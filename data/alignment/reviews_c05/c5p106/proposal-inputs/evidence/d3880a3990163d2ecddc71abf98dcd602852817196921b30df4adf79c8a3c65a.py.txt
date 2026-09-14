@@ -1,0 +1,38 @@
+"""Freeze exact current reconciliation and its complete recorded evidence."""
+from pathlib import Path
+import json,hashlib,datetime,subprocess,collections
+P=Path(__file__).resolve().parent;W=P.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def check(p,x):b=p.read_bytes();assert len(b)==x['bytes'] and sha(b)==x['sha256'],str(p)
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (P/'freeze.json').exists()
+mapping=json.loads((P/'original-to-copy-manifest.json').read_text())
+for x in mapping:
+ if 'copy_path' in x:check(P/x['copy_path'],x)
+ if 'original_git_commit' in x:
+  b=subprocess.check_output(['git','-C',str(W),'show',x['original_git_commit']+':'+x['repository_relative_path']]);assert len(b)==x['bytes'] and sha(b)==x['sha256']
+ else:check(Path(x['original']),x)
+pin=json.loads((P.parent/'proposal-baseline.json').read_text());summary=json.loads((P/'reconciliation-summary.json').read_text());dispositions=json.loads((P/'original-span-dispositions.json').read_text());assert len(dispositions)==150
+for n in [316,317,318]:
+ p=P/str(n);dec=json.loads((p/'decisions.json').read_text());spec=json.loads((p/'spec.json').read_text())['segments'][0];rr=json.loads((p/'resolved.json').read_text())['segments'][0]['resolved'];summ=next(x for x in summary['segments'] if x['seq']==n)
+ for role in ['spec','body']:
+  fn=p/('spec.json' if role=='spec' else 'body.html');assert len(fn.read_bytes())==summ[role+'_bytes'] and sha(fn.read_bytes())==summ[role+'_sha256']
+ assert len(rr)==len(spec['spans'])==summ['span_count'];assert json.loads((p/'errata.json').read_text())==[]
+ assert len(dec['original_dispositions'])==summ['original_dispositions']
+ for case in json.loads((p/'five-ground-errata-review.json').read_text()):assert len(case['grounds'])==5 and case['refuted']
+ for mode,filename in [('generate-v1','body.html'),('resolve-v1','resolved.json')]:
+  nd=p/'native'/mode;assert (nd/'stdin.json').read_bytes()==(p/'spec.json').read_bytes() and (nd/'stdout').read_bytes()==(p/filename).read_bytes() and not (nd/'stderr').read_bytes() and (nd/'exit.txt').read_text()=='0\n'
+ for angle in ['tibetan','english']:
+  nd=P/'native/originals'/angle/str(n);src=P.parent/angle/str(n)
+  assert (nd/'generate/stdout').read_bytes()==(src/'body.html').read_bytes()
+  for mode in ['generate','resolve']:assert (nd/mode/'stdin.json').read_bytes()==(src/'spec.json').read_bytes() and not (nd/mode/'stderr').read_bytes() and (nd/mode/'exit.txt').read_text()=='0\n'
+for caller in P.glob('*-caller'):
+ assert (caller/'execution.json').exists() and (caller/'exit.txt').read_text()=='0\n'
+put(P/'freeze-preflight.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_git_commit=pin['commit'],original_copy_mappings_checked=len(mapping),original_dispositions=150,final_spans=79,original_generator_replays=6,original_resolver_replays=6,final_generators=3,final_resolvers=3,final_generator_reruns_for_packaging=0,body_source_roundtrips=6,all_original_and_final_native_exit_zero=True,supplied_head_allowances=0,retained_errata=0,failed_reconciliation_native_attempts=0,read_only_display_limits='Several initially overlarge console projections truncated. Every original rationale, current tuple, five-ground finding and material critical record was subsequently read through bounded projections; complete underlying evidence is preserved. No incomplete projection is treated as full broad-corpus semantic review.'))
+files={}
+for p in sorted(P.rglob('*')):
+ if p.is_file() and p.name!='freeze.json':
+  b=p.read_bytes();files[str(p.relative_to(P))]=dict(bytes=len(b),sha256=sha(b))
+out=dict(schema='c05-independent-reconciliation-freeze-v1',status='FROZEN_RECONCILIATION_NOT_SEMANTIC_ACCEPTANCE',producer='Codex',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_git_commit=pin['commit'],source_origin_course_boundary=309,actual_acceptance_baseline=None,segments=[316,317,318],total_spans=79,total_nulls=3,total_word_pairs=54,total_d7=9,original_dispositions=150,files=files)
+put(P/'freeze.json',out)
+print(json.dumps(dict(status='FROZEN',files=len(files),freeze_bytes=(P/'freeze.json').stat().st_size,freeze_sha256=sha((P/'freeze.json').read_bytes()),segments=summary['segments']),indent=2))

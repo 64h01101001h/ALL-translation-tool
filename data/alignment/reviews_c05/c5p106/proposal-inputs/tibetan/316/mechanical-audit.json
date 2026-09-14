@@ -1,0 +1,69 @@
+{
+  "schema": "proposal-mechanical-audit-v1",
+  "stats": {
+    "seq": 316,
+    "spans": 18,
+    "nulls": 1,
+    "d5_total": 12,
+    "non_null_d5_word_pairs": 12,
+    "depth_counts": {
+      "5": 12,
+      "7": 1,
+      "6": 4,
+      "3": 1
+    },
+    "errata": 0,
+    "body_bytes": 3255,
+    "spec_sha256": "6a4919ac55aa7b870678803f4863b64c559d9487958b12bdfeafec664ee31021",
+    "body_sha256": "b7fb1f19037f9e8e72a5ee0d06302531a8eddcc784e99cd8ee0bd7786d418242",
+    "resolver_sha256": "1fde67b045854e5f78e3eb1c6a0af6c875a14dfd7411b91cfeee9ffb5598a176",
+    "errata_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "checks": {
+    "native_final_exit0": true,
+    "native_final_stderr_empty": true,
+    "body_equals_saved_native_stdout": true,
+    "spec_equals_native_stdin": true,
+    "both_complete_source_fields_preserved": true,
+    "flat_tibetan_syllable_boundaries": true,
+    "strictly_tighter_member_ranges": true,
+    "source_specific_occurrences_recorded": true
+  },
+  "attempts": [
+    {
+      "attempt": "01",
+      "invocation_sha256": "4472750581686fdc50de8887b39ff80a84f56153edd686632c38e25f3661d370",
+      "runs": [
+        {
+          "mode": "generate",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "generate"
+          ],
+          "exit": 0,
+          "stdout_bytes": 3255,
+          "stdout_sha256": "b7fb1f19037f9e8e72a5ee0d06302531a8eddcc784e99cd8ee0bd7786d418242",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "resolve",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "resolve"
+          ],
+          "exit": 0,
+          "stdout_bytes": 6438,
+          "stdout_sha256": "1fde67b045854e5f78e3eb1c6a0af6c875a14dfd7411b91cfeee9ffb5598a176",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "limits": "Mechanical fidelity is not semantic approval; fresh reconciliation, independent skepticism and root acceptance remain required."
+}

@@ -1,0 +1,68 @@
+{
+  "schema": "proposal-mechanical-audit-v1",
+  "stats": {
+    "seq": 317,
+    "spans": 25,
+    "nulls": 1,
+    "d5_total": 19,
+    "non_null_d5_word_pairs": 19,
+    "depth_counts": {
+      "5": 19,
+      "6": 5,
+      "7": 1
+    },
+    "errata": 0,
+    "body_bytes": 4242,
+    "spec_sha256": "2bac65917ff042c059d98cd4f596f9385c70f8e54fcf048194e3d16163834375",
+    "body_sha256": "8cf3ee4e707df7f2cc0d43c07834480806f60aaa6d10c8eb82c06341d6379f06",
+    "resolver_sha256": "df8a0449969c5451d28443ef8648e29867ba921666fef7c57099f1f1f2f9b57f",
+    "errata_sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "checks": {
+    "native_final_exit0": true,
+    "native_final_stderr_empty": true,
+    "body_equals_saved_native_stdout": true,
+    "spec_equals_native_stdin": true,
+    "both_complete_source_fields_preserved": true,
+    "flat_tibetan_syllable_boundaries": true,
+    "strictly_tighter_member_ranges": true,
+    "source_specific_occurrences_recorded": true
+  },
+  "attempts": [
+    {
+      "attempt": "01",
+      "invocation_sha256": "11018d9b3c3eed12f38b86941e8a1b9b846db5c769bdcfdd90f991e062dcdad6",
+      "runs": [
+        {
+          "mode": "generate",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "generate"
+          ],
+          "exit": 0,
+          "stdout_bytes": 4242,
+          "stdout_sha256": "8cf3ee4e707df7f2cc0d43c07834480806f60aaa6d10c8eb82c06341d6379f06",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "resolve",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "resolve"
+          ],
+          "exit": 0,
+          "stdout_bytes": 8970,
+          "stdout_sha256": "df8a0449969c5451d28443ef8648e29867ba921666fef7c57099f1f1f2f9b57f",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "limits": "Mechanical fidelity is not semantic approval; fresh reconciliation, independent skepticism and root acceptance remain required."
+}

@@ -1,0 +1,70 @@
+"""Pin original proposals, reopen their complete evidence, and replay canonical inputs."""
+from pathlib import Path
+import json,hashlib,subprocess,sqlite3,gzip,re,datetime,sys,os,time
+P=Path(__file__).resolve().parent; B=P.parent; W=B.parents[1]/'campaign-worktree'
+def sha(x):return hashlib.sha256(x).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def cp(src,role):
+ data=src.read_bytes(); h=sha(data);out=P/'originals/objects'/h
+ if not out.exists():out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(data)
+ assert out.read_bytes()==data
+ return dict(original=str(src),copy_path=str(out.relative_to(P)),role=role,bytes=len(data),sha256=h)
+pin=json.loads((B/'proposal-baseline.json').read_text());origin=pin['commit'];mapping=[];freezes=[]
+for angle,fn,expected in [('tibetan','frozen_manifest.json','43ec7de5a9a3d8faaa2fc9357864660b1001022a5663c6af2b091fe648883706'),('english','freeze-manifest.json','e6b2c27396f5cea0171bb7fa97eb078aea16fdd357f597a003e66ffde35db2a3')]:
+ f=B/angle/fn;assert sha(f.read_bytes())==expected;z=json.loads(f.read_text());files=z['files'];items=files.items() if isinstance(files,dict) else ((x['path'],x) for x in files)
+ for rel,info in items:
+  src=B/angle/rel;d=src.read_bytes();assert len(d)==info['bytes'] and sha(d)==info['sha256'],str(src);mapping.append(cp(src,'original-'+angle))
+ mapping.append(cp(f,'original-'+angle+'-freeze'));freezes.append(dict(angle=angle,path=str(f),bytes=f.stat().st_size,sha256=expected,file_count=len(files)))
+for name,x in pin['source_pins'].items():
+ src=Path(x['path']);d=src.read_bytes();assert len(d)==x['bytes'] and sha(d)==x['sha256'],name
+ if name!='spine':mapping.append(cp(src,'original-source-'+name))
+ else:mapping.append(dict(original=str(src),role='original-source-spine',bytes=len(d),sha256=sha(d)))
+for rel in list(pin['governing_git_pins'])+['engines/hgm_tools.py','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ d=subprocess.check_output(['git','-C',str(W),'show',origin+':'+rel]);out=P/'originals/git'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(d)
+ if rel in pin['governing_git_pins']:assert sha(d)==pin['governing_git_pins'][rel]['sha256']
+ mapping.append(dict(original_git_commit=origin,repository_relative_path=rel,copy_path=str(out.relative_to(P)),role='historical-governance',bytes=len(d),sha256=sha(d)))
+for src in [B/'proposal-baseline.json',B/'reconciliation-brief.md',B/'source.json',B/'context.json']:
+ mapping.append(cp(src,'input'))
+put(P/'original-to-copy-manifest.json',mapping);put(P/'original-freezes.json',freezes)
+db=sqlite3.connect(Path(pin['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rows=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',310,324))]
+for snap in json.loads((B/'source.json').read_text())+json.loads((B/'context.json').read_text()):assert all(next(r for r in rows if r['seq']==snap['seq'])[k]==v for k,v in snap.items())
+put(P/'evidence/source-context-originals.json',dict(sql='select * from corpus_segments where course=? and seq between ? and ? order by seq',parameters=['C05',310,324],rows=rows))
+queries=[]
+for rel in ['tibetan/evidence/corpus-queries.json','tibetan/evidence/targeted-corpus-queries.json','tibetan/evidence/spine-lexical-queries.json','english/evidence/corpus-queries.json','english/evidence/corpus-supplement.json']:
+ z=json.loads((B/rel).read_text());qs=z['queries'] if isinstance(z,dict) else z
+ for i,q in enumerate(qs):
+  args=q.get('params',q.get('parameters'));rr=[dict(x) for x in db.execute(q['sql'],args)];assert len(rr)==q['count'] and rr==q['rows'],(rel,i)
+  queries.append(dict(original=str(B/rel),index=i,sql=q['sql'],parameters=args,count=len(rr),rows=rr))
+put(P/'evidence/reexecuted-original-sql.json',queries)
+master=json.loads(gzip.decompress(Path(pin['source_pins']['master']['path']).read_bytes()))
+mq=[]
+for rel in ['tibetan/evidence/lexical-queries.json','english/evidence/master-queries.json','english/evidence/master-supplement.json']:
+ z=json.loads((B/rel).read_text());qs=z['results'] if isinstance(z,dict) else z
+ for i,q in enumerate(qs):
+  for item in q['records']:
+   col=item.get('collection','unified_entries');assert master[col][item['index']]==item['record'],(rel,q['term'])
+  cols=['unified_entries','curated_entries','glossary_entries'] if rel.startswith('tibetan') else ['unified_entries']
+  found=[dict(collection=c,index=j,record=e) for c in cols for j,e in enumerate(master[c]) if q['term']==e.get('wylie') or q['term'] in (e.get('wylie_variants') or [])]
+  assert len(found)==q['count'],(rel,q['term'],len(found),q['count'])
+  mq.append(dict(original=str(B/rel),index=i,term=q['term'],count=len(found),records=found))
+put(P/'evidence/reexecuted-original-master.json',mq)
+corpus=json.loads(gzip.decompress(Path(pin['source_pins']['corpus']['path']).read_bytes()));bycourse={}
+for i,r in enumerate(corpus):bycourse.setdefault(r['course'],[]).append((i,r))
+unique={(r['course'],r['seq']):r for r in rows}
+for q in queries:
+ for r in q['rows']:
+  if 'course' in r and 'seq' in r:unique[(r['course'],r['seq'])]=r
+cr=[]
+for (c,s),r in sorted(unique.items()):
+ i,o=bycourse[c][s-1];assert json.loads(r['raw'])==o,(c,s);assert all(o[k]==r[k] for k in ['course','acip','wylie','english']);cr.append(dict(course=c,seq=s,index=i,record=o))
+put(P/'evidence/full-original-corpus-records.json',cr)
+physical=Path(pin['source_pins']['physical']['path']).read_bytes();ext=[]
+for r in rows:
+ if r['seq'] not in [316,317,318]:continue
+ for fld in ['acip','english']:
+  pat=rb'\s+'.join(re.escape(t) for t in r[fld].encode('ascii').split());hits=list(re.finditer(pat,physical));assert len(hits)==1
+  ext.append(dict(seq=r['seq'],field=fld,count=len(hits),matches=[dict(byte_range=[m.start(),m.end()],latin1=physical[m.start():m.end()].decode('latin1'),sha256=sha(physical[m.start():m.end()])) for m in hits]))
+put(P/'evidence/physical-extents.json',ext)
+put(P/'evidence/preparation-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_git_commit=origin,actual_acceptance_baseline=None,freeze_files=sum(x['file_count'] for x in freezes),sql_queries=len(queries),master_queries=len(mq),full_corpus_records=len(cr),spine_count=db.execute('select count(*) from corpus_segments').fetchone()[0],original_copy_mappings=len(mapping),physical_extents=len(ext)))
+print((P/'evidence/preparation-proof.json').read_text())

@@ -1,0 +1,39 @@
+from pathlib import Path
+import json,hashlib,datetime,sys,subprocess,ast
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';A=B.parent;W=S.parents[2]/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+expected=sys.argv[1];baseline=read(B/'baseline.json');assert baseline['commit']==expected and baseline['course_boundary']==315;subprocess.check_output(['git','-C',str(W),'rev-parse','--verify',expected+'^{commit}']);now=datetime.datetime.now(datetime.timezone.utc).isoformat();manifest=read(S/'original-to-copy-manifest.json')
+raw=(B/'baseline.json').read_bytes();dest=S/'later-acceptance-baseline.json';dest.write_bytes(raw);manifest.append(dict(original=str(B/'baseline.json'),copy=str(dest.relative_to(S)),sha256=H(raw),bytes=len(raw)))
+# This later receipt cannot retroactively describe the original proposal/reconciler context.
+receipt=dict(received_utc=now,actual_baseline_commit=expected,course_boundary=315,original_source_origin_git_commit='8575edf1e0de695677194c1fde60f1d9e2c2f204',original_source_origin_boundary=309,original_reconciler_consumed_later_baseline=False,baseline_file_sha256=H(raw),validation=[])
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','tools/gen_alignment_page.py','engines/hgm_tools.py','docs/errata_register.json']:
+ x=subprocess.check_output(['git','-C',str(W),'show',expected+':'+rel]);prior=S/'governing-originals'/(rel+'.txt' if Path(rel).suffix=='.py' else rel);assert x==prior.read_bytes(),rel;receipt['validation'].append(dict(repository_relative_path=rel,sha256=H(x),bytes=len(x),unchanged_from_source_origin=True))
+for rel in ['data/hgm_dictionary_v27_2.json.gz','data/full_parallel_corpus_v32.json.gz']:assert H((W/rel).read_bytes())==baseline['sha256'][rel]
+put(S/'later-baseline-receipt.json',receipt)
+native=read(S/'native-proof.json');review=dict(schema='c05-independent-semantic-review-v1',producer='Codex fresh independent skeptical semantic reviewer',verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',status='PROVISIONAL machine review; root integration and human acceptance remain separate',open_findings=[],closed_findings=[dict(id='M1',kind='AUDIT_COUNT_LABEL',seq=316,disposition='Historical whitespace-start GNAG count0 preserved with its actual regex; independently measured lexical count1 at[66,70). See errata-counts-independent.json. No spec or generator change.')],segments=native['segments'],total_spans=79,total_nulls=3,total_word_pairs=54,total_d7=9,source_origin_git_commit=receipt['original_source_origin_git_commit'],later_supplied_acceptance_baseline=expected,later_baseline_accepted_through=315,original_reconciler_consumed_later_baseline=False,reconciliation_freeze_sha256=H((Q/'freeze.json').read_bytes()),integration_requirements=['Root acceptance and production fidelity checks before landing','Desktop/iOS consumption and limits require separate root evidence'],limits=['No human editorial acceptance','No publication or ingestion independence inferred from matching digital records','No MAIN/device/production-fidelity check performed by this role','249 MB spine retained externally with exact immutable source pin; full archive master/corpus and physical original copied'])
+put(S/'review.json',review);p=S/'review.md';t=p.read_text();assert t.count('ACTUAL_BASELINE_RECEIPT_PENDING')==1;t=t.replace('ACTUAL_BASELINE_RECEIPT_PENDING',f'The fresh reviewer received actual through315 acceptance baseline {expected} at {now}; the original reconciler did not consume it. Its governing semantic rules, generator, engine and errata register were checked unchanged against the original origin');p.write_text(t)
+# Preserve every runtime helper as supported exact bytes; exclude unsupported originals from the freeze.
+methods=[]
+for p in sorted(S.rglob('*.py')):
+ raw=p.read_bytes();d=S/'methods'/(str(p.relative_to(S))+'.txt');d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(raw);methods.append(dict(original=str(p),copy=str(d.relative_to(S)),sha256=H(raw),bytes=len(raw)));manifest.append(methods[-1])
+put(S/'method-copy-manifest.json',methods);put(S/'original-to-copy-manifest.json',manifest)
+# Inspect the actual landing whitelist and enforce it on every manifest target.
+land=A/'land_reviewed_page_v2.py';tree=ast.parse(land.read_text());allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'};tuples=[n for n in ast.walk(tree) if isinstance(n,ast.Tuple) and all(isinstance(e,ast.Constant) and isinstance(e.value,str) for e in n.elts)];assert any(set(e.value for e in n.elts)==allowed for n in tuples)
+seen=set();distinct=set()
+for r in manifest:
+ assert r['original'] not in seen,r['original'];seen.add(r['original']);p=(S/r['copy']).resolve();assert p.is_relative_to(S) and p.suffix in allowed;raw=p.read_bytes();assert len(raw)==r['bytes'] and H(raw)==r['sha256']
+ if 'original_git_commit' in r:original=subprocess.check_output(['git','-C',str(W),'show',r['original_git_commit']+':'+r['repository_relative_path']])
+ else:original=Path(r['original']).read_bytes()
+ assert original==raw,r['original'];distinct.add(r['copy'])
+put(S/'copy-preflight.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),manifest_records=len(manifest),distinct_manifest_copies=len(distinct),all_original_copy_bytes_equal=True,all_copy_targets_in_actual_landing_whitelist=True,landing_helper_path=str(land),landing_helper_sha256=H(land.read_bytes()),runtime_helper_supported_copies=len(methods)))
+files={}
+excluded_runtime=[]
+for p in sorted(S.rglob('*')):
+ if not p.is_file():continue
+ rel=str(p.relative_to(S))
+ if rel in ['freeze.json','freeze-receipt.json'] or rel.startswith('freeze-caller/'):continue
+ if p.suffix not in allowed:excluded_runtime.append(rel);continue
+ raw=p.read_bytes();files[rel]=dict(bytes=len(raw),sha256=H(raw))
+freeze=dict(schema='c05-independent-semantic-review-freeze-v1',producer=review['producer'],created_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',open_findings=[],file_count=len(files),total_spans=79,total_nulls=3,total_word_pairs=54,total_d7=9,source_origin_git_commit=review['source_origin_git_commit'],later_supplied_acceptance_baseline=expected,later_baseline_accepted_through=315,reconciliation_freeze_sha256=review['reconciliation_freeze_sha256'],files=files,exclusions=dict(self_and_receipt=['freeze.json','freeze-receipt.json'],active_capture_directory='freeze-caller (completes after freeze)',unsupported_runtime_helpers_preserved_exactly_under_methods=excluded_runtime),status='FROZEN PROVISIONAL machine semantic approval; root integration and human acceptance are separate')
+put(S/'freeze.json',freeze);put(S/'freeze-receipt.json',dict(status='FROZEN',files=len(files),freeze_sha256=H((S/'freeze.json').read_bytes()),review_sha256=H((S/'review.json').read_bytes()),utc=datetime.datetime.now(datetime.timezone.utc).isoformat()));print((S/'freeze-receipt.json').read_text())

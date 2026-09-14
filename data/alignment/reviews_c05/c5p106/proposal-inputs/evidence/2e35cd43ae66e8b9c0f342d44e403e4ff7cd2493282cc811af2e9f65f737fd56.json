@@ -1,0 +1,149 @@
+[
+  {
+    "seq": 318,
+    "found": "'DRES BA'I",
+    "expected_candidate": "'DRES PA'I",
+    "refuted": true,
+    "disposition": "UNRESOLVED_SPELLING_NOT_FILED",
+    "grounds": {
+      "a_quote": {
+        "finding": "Quoted found bytes are present in this segment; original fields, raw archive object and complete physical extents were reopened.",
+        "locations": {
+          "acip": [
+            207
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "finding": "Only C05:318 contains the broad ACIP BA phrase; the broad PA phrase occurs in 17 rows, and the narrower negative Wylie PA phrase in 11. C03:373 and C16:437 agree exactly in ACIP/Wylie/English but are a different passage; EM:908 is another different passage. No inspected witness proves an independent publication of this selected passage.",
+        "publication_limit": "The physical ASCII input and digital text fields are source evidence; no independent publication or ingestion lineage is established by equality, difference, or rarity."
+      },
+      "c_registered": {
+        "finding": "The original pinned register has no exact source-specific record for this segment. E-044, E-071, E-076, E-107, E-111 and E-121 were examined; none licenses this proposed textual correction.",
+        "source_specific_count": 0,
+        "register_count": 194,
+        "class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ]
+      },
+      "d_defensibility": {
+        "finding": "Conventional nominalizer spelling after -s favors PA, as the preserved morphology table states. The exact full HGM unified record24441 nevertheless has ma 'dres ba, Tibetan མ་འདྲེས་བ, ACIP MA 'DRES BA, hgm_gloss not mixed, and HTG2016 glossary provenance; its status is hgm-attested (not in Great Dictionary). That is material counterevidence absent from the Tibetan proposal's narrower 'dres ba lookup. Neither the master nor physical ASCII proves this spelling correct or independent, but the available evidence cannot exclude an orthographic variant or inherited source spelling. Default to refuted/uncertain; do not file a new erratum or normalize the source."
+      },
+      "e_counts": {
+        "finding": "All recorded original SQL queries and full master-record identities were independently reopened; count scope is stated explicitly. Original counts from all three master collections are distinguished from exact unified-entry counts.",
+        "measured": {
+          "source_chars": {
+            "acip": 224,
+            "wylie": 223,
+            "english": 367
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          },
+          "original_spine_rows": 42199,
+          "acip_dres_bai_rows": 1,
+          "acip_dres_pai_rows": 17,
+          "negative_wylie_bai_rows": 1,
+          "negative_wylie_pai_rows": 11,
+          "exact_unified_ma_dres_ba": 1,
+          "exact_unified_ma_dres_pa": 1,
+          "exact_unified_dres_ba": 0,
+          "exact_unified_dres_pa": 1
+        }
+      }
+    },
+    "evidence_refs": [
+      "../evidence/reexecuted-original-sql.json",
+      "../evidence/reexecuted-original-master.json",
+      "../evidence/full-original-corpus-records.json",
+      "../evidence/source-context-originals.json",
+      "../evidence/physical-extents.json",
+      "../evidence/register-recheck.json",
+      "../original-to-copy-manifest.json"
+    ],
+    "suggested_severity": null,
+    "suggested_confidence": "UNRESOLVED"
+  },
+  {
+    "seq": 318,
+    "found": "with the one mental stream",
+    "expected_candidate": "within the one mental stream",
+    "refuted": true,
+    "disposition": "REFUTED_DEFENSIBLE_RELATION",
+    "grounds": {
+      "a_quote": {
+        "finding": "Quoted found bytes are present in this segment; original fields, raw archive object and complete physical extents were reopened.",
+        "locations": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            295
+          ]
+        }
+      },
+      "b_parallel": {
+        "finding": "Full physical English preserves with the one mental stream and all three exact-field queries find only C05:318.",
+        "publication_limit": "The physical ASCII input and digital text fields are source evidence; no independent publication or ingestion lineage is established by equality, difference, or rarity."
+      },
+      "c_registered": {
+        "finding": "The original pinned register has no exact source-specific record for this segment. E-044, E-071, E-076, E-107, E-111 and E-121 were examined; none licenses this proposed textual correction.",
+        "source_specific_count": 0,
+        "register_count": 194,
+        "class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ]
+      },
+      "d_defensibility": {
+        "finding": "With is a defensible local relation for the stream condition. No source repair follows merely from preferring within. The exact middle with is assigned to its local la; the two other with occurrences belong to their separate dang particles."
+      },
+      "e_counts": {
+        "finding": "All recorded original SQL queries and full master-record identities were independently reopened; count scope is stated explicitly. Original counts from all three master collections are distinguished from exact unified-entry counts.",
+        "measured": {
+          "source_chars": {
+            "acip": 224,
+            "wylie": 223,
+            "english": 367
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          }
+        }
+      }
+    },
+    "evidence_refs": [
+      "../evidence/reexecuted-original-sql.json",
+      "../evidence/reexecuted-original-master.json",
+      "../evidence/full-original-corpus-records.json",
+      "../evidence/source-context-originals.json",
+      "../evidence/physical-extents.json",
+      "../evidence/register-recheck.json",
+      "../original-to-copy-manifest.json"
+    ],
+    "suggested_severity": null,
+    "suggested_confidence": null
+  }
+]

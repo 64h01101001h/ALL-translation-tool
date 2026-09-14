@@ -1,0 +1,43 @@
+import pathlib,json,hashlib,subprocess,sqlite3,gzip,shutil,datetime,os
+P=pathlib.Path(__file__).resolve().parent
+R=P.parents[2]; W=R/'campaign-worktree'; B=P.parent
+def sha(b): return hashlib.sha256(b).hexdigest()
+def put(p,x):
+ p.parent.mkdir(parents=True,exist_ok=True); p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+baseline=json.loads((B/'proposal-baseline.json').read_text()); origin=baseline['commit']
+manifest=[]
+for rel,pin in baseline['governing_git_pins'].items():
+ b=subprocess.check_output(['git','-C',str(W),'show',f'{origin}:{rel}']); assert len(b)==pin['bytes'] and sha(b)==pin['sha256']
+ out=P/'originals/git'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(b)
+ manifest.append(dict(original_git_commit=origin,repository_relative_path=rel,copy_path=str(out.relative_to(P)),bytes=len(b),sha256=sha(b)))
+for rel in ['engines/hgm_tools.py','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ b=subprocess.check_output(['git','-C',str(W),'show',f'{origin}:{rel}']);out=P/'originals/git'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(b)
+ manifest.append(dict(original_git_commit=origin,repository_relative_path=rel,copy_path=str(out.relative_to(P)),bytes=len(b),sha256=sha(b)))
+for name,pin in baseline['source_pins'].items():
+ src=pathlib.Path(pin['path']);b=src.read_bytes();assert len(b)==pin['bytes'] and sha(b)==pin['sha256'], name
+ item=dict(original=str(src),bytes=len(b),sha256=sha(b))
+ if name!='spine':
+  out=P/'originals/external'/src.name;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(b);item['copy_path']=str(out.relative_to(P))
+ manifest.append(item)
+for src in [B/'proposal-baseline.json',B/'english-brief.md',B.parent/'proposal-protocol.md']:
+ b=src.read_bytes();out=P/'originals/instructions'/src.name;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(b)
+ manifest.append(dict(original=str(src),copy_path=str(out.relative_to(P)),bytes=len(b),sha256=sha(b)))
+db=sqlite3.connect(pathlib.Path(baseline['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text())
+rows=[dict(x) for x in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',310,324))]
+for snap in source+context:
+ row=next(x for x in rows if x['seq']==snap['seq']);assert all(row[k]==v for k,v in snap.items())
+put(P/'evidence/source-context-originals.json',dict(sql='select * from corpus_segments where course=? and seq between ? and ? order by seq',parameters=['C05',310,324],rows=rows,snapshot_field_comparisons=len(source)*6+len(context)*6))
+queries=[]
+for s in source:
+ for fld in ['acip','wylie','english']:
+  sql=f'select * from corpus_segments where {fld}=? order by course,seq';rr=[dict(x) for x in db.execute(sql,(s[fld],))];queries.append(dict(kind='full-field-parallel',seq=s['seq'],field=fld,sql=sql,parameters=[s[fld]],count=len(rr),rows=rr))
+for field,text in [('wylie',"ma 'dres ba'i"),('wylie',"ma 'dres pa'i"),('wylie',"rgyud gcig la nyon mongs"),('english','unmixed with afflicted'),('wylie','gnag dang dkar dang gnyis'),('english','Non-virtue as well as virtue itself'),('wylie',"yid du mi 'ong ba"),('wylie',"zag med")]:
+ sql=f'select * from corpus_segments where {field} like ? order by course,seq';rr=[dict(x) for x in db.execute(sql,('%'+text+'%',))];queries.append(dict(kind='substring',field=field,needle=text,sql=sql,parameters=['%'+text+'%'],count=len(rr),rows=rr))
+put(P/'evidence/corpus-queries.json',queries)
+master=json.loads(gzip.decompress((P/'originals/external/hgm_dictionary_v27_2.json.gz').read_bytes()))
+corpus=json.loads(gzip.decompress((P/'originals/external/full_parallel_corpus_v32.json.gz').read_bytes()))
+put(P/'evidence/archive-shapes.json',dict(master_type=type(master).__name__,master_keys=list(master) if isinstance(master,dict) else None,corpus_type=type(corpus).__name__,corpus_keys=list(corpus) if isinstance(corpus,dict) else None))
+put(P/'original-to-copy-manifest.json',manifest)
+put(P/'evidence/preparation.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),origin=origin,source_count=len(source),context_count=len(rows),query_counts=[dict(kind=q['kind'],count=q['count'],seq=q.get('seq'),field=q['field'],needle=q.get('needle')) for q in queries]))
+print(json.dumps(dict(status='PASS',copied_items=len(manifest),source_count=len(source),context_count=len(rows),query_counts=[q['count'] for q in queries])))

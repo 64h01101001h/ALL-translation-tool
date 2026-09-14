@@ -1,0 +1,58 @@
+from pathlib import Path
+import json,gzip,sqlite3,hashlib,subprocess
+B=Path(__file__).resolve().parent;E=B/'evidence';W=B.parents[2]/'campaign-worktree'
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+pin=json.loads((E/'proposal-baseline.json').read_text()); prov=json.loads((E/'source-provenance.json').read_text())
+for rel in ['docs/alignment_briefs/REFUTE_BRIEF.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']:
+ data=subprocess.check_output(['git','show',pin['commit']+':'+rel],cwd=W);out=E/'governance'/rel;out.parent.mkdir(exist_ok=True,parents=True);out.write_bytes(data)
+ prov['pins'].append(dict(kind='git-object',origin_commit=pin['commit'],source=rel,saved=str(out.relative_to(B)),bytes=len(data),sha256=sha(out)))
+for src in [Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/HANDOFF.md'),Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff/README.md'),Path('/Users/adamderickandrade/ACIP Software Developmeent/tibetan-spellchecker/doc/particle-morphology.md')]:
+ data=src.read_bytes();out=E/'references'/src.name;out.parent.mkdir(exist_ok=True);out.write_bytes(data)
+ prov['pins'].append(dict(kind='external-reference',source=str(src),saved=str(out.relative_to(B)),bytes=len(data),sha256=sha(out)))
+dump(E/'source-provenance.json',prov)
+db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+queries=[]
+for term in ["'dres ba","'dres pa","'dres","ma 'dres","gnag","nag"]:
+ sql='SELECT * FROM entries WHERE wylie=? ORDER BY id';rows=[dict(r) for r in db.execute(sql,(term,))]
+ queries.append(dict(sql=sql,params=[term],count=len(rows),rows=rows))
+dump(E/'spine-lexical-queries.json',dict(queries=queries))
+original=json.loads(gzip.decompress((E/'full_parallel_corpus_v32.json.gz').read_bytes()))
+full=json.loads((E/'spine-context-full.json').read_text())['rows'];matches=[]
+for row in full:
+ raw=json.loads(row['raw']);hits=[dict(index=i,record=r) for i,r in enumerate(original) if r==raw]
+ assert len(hits)==1
+ matches.append(dict(spine_id=row['id'],course=row['course'],seq=row['seq'],match='full decoded spine raw object equality to original archived corpus record',count=len(hits),matches=hits))
+dump(E/'archive-to-spine.json',dict(corpus_count=len(original),context_count=len(full),matches=matches))
+register=json.loads((E/'governance/docs/errata_register.json').read_text())
+rq=json.loads((E/'register-queries.json').read_text())
+for term in ['C05:316','C05:317','C05:318','following section','heading','capital']:
+ hits=[r for r in register if term.lower() in json.dumps(r,ensure_ascii=False).lower()]
+ rq['queries'].append(dict(term=term,method='case-insensitive serialized full record substring',count=len(hits),records=hits))
+dump(E/'register-queries.json',rq)
+physical=(E/'C05ReadingASCII.txt').read_bytes()
+target="'DRES BA'I";a=physical.index(target.encode('ascii'))
+candidate=dict(seq=318,kind='TIBETAN_SPELLING',found="'DRES BA'I",expected="'DRES PA'I",evidence="C05:318 ACIP has 'DRES BA'I exactly once; its Wylie has 'dres ba'i. The full physical C05ReadingASCII.txt preserves those source bytes at [221940,221950), so this is not introduced by ACIP-to-Wylie conversion. Across the 42,199-row original spine, ACIP LIKE %'DRES BA'I% has 1 row (C05:318), whereas %'DRES PA'I% has 17 rows, all preserved in ../evidence/corpus-queries.json. C03:373 and C16:437 both read SDIG DANG MA 'DRES PA'I in the same translated passage; their ACIP, Wylie and English agree, but this does not independently establish publication or ingestion lineage. EM:908 separately reads SDIG CHE BA DANG MA 'DRES PA'I ZAS. The archived master has 'dres pa (mixed) and ma 'dres (unmixed), and no exact 'dres ba; reference particle-morphology.md specifies pa after final s. No same-passage parallel was found by the recorded full-spine English/Wylie searches, including C16, P1 and TCS; no duplicate or registered class was found in the pinned register. Standard nominalizer spelling therefore favors PA'I, but no original Tibetan blockprint or independently established same-passage publication was consulted; retain PROBABLE and preserve BA'I unchanged.",severity='LOW',confidence='PROBABLE')
+assert candidate['found'] in next(r for r in full if r['seq']==318)['acip']
+assert a==221940 and len(target)==10
+dump(B/'318/errata.json',[candidate])
+five={
+ 'a_quote':dict(pass_check=True,acip_found=candidate['found'],wylie_found="'dres ba'i",physical_byte_range=[a,a+len(target)],source_row_reference='spine-context-full.json; C05:318 full row and raw preserved'),
+ 'b_independent_parallel':dict(disposition='No same-passage alternate found; no independence or ingestion-lineage claim made.',checks=['English Virtue taken in by the realm of form represents: 1 row C05:318','Wylie rgyud gcig la sdug bsngal dang ma dres (apostrophe preserved in actual saved query): 1 row C05:318','Wylie rgyud gcig la nyon mongs pa dang ma dres (apostrophe preserved in actual saved query): 1 row C05:318'],full_evidence=['corpus-queries.json','targeted-corpus-queries.json']),
+ 'c_registered_class':dict(disposition='No matching source-segment filing, dres ba filing, or applicable registered mechanical class; exact register and all match records preserved.',reference='register-queries.json'),
+ 'd_expected_or_defensible':dict(disposition='PA is the standard nominalizer after final s; the master and morphology reference support pa. BA remains intelligible, and the available witnesses cannot rule out a source orthographic variant, so PROBABLE only.',full_evidence=['lexical-queries.json','spine-lexical-queries.json','references/particle-morphology.md']),
+ 'e_counts':dict(disposition='Counts obtained from original read-only SQLite, with all matching full rows preserved; final audit re-executes every recorded SELECT.',claimed_counts={'original_spine_rows':42199,'acip_dres_bai_rows':1,'acip_dres_pai_rows':17})
+}
+dump(E/'errata-review.json',dict(schema='independent-tibetan-errata-review-v1',producer='Codex GPT-6',status='Proposal checks only; fresh independent skeptic remains required',candidate318=dict(record=candidate,five_grounds=five),other_considerations=[
+dict(seq=316,consideration='In and Respectively',decision='Not an English typo: physical line starts establish verse lineation. English itself and respectivity explain the three categories; the unstained supplies the fourth in the next sentence.'),
+dict(seq=317,consideration='GNAG rather than NAG',decision='Do not file: archived master gnag is explicitly HGM-attested black; the four instances make coherent source/English distinctions. The spelling is not treated as corruption from preference for nag.'),
+dict(seq=317,consideration='four types absent as explicit bzhi',decision='Do not file: contextual explanation of the three colored categories plus unstained in 316; not a factual contradiction.'),
+dict(seq=318,consideration='with the one mental stream',decision='Do not file as a missing in: the physical source agrees and with is a defensible contextual relation. GMR wording remains verbatim.'),
+dict(seq='316–318',consideration='Apparatus, cap, heading, and conversion classes',decision='No following heading in these three English rows; bracketed iv.237-40 is preserved citation apparatus in 317. Source English lengths are below 1500. No new mechanical class proposed.')]))
+# Only the 318 note changes after native attempt 01. Preserve prior stdin/body
+# inside attempts/01, and rerun only this changed segment.
+p=B/'318/spec.json';spec=json.loads(p.read_text());note=spec['segments'][0]['note']
+note=note.replace('First ma dres','First ma &apos;dres').replace('second ma and dres','second ma and &apos;dres').replace('DRES BA’I',"&apos;DRES BA&apos;I")
+spec['segments'][0]['note']=note;dump(p,spec)
+dump(B/'318/supersession.json',dict(schema='proposal-supersession-v1',prior_native_attempt='attempts/01',new_native_attempt='attempts/02',reason='Source apostrophes are now explicit in the HTML note; every span and eng_order is unchanged. Prior successful native proof is preserved. The formal LOW/PROBABLE spelling proposal and its evidence are now recorded.',changed_spec_field='segments[0].note',unchanged_native_source_evidence_reused=['../evidence/source-provenance.json','../evidence/spine-context-full.json','../evidence/lexical-queries.json','../evidence/corpus-queries.json']))
+print('Preserved references, archive matches, five-ground source review, and spelling candidate; 318 note requires native attempt 02.')

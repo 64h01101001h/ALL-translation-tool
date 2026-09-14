@@ -1,0 +1,102 @@
+{
+  "schema": "proposal-mechanical-audit-v1",
+  "stats": {
+    "seq": 318,
+    "spans": 32,
+    "nulls": 1,
+    "d5_total": 21,
+    "non_null_d5_word_pairs": 21,
+    "depth_counts": {
+      "5": 21,
+      "6": 9,
+      "7": 2
+    },
+    "errata": 1,
+    "body_bytes": 5197,
+    "spec_sha256": "45cc6f68e0d19892d60ab0d2820223f8e8074e40d48637d610fcac7024c91711",
+    "body_sha256": "28be56009f5efc7b550b0ab752fdf03800b90793d6edcbe76f5bf54605fc990d",
+    "resolver_sha256": "ef5ede587d8eeda7f605754d14d8f51c331207c9473a453c503b46726972e6e0",
+    "errata_sha256": "cac912948ec0babecd0fac6eac7a7b4da14b612bec1ba9624aa40d02038d2abf"
+  },
+  "checks": {
+    "native_final_exit0": true,
+    "native_final_stderr_empty": true,
+    "body_equals_saved_native_stdout": true,
+    "spec_equals_native_stdin": true,
+    "both_complete_source_fields_preserved": true,
+    "flat_tibetan_syllable_boundaries": true,
+    "strictly_tighter_member_ranges": true,
+    "source_specific_occurrences_recorded": true
+  },
+  "attempts": [
+    {
+      "attempt": "01",
+      "invocation_sha256": "bcb14e0a135666e9fef29b08aee3637a7f47da312118ee539264c1be744c8a07",
+      "runs": [
+        {
+          "mode": "generate",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "generate"
+          ],
+          "exit": 0,
+          "stdout_bytes": 5176,
+          "stdout_sha256": "d288e2324d83f22d99d5d127d88222fa22fc89d6fad73e4671f00cfc6facc436",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "resolve",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "resolve"
+          ],
+          "exit": 0,
+          "stdout_bytes": 11317,
+          "stdout_sha256": "ef5ede587d8eeda7f605754d14d8f51c331207c9473a453c503b46726972e6e0",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "attempt": "02",
+      "invocation_sha256": "ff16bb7b9928e687778a40cc9deb51f4b045a37b6656b2f3ce2d6b4c9380809a",
+      "runs": [
+        {
+          "mode": "generate",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "generate"
+          ],
+          "exit": 0,
+          "stdout_bytes": 5197,
+          "stdout_sha256": "28be56009f5efc7b550b0ab752fdf03800b90793d6edcbe76f5bf54605fc990d",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "mode": "resolve",
+          "command": [
+            "/opt/homebrew/opt/python@3.14/bin/python3.14",
+            "-B",
+            "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-316-318/tibetan/native_runner.py",
+            "resolve"
+          ],
+          "exit": 0,
+          "stdout_bytes": 11317,
+          "stdout_sha256": "ef5ede587d8eeda7f605754d14d8f51c331207c9473a453c503b46726972e6e0",
+          "stderr_bytes": 0,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    }
+  ],
+  "limits": "Mechanical fidelity is not semantic approval; fresh reconciliation, independent skepticism and root acceptance remain required."
+}

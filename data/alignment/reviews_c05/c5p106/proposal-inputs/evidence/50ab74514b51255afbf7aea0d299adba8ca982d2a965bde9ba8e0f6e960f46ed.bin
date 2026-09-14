@@ -1,0 +1,115 @@
+from pathlib import Path
+from html.parser import HTMLParser
+import json,hashlib,sqlite3,gzip,collections,re,datetime,os
+B=Path(__file__).resolve().parent;E=B/'evidence';W=B.parents[2]/'campaign-worktree'
+def read(p):return json.loads(p.read_text())
+def dump(p,o):p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def extent(text,a,b,delims):
+ lo=max([text.rfind(d,0,a)+len(d) for d in delims]+[0]);ends=[i for d in delims if (i:=text.find(d,b))>=0];hi=min(ends) if ends else len(text)
+ return dict(range=[lo,hi],text=text[lo:hi])
+class SourceText(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.roots=[];self.stack=[];self.active=None;self.ignore=0
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs);nul='nul' in a.get('class','').split();self.stack.append((tag,nul))
+  if tag=='span' and a.get('data-l','').endswith('S') and a.get('data-d')=='1':self.active=[]
+  if nul:self.ignore+=1
+ def handle_endtag(self,tag):
+  if tag=='span' and self.active is not None:
+   # root span ends when no enclosing span remains after this close
+   remaining=[x[0] for x in self.stack[:-1]]
+   if 'span' not in remaining:self.roots.append(''.join(self.active));self.active=None
+  t,nul=self.stack.pop();assert t==tag,(t,tag)
+  if nul:self.ignore-=1
+ def handle_data(self,data):
+  if self.active is not None and not self.ignore:self.active.append(data)
+
+db=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rechecks=[]
+for name,queries in [('corpus-queries.json',read(E/'corpus-queries.json')['queries']),('targeted-corpus-queries.json',read(E/'targeted-corpus-queries.json')),('spine-lexical-queries.json',read(E/'spine-lexical-queries.json')['queries'])]:
+ for q in queries:
+  actual=[dict(r) for r in db.execute(q['sql'],q['params'])];assert actual==q['rows'] and len(actual)==q['count']
+  rechecks.append(dict(file=name,sql=q['sql'],params=q['params'],count=len(actual),full_rows_identical=True))
+master=json.loads(gzip.decompress((E/'hgm_dictionary_v27_2.json.gz').read_bytes()))
+for q in read(E/'lexical-queries.json')['results']:
+ actual=[dict(collection=c,index=i,record=r) for c in ['unified_entries','curated_entries','glossary_entries'] for i,r in enumerate(master[c]) if r.get('wylie')==q['term'] or q['term'] in (r.get('wylie_variants') or [])]
+ assert actual==q['records'] and len(actual)==q['count']
+ rechecks.append(dict(file='lexical-queries.json',term=q['term'],count=len(actual),full_records_identical=True))
+reg=read(E/'governance/docs/errata_register.json')
+for q in read(E/'register-queries.json')['queries']:
+ if q.get('method','').startswith('case-insensitive'):actual=[r for r in reg if q['term'].lower() in json.dumps(r,ensure_ascii=False).lower()]
+ else:actual=[r for r in reg if q['term'] in json.dumps(r,ensure_ascii=False)]
+ assert actual==q['records'] and len(actual)==q['count']
+ rechecks.append(dict(file='register-queries.json',term=q['term'],count=len(actual),full_records_identical=True))
+pin=read(E/'proposal-baseline.json');source_rechecks=[]
+for key,p in pin['source_pins'].items():
+ path=Path(p['path']);actual=sha(path);assert actual==p['sha256'] and path.stat().st_size==p['bytes']
+ source_rechecks.append(dict(key=key,path=str(path),sha256=actual,bytes=path.stat().st_size,unchanged=True))
+assert sha(W/'tools/gen_alignment_page.py')==pin['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+context=read(E/'spine-context-full.json')['rows']
+c03=next(r for q in read(E/'corpus-queries.json')['queries'] for r in q['rows'] if r['course']=='C03' and r['seq']==373)
+c16=next(r for q in read(E/'corpus-queries.json')['queries'] for r in q['rows'] if r['course']=='C16' and r['seq']==437)
+compared={k:c03[k]==c16[k] for k in ['acip','wylie','english']};assert all(compared.values())
+refs=[Path('/Users/adamderickandrade')/p for p in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']]
+access=[dict(path=str(p),readable=os.access(p,os.R_OK)) for p in refs];assert all(x['readable'] for x in access)
+totals=[]
+for seq in [316,317,318]:
+ D=B/str(seq);spec=read(D/'spec.json');s=spec['segments'][0];r=read(D/'resolved.json')['segments'][0];source=next(x for x in context if x['seq']==seq);dec=read(D/'decisions.json')
+ assert r['source_wylie']==source['wylie'] and r['source_english']==source['english']
+ parser=SourceText();parser.feed((D/'body.html').read_text());assert parser.roots==[source['wylie'],source['english']],parser.roots
+ # Exact saved native input and outputs, including every successful/superseded run.
+ attempts=[]
+ for A in sorted((D/'attempts').iterdir()):
+  m=read(A/'invocation.json');assert sha(A/'stdin.json')==m['stdin_sha256']
+  for run in m['runs']:
+   mode=run['mode'];assert int((A/(mode+'.exit')).read_text())==run['exit']
+   for stream in ['stdout','stderr']:
+    p=A/(mode+'.'+stream);assert sha(p)==run[stream+'_sha256'] and p.stat().st_size==run[stream+'_bytes']
+  attempts.append(dict(attempt=A.name,invocation_sha256=sha(A/'invocation.json'),runs=m['runs']))
+ A=D/'attempts'/('02' if seq==318 else '01')
+ assert (A/'stdin.json').read_bytes()==(D/'spec.json').read_bytes()
+ assert (A/'generate.stdout').read_bytes()==(D/'body.html').read_bytes()
+ assert (A/'resolve.stdout').read_bytes()==(D/'resolved.json').read_bytes()
+ assert (A/'generate.stderr').stat().st_size==0 and (A/'resolve.stderr').stat().st_size==0
+ assert int((A/'generate.exit').read_text())==int((A/'resolve.exit').read_text())==0
+ scopes=[];parent=None
+ for sp,rr,dd in zip(s['spans'],r['resolutions'],dec['spans']):
+  assert sp['id']==rr['id']==dd['id'] and sp['tib']==rr['tib_witness'] and sp['eng']==rr['eng_witness']
+  a,b=rr['tib_range'];assert source['wylie'][a:b]==sp['tib']
+  if sp['d']!=7:assert a==0 or source['wylie'][a-1] in ' ,';assert b==len(source['wylie']) or source['wylie'][b] in ' ,'
+  if sp['d']==7:
+   assert parent and parent['d']==5
+   pa,pb=parent['tib_range'];assert pa<=a<b<=pb and [a,b]!=[pa,pb]
+   if rr['eng_range'] is not None:
+    ea,eb=rr['eng_range'];pa,pb=parent['eng_range'];assert pa<=ea<eb<=pb and [ea,eb]!=[pa,pb]
+  else:parent=rr
+  scopes.append(dict(**rr,reason=dd['reason'],source_local_clause=extent(source['wylie'],a,b,[',']),english_local_sentence=extent(source['english'],*(rr['eng_range'] or [0,0]),['.','?']) if rr['eng_range'] else None,source_candidates=dd['source_candidates'],english_candidates=dd['english_candidates']))
+ for err in read(D/'errata.json'):assert any(err['found'] in source[k] for k in ['acip','wylie','english'])
+ stats=dict(seq=seq,spans=len(s['spans']),nulls=sum(x['eng'] is None for x in s['spans']),d5_total=sum(x['d']==5 for x in s['spans']),non_null_d5_word_pairs=sum(x['d']==5 and x['eng'] is not None for x in s['spans']),depth_counts=dict(collections.Counter(str(x['d']) for x in s['spans'])),errata=len(read(D/'errata.json')),body_bytes=(D/'body.html').stat().st_size,spec_sha256=sha(D/'spec.json'),body_sha256=sha(D/'body.html'),resolver_sha256=sha(D/'resolved.json'),errata_sha256=sha(D/'errata.json'))
+ dump(D/'occurrence-audit.json',dict(schema='source-specific-occurrence-audit-v1',seq=seq,range_convention='zero-based Unicode codepoint [start,end)',all_resolutions_visually_reviewed_against_local_argument=True,rows=scopes))
+ dump(D/'mechanical-audit.json',dict(schema='proposal-mechanical-audit-v1',stats=stats,checks=dict(native_final_exit0=True,native_final_stderr_empty=True,body_equals_saved_native_stdout=True,spec_equals_native_stdin=True,both_complete_source_fields_preserved=True,flat_tibetan_syllable_boundaries=True,strictly_tighter_member_ranges=True,source_specific_occurrences_recorded=True),attempts=attempts,limits='Mechanical fidelity is not semantic approval; fresh reconciliation, independent skepticism and root acceptance remain required.'))
+ totals.append(stats)
+ sourcehash=sha(E/'source-provenance.json');lexhash=sha(E/'lexical-queries.json');occsha=sha(D/'occurrence-audit.json')
+ challenge={316:'Challenge ph1 first: the full nominal phrase owns what brings it to an end at d3 because its internal object prevents a clean lexical predicate atom.',317:'Challenge w17 first: the yielding verb owns ripens forth; the nominal result and the later verbalized rnam smin are separately located, never inferred from matching substrings.',318:'Challenge w12 first: gcig owns in question as the local particularizer of the first mental stream; it is a contextual rendering, not a new binding gloss.'}[seq]
+ lines=[f'C05:{seq} — independent Tibetan-first proposal by Codex (GPT-6); machine alignment remains provisional.',challenge,
+ f"Counts: {stats['spans']} spans; {stats['nulls']} null; {stats['d5_total']} total d5; {stats['non_null_d5_word_pairs']} non-null d5 word pairs; {stats['errata']} errata proposals.",
+ 'The full argument and C05:310–324 context were read independently; all 18 six-field snapshot comparisons match original full SQLite rows.',
+ f'Original evidence: ../evidence/source-provenance.json SHA256 {sourcehash}; archived source bytes and exact Git-object pins are named there.',
+ f'Master records: ../evidence/lexical-queries.json SHA256 {lexhash}; curated/glossary fields and reference comparanda remain distinct, with no hgm_gloss edits.',
+ f'Exact occurrences and source-specific reasons: occurrence-audit.json SHA256 {occsha}; omissions are in decisions.json.',
+ 'Errata: ../evidence/errata-review.json checks all five grounds; original query rows and physical Latin-1 extents are preserved. '+('LOW/PROBABLE BA’I→PA’I only; no original blockprint or independent same-passage publication was inspected.' if seq==318 else 'No candidate survives the proposal review; errata.json is empty.'),
+ f"Native generator: EXIT=0; stderr=0 bytes; stdout=body.html, {stats['body_bytes']} bytes, SHA256 {stats['body_sha256']}.",
+ f"Final spec SHA256 {stats['spec_sha256']}; canonical resolver EXIT=0, empty stderr; resolved.json SHA256 {stats['resolver_sha256']}.",
+ ('Attempt 01 is superseded only for its source-apostrophe note. Attempt 02 preserves authentic generator and resolver streams; unchanged original source evidence is reused.' if seq==318 else 'Attempt 01 is the final native run; no failed or superseded native attempts for this segment.'),
+ 'Native canonical bytes run with the original worktree __file__ paths, historically pinned builder/engine dependencies, and an explicit SQLite mode=ro adapter; no gate is altered.',
+ 'Fresh reconciliation, independent skeptical review and root acceptance remain later requirements; these proposal checks do not imply semantic approval.']
+ (D/'report.md').write_text('\n'.join(lines)+'\n')
+dump(E/'final-evidence-audit.json',dict(schema='evidence-audit-v1',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_commit=pin['commit'],source_origin_course_boundary=309,not_future_acceptance_baseline=True,query_rechecks=rechecks,source_hash_rechecks=source_rechecks,required_reference_access=access,corpus_counts=dict(spine=db.execute('SELECT count(*) FROM corpus_segments').fetchone()[0],original_archive=len(json.loads(gzip.decompress((E/'full_parallel_corpus_v32.json.gz').read_bytes())))),text_comparison=dict(left='C03:373',right='C16:437',fields_equal=compared,limits='Field identity only; id/course/seq differ and publication independence or ingestion lineage is unproved.'),segment_statistics=totals))
+(B/'README.md').write_text('Independent Tibetan-first proposals for C05:316–318, produced by Codex (GPT-6). Read each report.md first, then spec.json, occurrence-audit.json and mechanical-audit.json. Full original evidence is shared only within this angle under evidence/.\n\nThe immutable source/governance origin is 8575edf1e0de695677194c1fde60f1d9e2c2f204 through309. It does not represent later through315 acceptance. No other-angle, root judgments, reconciliation or semantic files were read. All writes stayed in this tibetan/ root.\n\nAll native invocations are in segment attempts/ directories with exact stdin, stdout, stderr, exit and invocation metadata. Attempt 01 passes for all three segments; row 318 attempt 02 supersedes the note only and retains attempt 01. No failed native invocation occurred. Scripts are the preserved working helpers, not an instruction to overwrite frozen artifacts. No repository/source/master writes, device/browser/account actions, paid APIs, agents or commits occurred.\n\nThe manifest is frozen_manifest.json, schema independent-proposal-freeze-v1. It hashes every artifact under this angle except itself, using relative paths, exact byte counts and SHA256. Any later change must preserve this boundary and explicitly supersede it. Fresh reconciliation, independent skepticism and root acceptance remain outstanding.\n')
+files=[]
+for p in sorted(B.rglob('*')):
+ if p.is_file() and p.name!='frozen_manifest.json':files.append(dict(path=str(p.relative_to(B)),bytes=p.stat().st_size,sha256=sha(p)))
+manifest=dict(schema='independent-proposal-freeze-v1',producer='Codex GPT-6',angle='Tibetan-first',course='C05',segments=[316,317,318],frozen_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_origin_commit=pin['commit'],source_origin_course_boundary=309,actual_acceptance_baseline_not_claimed=True,file_count=len(files),files=files,segment_statistics=totals,status='frozen independent proposal; reconciliation, skepticism, and root acceptance remain required')
+dump(B/'frozen_manifest.json',manifest)
+for f in files:assert sha(B/f['path'])==f['sha256'] and (B/f['path']).stat().st_size==f['bytes']
+print(json.dumps(dict(manifest=str(B/'frozen_manifest.json'),schema=manifest['schema'],manifest_sha256=sha(B/'frozen_manifest.json'),files=len(files),stats=totals),indent=2))

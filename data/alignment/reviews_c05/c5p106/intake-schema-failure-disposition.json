@@ -1,0 +1,14 @@
+{
+  "status": "CORRECTED_VERIFIER_INDEX_ASSUMPTION",
+  "original_failed_script": "independent_intake.py",
+  "actual_failure_stream": "intake-caller/stderr.bin",
+  "reason": "Original SQL evidence includes dictionary entries as well as corpus rows: raw/id keys alone do not identify corpus records. The first helper compared a dictionary row to corpus data; its first repair then assumed a course key. Both verifier failures are preserved. Restrict corpus checks to records carrying course and seq, with per-course archive indexing and exact full-record equality. All dictionary SQL rows were independently reexecuted and matched. No source or proposal changed.",
+  "mismatched_id_assumptions": [],
+  "reused_verified_pre_failure": [
+    "freeze identities",
+    "source pins",
+    "all SQL records/counts",
+    "all full master records/counts"
+  ],
+  "rerun_generators": 0
+}

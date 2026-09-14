@@ -1,0 +1,17 @@
+from pathlib import Path
+import sys,types,sqlite3,json
+S=Path(__file__).resolve().parent;W=S.parents[2]/'campaign-worktree';P=S/'governing-originals';original=sqlite3.connect
+
+def ro(db,*a,**kw):
+ assert str(db)==str(W/'build/hgm_spine_v27_2.db');kw['uri']=True;return original(Path(db).as_uri()+'?mode=ro',*a,**kw)
+sqlite3.connect=ro
+for name,rel in [('hgm_tools','engines/hgm_tools.py'),('build_alignment_layer','tools/build_alignment_layer.py'),('gen_alignment_page','tools/gen_alignment_page.py')]:
+ raw=(P/(rel+'.txt')).read_bytes();m=types.ModuleType(name);m.__file__=str(W/rel);sys.modules[name]=m;exec(compile(raw,m.__file__,'exec'),m.__dict__)
+g=sys.modules['gen_alignment_page']
+if sys.argv[1]=='generate':g.main()
+else:
+ spec=json.load(sys.stdin);db=sqlite3.connect(str(W/'build/hgm_spine_v27_2.db'));db.row_factory=sqlite3.Row;out=[]
+ for s in spec['segments']:
+  r=dict(db.execute('select * from corpus_segments where course=? and seq=?',(spec['course'],s['seq'])).fetchone());byid={x['id']:x for x in s['spans']};tr=g.resolve(r['wylie'],s['spans'],'tib',s['seq']);er=g.resolve(r['english'],g.with_members(s['spans'],[byid[i] for i in s['eng_order']],r['english']),'eng',s['seq'])
+  out += [dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x['id'] in er else None) for x in s['spans']]
+ print(json.dumps(out,ensure_ascii=False,indent=2))

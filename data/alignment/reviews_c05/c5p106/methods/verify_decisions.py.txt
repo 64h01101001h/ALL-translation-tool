@@ -1,0 +1,61 @@
+from pathlib import Path
+import json,hashlib,re,difflib,sqlite3,os,datetime
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';W=S.parents[2]/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# Verify all complete review-package blocks against immutable file bytes or actual complete diffs.
+t=(B/'semantic-input-review-package.txt').read_text();parts=re.split(r'\n===== (.*?) =====\n',t);assert not parts[0].strip();proof=[]
+for name,body in zip(parts[1::2],parts[2::2]):
+ if name=='PACKAGE INPUT HASHES':
+  for r in json.loads(body):
+   raw=(B/r['path']).read_bytes();assert H(raw)==r['sha256'] and len(raw)==r['bytes']
+ elif name.startswith('COMPLETE '):
+  m=re.fullmatch(r'COMPLETE (tibetan|english) TO RECONCILED DIFF (\d+)',name);a,n=m.groups();f=a+'/'+n+'/spec.json';g='reconciled/'+n+'/spec.json';x=(B/f).read_text().splitlines();y=(B/g).read_text().splitlines();matches=[k for k in range(0,51) if '\n'.join(difflib.unified_diff(x,y,fromfile=f,tofile=g,n=k,lineterm='')).strip()==body.strip()];assert matches,name
+ else:
+  raw=(B/name).read_text();assert raw.strip()==body.strip(),name
+ proof.append(dict(section=name,body_sha256=H(body.encode()),body_bytes=len(body.encode())))
+put(S/'complete-package-proof.json',dict(status='PASS',package_sha256=H(t.encode()),package_bytes=len(t.encode()),sections=proof,reading_method='All blocks compared in full to their actual files or complete generated diffs. All source fields, current specs/notes/bodies/reports, original reasons and omissions, all changed dispositions and final reasons were read semantically once. Repeated JSON metadata and exact repeated strings were not treated as new semantic content.'))
+K=['seq','id','d','tib','eng','tib_range','eng_range'];orig=read(S/'original-resolved-spans.json');final=read(S/'resolved-spans.json');disps=read(Q/'original-span-dispositions.json');assert len(disps)==len(orig)==150
+for x in orig:
+ ds=[d for d in disps if d['angle']==x['angle'] and d['seq']==x['seq'] and d['original']['id']==x['id']];assert len(ds)==1;d=ds[0];assert d['original']=={k:x[k] for k in K};sp=read(B/x['angle']/str(x['seq'])/'spec.json')['segments'][0]['spans'];spec=next(v for v in sp if v['id']==x['id']);assert d['original_spec_span']==spec;dec=read(B/x['angle']/str(x['seq'])/'decisions.json');assert d['original_reason']==next(v['reason'] for v in dec['spans'] if v['id']==x['id']);assert bool(d['reason'])
+ for ft in d['final_tuples']:assert {k:ft[k] for k in K}==next(v for v in final if v['seq']==x['seq'] and v['id']==ft['id'])
+ if d['disposition']=='retained_exact':assert any(all(x[k]==ft[k] for k in K if k!='id') for ft in d['final_tuples'])
+for n in [316,317,318]:
+ d=read(Q/str(n)/'decisions.json');rs=[x for x in final if x['seq']==n];assert [{k:x[k] for k in K} for x in d['spans']]==rs
+ row=next(r for r in read(S/'source-context-independent.json') if r['seq']==n)
+ for x in d['spans']:
+  for field,word,rkey,akey in [('wylie','tib','tib_range','all_source_occurrences'),('english','eng','eng_range','all_english_occurrences')]:
+   if x[word] is None:assert x[rkey] is None and x[akey]==[];continue
+   assert row[field][slice(*x[rkey])]==x[word];found=[[m.start(),m.start()+len(x[word])] for m in re.finditer('(?='+re.escape(x[word])+')',row[field])];assert found==x[akey]
+ for field,part in [('wylie','tibetan'),('english','english')]:
+  covered=set()
+  for x in rs:
+   rr=x['tib_range' if field=='wylie' else 'eng_range']
+   if rr:covered.update(range(*rr))
+  gaps=[];i=0
+  while i<len(row[field]):
+   if i in covered:i+=1;continue
+   j=i+1
+   while j<len(row[field]) and j not in covered:j+=1
+   gaps.append(dict(range=[i,j],text=row[field][i:j]));i=j
+  assert gaps==d['complete_unwrapped_ranges'][part]
+# Independently remeasure every final-screen count/quote and clarify the one misleading token-count label.
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;mq=read(S/'independent-master-rechecks.json');screens=[]
+def exact_master(term):return len({x['index'] for q in mq if q['term']==term for x in q['records'] if x['collection']=='unified_entries'})
+for n in [316,317,318]:
+ row=dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',n)).fetchone())
+ for x in read(Q/str(n)/'five-ground-errata-review.json'):
+  locations={f:[m.start() for m in re.finditer(re.escape(x['found']),row[f])] for f in ['acip','wylie','english']};assert locations==x['grounds']['a_quote']['locations'];meas=x['grounds']['e_counts']['measured'];assert meas['source_chars']=={f:len(row[f]) for f in ['acip','wylie','english']}
+  for f,c in meas['full_field_parallel_counts'].items():assert db.execute('select count(*) from corpus_segments where '+f+'=?',(row[f],)).fetchone()[0]==c
+  if 'broad_wylie_gnag_rows' in meas:
+   assert db.execute('select count(*) from corpus_segments where wylie like ?',('%gnag%',)).fetchone()[0]==meas['broad_wylie_gnag_rows'];assert exact_master('gnag')==meas['exact_unified_gnag'];assert exact_master('nag')==meas['exact_unified_nag'];literal=len(re.findall(r'(?<!\S)gnag(?=[ ,]|$)',row['wylie']));assert literal==meas['whole_wylie_gnag_tokens'];lexical=[[m.start(),m.end()] for m in re.finditer(r'(?<![A-Za-z])gnag(?![A-Za-z])',row['wylie'])];x['independent_count_clarification']=dict(original_label='whole_wylie_gnag_tokens',original_whitespace_start_regex=r'(?<!\S)gnag(?=[ ,]|$)',literal_original_regex_count=literal,punctuation_aware_lexical_regex=r'(?<![A-Za-z])gnag(?![A-Za-z])',lexical_count=len(lexical),lexical_ranges=lexical,disposition='Original measurement preserved but label is too broad for comma-adjacent verse. Use explicitly delimited count and lexical count separately; semantic GNAG/NAG refutation unchanged.')
+  if 'acip_dres_bai_rows' in meas:
+   for f,q,key in [('acip',"%'DRES BA'I%",'acip_dres_bai_rows'),('acip',"%'DRES PA'I%",'acip_dres_pai_rows'),('wylie',"%ma 'dres ba'i%",'negative_wylie_bai_rows'),('wylie',"%ma 'dres pa'i%",'negative_wylie_pai_rows')]:assert db.execute('select count(*) from corpus_segments where '+f+' like ?',(q,)).fetchone()[0]==meas[key]
+   for term,key in [("ma 'dres ba",'exact_unified_ma_dres_ba'),("ma 'dres pa",'exact_unified_ma_dres_pa'),("'dres ba",'exact_unified_dres_ba'),("'dres pa",'exact_unified_dres_pa')]:assert exact_master(term)==meas[key]
+   assert db.execute('select count(*) from corpus_segments').fetchone()[0]==meas['original_spine_rows']
+  screens.append(x)
+put(S/'errata-counts-independent.json',screens)
+required=[Path('/Users/adamderickandrade')/x for x in ['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']];assert all(p.is_dir() and os.access(p,os.R_OK) for p in required);put(S/'required-access.json',[dict(path=str(p),readable=True) for p in required])
+put(S/'decisions-mechanical-proof.json',dict(status='PASS',original_dispositions=150,final_spans=79,full_package_sections=len(proof),errata_screens=len(screens),metadata_count_clarifications=1,semantic_approval_implied=False))
+print((S/'decisions-mechanical-proof.json').read_text())

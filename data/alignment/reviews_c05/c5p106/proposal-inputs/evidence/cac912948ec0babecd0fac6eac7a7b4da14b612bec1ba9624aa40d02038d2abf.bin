@@ -1,0 +1,11 @@
+[
+  {
+    "seq": 318,
+    "kind": "TIBETAN_SPELLING",
+    "found": "'DRES BA'I",
+    "expected": "'DRES PA'I",
+    "evidence": "C05:318 ACIP has 'DRES BA'I exactly once; its Wylie has 'dres ba'i. The full physical C05ReadingASCII.txt preserves those source bytes at [221940,221950), so this is not introduced by ACIP-to-Wylie conversion. Across the 42,199-row original spine, ACIP LIKE %'DRES BA'I% has 1 row (C05:318), whereas %'DRES PA'I% has 17 rows, all preserved in ../evidence/corpus-queries.json. C03:373 and C16:437 both read SDIG DANG MA 'DRES PA'I in the same translated passage; their ACIP, Wylie and English agree, but this does not independently establish publication or ingestion lineage. EM:908 separately reads SDIG CHE BA DANG MA 'DRES PA'I ZAS. The archived master has 'dres pa (mixed) and ma 'dres (unmixed), and no exact 'dres ba; reference particle-morphology.md specifies pa after final s. No same-passage parallel was found by the recorded full-spine English/Wylie searches, including C16, P1 and TCS; no duplicate or registered class was found in the pinned register. Standard nominalizer spelling therefore favors PA'I, but no original Tibetan blockprint or independently established same-passage publication was consulted; retain PROBABLE and preserve BA'I unchanged.",
+    "severity": "LOW",
+    "confidence": "PROBABLE"
+  }
+]

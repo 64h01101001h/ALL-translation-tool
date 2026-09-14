@@ -1,0 +1,105 @@
+from pathlib import Path
+import json,datetime,hashlib
+S=Path(__file__).resolve().parent;Q=S.parent/'reconciled'
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+reasons={316:'''The first category is nonvirtue as a complete negative lexical unit; its English hyphen is source spelling.
+The dge member names virtue inside Non-virtue; it does not assert a positive reading of the negative parent. Both ranges are strictly internal.
+The verse's gzugs is the form realm in its pair with desire. The actual English noun is form.
+This dang coordinates the two realms; the earlier English as well as coordinates a different pair and cannot be captured.
+The abbreviated desire-realm noun is locally rendered desire, with no supplied realm inserted.
+The inclusion predicate supplies taken In across the physical line break. Its genitive ending is a relation to virtue outside the lexical verb; capital In remains exact.
+The second, positive virtue is the separate English token after as well as, distinct from the earlier member.
+The emphatic nyid concerns virtue itself and owns itself, not a general essence noun.
+ni introduces the classified subject. English topic-predicate syntax carries this contribution without a separate word. This affirmative no-separate-exponent conclusion supports the sole topic null.
+The complete adverb orders the three categories respectively; du belongs to this established adverbial form.
+The first listed color is black. The comma before gnag is punctuation, not evidence that the lexeme is absent.
+The second color is white, describing form-realm virtue in the following explanation.
+The dang after dkar owns and before both; the previous color connector is punctuation in English.
+The totalizing numeral is both, the mixed category. Its following genitive relates it to deeds without a separate lexical exponent.
+The list's noun las is fronted as deeds before the three colors; it is not the different postposition from elsewhere.
+The demonstrative object in the ending expression is it after brings. C05:320 explains that referent; letters inside itself or white are not this pronoun.
+The exhaustion/end component supplies the nominal result end. Local causation and the full HGM end entry support this, without taking to an.
+The doing/causing component supplies brings in brings it to an end. Full HGM brings supports the local causative; the object and result have their own source words.
+The privative compound names the unstained fourth category. Supplied The and the copula are excluded.
+The stain component is stained within unstained; its participial English morphology is part of this locally exact member.
+The absence component gives the permitted un prefix, uniquely inside the unstained parent.
+The last yin is the copula is for the unstained category. It cannot also own the earlier supplied represent.'''.splitlines(),
+317:'''The opening las names the deeds being classified; its plural English is in the question.
+The established plural demonstrative is these, excluding the supplied four types of.
+The interrogative lexical unit gives how. HGM supports both just how and a competing just for 'o na, so this review does not decide the extra intensifier.
+Non-virtue names the whole first category and retains the negative compound.
+The positive virtue member is strictly contained in its negative parent on both sides; Non is deliberately unbanked as an affix.
+The topical ni is represented by subject-predicate organization without a separate English word; the definition's represents has the explicit yin owner.
+First gnag gives intrinsic blackness in the opening definition.
+Conjunctive la joins intrinsic blackness to the stated black ripening and supplies and.
+The complete ripening compound gives the first ripens in the definition, not either later repetition.
+This gnag pa gives the resultant blackness of that first definition. The full nominal color word is attested; its following genitive is excluded.
+The second las names the singular deed inside a type of deed; the explanatory type words stay outside.
+The main defining yin is recast as represents. This is an actual local predication, not a claimed new binding dictionary gloss.
+The inflected possessive pronoun refers back to the deed and gives its. The complete lexical form supports d5.
+The second ngo bo supplies very nature; the exact HGM lexical equivalent supports retaining very. The earlier question's ngo bo has a distributed recast.
+The established afflicted compound supplies afflicted alone. A longer dictionary phrase containing consists of something would overcapture this predicate's explicit copula and supplied noun.
+The second yin supplies consists of in the nature predication. The adjective has its own source and something remains framing.
+The first causal pas supplies in that, introducing the afflicted-nature ground for intrinsic blackness.
+Third gnag is the intrinsic blackness being explained in It is black in that, not the previous result-black token.
+The first shortened ripening noun is the produced result at the end of the English; its grammatical role distinguishes it from the second shortened ripening.
+The negative desirability compound qualifies that result as undesirable; the whole term stays intact.
+The internal mi gives the permitted un prefix in undesirable. A discontinuous positive remainder is not manufactured as a member.
+The producing verb 'byin gives ripens forth in this local rendering; the full master has different HGM glosses and is not misrepresented as already listing this pair.
+The second causal pas gives for introducing the production of an undesirable result, distinct from in that.
+The final shortened rnam smin is verbalized as the middle ripens in It also ripens into something black; source role determines the crossing order.
+The additive yang gives also in that resultant-blackness explanation.
+The last gnag pa is the explained resultant blackness, the fourth English black; its following proof-closing grammar stays unbanked.'''.splitlines(),
+318:'''The source noun identifies the form realm. Full HGM realm of form supports the complete local noun phrase as a lexical equivalent; the article is excluded.
+The inclusion predicate gives taken in. The disputed su/by attribution is left unresolved separately, without narrowing the actual phrasal verb.
+Virtue is the form-realm category at issue and the topical subject.
+ni has no separately alignable English word in this subject-predicate organization; represents belongs to yin, so the null does not hide competing lexical content.
+The first white characterizes the deed's intrinsic nature.
+The first la connects intrinsic and ripening whiteness, supplying and. The extra English also is not forced into this atom.
+The full ripening compound gives the initial ripens in the definition.
+The full nominal dkar ba names white ripening in that definition; the following genitive is outside the lexical unit.
+las gives the category noun deed; a type of is explanatory framing.
+yin provides the defining represents, as the adjacent black-deed definition does.
+The lexical possessive rang gi gives its before basic nature, without capturing anything from the following noun.
+The full ngo bo equivalent is basic nature. Basic is attested inside the lexical equivalent, not a supplied participant.
+First rgyud is the mental stream of the no-affliction relation and owns the first English mental stream.
+The first stream's la is within, preceding that stream in English; it is not one of the three comitative/locative with tokens.
+The affliction noun is rendered adjectivally as afflicted. Types of things is explanatory English and stays outside.
+First dang supplies with after unmixed, linking the afflicted things; it does not own the later stream-locative with.
+The complete negative mixture unit is unmixed in the first explanatory relation.
+The first ma is the unique negative un member within unmixed.
+The first 'dres is mixed within the same negative parent; its apostrophe and source extent are preserved.
+The shortened ripening noun names the desirable result produced in the next clause.
+The established desirability compound qualifies that result as desirable.
+The local yielding verb supplies ripens forth, parallel to the immediately preceding undesirable-result rendering; no replacement hgm_gloss is composed.
+The second rgyud is the mental stream in the no-suffering condition and owns the second stream phrase.
+The second gcig has an explicit one before the second mental stream; this does not resolve the first gcig/in question proposal.
+The second stream's la gives with immediately after the semicolon, a defensible published relation in this context.
+The established suffering compound supplies suffering, excluding supplied any.
+The final dang gives the final with before any suffering, separate from the locative with at the clause start.
+The second negative mixture compound is analytically rendered not mixed together. Together describes mixture; the auxiliary is is excluded.
+The second ma gives not strictly within that final negative parent, distinct from the earlier un.
+The second 'dres supplies mixed together strictly within the same final parent, preserving the meaningful mixing adverb.
+The terminal phyir closes the joint explanation and is fronted as because of before its basic nature; This is first of all remains supplied framing.'''.splitlines()}
+rs=read(S/'resolved-spans.json');decisions=[]
+for n in [316,317,318]:
+ rows=[r for r in rs if r['seq']==n];assert len(rows)==len(reasons[n]),(n,len(rows),len(reasons[n]))
+ final=read(Q/str(n)/'decisions.json')
+ for r,reason in zip(rows,reasons[n]):
+  detail=next(x for x in final['spans'] if x['id']==r['id']);decisions.append(dict(**r,parent=detail['parent'],verdict='SOUND_PROVISIONAL',independent_reason=reason))
+put(S/'independent-span-decisions.json',decisions)
+orig=[]
+for d in read(Q/'original-span-dispositions.json'):
+ if not d['final_ids']:
+  own={('english',317,'p1'):'Both just and just how are attested, but this local source does not settle which owns Just. Omission is warranted and is not a null.',('tibetan',318,'p1'):'The inclusion complement and English passive syntax do not establish a separate su/by atom. Preserve it unbanked with uncertainty.',('tibetan',318,'w12'):'First gcig can particularize a stream, but the nearby particular rendering belongs to another occurrence. Do not claim a settled separate in question exponent here.'}[(d['angle'],d['seq'],d['original']['id'])]
+ else:own=' '.join(next(x['independent_reason'] for x in decisions if x['seq']==d['seq'] and x['id']==i) for i in d['final_ids'])
+ orig.append(dict(angle=d['angle'],original=d['original'],original_disposition=d['disposition'],review_verdict='AGREE_WITH_RECONCILIATION',final_ids=d['final_ids'],independent_reason=own))
+put(S/'independent-original-dispositions.json',orig)
+omissions=[]
+for n in [316,317,318]:
+ for x in read(Q/str(n)/'decisions.json')['omissions']:
+  omissions.append(dict(seq=n,original_complete_omission=x,review_verdict='AGREE_WITH_STATED_LIMIT',independent_reason=('The source and complete English were compared before assigning the retained lexical units. This material is either supplied English, distributed grammar or specifically unresolved correspondence; the explicit ni topic null is separately justified in independent-span-decisions.json. No omitted content is treated as a proven absence merely to increase null coverage.')))
+put(S/'independent-omission-decisions.json',omissions)
+put(S/'bank-ready-errata.json',[]);put(S/'span-head-allow-needed.json',{'pages_c05':{}})
+print(json.dumps(dict(spans=len(decisions),original_dispositions=len(orig),omission_groups=len(omissions))))

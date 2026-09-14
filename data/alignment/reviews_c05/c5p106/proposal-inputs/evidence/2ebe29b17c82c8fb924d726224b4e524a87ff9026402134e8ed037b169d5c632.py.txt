@@ -1,0 +1,73 @@
+"""Bind reviewed decisions to actual native streams; no generation in this packaging step."""
+from pathlib import Path
+import json,hashlib,re,html,datetime,collections,sqlite3,gzip,subprocess
+P=Path(__file__).resolve().parent;B=P.parent;W=P.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ids(rows):return {r['id']:r for r in rows}
+def overlap(a,b):return a is not None and b is not None and max(a[0],b[0])<min(a[1],b[1])
+def gaps(text,rr,key):
+ covered=set(i for r in rr if r[key] is not None for i in range(*r[key]));out=[];start=None
+ for i in range(len(text)+1):
+  if i<len(text) and i not in covered:
+   if start is None:start=i
+  elif start is not None:out.append(dict(range=[start,i],text=text[start:i]));start=None
+ return out
+pin=json.loads((B/'proposal-baseline.json').read_text());plans=json.loads((P/'planned-resolved-spans.json').read_text());allresolved=[];alldisp=[];summaries=[]
+reasons_omitted={(317,'english','p1'):"Just has competing plausible ownership between 'o na and ji lta bu. Neither full dictionary entries nor the sole exact local witness determines this atom, so Just and 'o na remain unbanked rather than nulled.",(318,'tibetan','p1'):'su is the locative-classification complement of the inclusion predicate. Assigning the English passive by separately is unresolved; this is omitted, not asserted absent.',(318,'tibetan','w12'):'First gcig could motivate the particularizer in question, but no independently determined separate exponent is established. Nearby C05:319 particular is another occurrence; this first correspondence remains unbanked.'}
+for n in [316,317,318]:
+ d=P/str(n);sp=json.loads((d/'spec.json').read_text())['segments'][0];native=json.loads((d/'resolved.json').read_text())['segments'][0];rr=native['resolved'];row=native['original_row'];plan=json.loads((d/'planned-decisions.json').read_text());pr=ids(plan['spans'])
+ assert rr==[x for x in plans if x['seq']==n];allresolved.extend(rr)
+ for mode in ['generate','resolve']:
+  nd=d/'native'/('generate-v1' if mode=='generate' else 'resolve-v1');assert (nd/'stdin.json').read_bytes()==(d/'spec.json').read_bytes();assert (nd/'exit.txt').read_text()=='0\n' and not (nd/'stderr').read_bytes()
+  assert (nd/'stdout').read_bytes()==(d/('body.html' if mode=='generate' else 'resolved.json')).read_bytes()
+ expected_parent=None;final=[]
+ for s,r in zip(sp['spans'],rr):
+  assert row['wylie'][slice(*r['tib_range'])]==s['tib']
+  if s['eng'] is not None:assert row['english'][slice(*r['eng_range'])]==s['eng']
+  parent=expected_parent if s['d']==7 else None
+  if s['d']==7:
+   p=next(x for x in final if x['id']==parent);assert p['d']==5
+   for key in ['tib_range','eng_range']:
+    assert p[key][0]<=r[key][0]<r[key][1]<=p[key][1] and r[key]!=p[key]
+   assert p['tib'].count(s['tib'])==1
+  else:expected_parent=s['id']
+  final.append(dict(**r,parent=parent,reason=pr[s['id']]['reason'],all_source_occurrences=[[m.start(),m.end()] for m in re.finditer(re.escape(s['tib']),row['wylie'])],all_english_occurrences=[[m.start(),m.end()] for m in re.finditer(re.escape(s['eng']),row['english'])] if s['eng'] is not None else [],range_convention='zero-based Unicode codepoint [start,end)'))
+ # Full rendered source text, with only generated null markers excluded, must be exact.
+ body=(d/'body.html').read_text();parts=re.findall(r'<span class="u" data-d="1" data-l="s'+str(n)+r'S">(.*?)</div>',body,re.S);assert len(parts)==2
+ for source,part in zip([row['wylie'],row['english']],parts):
+  part=re.sub(r'<span class="nul">.*?</span>','',part);plain=html.unescape(re.sub('<[^>]+>','',part)).strip();assert plain==source
+ assert 'PROVISIONAL' in sp['note'] and 'pending' not in sp['note'].lower()
+ allowances=[r for r in rr if r['d'] in [5,7] and r['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',r['eng'],re.I)];assert not allowances
+ dispositions=[]
+ for angle in ['tibetan','english']:
+  orig=json.loads((P/'native/originals'/angle/str(n)/'resolve/stdout').read_text())['segments'][0]['resolved'];origsp=ids(json.loads((B/angle/str(n)/'spec.json').read_text())['segments'][0]['spans']);origwhy=ids(json.loads((B/angle/str(n)/'decisions.json').read_text())['spans']);op=None
+  for old in orig:
+   parent=op if old['d']==7 else None
+   if old['d']!=7:op=old['id']
+   exact=[r for r in final if all(r[k]==old[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+   if exact:chosen=exact;state='retained_exact';reason=exact[0]['reason']
+   elif (n,angle,old['id']) in reasons_omitted:chosen=[];state='omitted_uncertain';reason=reasons_omitted[n,angle,old['id']]
+   else:
+    same=[r for r in final if r['tib_range']==old['tib_range'] and r['eng_range']==old['eng_range']]
+    chosen=same if same else [r for r in final if r['d']!=7 and overlap(r['tib_range'],old['tib_range']) and overlap(r['eng_range'],old['eng_range'])]
+    assert chosen,(n,angle,old)
+    state='recast';reason=' | '.join(r['reason'] for r in chosen)
+    if n==316 and angle=='tibetan' and old['id']=='ph1':reason='The original complete d3 nominal phrase is defensible. Prefer its separately identifiable object de/it, ending zad/end, and causative byed pa/brings, with direct full-master HGM support and local clause roles. The flattened layer cannot simultaneously retain the parent phrase and these flat lexical words; nominal what and result-frame to an remain unwrapped.'
+    elif n in [317,318] and old['tib']=='rang gi':reason='Inflected possessive pronoun is a lexical unit with exact HGM its, so retain it at d5; source function, not the multiword Wylie spelling, determines depth.'
+    elif n==317 and old['tib']=='de dag':reason='Established plural demonstrative lexical unit, exact HGM these, is retained at d5 without the supplied four types of.'
+    elif n==317 and old['tib']=='ji lta bu':reason=pr['p4']['reason']
+    elif old['tib'] in ["gtogs pa'i","gnyis ka'i"]:reason='Retain the attested lexical nominal form without its genitive ending; the source relationship is distributed in English order, not a separate word within taken in/both.'
+    elif old['tib'] in ['gnag','dkar']:reason='The original color stem refers to this same occurrence. Retain the full nominal color word gnag pa/dkar ba where present, supported by the exact HGM headword; the following genitive remains unwrapped.'
+    elif n==318 and old['id'] in ['p8','w21'] and angle=='tibetan':reason='Retain the same exact negative/positive exponents as d7 members within the established complete second ma \'dres/not mixed together compound. The original analytic flat pieces are not false, but the compound plus contained members preserves both lexical and morphological coverage.'
+   rec=dict(angle=angle,seq=n,original=old,original_spec_span=origsp[old['id']],original_parent=parent,original_reason=origwhy[old['id']]['reason'],disposition=state,final_ids=[r['id'] for r in chosen],final_tuples=[{k:r[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range','parent']} for r in chosen],reason=reason)
+   dispositions.append(rec)
+ alldisp.extend(dispositions)
+ counts=dict(span_count=len(rr),null_count=sum(r['eng'] is None for r in rr),word_pair_count=sum(r['d']==5 and r['eng'] is not None for r in rr),total_d5=sum(r['d']==5 for r in rr),d7_count=sum(r['d']==7 for r in rr))
+ decision=dict(seq=n,status='RECONCILED_PROVISIONAL_NATIVE_PROVEN_NOT_ACCEPTED',spans=final,original_dispositions=dispositions,omissions=plan['omissions'],complete_unwrapped_ranges=dict(tibetan=gaps(row['wylie'],rr,'tib_range'),english=gaps(row['english'],rr,'eng_range')),supplied_head_allowances=[],counts=counts)
+ put(d/'decisions.json',decision)
+ summary=dict(seq=n,**counts,spec_bytes=(d/'spec.json').stat().st_size,spec_sha256=sha((d/'spec.json').read_bytes()),body_bytes=(d/'body.html').stat().st_size,body_sha256=sha((d/'body.html').read_bytes()),generator_exit=0,resolver_exit=0,errata_count=0,original_dispositions=len(dispositions));summaries.append(summary)
+put(P/'resolved-spans.json',allresolved);put(P/'original-span-dispositions.json',alldisp);assert len(alldisp)==150
+put(P/'supplied-head-allowances.json',dict(pages_c05={}))
+put(P/'reconciliation-summary.json',dict(schema='c05-reconciliation-summary-v1',status='RECONCILED_PROVISIONAL_NATIVE_PROVEN_NOT_ACCEPTED',producer='Codex',source_origin_git_commit=pin['commit'],source_origin_course_boundary=309,actual_acceptance_baseline=None,segments=summaries,total_spans=len(allresolved),total_nulls=sum(s['null_count'] for s in summaries),total_word_pairs=sum(s['word_pair_count'] for s in summaries),total_d7=sum(s['d7_count'] for s in summaries),original_dispositions=len(alldisp),disposition_counts=dict(collections.Counter(x['disposition'] for x in alldisp)),read_scope='Full selected sources and C05:310–324 context, all 150 original rationales and resolved ranges, all six original reports and specs, all 79 final tuples, five original English five-ground screens and the Tibetan candidate screen read. All original SQL and master query records were fully reopened and identity-checked. HGM fields of all unique material unified entries were read, with complete critical master records for causative, demonstrative, interrogative, mixture/spelling, gcig and unstained decisions. Broad corpus context records were retained and original-object identity checked; not every broad lexical witness was semantically adjudicated.',limits=['Independent fresh skeptic and root acceptance remain required.','Source origin309 is not a later through315 acceptance baseline.','No production fidelity suite, repository landing, integration or human approval claimed.','Physical ASCII and digital comparisons do not establish independent publication or ingestion lineage.','Original native history, including Tibetan318 note supersession, is preserved unchanged.']))
+print(json.dumps(dict(segments=summaries,original_dispositions=len(alldisp),disposition_counts=dict(collections.Counter(x['disposition'] for x in alldisp))),indent=2))

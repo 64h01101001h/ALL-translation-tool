@@ -1,0 +1,23 @@
+import pathlib,json,subprocess,datetime,os,hashlib,sys
+P=pathlib.Path(__file__).resolve().parent;W=P.parents[2]/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+results=[]
+for seq in [316,317,318]:
+ spec=(P/str(seq)/'spec.json').read_bytes()
+ for mode in ['generate','resolve']:
+  d=P/str(seq)/'native'/f'{mode}-v1';d.mkdir(parents=True,exist_ok=False)
+  cmd=[sys.executable,'-B',str(P/'canonical.py'),mode];env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+  (d/'stdin.json').write_bytes(spec);put(d/'command.json',dict(argv=cmd,cwd=str(W),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1'},stdin_sha256=sha(spec),method_sha256=sha((P/'canonical.py').read_bytes()),implementation='unchanged worktree canonical generator with exact historical builder/engine imports and a read-only SQLite connection adapter; no gates modified'))
+  started=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(cmd,cwd=W,input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env)
+  (d/'stdout.bin').write_bytes(r.stdout);(d/'stderr.bin').write_bytes(r.stderr);(d/'exit.txt').write_text(str(r.returncode)+'\n')
+  proof=dict(seq=seq,mode=mode,started_utc=started,completed_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),returncode=r.returncode,stdin_bytes=len(spec),stdin_sha256=sha(spec),stdout_bytes=len(r.stdout),stdout_sha256=sha(r.stdout),stderr_bytes=len(r.stderr),stderr_sha256=sha(r.stderr));put(d/'execution.json',proof)
+  assert r.returncode==0 and r.stderr==b'',proof
+  if mode=='generate':(P/str(seq)/'body.html').write_bytes(r.stdout)
+  else:
+   got=json.loads(r.stdout)['segments'][0]['resolved'];dec=json.loads((P/str(seq)/'decisions.json').read_text())['spans']
+   assert len(got)==len(dec)
+   for actual,intended in zip(got,dec):assert all(actual[k]==intended[k] for k in ['id','d','tib','eng','tib_range','eng_range']),(actual,intended)
+  results.append(proof)
+put(P/'native-results.json',results)
+print(json.dumps(dict(status='PASS',native_runs=len(results),runs=[dict(seq=x['seq'],mode=x['mode'],returncode=x['returncode'],stdout_bytes=x['stdout_bytes'],stderr_bytes=x['stderr_bytes']) for x in results])))

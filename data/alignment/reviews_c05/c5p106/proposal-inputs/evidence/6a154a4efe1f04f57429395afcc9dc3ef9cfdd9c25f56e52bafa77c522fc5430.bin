@@ -1,0 +1,27 @@
+import pathlib,sys,json,sqlite3,importlib.util,runpy,hashlib
+P=pathlib.Path(__file__).resolve().parent;W=P.parents[2]/'campaign-worktree'
+pin=json.loads((P/'originals/instructions/proposal-baseline.json').read_text())
+generator=W/'tools/gen_alignment_page.py'
+assert generator.read_bytes()==(P/'originals/git/tools/gen_alignment_page.py').read_bytes()
+sys.path.insert(0,str(P/'originals/git/engines'))
+bs=importlib.util.spec_from_file_location('build_alignment_layer',P/'originals/git/tools/build_alignment_layer.py');B=importlib.util.module_from_spec(bs);sys.modules[bs.name]=B;bs.loader.exec_module(B)
+B.SPINE=pin['source_pins']['spine']['path']
+connect=sqlite3.connect
+def readonly(database,*args,**kwargs):
+ assert str(database)==B.SPINE, database
+ kwargs['uri']=True
+ return connect(pathlib.Path(database).as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly
+if sys.argv[1]=='generate':
+ runpy.run_path(str(generator),run_name='__main__')
+elif sys.argv[1]=='resolve':
+ gs=importlib.util.spec_from_file_location('canonical_generator',generator);G=importlib.util.module_from_spec(gs);gs.loader.exec_module(G)
+ spec=json.load(sys.stdin);db=sqlite3.connect(B.SPINE);db.row_factory=sqlite3.Row;out=[]
+ for seg in spec['segments']:
+  row=dict(db.execute('select * from corpus_segments where course=? and seq=?',(spec['course'],seg['seq'])).fetchone())
+  spans=seg['spans'];byid={s['id']:s for s in spans};es=G.with_members(spans,[byid[i] for i in seg['eng_order']],row['english'])
+  tr=G.resolve(row['wylie'],spans,'tib',seg['seq']);er=G.resolve(row['english'],es,'eng',seg['seq'])
+  resolved=[dict(seq=seg['seq'],id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(tr[s['id']]),eng_range=list(er[s['id']]) if s['id'] in er else None) for s in spans]
+  out.append(dict(seq=seg['seq'],original_row=row,resolved=resolved))
+ print(json.dumps(dict(status='PASS',segments=out),ensure_ascii=False,indent=2))
+else:raise RuntimeError('unknown mode')

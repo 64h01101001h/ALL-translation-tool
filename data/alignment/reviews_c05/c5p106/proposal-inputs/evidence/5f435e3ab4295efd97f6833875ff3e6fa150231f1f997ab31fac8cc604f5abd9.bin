@@ -1,0 +1,36 @@
+import pathlib,json,gzip,sqlite3,re
+P=pathlib.Path(__file__).resolve().parent
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+master=json.loads(gzip.decompress((P/'originals/external/hgm_dictionary_v27_2.json.gz').read_bytes()))
+terms=['zag','med','byed','de','de dag','la','pas','yin pas','rgyud gcig',"'dres pa", "'dres ba"]
+out=[]
+for term in terms:
+ rr=[dict(index=i,record=e) for i,e in enumerate(master['unified_entries']) if term==e.get('wylie') or term in (e.get('wylie_variants') or [])];out.append(dict(term=term,count=len(rr),records=rr,match='wylie exact or exact wylie_variants member'))
+put(P/'evidence/master-supplement.json',out)
+pin=json.loads((P/'originals/instructions/proposal-baseline.json').read_text());db=sqlite3.connect(pathlib.Path(pin['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+out=[]
+for sql,args in [
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',["%'byin%",'%ripens forth%']),
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',['%yin%','%represents a type of deed%']),
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',['%gcig%','%in question%']),
+ ('select * from corpus_segments where acip like ? order by course,seq',["%'DRES BA'I%"]),
+ ('select * from corpus_segments where acip like ? order by course,seq',["%'DRES PA'I%"]),
+ ('select * from corpus_segments where wylie like ? order by course,seq',["%gnag%"]),
+ ]:
+  rr=[dict(r) for r in db.execute(sql,args)];out.append(dict(sql=sql,parameters=args,count=len(rr),rows=rr))
+put(P/'evidence/corpus-supplement.json',out)
+corpus=json.loads(gzip.decompress((P/'originals/external/full_parallel_corpus_v32.json.gz').read_bytes()));bycourse={}
+for index,row in enumerate(corpus):
+ bycourse.setdefault(row['course'],[]).append((index,row))
+rows={}
+for fn in ['source-context-originals.json','corpus-queries.json','corpus-supplement.json']:
+ data=json.loads((P/'evidence'/fn).read_text());groups=data if isinstance(data,list) else [data]
+ for q in groups:
+  for row in q['rows']:rows[(row['course'],row['seq'])]=row
+full=[]
+for (course,seq),row in sorted(rows.items()):
+ index,raw=bycourse[course][seq-1]
+ assert all(raw[k]==row[k] for k in ['course','wylie','acip','english'])
+ full.append(dict(course=course,seq=seq,index=index,record=raw))
+put(P/'evidence/full-original-corpus-records.json',full)
+print(json.dumps(dict(supplement_queries=len(out),query_counts=[q['count'] for q in out],full_original_records=len(full),master_extra_terms=len(terms))))

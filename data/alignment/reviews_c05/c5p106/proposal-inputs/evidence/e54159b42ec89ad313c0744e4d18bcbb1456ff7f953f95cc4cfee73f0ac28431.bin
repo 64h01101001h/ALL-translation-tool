@@ -1,0 +1,151 @@
+import pathlib,json,re,hashlib
+P=pathlib.Path(__file__).resolve().parent
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={s['seq']:s for s in json.loads((P/'originals/external/source.json').read_text())}
+# Every English occurrence below was selected from the complete local source clause.
+# Each tuple is Tibetan, exact English, source depth, English occurrence, rationale.
+drafts={
+316:[
+('mi dge','Non-virtue',5,1,'Established negative virtue compound names the first karmic category; preserve the whole hyphenated English and do not introduce the unresolved non-affix split.'),
+('gzugs','form',5,1,'First realm in the form/desire pair, not physical shape in this verse.'),
+('dang','and',6,1,'Connects form and desire, the first English and; it does not own the earlier as well as linking non-virtue and virtue.'),
+("'dod",'desire',5,1,'Second realm in the realm pair, distinguished from non-virtue and virtue.'),
+('gtogs pa','taken In',5,1,'Inclusion predicate is the phrasal taken In across the physical verse line break. Passive by is outside the selected lexical verb.'),
+('dge ba','virtue',5,2,'Positive virtue after non-virtue is the second whole-word virtue occurrence; the first lies within the prior hyphenated negative parent.'),
+('nyid','itself',6,1,'Standalone emphatic particle applies to positive virtue; not an independent doctrinal noun essence here.'),
+('rim bzhin du','Respectively',5,1,'Established adverbial compound states the ordered correspondence of the three categories.'),
+('gnag','black',5,1,'First karmic color category; gnag is an attested HGM black headword.'),
+('dkar','white',5,1,'Second karmic color category.'),
+('dang','and',6,2,'The second dang after dkar introduces both and owns the second English and; the earlier dang between black/white is rendered by the comma and omitted.'),
+('gnyis ka','both',5,1,'Established totalizing numeral compound designates the combined black-and-white category.'),
+('las','deeds',5,1,'Karma deeds, the English head noun preceding the three colors.'),
+('de','it',5,1,'Demonstrative object of ending; English it follows brings, not the letters it within itself.'),
+('zad','end',5,1,'Ending/result component of the causative expression zad byed pa; retains the nominal end without supplied an.'),
+('byed pa','brings',5,1,'Causative verb in brings it to an end; object it and result end are separately assigned.'),
+('zag med','unstained',5,1,'Established privative compound, whole HGM lexical equivalent; supplied The remains outside.'),
+('zag','stained',7,1,'Positive stain component inside unstained, strictly narrower than the whole parent.'),
+('med','un',7,1,'Privative component of zag med owns the permitted un- exponent inside unstained.'),
+('yin','is',5,1,'Final Tibetan copula corresponds to the fourth line is, not the preceding stanza represent supplied for its initial list.'),
+],
+317:[
+("'o na",'Just',3,1,'Opening discourse phrase introduces the question; the local HGM reading splits Just from the interrogative how.'),
+('las','deeds',5,1,'First karma token occurs in the opening question, whose English deeds is plural.'),
+('de dag','these',3,1,'Demonstrative plural phrase for the deeds; supplied four types of is not included.'),
+('ji lta bu','how',3,1,'Interrogative phrase asks what sort of nature, recast as how do we describe; it does not alone own describe.'),
+('mi dge ba','Non-virtue',5,1,'Whole negative virtue compound for the first category.'),
+('gnag','black',5,1,'First black describes the intrinsic quality of the non-virtuous deed.'),
+('la','and',6,1,'Conjunction joins black with its black ripening in the initial definition.'),
+('rnam par smin pa','ripens',5,1,'First ripening compound occurs in the initial definition and owns the first ripens.'),
+('gnag pa','black',5,2,'Second black is the ripened quality in that initial definition.'),
+('las','deed',5,1,'Second karma token is the singular deed in a type of deed, not the opening plural deeds.'),
+('yin','represents',5,1,'Definition copula is rendered with represents a type of deed; supplied a type of is not included.'),
+('rang gi','its',3,1,'Possessive phrase refers to the deed and owns its before very nature.'),
+('ngo bo','very nature',5,1,'Whole established HGM lexical equivalent retains very; not a supplied article or participant.'),
+('nyon mongs can','afflicted',5,1,'Established possessive affliction compound is rendered by the adjective afflicted, without supplied something.'),
+('yin','consists of',5,1,'Second copula predicates the afflicted character of the nature and is recast as consists of, excluding supplied something.'),
+('pas','in that',6,1,'First full causal pas attaches to yin and introduces the reason that the nature is afflicted; English in that precedes that reason.'),
+('gnag','black',5,3,'Third black is the explained intrinsic quality in It is black in that, not the preceding second black in the ripening definition.'),
+('rnam smin','result',5,1,'First abbreviated ripening compound is the object produced: an undesirable result. Its English position follows the ensuing verb after reordering.'),
+("yid du mi 'ong ba",'undesirable',5,1,'Established negative desirability compound qualifies result, not black directly.'),
+('mi','un',7,1,'Negative component is uniquely realized by un- inside its undesirable parent.'),
+("'byin",'ripens forth',5,1,'Local production verb gives forth the result; English recasts it as ripens forth. This is a corpus match, not a claim that the master currently lists that HGM gloss.'),
+('pas','for',6,1,'Second causal pas follows the result-producing verb and is the English for before it ripens forth, distinct from the earlier in that.'),
+('rnam smin','ripens',5,2,'Second abbreviated ripening compound is the explained black ripening and owns the middle ripens in It also ripens into something black.'),
+('yang','also',6,1,'Standalone additive particle in the second abbreviated ripening clause.'),
+('gnag pa','black',5,4,'Fourth black is the explained ripening quality in It also ripens into something black.'),
+],
+318:[
+('gzugs','realm of form',5,1,'Realm sense is an established full HGM equivalent of gzugs; realm of is intrinsic here, while the preceding the is supplied.'),
+('gtogs pa','taken in',5,1,'Inclusion predicate rendered as taken in; passive by is not separately claimed.'),
+('dge ba','Virtue',5,1,'Virtue belongs to the form realm and is the topical subject.'),
+('dkar','white',5,1,'First white is the intrinsic quality of the deed.'),
+('la','and',6,1,'Conjunction connects intrinsic white with white ripening; English also is not separately claimed here.'),
+('rnam par smin pa','ripens',5,1,'Initial full ripening compound owns the first ripens in the opening definition.'),
+('dkar ba','white',5,2,'Second white is the ripening quality in the opening definition.'),
+('las','deed',5,1,'Karma/deed head in the definition, without supplied a type of.'),
+('yin','represents',5,1,'Definition copula is recast by GMR as represents, as in the adjacent black-deed definition.'),
+('rang gi','its',3,1,'Possessive phrase owns its immediately before basic nature; neither its letters elsewhere nor a supplied participant.'),
+('ngo bo','basic nature',5,1,'Whole HGM lexical equivalent retains basic in the first explanatory clause.'),
+('rgyud','mental stream',5,1,'First stream is the individual continuum in which virtue and affliction are not mixed; owns the first English mental stream.'),
+('la','within',6,1,'First stream locative owns within, not any of the three with occurrences.'),
+('nyon mongs pa','afflicted',5,1,'Affliction compound is rendered adjectivally; types of things is left outside the lexical adjective.'),
+('dang','with',6,1,'First comitative links affliction with unmixed and owns with immediately after unmixed.'),
+("ma 'dres",'unmixed',5,1,'Whole established negative mixture compound in the affliction clause.'),
+('ma','un',7,1,'Unique negative member inside the first unmixed parent.'),
+("'dres",'mixed',7,1,'Unique positive mixture member inside the first unmixed parent.'),
+('rnam smin','result',5,1,'Abbreviated ripening noun is the desirable result produced, not the preceding verbal ripens of the definition.'),
+("yid du 'ong ba",'desirable',5,1,'Established desirability compound qualifies the produced result.'),
+("'byin",'ripens forth',5,1,'Production/giving verb is recast as ripens forth into a result; no new master gloss is composed or promoted.'),
+('rgyud','mental stream',5,2,'Second stream locates the absence of suffering in the result clause; owns the second mental stream.'),
+('gcig','one',5,1,'Second gcig has an explicit one in with the one mental stream; this must not be assigned to the first gcig.'),
+('la','with',6,2,'Second stream locative owns the middle with, immediately after the semicolon, not the following suffering-comitative with.'),
+('sdug bsngal','suffering',5,1,'Established suffering compound, without supplied any.'),
+('dang','with',6,3,'Second comitative joins suffering to mixed and owns the final with before any suffering.'),
+("ma 'dres",'not mixed together',5,1,'Second negative mixture compound is rendered analytically. Together expresses mixture; auxiliary is stays outside.'),
+('ma','not',7,1,'Negative member inside the final analytical parent, distinct from un in the first parent.'),
+("'dres",'mixed together',7,1,'Mixture member inside the final analytical parent, tighter than not mixed together and distinct from the first mixed in unmixed.'),
+('phyir','because of',6,1,'Terminal causal particle introduces the explanation of the white character, fronted as because of before its basic nature. Supplied This is first of all stays outside.'),
+]}
+omissions={
+316:[
+ {'source':'implicit coordination of mi dge and dge ba','reason':'English as well as links non-virtue and virtue; the written dang after gzugs belongs to form and desire and must not be borrowed.'},
+ {'source':'ni; genitive endings; first color dang','reason':'Topic and genitive/conjunctive grammar is distributed across order and punctuation; do not invent independent atoms or label uncertainty null.'},
+ {'source':'initial category matrix','reason':'English represent has no independently allocated Tibetan copula in the first three verse lines; final yin is used for fourth-line is.'},
+ {'source':'by; to an; The; what','reason':'Passive/result and nominal English framing remains outside the lexical spans. Full source verse, including In and Respectively capitalization, is preserved.'},
+],
+317:[
+ {'source':'first ngo bo; zhe na','reason':'The question about the nature is recast as do we describe; no defensible isolated noun nature/describe pair is asserted. This is distributed translation, not a null.'},
+ {'source':'opening four types of','reason':'GMR supplies the number/category framing from the surrounding classification; no local Tibetan numeral is invented.'},
+ {'source':'ni; te; second la; final phyir','reason':'Topic/continuation and outer explanatory structure are distributed; the explicit inner causal exponents are assigned to their two pas particles. No extra outer causal atom is forced.'},
+ {'source':'a type of; which is; into something; It is; It; it; an','reason':'English articles, pronouns and framing auxiliaries remain unwrapped; the explicit lexical definition copula is mapped only to represents.'},
+ {'source':'[iv.237-40]','reason':'Source verse-number apparatus is retained verbatim without a translation pair.'},
+],
+318:[
+ {'source':'first gcig','reason':'In the first stream phrase, in question may be referential English framing rather than a separate exponent of one/same. Leave this correspondence unresolved and unbanked; second gcig is explicitly one.'},
+ {'source':'su; pa\u0027i; ni; te; final ba\u0027i','reason':'Inclusion, nominalization, topic and continuation grammar is distributed across the English syntax; no independently doubtful null is asserted.'},
+ {'source':'zhing','reason':'The English And precedes the production clause while Tibetan zhing follows it and links the following stream condition. Preserve this connective restructuring unbanked rather than guessing a moved atom.'},
+ {'source':'also; types of things; This is first of all; the; a type of; it is; any','reason':'Explanatory English framing and supplied nominal/participant material stays outside lexical spans.'},
+ {'source':"MA 'DRES BA'I",'reason':'Physical ACIP and HGM exact headword attest the BA form; spelling status remains uncertain. Preserve it verbatim, do not silently normalize or file an unproved correction.'},
+]}
+def hits(text,part,member=False):
+ out=[];start=0
+ while True:
+  i=text.find(part,start)
+  if i<0:break
+  j=i+len(part)
+  word=lambda c: bool(re.match(r'[A-Za-z0-9\u0f00-\u0fff]',c))
+  if member or ((not word(part[0]) or i==0 or not word(text[i-1])) and (not word(part[-1]) or j==len(text) or not word(text[j]))):out.append([i,j])
+  start=i+1
+ return out
+for seq,draft in drafts.items():
+ row=source[seq];spans=[];dec=[];cursor=0;parent=None
+ for n,(tib,eng,d,occ,reason) in enumerate(draft,1):
+  ident=f'w{n}' if d==5 else f'm{n}' if d==7 else f'p{n}'
+  span=dict(id=ident,d=d,tib=tib,eng=eng);spans.append(span)
+  th=hits(row['wylie'],tib,member=d==7)
+  if d==7:
+   valid=[x for x in th if parent['tib_range'][0]<=x[0] and x[1]<=parent['tib_range'][1]];assert len(valid)==1,(seq,ident,valid);tr=valid[0]
+   eh=[x for x in hits(row['english'],eng,True) if parent['eng_range'][0]<=x[0] and x[1]<=parent['eng_range'][1]];assert len(eh)==1;(er,)=eh
+  else:
+   valid=[x for x in th if x[0]>=cursor];assert valid,(seq,ident,tib,cursor);tr=valid[0];cursor=tr[1]
+   eh=hits(row['english'],eng);er=eh[occ-1]
+  item=dict(id=ident,d=d,tib=tib,eng=eng,tib_range=tr,eng_range=er,english_occurrence_in_full_row=occ if d!=7 else None,all_english_occurrences=hits(row['english'],eng,member=d==7),parent=parent['id'] if d==7 else None,reason=reason)
+  dec.append(item)
+  if d==5:parent=item
+ for a,b in zip([x for x in dec if x['d']!=7],[x for x in dec if x['d']!=7][1:]):assert a['tib_range'][1]<=b['tib_range'][0]
+ ordered=sorted([x for x in dec if x['d']!=7],key=lambda x:x['eng_range'][0])
+ for a,b in zip(ordered,ordered[1:]):assert a['eng_range'][1]<=b['eng_range'][0],(seq,a,b)
+ note='PROVISIONAL machine alignment by Codex, independent English-first proposal. GMR English and source Wylie are preserved verbatim; no alignment is promoted to hgm_gloss. '+ ' '.join(x['reason'] for x in omissions[seq])
+ seg=dict(seq=seq,title={316:'black white and unstained deeds',317:'black deeds and their results',318:'white deeds and unmixed results'}[seq],spans=spans,eng_order=[x['id'] for x in ordered],note=note)
+ put(P/str(seq)/'spec.json',dict(course='C05',segments=[seg]))
+ def gaps(field,ranges):
+  out=[];cur=0
+  for lo,hi in sorted(ranges):
+   if lo>cur:out.append(dict(range=[cur,lo],text=row[field][cur:lo]))
+   cur=max(cur,hi)
+  if cur<len(row[field]):out.append(dict(range=[cur,len(row[field])],text=row[field][cur:]))
+  return out
+ put(P/str(seq)/'decisions.json',dict(angle='English-first',status='independent provisional proposal, not semantic acceptance',spans=dec,omissions=omissions[seq],complete_unwrapped_ranges={field:gaps(field,[x[key] for x in dec if x['d']!=7]) for field,key in [('wylie','tib_range'),('english','eng_range')]}))
+ put(P/str(seq)/'source.json',row)
+ put(P/str(seq)/'errata.json',[])
+ print(json.dumps(dict(seq=seq,spans=len(spans),nulls=0,word_pairs=sum(x['d']==5 for x in spans),members=sum(x['d']==7 for x in spans))))

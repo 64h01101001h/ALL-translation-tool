@@ -1,0 +1,50 @@
+import pathlib, json, hashlib, subprocess, sqlite3, gzip, os
+BASE = pathlib.Path(__file__).resolve().parent
+W = BASE.parents[2] / 'campaign-worktree'
+E = BASE / 'evidence'
+B = json.loads((BASE.parent / 'proposal-baseline.json').read_text())
+def dump(path, obj):
+    path.write_text(json.dumps(obj, ensure_ascii=False, indent=2)+'\n')
+def sha(b): return hashlib.sha256(b).hexdigest()
+pins = []
+for rel, pin in B['governing_git_pins'].items():
+    data = subprocess.check_output(['git','show',B['commit']+':'+rel],cwd=W)
+    assert len(data)==pin['bytes'] and sha(data)==pin['sha256'], rel
+    out=E/'governance'/rel; out.parent.mkdir(parents=True,exist_ok=True); out.write_bytes(data)
+    pins.append(dict(kind='git-object', origin_commit=B['commit'], source=rel, saved=str(out.relative_to(BASE)), bytes=len(data),sha256=sha(data)))
+for key, pin in B['source_pins'].items():
+    p=pathlib.Path(pin['path']); data=p.read_bytes()
+    assert len(data)==pin['bytes'] and sha(data)==pin['sha256'], key
+    entry=dict(kind='original-source',source=str(p),realpath=str(p.resolve()),bytes=len(data),sha256=sha(data))
+    if key!='spine':
+        out=E/p.name; out.write_bytes(data); entry['saved']=str(out.relative_to(BASE))
+    pins.append(entry)
+for rel in ['engines/hgm_tools.py', 'docs/NEVER_BANK_A_FALSEHOOD.md']:
+    data=subprocess.check_output(['git','show',B['commit']+':'+rel],cwd=W)
+    out=E/'governance'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(data)
+    pins.append(dict(kind='git-object',origin_commit=B['commit'],source=rel,saved=str(out.relative_to(BASE)),bytes=len(data),sha256=sha(data)))
+for p in [BASE.parent/'tibetan-brief.md',BASE.parent.parent/'proposal-protocol.md',BASE.parent/'proposal-baseline.json']:
+    data=p.read_bytes(); out=E/p.name;out.write_bytes(data)
+    pins.append(dict(kind='dispatch',source=str(p),saved=str(out.relative_to(BASE)),bytes=len(data),sha256=sha(data)))
+conn=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True)
+conn.row_factory=sqlite3.Row
+rows=[dict(r) for r in conn.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',310,324))]
+dump(E/'spine-context-full.json',dict(sql='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',params=['C05',310,324],count=len(rows),rows=rows))
+checks=[]
+for p in ['source.json','context.json']:
+    snapshots=json.loads((BASE.parent/p).read_text())
+    byseq={r['seq']:r for r in rows}
+    for r in snapshots:
+        checks.append(dict(file=p,seq=r['seq'],fields=list(r),equal=all(byseq[r['seq']][k]==v for k,v in r.items())))
+assert all(x['equal'] for x in checks)
+master=json.loads(gzip.decompress((E/'hgm_dictionary_v27_2.json.gz').read_bytes()))
+corpus=json.loads(gzip.decompress((E/'full_parallel_corpus_v32.json.gz').read_bytes()))
+summary=dict(pins=pins,snapshot_checks=checks,spine_segment_count=conn.execute('SELECT count(*) FROM corpus_segments').fetchone()[0],master_type=type(master).__name__,master_keys=list(master)[:30] if isinstance(master,dict) else None,corpus_type=type(corpus).__name__,corpus_keys=list(corpus)[:30] if isinstance(corpus,dict) else None)
+dump(E/'source-provenance.json',summary)
+print(json.dumps({k:v for k,v in summary.items() if k not in ['pins','snapshot_checks']},indent=2))
+print('Snapshot checks:',len(checks))
+print('First full spine row:',json.dumps(rows[6],ensure_ascii=False))
+if isinstance(master,dict):
+    for key in list(master)[:8]: print('MASTER',key,type(master[key]).__name__,len(master[key]) if hasattr(master[key],'__len__') else '',str(master[key])[:500])
+if isinstance(corpus,dict):
+    for key in list(corpus)[:8]: print('CORPUS',key,type(corpus[key]).__name__,len(corpus[key]) if hasattr(corpus[key],'__len__') else '',str(corpus[key])[:500])

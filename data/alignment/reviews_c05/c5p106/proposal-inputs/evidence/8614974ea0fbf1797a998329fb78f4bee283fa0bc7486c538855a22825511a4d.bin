@@ -1,0 +1,24 @@
+import pathlib,json,hashlib,datetime
+P=pathlib.Path(__file__).resolve().parent
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (P/'freeze-manifest.json').exists()
+executions=[]
+for script,stem,chunk in [('prepare.py','preparation','3b57cc'),('lexical.py','lexical','c88baf'),('supplement.py','supplement','0e14d6'),('author_specs.py','author-specs','c87c52'),('run_native.py','run-native','0a66dc'),('finalize.py','finalize','fd671a')]:
+ streams={}
+ for suffix in ['stdout','stderr','exit']:
+  p=P/(stem+'.'+suffix);b=p.read_bytes();streams[suffix]=dict(path=str(p.relative_to(P)),bytes=len(b),sha256=sha(b))
+ assert (P/(stem+'.exit')).read_text()=='0\n'
+ assert (P/(stem+'.stderr')).read_bytes()==b''
+ executions.append(dict(script=script,argv=['python3','-B','campaign-artifacts/C05-316-318/english/'+script],cwd=str(P.parents[2]),tool_output_chunk_id=chunk,streams=streams,returncode=0,timing='Parent shell invocation retained in task tool output; exact native subprocess timestamps exist separately for canonical generate/resolve.'))
+put(P/'workflow-executions.json',executions)
+summary=json.loads((P/'review-summary.json').read_text())
+files={}
+for p in sorted(P.rglob('*')):
+ if p.is_file():
+  b=p.read_bytes();files[str(p.relative_to(P))]=dict(bytes=len(b),sha256=sha(b))
+freeze=dict(schema='c05-independent-proposal-freeze-v1',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),status='FROZEN_ORIGINAL_PROPOSAL_NOT_ACCEPTED',angle='English-first',producer='Codex',origin_commit=summary['proposal_origin'],segments=[316,317,318],total_spans=summary['total_spans'],total_nulls=0,total_word_pairs=summary['total_word_pairs'],total_d7=summary['total_d7'],errata_count=0,files=files,manifest_excludes='This freeze-manifest.json only; every other current regular file under this angle is included.',evidence_source_manifest='original-to-copy-manifest.json')
+put(P/'freeze-manifest.json',freeze)
+for rel,pin in files.items():
+ b=(P/rel).read_bytes();assert len(b)==pin['bytes'] and sha(b)==pin['sha256']
+print(json.dumps(dict(status='FROZEN_AND_RECHECKED',schema=freeze['schema'],freeze_path=str(P/'freeze-manifest.json'),freeze_sha256=sha((P/'freeze-manifest.json').read_bytes()),file_count=len(files),total_bytes=sum(x['bytes'] for x in files.values()),total_spans=freeze['total_spans'],word_pairs=freeze['total_word_pairs'],members=freeze['total_d7'])))

@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,subprocess,datetime,time,sys,hashlib,os
+P=Path(__file__).resolve().parent;W=P.parents[2]/'campaign-worktree'
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def run(spec,out,mode):
+ out.mkdir(parents=True,exist_ok=False);data=spec.read_bytes();(out/'stdin.json').write_bytes(data)
+ argv=[sys.executable,'-B',str(P/'canonical.py'),mode];put(out/'invocation.json',dict(argv=argv,cwd=str(W),source_spec=str(spec),stdin_sha256=hashlib.sha256(data).hexdigest(),helper_sha256=hashlib.sha256((P/'canonical.py').read_bytes()).hexdigest(),environment={'PYTHONDONTWRITEBYTECODE':'1'}))
+ start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic();c=subprocess.run(argv,input=data,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'))
+ (out/'stdout').write_bytes(c.stdout);(out/'stderr').write_bytes(c.stderr);(out/'exit.txt').write_text(str(c.returncode)+'\n');put(out/'execution.json',dict(start_utc=start,end_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),elapsed_seconds=time.monotonic()-t,exit_code=c.returncode,stdout_bytes=len(c.stdout),stderr_bytes=len(c.stderr)))
+ assert c.returncode==0 and not c.stderr,(str(out),c.returncode,c.stderr.decode())
+ return c.stdout
+results=[]
+if sys.argv[1]=='originals':
+ for a in ['tibetan','english']:
+  for n in [316,317,318]:
+   spec=P.parent/a/str(n)/'spec.json';d=run(spec,P/'native/originals'/a/str(n)/'generate','generate');assert d==(spec.parent/'body.html').read_bytes()
+   r=run(spec,P/'native/originals'/a/str(n)/'resolve','resolve');results.append(dict(angle=a,seq=n,generator_exit=0,resolver_exit=0,body_equal=True,body_bytes=len(d)))
+ put(P/'original-replay-results.json',results)
+elif sys.argv[1]=='final':
+ for n in [316,317,318]:
+  spec=P/str(n)/'spec.json';d=run(spec,P/str(n)/'native/generate-v1','generate');(spec.parent/'body.html').write_bytes(d)
+  r=run(spec,P/str(n)/'native/resolve-v1','resolve');(spec.parent/'resolved.json').write_bytes(r);results.append(dict(seq=n,generator_exit=0,resolver_exit=0,body_bytes=len(d),body_sha256=hashlib.sha256(d).hexdigest()))
+ put(P/'final-native-results.json',results)
+else:raise RuntimeError('unknown mode')
+print(json.dumps(results,indent=2))

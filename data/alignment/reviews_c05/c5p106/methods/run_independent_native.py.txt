@@ -1,0 +1,19 @@
+from pathlib import Path
+import json,subprocess,datetime,hashlib,sys,os,time
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';W=S.parents[2]/'campaign-worktree';H=lambda b:hashlib.sha256(b).hexdigest()
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def read(p):return json.loads(p.read_text())
+def run(spec,d,mode):
+ d.mkdir(parents=True,exist_ok=False);raw=spec.read_bytes();(d/'stdin.bin').write_bytes(raw);argv=[sys.executable,'-B',str(S/'canonical_review.py'),mode];t=time.monotonic();start=datetime.datetime.now(datetime.timezone.utc).isoformat();c=subprocess.run(argv,input=raw,capture_output=True,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1'));(d/'stdout.bin').write_bytes(c.stdout);(d/'stderr.bin').write_bytes(c.stderr);(d/'exit.txt').write_text(str(c.returncode)+'\n');put(d/'execution.json',dict(argv=argv,cwd=str(W),environment={'PYTHONDONTWRITEBYTECODE':'1'},start_utc=start,elapsed_seconds=time.monotonic()-t,exit=c.returncode,streams={k:dict(bytes=len(v),sha256=H(v)) for k,v in [('stdin',raw),('stdout',c.stdout),('stderr',c.stderr)]}));assert c.returncode==0 and not c.stderr;return c.stdout
+# Reuse six originals only after stream and invocation proof identity, then independently resolve all original tuples.
+reuse=[];orig=[]
+for a in ['tibetan','english']:
+ for n in [316,317,318]:
+  p=B/a/str(n);d=Q/'native/originals'/a/str(n)/'generate';i=read(d/'invocation.json');e=read(d/'execution.json');raw=(p/'spec.json').read_bytes();assert raw==(d/'stdin.json').read_bytes() and H(raw)==i['stdin_sha256'];assert (d/'stdout').read_bytes()==(p/'body.html').read_bytes() and not (d/'stderr').read_bytes() and (d/'exit.txt').read_text().strip()=='0';assert e['exit_code']==0 and e['stdout_bytes']==(d/'stdout').stat().st_size and e['stderr_bytes']==0 and i['helper_sha256']==H((Q/'canonical.py').read_bytes());assert i['argv'][1:]==['-B',str(Q/'canonical.py'),'generate'] and i['cwd']==str(W)
+  rs=json.loads(run(p/'spec.json',S/'native/original-resolvers'/a/str(n),'resolve'));expected=read(Q/'native/originals'/a/str(n)/'resolve/stdout')['segments'][0]['resolved'];assert rs==expected;orig += [dict(angle=a,**x) for x in rs];reuse.append(dict(angle=a,seq=n,original_generator=str(d),generator_exit=0,body_sha256=H((p/'body.html').read_bytes()),body_bytes=(p/'body.html').stat().st_size,complete_stream_identity=True,independent_resolver_exit=0))
+put(S/'original-native-reuse.json',reuse);put(S/'original-resolved-spans.json',orig)
+resolved=[];segments=[]
+for n in [316,317,318]:
+ p=Q/str(n);out=run(p/'spec.json',S/'native/final'/str(n)/'generator','generate');assert out==(p/'body.html').read_bytes();rs=json.loads(run(p/'spec.json',S/'native/final'/str(n)/'resolver','resolve'));assert rs==read(p/'resolved.json')['segments'][0]['resolved'];resolved+=rs;segments.append(dict(seq=n,span_count=len(rs),null_count=sum(x['eng'] is None for x in rs),word_pair_count=sum(x['d']==5 and x['eng'] is not None for x in rs),spec_sha256=H((p/'spec.json').read_bytes()),spec_bytes=(p/'spec.json').stat().st_size,body_sha256=H(out),body_bytes=len(out),generator_exit=0,resolver_exit=0))
+put(S/'resolved-spans.json',resolved);put(S/'native-proof.json',dict(status='PASS',segments=segments,total_spans=len(resolved),total_nulls=sum(x['eng'] is None for x in resolved),total_word_pairs=sum(x['d']==5 and x['eng'] is not None for x in resolved),original_generator_replays_reused=len(reuse),fresh_final_generators=3,fresh_resolvers=9))
+print((S/'native-proof.json').read_text())

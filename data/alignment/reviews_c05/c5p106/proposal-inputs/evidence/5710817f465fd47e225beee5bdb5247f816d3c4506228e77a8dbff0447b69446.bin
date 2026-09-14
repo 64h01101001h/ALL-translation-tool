@@ -1,0 +1,111 @@
+from pathlib import Path
+import json, re
+B=Path(__file__).resolve().parent
+sources={r['seq']:r for r in json.loads((B/'evidence/spine-context-full.json').read_text())['rows']}
+def S(i,d,t,e,reason,**kw): return dict(id=i,d=d,tib=t,eng=e,**kw),reason
+proposals={
+316:dict(title='black white and unstained deeds', spans=[
+S('w1',5,'mi dge','Non-virtue','The first category is nonvirtue; preserve the whole established compound and the capitalized hyphenated English.'),
+S('m1',7,'dge','virtue','The positive member of Non-virtue lies strictly within mi dge; this is the first English virtue substring, not the later independent virtue.'),
+S('w2',5,'gzugs','form','The first of the two realms in the shared qualification of virtue.'),
+S('p1',6,'dang','and','This dang joins form and desire, and owns the first English and, after form; it cannot own the earlier as well as.'),
+S('w3',5,"'dod",'desire','The second of the two realms qualifying virtue.'),
+S('w4',5,"gtogs pa'i",'taken In','The inflected inclusion predicate has the phrasal verbal English taken In; preserve the verse-line capital In. By stays outside this verb.'),
+S('w5',5,'dge ba','virtue','The positive virtue following mi dge, resolved to the separate English virtue after as well as.'),
+S('p2',6,'nyid','itself','Standalone emphatic particle attaches to positive virtue.'),
+S('p3',6,'ni',None,'Topic marker has no separate word exponent in the English assertion.',cls='particle',nul='ni: topic marking; no separate English exponent'),
+S('w6',5,'rim bzhin du','Respectively','Established adverbial expression orders nonvirtue/form-realm virtue/desire-realm virtue against black/white/both; preserve line capital.'),
+S('w7',5,'gnag','black','First color category, nonvirtue, as explained explicitly in C05:317.'),
+S('w8',5,'dkar','white','Second color category, form-realm virtue, as explained explicitly in C05:318.'),
+S('p4',6,'dang','and','The dang after dkar joins white with both; it owns the second English and, before both. The prior dang after gnag is omitted.'),
+S('w9',5,"gnyis ka'i",'both','Both colors is an inflected lexical compound; it refers to desire-realm virtue, expanded in C05:319.'),
+S('w10',5,'las','deeds','The category noun is fronted in English before the listed colors.'),
+S('ph1',3,'de zad byed pa','what brings it to an end','Complete nominal phrase: de is the object it, zad byed pa the ending agent. The English object interrupts the predicate, so this is retained at phrase depth with no d7 children.'),
+S('w11',5,'zag med','unstained','The fourth category is unstained deeds; exclude supplied The. C05:320 explains its relation to ending black deeds.'),
+S('w12',5,'yin','is','Final copula predicates the unstained as the agent bringing black deeds to an end; the earlier represent belongs to the verse recast.'),
+],order=['w1','w5','p2','w4','w2','p1','w3','w6','w10','w7','w8','p4','w9','w11','w12','ph1'],
+omissions=[dict(tib='dang after gnag',reason='Its list coordination is expressed by punctuation; no lexical comma pair is proposed.'),dict(eng='as well as; by; represent; which are; The',reason='Supplied or distributed English scaffolding; no separate source atom is claimed.'),dict(tib='mi member',reason='Whole mi dge is retained, but no separate Non negative-affix proposal is made under the unresolved non-affix convention.')],
+note='Provisional machine alignment by Codex (GPT-6), independent Tibetan-first proposal. The verse pairs nonvirtue, form-realm virtue, and desire-realm virtue respectively with black, white, and both; C05:317–320 supplies the commentary. The first dang joins form and desire; the later retained dang joins white and both. The separate positive virtue follows the Non-virtue compound. de zad byed pa is a complete d3 nominal phrase because the English object it interrupts the predicate. ni has no separate English exponent. Supplied scaffolding remains unwrapped. In and Respectively preserve physical verse-line capitals; GMR English is verbatim. No hgm_gloss is changed.'),
+317:dict(title='black deeds and black results',spans=[
+S('w1',5,'las','deeds','Question noun: the four deed categories just stated in the preceding verse.'),
+S('w2',5,'de dag','these','Plural demonstrative referring to those categories; four types of is explanatory English.'),
+S('w3',5,'ji lta bu','Just how','Established interrogative expression in the question about the nature of the deeds.'),
+S('w4',5,'mi dge ba','Non-virtue','Established nonvirtue category; no separate Non-affix proposal.'),
+S('p1',6,'ni',None,'The topical marker adds no separately alignable English word.',cls='particle',nul='ni: topic marking; no separate English exponent'),
+S('w5',5,'gnag','black','First gnag is the intrinsic color in the definition Non-virtue represents a type of deed which is black.'),
+S('p2',6,'la','and','The first la coordinates intrinsic blackness with black ripening in the definition.'),
+S('w6',5,'rnam par smin pa','ripens','The definition turns the ripening noun into ripens; select the first English ripens, immediately after black and.'),
+S('w7',5,'gnag','black','Second gnag is the resultant blackness in ripens into something black, not the next sentence’s intrinsic blackness.'),
+S('w8',5,'las','deed','Second las is the singular category noun in a type of deed.'),
+S('w9',5,'yin','represents','Main defining copula becomes represents; the relative which is supplies English syntax.'),
+S('w10',5,'rang gi','its','Possessive pronoun preceding very nature; full inflected pronoun is supported in master.'),
+S('w11',5,'ngo bo','very nature','Second ngo bo states the inherent character of nonvirtue; first ngo bo in the question is left unpaired.'),
+S('w12',5,'nyon mongs can','afflicted','Established afflicted predicate; exclude supplied something. The earlier master phrase consists of something afflicted is not inherited whole.'),
+S('w13',5,'yin','consists of','Second yin is the local copula nature consists of something afflicted, not the main definition represents.'),
+S('p3',6,'pas','in that','First causal pas connects afflicted nature to the following intrinsic blackness: It is black in that its very nature...'),
+S('w14',5,'gnag','black','Third gnag is the explanatory intrinsic blackness: It is black in that; it precedes the explanation in English.'),
+S('w15',5,'rnam smin','result','First shortened rnam smin is the object yielded, the final noun result in an undesirable result.'),
+S('w16',5,"yid du mi 'ong ba",'undesirable','Established lexical compound characterizes that yielded result.'),
+S('m1',7,'mi','un','Negation is the unique negative member inside the undesirable compound, strictly tighter on both sides.',subword=True),
+S('w17',5,"'byin",'ripens forth','The yielding verb governs the undesirable result; GMR verbalizes yielding as ripens forth. This is the final ripens occurrence, not the earlier final rnam smin rendered ripens.'),
+S('p4',6,'pas','for','Second causal pas links yielding an undesirable result to the final resultant blackness; it owns for in the last English sentence.'),
+S('w18',5,'rnam smin','ripens','Second shortened rnam smin is the topic of the final resultant blackness, rendered verbally in It also ripens into something black; select the second English ripens, before ripens forth.'),
+S('p5',6,'yang','also','Additive particle modifies that resultant-blackness restatement; it owns also after It.'),
+S('w19',5,'gnag','black','Fourth gnag is the final resultant blackness, rendered in the last sentence before the for-clause.'),
+],order=['w3','w2','w1','w4','w9','w8','w5','p2','w6','w7','w14','p3','w10','w11','w13','w12','p5','w18','w19','p4','w17','w16','w15'],
+omissions=[dict(tib="'o na ... ngo bo ... zhe na",reason='The question about nature is recast as do we describe; only independently identifiable interrogative, demonstrative and deed noun are aligned. No ngo bo→describe false lexical pair.'),dict(tib='final phyir and remaining relational/nominal particles',reason='Overall proof closure and local causation are distributed across the English restatements; final phyir is omitted, not asserted to lack meaning.'),dict(eng='four types of; a type of; which is; into something; It; something',reason='Explanatory categories, participants and relative/result constructions stay unwrapped; color and affliction receive only their lexical exponents.')],
+note='Provisional machine alignment by Codex (GPT-6), independent Tibetan-first proposal. The four gnag occurrences map to definition-intrinsic, definition-resultant, explanation-intrinsic, and explanation-resultant blackness in that order. The first shortened rnam smin owns the final noun result; the second owns ripens in It also ripens into something black. The intervening yielding verb byin, written with its source apostrophe, owns the later ripens forth. The two pas clauses own in that and for respectively; final phyir and the recast first ngo bo are omitted as distributed, not nulled. ni has no separate exponent. The bracketed verse reference is apparatus. GMR English stays verbatim; no hgm_gloss is changed.'),
+318:dict(title='white virtue in the form realm',spans=[
+S('w1',5,'gzugs','realm of form','This context explicitly names the form realm, not mere visible form; the master has the full realm of form reading. Exclude the article.'),
+S('p1',6,'su','by','Locative classification complement of taken in, realized as by the realm; this is not an agentive -s segmentation.'),
+S('w2',5,"gtogs pa'i",'taken in','Inclusion predicate qualifying virtue; preserve lowercase prose in.'),
+S('w3',5,'dge ba','Virtue','The form-realm virtue category; capitalize only as the source English does.'),
+S('p2',6,'ni',None,'Topic particle adds no separately alignable English word.',cls='particle',nul='ni: topic marking; no separate English exponent'),
+S('w4',5,'dkar','white','First white is intrinsic whiteness in the definition of the deed.'),
+S('p3',6,'la','and','First la coordinates intrinsic whiteness and resultant whiteness in the definition.'),
+S('w5',5,'rnam par smin pa','ripens','The definition’s ripening compound owns the first ripens, before into something white.'),
+S('w6',5,'dkar','white','Second white is the result color in that same definition.'),
+S('w7',5,'las','deed','The singular noun in a type of deed; explanatory type of remains unwrapped.'),
+S('w8',5,'yin','represents','Main defining copula is fronted as represents.'),
+S('w9',5,'rang gi','its','Possessive preceding basic nature, supported as an inflected pronoun in the master.'),
+S('w10',5,'ngo bo','basic nature','The inherent character is the subject of the first causal explanation.'),
+S('w11',5,'rgyud','mental stream','First rgyud belongs to the no-affliction explanation, within the mental stream in question; it follows afflicted things in English.'),
+S('w12',5,'gcig','in question','First gcig particularizes the same single continuum; GMR recasts it as in question. This is a local contextual proposal, not a new hgm_gloss.'),
+S('p4',6,'la','within','Second la locates the no-affliction claim in the first mental stream; it owns within before that stream, not either later with.'),
+S('w13',5,'nyon mongs pa','afflicted','Lexical affliction is rendered adjectivally; supplied types of things remains unwrapped.'),
+S('p5',6,'dang','with','First dang is the comitative complement of unmixed with afflicted types of things, before the first mental stream.'),
+S('w14',5,"ma 'dres",'unmixed','Established negative compound in the first explanation; master supports unmixed.'),
+S('m1',7,'ma','un','Unique negative member strictly within the first ma dres compound and unmixed.',subword=True),
+S('m2',7,"'dres",'mixed','Unique positive verb member strictly within the same unmixed parent; source apostrophe is preserved.'),
+S('w15',5,'rnam smin','result','Second, shortened ripening compound is the yielded result noun in a desirable result.'),
+S('w16',5,"yid du 'ong ba",'desirable','Established desirability compound qualifies that result.'),
+S('w17',5,"'byin",'ripens forth','The yield verb governs the desirable result; English ripens forth is its local verbal recast, as in the directly preceding undesirable-result sentence.'),
+S('w18',5,'rgyud','mental stream','Second rgyud belongs to the no-suffering explanation after the desirable-result clause; select the later mental stream after one.'),
+S('w19',5,'gcig','one','Second gcig is explicitly one in with the one mental stream; it precedes its source noun in English.'),
+S('p6',6,'la','with','Third la owns the middle with, starting with the one mental stream after the semicolon; this is the locative wording actually published.'),
+S('w20',5,'sdug bsngal','suffering','Object of the second unmixed relation, not the earlier afflicted things.'),
+S('p7',6,'dang','with','Second dang is the final with in mixed together with any suffering; it is not the locative with before one mental stream.'),
+S('p8',6,'ma','not','Second ma is the standalone negation rendered not, in contrast to the first compound’s un member.'),
+S('w21',5,"'dres",'mixed together','Second dres is the positive verb of the no-suffering claim; source ba’i is left untouched and unbanked.'),
+S('p9',6,'phyir','because of','Final causal closure governs the joint nature/result explanation and is fronted as because of before its basic nature.'),
+],order=['w3','w2','p1','w1','w8','w7','w4','p3','w5','w6','p9','w9','w10','w14','p5','w13','p4','w11','w12','w17','w16','w15','p6','w19','w18','p8','w21','p7','w20'],
+omissions=[dict(tib='zhing',reason='Coordination is redistributed between And and the final semicolon; no exact standalone counterpart is asserted.'),dict(tib="ba'i following second 'dres",reason='Preserved probable spelling anomaly, but the lexical stem dres itself is clear and alignable; no corrected nominalizer is inserted.'),dict(eng='a type of; also; into something; This is first of all; it is; types of things; And it; any',reason='Explanatory headings, particles, participants and auxiliaries remain outside the lexical spans.')],
+note='Provisional machine alignment by Codex (GPT-6), independent Tibetan-first proposal. The two white occurrences distinguish intrinsic and resultant whiteness. First rgyud gcig la belongs to unmixedness with afflicted things: mental stream / in question / within; second belongs to unmixedness with suffering: mental stream / one / with. The three with occurrences are, respectively, first dang, third la, and second dang. First ma dres is the established unmixed compound with tighter negative and positive members; second ma and dres own not and mixed together. The nominal rnam smin owns result, and the yielding verb owns ripens forth. zhing is omitted as distributed coordination, not nulled. The source spelling DRES BA’I is preserved and separately proposed as LOW/PROBABLE for review; the stem alone is banked. GMR English is verbatim; no hgm_gloss is changed.'),
+}
+def positions(text,piece,subword=False):
+    hits=[]; start=0
+    while (i:=text.find(piece,start))>=0:
+        end=i+len(piece)
+        if subword or ((not piece[0].isalnum() or i==0 or not text[i-1].isalnum()) and (not piece[-1].isalnum() or end==len(text) or not text[end].isalnum())): hits.append([i,end])
+        start=i+1
+    return hits
+for seq,p in proposals.items():
+    spans=[x[0] for x in p['spans']]
+    spec=dict(course='C05',segments=[dict(seq=seq,title=p['title'],spans=spans,eng_order=p['order'],note=p['note'])])
+    (B/str(seq)/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+    decisions=[]
+    for sp,reason in p['spans']:
+        decisions.append(dict(id=sp['id'],reason=reason,source_candidates=positions(sources[seq]['wylie'],sp['tib'],sp['d']==7 or sp.get('subword',False)),english_candidates=positions(sources[seq]['english'],sp['eng'],sp['d']==7 or sp.get('subword',False)) if sp['eng'] is not None else [],depth_basis='source word or established compound' if sp['d']==5 else 'standalone source particle' if sp['d']==6 else 'tighter compound member' if sp['d']==7 else 'complete nominal phrase'))
+    (B/str(seq)/'decisions.json').write_text(json.dumps(dict(seq=seq,producer='Codex GPT-6',angle='Tibetan-first',source=sources[seq],spans=decisions,omissions=p['omissions']),ensure_ascii=False,indent=2)+'\n')
+    (B/str(seq)/'errata.json').write_text('[]\n')
+print('Authored specs and original occurrence candidates for',list(proposals))

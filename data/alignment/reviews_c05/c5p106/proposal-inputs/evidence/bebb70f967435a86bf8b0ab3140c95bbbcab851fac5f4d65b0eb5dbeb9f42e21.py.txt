@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,sqlite3,gzip,re,hashlib
+P=Path(__file__).resolve().parent;pin=json.loads((P.parent/'proposal-baseline.json').read_text());db=sqlite3.connect(Path(pin['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+out=[]
+for sql,args in [
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',["%'o na%",'Just how%']),
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',['%ji lta bu%','Just how%']),
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',["%rgyud gcig%",'%particular mental stream%']),
+ ('select * from corpus_segments where wylie like ? and english like ? order by course,seq',['%zad%byed%','%brings it to an end%'])]:
+ rows=[dict(r) for r in db.execute(sql,args)];out.append(dict(sql=sql,parameters=args,count=len(rows),rows=rows))
+(P/'evidence/material-corpus-queries.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+registry=json.loads((P/'originals/git/docs/errata_register.json').read_text());classes=[x for x in registry if x['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121']]
+checks=[]
+for needle in ['C05:316','C05:317','C05:318',"'DRES BA","'dres ba",'gnag']:
+ records=[r for r in registry if needle.lower() in json.dumps(r,ensure_ascii=False).lower()];checks.append(dict(needle=needle,count=len(records),records=records))
+(P/'evidence/register-recheck.json').write_text(json.dumps(dict(total_count=len(registry),source_queries=checks,full_class_records=classes),ensure_ascii=False,indent=2)+'\n')
+print(json.dumps([dict(sql=q['sql'],parameters=q['parameters'],count=q['count'],rows=[dict(course=r['course'],seq=r['seq'],wylie=r['wylie'],english=r['english']) for r in q['rows']]) for q in out],ensure_ascii=False,indent=2))

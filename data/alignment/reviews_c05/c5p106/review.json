@@ -1,0 +1,74 @@
+{
+  "schema": "c05-independent-semantic-review-v1",
+  "producer": "Codex fresh independent skeptical semantic reviewer",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "status": "PROVISIONAL machine review; root integration and human acceptance remain separate",
+  "open_findings": [],
+  "closed_findings": [
+    {
+      "id": "M1",
+      "kind": "AUDIT_COUNT_LABEL",
+      "seq": 316,
+      "disposition": "Historical whitespace-start GNAG count0 preserved with its actual regex; independently measured lexical count1 at[66,70). See errata-counts-independent.json. No spec or generator change."
+    }
+  ],
+  "segments": [
+    {
+      "seq": 316,
+      "span_count": 22,
+      "null_count": 1,
+      "word_pair_count": 15,
+      "spec_sha256": "ff328b658bed8e85fd4c9430982875490bdaf8cfd110b8da4fa6e0e5947e5fa2",
+      "spec_bytes": 4087,
+      "body_sha256": "04e5e2800f34f04cded3dc8aa18e52d94748fd44b28cd51c40c8b5246e4aaa9d",
+      "body_bytes": 4052,
+      "generator_exit": 0,
+      "resolver_exit": 0
+    },
+    {
+      "seq": 317,
+      "span_count": 26,
+      "null_count": 1,
+      "word_pair_count": 19,
+      "spec_sha256": "b1e93ab9df2c3e18f1e4392d18ba1c7bd3083c9f1c13647a218405ac3dba9ad2",
+      "spec_bytes": 4764,
+      "body_sha256": "1a6a602b8d2877c2867b769cc05719637e4c5cdd270ff206f279ac4a44d860dd",
+      "body_bytes": 4779,
+      "generator_exit": 0,
+      "resolver_exit": 0
+    },
+    {
+      "seq": 318,
+      "span_count": 31,
+      "null_count": 1,
+      "word_pair_count": 20,
+      "spec_sha256": "33b56037d0c0e9ea1bb5b182abd2ca5ac0dc2aeffed2883c60030e387d00f604",
+      "spec_bytes": 5425,
+      "body_sha256": "7bcbb1664d1f93c8a2a1ecd9fa521b8b893ebfe845e0cacbd6c8cf9ee1b5da66",
+      "body_bytes": 5366,
+      "generator_exit": 0,
+      "resolver_exit": 0
+    }
+  ],
+  "total_spans": 79,
+  "total_nulls": 3,
+  "total_word_pairs": 54,
+  "total_d7": 9,
+  "source_origin_git_commit": "8575edf1e0de695677194c1fde60f1d9e2c2f204",
+  "later_supplied_acceptance_baseline": "af139c573f85aaf33278cd079719947ee9af8cdd",
+  "later_baseline_accepted_through": 315,
+  "original_reconciler_consumed_later_baseline": false,
+  "reconciliation_freeze_sha256": "51aa8fc419bbd25ea20a21d0ea4524b1c964888891c7aa0c400b449c3f6ba314",
+  "integration_requirements": [
+    "Root acceptance and production fidelity checks before landing",
+    "Desktop/iOS consumption and limits require separate root evidence"
+  ],
+  "limits": [
+    "No human editorial acceptance",
+    "No publication or ingestion independence inferred from matching digital records",
+    "No MAIN/device/production-fidelity check performed by this role",
+    "249 MB spine retained externally with exact immutable source pin; full archive master/corpus and physical original copied"
+  ]
+}

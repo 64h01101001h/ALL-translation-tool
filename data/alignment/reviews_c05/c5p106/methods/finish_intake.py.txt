@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,gzip,hashlib,re,datetime
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';W=B.parents[1]/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+pin=read(B/'proposal-baseline.json');queries=read(S/'independent-sql-rechecks.json');mq=read(S/'independent-master-rechecks.json');rows=read(S/'source-context-independent.json');corpus=json.loads(gzip.decompress(Path(pin['source_pins']['corpus']['path']).read_bytes()));bycourse={}
+for i,r in enumerate(corpus):bycourse.setdefault(r['course'],[]).append((i,r))
+cr=read(Q/'evidence/full-original-corpus-records.json')
+for r in cr:assert corpus[r['index']]==r['record']
+observed=[];bad=[]
+for q in queries:
+ for r in q['rows']:
+  if 'raw' in r:
+   idx,c=bycourse[r['course']][r['seq']-1];assert json.loads(r['raw'])==c
+   if json.loads(r['raw'])!=corpus[r['id']-1]:bad.append(dict(course=r['course'],seq=r['seq'],sqlite_id=r['id'],actual_archive_index=idx))
+   observed.append(dict(course=r['course'],seq=r['seq'],index=idx,raw_complete_equal=True))
+put(S/'intake-schema-failure-disposition.json',dict(status='CORRECTED_VERIFIER_INDEX_ASSUMPTION',original_failed_script='independent_intake.py',actual_failure_stream='intake-caller/stderr.bin',reason='SQLite corpus row id is not necessarily archive index plus one. Replaced that unsupported assumption with archive per-course sequence indexing and exact complete raw-record comparison; no source or proposal changed.',mismatched_id_assumptions=bad,reused_verified_pre_failure=['freeze identities','source pins','all SQL records/counts','all full master records/counts'],rerun_generators=0))
+put(S/'independent-full-corpus-rechecks.json',dict(original_records=cr,sql_rows=observed))
+physical=Path(pin['source_pins']['physical']['path']).read_bytes();pr=[]
+for p in read(Q/'evidence/physical-extents.json'):
+ row=next(r for r in rows if r['seq']==p['seq']);pat=rb'\s+'.join(re.escape(t) for t in row[p['field']].encode('ascii').split());hits=list(re.finditer(pat,physical));assert len(hits)==p['count']==1
+ for m,x in zip(hits,p['matches']):assert [m.start(),m.end()]==x['byte_range'] and physical[m.start():m.end()].decode('latin1')==x['latin1'] and H(physical[m.start():m.end()])==x['sha256']
+ pr.append(p)
+put(S/'physical-extents-independent.json',pr)
+reg=read(S/'governing-originals/docs/errata_register.json');records=reg if isinstance(reg,list) else reg['items'];claimed=read(Q/'evidence/register-recheck.json');assert len(records)==claimed['total_count']==194
+for r in claimed['full_class_records']:assert r in records
+for q in claimed['source_queries']:
+ found=[x for x in records if q['needle'] in json.dumps(x,ensure_ascii=False)];assert found==q['records'] and len(found)==q['count']
+put(S/'register-recheck-independent.json',claimed)
+for angle in ['tibetan','english','reconciled']:
+ for n in [316,317,318]:
+  for p in (B/angle/str(n)).iterdir():
+   if not p.is_file():continue
+   d=S/('reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle)/str(n)/p.name;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(p.read_bytes())
+put(S/'intake-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),freeze_files=len(read(Q/'freeze.json')['files']),sql_queries=len(queries),master_queries=len(mq),unique_master_records=len({(x['collection'],x['index']) for q in mq for x in q['records']}),full_corpus_records=len(cr),physical_extents=len(pr),source_origin_git_commit=pin['commit']))
+print((S/'intake-proof.json').read_text())

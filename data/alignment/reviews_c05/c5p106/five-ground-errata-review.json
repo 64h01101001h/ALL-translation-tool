@@ -1,0 +1,470 @@
+[
+  {
+    "seq": 316,
+    "found": "In",
+    "expected_candidate": "in",
+    "refuted": true,
+    "verdict": "REFUTED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            42
+          ]
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "The four physical verse lines and complete source/context preserve the category structure; full-field ACIP, Wylie and English searches each find one row.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "Physical CRLF before In and Respectively demonstrates verse line starts. No correction is warranted.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 131,
+            "wylie": 129,
+            "english": 173
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          }
+        },
+        "scope_clarification": null,
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  },
+  {
+    "seq": 316,
+    "found": "GNAG",
+    "expected_candidate": "NAG",
+    "refuted": true,
+    "verdict": "REFUTED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [
+            67
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "The 28 broad gnag rows are lexical comparisons, not alternate publications of this verse. Full-field searches each find only this row.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "The full HGM GNAG/gnag headword is attested as black; preference for NAG/nag does not establish an error.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 131,
+            "wylie": 129,
+            "english": 173
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          },
+          "broad_wylie_gnag_rows": 28,
+          "exact_unified_gnag": 1,
+          "exact_unified_nag": 1,
+          "historical_whitespace_start_gnag_regex_count": 0,
+          "punctuation_aware_gnag_lexical_count": 1,
+          "punctuation_aware_gnag_lexical_ranges": [
+            [
+              66,
+              70
+            ]
+          ]
+        },
+        "scope_clarification": {
+          "original_label": "whole_wylie_gnag_tokens",
+          "original_whitespace_start_regex": "(?<!\\S)gnag(?=[ ,]|$)",
+          "literal_original_regex_count": 0,
+          "punctuation_aware_lexical_regex": "(?<![A-Za-z])gnag(?![A-Za-z])",
+          "lexical_count": 1,
+          "lexical_ranges": [
+            [
+              66,
+              70
+            ]
+          ],
+          "disposition": "Original measurement preserved but label is too broad for comma-adjacent verse. Use explicitly delimited count and lexical count separately; semantic GNAG/NAG refutation unchanged."
+        },
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  },
+  {
+    "seq": 317,
+    "found": "GNAG",
+    "expected_candidate": "NAG",
+    "refuted": true,
+    "verdict": "REFUTED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [
+            71,
+            96,
+            156,
+            218
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "The same 28 broad lexical comparison rows are not same-passage publication evidence. Full-field searches each find one row.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "The four black occurrences coherently distinguish intrinsic and resultant blackness in definition and explanation. HGM directly attests gnag as black.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 234,
+            "wylie": 233,
+            "english": 289
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          },
+          "broad_wylie_gnag_rows": 28,
+          "exact_unified_gnag": 1,
+          "exact_unified_nag": 1,
+          "historical_whitespace_start_gnag_regex_count": 4,
+          "punctuation_aware_gnag_lexical_count": 4,
+          "punctuation_aware_gnag_lexical_ranges": [
+            [
+              71,
+              75
+            ],
+            [
+              96,
+              100
+            ],
+            [
+              156,
+              160
+            ],
+            [
+              218,
+              222
+            ]
+          ]
+        },
+        "scope_clarification": {
+          "original_label": "whole_wylie_gnag_tokens",
+          "original_whitespace_start_regex": "(?<!\\S)gnag(?=[ ,]|$)",
+          "literal_original_regex_count": 4,
+          "punctuation_aware_lexical_regex": "(?<![A-Za-z])gnag(?![A-Za-z])",
+          "lexical_count": 4,
+          "lexical_ranges": [
+            [
+              71,
+              75
+            ],
+            [
+              96,
+              100
+            ],
+            [
+              156,
+              160
+            ],
+            [
+              218,
+              222
+            ]
+          ],
+          "disposition": "Original measurement preserved but label is too broad for comma-adjacent verse. Use explicitly delimited count and lexical count separately; semantic GNAG/NAG refutation unchanged."
+        },
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  },
+  {
+    "seq": 317,
+    "found": "four types",
+    "expected_candidate": "",
+    "refuted": true,
+    "verdict": "REFUTED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            30
+          ]
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "Read complete C05:316 and the following317–320 commentary; no contradiction supports the original three types alternative. Full-field searches find one row.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "The preceding verse supplies three colored categories and the unstained fourth. The explanatory English numeral is defensible, though it has no explicit local Tibetan numeral to bank.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 234,
+            "wylie": 233,
+            "english": 289
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          }
+        },
+        "scope_clarification": null,
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  },
+  {
+    "seq": 318,
+    "found": "'DRES BA'I",
+    "expected_candidate": "'DRES PA'I",
+    "refuted": true,
+    "verdict": "UNRESOLVED_NOT_FILED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [
+            207
+          ],
+          "wylie": [],
+          "english": []
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "C03:373 and C16:437 agree exactly in all three text fields but are a different passage. EM:908 is another different passage. BA1 versus PA17 is not proof of an error or independent publication. The physical source preserves the actual BA bytes.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "PA is conventionally expected after final-s, but the complete HGM ma dres ba headword, with its actual source apostrophe, records not mixed. The narrower positive dres ba lookup misses this negative headword. This is material counterevidence, not proof of BA correctness. Orthographic status remains unresolved; no erratum survives the required skeptical default.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 224,
+            "wylie": 223,
+            "english": 367
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          },
+          "original_spine_rows": 42199,
+          "acip_dres_bai_rows": 1,
+          "acip_dres_pai_rows": 17,
+          "negative_wylie_bai_rows": 1,
+          "negative_wylie_pai_rows": 11,
+          "exact_unified_ma_dres_ba": 1,
+          "exact_unified_ma_dres_pa": 1,
+          "exact_unified_dres_ba": 0,
+          "exact_unified_dres_pa": 1
+        },
+        "scope_clarification": null,
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  },
+  {
+    "seq": 318,
+    "found": "with the one mental stream",
+    "expected_candidate": "within the one mental stream",
+    "refuted": true,
+    "verdict": "REFUTED",
+    "independent_ground_checks": {
+      "a_quote": {
+        "exact_locations": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            295
+          ]
+        },
+        "full_source_and_physical_bytes_verified": true,
+        "reference": "source-context-independent.json; physical-extents-independent.json"
+      },
+      "b_parallel": {
+        "independent_judgment": "The full physical source retains with the one mental stream; all three full-field searches find one row.",
+        "publication_independence_established": false,
+        "source_evidence": "independent-sql-rechecks.json; independent-full-corpus-rechecks.json"
+      },
+      "c_registered": {
+        "total_register_records": 194,
+        "source_specific_records": 0,
+        "checked_class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ],
+        "judgment": "No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.",
+        "reference": "register-recheck-independent.json"
+      },
+      "d_defensibility": {
+        "independent_judgment": "With is defensible for this local stream condition. Its middle occurrence belongs to la; the two other with tokens belong to distinct dang complements. A stylistic preference for within is insufficient.",
+        "reference": "critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json"
+      },
+      "e_counts": {
+        "independently_remeasured": {
+          "source_chars": {
+            "acip": 224,
+            "wylie": 223,
+            "english": 367
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          }
+        },
+        "scope_clarification": null,
+        "reference": "independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json"
+      }
+    },
+    "new_erratum": false
+  }
+]

@@ -1,0 +1,44 @@
+from pathlib import Path
+import json,hashlib,sqlite3,importlib.util,re,datetime,html
+from html.parser import HTMLParser
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';A=B.parent;W=S.parents[2]/'campaign-worktree'
+H=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+sp=importlib.util.spec_from_file_location('cp',A/'copy_evidence_once.py');cp=importlib.util.module_from_spec(sp);sp.loader.exec_module(cp);pin=read(B/'proposal-baseline.json');put(S/'direct-source-copy-proof.json',cp.preserve(S,S/'original-to-copy-manifest.json',[Path(v['path']) for k,v in pin['source_pins'].items() if k!='spine']))
+# Recheck embedded queries, avoiding any confusion between dictionary and corpus row types.
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;embedded=[]
+def walk(o,path):
+ if isinstance(o,dict):
+  if 'sql' in o and 'rows' in o and ('parameters' in o or 'params' in o):
+   args=o.get('parameters',o.get('params'));rr=[dict(r) for r in db.execute(o['sql'],args)];assert rr==o['rows'] and len(rr)==o['count'];embedded.append(dict(path=path,sql=o['sql'],parameters=args,count=len(rr)))
+  for k,v in o.items():walk(v,path+'/'+str(k))
+ elif isinstance(o,list):
+  for i,v in enumerate(o):walk(v,path+'/'+str(i))
+for n in [316,317,318]:walk(read(B/'english'/str(n)/'five-ground-errata-review.json'),'english/'+str(n))
+put(S/'embedded-query-rechecks.json',embedded)
+class P(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.parts={'tib':[],'eng':[]}
+ def handle_starttag(self,tag,attrs):self.stack.append((tag,dict(attrs)))
+ def handle_endtag(self,tag):
+  for i in range(len(self.stack)-1,-1,-1):
+   if self.stack[i][0]==tag:self.stack=self.stack[:i];break
+ def handle_data(self,d):
+  if any(a.get('class')=='nul' for t,a in self.stack):return
+  if not any(a.get('data-l','').endswith('S') for t,a in self.stack):return
+  for side in self.parts:
+   if any(t=='div' and a.get('class')==side for t,a in self.stack):self.parts[side].append(d)
+render=[]
+for n in [316,317,318]:
+ p=P();p.feed((Q/str(n)/'body.html').read_text());row=dict(db.execute('select * from corpus_segments where course=? and seq=?',('C05',n)).fetchone());assert ''.join(p.parts['tib'])==row['wylie'] and ''.join(p.parts['eng'])==row['english'];render.append(dict(seq=n,wylie_exact=True,english_exact=True,body_sha256=H((Q/str(n)/'body.html').read_bytes())))
+put(S/'rendered-source-identity.json',render)
+# Material lexical records were read in full in four groups; retain their exact objects and scope.
+terms={'de','zad','byed pa','zag med','zag','med',"'o na",'ji lta bu','rang gi','de dag','ngo bo','gcig',"ma 'dres ba","ma 'dres pa","'dres ba","'dres pa","ma 'dres","'dres","'byin",'gnag','nag','gzugs','gtogs pa'};selected={}
+for q in read(S/'independent-master-rechecks.json'):
+ if q['term'] in terms:
+  for r in q['records']:selected[(r['collection'],r['index'])]=r
+assert len(selected)==35
+put(S/'critical-complete-master-records-read.json',list(selected.values()))
+# Preserve note-only supersession with exact current/historical identities.
+x=read(B/'tibetan/318/attempts/01/stdin.json');y=read(B/'tibetan/318/attempts/02/stdin.json');xn=x['segments'][0].pop('note');yn=y['segments'][0].pop('note');assert x==y;put(S/'historical-note-supersession-reviewed.json',dict(seq=318,angle='tibetan',old_note=xn,new_note=yn,all_other_spec_content_identical=True,disposition='The source apostrophes were restored in explanatory prose with HTML entities. Both actual native versions and their full source evidence are preserved; current spec/body only is approved.'))
+print(json.dumps(dict(status='PASS',embedded_queries=len(embedded),rendered_rows=len(render),critical_full_master_records=len(selected))))

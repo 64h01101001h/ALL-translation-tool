@@ -1,0 +1,49 @@
+"""Run immutable canonical bytes, with SQLite connection policy constrained to RO.
+
+No algorithm or gate is reimplemented or changed. Canonical module __file__ paths
+remain the worktree paths, making their ROOT/SPINE values original. The historically
+pinned builder is loaded before the unmodified generator to prevent concurrent
+registration changes from changing the consumed dependency. All caller stdin,
+stdout, stderr, exit and command bytes are retained by run_attempts.py.
+"""
+from pathlib import Path
+import sys, types, sqlite3, json, hashlib
+B=Path(__file__).resolve().parent
+W=B.parents[2]/'campaign-worktree'
+E=B/'evidence/governance'
+baseline=json.loads((B/'evidence/proposal-baseline.json').read_text())
+connect=sqlite3.connect
+def connect_ro(database,*args,**kwargs):
+    expected=str(W/'build/hgm_spine_v27_2.db')
+    if str(database)!=expected: raise RuntimeError('Unexpected SQLite path: '+str(database))
+    kwargs['uri']=True
+    return connect('file:'+expected+'?mode=ro',*args,**kwargs)
+sqlite3.connect=connect_ro
+def original(name,rel):
+    b=(E/rel).read_bytes()
+    if rel in baseline['governing_git_pins']:
+        assert hashlib.sha256(b).hexdigest()==baseline['governing_git_pins'][rel]['sha256']
+    m=types.ModuleType(name);m.__file__=str(W/rel);sys.modules[name]=m
+    exec(compile(b,m.__file__,'exec'),m.__dict__)
+    return m
+original('hgm_tools','engines/hgm_tools.py')
+original('build_alignment_layer','tools/build_alignment_layer.py')
+g=original('gen_alignment_page','tools/gen_alignment_page.py')
+if sys.argv[1]=='generate':
+    g.main()
+elif sys.argv[1]=='resolve':
+    spec=json.load(sys.stdin)
+    rows=[]
+    with sqlite3.connect(str(W/'build/hgm_spine_v27_2.db')) as db:
+        for seg in spec['segments']:
+            wyl,eng=db.execute('SELECT wylie,english FROM corpus_segments WHERE course=? AND seq=?',(spec['course'],seg['seq'])).fetchone()
+            spans=seg['spans']; byid={s['id']:s for s in spans}
+            engsp=g.with_members(spans,[byid[i] for i in seg['eng_order']],eng)
+            tr=g.resolve(wyl,spans,'tib',seg['seq']);er=g.resolve(eng,engsp,'eng',seg['seq'])
+            records=[]
+            for s in spans:
+                a,b=tr[s['id']]; x,y=er.get(s['id'],[None,None])
+                records.append(dict(id=s['id'],d=s['d'],tib=s['tib'],eng=s.get('eng'),tib_range=[a,b],eng_range=[x,y] if x is not None else None,tib_witness=wyl[a:b],eng_witness=eng[x:y] if x is not None else None))
+            rows.append(dict(seq=seg['seq'],source_wylie=wyl,source_english=eng,resolutions=records))
+    print(json.dumps(dict(schema='canonical-resolver-evidence-v1',producer='Codex GPT-6',original_commit=baseline['commit'],range_convention='zero-based Unicode codepoint [start,end)',segments=rows),ensure_ascii=False,indent=2))
+else: raise SystemExit('Unsupported mode')

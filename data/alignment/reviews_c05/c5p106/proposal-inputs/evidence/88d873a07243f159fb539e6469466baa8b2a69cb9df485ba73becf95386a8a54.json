@@ -1,0 +1,144 @@
+[
+  {
+    "seq": 316,
+    "found": "In",
+    "expected_candidate": "in",
+    "refuted": true,
+    "disposition": "REFUTED_PHYSICAL_VERSE_LINEATION",
+    "grounds": {
+      "a_quote": {
+        "finding": "Quoted found bytes are present in this segment; original fields, raw archive object and complete physical extents were reopened.",
+        "locations": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            42
+          ]
+        }
+      },
+      "b_parallel": {
+        "finding": "All three exact-field queries find only C05:316. The physical English starts the second verse line with In and the third with Respectively.",
+        "publication_limit": "The physical ASCII input and digital text fields are source evidence; no independent publication or ingestion lineage is established by equality, difference, or rarity."
+      },
+      "c_registered": {
+        "finding": "The original pinned register has no exact source-specific record for this segment. E-044, E-071, E-076, E-107, E-111 and E-121 were examined; none licenses this proposed textual correction.",
+        "source_specific_count": 0,
+        "register_count": 194,
+        "class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ]
+      },
+      "d_defensibility": {
+        "finding": "The capital is defensible verse lineation, not a typo. Preserve both capitals, the first-stanza classification, and the fourth-line unstained clause."
+      },
+      "e_counts": {
+        "finding": "All recorded original SQL queries and full master-record identities were independently reopened; count scope is stated explicitly. Original counts from all three master collections are distinguished from exact unified-entry counts.",
+        "measured": {
+          "source_chars": {
+            "acip": 131,
+            "wylie": 129,
+            "english": 173
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          }
+        }
+      }
+    },
+    "evidence_refs": [
+      "../evidence/reexecuted-original-sql.json",
+      "../evidence/reexecuted-original-master.json",
+      "../evidence/full-original-corpus-records.json",
+      "../evidence/source-context-originals.json",
+      "../evidence/physical-extents.json",
+      "../evidence/register-recheck.json",
+      "../original-to-copy-manifest.json"
+    ],
+    "suggested_severity": null,
+    "suggested_confidence": null
+  },
+  {
+    "seq": 316,
+    "found": "GNAG",
+    "expected_candidate": "NAG",
+    "refuted": true,
+    "disposition": "REFUTED_ATTESTED_LEXEME",
+    "grounds": {
+      "a_quote": {
+        "finding": "Quoted found bytes are present in this segment; original fields, raw archive object and complete physical extents were reopened.",
+        "locations": {
+          "acip": [
+            67
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "finding": "Exact fields find only this row. Broad gnag rows are lexical comparisons; none establishes an alternate independent publication of the selected passage.",
+        "publication_limit": "The physical ASCII input and digital text fields are source evidence; no independent publication or ingestion lineage is established by equality, difference, or rarity."
+      },
+      "c_registered": {
+        "finding": "The original pinned register has no exact source-specific record for this segment. E-044, E-071, E-076, E-107, E-111 and E-121 were examined; none licenses this proposed textual correction.",
+        "source_specific_count": 0,
+        "register_count": 194,
+        "class_ids": [
+          "E-044",
+          "E-071",
+          "E-076",
+          "E-107",
+          "E-111",
+          "E-121"
+        ]
+      },
+      "d_defensibility": {
+        "finding": "Complete HGM unified index23855 gives gnag, Tibetan གནག, ACIP GNAG and black with glossary HTG2016 provenance. Both gnag and nag exist; preference for nag is not evidence of a defect."
+      },
+      "e_counts": {
+        "finding": "All recorded original SQL queries and full master-record identities were independently reopened; count scope is stated explicitly. Original counts from all three master collections are distinguished from exact unified-entry counts.",
+        "measured": {
+          "source_chars": {
+            "acip": 131,
+            "wylie": 129,
+            "english": 173
+          },
+          "full_field_parallel_counts": {
+            "acip": 1,
+            "wylie": 1,
+            "english": 1
+          },
+          "physical_full_field_matches": {
+            "acip": 1,
+            "english": 1
+          },
+          "broad_wylie_gnag_rows": 28,
+          "exact_unified_gnag": 1,
+          "exact_unified_nag": 1,
+          "whole_wylie_gnag_tokens": 0
+        }
+      }
+    },
+    "evidence_refs": [
+      "../evidence/reexecuted-original-sql.json",
+      "../evidence/reexecuted-original-master.json",
+      "../evidence/full-original-corpus-records.json",
+      "../evidence/source-context-originals.json",
+      "../evidence/physical-extents.json",
+      "../evidence/register-recheck.json",
+      "../original-to-copy-manifest.json"
+    ],
+    "suggested_severity": null,
+    "suggested_confidence": null
+  }
+]

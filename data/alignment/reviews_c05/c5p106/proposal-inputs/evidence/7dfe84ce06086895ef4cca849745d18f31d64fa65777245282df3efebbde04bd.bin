@@ -1,0 +1,24 @@
+from pathlib import Path
+import subprocess,sys,json,hashlib,os,datetime
+B=Path(__file__).resolve().parent
+W=B.parents[2]/'campaign-worktree'
+for seq in map(int,sys.argv[1:]):
+    D=B/str(seq);attempts=D/'attempts';attempts.mkdir(exist_ok=True)
+    n=1
+    while (attempts/('%02d'%n)).exists(): n+=1
+    A=attempts/('%02d'%n);A.mkdir()
+    stdin=(D/'spec.json').read_bytes(); (A/'stdin.json').write_bytes(stdin)
+    env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1')
+    meta=dict(schema='native-attempt-v1',seq=seq,attempt=n,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),cwd=str(W),stdin_sha256=hashlib.sha256(stdin).hexdigest(),runner_sha256=hashlib.sha256((B/'native_runner.py').read_bytes()).hexdigest(),runs=[])
+    for mode in ['generate','resolve']:
+        command=[sys.executable,'-B',str(B/'native_runner.py'),mode]
+        result=subprocess.run(command,input=stdin,cwd=W,env=env,capture_output=True)
+        (A/(mode+'.stdout')).write_bytes(result.stdout)
+        (A/(mode+'.stderr')).write_bytes(result.stderr)
+        (A/(mode+'.exit')).write_text(str(result.returncode)+'\n')
+        meta['runs'].append(dict(mode=mode,command=command,exit=result.returncode,stdout_bytes=len(result.stdout),stdout_sha256=hashlib.sha256(result.stdout).hexdigest(),stderr_bytes=len(result.stderr),stderr_sha256=hashlib.sha256(result.stderr).hexdigest()))
+        print(seq,mode,'EXIT',result.returncode,'stdout bytes',len(result.stdout),'stderr bytes',len(result.stderr))
+        if result.stderr: print(result.stderr.decode('utf-8',errors='backslashreplace'))
+        if result.returncode==0 and not result.stderr:
+            (D/('body.html' if mode=='generate' else 'resolved.json')).write_bytes(result.stdout)
+    (A/'invocation.json').write_text(json.dumps(meta,indent=2)+'\n')

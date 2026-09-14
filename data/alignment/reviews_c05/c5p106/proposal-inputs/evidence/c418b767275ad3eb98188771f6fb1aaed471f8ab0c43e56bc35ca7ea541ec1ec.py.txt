@@ -1,0 +1,25 @@
+"""Execute unchanged historical canonical code with the original ROOT and read-only SQLite."""
+from pathlib import Path
+import sys,types,sqlite3,json,hashlib
+P=Path(__file__).resolve().parent;W=P.parents[2]/'campaign-worktree'
+pin=json.loads((P.parent/'proposal-baseline.json').read_text())
+original_connect=sqlite3.connect
+def readonly(database,*args,**kwargs):
+ assert str(database)==str(W/'build/hgm_spine_v27_2.db'),str(database)
+ kwargs['uri']=True
+ return original_connect(Path(database).as_uri()+'?mode=ro',*args,**kwargs)
+sqlite3.connect=readonly
+def load(name,rel):
+ b=(P/'originals/git'/rel).read_bytes()
+ if rel in pin['governing_git_pins']:assert hashlib.sha256(b).hexdigest()==pin['governing_git_pins'][rel]['sha256']
+ m=types.ModuleType(name);m.__file__=str(W/rel);sys.modules[name]=m;exec(compile(b,m.__file__,'exec'),m.__dict__);return m
+load('hgm_tools','engines/hgm_tools.py');load('build_alignment_layer','tools/build_alignment_layer.py');g=load('gen_alignment_page','tools/gen_alignment_page.py')
+if sys.argv[1]=='generate':g.main()
+elif sys.argv[1]=='resolve':
+ spec=json.load(sys.stdin);db=sqlite3.connect(str(W/'build/hgm_spine_v27_2.db'));db.row_factory=sqlite3.Row;out=[]
+ for s in spec['segments']:
+  r=dict(db.execute('select * from corpus_segments where course=? and seq=?',(spec['course'],s['seq'])).fetchone());sp=s['spans'];byid={x['id']:x for x in sp}
+  tr=g.resolve(r['wylie'],sp,'tib',s['seq']);er=g.resolve(r['english'],g.with_members(sp,[byid[i] for i in s['eng_order']],r['english']),'eng',s['seq'])
+  out.append(dict(seq=s['seq'],original_row=r,resolved=[dict(seq=s['seq'],id=x['id'],d=x['d'],tib=x['tib'],eng=x['eng'],tib_range=list(tr[x['id']]),eng_range=list(er[x['id']]) if x['id'] in er else None) for x in sp]))
+ print(json.dumps(dict(status='PASS',segments=out),ensure_ascii=False,indent=2))
+else:raise RuntimeError('unknown mode')

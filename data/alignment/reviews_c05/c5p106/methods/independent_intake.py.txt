@@ -1,0 +1,69 @@
+from pathlib import Path
+import json,hashlib,sqlite3,gzip,subprocess,sys,os,datetime,time,importlib.util,re
+S=Path(__file__).resolve().parent;B=S.parent;Q=B/'reconciled';W=B.parents[1]/'campaign-worktree';A=B.parent
+H=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=S/'original-to-copy-manifest.json';sp=importlib.util.spec_from_file_location('copy_once',A/'copy_evidence_once.py');cp=importlib.util.module_from_spec(sp);sp.loader.exec_module(cp)
+qf=read(Q/'freeze.json');assert H((Q/'freeze.json').read_bytes())=='51aa8fc419bbd25ea20a21d0ea4524b1c964888891c7aa0c400b449c3f6ba314'
+originals=[]
+for base,fn in [(Q,'freeze.json'),(B/'tibetan','frozen_manifest.json'),(B/'english','freeze-manifest.json')]:
+ z=read(base/fn);items=z['files'].items() if isinstance(z['files'],dict) else ((r['path'],r) for r in z['files'])
+ for rel,i in items:
+  p=base/rel;raw=p.read_bytes();assert len(raw)==i['bytes'] and H(raw)==i['sha256'];originals.append(p)
+ originals.append(base/fn)
+originals += [B/'semantic-review-brief.md',B/'semantic-input-review-package.txt',A/'semantic-review-protocol.md',A/'copy_evidence_once.py',B/'proposal-baseline.json',B/'source.json',B/'context.json']
+put(S/'initial-copy-proof.json',cp.preserve(S,manifest,originals))
+pin=read(B/'proposal-baseline.json');pins=[]
+for rel,info in pin['governing_git_pins'].items():
+ raw=subprocess.check_output(['git','-C',str(W),'show',pin['commit']+':'+rel]);assert H(raw)==info['sha256'];dest=S/'governing-originals'/(rel+'.txt' if Path(rel).suffix=='.py' else rel);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw)
+ pins.append(dict(original=str(W/rel),copy=str(dest.relative_to(S)),sha256=H(raw),bytes=len(raw),original_git_commit=pin['commit'],repository_relative_path=rel))
+for rel in ['engines/hgm_tools.py','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ raw=subprocess.check_output(['git','-C',str(W),'show',pin['commit']+':'+rel]);dest=S/'governing-originals'/(rel+'.txt' if Path(rel).suffix=='.py' else rel);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(raw);pins.append(dict(original=str(W/rel),copy=str(dest.relative_to(S)),sha256=H(raw),bytes=len(raw),original_git_commit=pin['commit'],repository_relative_path=rel))
+put(manifest,read(manifest)+pins)
+sourcepins=[]
+for k,i in pin['source_pins'].items():
+ p=Path(i['path']);raw=p.read_bytes();assert len(raw)==i['bytes'] and H(raw)==i['sha256'];sourcepins.append(dict(role=k,**i))
+put(S/'source-pins-verified.json',sourcepins)
+db=sqlite3.connect(Path(pin['source_pins']['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+rows=[dict(r) for r in db.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',310,324))]
+for r in read(B/'source.json')+read(B/'context.json'):assert all(next(x for x in rows if x['seq']==r['seq'])[k]==v for k,v in r.items())
+put(S/'source-context-independent.json',rows)
+queries=[]
+for f in ['evidence/reexecuted-original-sql.json','evidence/material-corpus-queries.json']:
+ for j,q in enumerate(read(Q/f)):
+  rr=[dict(r) for r in db.execute(q['sql'],q['parameters'])];assert rr==q['rows'] and len(rr)==q['count'];queries.append(dict(file=f,index=j,sql=q['sql'],parameters=q['parameters'],count=len(rr),rows=rr))
+put(S/'independent-sql-rechecks.json',queries)
+master=json.loads(gzip.decompress(Path(pin['source_pins']['master']['path']).read_bytes()));index={}
+for c in ['unified_entries','curated_entries','glossary_entries']:
+ for i,r in enumerate(master[c]):
+  for term in {r.get('wylie'),*(r.get('wylie_variants') or [])}:
+   if term is not None:index.setdefault((c,term),[]).append(dict(collection=c,index=i,record=r))
+mq=[]
+for q in read(Q/'evidence/reexecuted-original-master.json'):
+ cols=['unified_entries','curated_entries','glossary_entries'] if '/tibetan/' in q['original'] else ['unified_entries'];rr=[x for c in cols for x in index.get((c,q['term']),[])];assert rr==q['records'] and len(rr)==q['count'];mq.append(q)
+put(S/'independent-master-rechecks.json',mq)
+corpus=json.loads(gzip.decompress(Path(pin['source_pins']['corpus']['path']).read_bytes()));cr=read(Q/'evidence/full-original-corpus-records.json')
+for r in cr:assert corpus[r['index']]==r['record']
+for q in queries:
+ for r in q['rows']:
+  if 'raw' in r:assert json.loads(r['raw'])==corpus[r['id']-1]
+physical=Path(pin['source_pins']['physical']['path']).read_bytes();pr=[]
+for p in read(Q/'evidence/physical-extents.json'):
+ row=next(r for r in rows if r['seq']==p['seq']);pat=rb'\s+'.join(re.escape(t) for t in row[p['field']].encode('ascii').split());hits=list(re.finditer(pat,physical));assert len(hits)==p['count']==1
+ for m,x in zip(hits,p['matches']):assert [m.start(),m.end()]==x['byte_range'] and physical[m.start():m.end()].decode('latin1')==x['latin1'] and H(physical[m.start():m.end()])==x['sha256']
+ pr.append(p)
+put(S/'physical-extents-independent.json',pr)
+reg=read(S/'governing-originals/docs/errata_register.json');records=reg if isinstance(reg,list) else reg['items'];claimed=read(Q/'evidence/register-recheck.json');assert len(records)==claimed['total_count']==194
+for r in claimed['full_class_records']:assert r in records
+for q in claimed['source_queries']:
+ found=[x for x in records if q['needle'] in json.dumps(x,ensure_ascii=False)];assert found==q['records'] and len(found)==q['count']
+put(S/'register-recheck-independent.json',claimed)
+# Preserve readable current interfaces without unsupported extensions.
+for angle in ['tibetan','english','reconciled']:
+ for n in [316,317,318]:
+  for p in (B/angle/str(n)).iterdir():
+   if not p.is_file():continue
+   d=S/('reviewed-final' if angle=='reconciled' else 'proposal-inputs/'+angle)/str(n)/p.name;d.parent.mkdir(parents=True,exist_ok=True);d.write_bytes(p.read_bytes())
+put(S/'intake-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),freeze_files=len(qf['files']),sql_queries=len(queries),master_queries=len(mq),unique_master_records=len({(x['collection'],x['index']) for q in mq for x in q['records']}),full_corpus_records=len(cr),physical_extents=len(pr),source_origin_git_commit=pin['commit']))
+print((S/'intake-proof.json').read_text())

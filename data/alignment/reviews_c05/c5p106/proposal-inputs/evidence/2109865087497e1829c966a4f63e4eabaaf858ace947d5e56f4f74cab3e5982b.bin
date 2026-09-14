@@ -1,0 +1,21 @@
+import pathlib,json,gzip,re,sqlite3,hashlib
+P=pathlib.Path(__file__).resolve().parent
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+master=json.loads(gzip.decompress((P/'originals/external/hgm_dictionary_v27_2.json.gz').read_bytes()))
+terms=['mi dge','mi dge ba','gzugs',"'dod",'gtogs','gtogs pa','dge ba','nyid','rim bzhin','rim bzhin du','gnag','nag','dkar','gnyis ka','las','zad byed','zad','byed pa','zag med','yin',"'o na",'ngo bo','ji lta bu','zhe na','rnam par smin pa','rnam sm in','rnam smin','rang','nyon mongs can','nyon mongs pa',"yid du mi 'ong ba", "yid du 'ong ba", "'byin",'phyir','rgyud','gcig','ma',"'dres", "ma 'dres", "ma 'dres pa", "ma 'dres ba", 'sdug bsngal','ba','pa','gnag pa','dkar ba','zhing','dang']
+queries=[]
+for term in terms:
+ rr=[dict(index=i,record=e) for i,e in enumerate(master['unified_entries']) if term==e.get('wylie') or term in (e.get('wylie_variants') or [])]
+ queries.append(dict(term=term,match='wylie exact or exact wylie_variants member',count=len(rr),records=rr))
+put(P/'evidence/master-queries.json',queries)
+registry=json.loads((P/'originals/git/docs/errata_register.json').read_text())
+selected=[x for x in registry if any(n in json.dumps(x,ensure_ascii=False).lower() for n in ['c05:316','c05:317','c05:318',"'dres",'nominali','heading','1,500','english running','converter','lineation','folio'])]
+put(P/'evidence/registered-class-query.json',dict(method='case-insensitive substring over complete JSON records',needles=['c05:316','c05:317','c05:318',"\u0027dres",'nominali','heading','1,500','english running','converter','lineation','folio'],count=len(selected),records=selected))
+src=json.loads((P/'originals/external/source.json').read_text());physical=(P/'originals/external/C05ReadingASCII.txt').read_bytes();ext=[]
+for row in src:
+ for fld in ['acip','english']:
+  # Physical whitespace and line wrapping may differ; match token sequence with exact non-whitespace bytes.
+  toks=row[fld].encode('ascii').split();pat=rb'\s+'.join(re.escape(t) for t in toks);hits=list(re.finditer(pat,physical))
+  ext.append(dict(seq=row['seq'],field=fld,method='exact ASCII non-whitespace token sequence; original bytes retained',count=len(hits),matches=[dict(byte_range=[m.start(),m.end()],latin1=physical[m.start():m.end()].decode('latin1'),sha256=hashlib.sha256(physical[m.start():m.end()]).hexdigest()) for m in hits]))
+put(P/'evidence/physical-extents.json',ext)
+print(json.dumps(dict(master_queries=len(queries),master_records=sum(q['count'] for q in queries),registered_matches=len(selected),physical_counts=[x['count'] for x in ext])))

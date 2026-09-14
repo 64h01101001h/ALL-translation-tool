@@ -1,0 +1,66 @@
+[
+  {
+    "sql": "select * from corpus_segments where wylie like ? and english like ? order by course,seq",
+    "parameters": [
+      "%'o na%",
+      "Just how%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "course": "C05",
+        "seq": 317,
+        "wylie": "[iv.237-40] ,'o na las de dag gi ngo bo ji lta bu zhe na, mi dge ba ni gnag la rnam par smin pa gnag pa'i las yin te, rang gi ngo bo nyon mongs can yin pas gnag la, rnam smin yid du mi 'ong ba 'byin pas rnam smin yang gnag pa'i phyir",
+        "english": "Just how do we describe these four types of deeds? Non-virtue represents a type of deed which is black and ripens into something black. It is black in that its very nature consists of something afflicted. It also ripens into something black, for it ripens forth into an undesirable result."
+      }
+    ]
+  },
+  {
+    "sql": "select * from corpus_segments where wylie like ? and english like ? order by course,seq",
+    "parameters": [
+      "%ji lta bu%",
+      "Just how%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "course": "C05",
+        "seq": 317,
+        "wylie": "[iv.237-40] ,'o na las de dag gi ngo bo ji lta bu zhe na, mi dge ba ni gnag la rnam par smin pa gnag pa'i las yin te, rang gi ngo bo nyon mongs can yin pas gnag la, rnam smin yid du mi 'ong ba 'byin pas rnam smin yang gnag pa'i phyir",
+        "english": "Just how do we describe these four types of deeds? Non-virtue represents a type of deed which is black and ripens into something black. It is black in that its very nature consists of something afflicted. It also ripens into something black, for it ripens forth into an undesirable result."
+      }
+    ]
+  },
+  {
+    "sql": "select * from corpus_segments where wylie like ? and english like ? order by course,seq",
+    "parameters": [
+      "%rgyud gcig%",
+      "%particular mental stream%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "course": "C05",
+        "seq": 319,
+        "wylie": "'dod par gtogs pa'i dge ba ni dkar gnag la rnam par smin pa yang dkar gnag pa'i las yin te, rang gi ngo bo nyon mongs can min pas dkar, rgyud gcig la nyon mongs pa dang 'dres pas gnag, 'bras bu yid du 'ong ba 'byin pas rnam smin dkar, rgyud gcig la sdug bsngal dang 'dres pas rnam smin gnag pa'i phyir",
+        "english": "Virtue taken in by the realm of desire represents a type of deed which is both white and black, and which also ripens into something both white and black. Since its basic nature is free of affliction it is white but--since within a single mental stream it is also mixed with afflicted things--it is black as well. It ripens into something white because it gives forth a pleasant result but--since within the particular mental stream this is also mixed with suffering--we can also say it ripens into something black."
+      }
+    ]
+  },
+  {
+    "sql": "select * from corpus_segments where wylie like ? and english like ? order by course,seq",
+    "parameters": [
+      "%zad%byed%",
+      "%brings it to an end%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "course": "C05",
+        "seq": 316,
+        "wylie": "mi dge gzugs dang 'dod gtogs pa'i, ,dge ba nyid ni rim bzhin du, ,gnag dang dkar dang gnyis ka'i las, ,de zad byed pa zag med yin",
+        "english": "Non-virtue as well as virtue itself taken In by the form and desire represent Respectively deeds which are black, white, and both. The unstained is what brings it to an end."
+      }
+    ]
+  }
+]

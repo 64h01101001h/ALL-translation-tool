@@ -1,0 +1,23 @@
+from pathlib import Path
+import json
+S=Path(__file__).resolve().parent;Q=S.parent/'reconciled'
+def read(p):return json.loads(p.read_text())
+reasons={
+(316,'In'):('Physical CRLF before In and Respectively demonstrates verse line starts. No correction is warranted.','The four physical verse lines and complete source/context preserve the category structure; full-field ACIP, Wylie and English searches each find one row.'),
+(316,'GNAG'):('The full HGM GNAG/gnag headword is attested as black; preference for NAG/nag does not establish an error.','The 28 broad gnag rows are lexical comparisons, not alternate publications of this verse. Full-field searches each find only this row.'),
+(317,'GNAG'):('The four black occurrences coherently distinguish intrinsic and resultant blackness in definition and explanation. HGM directly attests gnag as black.','The same 28 broad lexical comparison rows are not same-passage publication evidence. Full-field searches each find one row.'),
+(317,'four types'):('The preceding verse supplies three colored categories and the unstained fourth. The explanatory English numeral is defensible, though it has no explicit local Tibetan numeral to bank.','Read complete C05:316 and the following317–320 commentary; no contradiction supports the original three types alternative. Full-field searches find one row.'),
+(318,"'DRES BA'I"):('PA is conventionally expected after final-s, but the complete HGM ma dres ba headword, with its actual source apostrophe, records not mixed. The narrower positive dres ba lookup misses this negative headword. This is material counterevidence, not proof of BA correctness. Orthographic status remains unresolved; no erratum survives the required skeptical default.','C03:373 and C16:437 agree exactly in all three text fields but are a different passage. EM:908 is another different passage. BA1 versus PA17 is not proof of an error or independent publication. The physical source preserves the actual BA bytes.'),
+(318,'with the one mental stream'):('With is defensible for this local stream condition. Its middle occurrence belongs to la; the two other with tokens belong to distinct dang complements. A stylistic preference for within is insufficient.','The full physical source retains with the one mental stream; all three full-field searches find one row.')}
+verdicts=[]
+for x in read(S/'errata-counts-independent.json'):
+ n=x['seq'];decisive,parallel=reasons[(n,x['found'])];counts=x['grounds']['e_counts']['measured'].copy();clar=x.get('independent_count_clarification')
+ if clar:
+  counts['historical_whitespace_start_gnag_regex_count']=counts.pop('whole_wylie_gnag_tokens');counts['punctuation_aware_gnag_lexical_count']=clar['lexical_count'];counts['punctuation_aware_gnag_lexical_ranges']=clar['lexical_ranges']
+ verdicts.append(dict(seq=n,found=x['found'],expected_candidate=x['expected_candidate'],refuted=True,verdict='UNRESOLVED_NOT_FILED' if (n,x['found'])==(318,"'DRES BA'I") else 'REFUTED',independent_ground_checks={
+  'a_quote':dict(exact_locations=x['grounds']['a_quote']['locations'],full_source_and_physical_bytes_verified=True,reference='source-context-independent.json; physical-extents-independent.json'),
+  'b_parallel':dict(independent_judgment=parallel,publication_independence_established=False,source_evidence='independent-sql-rechecks.json; independent-full-corpus-rechecks.json'),
+  'c_registered':dict(total_register_records=194,source_specific_records=0,checked_class_ids=['E-044','E-071','E-076','E-107','E-111','E-121'],judgment='No source-specific duplicate or applicable registered class establishes this proposed correction. Existing classes remain preserved without refiling.',reference='register-recheck-independent.json'),
+  'd_defensibility':dict(independent_judgment=decisive,reference='critical-complete-master-records-read.json; independent-master-rechecks.json; original-to-copy-manifest.json'),
+  'e_counts':dict(independently_remeasured=counts,scope_clarification=clar,reference='independent-sql-rechecks.json; embedded-query-rechecks.json; errata-counts-independent.json')},new_erratum=False))
+(S/'five-ground-errata-review.json').write_text(json.dumps(verdicts,ensure_ascii=False,indent=2)+'\n');print(json.dumps(dict(status='PASS',independent_screens=len(verdicts),new_errata=0)))

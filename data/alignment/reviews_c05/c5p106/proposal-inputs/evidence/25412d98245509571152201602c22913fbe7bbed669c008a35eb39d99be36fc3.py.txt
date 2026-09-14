@@ -1,0 +1,47 @@
+"""Source-specific reconciled judgments; native canonical proof follows."""
+from pathlib import Path
+import json,copy
+P=Path(__file__).resolve().parent;B=P.parent
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+notes={
+316:"PROVISIONAL machine alignment by Codex, independent reconciliation. GMR wording and source Wylie remain verbatim; nothing is promoted to hgm_gloss. The verse orders nonvirtue, form-realm virtue and desire-realm virtue against black, white and both. The first dang joins form/desire and the final retained dang joins white/both; the intermediate list connector is expressed by punctuation. In and Respectively preserve physical verse-line capitals. The ending-agent expression is decomposed into de/it, zad/end and byed pa/brings: the local causative and its object/result are separately identifiable. English nominal and result framing what and to an remains unwrapped. ni marks the topic with no separately alignable English word; represent is the supplied first-stanza predicate, while final yin owns is. The positive virtue member of Non-virtue and both strictly tighter members of unstained are retained; no unresolved Non-affix mapping is introduced.",
+317:"PROVISIONAL machine alignment by Codex, independent reconciliation. GMR wording and source Wylie remain verbatim; nothing is promoted to hgm_gloss. The four black occurrences preserve intrinsic and resultant blackness first in the definition and then in its explanation. The first shortened rnam smin owns the final noun result; the second owns the middle ripens. The intervening &apos;byin owns the final ripens forth as a local yielding-verb rendering, not a new master gloss. The two pas particles own in that and for at their respective causal clauses. ji lta bu owns how; whether Just belongs to the opening discourse marker or intensifies the interrogative is unresolved, so Just and &apos;o na remain unbanked. The question about ngo bo is recast as do we describe, not a lexical nature/describe pair. ni has no separate English word exponent. Final phyir and other distributed relations remain omitted, not nulled; four types of and the bracketed citation are retained as contextual English and apparatus without invented Tibetan links.",
+318:"PROVISIONAL machine alignment by Codex, independent reconciliation. GMR wording and source Wylie remain verbatim; nothing is promoted to hgm_gloss. First rgyud refers to the stream in the no-affliction explanation and second rgyud to the stream in the no-suffering explanation. The first gcig/in question correspondence is uncertain; only the second gcig has an explicit one. The three with occurrences belong respectively to the first dang, the second stream-locative la, and the final dang. Both negative mixture compounds retain strictly tighter negative and positive members; together expresses mixing, not a supplied participant. Final phyir owns because of in the joint explanatory frame; zhing and the redistributed And remain unbanked. su/by is left unresolved within the taken-in construction, while ni has no separate English word exponent. The physical source preserves &apos;DRES BA&apos;I. Conventional PA spelling is counterbalanced by the exact HGM headword ma &apos;dres ba; spelling status remains unresolved and no erratum or source correction is filed."
+}
+extra_omissions={
+316:[dict(source='genitive endings on gtogs pa and gnyis ka',reason='The adjectival relationship is distributed through English order; retain each lexical stem and nominalizer without falsely making a separate English genitive atom.'),dict(source='what; to an',reason='Nominal agent framing and result construction accompany the causative; the independently identifiable it, end and brings remain lexical matches, and no member is hung from a phrase.')],
+317:[dict(source="'o na / Just",reason="Both 'o na/just and ji lta bu/just how are attested in HGM fields. This single local occurrence and the exact-query witnesses do not adjudicate ownership of Just. Retain ji lta bu/how, leave the opening marker and disputed intensifier unbanked, and do not label them null."),dict(source='remaining nominal/genitive endings',reason='Inflected gnag pa is retained as its whole attested black lexeme; remaining genitives relate the blackness to the deed and have no separately asserted atom.')],
+318:[dict(source='su / by',reason='The locative-classification complement belongs to the taken-in construction. A separate su/by equivalence is plausible but not resolved by the shared predicate; omit this contested correspondence without asserting absence.'),dict(source='first gcig / in question',reason='The specific-stream reading is plausible and C05:319 has a nearby particular-stream recast, but that is a different occurrence and does not establish a separate in question exponent here. Leave the correspondence unbanked.'),dict(source="final ba'i",reason="The complete physical source and exact HGM ma 'dres ba headword preserve BA; the conventional PA preference does not resolve orthographic status. Neither spelling is edited, promoted, or aligned to invented English.")]
+}
+allplans=[]
+for n in [316,317,318]:
+ spec=copy.deepcopy(json.loads((B/'english'/str(n)/'spec.json').read_text()));seg=spec['segments'][0]
+ original=json.loads((B/'english'/str(n)/'decisions.json').read_text());why={s['id']:s['reason'] for s in original['spans']}
+ ranges={s['id']:{k:s[k] for k in ['tib_range','eng_range']} for s in original['spans']}
+ out=[]
+ for s in seg['spans']:
+  if n==317 and s['id']=='p1':continue
+  if n==317 and s['id'] in ['p3','p4','p12']:s['d']=5
+  if n==318 and s['id']=='p10':s['d']=5
+  if n==317 and s['id']=='p4':why[s['id']]='Established interrogative ji lta bu owns how. Both competing proposals attach Just differently; retain the common unambiguous interrogative core and leave that intensifier unresolved.'
+  if s['eng']=='un' and s['d']==7:s['subword']=True
+  out.append(s)
+  if n in [316,317] and s['eng']=='Non-virtue':
+   mid='m_positive_virtue';t='dge' if n==316 else 'dge ba';parent=ranges[s['id']];start=parent['tib_range'][0]+3
+   out.append(dict(id=mid,d=7,tib=t,eng='virtue'));ranges[mid]=dict(tib_range=[start,parent['tib_range'][1]],eng_range=[parent['eng_range'][0]+4,parent['eng_range'][1]])
+   why[mid]='The positive virtue member is unique and strictly tighter inside the established negative parent. The Non- prefix remains unpaired under the unresolved convention; this member does not assert that the parent is positive.'
+  if (n==316 and s['id']=='p7') or (n==317 and s['id']=='w5') or (n==318 and s['id']=='w3'):
+   tr=json.loads((P/'native/originals/tibetan'/str(n)/'resolve/stdout').read_text())['segments'][0]['resolved'];ni=next(x for x in tr if x['tib']=='ni');out.append(dict(id='p_topic',d=6,tib='ni',eng=None,cls='particle',nul='Topic marking has no separately alignable English word exponent; the clause syntax retains its function.'));ranges['p_topic']=dict(tib_range=ni['tib_range'],eng_range=None);why['p_topic']='The source topic marker is carried by English subject-predicate organization, with no separately alignable lexical exponent. This is a positive no-separate-exponent finding, not uncertainty or absence of topic meaning.'
+ seg['spans']=out;seg['eng_order']=[s['id'] for s in sorted([x for x in out if x['d']!=7 and x['eng'] is not None],key=lambda x:ranges[x['id']]['eng_range'][0])];seg['note']=notes[n]
+ if n==316:
+  why['w14']='de is the demonstrative object it of the ending-agent expression, selected at [160,162), outside itself. The complete clause and C05:320 make the object relation explicit.'
+  why['w15']='zad contributes ending, nominalized in the result complement end. Full HGM index16595 includes end; an and to are English result framing and remain outside.'
+  why['w16']='byed pa is the causative doing/bringing component of zad byed pa, realized by brings. Full HGM index12836 includes brings; this matches the local causal predicate without taking its object or result.'
+ omissions=copy.deepcopy(original['omissions'])+extra_omissions[n]
+ # Supersede original broad topic omission with the explicit adjudicated null.
+ for o in omissions:
+  if 'ni;' in o.get('source',''):o['reason']+=' Reconciliation distinguishes ni as a proven no-separate-word exponent and retains an explicit topic null; this original broad omission is superseded for ni only.'
+ plans=[dict(seq=n,**s,**ranges[s['id']],reason=why[s['id']]) for s in out]
+ put(P/str(n)/'spec.json',spec);put(P/str(n)/'errata.json',[]);put(P/str(n)/'planned-decisions.json',dict(seq=n,status='RECONCILED_PROVISIONAL_AWAITING_NATIVE_PROOF',spans=plans,omissions=omissions));allplans.extend(plans)
+put(P/'planned-resolved-spans.json',[{k:s[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']} for s in allplans])
+print(json.dumps(dict(spans=len(allplans),nulls=sum(s['eng'] is None for s in allplans),word_pairs=sum(s['d']==5 and s['eng'] is not None for s in allplans)),indent=2))

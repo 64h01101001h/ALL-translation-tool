@@ -1,0 +1,76 @@
+import pathlib,json,hashlib,datetime,sqlite3,re,html.parser,os
+P=pathlib.Path(__file__).resolve().parent
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+src={x['seq']:x for x in json.loads((P/'originals/external/source.json').read_text())}
+registry=json.loads((P/'originals/git/docs/errata_register.json').read_text())
+cp=json.loads((P/'evidence/corpus-queries.json').read_text());cs=json.loads((P/'evidence/corpus-supplement.json').read_text())
+physical=json.loads((P/'evidence/physical-extents.json').read_text())
+mk=json.loads((P/'evidence/master-queries.json').read_text())+json.loads((P/'evidence/master-supplement.json').read_text())
+classes=[r for r in registry if r['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121']]
+def grounds(seq,found,expected,decision,a,b,c,d,e):
+ row=src[seq]
+ return dict(seq=seq,found=found,expected_candidate=expected,disposition=decision,refuted=True,grounds={
+ 'a_quote':dict(finding=a,exact_field_locations={k:[m.start() for m in re.finditer(re.escape(found),row[k])] for k in ['acip','wylie','english']}),
+ 'b_parallel':dict(finding=b,full_field_queries=[q for q in cp if q.get('seq')==seq],source_publication_limit='No independent physical publication was inspected. The preserved ASCII input is the same source stream, not an independent witness. Corpus textual identity alone cannot establish publication or ingestion lineage.'),
+ 'c_registered':dict(finding=c,full_class_records=classes,source_specific_records=[r for r in registry if 'C05:'+str(seq) in json.dumps(r)]),
+ 'd_defensibility':dict(finding=d),
+ 'e_counts':dict(finding=e,measured=dict(acip_chars=len(row['acip']),wylie_chars=len(row['wylie']),english_chars=len(row['english']),physical_full_field_matches={x['field']:x['count'] for x in physical if x['seq']==seq},full_field_parallel_counts={q['field']:q['count'] for q in cp if q.get('seq')==seq})),
+ },evidence_refs=['../evidence/corpus-queries.json','../evidence/corpus-supplement.json','../evidence/master-queries.json','../evidence/master-supplement.json','../evidence/physical-extents.json','../evidence/full-original-corpus-records.json','../originals/git/docs/errata_register.json'])
+screens={
+316:[
+ grounds(316,'In','in','REFUTED_LINEATION','The uppercase In is present at the preserved English offset.','All three full-field equality queries find only C05:316. The physical source puts In at the start of the second verse line.','No C05:316 record is already filed. This is verse lineation, not E-071 running-head apparatus or a converter defect.','Capitalization is defensible and intentional at the physical verse line start; the same applies to Respectively on the third line. Do not correct it.','Three equality queries each count 1; both full physical token extents count 1; full English is 173 characters, not a 1500-character cap.'),
+ grounds(316,'GNAG','NAG','REFUTED_ATTESTED_LEXEME','GNAG occurs verbatim in ACIP; Wylie gnag is the matching conversion.','The full verse has no other exact field parallel. Broad wylie substring gnag occurs in 28 rows, retained in full as lexical context, not same-passage witnesses.','No matching segment record is registered; source spelling is not a converter escape or apparatus class.','The complete HGM master record at unified index23855 records gnag, Tibetan གནག, ACIP GNAG, hgm_gloss black. Replacing it merely with the other attested form nag is not justified.','Actual gnag substring query count is 28; exact master gnag and nag queries each return 1; source and physical occurrences are retained.'),
+],
+317:[
+ grounds(317,'four types','three types','REFUTED_CONTEXTUAL_EXPLICATION','English four types is present; no Tibetan four occurs in this question.','Exact field queries find only this row. Original C05:316 explicitly lists black, white, both, and the unstained; all four categories are preserved in full source context.','No C05:317 source-specific filed record was found. The bracketed verse number is apparatus, not part of a translated numeral.','The numeral is GMR explanatory framing from the preceding four-way classification. It is not a false numerical translation and gets no invented Tibetan span.','All three exact parallel queries count 1; source-context reads include every C05 row310–324; both physical field extents each count 1.'),
+ grounds(317,'GNAG','NAG','REFUTED_ATTESTED_LEXEME','The source ACIP and Wylie consistently carry GNAG/gnag for the four black occurrences.','28 broad gnag rows are lexical comparisons only. Exact full fields find C05:317 alone.','No segment duplicate; no relevant converter or apparatus class explains this as corruption.','HGM gnag black is directly attested; black deed, black ripening, and their explanatory repetitions are coherent and independently occurrence-assigned.','Source contains four whole gnag tokens; full-field query count1 per field; exact master gnag count1; broad corpus gnag count28.'),
+],
+318:[
+ grounds(318,"MA 'DRES BA'I","MA 'DRES PA'I",'UNRESOLVED_SPELLING_NOT_FILED','The candidate found phrase is verbatim in ACIP and the full physical ASCII extent. Wylie retains the same ba\u0027i; this is not a normalization introduced by the alignment.','Only C05:318 contains the ACIP substring \'DRES BA\u0027I; 17 rows contain \'DRES PA\u0027I. The narrower Wylie ma \'dres pa\u0027i query finds 11. None of these different passages is an independent same-passage publication.','No C05:318 source-specific record is already filed; six actual registered-class records were read in full and none establishes a BA-to-PA correction for this row.','PA is the conventional nominalizer expectation after the written -s, so BA deserves upstream scrutiny. However, complete HGM master index24441 independently within the master schema records the exact headword ma \'dres ba with hgm_gloss not mixed and glossary provenance HTG2016. That entry and the physical source do not prove grammatical validity or independent publication, but prevent confidently declaring a conversion/keying defect from rarity alone. Without an independent textual/orthographic adjudication the default skeptical outcome is refuted/uncertain, not a new erratum.','Actual ACIP broad BA query1 versus PA17; narrow negative Wylie BA1 versus PA11; exact master ma \'dres ba1, ma \'dres pa1, \'dres ba0, \'dres pa1; three full-field equality queries each1; both physical extents1.'),
+],
+}
+class SourceText(html.parser.HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.text={'tib':[],'eng':[]};self.skip=0
+ def handle_starttag(self,tag,attrs):
+  attrs=dict(attrs)
+  if tag=='div':
+   self.stack.append((self.side,self.skip))
+   if attrs.get('class') in ['tib','eng']:self.side=attrs['class']
+   if attrs.get('class')=='lab':self.skip+=1
+ def handle_endtag(self,tag):
+  if tag=='div':self.side,self.skip=self.stack.pop()
+ def handle_data(self,data):
+  if self.side and not self.skip:self.text[self.side].append(data)
+results=[]
+for seq in [316,317,318]:
+ seg=json.loads((P/str(seq)/'spec.json').read_text())['segments'][0];dec=json.loads((P/str(seq)/'decisions.json').read_text());body=(P/str(seq)/'body.html').read_bytes()
+ h=SourceText();h.feed(body.decode());assert ''.join(h.text['tib']).strip()==src[seq]['wylie'];assert ''.join(h.text['eng']).strip()==src[seq]['english']
+ gen=json.loads((P/str(seq)/'native/generate-v1/execution.json').read_text());res=json.loads((P/str(seq)/'native/resolve-v1/execution.json').read_text())
+ assert gen['returncode']==res['returncode']==0 and gen['stderr_bytes']==res['stderr_bytes']==0
+ assert body==(P/str(seq)/'native/generate-v1/stdout.bin').read_bytes()
+ for g in screens[seq]:
+  assert any(g['grounds']['a_quote']['exact_field_locations'].values()),g['found']
+ put(P/str(seq)/'five-ground-errata-review.json',screens[seq])
+ m=dict(seq=seq,span_count=len(seg['spans']),null_count=sum(s['eng'] is None for s in seg['spans']),word_pair_count=sum(s['d']==5 and s['eng'] is not None for s in seg['spans']),total_d5=sum(s['d']==5 for s in seg['spans']),d7_count=sum(s['d']==7 for s in seg['spans']),errata_count=0,body_bytes=len(body),body_sha256=sha(body),spec_bytes=(P/str(seq)/'spec.json').stat().st_size,spec_sha256=sha((P/str(seq)/'spec.json').read_bytes()),generator=gen,resolver=res,source_text_recovered_verbatim=True,source_and_english_occurrences='All planned ranges were manually read in the complete local argument before generation; the unchanged canonical resolver then matched them exactly.')
+ put(P/str(seq)/'metrics.json',m);results.append(m)
+ concern={316:'Challenge the split zad/end and byed pa/brings first: their causative reading is source-specific, and supplied to an stays unwrapped. The final yin/is belongs to the fourth line, while represent is left unbanked.',317:'Challenge the source nominal rnam smin/result versus the other rnam smin/ripens assignment first; their argument roles require the recorded crossing English order. The two pas particles own distinct in that and for causal clauses.',318:'Challenge the negative mixture and causal scopes first. First gcig/in question remains uncertain and omitted; second gcig owns the explicit one. The three with exponents belong to first dang, second la, and second dang respectively.'}[seq]
+ report=[f'# C05:{seq} — independent English-first proposal',
+ 'Producer: Codex. All alignments remain PROVISIONAL; no hgm_gloss changes or semantic approval.',
+ 'Read the full original source and C05:310–324 context. Original spine fields, full material corpus/master objects, physical bytes and historical governing inputs are retained under ../originals and ../evidence.',
+ concern,
+ 'Every retained span, selected occurrence, member parent, and every unwrapped source/English range is recorded in decisions.json. Uncertain/distributed correspondences are omitted with reasons, not converted to nulls.',
+ 'Full five-ground screens are in five-ground-errata-review.json; errata.json is empty. Corpus equality proves only the compared text; no independent physical publication was inspected.',
+ f'Canonical generator: EXIT=0; stderr=0 bytes; body={len(body)} bytes. The actual complete stdout is body.html and native/generate-v1/stdout.bin; command, stdin, execution time and exit are preserved beside it.',
+ 'Canonical resolver: EXIT=0; stderr=0 bytes; all intended source and English ranges match. Complete native output is native/resolve-v1/stdout.bin. Successful generation was run once for this unchanged spec.',
+ f'Measured: {m["span_count"]} spans; {m["null_count"]} nulls; {m["word_pair_count"]} non-null d5 word pairs; {m["total_d5"]} total d5; {m["d7_count"]} d7 members.',
+ f'Spec SHA256 {m["spec_sha256"]}; body SHA256 {m["body_sha256"]}.',
+ 'Limits: no publication repair, repository acceptance, device integration, or production fidelity suite was performed by this original-proposal role. Independent reconciliation and fresh review are still separate requirements.'
+ ]
+ (P/str(seq)/'report.md').write_text('\n'.join(report)+'\n')
+pins=json.loads((P/'originals/instructions/proposal-baseline.json').read_text())
+for name,pin in pins['source_pins'].items():
+ b=pathlib.Path(pin['path']).read_bytes();assert len(b)==pin['bytes'] and sha(b)==pin['sha256'],name
+put(P/'review-summary.json',dict(status='FROZEN_INDEPENDENT_ORIGINAL_PROPOSAL_NOT_SEMANTIC_ACCEPTANCE',angle='English-first',producer='Codex',proposal_origin=pins['commit'],proposal_origin_course_boundary=309,future_acceptance_boundary=315,segments=results,total_spans=sum(m['span_count'] for m in results),total_nulls=0,total_word_pairs=sum(m['word_pair_count'] for m in results),total_d7=sum(m['d7_count'] for m in results),source_recheck='All six original source pins retained exact bytes and hashes after canonical execution.',supplied_head_allowances=[],execution_history='All three preparation helpers, authoring helper, three native generators and three native resolvers completed without a failed attempt. The intentionally retained exploratory rnam sm in term has zero master matches and is not used as evidence for a mapping. No spec was corrected after a passing generation.',read_scope='All 15 context rows and three selected source fields read completely; all 75 retained decisions and exact ranges read before canonical generation; all 59 exact master query HGM projections read, plus seven complete critical master records; six complete registered-class records read; all six physical selected extents read. Broad corpus query outputs are preserved and full archive object identities checked for 206 records; not every broad lexical context row was semantically adjudicated.',isolation='Only assigned angle files, whitelisted batch source/context/proposal-baseline/brief, shared protocol and required historical governance/canonical source files were opened. No other-angle or root/reconciliation/semantic judgments were read.',limits=['Physical ASCII input is not an independent publication witness.','BA/PA spelling remains uncertain, with no source change or filed erratum.','Native canonical generator and resolver prove mechanical correspondence, not semantics.']))
+put(P/'fidelity-proof.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),all_three_bodies_recover_original_text=True,all_six_native_executions_pass=True,all_six_source_pins_unchanged=True,total_spans=75,acceptance='Original proposal only'))
+print(json.dumps(dict(status='PASS',segments=[{k:m[k] for k in ['seq','span_count','null_count','word_pair_count','d7_count','body_bytes']} for m in results])))
