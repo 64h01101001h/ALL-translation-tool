@@ -975,3 +975,52 @@ QUALITY is NEEDS_CORRECTION for the private pack. It remains external and UNACCE
 Coverage remains279/511 C05,232 segments remaining; full layer45275 links,11934 nulls,1615 notes,11 trees,7084 heads/15517 pairs. All45126 prior links remain. Desktop HTML/CSV data are current279; native rendering, installed phone and QSettings routing remain unverified beyond the recorded through171 boundary. MAIN integration remains OPEN; no patch, release or device operation occurred. Failed/deferred consumer disposition is recorded separately from fixed page/code acceptance. Mandatory early279 global packages/history/fixtures/partitioned read-only MAIN checks and independent/root closure remain outstanding before280 originals. The regular outer checkpoint through291 remains scheduled; it does not waive this early trigger.
 
 Complete consumer evidence is retained at campaign-artifacts/integration/through279-parser-final-ledger-preparation/complete-consumer-evidence-manifest.json. It lists complete full-byte external originals, including source specs/reviews, actual commands/results, corrected and failed tooling, binaries, data, dependencies and current measured coverage. This ledger and later checkpoint callers are subsequent evidence, not falsely self-banked. Continue C05 beforeC06; no spend, paid API, account messages, release or overwrite of others' work. Standing local authorization requires no further user confirmation.
+
+
+### 2026-09-14 UTC — C05 segments 280–282 (page 94)
+
+Independent proposal, reconciliation and semantic review approved 124
+provisional correspondences (54/46/24), including four grammatical nulls and
+102 nonnull depth-5 correspondences. All 225 original proposal dispositions,
+15 material omission reasons and 11 investigated/refuted suspicions survive.
+Exactly two source-specific sogs head licenses were added; no errata were
+added. Uncertain correspondences remain unbanked. GMR's wording and master
+sources are unchanged; none of this machine work enters hgm_gloss. Complete
+sources, specs, proposals, decisions, generator results and semantic review
+are retained in reviews_c05/c5p94 and the external campaign evidence records.
+
+One root layer/view run and all 17 relevant fidelity suites passed; the suite
+took 12.62 seconds. The independent isolated reproduction matched all seven
+generated outputs byte for byte with the immutable incoming main CSV seed.
+Full retention preserved 45,275 prior links and added 127, including three
+sentence anchors. Coverage is 282 of 511 C05 segments, with 229 remaining.
+The full bank has 45,402 links, 11,938 nulls, 1,618 note blocks, 11 trees,
+7,092 heads and 15,546 evidence pairs. Proven ACIP covers 7,089 of 7,092
+heads; three missing heads and five source-linked spans remain explicit
+limits. Main/reverse/course CSV rows are 22,528/22,188/24,105; changes has
+37 rows. Producer metadata date is September 13 local time; the execution
+records are September 14 UTC. No date-driven regeneration was performed.
+
+The actual 13-file payload includes the two-license sidecar and preserves
+all prior sidecar values. Staged whitespace checks account for the original
+source and CSV bytes without normalization. Complete current bank and stage
+checks precede this append. Later bank, stage, commit and closure results
+remain external at their true boundaries; they are not claimed inside their
+own earlier input manifests. Source-preparation failures and corrections
+are preserved. Three retention-preparation caller results are explicitly
+labeled conversation transcriptions: original raw streams were unavailable.
+This limitation does not replace the full actual generator/build/test or
+independent reproduction captures. Fixed DATA and documentation commit
+identities are recorded by the subsequent root closure.
+
+Private JSON/HTML/CSV outputs are current through 282. MAIN remains
+OPEN_NO_APPLICATION; the September 13 23:40–23:42 UTC compatibility check
+passed all 13 chunks but applied nothing. The new private phone pack remains
+FAILED_UNACCEPTED for four inherited C01 source-correspondence defects and
+must not be installed. The existing through171 phone resource is unchanged;
+no current native rendering, device installation or saved data-root acceptance
+is claimed. No release, paid API, spending, account message or source/gloss
+correction occurred. C13 remains blocked upstream. Finish all C05 through511
+before C06, then proceed in order. Next regular outer checkpoint is291.
+The existing one-minute continuation ends September 15, 2026 at07:00
+America/Denver (13:00 UTC); safely checkpoint and pause at the deadline.
