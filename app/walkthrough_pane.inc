@@ -147,16 +147,39 @@ inline QString slice(const allcore::OverlayDoc& doc, int beg, int end) {
 //
 // Returns -1 when nothing in [t, limit) is glossed, and the caller flags the
 // syllable rather than approximating it (rule 3).
+// And then a second time, for the same reason in a different coat. Length was
+// still the only ranking, so a four-token AUTO-ALIGNED span beat the curated
+// two-token one inside it: RGYAL BA'I YON TAN came back "farthest shore" while
+// `rgyal ba` sat underneath it, curated, reading "the Victors", and RAB RDZOGS
+// came back "sadang lamgyi yunten rabdzok" — which is not English at all, it
+// is a pronunciation line the auto-aligner paired with Tibetan. Adam caught it
+// on the page. Measured over the corpus: of 877,004 glossed picks, 97,913 land
+// on an auto-aligned entry and 63,956 of those — 7.3% of every word the pane
+// glosses — reach past a GMR-tier gloss to do it.
+//
+// That is rule 1 inverted. hgm_gloss is binding and the curated and glossary
+// tiers ARE his English; auto-aligned is the machine's match, provisional by
+// construction. Preferring the machine's longer guess to his own shorter word
+// is the one trade this project may never make. So: the longest span among
+// those carrying a GMR-tier gloss, and only if there is none, the longest
+// provisional one — still labelled, because it is still the best available.
+// Splitting a term into two of his words beats keeping it whole with a guess.
 inline int bestGlossSpan(const allcore::OverlayDoc& doc, int t, int limit) {
     int best = -1, bestLen = 0;
+    int fallback = -1, fallbackLen = 0;
     for (int si : doc.spansAt(t)) {
         const auto& sp = doc.spans[si];
         if (sp.beg != t || sp.end > limit || sp.entry_ix < 0) continue;
-        if (doc.entries[sp.entry_ix].hgm_gloss.empty()) continue;
+        const auto& e = doc.entries[sp.entry_ix];
+        if (e.hgm_gloss.empty()) continue;
         const int len = sp.end - sp.beg;
-        if (len > bestLen) { bestLen = len; best = si; }
+        if (e.provisional()) {
+            if (len > fallbackLen) { fallbackLen = len; fallback = si; }
+        } else if (len > bestLen) {
+            bestLen = len; best = si;
+        }
     }
-    return best;
+    return best >= 0 ? best : fallback;
 }
 
 }  // namespace walk
@@ -456,6 +479,26 @@ public:
                   "cases: a transitive verb with no third-case chunk warns "
                   "that the agent is unstated — absence of an agent is not "
                   "evidence of an intransitive construction");
+        }
+        {   // Rule 1: his own English outranks the machine's match, even
+            // when the machine's match covers more of the line. Adam caught
+            // this on the page: RGYAL BA'I YON TAN glossed "farthest shore"
+            // and RAB RDZOGS glossed "sadang lamgyi yunten rabdzok" — which
+            // is a pronunciation line, not English — while `rgyal ba` sat
+            // underneath, curated, reading "the Victors". The picker ranked
+            // by length alone, so the longer auto-aligned span won.
+            src_->setPlainText("rgyal ba'i yon tan ma lus rab rdzogs shing");
+            walk();
+            const QString t = out_->toPlainText();
+            check(t.contains("the Victors"),
+                  "step 5 shows his curated gloss for rgyal ba, not the "
+                  "auto-aligned span that swallows it");
+            check(!t.contains("farthest shore"),
+                  "and does not prefer a longer PROVISIONAL gloss over a "
+                  "GMR-tier one (rule 1: he is binding, the machine matches)");
+            check(!t.contains("sadang lamgyi"),
+                  "nor surface an auto-aligned entry whose \"English\" is a "
+                  "pronunciation line");
         }
         {   // Rule 3: a word the glossary does not have is flagged, never
             // guessed; and step 6 never calls itself a translation.
