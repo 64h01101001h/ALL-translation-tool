@@ -1,0 +1,636 @@
+{
+  "generator": {
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-301-303/tibetan/canonical_runtime.py"
+    ],
+    "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+    "stdin": "spec.json",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit": 0,
+    "stdout": {
+      "bytes": 4496,
+      "sha256": "fa05e1ee85a8a5a91daa8ac133f970330a86f2868c8797d7a4f4f7bebaa8ace9"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "original_generator": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/tools/gen_alignment_page.py",
+    "original_generator_sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e",
+    "immutable_builder_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4:tools/build_alignment_layer.py",
+    "immutable_conversion_origin": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4:engines/hgm_tools.py",
+    "scope": "Canonical unchanged main() execution; full builder dependency loaded from immutable original bytes. sqlite3 connection opening forced to URI mode=ro. No resolution/emission logic substituted."
+  },
+  "source_id": 1685,
+  "source_fields": {
+    "acip": {
+      "characters": 221,
+      "utf8_bytes": 221,
+      "sha256": "7a5986b75e456de2d3dd336fe878b371f61e0a7f50a1aad56f53658213aec5e0"
+    },
+    "wylie": {
+      "characters": 221,
+      "utf8_bytes": 221,
+      "sha256": "8cf4775c6c48252f3528f9249e5504503d28053a93f98d762c601d4b68d3c243"
+    },
+    "english": {
+      "characters": 302,
+      "utf8_bytes": 302,
+      "sha256": "53e406523fc520ae612a787ebc369309a23cc7cfa07aa2c7aea1293817507c54"
+    }
+  },
+  "counts": {
+    "spec_spans": 22,
+    "nulls": 3,
+    "depth5": 8,
+    "depth7": 0,
+    "by_depth": {
+      "1": 0,
+      "2": 0,
+      "3": 4,
+      "4": 0,
+      "5": 8,
+      "6": 10,
+      "7": 0
+    },
+    "builder_tib_spans_including_sentence": 23,
+    "builder_eng_spans_including_sentence": 23
+  },
+  "proofs": {
+    "full_acip_to_wylie": true,
+    "all_intended_ranges_exact": true,
+    "all_span_acip_roundtrips": true,
+    "builder_sees_every_span": true,
+    "full_tibetan_verbatim": true,
+    "full_english_verbatim": true,
+    "raw_whitespace_verbatim": true,
+    "zero_supplied_d5_d7_heads": true,
+    "semantic_correspondence_proved_by_mechanics": false
+  },
+  "files": {
+    "spec.json": {
+      "bytes": 4435,
+      "sha256": "e30a847779a75fff67ebd9131e3ec5bbe16094b0a23c842c96e32779619e3a81"
+    },
+    "body.html": {
+      "bytes": 4496,
+      "sha256": "fa05e1ee85a8a5a91daa8ac133f970330a86f2868c8797d7a4f4f7bebaa8ace9"
+    },
+    "generator.stdout.html": {
+      "bytes": 4496,
+      "sha256": "fa05e1ee85a8a5a91daa8ac133f970330a86f2868c8797d7a4f4f7bebaa8ace9"
+    },
+    "generator.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "intended-ranges.json": {
+      "bytes": 3563,
+      "sha256": "0c537e1f68c4bf72919de3972d49626d1e8dfa47ca2c31fb11478d3a72c69a82"
+    },
+    "omissions.json": {
+      "bytes": 871,
+      "sha256": "6e87d5f3f162d023d284477680da7b7b088a1bf7070f2b777c6822dbc0dcef66"
+    },
+    "errata.json": {
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    }
+  },
+  "per_span": [
+    {
+      "id": "w1",
+      "depth": 3,
+      "tib": "byas pa la kho na re",
+      "eng": "Someone may respond to this argument with the following claim",
+      "actual_tib_range": [
+        0,
+        20
+      ],
+      "actual_eng_range": [
+        0,
+        61
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "BYAS PA LA KHO NA RE",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        0
+      ],
+      "eng_occurrences": [
+        0
+      ]
+    },
+    {
+      "id": "w2",
+      "depth": 6,
+      "tib": "mi",
+      "eng": "not",
+      "actual_tib_range": [
+        22,
+        24
+      ],
+      "actual_eng_range": [
+        81,
+        84
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "MI",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        22,
+        138,
+        178
+      ],
+      "eng_occurrences": [
+        81,
+        145,
+        268
+      ]
+    },
+    {
+      "id": "w3",
+      "depth": 5,
+      "tib": "mtshungs",
+      "eng": "same",
+      "actual_tib_range": [
+        25,
+        33
+      ],
+      "actual_eng_range": [
+        89,
+        93
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "MTSUNGS",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        25
+      ],
+      "eng_occurrences": [
+        89
+      ]
+    },
+    {
+      "id": "w4",
+      "depth": 6,
+      "tib": "te",
+      "eng": null,
+      "actual_tib_range": [
+        34,
+        36
+      ],
+      "actual_eng_range": null,
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "TE",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        34
+      ],
+      "eng_occurrences": []
+    },
+    {
+      "id": "w5",
+      "depth": 5,
+      "tib": "yi dvags",
+      "eng": "craving spirit",
+      "actual_tib_range": [
+        38,
+        46
+      ],
+      "actual_eng_range": [
+        124,
+        138
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "YI DVAGS",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        38,
+        72
+      ],
+      "eng_occurrences": [
+        124
+      ]
+    },
+    {
+      "id": "w6",
+      "depth": 6,
+      "tib": "la",
+      "eng": "to",
+      "actual_tib_range": [
+        47,
+        49
+      ],
+      "actual_eng_range": [
+        117,
+        119
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "LA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        8,
+        47,
+        141
+      ],
+      "eng_occurrences": [
+        20,
+        117,
+        208,
+        240
+      ]
+    },
+    {
+      "id": "w7",
+      "depth": 5,
+      "tib": "de",
+      "eng": "this",
+      "actual_tib_range": [
+        50,
+        52
+      ],
+      "actual_eng_range": [
+        104,
+        108
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "DE",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        50,
+        68,
+        131,
+        149,
+        171,
+        175
+      ],
+      "eng_occurrences": [
+        23,
+        104
+      ]
+    },
+    {
+      "id": "w8",
+      "depth": 5,
+      "tib": "'byung ba",
+      "eng": "happens",
+      "actual_tib_range": [
+        58,
+        67
+      ],
+      "actual_eng_range": [
+        109,
+        116
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "'BYUNG BA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        58,
+        157
+      ],
+      "eng_occurrences": [
+        109,
+        200
+      ]
+    },
+    {
+      "id": "w9",
+      "depth": 5,
+      "tib": "rang",
+      "eng": "own",
+      "actual_tib_range": [
+        81,
+        85
+      ],
+      "actual_eng_range": [
+        167,
+        170
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "RANG",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        81,
+        181
+      ],
+      "eng_occurrences": [
+        167
+      ]
+    },
+    {
+      "id": "w10",
+      "depth": 5,
+      "tib": "rlom pa",
+      "eng": "imagination",
+      "actual_tib_range": [
+        94,
+        101
+      ],
+      "actual_eng_range": [
+        171,
+        182
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "RLOM PA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        94,
+        194
+      ],
+      "eng_occurrences": [
+        171,
+        290
+      ]
+    },
+    {
+      "id": "w11",
+      "depth": 6,
+      "tib": "tsam",
+      "eng": "nothing more than",
+      "actual_tib_range": [
+        102,
+        106
+      ],
+      "actual_eng_range": [
+        145,
+        162
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "TZAM",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        102,
+        202
+      ],
+      "eng_occurrences": [
+        145,
+        268
+      ]
+    },
+    {
+      "id": "w12",
+      "depth": 6,
+      "tib": "yin",
+      "eng": null,
+      "actual_tib_range": [
+        107,
+        110
+      ],
+      "actual_eng_range": null,
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "YIN",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        107,
+        207
+      ],
+      "eng_occurrences": []
+    },
+    {
+      "id": "w13",
+      "depth": 3,
+      "tib": "des na",
+      "eng": "Well then",
+      "actual_tib_range": [
+        131,
+        137
+      ],
+      "actual_eng_range": [
+        184,
+        193
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "DES NA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        131
+      ],
+      "eng_occurrences": [
+        184
+      ]
+    },
+    {
+      "id": "w14",
+      "depth": 5,
+      "tib": "mi",
+      "eng": "human",
+      "actual_tib_range": [
+        138,
+        140
+      ],
+      "actual_eng_range": [
+        215,
+        220
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "MI",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        22,
+        138,
+        178
+      ],
+      "eng_occurrences": [
+        215
+      ]
+    },
+    {
+      "id": "w15",
+      "depth": 6,
+      "tib": "la",
+      "eng": "to",
+      "actual_tib_range": [
+        141,
+        143
+      ],
+      "actual_eng_range": [
+        208,
+        210
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "LA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        8,
+        47,
+        141
+      ],
+      "eng_occurrences": [
+        20,
+        117,
+        208,
+        240
+      ]
+    },
+    {
+      "id": "w16",
+      "depth": 6,
+      "tib": "yang",
+      "eng": "either",
+      "actual_tib_range": [
+        144,
+        148
+      ],
+      "actual_eng_range": [
+        247,
+        253
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "YANG",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        144
+      ],
+      "eng_occurrences": [
+        247
+      ]
+    },
+    {
+      "id": "w17",
+      "depth": 3,
+      "tib": "'byung ba med",
+      "eng": "can't be happening",
+      "actual_tib_range": [
+        157,
+        170
+      ],
+      "actual_eng_range": [
+        221,
+        239
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "'BYUNG BA MED",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        157
+      ],
+      "eng_occurrences": [
+        221
+      ]
+    },
+    {
+      "id": "w18",
+      "depth": 3,
+      "tib": "mi rang gi",
+      "eng": "his",
+      "actual_tib_range": [
+        178,
+        188
+      ],
+      "actual_eng_range": [
+        286,
+        289
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "MI RANG GI",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        178
+      ],
+      "eng_occurrences": [
+        24,
+        105,
+        163,
+        286
+      ]
+    },
+    {
+      "id": "w19",
+      "depth": 5,
+      "tib": "rlom pa",
+      "eng": "imagination",
+      "actual_tib_range": [
+        194,
+        201
+      ],
+      "actual_eng_range": [
+        290,
+        301
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "RLOM PA",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        94,
+        194
+      ],
+      "eng_occurrences": [
+        171,
+        290
+      ]
+    },
+    {
+      "id": "w20",
+      "depth": 6,
+      "tib": "tsam",
+      "eng": "nothing more than",
+      "actual_tib_range": [
+        202,
+        206
+      ],
+      "actual_eng_range": [
+        268,
+        285
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "TZAM",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        102,
+        202
+      ],
+      "eng_occurrences": [
+        145,
+        268
+      ]
+    },
+    {
+      "id": "w21",
+      "depth": 6,
+      "tib": "yin",
+      "eng": null,
+      "actual_tib_range": [
+        207,
+        210
+      ],
+      "actual_eng_range": null,
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "YIN",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        107,
+        207
+      ],
+      "eng_occurrences": []
+    },
+    {
+      "id": "w22",
+      "depth": 6,
+      "tib": "phyir",
+      "eng": "because",
+      "actual_tib_range": [
+        216,
+        221
+      ],
+      "actual_eng_range": [
+        255,
+        262
+      ],
+      "matches_independently_selected_range": true,
+      "canonical_acip_substring": "PHYIR",
+      "acip_roundtrip": true,
+      "tib_occurrences": [
+        116,
+        216
+      ],
+      "eng_occurrences": [
+        255
+      ]
+    }
+  ]
+}

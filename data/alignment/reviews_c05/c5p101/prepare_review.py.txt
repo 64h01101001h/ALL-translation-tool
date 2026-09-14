@@ -1,0 +1,57 @@
+import pathlib,json,hashlib,subprocess,runpy,gzip,sqlite3,datetime
+S=pathlib.Path(__file__).resolve().parent;B=S.parent;W=B.parents[1]/'campaign-worktree';C='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+manifest=S/'original-to-copy-manifest.json'; records=[];allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+def save(p,rel,raw=None,**extra):
+ p=p.resolve();raw=p.read_bytes() if raw is None else raw;q=S/rel;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists():assert q.read_bytes()==raw
+ else:q.write_bytes(raw)
+ records.append(dict(original=str(p),copy=str(q.relative_to(S)),sha256=sha(raw),bytes=len(raw),**extra))
+def supported(rel):return rel if pathlib.Path(rel).suffix.lower() in allowed else rel+'.txt'
+for tree in ['tibetan','english','reconciled']:
+ for p in sorted((B/tree).rglob('*')):
+  if not p.is_file() or '__pycache__' in p.parts:continue
+  rel=p.relative_to(B)
+  if len(rel.parts)>2 and rel.parts[1] in ['301','302','303']:
+   prefix='reviewed-final' if tree=='reconciled' else 'proposal-inputs/'+tree
+   save(p,supported(prefix+'/'+str(pathlib.Path(*rel.parts[1:]))))
+extras=[p for p in B.iterdir() if p.is_file()]+[p for tree in ['tibetan','english','reconciled','proposal-verification','root-reconciliation-verification'] for p in (B/tree).rglob('*') if p.is_file() and '__pycache__' not in p.parts and str(p.resolve()) not in {r['original'] for r in records}]
+extras += [B.parent/'semantic-review-protocol.md',B.parent/'proposal-protocol.md',B.parent/'copy_evidence_once.py',B.parent/'land_reviewed_page.py']
+extras=[p for p in extras if p.exists()]
+dump(manifest,records)
+helper=runpy.run_path(str(B.parent/'copy_evidence_once.py')); helper['preserve'](S,manifest,extras);records=json.loads(manifest.read_text())
+baseline=json.loads((B/'proposal-baseline.json').read_text());gov=list(baseline['governing_git_pins'])+['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','DIAMOND_CUTTER_TRANSLATION_TOOL_ROADMAP.md']
+for rel in gov:
+ r=subprocess.run(['git','show',C+':'+rel],cwd=W,capture_output=True);assert r.returncode==0
+ if rel in baseline['governing_git_pins']:
+  x=baseline['governing_git_pins'][rel];assert len(r.stdout)==x['bytes'] and sha(r.stdout)==x['sha256']
+ save(W/rel,supported('governing/'+rel),r.stdout,original_git_commit=C,repository_relative_path=rel)
+dump(manifest,records)
+pins=[]
+for name,pin in baseline['source_pins'].items():
+ p=pathlib.Path(pin['path']);raw=p.read_bytes();assert len(raw)==pin['bytes'] and sha(raw)==pin['sha256'];pins.append(dict(name=name,**pin,matched=True))
+dump(S/'source-pin-proof.json',pins)
+con=sqlite3.connect('file:'+baseline['source_pins']['spine']['path']+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON')
+rows=[dict(x) for x in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',295,309))];dump(S/'independent-source-rows.json',rows)
+source=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());lookup={r['seq']:r for r in rows}
+for x in source+context:assert all(lookup[x['seq']][k]==v for k,v in x.items())
+dump(S/'independent-source-proof.json',{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','parameters':['C05',295,309],'row_count':len(rows),'source_context_exact':True,'source_origin_commit':C,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()})
+master=json.loads(gzip.decompress(pathlib.Path(baseline['source_pins']['master']['path']).read_bytes())); corpus=json.loads(gzip.decompress(pathlib.Path(baseline['source_pins']['corpus']['path']).read_bytes()))
+print('CORPUS',type(corpus).__name__,list(corpus)[:5] if isinstance(corpus,dict) else len(corpus))
+master_distinct={}; maprefs=[]
+for pool in ['reconciled/evidence/records.json','english/evidence/records.json']:
+ for key,rec in json.loads((B/pool).read_text()).items():
+  if rec['kind']!='master':continue
+  obj=rec['record'];locs=rec.get('locators',rec.get('locations'));proof=[]
+  for loc in locs:
+   sec=loc.get('section',loc.get('collection')); idx=loc.get('index',loc.get('index0'));assert master[sec][idx]==obj;proof.append({'section':sec,'index0':idx})
+  dig=sha(json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());master_distinct[dig]=obj;maprefs.append({'pool':pool,'key':key,'complete_record_digest':dig,'locations':proof})
+# The Tibetan reader stores records grouped by query. Verify every complete master original.
+for term,x in json.loads((B/'tibetan/evidence/lexical-evidence.json').read_text()).items():
+ for sec,items in x['master_matches'].items():
+  for y in items:
+   obj=y['record'];idx=y['index_zero_based'];assert master[sec][idx]==obj;dig=sha(json.dumps(obj,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());master_distinct[dig]=obj;maprefs.append({'pool':'tibetan/evidence/lexical-evidence.json','term':term,'complete_record_digest':dig,'locations':[{'section':sec,'index0':idx}]})
+readlines=[json.dumps({'index':i,'digest':k,'record':v},ensure_ascii=False,separators=(',',':')) for i,(k,v) in enumerate(master_distinct.items())]
+(S/'independent-complete-master-records.txt').write_text('\n'.join(readlines)+'\n');dump(S/'full-master-read-mapping.json',maprefs)
+print('PRESERVED',len(records),'distinct_master_records',len(master_distinct),'master_origin_mappings',len(maprefs))

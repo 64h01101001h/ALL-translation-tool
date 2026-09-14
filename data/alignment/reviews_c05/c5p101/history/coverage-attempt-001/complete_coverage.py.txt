@@ -1,0 +1,53 @@
+import pathlib,json,hashlib,re,subprocess,collections,difflib
+S=pathlib.Path(__file__).resolve().parent;B=S.parent;W=S.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+central=json.loads((B/'reconciled/reconciliation-decisions.json').read_text());final=[];omissions=[];proof=[]
+for seq in [301,302,303]:
+ f=json.loads((B/f'reconciled/{seq}/final-decisions.json').read_text());sp=json.loads((B/f'reconciled/{seq}/spec.json').read_text())['segments'][0]['spans'];assert [r['span_object'] for r in f]==sp;final.extend(f)
+ omissions.extend({'seq':seq,**r} for r in json.loads((B/f'reconciled/{seq}/omissions.json').read_text()))
+assert central['final_ordered_tuples']==final;assert central['material_omissions']==omissions
+assert central['errata_suspicion_refutations']==json.loads((B/'reconciled/errata-refutations.json').read_text())
+for n,x in enumerate(central['original_decisions']):
+ a=x['angle'];seq=x['seq'];i=x['id'];p=f'{a}/{seq}/spec.json';spec=json.loads((B/p).read_text())['segments'][0];sp=next(s for s in spec['spans'] if s['id']==i);assert sp==x['original_span_object']
+ if a=='english':
+  p2=f'{a}/{seq}/decisions.json';dec=next(r for r in json.loads((B/p2).read_text())['spans'] if r['id']==i);assert x['original_reason']==dec['reason'];rr={'tib':dec['tib_range'],'eng':dec['eng_range']}
+ else:
+  p2=f'{a}/{seq}/intended-ranges.json';rr=json.loads((B/p2).read_text())['ranges'][i];assert x['original_reason'] is None
+ assert [sp[k] for k in ['id','d','tib','eng']]==[x[k] for k in ['id','d','tib','eng']]
+ assert rr['tib']==x['tib_range'] and rr['eng']==x['eng_range']
+ members=[final[j] for j in x['final_tuple_indices']];assert [r['id'] for r in members]==x['final_ids'];assert all(r['seq']==seq for r in members);assert x['rationale']==' '.join(r['rationale'] for r in members)
+ proof.append({'central_original_index0':n,'angle':a,'seq':seq,'id':i,'complete_original_spec':p,'complete_original_reason_or_ranges':p2,'original_context_refs':x['original_context_refs'],'final_indices':x['final_tuple_indices'],'disposition':x['disposition'],'all_original_content_exact':True,'rationale_exact_concatenation_of_fully_read_final_records':True})
+assert len(proof)==central['original_count']==197
+package=(B/'semantic-input-review-package.txt').read_text();parts=re.split(r'^===== (.*?) =====\n',package,flags=re.M);package_map=[]
+for name,body in zip(parts[1::2],parts[2::2]):
+ if name.startswith('COMPLETE'):
+  angle=name.split()[1];seq=int(name.split()[-1]);a=f'{angle}/{seq}/spec.json';z=f'reconciled/{seq}/spec.json';actual=''.join(difflib.unified_diff((B/a).read_text().splitlines(keepends=True),(B/z).read_text().splitlines(keepends=True),fromfile=a,tofile=z,n=10))
+  assert body.strip()==actual.strip();entry={'name':name,'read_complete':True,'exact_diff_of':[a,z]}
+ elif name=='PACKAGE INPUT HASHES':
+  checks=[]
+  for x in json.loads(body):
+   raw=(B/x['path']).read_bytes();assert len(raw)==x['bytes'] and sha(raw)==x['sha256'];checks.append(x)
+  entry={'name':name,'read_complete':True,'all_original_pins_verified':checks}
+ else:
+  assert body.strip()==(B/name).read_text().strip();entry={'name':name,'read_complete':True,'full_original':str(B/name),'whitespace_only_section_delimiters':True}
+ package_map.append(entry)
+dump(S/'complete-review-coverage.json',{'originals':proof,'original_count':len(proof),'dispositions':dict(collections.Counter(x['disposition'] for x in proof)),'final104_exact_to_individual_complete_final_decisions':True,'all14_material_omissions_exact_to_individual_records':True,'all3_full_errata_screens_exact_to_individual_file':True,'package_complete_sections':package_map,'central_source_origin':central['source_origin'],'central_acceptance_baseline_is_historical_pending_string':central['acceptance_baseline']})
+# Preserve additional actually used complete original files, including full raw
+# corpus archive for the P7 digital witness. No original source query is repeated.
+manifest=json.loads((S/'original-to-copy-manifest.json').read_text())
+def preserve(p,rel,commit=None,gitpath=None,raw=None):
+ if raw is None:raw=p.read_bytes()
+ q=S/rel;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists():assert q.read_bytes()==raw
+ else:q.write_bytes(raw)
+ row={'original':str(p),'copy':rel,'sha256':sha(raw),'bytes':len(raw)}
+ if commit:row.update(original_git_commit=commit,repository_relative_path=gitpath)
+ manifest.append(row);return row
+for name in ['HANDOFF.md','README.md']:preserve(pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/Handoff')/name,'reference-history/'+name)
+preserve(W/'data/full_parallel_corpus_v32.json.gz','physical/full_parallel_corpus_v32.json.gz.bin')
+preserve(B/'baseline.json','acceptance-baseline.json')
+commit='b5047596859f6537b71f259c1e7df2e70f867fb2';p='docs/errata_register.json';raw=subprocess.check_output(['git','-C',str(W),'show',commit+':'+p]);pin=preserve(W/p,'acceptance-governing/'+p,commit,p,raw)
+reg=json.loads(raw);matches=[r for r in reg if 'sizzle' in json.dumps(r).lower() or r.get('segment') in ['C05:301','C05:302','C05:303']];assert len(reg)==193 and not matches
+dump(S/'actual-register-check.json',{'actual_through300_commit':commit,'register_pin':pin,'total_entries':len(reg),'search':'sizzle in full record OR segment in C05:301,C05:302,C05:303','matches':matches,'matched_count':len(matches),'new_predecessor_entry':next(r for r in reg if r['item_id']=='E-193'),'does_not_replace_source_origin_register':True})
+dump(S/'original-to-copy-manifest.json',manifest)
+with (S/'inspection-failures.txt').open('a') as f:f.write('\nInspection attempted english/301/intended-ranges.json, absent by proposal design, FileNotFoundError exit1. English complete per-span decisions hold actual intended ranges; these were subsequently matched explicitly. No generator or source query ran.\nLarge concatenated reference-history read exceeded output cap; missing Handoff and README line blocks were subsequently read directly.\n')
+print('COVERAGE PASS',len(proof),'ORIGINALS',len(final),'FINAL',len(omissions),'OMISSIONS',len(package_map),'PACKAGE SECTIONS','ACTUAL REGISTER',len(reg),'MATCHES',len(matches))

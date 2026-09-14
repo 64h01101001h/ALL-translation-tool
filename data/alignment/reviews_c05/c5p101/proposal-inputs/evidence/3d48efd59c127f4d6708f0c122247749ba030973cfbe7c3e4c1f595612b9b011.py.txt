@@ -1,0 +1,51 @@
+import json,hashlib,datetime
+from pathlib import Path
+P=Path(__file__).resolve().parent
+def sha(data):return hashlib.sha256(data).hexdigest()
+def describe(path):
+ b=path.read_bytes();return {'bytes':len(b),'sha256':sha(b)}
+for name,src in [('proposal-baseline.original.json',P.parent/'proposal-baseline.json'),('brief.original.md',P.parent/'tibetan-brief.md'),('protocol.original.md',P.parents[1]/'proposal-protocol.md')]:
+ (P/'evidence'/name).write_bytes(src.read_bytes())
+challenge={
+301:'Challenge first: final med → no is the negative token in no actual pus and blood exists; the finite exists remains unwrapped. First med par thal is omitted because three could-never clauses distribute it.',
+302:'Challenge first: longs spyod pa → drinks is a contextual use of the established partake/enjoy compound; rnag khrag is matched once at the anticipatory named English object, with later them unwrapped.',
+303:'Challenge first: second mi rang gi → his is a complete referential genitive phrase at d3; the negative event is also kept whole at d3, with its English restatement unwrapped.'}
+lex={
+301:'HGM master supports burning steel, real/actual, visual consciousness, valid perception, pus and blood. Expanded perform any real actions is not assigned to dngos gnas pa. Repeated agreement, real/actual, because and med positions are explicit.',
+302:'Full source supports wash/cook/sizzle and confirm/experience; anomalous bare-verb automatic glosses are not evidence for these matches. The three dang occurrences select or, action-sequence and, and throat/stomach and at exact positions.',
+303:'HGM glossary supports rlom pa/imagination and tsam/nothing more than. blos remains omitted as mental content distributed into imagination. Two yin nulls expressly identify copular fusion into it\'s; te has only punctuation.'}
+err={
+301:'Errata: 0. Full C15:446 ACIP/Wylie/English match verified; no new local source defect demonstrated.',
+302:'Errata: 0. Probable as the sizzle typo retained in source and noted, not newly filed; C15:447 repeats all three fields, P7:41 repeats the phrase with other differences, and original C05 physical text contains it. Publication independence/ingestion history remains unproved.',
+303:'Errata: 0. Full C15:448 ACIP/Wylie/English match verified; no new local source defect demonstrated.'}
+for seq in [301,302,303]:
+ d=P/str(seq);v=json.loads((d/'verification.json').read_text());c=v['counts'];pin=v['generator']
+ lines=[
+  f'C05:{seq} — Codex, independent Tibetan-first original proposal. PROVISIONAL machine alignment; no human semantic approval or hgm_gloss promotion.',
+  challenge[seq],lex[seq],
+  'Omissions: omissions.json gives judgments; coverage-and-omissions.json records every uncovered original range. Nulls assert no separately permitted exponent, not uncertainty.',
+  f'Original evidence: ../evidence/spine-records.json row {v["source_id"]}; ../evidence/original-corpus-records.json same key; full master records in ../evidence/lexical-evidence.json; physical block and parser proof in ../evidence/physical-selected-verification.json.',
+  err[seq],
+  f'Counts: {c["spec_spans"]} proposed spans; {c["nulls"]} nulls; {c["depth5"]} d5; {c["depth7"]} d7; 0 proposed errata. Builder sees {c["builder_tib_spans_including_sentence"]} spans on each side including the generated sentence wrapper.',
+  f'FINAL GENERATOR: EXIT=0; STDOUT_BYTES={pin["stdout"]["bytes"]}; STDERR_BYTES=0. Exact stdout is generator.stdout.html = body.html; exact stderr is generator.stderr.txt. Original command/dependency proof: generator-run.json and attempts/attempt-01/.',
+  f'SHA256 spec.json={describe(d/"spec.json")["sha256"]}; body.html={describe(d/"body.html")["sha256"]}.',
+  'Verification: all expected offsets, full raw source whitespace, canonical ACIP conversions, every parser span, and four unchanged private-scope fidelity gates pass. Complete counts and hashes: verification.json and ../evidence/gate-runs.json.',
+  'Source/governance origin is ce646d0c48f9338ff47e40f46582ad14c8a3eaf4 through294. Canonical generator is unchanged; builder and allowance use that actual immutable origin while concurrent pages may advance. Freeze boundary: ../freeze.json. Mechanical success does not establish correspondence.'
+ ]
+ (d/'report.md').write_text('\n'.join(lines)+'\n')
+index={
+ 'role':'Codex independent Tibetan-first original proposals C05:301–303',
+ 'source_origin_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4',
+ 'source_origin_boundary':294,
+ 'mapping':{str(seq):{'final_directory':str(seq),'complete_source_row_id':str(1382+seq),'snapshot_fields_checked':['id','course','seq','acip','wylie','english'],'source_rows':'evidence/spine-records.json','original_corpus_records':'evidence/original-corpus-records.json','original_physical_block':'evidence/physical-C05-%d.block.txt'%seq,'complete_physical_source':'evidence/C05ReadingASCII.original.txt','physical_parse_and_ranges':'evidence/physical-selected-verification.json','master_lexical_records':'evidence/lexical-evidence.json','query_inputs_counts_and_all_hits':'evidence/corpus-queries.json','registered_errata_checks':'evidence/errata-register-checks.json','errata_observation':'evidence/errata-observations.json','exact_intended_and_resolved_ranges':str(seq)+'/verification.json'} for seq in [301,302,303]},
+ 'shared_evidence_deduplication':'One exact full spine row per id, including raw. Every query preserves all result row ids; each preserved original gzip row is mapped by original global index and course-local sequence. Identical content across courses is still represented with distinct identities; no independent publication or ingestion lineage is inferred.',
+ 'aggregate_counts':{'spec_spans':99,'nulls':4,'depth5':56,'depth7':10,'proposed_errata':0},
+ 'failed_or_superseded_work':'evidence/native/collection-01.input.py + stdout/stderr/exit preserve UTF-8 decode failure; successful collection-02 changes only the reversible source-byte view. build-inputs-draft-01.py preserves pre-run occurrence-index draft; build-inputs-01.input.py is actual generated-input author. Generator has one successful attempt per segment, no failed generator attempt. Initial discovery failure and exploratory live builder read are disclosed in evidence/provenance-and-attempts.json.',
+ 'validation_scope':'Unchanged original generator against original read-only spine with pinned original full builder module; canonical conversion and parser proof; four exact historical gate sources over three exact proposal bodies in validation-runtime only. This is proposal evidence, not course landing or semantic acceptance.'}
+(P/'evidence-index.json').write_text(json.dumps(index,ensure_ascii=False,indent=2)+'\n')
+readme='These are frozen independent Tibetan-first originals for C05:301–303. Read each segment report.md first, then evidence-index.json for the complete original-source and proof map. All results are provisional machine proposals. Files under validation-runtime are exact historical fidelity scripts and exact copies of the three generated bodies; they do not include other-angle judgments. Native failures, inputs, outputs and exits are retained. The full supplied baseline and immutable governing Git bytes are stored under evidence/. The original repository/source/master/corpus remain unchanged. freeze.json enumerates every file within this role boundary except its own manifest and its SHA-256 receipt; freeze.sha256 identifies that exact manifest. Any later change must preserve and explicitly supersede this boundary.\n'
+(P/'README.md').write_text(readme)
+manifest={'status':'FROZEN_INDEPENDENT_TIBETAN_FIRST_ORIGINALS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'producer':'Codex','source_origin_commit':index['source_origin_commit'],'source_origin_boundary':294,'segments':[301,302,303],'mutable_governance_and_builder_dependency_origin':'Exact Git objects from ce646d0c48f9338ff47e40f46582ad14c8a3eaf4, stored and hash-verified under evidence/governance; no future acceptance claimed.','exclusions':['freeze.json (self)','freeze.sha256 (manifest receipt)'],'files':{str(x.relative_to(P)):describe(x) for x in sorted(P.rglob('*')) if x.is_file() and x.name not in ['freeze.json','freeze.sha256']}}
+(P/'freeze.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
+(P/'freeze.sha256').write_text(sha((P/'freeze.json').read_bytes())+'  freeze.json\n')
+print(json.dumps({'freeze':str(P/'freeze.json'),'manifest_files':len(manifest['files']),'manifest_sha256':sha((P/'freeze.json').read_bytes()),'segments':{str(seq):{'spec':describe(P/str(seq)/'spec.json'),'body':describe(P/str(seq)/'body.html'),'report':describe(P/str(seq)/'report.md')} for seq in [301,302,303]}},indent=2))

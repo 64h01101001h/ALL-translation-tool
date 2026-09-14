@@ -1,0 +1,54 @@
+import json,re
+from pathlib import Path
+P=Path(__file__).resolve().parent
+rows={r['seq']:r for r in json.loads((P/'evidence/spine-records.json').read_text()).values() if r['course']=='C05'}
+def hits(text,piece):
+ return [m.start() for m in re.finditer(re.escape(piece),text) if (not piece[0].isalnum() or m.start()==0 or not text[m.start()-1].isalnum()) and (not piece[-1].isalnum() or m.end()==len(text) or not text[m.end()].isalnum())]
+def build(seq,title,items,note,omissions):
+ row=rows[seq];spans=[];targets={};cur=0;parent=None
+ for i,item in enumerate(items,1):
+  tib,eng,d,*opt=item;extra=opt[0] if opt and isinstance(opt[0],dict) else {};occ=opt[0] if opt and isinstance(opt[0],int) else 0
+  sp={'id':'w'+str(i),'d':d,'tib':tib,'eng':eng,**extra}
+  if d==7:
+   assert parent
+   t0=parent['tib'][0]+row['wylie'][slice(*parent['tib'])].index(tib)
+   e0=parent['eng'][0]+row['english'][slice(*parent['eng'])].index(eng) if eng else None
+  else:
+   locations=[p for p in hits(row['wylie'],tib) if p>=cur];assert locations,(seq,tib,cur)
+   t0=locations[0];cur=t0+len(tib)
+   e0=hits(row['english'],eng)[occ] if eng else None
+  targets[sp['id']]={'tib':[t0,t0+len(tib)],'eng':None if eng is None else [e0,e0+len(eng)],'english_occurrence_zero_based':None if eng is None else (None if d==7 else occ)}
+  if d==5:parent=targets[sp['id']]
+  elif d!=7:parent=None
+  spans.append(sp)
+ order=sorted([s['id'] for s in spans if s['eng'] is not None and s['d']!=7],key=lambda i:targets[i]['eng'][0])
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':note}]}
+ for name,obj in [('spec.json',spec),('intended-ranges.json',{'course':'C05','seq':seq,'source_id':row['id'],'coordinate_system':'zero-based Unicode codepoint half-open offsets in complete original spine fields','ranges':targets}),('omissions.json',omissions),('errata.json',[])]:
+  (P/str(seq)/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+ print(seq,len(spans),'spans',sum(x['eng'] is None for x in spans),'nulls')
+base='Codex Tibetan-first independent proposal; PROVISIONAL machine alignment, unreviewed by a human; no hgm_gloss promotion. GMR English and all Tibetan source text remain verbatim. '
+build(301,'real actions and valid perception',[
+ ("'dod",'agree',5,0),('na','suppose',6,0),('lcags sreg','burning steel',5),('lcags','steel',7),('sreg','burning',7),('sogs','other',5),('der','there',5),('skyes','born',5),("'gro ba",'people',5),('lus','bodies',5),('sreg pa','burn',5),('dang',None,6,{'cls':'coord','nul':'The first coordination is carried by the repeated English clauses and punctuation; no separate conjunction occurs between burn and chop.'}),('gtub pa','chop',5),('sogs','so on',5),('dngos gnas pa','real',5,0),("'dod pa",'agreed',5),('phyir','because',6,0),("'dod",'agree',5,1),('na','suppose',6,1),('dmyal ba','hells',5),('sdug bsngal','torment',5),('med par thal','must not even exist',3),("'dod pa",'admission',5),('yang','too',6),('bltas pa','look',5),('mi','human',5),('mig shes','visual consciousness',5),('mig','visual',7),('shes','consciousness',7),('tshad mar','valid perception',5),('chu','water',5),('dngos gnas pa','actual',5,0),('med',"doesn't exist",5),("de'i tshe na",'in the same situation',3),('rnag khrag','pus and blood',5),('rnag','pus',7),('khrag','blood',7),('dngos gnas pa','actual',5,1),('med','no',5,1),('phyir','because',6,1)
+],base+'The first dngos gnas pa owns only real, not the glossary’s expanded perform any real actions. The earlier English hell-being recap and the later recap of real actions are supplied context, not second Tibetan occurrences. The first negative consequence is distributed across three could-never clauses and remains omitted. The final med owns no in the negative-existential construction; exists is outside that negative token. The terminative inflection in tshad mar belongs to the predicative valid-perception expression. Only the closing words so on and other are matched on sogs; surrounding supplied nouns remain unwrapped.',[
+ {'tib':"med par thal (first occurrence)",'reason':'Negative existential consequence distributed across could never perform / could never burn / could never chop. No single flat lexical match assigned.'},
+ {'tib':"zhig; de'i before first phyir; de'i phyir after admission",'reason':'Indefinite, resumptive and causal framing recast across any, what you just, and by your own admission; no additional independent atom asserted.'},
+ {'tib':'gzhan; de ltar; cig car du; first local de’i tshe na after bltas pa','reason':'Transition and simultaneous-viewing scene distributed over remember, that case where, beings all sit down, and same thing; no false lexical claim of sit down or same on cig car.'},
+ {'tib':"song ba'i; par thal after water med; case/nominal suffixes and other unselected particles",'reason':'Predicative status, inferential frame and grammatical joins remain unbanked; no unresolved content is represented as null.'},
+ {'eng':'that this hell being could have no valid perceptions of the type we mentioned; second perform any real actions; their/they; up after chop; at all; either','reason':'Expanded recap, supplied participants, noncontiguous phrasal completion and emphasis remain in verbatim English without extra claimed Tibetan occurrences.'}
+])
+build(302,'experience confirms each object',[
+ ('kho na re','Someone might now make the following claim',3),("de'i tshe na",'In this situation',3),('chu','water',5,0),('dngos gnas pa','real',5,0),('yod','exist',5,0),("'khrud pa",'wash',5),('dang','or',6),("'tshod",'cook',5),('mi','human',5),('rang','own',5,0),('myong','experience',5,0),("'grub pa",'confirm',5,0),('phyir','because',6,0),("'o na",'Well then',3),("de'i tshe na",'in the same situation',3),('rnag khrag','pus and blood',5,0),('rnag','pus',7),('khrag','blood',7),('dngos gnas','real',5,1),('yod','exist',5,1),('thal','must',6),("de'i tshe na",'in this same situation',3),('rnag khrag','pus and blood',5,1),('rnag','pus',7),('khrag','blood',7),('longs spyod pa','drinks',5),('dang','and',6,4),('lto ba','stomach',5),('dang','and',6,5),('mgrin pa','throat',5),('sogs','so on',5),("'tshig pa",'sizzle',5),('yi dvags','craving spirit',5),('rang','own',5,1),('myong','experience',5,1),("'grub pa",'confirm',5,1),('phyir','because',6,1)
+],base+'The speech formula is a complete phrase, not a dictionary headword. rang owns own only; supplied his remains unwrapped. longs spyod pa is the contextual drinking of the pus and blood, with the named object matched once at its English anticipation before confirm and its later them left unwrapped. The first dang coordinates the two functions that GMR presents with or. The two later dang occurrences are tied respectively to the drinking/burning sequence and throat/stomach coordination. The exact English as the sizzle remains unchanged. Lexical cook is inferred from the full original water-function sentence, not borrowed from a comparative gloss or the anomalous bare-verb auto-aligned entry.',[
+ {'tib':'chus lus','reason':'Instrumental water and bodily washing distributed through repeated water/it, uses it, and himself; no lexical equation of lus with himself or arbitrary water occurrence.'},
+ {'tib':"par byed pa after 'tshod",'reason':'Cooking verbal construction rendered by finite cook; no separately claimed auxiliary or supplied functions phrase.'},
+ {'tib':'gis/bas/pa’i; de; zer na; par; la; other nominal/case syllables','reason':'Argument-role and reason syntax recast across with his own experience and closing speech frame; omitted without asserting that their meaning is absent.'},
+ {'eng':'functions of water; perform their functions; uses it; something; repeated it/them; auxiliary can/does','reason':'GMR’s explanation and grammatical expansion; no additional standalone Tibetan exponents claimed.'},
+ {'eng':'as the sizzle','reason':'Probable published English typo, also in C15:447 and P7:41 and the original C05 file. Preserve exact text. Repeated wording does not prove publication independence or ingestion lineage; no new corruption claim is filed.'}
+])
+build(303,'the imagination objection',[
+ ('byas pa la kho na re','Someone may respond to this argument with the following claim',3),('mi','not',6),('mtshungs','same',5),('te',None,6,{'cls':'continuative','nul':'Continuative linkage is carried by sentence punctuation; no separate English connective.'}),('yi dvags','craving spirit',5),('la','to',6,1),('de','this',5,1),("'byung ba",'happens',5,0),('rang','own',5),('rlom pa','imagination',5,0),('tsam','nothing more than',6,0),('yin',None,6,{'cls':'copula','nul':'Copular contribution is fused into the English contraction it’s (source spelling: it\'s); no separately permitted span for its interior is.'}),('des na','Well then',3),('mi','human',5),('la','to',6,2),('yang','either',6),("'byung ba med","can't be happening",3),('mi rang gi','his',3,1),('rlom pa','imagination',5,1),('tsam','nothing more than',6,1),('yin',None,6,{'cls':'copula','nul':'Copular contribution is fused into the second English it\'s; no separately permitted span for interior is.'}),('phyir','because',6)
+],base+'The opening speech formula and the second negative event predicate are complete phrases. The second byung ba is matched once at can’t be happening (verbatim source: can\'t be happening); the earlier what happens is the English restatement of the same event and remains unwrapped. The first rang owns own; the second mi rang gi is the complete referential genitive phrase rendered his, at phrase depth. blos contributes the mental mode within imagination and is omitted as distributed content. The two copulas are explicit fusion nulls for is inside it\'s, not assertions of absent meaning. The second yi dvags and first causal closure remain unbanked where the English reorganizes the event into his own imagination.',[
+ {'tib':"ltar (first); de after first 'byung ba; second yi dvags; gi; blos (both)",'reason':'Manner, resumed event, participant possessive and mental activity are distributed into all this happens / his own imagination. blos is not a separate English mind atom and is omitted, not falsely nulled.'},
+ {'tib':"first pa'i phyir; zer na; second de ltar; de after second med",'reason':'First reason becomes an English when-framed assertion; other discourse/relative resumptives are not separable lexical matches.'},
+ {'eng':'The two cases; all; first his; what happens (second case); be/to him around second negative predicate','reason':'Supplied comparison labels, quantifier, distributed possessive and repeated event/participant frame remain unwrapped. The second Tibetan event is banked once as a negative predicate.'}
+])

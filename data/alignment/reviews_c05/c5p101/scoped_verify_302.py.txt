@@ -1,0 +1,33 @@
+import pathlib,json,subprocess,os,hashlib,datetime,runpy,html.parser,collections
+S=pathlib.Path(__file__).resolve().parent;W=S.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+source={x['seq']:x for x in json.loads((S/'independent-source-rows.json').read_text())}
+records=[r for r in json.loads((S/'history/needs-correction-302w23/resolved-spans.json').read_text()) if r['seq']!=302];counts=[r for r in json.loads((S/'history/needs-correction-302w23/generator-proof.json').read_text()) if r['seq']!=302]
+class Text(html.parser.HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.out={'tib':[],'eng':[]};self.labels={'tib':[],'eng':[]}
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='div' and a.get('class') in self.out:self.side=a['class']
+  if t=='span':
+   self.stack.append(a)
+   if 'data-l' in a and self.side:self.labels[self.side].append(a['data-l'])
+ def handle_endtag(self,t):
+  if t=='span':self.stack.pop()
+ def handle_data(self,s):
+  if self.side and any(x.get('data-d')=='1' for x in self.stack) and not any(x.get('class')=='nul' for x in self.stack):self.out[self.side].append(s)
+for seq in [302]:
+ d=S/'reviewed-final'/str(seq);a=S/'native-checks'/str(seq)/'attempt-002';a.mkdir(parents=True,exist_ok=False);raw=(d/'spec.json').read_bytes();(a/'spec.json').write_bytes(raw)
+ argv=[os.sys.executable,'-B',str(S/'canonical_runtime.py.txt')];dump(a/'command.json',{'argv':argv,'cwd':str(W),'stdin':'spec.json','stdin_sha256':sha(raw),'stdin_bytes':len(raw),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'}})
+ r=subprocess.run(argv,cwd=W,input=raw,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'});(a/'generator.stdout').write_bytes(r.stdout);(a/'generator.stderr').write_bytes(r.stderr);(a/'generator.exit').write_text(str(r.returncode)+'\n');assert r.returncode==0,r.stderr
+ assert r.stdout==(d/'body.html').read_bytes()
+ seg=json.loads(raw)['segments'][0];sp=seg['spans'];parser=Text();parser.feed(r.stdout.decode());fidelity={k:''.join(parser.out[k])==source[seq][f] for k,f in [('tib','wylie'),('eng','english')]};assert all(fidelity.values())
+ assert all(collections.Counter(parser.labels[k])==collections.Counter(['s'+str(seq)+'S']+['s'+str(seq)+x['id'] for x in sp]) for k in ['tib','eng'])
+ counts.append({'seq':seq,'span_count':len(sp),'null_count':sum(x['eng'] is None for x in sp),'word_pair_count':sum(x['eng'] is not None and x['d']==5 for x in sp),'spec_sha256':sha(raw),'spec_bytes':len(raw),'body_sha256':sha(r.stdout),'body_bytes':len(r.stdout),'generator_exit':r.returncode,'stderr_bytes':len(r.stderr),'complete_source_fidelity':fidelity,'exact_saved_body':True})
+ print(seq,'EXIT',r.returncode,'BODY_BYTES',len(r.stdout),'EXACT_SAVED_BODY',True)
+runtime=runpy.run_path(str(S/'canonical_runtime.py.txt'));g=runpy.run_path(str(runtime['prepare']()))
+for seq in [302]:
+ d=S/'reviewed-final'/str(seq);seg=json.loads((d/'spec.json').read_text())['segments'][0];sp=seg['spans'];by={x['id']:x for x in sp};t=g['resolve'](source[seq]['wylie'],sp,'tib',seq);e=g['resolve'](source[seq]['english'],g['with_members'](sp,[by[k] for k in seg['eng_order']],source[seq]['english']),'eng',seq)
+ actual=[{'seq':seq,'id':x['id'],'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':list(t[x['id']]),'eng_range':list(e[x['id']]) if x['eng'] is not None else None} for x in sp]
+ intent=json.loads((d/'intended-ranges.json').read_text());assert len(intent)==len(actual)
+ for x,y in zip(actual,intent):assert all(x[k]==y[k] for k in x),(x,y)
+ records.extend(actual)
+records.sort(key=lambda r:(r['seq'],int(r['id'][1:])));counts.sort(key=lambda r:r['seq']);assert len(records)==104 and sum(r['word_pair_count'] for r in counts)==57;dump(S/'resolved-spans.json',records);dump(S/'generator-proof.json',counts);print('CORRECTED302 40 NATIVE RANGES MATCH; UNCHANGED301/303 PROOFS REUSED; ALL104 ORDERED RANGES / 57 D5')

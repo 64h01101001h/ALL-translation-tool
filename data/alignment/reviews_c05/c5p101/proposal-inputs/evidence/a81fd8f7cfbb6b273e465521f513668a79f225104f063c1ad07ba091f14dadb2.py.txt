@@ -1,0 +1,31 @@
+import pathlib,sys,subprocess,json,hashlib,runpy,html.parser,datetime,os
+H=pathlib.Path(__file__).resolve().parent;R=H.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest()
+dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+class Plain(html.parser.HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.stack=[];self.out={'tib':[],'eng':[]}
+ def handle_starttag(self,t,a):
+  a=dict(a)
+  if t=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  if t=='span':self.stack.append(a)
+ def handle_endtag(self,t):
+  if t=='span':self.stack.pop()
+ def handle_data(self,s):
+  if self.side and any(a.get('data-d')=='1' for a in self.stack) and not any(a.get('class')=='nul' for a in self.stack):self.out[self.side].append(s)
+runner=runpy.run_path(str(H/'run_canonical.py'));G=runpy.run_path(str(runner['prepare']()))
+source={r['seq']:r for r in json.loads((H.parent/'source.json').read_text())};results=[]
+for seq in [301,302,303]:
+ d=H/str(seq);n=1
+ while (d/'attempts'/f'{n:03d}').exists():n+=1
+ a=d/'attempts'/f'{n:03d}';a.mkdir(parents=True);inp=(d/'spec.json').read_bytes();(a/'spec.json').write_bytes(inp);(a/'runner.py').write_bytes((H/'run_canonical.py').read_bytes())
+ argv=[sys.executable,'-B',str(H/'run_canonical.py')];cmd={'argv':argv,'cwd':str(R),'stdin':'spec.json','stdin_bytes':len(inp),'stdin_sha256':sha(inp),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()};dump(a/'command.json',cmd)
+ r=subprocess.run(argv,input=inp,capture_output=True,cwd=R,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'})
+ (a/'stdout').write_bytes(r.stdout);(a/'stderr').write_bytes(r.stderr);(a/'exit').write_text(str(r.returncode)+'\n')
+ print(seq,'EXIT='+str(r.returncode),'BODY_BYTES='+str(len(r.stdout)),'STDERR_BYTES='+str(len(r.stderr)))
+ if r.returncode:print(r.stderr.decode());sys.exit(1)
+ (d/'body.html').write_bytes(r.stdout);(d/'canonical.stdout').write_bytes(r.stdout);(d/'canonical.stderr').write_bytes(r.stderr);(d/'canonical.exit').write_text('0\n');dump(d/'canonical-command.json',cmd)
+ s=json.loads(inp)['segments'][0];sp=s['spans'];by={x['id']:x for x in sp};t=G['resolve'](source[seq]['wylie'],sp,'tib',seq);es=G['with_members'](sp,[by[k] for k in s['eng_order']],source[seq]['english']);e=G['resolve'](source[seq]['english'],es,'eng',seq);intents=json.loads((d/'intended-ranges.json').read_text());proof=[]
+ for x in intents:
+  actual={'tib_range':list(t[x['id']]),'eng_range':list(e[x['id']]) if x['eng'] is not None else None};okay=all(x[k]==v for k,v in actual.items());proof.append({'id':x['id'],'actual':actual,'intended':{k:x[k] for k in actual},'match':okay});assert okay,(seq,x,actual)
+ p=Plain();p.feed(r.stdout.decode());fidelity={side:''.join(p.out[side])==source[seq][field] for side,field in [('tib','wylie'),('eng','english')]};assert all(fidelity.values()),(seq,fidelity)
+ result={'seq':seq,'exit':0,'body_bytes':len(r.stdout),'stderr_bytes':len(r.stderr),'spec_bytes':len(inp),'spec_sha256':sha(inp),'body_sha256':sha(r.stdout),'source_fidelity':fidelity,'all_ranges_match':True,'counts':{'spans':len(sp),'nulls':sum(x['eng'] is None for x in sp),'depths':{str(k):sum(x['d']==k for x in sp) for k in range(1,8)}},'range_proof':proof,'native_attempt':str(a.relative_to(H))};dump(d/'validation.json',result);results.append(result)
+dump(H/'validation-summary.json',[{k:v for k,v in x.items() if k!='range_proof'} for x in results]);print('ALL FINAL CANONICAL RANGES AND COMPLETE SOURCE TEXTS MATCH')

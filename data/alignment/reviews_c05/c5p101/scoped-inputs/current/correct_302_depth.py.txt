@@ -1,0 +1,86 @@
+"""Preserve superseded inputs, correct one depth, replay only affected302."""
+from pathlib import Path
+import json, hashlib, shutil, datetime, subprocess, sys, os, importlib.util, sqlite3
+from collections import Counter
+B=Path(__file__).resolve().parent; R=B/'reconciled'; W=B.parents[1]/'campaign-worktree'; A=B.parent
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def read(p):return json.loads(p.read_text())
+now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+H=B/'reconciliation-history/v1-before-302-depth-correction';H.mkdir(parents=True,exist_ok=False)
+paths=['reconciled','root-reconciliation-verification','root-reconciliation-intake.json','semantic-input-review-package.txt']
+manifest=[]
+for relative in paths:
+ p=B/relative
+ if p.is_dir():shutil.copytree(p,H/relative)
+ else:shutil.copy2(p,H/relative)
+ for q in sorted(p.rglob('*')) if p.is_dir() else [p]:
+  if q.is_file():
+   dest=H/q.relative_to(B);assert dest.read_bytes()==q.read_bytes()
+   manifest.append(dict(original=str(q),preserved=str(dest),bytes=q.stat().st_size,sha256=sha(q)))
+dump(H/'preservation.json',dict(utc=now,status='EXACT_PRIOR_BOUNDARY_PRESERVED',files=manifest))
+oldfreeze=read(R/'freeze.json')
+for f in oldfreeze['files']:
+ p=R/f['path'];assert p.stat().st_size==f['bytes'] and sha(p)==f['sha256']
+reason='Fresh independent review correction: Tibetan thal is a lexical consequence predicate, so d5; English modal must does not make the Tibetan source a particle. Exact Tibetan, English and both occurrence ranges remain unchanged. Both original d6 proposals are retained historically and explicitly rejected in depth.'
+p=R/'302/spec.json';spec=read(p);spans=spec['segments'][0]['spans'];target=[x for x in spans if x['id']=='w23'];assert len(target)==1 and target[0]=={'d':6,'tib':'thal','eng':'must','id':'w23'};target[0]['d']=5;dump(p,spec)
+for filename in ['final-decisions.json','intended-ranges.json']:
+ p=R/'302'/filename;rows=read(p)
+ for row in rows:
+  if row['id']=='w23':
+   assert row['d']==6;row['d']=5
+   if 'span_object' in row:row['span_object']['d']=5;row['rationale']=reason
+ dump(p,rows)
+p=R/'reconciliation-decisions.json';decisions=read(p)
+for row in decisions['final_ordered_tuples']:
+ if row['seq']==302 and row['id']=='w23':row['d']=5;row['span_object']['d']=5;row['rationale']=reason
+for row in decisions['original_decisions']:
+ if row['seq']==302 and row['final_ids']==['w23']:
+  assert row['disposition']=='retained';row['disposition']='recast_or_depth_changed';row['rationale']=reason
+base=read(B/'baseline.json');head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=W,text=True).strip();assert head=='b5047596859f6537b71f259c1e7df2e70f867fb2'
+decisions['acceptance_baseline']=head;dump(p,decisions)
+at=R/'302/attempts/002';at.mkdir(exist_ok=False);raw=(R/'302/spec.json').read_bytes();(at/'spec.json').write_bytes(raw)
+argv=[sys.executable,'-B',str(A/'run_generator_readonly.py')];cmd=dict(argv=argv,cwd=str(W),stdin='spec.json',stdin_bytes=len(raw),stdin_sha256=hashlib.sha256(raw).hexdigest(),utc=now,environment_overrides={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'})
+dump(at/'command.json',cmd);shutil.copy2(A/'run_generator_readonly.py',at/'runner.py')
+run=subprocess.run(argv,cwd=W,input=raw,capture_output=True,env={**os.environ,**cmd['environment_overrides']})
+for name,data in [('stdout',run.stdout),('stderr',run.stderr),('exit',f'{run.returncode}\n'.encode())]:(at/name).write_bytes(data)
+assert run.returncode==0 and not run.stderr
+oldbody=(H/'reconciled/302/body.html').read_bytes();newbody=run.stdout
+# The only body modifications must be the two displayed depth attributes of this same correspondence.
+import re
+oldparts=oldbody.decode().splitlines();newparts=newbody.decode().splitlines();assert len(oldparts)==len(newparts)
+changes=[]
+for old,new in zip(oldparts,newparts):
+ if old!=new:
+  assert 's302w23' in old and 's302w23' in new
+  expected=re.sub(r'(<span\b[^>]*\bdata-d=")6("[^>]*\bdata-a="s302w23")',r'\g<1>5\2',old)
+  if expected==old: expected=re.sub(r'(<span\b[^>]*\bdata-a="s302w23"[^>]*\bdata-d=")6(")',r'\g<1>5\2',old)
+  assert new==expected,(old,new)
+  changes.append(dict(before=old,after=new))
+assert changes
+sys.path.insert(0,str(W/'tools'));definition=importlib.util.spec_from_file_location('canonical_generator',W/'tools/gen_alignment_page.py');g=importlib.util.module_from_spec(definition);definition.loader.exec_module(g)
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON');source=dict(db.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq=302").fetchone());db.close()
+seg=spec['segments'][0];by={s['id']:s for s in spans};t=g.resolve(source['wylie'],spans,'tib',302);e=g.resolve(source['english'],g.with_members(spans,[by[x] for x in seg['eng_order']],source['english']),'eng',302)
+resolved=[dict(seq=302,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=list(t[s['id']]),eng_range=list(e[s['id']]) if s['eng'] is not None else None) for s in spans]
+oldresolved=read(H/'root-reconciliation-verification/resolved-spans.json');expected=[dict(v,d=5) if v['seq']==302 and v['id']=='w23' else v for v in oldresolved];assert resolved==[v for v in expected if v['seq']==302]
+assert resolved==read(R/'302/intended-ranges.json')
+for name,data in [('body.html',newbody),('canonical.stdout',newbody),('canonical.stderr',run.stderr),('canonical.exit',b'0\n')]:(R/'302'/name).write_bytes(data)
+dump(R/'302/canonical-command.json',cmd)
+v=read(R/'302/validation.json');v.update(body_bytes=len(newbody),spec_bytes=len(raw),spec_sha256=sha(R/'302/spec.json'),body_sha256=sha(R/'302/body.html'),native_attempt='302/attempts/002');v['counts']['depths']['5']=24;v['counts']['depths']['6']=7;v['source_fidelity_evidence']='Previous full source fidelity plus exact depth-only body delta; source and occurrence ranges rechecked against read-only actual spine.';dump(R/'302/validation.json',v)
+vs=read(R/'validation-summary.json');vs[1]={k:x for k,x in v.items() if k!='range_proof'};dump(R/'validation-summary.json',vs)
+report=read(B/'root-reconciliation-verification/report.json');row=report[1];row.update(depths=dict(Counter(s['d'] for s in spans)),nonnull_d5=24,body_bytes=len(newbody),spec_sha256=v['spec_sha256'],body_sha256=v['body_sha256'],actual_native_evidence=str(at));dump(B/'root-reconciliation-verification/report.json',report);dump(B/'root-reconciliation-verification/resolved-spans.json',expected)
+text=(R/'302/report.md').read_text().replace('6 original spans were recast','8 original spans were recast').replace('23 non-null d5','24 non-null d5').replace('attempts/001','attempts/002').replace('no failed generator and no source/spec re-run for bookkeeping.','one scoped generator rerun after the required source-depth correction; earlier successful attempt is preserved.').replace('f3e4c060ac400ed92485d95f341c48f0a0b09819b69efeb2acce7e35e81c7f88',v['spec_sha256']).replace('6807fbd354477f8a9cfeda2c708467e5b59a2282912cb91f6be34637b3080f90',v['body_sha256'])
+text+='\nCORRECTION AFTER FRESH REVIEW: '+reason+'\nActual acceptance baseline is '+head+' through300. Prior complete reconciliation preserved at '+str(H)+'.\n'
+(R/'302/report.md').write_text(text)
+proof=dict(status='PASS_SCOPED_DEPTH_CORRECTION',utc=now,reason=reason,changed_segment=302,changed_id='w23',old_depth=6,new_depth=5,source_verbatim=True,all_ranges_unchanged=True,all_other_specs_and_bodies_unchanged=True,body_changes=changes,actual_native_evidence=str(at),reused_successful_segments=[301,303],preservation=str(H/'preservation.json'),acceptance_baseline=head)
+for seq in [301,303]:
+ for name in ['spec.json','body.html']:
+  assert (R/str(seq)/name).read_bytes()==(H/'reconciled'/str(seq)/name).read_bytes()
+dump(R/'correction-302w23.json',proof)
+freeze={**oldfreeze,'utc':now,'acceptance_baseline':head,'segments':report,'supersedes':dict(path=str(H/'reconciled/freeze.json'),sha256=sha(H/'reconciled/freeze.json'))};files=[]
+for p in sorted(R.rglob('*')):
+ if p.is_file() and p!=R/'freeze.json':files.append(dict(path=str(p.relative_to(R)),bytes=p.stat().st_size,sha256=sha(p)))
+freeze.update(files=files,file_count=len(files));dump(R/'freeze.json',freeze)
+intake=read(B/'root-reconciliation-intake.json');intake.update(utc=now,freeze_files=len(files),freeze_sha256=sha(R/'freeze.json'),dispositions=dict(Counter(v['disposition'] for v in decisions['original_decisions'])),actual_canonical_replays=1,reused_unchanged_segment_replays=2,acceptance_baseline=head,correction_proof=str(R/'correction-302w23.json'));dump(B/'root-reconciliation-intake.json',intake)
+dump(B/'root-reconciliation-verification/execution-reuse.json',dict(reason='Only302 re-executed after required depth correction. Reuse exact successful301/303 native evidence, sources and occurrence resolutions unchanged.',current302=str(at),prior301303=str(H/'root-reconciliation-verification/execution-reuse.json'),correction=str(R/'correction-302w23.json')))
+print(json.dumps(dict(status=proof['status'],spec_sha256=v['spec_sha256'],body_sha256=v['body_sha256'],freeze_sha256=sha(R/'freeze.json'),freeze_files=len(files),nonnull_d5=57,dispositions=intake['dispositions'],preservation=str(H)),indent=2))

@@ -1,0 +1,20 @@
+import json,pathlib,shutil
+from capture import BASE
+for seq in [302,303]:
+    p=BASE/str(seq);a=p/'attempts/03-prefinal';a.mkdir(parents=True)
+    for name in ['spec.json','decisions.json','errata.json','body.html','verification.json']:shutil.copy2(p/name,a/name)
+p=BASE/'302';e=json.loads((p/'errata.json').read_text())
+e[0]['evidence']=e[0]['evidence'].replace('P7:41 also reads as the sizzle, in a shorter English segment ending at this sentence.','P7:41 also reads as the sizzle and preserves the full English argument, with em dashes where C05 has double hyphens; its ACIP/Wylie punctuation and yi dwags spelling differ, so no whole-row identity is claimed.')
+(p/'errata.json').write_text(json.dumps(e,ensure_ascii=False,indent=2)+'\n')
+d=json.loads((p/'decisions.json').read_text())
+for s in d['spans']:
+    if s['tib']=="'tshod par":s['reason']=s['reason'].replace('lemma is tshod pa',"lemma is 'tshod pa")
+(p/'decisions.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+p=BASE/'303';s=json.loads((p/'spec.json').read_text());d=json.loads((p/'decisions.json').read_text())
+for sp in s['segments'][0]['spans']:
+    if sp['tib']=='med':sp['d']=5
+for sp in d['spans']:
+    if sp['tib']=='med':
+        sp['d']=5;sp['reason']='Negative existential word, d5 rather than a standalone grammatical particle. Its negative force is rendered in the auxiliary of the happening predicate; can and be stay unwrapped.'
+(p/'spec.json').write_text(json.dumps(s,ensure_ascii=False,indent=2)+'\n');(p/'decisions.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+print('Corrected P7 witness extent description without changing source or body; classified med as d5 lexical negative existential; preserved previous drafts.')

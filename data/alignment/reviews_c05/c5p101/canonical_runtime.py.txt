@@ -1,0 +1,12 @@
+import pathlib,sys,json,hashlib,types,sqlite3,runpy
+S=pathlib.Path(__file__).resolve().parent;W=S.parents[2]/'campaign-worktree'
+def prepare():
+ pins=json.loads((S/'source-pin-proof.json').read_text());spine=next(x['path'] for x in pins if x['name']=='spine')
+ pinned=S/'governing/tools/gen_alignment_page.py.txt';generator=W/'tools/gen_alignment_page.py';assert generator.read_bytes()==pinned.read_bytes()
+ builder=types.ModuleType('build_alignment_layer');builder.__file__=str(W/'tools/build_alignment_layer.py');sys.path.insert(0,str(W/'engines'));exec(compile((S/'governing/tools/build_alignment_layer.py.txt').read_bytes(),builder.__file__,'exec'),builder.__dict__);sys.modules['build_alignment_layer']=builder
+ native_connect=sqlite3.connect
+ def read_only(database,*args,**kwargs):
+  assert str(database)==spine;kwargs['uri']=True;db=native_connect('file:'+spine+'?mode=ro',*args,**kwargs);db.execute('PRAGMA query_only=ON');return db
+ sqlite3.connect=read_only
+ return generator
+if __name__=='__main__':runpy.run_path(str(prepare()),run_name='__main__')

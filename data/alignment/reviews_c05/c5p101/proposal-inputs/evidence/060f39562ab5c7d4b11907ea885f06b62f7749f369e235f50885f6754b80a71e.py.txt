@@ -1,0 +1,74 @@
+from pathlib import Path
+import json,copy,hashlib,collections,datetime
+D=Path(__file__).resolve().parent;J=D.parent;E=D/'evidence'
+def write(p,x):
+ assert not p.exists(),p
+ p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+S={r['seq']:r for r in json.loads((J/'source.json').read_text())}
+O=json.loads((J/'proposal-verification/root-resolved-spans.json').read_text());lookup={(x['angle'],x['seq'],x['id']):x for x in O}
+props={(a,s):json.loads((J/a/str(s)/'spec.json').read_text())['segments'][0] for a in ['tibetan','english'] for s in [301,302,303]}
+engdec={s:json.loads((J/'english'/str(s)/'decisions.json').read_text()) for s in S}
+q=json.loads((E/'queries.json').read_text());lex={x['term']:x['records'] for x in q if x['kind']=='master_exact_or_variant'}
+records=json.loads((E/'records.json').read_text());sr={v['record']['seq']:k for k,v in records.items() if v['kind']=='spine' and v['record']['course']=='C05'}
+final=[];selected={};allows={};all_dispositions=[]
+def use(a,s,i):
+ o=copy.deepcopy(lookup[a,s,i]);o['origin']=[a,i]
+ obj=next(x for x in props[a,s]['spans'] if x['id']==i);o['span_object']=copy.deepcopy(obj)
+ if a=='english':d=next(x for x in engdec[s]['spans'] if x['id']==i);o['rationale']=d['reason'];o['lexical_terms']=[d['lexical_query_term']] if d['lexical_query_term'] else []
+ else:
+  matches=[x for x in engdec[s]['spans'] if all(x[k]==o[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+  o['rationale']=matches[0]['reason'] if matches else obj.get('nul','')
+  o['lexical_terms']=[matches[0]['lexical_query_term']] if matches and matches[0]['lexical_query_term'] else []
+ return o
+selected[301]=[use('tibetan',301,x['id']) for x in props['tibetan',301]['spans']]
+for i,eid,reason in [('w6','w6','Use the established enumeration compound la sogs pa with its inseparable instrumental inflection pas. It licenses and other; the noun objects remains outside. Both full compound and shorter sogs glossary entries were considered. d5 is justified by the established compound, not a gate bypass.'),('w14','w13','Use the complete established enumeration compound la sogs pa for and so on, closing the chopping list. This covers the closing conjunction without absorbing a supplied noun; no degenerate members.')]:
+ k=next(k for k,x in enumerate(selected[301]) if x['id']==i);x=use('english',301,eid);x['d']=5;x['span_object']['d']=5;x['rationale']=reason;x['lexical_terms']=['la sogs pa','sogs'];selected[301][k]=x
+reasons301={
+'w8':("The narrower lexical skyes owns born at the same occurrence; both skyes and nominalized skyes pa have positive HGM born evidence. The following nominal/genitive suffix is outside the selected verb, with no claim that it lacks meaning.",['skyes','skyes pa']),
+'w22':("The complete negative existential consequence med par thal is rendered by must not even exist. Retain the full phrase at d3, including its inferential modal and negative-existence predicate; no isolated positive exist or false null. This second consequence is contiguous, unlike the first consequence distributed over three could-never clauses.",['med','med par thal']),
+'w30':("The actual inflected nominal tshad mar is the valid-perception compound tshad ma with its terminative inflection inside the status construction tshad mar song ba. Retain the two-word English noun valid perception at d5; do not capture is a or the relative predicate on that noun. Both full tshad ma and actual tshad mar entries were considered; song ba grammatical status remains outside rather than being falsely equated with perception.",['tshad ma','tshad mar','song ba']),
+'w33':("The negative existential word med owns the complete English doesn't exist. This exact form appears in the full HGM glossary and the current subject is actual water. Do not reduce it to positive exist or a null. par thal inference is distributed in You must be saying then and is not swallowed into this lexical span.",['med']),
+'w39':("The final lexical negative existential med is rendered discontinuously in no actual pus and blood exists. Retain its exact negative exponent no, supported by the full HGM med/no and med/no ... exists alternatives, with exists unwrapped; this does not assert that the English predicate lacks existential content. It is d5 as a negative existential word, not classified as a simple standalone particle.",['med'])}
+for x in selected[301]:
+ if x['origin'][0]=='tibetan' and x['id'] in reasons301:x['rationale'],x['lexical_terms']=reasons301[x['id']]
+selected[302]=[use('english',302,x['id']) for x in props['english',302]['spans']]
+for x in selected[302]:
+ if x['id']=='w33':x['d']=5;x['span_object']['d']=5;x['rationale']='The full established enumeration compound la sogs pa owns and so on at the list closure. Retain d5 on lexical evidence and name the actual enumeration licensor for and; no supplied object/site is captured.';x['lexical_terms']=['la sogs pa','sogs']
+ if x['id'] in ['w13','w38']:x['rationale']='Retain the full inflected nominal myong bas for experience. The positive HGM lemma myong ba is the complete noun; bas stays inseparable, with English with outside rather than inventing a free -s atom. This is the '+('human' if x['id']=='w13' else 'spirit')+' experience occurrence.';x['lexical_terms']=['myong ba']
+ if x['id']=='w9':x['rationale']="Retain the inflected lexical 'tshod par for cook, based on full positive HGM 'tshod pa/cook and the original water-use construction. The anomalous bare-stem automatic gloss was read and rejected as correspondence evidence; byed pa is distributed across repeated uses/functions and is not added to cook.";x['lexical_terms']=["'tshod pa","'tshod",'byed pa']
+ if x['id'] in ['w1','w2']:x['rationale']+= ' The larger positive kho na re reporting formula was considered; retain the separate overt participant and reporting head without might now make the following expansion. Someone is a contextual rendering of the overt kho in this formula, not its curated/dictionary gloss we.';x['lexical_terms']=['kho','kho na re','na re']
+selected[303]=[use('english',303,x['id']) for x in props['english',303]['spans'] if x['id']!='w18']
+for k,x in enumerate(selected[303]):
+ if x['id']=='w17':
+  x=use('tibetan',303,'w17');x['rationale']="The second complete negative event predicate 'byung ba med owns can't be happening at d3. This preserves the negative existential/event scope together; the earlier what happens is a duplicated English restatement, and to him is outside. The competing separate happening plus n't analysis is mechanically possible but fragments the contextual negative predicate.";x['lexical_terms']=["'byung ba",'med'];selected[303][k]=x
+ if x['id'] in ['w11','w20']:
+  start=x['tib_range'][0]-5;assert S[303]['wylie'][start:x['tib_range'][1]]=='blos rlom pa';x['tib']='blos rlom pa';x['tib_range'][0]=start;x['span_object']['tib']=x['tib'];x['rationale']='Retain the entire established blos rlom pa/imagination compound (full HGM unified index24294 and glossary index5044). The shorter rlom pa/imagination entry is also positive, but dropping blos misrepresents this attested compound as omitted mental content. No member is banked because imagination has no tighter separately licensed English member.';x['lexical_terms']=['blos rlom pa','rlom pa','blo']
+ if x['id']=='w8':x['rationale']='The complete demonstrative manner phrase de ltar is rendered all this, explicitly attested among the full HGM alternatives and referring to the described experience. Keep the phrase at d3; do not make bare ltar mean all or invent a separate quantifier atom.';x['lexical_terms']=['de ltar','de']
+ if x['id'] in ['w1','w2','w3']:x['rationale']+=' The full positive reporting formula was considered. Preserve the retrospective argument phrase, explicit participant and reporting head separately; modal and connective expansion stays outside.';x['lexical_terms']=['kho','kho na re','na re']
+for i in ['w4','w12','w21']:selected[303].append(use('tibetan',303,i))
+notes={301:"The two enumeration compounds license and other / and so on without supplied objects. The first negative consequence is distributed over three could-never clauses and remains unbanked; the second is a full phrase. Actual water retains doesn't exist, and final med retains the negative token no with exists outside. All four concessions and repeated real/actual positions are fixed. The valid-perception nominal retains its terminative inflection; its status predicate is outside. Positive expanded glossary renderings of real actions, all sit down and chop them up were considered but do not justify swallowing supplied or discontinuous content.",302:"The reporting participant and claim are separate from the supplied modal frame. Inflected cook and experience forms remain intact; -s is never split. Both gis nulls mark ergative roles carried by active syntax. Named pus and blood is banked at its English anticipation once, with later them outside. The three temporal frames and three conjunctions have distinct intended occurrences. The exact words as the sizzle remain unchanged; one LOW/PROBABLE erratum is proposed separately, without author-intent or independent-publication certainty.",303:"The complete attested blos rlom pa compound owns imagination twice; no degenerate member is invented. The two explicit experiencer possessives retain his own/his at phrase depth. The second negative event predicate stays whole and its earlier English repetition stays outside. Two yin nulls explicitly mark copular fusion into it's, and te has punctuation only. de ltar/all this is a complete demonstrative phrase, not a bare quantifier equation."}
+for seq,rows in selected.items():
+ rows.sort(key=lambda x:(x['tib_range'][0],x['d']==7))
+ # Preserve member adjacency with the original parent, including reversed Tibetan member order if any.
+ spans=[]
+ for n,x in enumerate(rows,1):
+  x['id']='w'+str(n);obj=copy.deepcopy(x['span_object']);obj.update({k:x[k] for k in ['id','d','tib','eng']});spans.append(obj)
+  assert x['rationale'],(seq,x)
+  x['source_ref']=sr[seq];x['lexical_evidence_refs']=[r for t in x['lexical_terms'] for r in lex.get(t,[])];x['final_index']=len(final);final.append(x)
+  if x['d'] in [5,7] and x['eng'] and x['eng'].split()[0].lower() in ['the','a','an','and','or','his','our','your','i','you']:
+   assert x['tib'].startswith('la sogs pa');allows[f'c5p101/s{seq}'+x['id']]='The established enumeration compound '+x['tib']+' licenses the closing '+x['eng']+'; following supplied nouns stay outside. '+x['rationale']
+ engorder=[x['id'] for x in sorted(rows,key=lambda x:x['eng_range'][0] if x['eng_range'] else -1) if x['eng'] is not None and x['d']!=7]
+ seg={'seq':seq,'title':{301:'real actions and valid perception',302:'experience confirms each object',303:'the imagination objection'}[seq],'spans':spans,'eng_order':engorder,'note':'Codex root reconciliation of two independently frozen proposals; PROVISIONAL machine correspondence, unreviewed by a human, no hgm_gloss promotion. Source Tibetan and GMR English remain verbatim. '+notes[seq]}
+ out=D/str(seq);out.mkdir(exist_ok=True);write(out/'spec.json',{'course':'C05','segments':[seg]});write(out/'intended-ranges.json',[{k:x[k] for k in ['seq','id','d','tib','eng','tib_range','eng_range']} for x in rows]);write(out/'final-decisions.json',rows)
+ write(out/'errata.json',json.loads((J/'english'/str(seq)/'errata.json').read_text()))
+for o in O:
+ candidates=[x for x in final if x['seq']==o['seq'] and x['tib_range'][0]<o['tib_range'][1] and o['tib_range'][0]<x['tib_range'][1] and ((x['eng_range'] is None)==(o['eng_range'] is None))]
+ exact=[x for x in candidates if all(x[k]==o[k] for k in ['d','tib','eng','tib_range','eng_range'])]
+ targets=exact or candidates
+ assert targets,(o,'unaccounted original')
+ a=o['angle'];s=o['seq'];orig=next(x for x in props[a,s]['spans'] if x['id']==o['id'])
+ reason=next((x['reason'] for x in engdec[s]['spans'] if x['id']==o['id']),None) if a=='english' else orig.get('nul')
+ all_dispositions.append({**o,'original_span_object':orig,'original_reason':reason,'original_reason_source':str((J/a/str(s)/('decisions.json' if a=='english' else 'spec.json')).resolve()),'original_context_refs':[str((J/a/str(s)/'report.md').resolve())],'disposition':'retained' if exact else 'recast_or_depth_changed','final_ids':[x['id'] for x in targets],'final_tuple_indices':[x['final_index'] for x in targets],'rationale':' '.join(dict.fromkeys(x['rationale'] for x in targets))})
+write(D/'span-head-allow-needed.json',{'pages_c05':allows})
+write(D/'reconciliation-decisions.json',{'status':'ROOT_RECONCILIATION_CANDIDATE; independent fresh review required','producer':'Codex root; authored neither original proposal','source_origin':json.loads((J/'proposal-baseline.json').read_text())['commit'],'original_count':len(O),'original_decisions':all_dispositions,'final_ordered_tuples':final,'acceptance_baseline':'Not captured; preceding through300 must be verified first'})
+print(json.dumps({'originals':len(O),'final':len(final),'segments':{s:{'spans':len(rows),'nulls':sum(x['eng'] is None for x in rows),'d5':sum(x['d']==5 and x['eng'] is not None for x in rows)} for s,rows in selected.items()},'allowances':allows}))

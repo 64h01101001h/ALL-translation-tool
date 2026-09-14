@@ -1,0 +1,11 @@
+C05:302 — Codex, independent Tibetan-first original proposal. PROVISIONAL machine alignment; no human semantic approval or hgm_gloss promotion.
+Challenge first: longs spyod pa → drinks is a contextual use of the established partake/enjoy compound; rnag khrag is matched once at the anticipatory named English object, with later them unwrapped.
+Full source supports wash/cook/sizzle and confirm/experience; anomalous bare-verb automatic glosses are not evidence for these matches. The three dang occurrences select or, action-sequence and, and throat/stomach and at exact positions.
+Omissions: omissions.json gives judgments; coverage-and-omissions.json records every uncovered original range. Nulls assert no separately permitted exponent, not uncertainty.
+Original evidence: ../evidence/spine-records.json row 1684; ../evidence/original-corpus-records.json same key; full master records in ../evidence/lexical-evidence.json; physical block and parser proof in ../evidence/physical-selected-verification.json.
+Errata: 0. Probable as the sizzle typo retained in source and noted, not newly filed; C15:447 repeats all three fields, P7:41 repeats the phrase with other differences, and original C05 physical text contains it. Publication independence/ingestion history remains unproved.
+Counts: 37 proposed spans; 0 nulls; 22 d5; 4 d7; 0 proposed errata. Builder sees 38 spans on each side including the generated sentence wrapper.
+FINAL GENERATOR: EXIT=0; STDOUT_BYTES=5988; STDERR_BYTES=0. Exact stdout is generator.stdout.html = body.html; exact stderr is generator.stderr.txt. Original command/dependency proof: generator-run.json and attempts/attempt-01/.
+SHA256 spec.json=34a4a7c3f03adee8a4cc1cdfee7b6515483c876b8c2be4f864351b2beb504349; body.html=8924cb0e5fe4e38c3f82c5ac33408e5a9de06b4679cd4820362042b989d9a033.
+Verification: all expected offsets, full raw source whitespace, canonical ACIP conversions, every parser span, and four unchanged private-scope fidelity gates pass. Complete counts and hashes: verification.json and ../evidence/gate-runs.json.
+Source/governance origin is ce646d0c48f9338ff47e40f46582ad14c8a3eaf4 through294. Canonical generator is unchanged; builder and allowance use that actual immutable origin while concurrent pages may advance. Freeze boundary: ../freeze.json. Mechanical success does not establish correspondence.

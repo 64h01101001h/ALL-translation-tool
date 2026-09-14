@@ -1,0 +1,71 @@
+import gzip,hashlib,json,pathlib,re,sqlite3,collections
+from capture import BASE
+pins=json.loads((BASE/'evidence/source-pins.json').read_text())
+db=sqlite3.connect(pathlib.Path(pins['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+master=json.loads(gzip.open(pins['master']['path'],'rt').read());corpus=json.loads(gzip.open(pins['corpus']['path'],'rt').read())
+terms=["'dod","lcags sreg","der","skyes pa","'gro ba","lus","sreg pa","gtub pa","sogs pa","dngos gnas pa","dmyal ba","sdug bsngal","gzhan yang","de ltar","cig car du","bltas pa","de'i tshe na","mi","mig shes","tshad ma","chu","rnag khrag","kho na re","'khrud pa","'tshod","'tshod pa","byed pa","rang","myong ba","'grub pa","'o na","longs spyod pa","lto ba","mgrin pa","'tshig pa","yi dvags","mtshungs","'byung ba","blo","rlom pa","tsam","des na"]
+pool={}; queries=[]
+def bank(kind,record,locator):
+    data=json.dumps(record,ensure_ascii=False,sort_keys=True).encode(); key=kind+'-'+hashlib.sha256(data).hexdigest()
+    if key not in pool:pool[key]={'kind':kind,'record':record,'locators':[]}
+    if locator not in pool[key]['locators']:pool[key]['locators'].append(locator)
+    return key
+summary={}
+for term in terms:
+    refs=[];gloss=[]
+    for collection in ['unified_entries','curated_entries','glossary_entries']:
+        for i,entry in enumerate(master[collection]):
+            if entry.get('wylie')==term or term in entry.get('wylie_variants',[]):
+                refs.append(bank('master',entry,{'collection':collection,'index0':i,'source':pins['master']['path']}));gloss.append({'collection':collection,'wylie':entry.get('wylie'),'hgm':entry.get('hgm_gloss',entry.get('hgm_glosses')),'evidence':entry.get('hgm_evidence')})
+    rows=[dict(r) for r in db.execute('SELECT * FROM entries WHERE wylie=? OR id IN (SELECT entry_id FROM entry_variants WHERE wylie=?)',(term,term))]
+    refs.extend(bank('spine-entry',r,{'id':r['id'],'source':pins['spine']['path']}) for r in rows)
+    queries.append({'kind':'lexical-exact-or-variant','term':term,'master_count':len(gloss),'spine_count':len(rows),'refs':refs});summary[term]=gloss
+local=[dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',289,315))]
+for r in local:bank('spine-corpus',r,{'course':r['course'],'seq':r['seq'],'id':r['id'],'source':pins['spine']['path']})
+for seq in [301,302,303]:
+    r=next(x for x in local if x['seq']==seq)
+    matches=[dict(x) for x in db.execute('SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq',(r['acip'],r['wylie'],r['english']))]
+    refs=[bank('spine-corpus',x,{'course':x['course'],'seq':x['seq'],'id':x['id'],'source':pins['spine']['path']}) for x in matches]
+    queries.append({'kind':'exact-three-text-fields','source':'C05:'+str(seq),'sql':'SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq','params':[r['acip'],r['wylie'],r['english']],'count':len(matches),'refs':refs})
+    print('EXACT',seq,[(x['course'],x['seq']) for x in matches])
+searches=[('english','%as the sizzle%'),('english','%as they sizzle%'),('english','%his own imagination%'),('wylie',"%blos rlom pa tsam%"),('wylie',"%longs spyod pa%"),('english','%chop them up%')]
+for field,pattern in searches:
+    sql='SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq'
+    rows=[dict(r) for r in db.execute(sql,(pattern,))]
+    if field=='wylie' and pattern=="%longs spyod pa%":
+        rows=[r for r in rows if re.search(r'\b(drink|drinks|enjoy|use|uses)\b',r['english'])]
+        filt='English whole words: drink|drinks|enjoy|use|uses'
+    else:filt=None
+    refs=[bank('spine-corpus',r,{'course':r['course'],'seq':r['seq'],'id':r['id'],'source':pins['spine']['path']}) for r in rows]
+    queries.append({'kind':'corpus-search','sql':sql,'params':[pattern],'post_filter':filt,'count':len(rows),'refs':refs})
+    print('QUERY',field,pattern,'count',len(rows),'locations',[(r['course'],r['seq']) for r in rows])
+seqs=collections.Counter();selected=[]
+for i,r in enumerate(corpus):
+    seqs[r['course']]+=1
+    if (r['course']=='C05' and 289<=seqs[r['course']]<=315) or any(r.get(f)==x.get(f) for x in local if x['seq'] in [301,302,303] for f in ['english','acip','wylie']):
+        ref=bank('original-corpus',r,{'source':pins['corpus']['path'],'index0':i,'course':r['course'],'seq_by_course_order':seqs[r['course']]})
+        selected.append(ref)
+queries.append({'kind':'original-corpus-full-inspection','total':len(corpus),'course_counts':dict(seqs),'selection':'C05:289–315 or any exact acip/wylie/english field of selected rows','count':len(selected),'refs':selected})
+text=pathlib.Path(pins['physical']['path']).read_bytes().decode('latin-1');lines=text.splitlines(keepends=True)
+needles=['And suppose you agree that this hell being','Someone might now make the following claim','Someone may respond to this argument','as the sizzle','as they sizzle',"'DOD NA, LCAGS SREG","BYAS PA LA KHO NA RE, MI MTSUNGS"]
+hits={n:[i+1 for i,l in enumerate(lines) if n in l] for n in needles}
+anchors=[i for h in hits.values() for i in h];a=max(1,min(anchors)-100);b=min(len(lines),max(anchors)+120)
+excerpt=''.join(lines[a-1:b]);(BASE/'evidence/physical-context.txt').write_text(excerpt)
+(BASE/'evidence/physical-context-map.json').write_text(json.dumps({'path':pins['physical']['path'],'needles':hits,'start_line':a,'end_line':b,'total_lines':len(lines),'excerpt_sha256':hashlib.sha256(excerpt.encode()).hexdigest()},indent=2)+'\n')
+print('PHYSICAL',hits,a,b)
+registry=json.loads((BASE/'calls/git-v2-docs_errata_register.json/stdout.bin').read_bytes())
+def walk(x,path='$'):
+    if isinstance(x,dict):
+        s=json.dumps(x,ensure_ascii=False)
+        if any(k in x for k in ['found','expected']) and (re.search(r'sizzle|imagination|C05:30[123]|E-071|following.{0,30}heading|E-107',s,re.I)):
+            yield path,x
+        else:
+            for k,v in x.items():yield from walk(v,path+'.'+k)
+    elif isinstance(x,list):
+        for i,v in enumerate(x):yield from walk(v,path+f'[{i}]')
+regs=[{'json_path':p,'record':r} for p,r in walk(registry)]
+(BASE/'evidence/registry-matches.json').write_text(json.dumps(regs,ensure_ascii=False,indent=2)+'\n')
+(BASE/'evidence/records.json').write_text(json.dumps(pool,ensure_ascii=False,indent=2)+'\n')
+(BASE/'evidence/queries.json').write_text(json.dumps(queries,ensure_ascii=False,indent=2)+'\n')
+(BASE/'evidence/lexical-summary.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+print('REGISTRY_MATCHES',len(regs),'BANKED_RECORDS',len(pool))

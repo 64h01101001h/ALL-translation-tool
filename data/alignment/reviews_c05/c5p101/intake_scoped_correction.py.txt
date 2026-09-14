@@ -1,0 +1,75 @@
+import pathlib,json,hashlib,shutil,collections,difflib,re,datetime
+S=pathlib.Path(__file__).resolve().parent;B=S.parent;H=B/'reconciliation-history/v1-before-302-depth-correction';sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n');allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+manifest=json.loads((S/'original-to-copy-manifest.json').read_text());preservation=json.loads((H/'preservation.json').read_text());hist={r['original']:r for r in preservation['files']};remaps=[]
+for h in hist.values():
+ raw=pathlib.Path(h['preserved']).read_bytes();assert len(raw)==h['bytes'] and sha(raw)==h['sha256']
+for r in manifest:
+ if r['original'] in hist:
+  h=hist[r['original']];assert h['sha256']==r['sha256'] and h['bytes']==r['bytes'];old=dict(r);r['original']=h['preserved']
+  if r['copy'].startswith('reviewed-final/'):
+   p=S/'history/needs-correction-302w23'/r['copy'];assert p.read_bytes()==(S/r['copy']).read_bytes();r['copy']=str(p.relative_to(S))
+  remaps.append({'captured_original_record':old,'resolved_historical_record':dict(r),'preservation_mapping':h})
+def copy(p,rel):
+ raw=p.read_bytes();q=S/rel;q.parent.mkdir(parents=True,exist_ok=True)
+ if q.exists():assert q.read_bytes()==raw,(p,q,'do not overwrite old copies')
+ else:q.write_bytes(raw)
+ row={'original':str(p),'copy':rel,'sha256':sha(raw),'bytes':len(raw)}
+ if row not in manifest:manifest.append(row)
+ return row
+# All historical roots and every current candidate/input are preserved, with
+# supported extensions. Existing old readable302 copies were frozen above.
+for p in sorted((B/'reconciled').rglob('*')):
+ if not p.is_file():continue
+ rel=p.relative_to(B/'reconciled');out='scoped-inputs/current/reconciled/'+str(rel)
+ if p.suffix.lower() not in allowed:out+='.txt'
+ copy(p,out)
+ if rel.parts[0] in ['301','302','303']:
+  dest=S/'reviewed-final'/rel
+  if dest.suffix.lower() not in allowed:dest=pathlib.Path(str(dest)+'.txt')
+  if dest.exists() and dest.read_bytes()!=p.read_bytes():
+   old=S/'history/needs-correction-302w23'/dest.relative_to(S);assert old.exists() and old.read_bytes()==dest.read_bytes();dest.unlink()
+  copy(p,str(dest.relative_to(S)))
+for p in sorted(H.rglob('*')):
+ if p.is_file():
+  rel='scoped-inputs/history/'+str(p.relative_to(H));rel+= '' if p.suffix.lower() in allowed else '.txt';copy(p,rel)
+paths=[B/'root-reconciliation-intake.json',B/'semantic-input-review-package.txt',B/'root-scoped-correction-recovery.json',B/'correct_302_depth.py',B/'complete_302_depth_correction.py']
+for tree in ['root-reconciliation-verification','root-scoped-depth-correction-caller','root-scoped-depth-correction-completion-caller']:
+ paths.extend(p for p in (B/tree).rglob('*') if p.is_file())
+for p in sorted(paths):
+ out='scoped-inputs/current/'+str(p.relative_to(B));out+=' ' if False else ''
+ if p.suffix.lower() not in allowed:out+='.txt'
+ copy(p,out)
+dump(S/'historical-original-remapping.json',remaps);dump(S/'original-to-copy-manifest.json',manifest)
+# An exact structural diff names every changed semantic field; no source query.
+def differences(a,b,path=''):
+ if type(a)!=type(b):return [{'path':path,'before':a,'after':b}]
+ if isinstance(a,dict):
+  result=[]
+  for k in sorted(set(a)|set(b)):
+   if k not in a or k not in b:result.append({'path':path+'/'+str(k),'before':a.get(k),'after':b.get(k)})
+   else:result+=differences(a[k],b[k],path+'/'+str(k))
+  return result
+ if isinstance(a,list):
+  if len(a)!=len(b):return [{'path':path,'before':a,'after':b}]
+  return sum((differences(x,y,path+'/'+str(i)) for i,(x,y) in enumerate(zip(a,b))),[])
+ return [] if a==b else [{'path':path,'before':a,'after':b}]
+changed=[]
+for h in hist.values():
+ old=pathlib.Path(h['preserved']);p=pathlib.Path(h['original'])
+ if not p.exists() or old.read_bytes()==p.read_bytes():continue
+ x={'path':str(p.relative_to(B)),'old_sha256':h['sha256'],'new_sha256':sha(p.read_bytes()),'old_bytes':h['bytes'],'new_bytes':p.stat().st_size}
+ if p.suffix=='.json':x['structural_differences']=differences(json.loads(old.read_text()),json.loads(p.read_text()))
+ elif p.name!='semantic-input-review-package.txt':x['full_diff']=''.join(difflib.unified_diff(old.read_text().splitlines(keepends=True),p.read_text().splitlines(keepends=True),fromfile=str(old),tofile=str(p)))
+ else:x['package_diff']='Full current package preserved and new/unchanged section mapping verified separately.'
+ changed.append(x)
+oldspec=json.loads((H/'reconciled/302/spec.json').read_text());newspec=json.loads((B/'reconciled/302/spec.json').read_text());assert differences(oldspec,newspec)==[{'path':'/segments/0/spans/22/d','before':6,'after':5}]
+oldbody=(H/'reconciled/302/body.html').read_bytes();newbody=(B/'reconciled/302/body.html').read_bytes();needle=b'data-d="6" data-l="s302w23"';assert oldbody.count(needle)==2 and oldbody.replace(needle,b'data-d="5" data-l="s302w23"')==newbody
+assert sha((B/'reconciled/302/spec.json').read_bytes())=='2527b7e17b912d89fb13456f931bbc4c738a978f1812a6151c2aa09a0eafc068';assert sha(newbody)=='e0b303916a5f5aae9ba2760344d5d09bd0b0381c28bcbd53c45479ebc6937d63'
+freeze=(B/'reconciled/freeze.json').read_bytes();assert sha(freeze)=='30d8d73f4a02c09ac58c75ebb99fd3e18e83352812d891275c152d9269b44dfb';f=json.loads(freeze);assert len(f['files'])==96
+for r in f['files']:
+ raw=(B/'reconciled'/r['path']).read_bytes();assert sha(raw)==r['sha256'] and len(raw)==r['bytes']
+for seq in [301,303]:
+ for n in ['spec.json','body.html','final-decisions.json','intended-ranges.json','omissions.json','errata.json']:
+  assert (H/'reconciled'/str(seq)/n).read_bytes()==(B/'reconciled'/str(seq)/n).read_bytes()
+dump(S/'scoped-input-change-proof.json',{'status':'PASS_EXACT_DEPTH_ONLY_SPEC_BODY_CORRECTION','current_freeze_sha256':sha(freeze),'current_freeze_file_count':len(f['files']),'prior_freeze_sha256':sha((H/'reconciled/freeze.json').read_bytes()),'old_source_files_preserved':len(hist),'changed_original_files':changed,'remapped_copy_references':len(remaps),'native_301_303_reuse':'All six individual semantic/native interfaces byte-identical; no rerun','semantic_scope':'Only302w23.d6→d5, full strings and ranges unchanged. Read every structural-difference field below and full new helpers/callers; unchanged originals retain prior independent review.'})
+print('INTAKE PASS',len(hist),'OLD FILES',len(changed),'CHANGED FILES',len(remaps),'HISTORICAL REMAPS',len(manifest),'COPY MAPPINGS')

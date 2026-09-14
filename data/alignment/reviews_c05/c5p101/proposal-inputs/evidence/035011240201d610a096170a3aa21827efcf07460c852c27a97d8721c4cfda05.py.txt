@@ -1,0 +1,39 @@
+import gzip,hashlib,json,pathlib,re,subprocess,sqlite3
+from capture import BASE,capture
+pins=json.loads((BASE/'evidence/source-pins.json').read_text());W=BASE.parents[2]/'campaign-worktree'
+rows=json.loads((BASE/'evidence/original-local-rows.json').read_text());corpus=json.loads(gzip.open(pins['corpus']['path'],'rt').read())
+pool=json.loads((BASE/'evidence/records.json').read_text());queries=json.loads((BASE/'evidence/queries.json').read_text())
+physical=pathlib.Path(pins['physical']['path']).read_bytes();txt=physical.decode('latin-1')
+proof=[]
+for seq in [301,302,303]:
+    row=next(x for x in rows if x['seq']==seq)
+    matches=[(i,r) for i,r in enumerate(corpus) if r['course']=='C05' and all(r[k]==row[k] for k in ['acip','wylie','english'])]
+    assert len(matches)==1 and json.loads(row['raw'])==matches[0][1]
+    fields={}
+    for f in ['acip','english']:
+        pattern=r'\s+'.join(re.escape(v) for v in row[f].split());m=re.search(pattern,txt)
+        assert m,(seq,f)
+        exact=physical[m.start():m.end()];name=f'physical-{seq}-{f}.bin';(BASE/'evidence'/name).write_bytes(exact)
+        assert ' '.join(exact.decode('latin-1').split())==row[f]
+        fields[f]={'source':pins['physical']['path'],'byte_range':[m.start(),m.end()],'start_line':txt[:m.start()].count('\n')+1,'end_line':txt[:m.end()].count('\n')+1,'evidence_file':name,'bytes':len(exact),'sha256':hashlib.sha256(exact).hexdigest(),'comparison':'whitespace-collapse only, source retained byte-exact','matches_spine':True}
+    keys=[k for k,v in pool.items() if v['kind']=='spine-corpus' and v['record']['id']==row['id']]
+    assert len(keys)==1
+    proof.append({'seq':seq,'spine_record':keys[0],'spine_raw_equals_original_corpus_record':True,'original_corpus_index0':matches[0][0],'physical':fields,'english_chars':len(row['english']),'apparatus':'No following selection heading and no 1500-character cap in this row.'})
+(BASE/'evidence/three-source-verification.json').write_text(json.dumps(proof,indent=2)+'\n')
+engine=W/'engines/hgm_tools.py';pin='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+r=capture('git-engine-hgm_tools',['git','show',pin+':engines/hgm_tools.py'],cwd=W);assert not r.returncode and not r.stderr and r.stdout==engine.read_bytes()
+(BASE/'evidence/engine-dependency.json').write_text(json.dumps({'path':str(engine),'git_origin':pin+':engines/hgm_tools.py','sha256':hashlib.sha256(r.stdout).hexdigest(),'live_equals_git':True,'used_by':'Historical canonical builder import; conversion functions are not called by generator.'},indent=2)+'\n')
+lex={q['term']:q['refs'] for q in queries if q['kind']=='lexical-exact-or-variant'}
+lemmas={'tshad mar':'tshad ma',"'tshod par":"'tshod pa",'myong bas':'myong ba','dngos gnas':'dngos gnas pa',"'dod pa":"'dod",'sreg':'sreg pa'}
+for seq in [301,302,303]:
+    p=BASE/str(seq);d=json.loads((p/'decisions.json').read_text())
+    sm=next(x for x in proof if x['seq']==seq)
+    d['source_record_ref']=sm['spine_record'];d['evidence_pool']='../evidence/records.json';d['source_verification']='../evidence/three-source-verification.json'
+    for s in d['spans']:
+        s['source_record_ref']=sm['spine_record']
+        lemma=lemmas.get(s['tib'],s['tib']);s['lexical_query_term']=lemma if lemma in lex else None;s['lexical_record_refs']=lex.get(lemma,[])
+        s.pop('evidence',None)
+    (p/'decisions.json').write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n')
+err=[{'seq':302,'kind':'ENGLISH_TYPO','found':'and then as the sizzle in his throat and stomach','expected':'and then as they sizzle in his throat and stomach','evidence':"C05:302 id1684 gives the exact found wording in English and raw. ACIP 'TSIG PA / wylie 'tshig pa is the verbal burning predicate; original master unified_entries and glossary_entries 'tshig pa have HGM gloss sizzle. The preceding pus and blood supplies the natural plural subject they; the supplied article the leaves this as-clause without that subject. Probable single-letter omission, not a change to the Tibetan. C15:447 has identical ACIP, Wylie and English fields (id/course/seq differ); P7:41 also reads as the sizzle, in a shorter English segment ending at this sentence. A full-corpus English LIKE '%as the sizzle%' query returns those three rows, while LIKE '%as they sizzle%' returns zero. Physical C05ReadingASCII.txt line3015 also reads 'drinks them, and then as the sizzle in his throat and stomach, and so on.' Repetition establishes the transmitted reading, not independent publication or ingestion lineage; no corrected witness proves the proposed reading. Historical errata register ce646d0c contains no sizzle entry and no entry for this segment; this is not an E-071 header, following-heading, converter, footnote-fusion, or E-107 cap class. The full row, master entries, corpus records, original corpus objects, physical bytes and query mappings are preserved in ../evidence/records.json, queries.json, three-source-verification.json and physical-302-english.bin. Skeptic should test source quote, grammatical diagnosis, registered class, parallels/provenance and lexical evidence independently; authorial intent remains unproved.",'severity':'LOW','confidence':'PROBABLE'}]
+(BASE/'302/errata.json').write_text(json.dumps(err,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'verified_raw_corpus_rows':3,'physical_fields':6,'engine_unchanged':True,'probable_errata':1}))

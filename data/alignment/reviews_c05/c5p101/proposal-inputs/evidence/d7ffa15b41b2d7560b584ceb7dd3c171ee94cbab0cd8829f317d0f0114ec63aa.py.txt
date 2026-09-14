@@ -1,0 +1,72 @@
+import json,hashlib,subprocess,sys,os,re
+from pathlib import Path
+import canonical_runtime as R
+P=Path(__file__).resolve().parent
+E=P/'evidence'
+def write(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(x):return hashlib.sha256(x).hexdigest()
+H,B=R.bootstrap()
+rows=json.loads((E/'spine-records.json').read_text());selected={r['seq']:r for r in rows.values() if r['course']=='C05' and r['seq'] in [301,302,303]}
+original=Path(R.PIN['source_pins']['physical']['path']).read_bytes()
+decoded=original.decode('latin-1');parsed=H.parse_aligned(R.PIN['source_pins']['physical']['path'],'C05')
+physical=[]
+for seq,r in selected.items():
+ matches=[(i,p) for i,p in enumerate(parsed) if p['acip']==r['acip']]
+ assert len(matches)==1
+ i,p=matches[0]
+ assert all(p[k]==r[k] for k in ['acip','wylie','english'])
+ start=decoded.index(r['acip']);next_start=decoded.find('\n',start);eng_start=next_start+1
+ # A complete physical block ends at the next canonical ACIP record, after its full English.
+ following=parsed[i+1]['acip'];end=decoded.index(following,eng_start)
+ block=original[start:end]
+ out=E/('physical-C05-%s.block.txt'%seq);out.write_bytes(block)
+ physical.append({'seq':seq,'original_file':R.PIN['source_pins']['physical']['path'],'original_file_sha256':sha(original),'byte_range':[start,end],'line_start_one_based':original[:start].count(b'\n')+1,'line_end_one_based':original[:end].count(b'\n')+1,'block_file':out.name,'block_bytes':len(block),'block_sha256':sha(block),'canonical_parse_index_zero_based':i,'canonical_parse_total_records':len(parsed),'complete_parsed_original_record':p,'all_three_fields_equal_spine':True,'encoding_note':'Full source bytes preserved; latin-1 is a reversible byte-offset view only. Canonical parse_aligned uses its unchanged UTF-8 errors=replace behavior. These selected blocks are ASCII.'})
+write(E/'physical-selected-verification.json',physical)
+register=json.loads((E/'governance/docs/errata_register.json').read_text())
+needles=['sizzle','C05:301','C05:302','C05:303','following section','heading','1,500','converter','row-boundary']
+checks=[]
+for n in needles:
+ matches=[r for r in register if n.casefold() in json.dumps(r,ensure_ascii=False).casefold()]
+ checks.append({'query':'case-insensitive substring anywhere in complete serialized original record','needle':n,'count':len(matches),'records':matches})
+write(E/'errata-register-checks.json',checks)
+write(E/'errata-observations.json',{
+ '301':{'new_errata':0,'finding':'No demonstrated new local textual defect. Source contains normal debate recasts; complete original source and corpus parallels match.'},
+ '302':{'new_errata':0,'found_verbatim':'as the sizzle in his throat and stomach','possible_editorial_reading':'as they sizzle in his throat and stomach','status':'PROBABLE editorial typo observation, not a filed erratum and not replacement GMR text','grounds':{'local_source':'Exact found string in C05:302 English and original C05 physical block; ACIP source has LTO BA DANG MGRIN PA LA SOGS PA \'TSIG PA.','grammar':'The surrounding they perform / he drinks sequence makes they sizzle plausible. The text as printed lacks an ordinary finite clause following as the.','parallel_check':'C15:447 ACIP/Wylie/English equal C05:302. P7:41 repeats the found string but differs in Tibetan punctuation and yi dwags and English em dashes; it is not a full-text-identical row. C05:305/C15:450/P7:44 have ordinary pus and blood sizzle. Full records retained.','lexical':'Master glossary-attested \'tshig pa has hgm_gloss sizzle. Other bare-verb automatic entries are not used to justify a correction.','registered_classes':'No sizzle or C05:302 record in the 192-record pinned register. This phrase is not the heading, cap, converter or boundary class.'},'limits':'The shared wording is an existing textual reading. Text identity cannot prove independent publication, and no ingestion-lineage claim is made. The probable editorial reading remains unbanked and no source change is proposed for landing by this angle.'},
+ '303':{'new_errata':0,'finding':'No demonstrated new textual defect. Full source plus C15:448 parallel checked; predicate restatements and imagination recasts are translation choices.'}})
+for seq,r in selected.items():
+ d=P/str(seq);v=json.loads((d/'verification.json').read_text());s=json.loads((d/'spec.json').read_text())['segments'][0]
+ coverage={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  intervals=[a['actual_'+side+'_range'] for a in v['per_span'] if a['actual_'+side+'_range'] is not None]
+  merged=[]
+  for lo,hi in sorted(intervals):
+   if merged and lo<=merged[-1][1]:merged[-1][1]=max(hi,merged[-1][1])
+   else:merged.append([lo,hi])
+  gaps=[];cursor=0
+  for lo,hi in merged:
+   if cursor<lo:gaps.append({'range':[cursor,lo],'text':r[field][cursor:lo]})
+   cursor=hi
+  if cursor<len(r[field]):gaps.append({'range':[cursor,len(r[field])],'text':r[field][cursor:]})
+  coverage[side]={'source_characters':len(r[field]),'selected_union_ranges':merged,'unselected_exact_gaps':gaps,'selected_characters':sum(b-a for a,b in merged),'omission_reason_reference':'omissions.json; punctuation, whitespace and routine inflectional joins remain verbatim without standalone claims'}
+ write(d/'coverage-and-omissions.json',coverage)
+ # A read-only private corpus of exactly these generated proposal bodies lets unchanged gates
+ # inspect every local proposal without consuming concurrently changing registered pages.
+ pages=P/'validation-runtime/data/alignment/pages_c05';pages.mkdir(parents=True,exist_ok=True)
+ (pages/('proposal-%d.html'%seq)).write_bytes((d/'body.html').read_bytes())
+(P/'validation-runtime/data/alignment/span_head_allow.json').write_bytes((E/'governance/data/alignment/span_head_allow.json').read_bytes())
+gate_log=[]
+for name in ['test_no_broken_words.py','test_no_split_syllables.py','test_no_degenerate_members.py','test_no_supplied_span_head.py']:
+ args=[sys.executable,str(P/'validation-runtime/tools'/name)]
+ r=subprocess.run(args,cwd=R.W,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (E/'native'/(name+'.stdout')).write_bytes(r.stdout);(E/'native'/(name+'.stderr')).write_bytes(r.stderr)
+ gate_log.append({'command':args,'cwd':str(R.W),'environment':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'stdout_file':'native/'+name+'.stdout','stderr_file':'native/'+name+'.stderr','scope':'Three exact proposal bodies only; unchanged tool bytes from pinned Git object; original pinned span-head allowance.'})
+ print(name,'EXIT='+str(r.returncode),r.stdout.decode().strip(),r.stderr.decode().strip())
+ assert r.returncode==0 and not r.stderr
+write(E/'gate-runs.json',gate_log)
+provenance={'producer':'Codex, Tibetan-first independent proposal','origin_commit':R.COMMIT,'origin_boundary':294,'root_may_advance_other_pages':True,'native_files':'All native generator attempts, exact input/output/error/exit are in each segment attempts/; evidence/native preserves helper attempts including a failed UTF-8 view of the physical source.','failed_discovery':'At initial workspace root cat AGENTS.md returned cat: AGENTS.md: No such file or directory; the combined tool command exited 0 after its final successful baseline cat. Correct governing file was then read from the immutable worktree Git object. The original tool transcript preserves this discovery output.','historical_dependency':'An early display of the live builder first 180 lines was exploratory only; it was not used as the runtime dependency. The full byte-exact historical builder is preserved and loaded from the specified Git object.','no_false_provenance':'Only fields actually compared are described as equal. C15/P7 course identity and textual matches do not prove independent publication or reingestion.','source_roles':'Original spine/raw/gzip corpus/physical course are attestation evidence. HGM master full entries retain their tiers/provenance. Comparative glosses never supply GMR English.','omissions':'Complete unselected source ranges and explicit semantic reasons preserved; uncertainty is not replaced by null.','mechanical_limits':'Local generator and four private-scope fidelity gates do not prove correspondence, course coverage, semantic acceptance, or landing. No repository, source, other-angle or glossary writes.'}
+write(E/'provenance-and-attempts.json',provenance)
+pins={}
+for k,pin in R.PIN['source_pins'].items():
+ data=Path(pin['path']).read_bytes();pins[k]={'bytes':len(data),'sha256':sha(data),'matches_original':len(data)==pin['bytes'] and sha(data)==pin['sha256']};assert pins[k]['matches_original']
+write(E/'final-source-pin-checks.json',pins)
+print('All original source pins still match; physical complete records and targeted fidelity gates verified.')

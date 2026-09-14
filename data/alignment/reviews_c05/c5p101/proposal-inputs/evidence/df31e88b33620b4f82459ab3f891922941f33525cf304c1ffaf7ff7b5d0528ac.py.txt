@@ -1,0 +1,37 @@
+import gzip, hashlib, json, os, pathlib, sqlite3, subprocess
+from capture import BASE,capture
+W=BASE.parents[2]/'campaign-worktree'
+PIN='ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'
+baseline=json.loads((BASE.parent/'proposal-baseline.json').read_text())
+for name,pin in baseline['governing_git_pins'].items():
+    r=capture('git-v2-'+name.replace('/','_'),['git','show',PIN+':'+name],cwd=W)
+    assert r.returncode==0 and not r.stderr
+    assert hashlib.sha256(r.stdout).hexdigest()==pin['sha256']
+    if name=='data/alignment/C05_CAMPAIGN.md':
+        s=r.stdout.decode();a=s.index('## Course shape');b=s.find('\n## ',a+1)
+        (BASE/'evidence/course-shape.md').write_text(s[a:b if b!=-1 else None])
+    elif name not in ['docs/errata_register.json','data/alignment/span_head_allow.json']:
+        p=BASE/'evidence/pinned'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(r.stdout)
+pins={}
+for k,v in baseline['source_pins'].items():
+    p=pathlib.Path(v['path']);data=p.read_bytes();h=hashlib.sha256(data).hexdigest()
+    assert h==v['sha256'] and len(data)==v['bytes'],k
+    pins[k]={'path':str(p),'bytes':len(data),'sha256':h}
+(BASE/'evidence/source-pins.json').write_text(json.dumps(pins,indent=2)+'\n')
+db=sqlite3.connect(pathlib.Path(pins['spine']['path']).as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+schemas=[dict(r) for r in db.execute("SELECT name,sql FROM sqlite_master WHERE type='table'")]
+(BASE/'evidence/spine-schema.json').write_text(json.dumps(schemas,indent=2)+'\n')
+rows=[dict(r) for r in db.execute('SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',('C05',289,315))]
+(BASE/'evidence/original-local-rows.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+checks=[]
+for name in ['source','context']:
+    for snap in json.loads((BASE.parent/(name+'.json')).read_text()):
+        row=next(r for r in rows if r['seq']==snap['seq'])
+        matched={k:row[k]==snap[k] for k in ['id','course','seq','acip','wylie','english']};assert all(matched.values())
+        checks.append({'snapshot':name,'id':row['id'],'seq':row['seq'],'fields':matched})
+(BASE/'evidence/snapshot-checks.json').write_text(json.dumps(checks,indent=2)+'\n')
+for kind in ['master','corpus']:
+    d=json.loads(gzip.open(pins[kind]['path'],'rt').read())
+    desc={'kind':kind,'type':type(d).__name__,'length':len(d),'keys':list(d)[:20] if isinstance(d,dict) else None,'first':d[0] if isinstance(d,list) else {k:(v[:1] if isinstance(v,list) else str(v)[:1000]) for k,v in list(d.items())[:4]}}
+    (BASE/'evidence'/('shape-'+kind+'.json')).write_text(json.dumps(desc,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'verified_source_pins':len(pins),'snapshot_records':len(checks),'local_rows':len(rows)}))

@@ -1,0 +1,51 @@
+import json,os,sys,subprocess,hashlib,copy,re,runpy
+from pathlib import Path
+import canonical_runtime as R
+P=Path(__file__).resolve().parent
+def sha(data):return hashlib.sha256(data).hexdigest()
+def desc(path):
+ data=path.read_bytes();return {'bytes':len(data),'sha256':sha(data)}
+def write(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+H,B=R.bootstrap()
+G=runpy.run_path(str(R.W/'tools/gen_alignment_page.py'),run_name='canonical_generator_for_range_proof')
+rows={r['seq']:r for r in json.loads((P/'evidence/spine-records.json').read_text()).values() if r['course']=='C05'}
+for seq in [301,302,303]:
+ d=P/str(seq);attempt=d/'attempts'/('attempt-%02d'%(len(list((d/'attempts').glob('attempt-*')))+1) if (d/'attempts').exists() else 'attempt-01');attempt.mkdir(parents=True)
+ for name in ['spec.json','intended-ranges.json','omissions.json','errata.json']:(attempt/name).write_bytes((d/name).read_bytes())
+ args=[sys.executable,str(P/'canonical_runtime.py')]
+ native=subprocess.run(args,input=(d/'spec.json').read_bytes(),cwd=R.W,capture_output=True,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (attempt/'stdout.html').write_bytes(native.stdout);(attempt/'stderr.txt').write_bytes(native.stderr)
+ invocation={'command':args,'cwd':str(R.W),'stdin':'spec.json','environment':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':native.returncode,'stdout':desc(attempt/'stdout.html'),'stderr':desc(attempt/'stderr.txt'),'original_generator':str(R.W/'tools/gen_alignment_page.py'),'original_generator_sha256':desc(R.W/'tools/gen_alignment_page.py')['sha256'],'immutable_builder_origin':R.COMMIT+':tools/build_alignment_layer.py','immutable_conversion_origin':R.COMMIT+':engines/hgm_tools.py','scope':'Canonical unchanged main() execution; full builder dependency loaded from immutable original bytes. sqlite3 connection opening forced to URI mode=ro. No resolution/emission logic substituted.'}
+ write(attempt/'invocation.json',invocation)
+ print(seq,'GENERATOR EXIT='+str(native.returncode),'STDOUT_BYTES='+str(len(native.stdout)),'STDERR_BYTES='+str(len(native.stderr)),flush=True)
+ if native.returncode or native.stderr:print(native.stderr.decode());continue
+ (d/'body.html').write_bytes(native.stdout);(d/'generator.stdout.html').write_bytes(native.stdout);(d/'generator.stderr.txt').write_bytes(native.stderr);write(d/'generator-run.json',invocation)
+ spec=json.loads((d/'spec.json').read_text());s=spec['segments'][0];sp=s['spans'];r=rows[seq]
+ tr=G['resolve'](r['wylie'],sp,'tib',seq)
+ eo=G['with_members'](sp,[next(x for x in sp if x['id']==i) for i in s['eng_order']],r['english'])
+ er=G['resolve'](r['english'],eo,'eng',seq)
+ intended=json.loads((d/'intended-ranges.json').read_text())['ranges'];per_span=[]
+ assert H.acip_to_ewts(r['acip'])==r['wylie']
+ for a in sp:
+  key=a['id'];t=list(tr[key]);e=list(er[key]) if key in er else None
+  assert t==intended[key]['tib'],(seq,key,'tib',t,intended[key])
+  assert e==intended[key]['eng'],(seq,key,'eng',e,intended[key])
+  assert r['wylie'][slice(*t)]==a['tib']
+  if e:assert r['english'][slice(*e)]==a['eng']
+  acip=B.acip_span(r['acip'],r['wylie'],a['tib']);assert acip and H.acip_to_ewts(acip)==a['tib'],(seq,key,acip)
+  per_span.append({'id':key,'depth':a['d'],'tib':a['tib'],'eng':a['eng'],'actual_tib_range':t,'actual_eng_range':e,'matches_independently_selected_range':True,'canonical_acip_substring':acip,'acip_roundtrip':True,'tib_occurrences':[m.start() for m in re.finditer(re.escape(a['tib']),r['wylie'])],'eng_occurrences':[] if a['eng'] is None else [m.start() for m in re.finditer(re.escape(a['eng']),r['english'])]})
+ doc=native.stdout.decode()
+ tib=dict((lab,(dep,txt)) for dep,lab,txt in B.spans_of(doc,'tib'));eng=dict((lab,(dep,txt)) for dep,lab,txt in B.spans_of(doc,'eng'))
+ assert tib['s%dS'%seq][1]==r['wylie'];assert eng['s%dS'%seq][1]==r['english']
+ for a in sp:
+  lab='s%d%s'%(seq,a['id']);assert tib[lab]==(a['d'],a['tib']);assert eng[lab]==(a['d'],a['eng'] or '')
+ assert len(tib)==len(sp)+1 and len(eng)==len(sp)+1
+ assert not any(a['eng'] and a['d'] in [5,7] and re.match(r'(?i)(the|a|an|and|or|his|our|your|i|you)\b',a['eng']) for a in sp)
+ # Independent plain-text extraction additionally checks raw source whitespace, not normalization.
+ for side,text in [('tib',r['wylie']),('eng',r['english'])]:
+  block=doc.split('<div class="'+side+'">',1)[1].split('</div>',1)[1].split('\n</div>',1)[0]
+  block=re.sub(r'<span class="nul">.*?</span>','',block,flags=re.S)
+  recovered=B.strip_tags(block).strip('\n');assert recovered==text,(seq,side,repr(recovered))
+ summary={'generator':invocation,'source_id':r['id'],'source_fields':{k:{'characters':len(r[k]),'utf8_bytes':len(r[k].encode()),'sha256':sha(r[k].encode())} for k in ['acip','wylie','english']},'counts':{'spec_spans':len(sp),'nulls':sum(a['eng'] is None for a in sp),'depth5':sum(a['d']==5 for a in sp),'depth7':sum(a['d']==7 for a in sp),'by_depth':{str(dep):sum(a['d']==dep for a in sp) for dep in range(1,8)},'builder_tib_spans_including_sentence':len(tib),'builder_eng_spans_including_sentence':len(eng)},'proofs':{'full_acip_to_wylie':True,'all_intended_ranges_exact':True,'all_span_acip_roundtrips':True,'builder_sees_every_span':True,'full_tibetan_verbatim':True,'full_english_verbatim':True,'raw_whitespace_verbatim':True,'zero_supplied_d5_d7_heads':True,'semantic_correspondence_proved_by_mechanics':False},'files':{name:desc(d/name) for name in ['spec.json','body.html','generator.stdout.html','generator.stderr.txt','intended-ranges.json','omissions.json','errata.json']},'per_span':per_span}
+ write(d/'verification.json',summary);write(attempt/'verification.json',summary)
+ print(seq,'EXACT RANGE/BODY/PARSER/ACIP CHECKS PASS',json.dumps(summary['counts']),flush=True)

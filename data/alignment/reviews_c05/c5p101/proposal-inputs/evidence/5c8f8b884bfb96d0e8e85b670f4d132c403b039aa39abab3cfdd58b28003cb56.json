@@ -1,0 +1,83 @@
+{
+  "role": "Codex independent Tibetan-first original proposals C05:301–303",
+  "source_origin_commit": "ce646d0c48f9338ff47e40f46582ad14c8a3eaf4",
+  "source_origin_boundary": 294,
+  "mapping": {
+    "301": {
+      "final_directory": "301",
+      "complete_source_row_id": "1683",
+      "snapshot_fields_checked": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "source_rows": "evidence/spine-records.json",
+      "original_corpus_records": "evidence/original-corpus-records.json",
+      "original_physical_block": "evidence/physical-C05-301.block.txt",
+      "complete_physical_source": "evidence/C05ReadingASCII.original.txt",
+      "physical_parse_and_ranges": "evidence/physical-selected-verification.json",
+      "master_lexical_records": "evidence/lexical-evidence.json",
+      "query_inputs_counts_and_all_hits": "evidence/corpus-queries.json",
+      "registered_errata_checks": "evidence/errata-register-checks.json",
+      "errata_observation": "evidence/errata-observations.json",
+      "exact_intended_and_resolved_ranges": "301/verification.json"
+    },
+    "302": {
+      "final_directory": "302",
+      "complete_source_row_id": "1684",
+      "snapshot_fields_checked": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "source_rows": "evidence/spine-records.json",
+      "original_corpus_records": "evidence/original-corpus-records.json",
+      "original_physical_block": "evidence/physical-C05-302.block.txt",
+      "complete_physical_source": "evidence/C05ReadingASCII.original.txt",
+      "physical_parse_and_ranges": "evidence/physical-selected-verification.json",
+      "master_lexical_records": "evidence/lexical-evidence.json",
+      "query_inputs_counts_and_all_hits": "evidence/corpus-queries.json",
+      "registered_errata_checks": "evidence/errata-register-checks.json",
+      "errata_observation": "evidence/errata-observations.json",
+      "exact_intended_and_resolved_ranges": "302/verification.json"
+    },
+    "303": {
+      "final_directory": "303",
+      "complete_source_row_id": "1685",
+      "snapshot_fields_checked": [
+        "id",
+        "course",
+        "seq",
+        "acip",
+        "wylie",
+        "english"
+      ],
+      "source_rows": "evidence/spine-records.json",
+      "original_corpus_records": "evidence/original-corpus-records.json",
+      "original_physical_block": "evidence/physical-C05-303.block.txt",
+      "complete_physical_source": "evidence/C05ReadingASCII.original.txt",
+      "physical_parse_and_ranges": "evidence/physical-selected-verification.json",
+      "master_lexical_records": "evidence/lexical-evidence.json",
+      "query_inputs_counts_and_all_hits": "evidence/corpus-queries.json",
+      "registered_errata_checks": "evidence/errata-register-checks.json",
+      "errata_observation": "evidence/errata-observations.json",
+      "exact_intended_and_resolved_ranges": "303/verification.json"
+    }
+  },
+  "shared_evidence_deduplication": "One exact full spine row per id, including raw. Every query preserves all result row ids; each preserved original gzip row is mapped by original global index and course-local sequence. Identical content across courses is still represented with distinct identities; no independent publication or ingestion lineage is inferred.",
+  "aggregate_counts": {
+    "spec_spans": 99,
+    "nulls": 4,
+    "depth5": 56,
+    "depth7": 10,
+    "proposed_errata": 0
+  },
+  "failed_or_superseded_work": "evidence/native/collection-01.input.py + stdout/stderr/exit preserve UTF-8 decode failure; successful collection-02 changes only the reversible source-byte view. build-inputs-draft-01.py preserves pre-run occurrence-index draft; build-inputs-01.input.py is actual generated-input author. Generator has one successful attempt per segment, no failed generator attempt. Initial discovery failure and exploratory live builder read are disclosed in evidence/provenance-and-attempts.json.",
+  "validation_scope": "Unchanged original generator against original read-only spine with pinned original full builder module; canonical conversion and parser proof; four exact historical gate sources over three exact proposal bodies in validation-runtime only. This is proposal evidence, not course landing or semantic acceptance."
+}

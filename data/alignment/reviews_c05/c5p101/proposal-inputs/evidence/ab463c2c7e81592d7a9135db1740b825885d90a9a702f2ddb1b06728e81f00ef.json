@@ -1,0 +1,36 @@
+{
+  "recorded_at": "2026-09-12T23:13:26.338752+00:00",
+  "initial_capture": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/capture_future_source_batch.py",
+      "301",
+      "303",
+      "campaign-artifacts/C05-301-303/preparation-terms.json"
+    ],
+    "observed_tool_exit": 0,
+    "exec_session_id": 40995,
+    "helper": {
+      "bytes": 5511,
+      "sha256": "259ede33ba954bd0133e9765af48eb03da4f448bac68acdd7a00188c0ee9d285"
+    }
+  },
+  "supplement": {
+    "argv": [
+      "python3",
+      "-B",
+      "campaign-artifacts/C05-301-303/complete-preparation-evidence.py"
+    ],
+    "observed_tool_exit": 0,
+    "exec_session_id": 34213,
+    "helper": {
+      "bytes": 4121,
+      "sha256": "46527f39b658ef4c01995b8cdc598706dc72b8472a84ebeecf45f22c244ad96e"
+    }
+  },
+  "env": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "note": "Actual command results observed; no separate stdout capture or total runtime asserted. Original helper sources and full structured results retained."
+}

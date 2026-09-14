@@ -1,0 +1,75 @@
+import os,sys,json,gzip,hashlib,sqlite3,subprocess,re
+from pathlib import Path
+ROOT=Path(__file__).resolve().parent
+W=ROOT.parents[2]/'campaign-worktree'
+B=json.loads((ROOT.parent/'proposal-baseline.json').read_text())
+E=ROOT/'evidence'
+def save(name,obj):
+ p=E/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+checks={}
+for key,pin in B['source_pins'].items():
+ raw=Path(pin['path']).read_bytes();checks[key]={'bytes':len(raw),'sha256':sha(raw),'matches':len(raw)==pin['bytes'] and sha(raw)==pin['sha256']};assert checks[key]['matches']
+save('source-pin-checks.json',checks)
+governance={}
+for rel,pin in B['governing_git_pins'].items():
+ args=['git','show',pin['original_git_commit']+':'+rel];r=subprocess.run(args,cwd=W,capture_output=True)
+ out=E/'governance'/rel;out.parent.mkdir(parents=True,exist_ok=True);out.write_bytes(r.stdout)
+ (out.parent/(out.name+'.stderr')).write_bytes(r.stderr)
+ governance[rel]={'command':args,'cwd':str(W),'exit':r.returncode,'bytes':len(r.stdout),'sha256':sha(r.stdout),'stderr_bytes':len(r.stderr),'matches':len(r.stdout)==pin['bytes'] and sha(r.stdout)==pin['sha256']}
+ assert r.returncode==0 and not r.stderr and governance[rel]['matches']
+save('governance.json',governance)
+# Original exact records are deduplicated by spine row id; query maps preserve all hits.
+db=sqlite3.connect('file:'+B['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+records={};queries=[]
+def query(name,sql,params):
+ rows=[dict(x) for x in db.execute(sql,params)]
+ queries.append({'name':name,'sql':sql,'params':params,'count':len(rows),'row_ids':[x['id'] for x in rows]})
+ for r in rows:records[str(r['id'])]=r
+ return rows
+context=query('complete argument and context','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',289,314])
+snapchecks=[]
+for name in ['source','context']:
+ for snap in json.loads((ROOT.parent/(name+'.json')).read_text()):
+  row=next(x for x in context if x['seq']==snap['seq'])
+  fields={k:row[k]==snap[k] for k in ['id','course','seq','acip','wylie','english']};assert all(fields.values());snapchecks.append({'snapshot':name,'id':row['id'],'fields':fields})
+save('snapshot-checks.json',snapchecks)
+selected=[r for r in context if r['seq'] in [301,302,303]]
+for r in selected:
+ query('full exact textual parallels '+str(r['seq']),'select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq',[r['acip'],r['wylie'],r['english']])
+ query('wylie parallels '+str(r['seq']),'select * from corpus_segments where wylie=? order by course,seq',[r['wylie']])
+for name,pattern in [('sizzle typo','%as the sizzle%'),('sizzle proper','%sizzle%'),('imagination','%own imagination%'),('burning steel','%burning steel%'),('valid perception real','%valid perception%actual%')]:
+ query(name,'select * from corpus_segments where english like ? order by course,seq',[pattern])
+save('corpus-queries.json',queries);save('spine-records.json',records)
+corpus=json.load(gzip.open(B['source_pins']['corpus']['path'],'rt'))
+seqs={};origin={};corpus_matches={}
+for i,r in enumerate(corpus):
+ c=r['course'];seqs[c]=seqs.get(c,0)+1;origin[(c,seqs[c])]=(i,r)
+for k,r in records.items():
+ i,raw=origin[(r['course'],r['seq'])]
+ fields={f:raw[f]==r[f] for f in ['acip','wylie','english']};assert all(fields.values())
+ assert json.loads(r['raw'])==raw
+ corpus_matches[k]={'original_global_index_zero_based':i,'course_sequence_one_based':r['seq'],'fields_match':fields,'spine_raw_matches_original':True,'original_record':raw}
+save('original-corpus-records.json',corpus_matches)
+terms=['lcags sreg','sreg','gtub','dngos gnas','dngos gnas pa','sdug bsngal','mig shes','tshad ma','tshad mar song ba','rnag khrag','rnag','khrag',"'dod","'dod pa",'dmyal ba','yi dvags','myong','myong ba',"'grub","'grub pa",'longs spyod','longs spyod pa',"'tshig","'tshig pa", "'tshod", "'tshod par byed pa", "'khrud", "'khrud pa",'lto ba','mgrin pa','blos rlom','rlom','rlom pa','rang','rang gi','tsam','mtshungs','mi mtshungs','kho na re',"'byung ba"]
+master=json.load(gzip.open(B['source_pins']['master']['path'],'rt'));lex={}
+for term in terms:
+ matches={}
+ for group in ['unified_entries','curated_entries','glossary_entries']:
+  matches[group]=[{'index_zero_based':i,'record':r} for i,r in enumerate(master[group]) if r.get('wylie')==term or term in r.get('wylie_variants',[])]
+ spine=[dict(r) for r in db.execute('select * from entries where wylie=? or id in (select entry_id from entry_variants where wylie=?)',(term,term))]
+ lex[term]={'method':'exact wylie or variant equality, all results retained','master_matches':matches,'spine_entry_matches':spine}
+save('lexical-evidence.json',lex)
+physical=Path(B['source_pins']['physical']['path']).read_bytes();decoded=physical.decode('utf-8')
+needles=['And suppose you agree that this hell being','Someone might now make the following claim','Someone may respond to this argument','as the sizzle',"'DOD NA, LCAGS SREG"]
+physical_results=[]
+for needle in needles:
+ positions=[m.start() for m in re.finditer(re.escape(needle),decoded)]
+ physical_results.append({'query':needle,'exact_case_sensitive_count':len(positions),'character_offsets':positions})
+# Save complete source unchanged for reproducible layout/line/byte inspection.
+(E/'C05ReadingASCII.original.txt').write_bytes(physical)
+save('physical-searches.json',physical_results)
+summary={term:[x['record'].get('hgm_gloss',x['record'].get('hgm_glosses')) for group in v['master_matches'].values() for x in group] for term,v in lex.items()}
+save('lexical-summary.json',summary)
+save('collection-summary.json',{'corpus_total':len(corpus),'master_unified_count':len(master['unified_entries']),'unique_spine_rows':len(records),'queries':len(queries),'selected_segment_refs':{str(r['seq']):{'spine':f'spine-records.json#/{r["id"]}','original_corpus':f'original-corpus-records.json#/{r["id"]}','lexical':'lexical-evidence.json','physical':'C05ReadingASCII.original.txt'} for r in selected}})
+print(json.dumps({'checks':checks,'summary':summary,'physical':physical_results,'query_counts':[(q['name'],q['count']) for q in queries]},ensure_ascii=False,indent=2))

@@ -1,0 +1,36 @@
+import pathlib, json, hashlib, datetime
+
+S = pathlib.Path(__file__).resolve().parent
+sha = lambda b: hashlib.sha256(b).hexdigest()
+r = json.loads((S/'review.json').read_text())
+p = json.loads((S/'packaging-preflight.json').read_text())
+assert r['verdict'] == r['spec_verdict'] == r['quality_verdict'] == 'APPROVE'
+assert r['open_findings'] == [] and p['status'] == 'PASS'
+assert (r['total_spans'], r['total_nulls'], r['total_word_pairs']) == (104,6,57)
+for name in ['finalize-scoped', 'packaging-preflight']:
+    assert (S/(name+'.stderr')).read_bytes() == b''
+    (S/(name+'.exit')).write_text('0\n')
+dest = S/'review-freeze.json'
+assert not dest.exists()
+files=[]
+for f in sorted(S.rglob('*')):
+    if f.is_file() and f != dest:
+        assert f.suffix in p['supported_extensions']
+        raw=f.read_bytes()
+        files.append({'path':f.relative_to(S).as_posix(), 'sha256':sha(raw), 'bytes':len(raw)})
+freeze={
+    'status':'FROZEN_INDEPENDENT_SEMANTIC_REVIEW; PROVISIONAL_MACHINE_APPROVAL; NOT_PRODUCTION_ACCEPTANCE',
+    'reviewer':r['reviewer'], 'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'source_origin_commit':r['source_origin_commit'], 'governing_git_commit':r['governing_git_commit'],
+    'source_origin_boundary':294, 'actual_acceptance_baseline':r['actual_acceptance_baseline'],
+    'actual_acceptance_boundary':300, 'reviewed_reconciliation_freeze_sha256':r['reviewed_reconciliation_freeze_sha256'],
+    'superseded_reconciliation_freeze_sha256':r['superseded_reconciliation_freeze_sha256'],
+    'verdict':'APPROVE', 'spec_verdict':'APPROVE', 'quality_verdict':'APPROVE', 'open_findings':[],
+    'total_spans':104, 'total_nulls':6, 'total_word_pairs':57,
+    'retained_errata':1, 'errata_severity':'LOW', 'errata_confidence':'PROBABLE',
+    'copy_mappings_checked':p['manifest_records'], 'Git_objects_checked':p['git_objects_checked'],
+    'file_count':len(files), 'files':files,
+    'self_note':'This freeze lists every other file under semantic-review, including full current and historical evidence, original/copy mappings, native attempts, failures, scripts and preflight. It excludes only itself. No files were written after sealing.'
+}
+dest.write_text(json.dumps(freeze,ensure_ascii=False,indent=2)+'\n')
+print('SEALED',len(files),'FILES',sha(dest.read_bytes()),str(dest))

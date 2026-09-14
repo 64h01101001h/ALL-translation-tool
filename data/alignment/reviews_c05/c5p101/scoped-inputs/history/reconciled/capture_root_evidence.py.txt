@@ -1,0 +1,54 @@
+from pathlib import Path
+import json,gzip,hashlib,sqlite3,subprocess,datetime,shutil
+D=Path(__file__).resolve().parent;J=D.parent;W=J.parents[1]/'campaign-worktree';E=D/'evidence';E.mkdir(exist_ok=True)
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def save(p,o):
+ assert not p.exists(),p
+ p.write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+b=json.loads((J/'proposal-baseline.json').read_text());m={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin':b['commit'],'source_pins':{},'git_pins':{},'reused_root_original_generator_evidence':str(J/'proposal-verification/report.json')}
+for k,v in b['source_pins'].items():
+ raw=Path(v['path']).read_bytes();assert len(raw)==v['bytes'] and sha(raw)==v['sha256'];m['source_pins'][k]=v
+for rel,v in b['governing_git_pins'].items():
+ r=subprocess.run(['git','show',v['original_git_commit']+':'+rel],cwd=W,capture_output=True);assert r.returncode==0 and sha(r.stdout)==v['sha256']
+ p=E/'governance'/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(r.stdout);m['git_pins'][rel]={**v,'saved':str(p.relative_to(D))}
+c=sqlite3.connect('file:'+b['source_pins']['spine']['path']+'?mode=ro',uri=True);c.execute('PRAGMA query_only=ON');c.row_factory=sqlite3.Row
+master=json.load(gzip.open(b['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(b['source_pins']['corpus']['path'],'rt'))
+terms=set(x['term'] for x in json.loads((J/'english/evidence/queries.json').read_text()) if x['kind']=='lexical-exact-or-variant')
+terms.update(['la sogs pa','sogs','skyes','skyes pa','med','med par thal','tshad mar','song ba','tshad ma','na re','kho','myong ba',"'tshod pa",'blos rlom pa','rlom pa','de','yin','rang gi'])
+records={};queries=[]
+def put(kind,record,loc):
+ k=kind+':'+sha(json.dumps(record,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());records.setdefault(k,{'kind':kind,'record':record,'locations':[]})
+ if loc not in records[k]['locations']:records[k]['locations'].append(loc)
+ return k
+for term in sorted(terms):
+ refs=[]
+ for sec in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[sec]):
+   if r.get('wylie')==term or term in r.get('wylie_variants',[]):refs.append(put('master',r,{'section':sec,'index':i}))
+ queries.append({'kind':'master_exact_or_variant','term':term,'count':len(refs),'records':refs})
+for name,sql,params in [('local_context','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C05',297,309]),('C15_parallel','select * from corpus_segments where course=? and seq between ? and ? order by seq',['C15',446,448]),('P7_context','select * from corpus_segments where course=? and seq between ? and ? order by seq',['P7',41,43])]+[(s,'select * from corpus_segments where english like ? order by course,seq',['%'+s+'%']) for s in ['as the sizzle','as they sizzle','real actions','his own imagination']]:
+ rows=[dict(r) for r in c.execute(sql,params)];refs=[put('spine',r,{'id':r['id']}) for r in rows];queries.append({'kind':'sql','name':name,'sql':sql,'parameters':params,'count':len(refs),'records':refs})
+source=json.loads((J/'source.json').read_text())
+for r in source:
+ actual=dict(c.execute('select * from corpus_segments where course=? and seq=?',['C05',r['seq']]).fetchone());assert all(actual[k]==v for k,v in r.items())
+target={(v['record']['course'],v['record']['seq']):k for k,v in records.items() if v['kind']=='spine'};seqs={};mapping=[]
+for i,r in enumerate(corpus):
+ course=r['course'];seqs[course]=seqs.get(course,0)+1;k=target.get((course,seqs[course]))
+ if k:
+  assert json.loads(records[k]['record']['raw'])==r
+  cr=put('corpus_original',r,{'index':i,'course':course,'derived_seq':seqs[course]});mapping.append({'spine_ref':k,'corpus_ref':cr,'raw_equal':True})
+physical=Path(b['source_pins']['physical']['path']).read_bytes();physical_checks=[]
+for row in json.loads((J/'english/evidence/three-source-verification.json').read_text()):
+ src=next(x for x in source if x['seq']==row['seq'])
+ for field,v in row['physical'].items():
+  lo,hi=v['byte_range'];raw=physical[lo:hi];assert sha(raw)==v['sha256'] and raw==(J/'english/evidence'/v['evidence_file']).read_bytes()
+  assert ' '.join(raw.decode('ascii').split())==src[field]
+  (E/v['evidence_file']).write_bytes(raw);physical_checks.append({'seq':row['seq'],'field':field,**v})
+(E/'physical-C05-original.bin').write_bytes(physical)
+save(E/'physical-checks.json',physical_checks);save(E/'records.json',records);save(E/'queries.json',queries);save(E/'corpus-map.json',mapping);save(E/'manifest.json',m)
+# Full original records, one per line, to support bounded direct reading without repeated SQL/raw wrappers.
+lines=[]
+for k,v in records.items():
+ if v['kind']=='master':lines.append(json.dumps({'key':k,**v},ensure_ascii=False))
+(E/'master-reading.jsonl').write_text('\n'.join(lines)+'\n')
+print(json.dumps({'source_pins':len(m['source_pins']),'git_pins':len(m['git_pins']),'full_records':len(records),'master_records':len(lines),'queries':len(queries),'physical_fields':len(physical_checks),'source_rows':len(source),'semantic_approval':False}))

@@ -1,0 +1,19 @@
+import collections,gzip,hashlib,json,pathlib
+from capture import BASE
+pins=json.loads((BASE/'evidence/source-pins.json').read_text());corpus=json.loads(gzip.open(pins['corpus']['path'],'rt').read())
+def key(r):return hashlib.sha256(json.dumps(r,ensure_ascii=False,sort_keys=True).encode()).hexdigest()
+index=collections.defaultdict(list);seqs=collections.Counter()
+for i,r in enumerate(corpus):
+    seqs[r['course']]+=1;index[key(r)].append({'source':pins['corpus']['path'],'index0':i,'course':r['course'],'seq_by_course_order':seqs[r['course']]})
+p=BASE/'evidence/records.json';pool=json.loads(p.read_text());results=[]
+for ref,v in list(pool.items()):
+    if v['kind']!='spine-corpus':continue
+    raw=json.loads(v['record']['raw']);kh=key(raw);matches=index[kh];assert matches
+    original_ref='original-corpus-'+kh
+    if original_ref not in pool:pool[original_ref]={'kind':'original-corpus','record':raw,'locators':[]}
+    for loc in matches:
+        if loc not in pool[original_ref]['locators']:pool[original_ref]['locators'].append(loc)
+    results.append({'spine_record_ref':ref,'original_record_ref':original_ref,'raw_object_exact_match':True,'original_indices0':[x['index0'] for x in matches]})
+p.write_text(json.dumps(pool,ensure_ascii=False,indent=2)+'\n')
+(BASE/'evidence/all-witness-original-checks.json').write_text(json.dumps({'original_corpus_records_scanned':len(corpus),'all_material_spine_witnesses_verified':True,'checks':results},indent=2)+'\n')
+print(json.dumps({'verified_material_spine_rows':len(results),'final_distinct_evidence_records':len(pool)}))

@@ -1,0 +1,209 @@
+[
+  {
+    "name": "complete argument and context",
+    "sql": "select * from corpus_segments where course=? and seq between ? and ? order by seq",
+    "params": [
+      "C05",
+      289,
+      314
+    ],
+    "count": 26,
+    "row_ids": [
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696
+    ]
+  },
+  {
+    "name": "full exact textual parallels 301",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "params": [
+      "'DOD NA, LCAGS SREG LA SOGS PAS, DER SKYES PA'I 'GRO BA'I LUS SREG PA DANG , GTUB PA LA SOGS PA DNGOS GNAS PA ZHIG MED PAR THAL, 'DOD PA DE'I PHYIR, 'DOD NA, DMYAL BA'I SDUG BSNGAL MED PAR THAL, 'DOD PA DE'I PHYIR, GZHAN YANG DE LTAR CIG CAR DU BLTAS PA DE'I TSE NA, MI'I MIG SHES TSAD MAR SONG BA'I CHU DNGOS GNAS PA MED PAR THAL, DE'I TSE NA RNAG KHRAG DNGOS GNAS PA MED PA'I PHYIR,",
+      "'dod na, lcags sreg la sogs pas, der skyes pa'i 'gro ba'i lus sreg pa dang , gtub pa la sogs pa dngos gnas pa zhig med par thal, 'dod pa de'i phyir, 'dod na, dmyal ba'i sdug bsngal med par thal, 'dod pa de'i phyir, gzhan yang de ltar cig car du bltas pa de'i tshe na, mi'i mig shes tshad mar song ba'i chu dngos gnas pa med par thal, de'i tshe na rnag khrag dngos gnas pa med pa'i phyir",
+      "And suppose you agree that this hell being could have no valid perceptions of the type we mentioned. Well then, the burning steel and other objects could never perform any real actions: they could never burn the bodies of the people born there, they could never chop them up, and so on. Why? Well because of what you just agreed to. And suppose you agree to this; that they could never perform any real actions. Well then, the torment of the hells itself then must not even exist, by your own admission. And remember too that case where the beings all sit down and look at the same thing. You must be saying then that the actual water, the thing towards which the visual consciousness of the human is a valid perception, doesn't exist at all. Why? Well because, according to you, no actual pus and blood exists either in the same situation."
+    ],
+    "count": 2,
+    "row_ids": [
+      1683,
+      5997
+    ]
+  },
+  {
+    "name": "wylie parallels 301",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "params": [
+      "'dod na, lcags sreg la sogs pas, der skyes pa'i 'gro ba'i lus sreg pa dang , gtub pa la sogs pa dngos gnas pa zhig med par thal, 'dod pa de'i phyir, 'dod na, dmyal ba'i sdug bsngal med par thal, 'dod pa de'i phyir, gzhan yang de ltar cig car du bltas pa de'i tshe na, mi'i mig shes tshad mar song ba'i chu dngos gnas pa med par thal, de'i tshe na rnag khrag dngos gnas pa med pa'i phyir"
+    ],
+    "count": 2,
+    "row_ids": [
+      1683,
+      5997
+    ]
+  },
+  {
+    "name": "full exact textual parallels 302",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "params": [
+      "KHO NA RE, DE'I TSE NA CHU DNGOS GNAS PA YOD DE, CHUS LUS 'KHRUD PA DANG 'TSOD PAR BYED PA MI RANG GIS MYONG BAS 'GRUB PA'I PHYIR ZER NA, 'O NA, DE'I TSE NA, RNAG KHRAG DNGOS GNAS YOD PAR THAL, DE'I TSE NA, RNAG KHRAG LA LONGS SPYOD PA DANG , LTO BA DANG MGRIN PA LA SOGS PA 'TSIG PA YI DVAGS RANG GIS MYONG BAS 'GRUB PA'I PHYIR,",
+      "kho na re, de'i tshe na chu dngos gnas pa yod de, chus lus 'khrud pa dang 'tshod par byed pa mi rang gis myong bas 'grub pa'i phyir zer na, 'o na, de'i tshe na, rnag khrag dngos gnas yod par thal, de'i tshe na, rnag khrag la longs spyod pa dang , lto ba dang mgrin pa la sogs pa 'tshig pa yi dvags rang gis myong bas 'grub pa'i phyir",
+      "Someone might now make the following claim: In this situation, there does exist some real water there. This is because the human can confirm the water with his own experience, as it performs all the functions of water--as he uses it to wash himself, or as he uses it to cook something. Well then, in the same situation there must exist some real pus and blood there as well, because in this same situation the craving spirit can confirm the pus and blood with his own experience as they perform their functions--as he drinks them, and then as the sizzle in his throat and stomach, and so on."
+    ],
+    "count": 2,
+    "row_ids": [
+      1684,
+      5998
+    ]
+  },
+  {
+    "name": "wylie parallels 302",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "params": [
+      "kho na re, de'i tshe na chu dngos gnas pa yod de, chus lus 'khrud pa dang 'tshod par byed pa mi rang gis myong bas 'grub pa'i phyir zer na, 'o na, de'i tshe na, rnag khrag dngos gnas yod par thal, de'i tshe na, rnag khrag la longs spyod pa dang , lto ba dang mgrin pa la sogs pa 'tshig pa yi dvags rang gis myong bas 'grub pa'i phyir"
+    ],
+    "count": 2,
+    "row_ids": [
+      1684,
+      5998
+    ]
+  },
+  {
+    "name": "full exact textual parallels 303",
+    "sql": "select * from corpus_segments where acip=? and wylie=? and english=? order by course,seq",
+    "params": [
+      "BYAS PA LA KHO NA RE, MI MTSUNGS TE, YI DVAGS LA DE LTAR 'BYUNG BA DE, YI DVAGS RANG GI BLOS RLOM PA TZAM YIN PA'I PHYIR, ZER NA, DES NA MI LA YANG DE LTAR 'BYUNG BA MED DE, DE MI RANG GI BLOS RLOM PA TZAM YIN PA'I PHYIR,",
+      "byas pa la kho na re, mi mtshungs te, yi dvags la de ltar 'byung ba de, yi dvags rang gi blos rlom pa tsam yin pa'i phyir, zer na, des na mi la yang de ltar 'byung ba med de, de mi rang gi blos rlom pa tsam yin pa'i phyir",
+      "Someone may respond to this argument with the following claim: The two cases are not the same. When all this happens to the craving spirit, it's nothing more than his own imagination. Well then, what happens to the human can't be happening to him either, because it's nothing more than his imagination."
+    ],
+    "count": 2,
+    "row_ids": [
+      1685,
+      5999
+    ]
+  },
+  {
+    "name": "wylie parallels 303",
+    "sql": "select * from corpus_segments where wylie=? order by course,seq",
+    "params": [
+      "byas pa la kho na re, mi mtshungs te, yi dvags la de ltar 'byung ba de, yi dvags rang gi blos rlom pa tsam yin pa'i phyir, zer na, des na mi la yang de ltar 'byung ba med de, de mi rang gi blos rlom pa tsam yin pa'i phyir"
+    ],
+    "count": 2,
+    "row_ids": [
+      1685,
+      5999
+    ]
+  },
+  {
+    "name": "sizzle typo",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "params": [
+      "%as the sizzle%"
+    ],
+    "count": 3,
+    "row_ids": [
+      1684,
+      5998,
+      34930
+    ]
+  },
+  {
+    "name": "sizzle proper",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "params": [
+      "%sizzle%"
+    ],
+    "count": 6,
+    "row_ids": [
+      1684,
+      1687,
+      5998,
+      6001,
+      34930,
+      34933
+    ]
+  },
+  {
+    "name": "imagination",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "params": [
+      "%own imagination%"
+    ],
+    "count": 8,
+    "row_ids": [
+      1685,
+      1686,
+      1687,
+      5999,
+      6000,
+      6001,
+      29371,
+      34933
+    ]
+  },
+  {
+    "name": "burning steel",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "params": [
+      "%burning steel%"
+    ],
+    "count": 11,
+    "row_ids": [
+      1682,
+      1683,
+      1690,
+      1691,
+      5996,
+      5997,
+      6004,
+      6005,
+      6863,
+      6864,
+      34929
+    ]
+  },
+  {
+    "name": "valid perception real",
+    "sql": "select * from corpus_segments where english like ? order by course,seq",
+    "params": [
+      "%valid perception%actual%"
+    ],
+    "count": 13,
+    "row_ids": [
+      323,
+      496,
+      1676,
+      1682,
+      1683,
+      1689,
+      5990,
+      5996,
+      5997,
+      6003,
+      34924,
+      34929,
+      34935
+    ]
+  }
+]

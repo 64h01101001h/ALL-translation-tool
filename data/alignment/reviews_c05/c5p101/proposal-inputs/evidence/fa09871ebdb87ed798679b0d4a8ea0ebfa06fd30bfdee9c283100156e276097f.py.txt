@@ -1,0 +1,50 @@
+import datetime,hashlib,json,pathlib,re,shutil
+from capture import BASE
+def h(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+pins=json.loads((BASE/'evidence/source-pins.json').read_text());post={}
+for k,v in pins.items():
+    p=pathlib.Path(v['path']);actual=h(p);assert actual==v['sha256'];post[k]={'path':str(p),'sha256':actual,'unchanged':True}
+(BASE/'evidence/final-source-checks.json').write_text(json.dumps(post,indent=2)+'\n')
+for name in ['proposal-baseline.json','english-brief.md']:
+    shutil.copy2(BASE.parent/name,BASE/'evidence'/name)
+shutil.copy2(BASE.parents[1]/'proposal-protocol.md',BASE/'evidence/proposal-protocol.md')
+launch=BASE/'calls/git-AGENTS.md'
+(launch/'launch-failure.json').write_text(json.dumps({'status':'not launched','exit':None,'reason':'Incorrect cwd campaign-artifacts/campaign-worktree did not exist. Parent prepare native process exited 1; complete traceback in ../prepare/stderr.bin. No child stdout, stderr or native exit existed.','parent_call':'../prepare'},indent=2)+'\n')
+details={
+301:['Challenge first: dngos gnas pa → real marks the first actions qualifier only; the duplicate English restatement stays unwrapped.','Concession/reason occurrences, visual-consciousness members and final temporal phrase are fixed by the saved intended ranges.','Omitted the distributed negative-existence conclusions and expanded shared-looking scenario; gtub pa owns only chop, leaving supplied them and discontinuous up unwrapped.','Errata 0: full original row, C15:446 three-field identity and physical source agree; no apparatus or 1500-character cap.'],
+302:['Challenge first: longs spyod pa → drinks is contextual consumption, supported by the local liquid argument and original glossary eat or drink.','Both gis are affirmative no-separate-exponent nulls: active-subject syntax carries the ergative role. Confirm/experience/own and the three temporal frames retain their exact intended occurrences.','Omitted chus/lus/byed pa because water/body/function wording is redistributed; source typo remains byte-exact.','Errata 1, LOW/PROBABLE: as the sizzle → as they sizzle; physical line3015, C15:447 and P7:41 preserve the transmitted typo, with no corrected corpus witness. P7 has full English scope with dash differences; identity does not prove publication or ingestion lineage.'],
+303:['Challenge first: med → n\'t is the negative existential word at d5 in the recast happening predicate; the auxiliary remains unwrapped.','The second byung ba is marked once at happening; earlier what happens is a duplicated English recast. The repeated spirit/human possessive phrases map to his own / his, at d3.','Omitted blos and distributed copular, reporting and demonstrative content; rlom pa → imagination and tsam → nothing more than each occur twice.','Errata 0: C15:448 matches all three text fields, and physical source preserves the full row; incomplete P7:42 supports only its quoted extent.']}
+totals={'spans':0,'d5':0,'nulls':0,'errata':0};files={}
+for seq in [301,302,303]:
+    p=BASE/str(seq);v=json.loads((p/'verification.json').read_text());assert v['all_intended_ranges_match'] and v['full_plain_source_equality']
+    e=json.loads((p/'errata.json').read_text());spec=json.loads((p/'spec.json').read_text());s=spec['segments'][0]
+    assert len(spec['segments'])==1 and s['seq']==seq and len(s['spans'])==v['span_count']
+    assert sum(x['d']==5 for x in s['spans'])==v['d5_count']
+    call=f'{seq}-canonical-'+('04' if seq==303 else '02');native=BASE/'calls'/call
+    assert (p/'spec.json').read_bytes()==(native/'stdin.bin').read_bytes()
+    assert (p/'body.html').read_bytes()==(native/'stdout.bin').read_bytes()
+    assert (native/'stderr.bin').read_bytes()==b'' and (native/'exit.txt').read_text()=='0\n'
+    for key,col in [('spans','span_count'),('d5','d5_count'),('nulls','null_count')]:totals[key]+=v[col]
+    totals['errata']+=len(e)
+    filehashes={name:{'bytes':(p/name).stat().st_size,'sha256':h(p/name)} for name in ['spec.json','body.html','decisions.json','errata.json','verification.json']}
+    (p/'hashes.json').write_text(json.dumps(filehashes,indent=2)+'\n')
+    report=[f'C05:{seq} — independent English-first proposal by Codex; PROVISIONAL machine correspondence, no semantic approval.',*details[seq],f'Counts: {v["span_count"]} explicit spans; d5 {v["d5_count"]}; nulls {v["null_count"]}; errata {len(e)}.',f'Native canonical result: EXIT=0; stderr=0 bytes; body={v["body_bytes"]} bytes. Saved exact stdout: ../calls/{call}/stdout.bin; command/input/error/exit preserved alongside.',f'Body SHA256 {h(p/"body.html")}; spec SHA256 {h(p/"spec.json")}.',f'Actual emitted source is byte-exact after markup removal; all {v["span_count"]} intended occurrence ranges match (verification.json). Full file hashes: hashes.json.',f'Per-span reasons, ranges and exact original record references: decisions.json. Full shared originals: ../evidence/records.json (SHA256 {h(BASE/"evidence/records.json")}), with queries.json and three-source-verification.json.',f'Source origin: ce646d0c48f9338ff47e40f46582ad14c8a3eaf4 through294. Unchanged live canonical generator uses pinned historical builder plus SQLite URI mode=ro (../helpers/canonical.py); no registry mutation hold.',f'All failed/superseded attempts preserved in attempts/ and ../calls/; shared evidence/provenance details in ../README.md. Final proof boundary: ../freeze/manifest.json.']
+    (p/'report.md').write_text('\n'.join(report)+'\n');files[str(seq)]=filehashes
+summary={'producer':'Codex','angle':'English-first','source_origin':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4 through294','totals':totals,'segments':files,'records_sha256':h(BASE/'evidence/records.json'),'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+(BASE/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+readme='''Independent English-first C05:301–303 proposals by Codex. Source origin is the explicitly authorized ce646d0c48f9338ff47e40f46582ad14c8a3eaf4 through294 snapshot. This does not claim later acceptance or semantic approval.
+
+Read each segment report and decisions.json first. Each spec has exactly one segment. hashes.json records measured file hashes; verification.json compares actual HTML-extracted occurrence ranges with separately authored intended ranges and proves both complete text fields survive verbatim.
+
+The shared source/evidence pool records.json stores complete material original master entries (including tier/evidence/reference fields), full original spine rows/raw, and original gzip-corpus objects with exact original indices. queries.json maps exact SQL/parameters/counts and lexical collection searches to pool references. Source/context six-field snapshot equality covers 18 records; original-local-rows.json provides complete source-query output for C05:289–315. Physical source context is lines2892–3138, decoded Latin-1 solely as a reversible byte transport, not an encoding or publication claim. The six physical-SEQ-FIELD.bin files preserve exact selected source bytes and source byte offsets, line ranges and whitespace-only comparisons in three-source-verification.json. These mechanical normalizations never alter spec/spine text. No HGM gloss was changed; comparative gloss fields are evidence only.
+
+The canonical adapter checks the live generator hash, imports the byte-identical historical builder object using its original source location, and forces the spine connection to SQLite URI mode=ro. It executes the actual unchanged worktree tools/gen_alignment_page.py. It changes neither matching rules nor gates. The live builder registry may advance concurrently; historical source dependency is deliberate. Its hgm_tools import is verified equal to the same Git origin. Native commands, stdin, stdout, stderr, exit, sizes and hashes are in calls/. Final calls are 301-canonical-02, 302-canonical-02, and 303-canonical-04. All native generator exits were 0; a local HTML verification helper initially mishandled the label div before the Tibetan span and failed, then was corrected without changing generated text.
+
+Preserved failures: prepare had a wrong cwd and never launched its first nested git child; evidence initially attempted UTF-8 on a non-UTF-8 physical source; generate-verify initially failed its own HTML-parser assertion. Each native parent stdout/stderr/exit and failed helper is preserved. Superseded original proposals remain in each attempts/00-authored; 302/303 attempts/03-prefinal retain prefinal metadata/errata/depth decisions. The final revision corrects P7:41 witness description (full scope, dash variants) and treats med as a d5 lexical negative existential. It does not alter source wording.
+
+Provisional erratum C05:302 is LOW/PROBABLE. Exact C15:447 text-field identity, P7:41 variant text and physical spelling establish transmission only. No independent corrected witness, authorial intention, or ingestion lineage is proved. P7:42/43 are incomplete and cannot substantiate their missing imagination continuations. No following selection heading occurs in these three rows; the known heading class remains apparatus in contextual sources. Historical E-071/E-107 and following-heading class evidence was checked; no duplicate erratum is proposed.
+
+The final freeze manifest covers every file existing before freezing, including helpers, exact command captures and superseded attempts. No file covered by that boundary may be edited without a new explicit superseding boundary. Source files, repository files, accounts and external systems were never mutated by this role.
+'''
+(BASE/'README.md').write_text(readme)
+print(json.dumps(totals))

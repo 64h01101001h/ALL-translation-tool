@@ -1,0 +1,20 @@
+"""Run unchanged live canonical generator, importing exact historical builder.
+Only connection configuration changes: force SQLite URI mode=ro. No rule changes.
+"""
+import hashlib, pathlib, runpy, sqlite3, sys, types
+BASE=pathlib.Path(__file__).resolve().parents[1]
+W=BASE.parents[2]/'campaign-worktree'
+PINNED=BASE/'evidence/pinned/tools'
+generator=W/'tools/gen_alignment_page.py'
+assert hashlib.sha256(generator.read_bytes()).hexdigest()=='7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e'
+builder=PINNED/'build_alignment_layer.py'
+assert hashlib.sha256(builder.read_bytes()).hexdigest()=='9b48b4a62ed77a4804d095ce303d054bf9d43786a2b7f30f106b3f98e9ea0b1f'
+mod=types.ModuleType('build_alignment_layer');mod.__file__=str(W/'tools/build_alignment_layer.py')
+sys.modules['build_alignment_layer']=mod
+exec(compile(builder.read_bytes(),mod.__file__,'exec'),mod.__dict__)
+connect=sqlite3.connect
+def readonly(database,*args,**kwargs):
+    assert pathlib.Path(database).resolve()==(W/'build/hgm_spine_v27_2.db').resolve()
+    return connect(pathlib.Path(database).as_uri()+'?mode=ro',*args,uri=True,**kwargs)
+sqlite3.connect=readonly
+if __name__=='__main__':runpy.run_path(str(generator),run_name='__main__')

@@ -1,0 +1,44 @@
+import collections,hashlib,json,pathlib,shutil,sys
+from html.parser import HTMLParser
+from capture import BASE,capture
+class Page(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True);self.side=None;self.started=False;self.level=0;self.stack=[];self.sides={s:[] for s in ['tib','eng']};self.ranges={s:{} for s in self.sides};self.skip=0
+    def handle_starttag(self,tag,attrs):
+        a=dict(attrs)
+        if tag=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+        if tag=='span' and self.side:
+            if a.get('class')=='nul':self.skip+=1;self.stack.append(('nul',None,None));return
+            label=a.get('data-l')
+            if a.get('data-d')=='1':self.started=True
+            self.stack.append((label,len(''.join(self.sides[self.side])),self.side))
+    def handle_data(self,s):
+        if self.side and self.started and not self.skip:self.sides[self.side].append(s)
+    def handle_endtag(self,tag):
+        if tag=='span' and self.stack:
+            lab,start,side=self.stack.pop()
+            if lab=='nul':self.skip-=1;return
+            if lab:self.ranges[side][lab]=[start,len(''.join(self.sides[side]))]
+            if not self.stack:self.started=False
+        elif tag=='div' and not self.started:self.side=None
+rows=json.loads((BASE/'evidence/original-local-rows.json').read_text())
+for seq in [301,302,303]:
+    p=BASE/str(seq);attempt=p/'attempts/01-canonical';attempt.mkdir(parents=True,exist_ok=False)
+    for name in ['spec.json','decisions.json','errata.json']:shutil.copy2(p/name,attempt/name)
+    shutil.copy2(BASE/'helpers/canonical.py',attempt/'canonical.py')
+    r=capture(str(seq)+'-canonical-01',[sys.executable,str(BASE/'helpers/canonical.py')],(p/'spec.json').read_bytes(),BASE.parents[2]/'campaign-worktree')
+    (attempt/'stdout.bin').write_bytes(r.stdout);(attempt/'stderr.bin').write_bytes(r.stderr);(attempt/'exit.txt').write_text(str(r.returncode)+'\n')
+    if r.returncode or r.stderr:print(seq,'GENERATOR_FAILED',r.returncode,r.stderr.decode());continue
+    (p/'body.html').write_bytes(r.stdout)
+    parser=Page();parser.feed(r.stdout.decode());row=next(x for x in rows if x['seq']==seq)
+    assert ''.join(parser.sides['tib'])==row['wylie'],(seq,'tib plain')
+    assert ''.join(parser.sides['eng'])==row['english'],(seq,'eng plain')
+    decisions=json.loads((p/'decisions.json').read_text());checks=[]
+    for d in decisions['spans']:
+        label='s'+str(seq)+d['id'];actual_t=parser.ranges['tib'][label];actual_e=parser.ranges['eng'][label] if d['eng'] is not None else None
+        checks.append({'id':d['id'],'tib_intended':d['tib_range'],'tib_actual':actual_t,'eng_intended':d['eng_range'],'eng_actual':actual_e,'pass':actual_t==d['tib_range'] and actual_e==d['eng_range']})
+    result={'seq':seq,'generator_exit':r.returncode,'stderr_bytes':len(r.stderr),'body_bytes':len(r.stdout),'body_sha256':hashlib.sha256(r.stdout).hexdigest(),'span_count':len(checks),'d5_count':sum(d['d']==5 for d in decisions['spans']),'null_count':sum(d['eng'] is None for d in decisions['spans']),'full_plain_source_equality':True,'all_intended_ranges_match':all(x['pass'] for x in checks),'ranges':checks}
+    (p/'verification.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(seq,json.dumps({k:v for k,v in result.items() if k!='ranges'}))
+    for c in checks:
+        if not c['pass']:print('MISMATCH',c)

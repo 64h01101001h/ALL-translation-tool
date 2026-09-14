@@ -1,0 +1,19 @@
+import hashlib, json, os, pathlib, subprocess, sys, datetime
+BASE = pathlib.Path(__file__).resolve().parents[1]
+def capture(name, argv, stdin=b'', cwd=None):
+    dest = BASE / 'calls' / name
+    dest.mkdir(parents=True, exist_ok=False)
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+    (dest/'stdin.bin').write_bytes(stdin)
+    command = {'argv':argv,'cwd':str(cwd or BASE),'env_overlay':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+    (dest/'command.json').write_text(json.dumps(command,indent=2)+'\n')
+    r=subprocess.run(argv,input=stdin,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=cwd or BASE,env=env)
+    (dest/'stdout.bin').write_bytes(r.stdout); (dest/'stderr.bin').write_bytes(r.stderr)
+    (dest/'exit.txt').write_text(str(r.returncode)+'\n')
+    result={k:{'bytes':len(v),'sha256':hashlib.sha256(v).hexdigest()} for k,v in [('stdin',stdin),('stdout',r.stdout),('stderr',r.stderr)]}
+    result['exit']=r.returncode
+    (dest/'result.json').write_text(json.dumps(result,indent=2)+'\n')
+    return r
+if __name__=='__main__':
+    name=sys.argv[1]; argv=sys.argv[2:]
+    r=capture(name,argv,sys.stdin.buffer.read()); sys.stdout.buffer.write(r.stdout); sys.stderr.buffer.write(r.stderr); sys.exit(r.returncode)

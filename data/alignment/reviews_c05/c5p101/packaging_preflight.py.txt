@@ -1,0 +1,23 @@
+import pathlib,json,subprocess,hashlib,datetime
+S=pathlib.Path(__file__).resolve().parent;W=S.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest();allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+manifest=json.loads((S/'original-to-copy-manifest.json').read_text());results=[];git_cache={}
+for i,x in enumerate(manifest):
+ assert set(x) in [set(['original','copy','sha256','bytes']),set(['original','copy','sha256','bytes','original_git_commit','repository_relative_path'])],(i,'schema',x)
+ p=pathlib.Path(x['original']);q=S/x['copy'];assert p.is_absolute() and not pathlib.Path(x['copy']).is_absolute() and q.resolve().is_relative_to(S.resolve());copied=q.read_bytes();assert q.suffix.lower() in allowed
+ if 'original_git_commit' in x:
+  k=(x['original_git_commit'],x['repository_relative_path'])
+  if k not in git_cache:git_cache[k]=subprocess.check_output(['git','-C',str(W),'show',k[0]+':'+k[1]])
+  original=git_cache[k];basis='immutable Git '+k[0]+':'+k[1]
+ else:original=p.read_bytes();basis='exact original file bytes'
+ ok=original==copied and len(copied)==x['bytes'] and sha(copied)==x['sha256'];results.append({'index0':i,'original':str(p),'copy':x['copy'],'sha256':sha(copied),'bytes':len(copied),'basis':basis,'pass':ok})
+ # Checkpoint before asserting so a packaging failure is evidence, not erased.
+ if not ok:
+  (S/'packaging-preflight-failure.json').write_text(json.dumps({'failure':results[-1],'measured_original_sha256':sha(original),'measured_original_bytes':len(original)},indent=2)+'\n');raise AssertionError(results[-1])
+unsupported=[str(p.relative_to(S)) for p in S.rglob('*') if p.is_file() and p.suffix.lower() not in allowed];assert not unsupported,unsupported
+assert not any(p.name=='__pycache__' for p in S.rglob('*'))
+r=json.loads((S/'review.json').read_text());assert r['verdict']=='APPROVE' and not r['open_findings'];assert r['total_spans']==104 and r['total_nulls']==6 and r['total_word_pairs']==57
+records=json.loads((S/'resolved-spans.json').read_text());assert len(records)==104 and all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in records)
+for x in r['segments']:
+ d=S/'reviewed-final'/str(x['seq']);assert sha((d/'spec.json').read_bytes())==x['spec_sha256'] and (d/'spec.json').stat().st_size==x['spec_bytes'];assert sha((d/'body.html').read_bytes())==x['body_sha256'] and (d/'body.html').stat().st_size==x['body_bytes']
+result={'status':'PASS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'manifest_records':len(manifest),'distinct_copy_targets':len({x['copy'] for x in manifest}),'git_objects_checked':len(git_cache),'supported_extensions':sorted(allowed),'actual_whitelist_source':'campaign-artifacts/land_reviewed_page.py line71','unsupported_files':unsupported,'all_copies_equal_exact_original_or_pinned_Git_object':True,'checks':results,'final_tuple_count':len(records),'final_word_pairs':57}
+(S/'packaging-preflight.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print('PREFLIGHT PASS',len(manifest),'MAPPINGS',len(git_cache),'GIT OBJECTS',len(records),'FINAL TUPLES')

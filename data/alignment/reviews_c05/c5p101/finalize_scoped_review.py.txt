@@ -1,0 +1,115 @@
+import pathlib, json, hashlib, re, shutil, datetime
+
+S = pathlib.Path(__file__).resolve().parent
+B = S.parent
+sha = lambda b: hashlib.sha256(b).hexdigest()
+read = lambda p: json.loads(p.read_text())
+def dump(p, x):
+    p.write_text(json.dumps(x, ensure_ascii=False, indent=2) + '\n')
+
+old_freeze = '7eb22817f840440abf8b24a9435ad1678d4f09d082665318dc91cab7006d8371'
+new_freeze = '30d8d73f4a02c09ac58c75ebb99fd3e18e83352812d891275c152d9269b44dfb'
+assert sha((B/'reconciled/freeze.json').read_bytes()) == new_freeze
+boundary = S/'history/needs-correction-302w23'
+assert read(boundary/'review.json')['verdict'] == 'NEEDS_CORRECTION'
+assert sha((boundary/'boundary-freeze.json').read_bytes()) == 'd8d14df630ba60a4f6298c4b789b96f54af9bc1faf210ada513317275e9b6072'
+proof = read(S/'generator-proof.json')
+records = read(S/'resolved-spans.json')
+assert sum(x['word_pair_count'] for x in proof) == 57
+spans = read(S/'independent-span-review.json')
+assert len(spans) == len(records) == 104
+for x, y in zip(spans, records):
+    if x['seq'] == 302 and x['id'] == 'w23':
+        assert x['d'] == 6 and y['d'] == 5
+        assert all(x[k] == y[k] for k in y if k != 'd')
+        x.update(y)
+        x['verdict'] = 'ACCEPT'
+        x['independent_reason'] = ('Accept corrected d5: in yod par thal, par attaches to the existence predicate and thal is the lexical concluding consequence predicate, it follows. The complete positive HGM must and logically-follow record support this English realization. English modal must does not establish a Tibetan standalone particle. The d6 claim was rejected; only depth changed, with both strings and ranges preserved.')
+    else:
+        assert all(x[k] == y[k] for k in y)
+        assert x['verdict'] == 'ACCEPT'
+dump(S/'independent-span-review.json', spans)
+
+finding = read(boundary/'thal-depth-finding.json')
+resolution = {
+    'status': 'RESOLVED', 'verdict': 'APPROVE', 'seq': 302, 'id': 'w23',
+    'previous_depth': 6, 'current_depth': 5, 'tib': 'thal', 'eng': 'must',
+    'source_side_classification': finding['reason'],
+    'minimal_correction_verified': 'Only 302w23.d6 to d5. Exact strings, order and ranges unchanged; body differs only in this span depth attribute on both sides.',
+    'current_spec_sha256': proof[1]['spec_sha256'], 'current_body_sha256': proof[1]['body_sha256'],
+    'current_reconciliation_freeze_sha256': new_freeze,
+    'historical_reconciliation_freeze_sha256': old_freeze,
+    'preserved_needs_correction_boundary': 'history/needs-correction-302w23',
+    'preserved_boundary_freeze_sha256': 'd8d14df630ba60a4f6298c4b789b96f54af9bc1faf210ada513317275e9b6072',
+    'root_history': str(B/'reconciliation-history/v1-before-302-depth-correction'),
+    'history_original_mapping': 'historical-original-remapping.json',
+    'all_changed_inputs': 'scoped-input-change-proof.json',
+    'fresh_corrected_native_evidence': 'native-checks/302/attempt-002',
+    'unchanged_native_evidence_reused': ['native-checks/301/attempt-001', 'native-checks/303/attempt-001'],
+    'native_execution_accounting': 'Initial review executed all three once. This scoped correction executed only 302 once. Current effective proof uses corrected 302 plus unchanged initial 301/303. Initial 302 remains historical; no passing source queries or unchanged generators rerun for packaging.',
+    'semantic_evidence_reuse': 'All original full source, master, parallel, omission and errata evidence retained. All 16 changed input files read; exact field changes and current 50-section package mapping verified. Unchanged semantic judgments remain independently supported.',
+    'root_wrapper_failure': 'Root native corrected 302 succeeded, then wrapper failed while matching data-a instead of canonical data-l. Root completion reused that successful output. Both helpers and callers are preserved under scoped-inputs/current. This reviewer additionally executed corrected 302 once independently.',
+    'final_counts': {'spans': 104, 'nulls': 6, 'non_null_d5': 57},
+    'open_findings': [],
+}
+dump(S/'scoped-resolution.json', resolution)
+dump(S/'thal-depth-finding.json', resolution)
+
+r = read(S/'history/pre-thal-depth-correction/review.json')
+r.update(verdict='APPROVE', spec_verdict='APPROVE', quality_verdict='APPROVE', open_findings=[], segments=proof,
+         total_spans=104, total_nulls=6, total_word_pairs=57,
+         status='PROVISIONAL_MACHINE_APPROVAL; NOT_PRODUCTION_ACCEPTANCE',
+         reviewed_reconciliation_freeze_sha256=new_freeze,
+         superseded_reconciliation_freeze_sha256=old_freeze,
+         actual_acceptance_baseline='b5047596859f6537b71f259c1e7df2e70f867fb2',
+         original_dispositions_retained=175, original_dispositions_recast_or_depth_changed=22,
+         resolved_findings=[{'seq':302, 'id':'w23', 'depth_before':6, 'depth_after':5, 'evidence':'scoped-resolution.json'}],
+         scoped_resolution='scoped-resolution.json')
+dump(S/'review.json', r)
+
+md = (S/'history/pre-thal-depth-correction/review.md').read_text()
+md = md.replace('| Fresh generator exit |', '| Current native proof exit |')
+md = md.replace('| 302 | 40 | 2 | 23 | 0 |', '| 302 | 40 | 2 | 24 | 0 |')
+md = md.replace('| Total | 104 | 6 | 56 | Three passes |', '| Total | 104 | 6 | 57 | Three current passes |')
+md = md.replace('The reviewed reconciliation freeze is `'+old_freeze+'`.', 'The current reviewed reconciliation freeze is `'+new_freeze+'` (96 files). It supersedes the exact preserved pre-correction freeze `'+old_freeze+'`.')
+md = md.replace('This does not replace historical origin governance or turn the reconciliation\'s historical “not captured” acceptance-baseline string into a current claim.', 'This does not replace historical origin governance. The current central reconciliation records the actual through300 baseline; its earlier “not captured” string remains preserved as historical evidence.')
+md = md.replace('177 original tuples retained exactly, 20 recast or depth-changed', '175 original tuples retained exactly, 22 recast or depth-changed')
+old_native = 'All three **actual canonical generators** ran freshly once and returned exit0 with empty stderr.'
+new_native = ('The initial independent review ran all three **actual canonical generators** freshly once, all exit0 with empty stderr. After the required 302w23 depth correction, I ran only corrected 302 once at `native-checks/302/attempt-002/`, again exit0 with empty stderr. Current proof reuses the unchanged successful 301/303 executions. Thus four executions exist across the two review boundaries, with three applicable to the current files; the old 302 execution remains historical.')
+assert old_native in md
+md = md.replace(old_native, new_native)
+md = md.replace('`native-checks/<seq>/attempt-001/` preserves exact specs, command/environment, complete stdout/stderr and exit;', '`native-checks/<seq>/attempt-001/` and corrected `native-checks/302/attempt-002/` preserve exact specs, command/environment, complete stdout/stderr and exit;')
+marker = '**303 imagination, possession and the negative event.**'
+assert marker in md
+thal = ('**Resolved 302w23 depth finding.** I rejected the original d6 classification of `thal / must`: in `yod par thal`, `par` attaches to the existence predicate and `thal` is the concluding lexical consequence predicate, “it follows.” The complete positive HGM must and logically-follow record support this local English match. English modal realization does not make the Tibetan source a standalone particle. The exact minimal correction to d5 is now verified. Corrected spec SHA-256 is `'+proof[1]['spec_sha256']+'`; corrected body SHA-256 is `'+proof[1]['body_sha256']+'`. All strings and occurrence ranges are unchanged; the body changes only the two s302w23 depth attributes. Both original proposals are now explicitly counted among the 22 recast dispositions.\n\n')
+md = md.replace(marker, thal + marker)
+marker = 'The exact supported-extension whitelist was inspected'
+history = ('The full **NEEDS_CORRECTION** boundary remains untouched under `history/needs-correction-302w23/`, with boundary-freeze SHA-256 `d8d14df630ba60a4f6298c4b789b96f54af9bc1faf210ada513317275e9b6072`. The earlier unsealed draft is separately retained under `history/pre-thal-depth-correction/`. Root preserved all 95 historical reconciliation/interface files in `reconciliation-history/v1-before-302-depth-correction/`; the current manifest redirects historical references to those exact preserved originals. `historical-original-remapping.json` retains the old references and their resolutions. All 16 changed inputs, every new helper/caller and the current full package were read, copied and checked. The current package has all 50 sections and six complete original-to-current diffs, with 175 retained and 22 recast original dispositions. Unchanged full source/master/parallel/omission/errata evidence and 301/303 native results are explicitly reused.\n\nRoot\'s corrected 302 generator returned exit0 before its wrapper failed on `data-a` instead of canonical `data-l`. Root\'s completion reused that exact native output. Both helper sources, both caller records and the recovery record are preserved under `scoped-inputs/current/`; my separate scoped native execution of corrected 302 also passed. `scoped-resolution.json` closes the depth finding only against the actual corrected files.\n\n')
+md = md.replace(marker, history + marker)
+(S/'review.md').write_text(md)
+
+# Preserve earlier derived views, then derive current complete package without queries or generators.
+derived = S/'history/needs-correction-derived-package'
+derived.mkdir(exist_ok=False)
+for name in ['package-full-compact.txt', 'package-section-index.json']:
+    shutil.copyfile(S/name, derived/name)
+package = (S/'scoped-inputs/current/semantic-input-review-package.txt').read_text()
+parts = re.split(r'^===== (.*?) =====\n', package, flags=re.M)
+index = []; compact = []
+for name, text in zip(parts[1::2], parts[2::2]):
+    body = text.strip()
+    index.append({'name':name, 'bytes':len(body.encode()), 'sha256':sha(body.encode())})
+    try:
+        view = json.dumps(json.loads(body), ensure_ascii=False, separators=(',', ':'))
+    except json.JSONDecodeError:
+        view = body
+    compact.append('===== '+name+' =====\n'+view+'\n')
+assert len(index) == 50
+dump(S/'package-section-index.json', index)
+(S/'package-full-compact.txt').write_text('\n'.join(compact))
+for name in ['scoped-native', 'scoped-intake', 'scoped-coverage']:
+    assert (S/(name+'.stderr')).read_bytes() == b''
+    (S/(name+'.exit')).write_text('0\n')
+with (S/'inspection-failures.txt').open('a') as f:
+    f.write('Scoped packaging inspection attempted intake-scoped-correction.stdout; actual file is scoped-intake.stdout, which was then read. A search for old package-view producer names returned no matches. One combined change-proof display exceeded output cap; the exact changed semantic fields had already been read individually during scoped intake. No source query or generator reran.\n')
+print('FINAL ARTIFACTS READY: APPROVE 104 / 6 / 57; exact historical NEEDS_CORRECTION boundary retained')

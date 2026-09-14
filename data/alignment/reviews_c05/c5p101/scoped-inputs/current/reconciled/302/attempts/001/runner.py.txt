@@ -1,0 +1,14 @@
+"""Unchanged native canonical generator, read-only spine and pinned builder import."""
+import sys,pathlib,hashlib,json,types,sqlite3,runpy
+H=pathlib.Path(__file__).resolve().parent;R=H.parents[2]/'campaign-worktree'
+def prepare():
+ m=json.loads((H/'evidence/manifest.json').read_text());gen=R/'tools/gen_alignment_page.py'
+ assert hashlib.sha256(gen.read_bytes()).hexdigest()==m['git_pins']['tools/gen_alignment_page.py']['sha256']
+ code=(H/'evidence/governance/tools/build_alignment_layer.py').read_bytes();assert hashlib.sha256(code).hexdigest()==m['git_pins']['tools/build_alignment_layer.py']['sha256']
+ sys.path.insert(0,str(R/'engines'));b=types.ModuleType('build_alignment_layer');b.__file__=str(R/'tools/build_alignment_layer.py');exec(compile(code,b.__file__,'exec'),b.__dict__);sys.modules['build_alignment_layer']=b
+ original_connect=sqlite3.connect
+ def ro(database,*args,**kw):
+  assert str(database)==m['source_pins']['spine']['path'];kw['uri']=True;c=original_connect('file:'+str(database)+'?mode=ro',*args,**kw);c.execute('PRAGMA query_only=ON');return c
+ sqlite3.connect=ro
+ return gen
+if __name__=='__main__':runpy.run_path(str(prepare()),run_name='__main__')

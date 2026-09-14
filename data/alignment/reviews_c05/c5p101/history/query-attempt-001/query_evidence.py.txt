@@ -1,0 +1,69 @@
+import pathlib,json,gzip,sqlite3,hashlib,re,collections,datetime
+S=pathlib.Path(__file__).resolve().parent;B=S.parent;W=S.parents[2]/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest();dump=lambda p,x:p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+con=sqlite3.connect('file:'+str(W/'build/hgm_spine_v27_2.db')+'?mode=ro',uri=True);con.row_factory=sqlite3.Row;con.execute('PRAGMA query_only=ON')
+queries=[];cache={};rowpool={};proof=[]
+def query(sql,params):
+ key=json.dumps([sql.lower(),params]);
+ if key not in cache:
+  rows=[dict(r) for r in con.execute(sql,params)];k=len(queries);cache[key]=k;refs=[]
+  for r in rows:
+   dig=sha(json.dumps(r,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());rowpool[dig]=r;refs.append(dig)
+  queries.append({'id':k,'sql':sql,'parameters':params,'count':len(rows),'rows':refs})
+ k=cache[key];return k,[rowpool[x] for x in queries[k]['rows']]
+# Reuse the already fresh local-context read; no repeated source query for packaging.
+local=json.loads((S/'independent-source-rows.json').read_text())
+files=['root-lexical-preparation.json','root-additional-lexical-preparation.json','root-parallel-preparation.json','root-additional-parallel-preparation.json','english/evidence/queries.json','reconciled/evidence/queries.json','reconciled/evidence/errata-supplement-full.json']
+for path in files:
+ for i,x in enumerate(json.loads((B/path).read_text())):
+  if 'sql' not in x:continue
+  params=x.get('params',x.get('parameters',[]));sql=x['sql']
+  if params==['C05',297,309] and 'between' in sql: k='independent-source-rows.json#297-309';rows=[r for r in local if 297<=r['seq']<=309]
+  else:k,rows=query(sql,params)
+  full_count=len(rows)
+  if x.get('post_filter'):rows=[r for r in rows if re.search(r'\b(drink|drinks|enjoy|use|uses)\b',r['english'],re.I)]
+  assert len(rows)==x['count'],(path,i,len(rows),x['count'])
+  if 'rows' in x:assert rows==x['rows'],(path,i)
+  proof.append({'original':path,'index':i,'query_id':k,'measured_count':len(rows),'unfiltered_count':full_count,'filter':x.get('post_filter'),'matches_original_claim':True})
+# Relevant new adversarial comparisons, all complete results, no LIMIT.
+for field,pattern in [('wylie',"%tshad mar song ba%"),('english','%no actual pus and blood exists%'),('english','%sizzle%')]:query('SELECT * FROM corpus_segments WHERE '+field+' LIKE ? ORDER BY course,seq',[pattern])
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()));corpus=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()))
+corpus_keys=collections.defaultdict(list);seqs=collections.Counter()
+for i,r in enumerate(corpus):seqs[r['course']]+=1;corpus_keys[(r['course'],seqs[r['course']])].append((i,r))
+corpus_proof=[]
+for k,r in rowpool.items():
+ if 'course' not in r:continue
+ c=corpus_keys[(r['course'],r['seq'])];assert len(c)==1;i,obj=c[0];assert json.loads(r['raw'])==obj;assert all(r[f]==obj[f] for f in ['course','acip','wylie','english']);corpus_proof.append({'row_digest':k,'corpus_index0':i,'course':r['course'],'seq':r['seq'],'exact_all_fields_and_raw':True,'original_record':obj})
+# Read every previously uninspected preparation master original, plus each missing positive original collection.
+seen={json.loads(l)['digest'] for l in (S/'independent-complete-master-records.txt').read_text().splitlines()};supp={};suppmap=[]
+terms=set(json.loads((B/'preparation-terms.json').read_text()))|{'blos','chus',"'dod na",'tshad mar song ba','med par thal','btso ba','btsos pa'}
+for x in json.loads((B/'root-additional-lexical-preparation.json').read_text()):terms.add(x['term'])
+for term in sorted(terms):
+ for sec in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[sec]):
+   if r.get('wylie')!=term and term not in r.get('wylie_variants',[]):continue
+   dig=sha(json.dumps(r,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode());suppmap.append({'term':term,'section':sec,'index0':i,'digest':dig,'already_in_full_master_read':dig in seen})
+   if dig not in seen:supp[dig]=r
+for k,r in rowpool.items():
+ if 'id' not in r or 'course' in r:continue
+ assert master['unified_entries'][r['id']-1]==json.loads(r['raw'])
+(S/'supplemental-complete-master-records.txt').write_text('\n'.join(json.dumps({'digest':k,'record':v},ensure_ascii=False,separators=(',',':')) for k,v in supp.items())+'\n')
+dump(S/'supplemental-master-map.json',suppmap);dump(S/'independent-query-results.json',queries);dump(S/'independent-query-original-map.json',proof);dump(S/'independent-complete-query-rows.json',rowpool);dump(S/'independent-corpus-originals.json',corpus_proof)
+# Physical files are source bytes, not Git objects. Retain complete originals with mapped paths.
+manifest=json.loads((S/'original-to-copy-manifest.json').read_text());physical=[]
+for course in ['C05','C15']:
+ p=pathlib.Path('/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII')/(course+'ReadingASCII.txt');raw=p.read_bytes();q=S/'physical'/p.name;q.parent.mkdir(exist_ok=True);q.write_bytes(raw);manifest.append({'original':str(p),'copy':str(q.relative_to(S)),'sha256':sha(raw),'bytes':len(raw)})
+ lines=raw.splitlines(keepends=True);hits=[];pos=0
+ for n,l in enumerate(lines,1):
+  if b'as the sizzle' in l:hits.append({'line':n,'range':[pos,pos+len(l)],'line_text':l.decode('utf-8'),'sha256':sha(l)})
+  pos+=len(l)
+ physical.append({'course':course,'source':str(p),'copy':str(q.relative_to(S)),'bytes':len(raw),'sha256':sha(raw),'sizzle_lines':hits})
+# Independently check all six physical extents against current exact source and snapshots.
+checks=[]
+for x in json.loads((B/'reconciled/evidence/physical-checks.json').read_text()):
+ raw=pathlib.Path(x['source']).read_bytes();lo,hi=x['byte_range'];extent=raw[lo:hi];src=next(r for r in local if r['seq']==x['seq']);assert re.sub(r'\s+',' ',extent.decode()).strip()==src[x['field']];assert extent==(B/'reconciled/evidence'/x['evidence_file']).read_bytes();checks.append({**x,'independently_verified':True})
+dump(S/'physical-original-proof.json',physical);dump(S/'physical-extents-proof.json',checks);dump(S/'original-to-copy-manifest.json',manifest)
+reg=json.loads((S/'governing/docs/errata_register.json').read_text());entries=reg if isinstance(reg,list) else reg['entries']
+matched=[r for r in entries if 'sizzle' in json.dumps(r).lower() or (r.get('course')=='C05' and r.get('seq')==302)]
+classes=[r for r in entries if r.get('id') in ['E-044','E-071','E-076','E-107','E-121']]
+dump(S/'register-check.json',{'register_entries':len(entries),'search':'sizzle anywhere OR course=C05 and seq=302','matches':matched,'matched_count':len(matched),'class_records':classes,'source_origin_commit':'ce646d0c48f9338ff47e40f46582ad14c8a3eaf4'})
+print('QUERY SETS',len(queries),'ORIGINAL CLAIM MAPPINGS',len(proof),'DISTINCT COMPLETE ROWS',len(rowpool),'ORIGINAL CORPUS OBJECTS',len(corpus_proof),'NEW MASTER RECORDS',len(supp),'REGISTER',len(entries),'MATCHES',len(matched))
