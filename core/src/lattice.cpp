@@ -49,6 +49,34 @@ void tokenizeDocument(const std::string& raw, std::vector<std::string>& tokens,
     (void)pending_barrier;
 }
 
+// The one ranking. See the comment on the declaration for why this is a
+// function rather than a habit.
+int OverlayDoc::bestSpan(const std::vector<int>& candidates) const {
+    int best = -1, bestLen = 0;
+    bool bestGlossed = false, bestProvisional = true;
+    for (int ix : candidates) {
+        if (ix < 0 || ix >= (int)spans.size()) continue;
+        const auto& sp = spans[ix];
+        if (sp.entry_ix < 0 || sp.entry_ix >= (int)entries.size()) continue;
+        const auto& e = entries[sp.entry_ix];
+        const bool glossed = !e.hgm_gloss.empty();
+        const bool prov = e.provisional();
+        const int len = sp.end - sp.beg;
+        const bool better =
+            best < 0 ||
+            (glossed && !bestGlossed) ||
+            (glossed == bestGlossed && glossed && !prov && bestProvisional) ||
+            (glossed == bestGlossed && prov == bestProvisional && len > bestLen);
+        if (better) {
+            best = ix;
+            bestLen = len;
+            bestGlossed = glossed;
+            bestProvisional = prov;
+        }
+    }
+    return best;
+}
+
 std::vector<int> OverlayDoc::spansAt(int tok) const {
     std::vector<int> ix;
     for (int i = 0; i < (int)spans.size(); ++i)

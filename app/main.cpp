@@ -22156,8 +22156,18 @@ private:
                 for (int t = cl.beg; t < cl.end; ++t) {
                     auto at = doc_.spansAt(t);
                     if (at.empty()) continue;
-                    const auto& e =
-                        doc_.entries[doc_.spans[at.front()].entry_ix];
+                    // at.front() is just the first span the lattice happened
+                    // to record at this token -- often a bare syllable of a
+                    // term the glossary knows perfectly well. Taking it meant
+                    // this layer printed "(no Geshe Michael Roach equivalent)"
+                    // over words he has glossed, which is not a gap in the
+                    // dictionary but a claim about one, and a false one.
+                    //
+                    // Same ranking as everywhere else now: a gloss beats none,
+                    // HIS tier beats the machine's, extent is the last word.
+                    const int chosen = doc_.bestSpan(at);
+                    const int pick = chosen >= 0 ? chosen : at.front();
+                    const auto& e = doc_.entries[doc_.spans[pick].entry_ix];
                     if (!seen.insert(e.id).second) continue;
                     // A revealed gloss enters the deck, WITH the segment it
                     // was met in. Until now the Trainer's six reveal layers
@@ -27647,23 +27657,15 @@ private:
                 // where a curated one sat inside it — and this chip is the
                 // scaffold the translator completes, so a machine phrase here
                 // is a machine phrase in the draft.
-                int best = -1, bw = 0;
-                bool bestProv = true;
+                std::vector<int> inChunk;
                 for (size_t s = 0; s < doc_.spans.size(); ++s) {
                     const auto& sp = doc_.spans[s];
-                    if (sp.beg >= ch.beg && sp.end <= ch.end) {
-                        const auto& e = doc_.entries[sp.entry_ix];
-                        if (e.hgm_gloss.empty()) continue;
-                        const bool prov = e.provisional();
-                        const int w = sp.end - sp.beg;
-                        if (best < 0 || (!prov && bestProv) ||
-                            (prov == bestProv && w > bw)) {
-                            bw = w;
-                            bestProv = prov;
-                            best = (int)s;
-                        }
-                    }
+                    if (sp.beg >= ch.beg && sp.end <= ch.end &&
+                        sp.entry_ix >= 0 &&
+                        !doc_.entries[sp.entry_ix].hgm_gloss.empty())
+                        inChunk.push_back((int)s);
                 }
+                const int best = doc_.bestSpan(inChunk);
                 if (best >= 0) {
                     const auto& e =
                         doc_.entries[doc_.spans[best].entry_ix];

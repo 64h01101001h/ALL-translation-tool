@@ -35,6 +35,25 @@ struct OverlayDoc {
 
     // indices of spans covering token `tok`, innermost (shortest) first
     std::vector<int> spansAt(int tok) const;
+
+    // The best span among `candidates`, by the project's one ranking:
+    //
+    //   1. a span carrying an hgm_gloss beats one carrying none
+    //   2. among glossed spans, a GMR tier (curated/glossary) beats an
+    //      auto-aligned one -- rule 1, his English outranks the machine's
+    //      match even when the machine's match covers more of the line
+    //   3. and only then, longer beats shorter
+    //
+    // Returns -1 when nothing qualifies.
+    //
+    // This exists because the rule was written out by hand in five places and
+    // four of them stopped at step 3 -- walk::bestGlossSpan, the DraftPane
+    // scaffold chip and its anchor list, wilsonParse's unit picker, and the
+    // Trainer's vocabulary layer, which did not even reach step 1 and printed
+    // "no Geshe Michael Roach equivalent" over words he had glossed. Each was
+    // found separately, on 2026-09-13, and each could have been the last one.
+    // A sixth copy should call this instead.
+    int bestSpan(const std::vector<int>& candidates) const;
     // per-token cover count (capped at `cap`) — drives the depth wash
     std::vector<int> coverDepth(int cap = 3) const;
 };

@@ -247,6 +247,28 @@ int main(int argc, char** argv) {
 
     particleScriptParity(failures);
 
+    {   // OverlayDoc::bestSpan -- the ONE ranking. It was written out by
+        // hand in five places and four of them stopped at "longest", so a
+        // machine's auto-aligned match beat his curated word wherever the
+        // machine's covered more of the line. Gated here so the rule has one
+        // home and one test rather than five of each.
+        auto d = allcore::buildOverlay(spine, "RGYAL BA'I YON TAN MA LUS");
+        const int best = d.bestSpan(d.spansAt(0));
+        CHECK(best >= 0, "bestSpan: returns something for a known phrase");
+        const auto& e = d.entries[d.spans[best].entry_ix];
+        CHECK(!e.hgm_gloss.empty(),
+              "bestSpan: a glossed span beats an unglossed one");
+        CHECK(!e.provisional(),
+              "bestSpan: a GMR tier beats an auto-aligned span even when the "
+              "auto-aligned one covers MORE of the line (rule 1)");
+        CHECK(e.wylie == "rgyal ba",
+              "bestSpan: and the span it returns is his curated one, not the "
+              "four-token auto-aligned span that swallows it");
+        CHECK(d.bestSpan({}) < 0,
+              "bestSpan: nothing in, -1 out -- the caller flags rather than "
+              "approximating (rule 3)");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "LATTICE SMOKE FAILED" : "LATTICE SMOKE OK", failures);
     return failures ? 1 : 0;

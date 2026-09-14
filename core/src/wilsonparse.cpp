@@ -247,27 +247,13 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                 // stand in for a curated one, which is walk::bestGlossSpan's
                 // defect in a second place: 101,733 GMR-tier terms across the
                 // corpus were being shadowed this way.
-                int chosen = -1, bestLen = 0;
-                bool bestGlossed = false, bestProv = true;
+                std::vector<int> here;
                 for (int ix : at) {
                     const auto& s2 = doc.spans[ix];
                     if (s2.beg != t || s2.end > cl.end) continue;
-                    const auto& e2 = doc.entries[s2.entry_ix];
-                    const bool g = !e2.hgm_gloss.empty();
-                    const bool prov = e2.provisional();
-                    const int len = s2.end - s2.beg;
-                    const bool better =
-                        chosen < 0 ||
-                        (g && !bestGlossed) ||
-                        (g == bestGlossed && g && !prov && bestProv) ||
-                        (g == bestGlossed && prov == bestProv && len > bestLen);
-                    if (better) {
-                        chosen = ix;
-                        bestLen = len;
-                        bestGlossed = g;
-                        bestProv = prov;
-                    }
+                    here.push_back(ix);
                 }
+                int chosen = doc.bestSpan(here);
                 if (chosen < 0) chosen = at.front();
                 const auto& span = doc.spans[chosen];
                 const auto& e = doc.entries[span.entry_ix];
