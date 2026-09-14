@@ -74,6 +74,41 @@ inline constexpr int kClauseDiscordant = 21;   // 6 engine-only, 15 written-only
 inline constexpr int kClausePairs = 972;
 inline constexpr int kClauseBackPct = 5;
 
+// A clause ending in the topic particle `ni` is an OPENING, not a sentence.
+// Measured over all 42,087 corpus segments on 2026-09-13: 8,016 (19%) carry no
+// confident verb anywhere, but of the 764 that end in `ni`, 489 do — 64%, three
+// and a half times the base rate. So when there is no verb AND the clause ends
+// in `ni`, "no verb found" is the wrong thing to say: the verb is in what comes
+// next, and saying so is more use than confessing ignorance.
+//
+// `dang` earns the same line for the same reason. It is the conjunctive, and it
+// is the commonest ending of a verbless segment in the corpus — 12.6% against
+// `ni`'s 6.1%, which is the opposite of what a twelve-segment sample suggested.
+inline constexpr int kVerblessPct = 19;        // of all segments, corpus-wide
+inline constexpr int kNiFinalTotal = 764;      // segments ending in `ni`
+inline constexpr int kNiFinalVerblessPct = 64; // of those, carrying no verb
+
+// Empty unless the clause closes on a particle that says the verb is elsewhere.
+inline QString fragmentNote(const allcore::OverlayDoc& doc,
+                            const allcore::Clause& c) {
+    if (c.end <= c.beg) return QString();
+    const QString tail =
+        QString::fromStdString(doc.tokens[c.end - 1]).toUpper();
+    if (tail == "NI")
+        return "<span style='color:#B4540A'>It ends in the topic particle "
+               "<b>ni</b></span> — which announces a subject and hands the verb "
+               "to what follows. Of the " + QString::number(kNiFinalTotal) +
+               " segments in the corpus ending this way, <b>" +
+               QString::number(kNiFinalVerblessPct) + "%</b> carry no verb at "
+               "all, against " + QString::number(kVerblessPct) +
+               "% of segments generally. Read on for it.";
+    if (tail == "DANG")
+        return "<span style='color:#B4540A'>It ends in the conjunctive "
+               "<b>dang</b></span> — the list, or the sentence, carries on. "
+               "Read on for the verb.";
+    return QString();
+}
+
 inline QString pct() {
     return QString::number(100.0 * kOrderAgree / kOrderSpans, 'f', 0) + "%";
 }
@@ -480,6 +515,33 @@ public:
                   "that the agent is unstated — absence of an agent is not "
                   "evidence of an intransitive construction");
         }
+        {   // A clause closing on `ni` or `dang` has not lost its verb, it
+            // has not reached it. Measured corpus-wide, not sampled: 64% of
+            // the 764 `ni`-final segments carry no verb, against 19% overall.
+            // The gate quotes the constants so the prose cannot drift from the
+            // measurement, and pins the note to the UNVERIFIED branch — the
+            // first version of this sat on `verb.chunk < 0`, which spotVerb
+            // almost never produces, and never once fired.
+            src_->setPlainText("sangs rgyas kyi chos ni");
+            walk();
+            const QString t = out_->toPlainText();
+            check(t.contains("topic particle"),
+                  "a ni-final clause is named an opening, not reported as a "
+                  "clause whose verb could not be found");
+            check(t.contains(QString::number(walk::kNiFinalVerblessPct) + "%") &&
+                      t.contains(QString::number(walk::kNiFinalTotal)) &&
+                      t.contains(QString::number(walk::kVerblessPct) + "%"),
+                  "and it quotes the measured figures, all three, from the "
+                  "constants rather than from prose");
+            src_->setPlainText("chos dang sems can dang");
+            walk();
+            check(out_->toPlainText().contains("conjunctive"),
+                  "a dang-final clause is named a continuation");
+            src_->setPlainText("sangs rgyas kyis chos bstan");
+            walk();
+            check(!out_->toPlainText().contains("topic particle"),
+                  "a clause with an attested verb gets no fragment note");
+        }
         {   // Rule 1: his own English outranks the machine's match, even
             // when the machine's match covers more of the line. Adam caught
             // this on the page: RGYAL BA'I YON TAN glossed "farthest shore"
@@ -735,9 +797,16 @@ private:
         // ---- step 2 ----
         h += step(2, "The verb");
         if (verb.chunk < 0) {
-            h += body("<span style='color:#B4540A'>no verb found.</span> The "
-                      "clause may be a noun phrase, or the verb may not be in "
-                      "the glossary.");
+            // Before confessing ignorance, check whether the clause is simply
+            // not finished. A clause closing on `ni` or `dang` is an opening or
+            // a continuation, and the reader is better served by being told
+            // where the verb IS than that we could not find one here.
+            const QString frag = walk::fragmentNote(doc, c);
+            if (!frag.isEmpty()) h += body(frag);
+            else
+                h += body("<span style='color:#B4540A'>no verb found.</span> The "
+                          "clause may be a noun phrase, or the verb may not be in "
+                          "the glossary.");
         } else {
             QString e = "<b>" + walk::esc(verb.wylie) + "</b>";
             if (verb.confident)
@@ -769,6 +838,18 @@ private:
                      "have NO verb at all. Tibetan omits them freely, most "
                      "often a verb of existence or a linking verb, and an "
                      "implied one leaves nothing here to find.</div>";
+            // And sometimes we can do better than "may". A clause closing on
+            // `ni` or `dang` is not missing its verb, it has not reached it.
+            // This is the branch that matters: spotVerb almost always returns
+            // SOMETHING, so a verbless clause arrives here as an unverified
+            // candidate, not as verb.chunk < 0. The first version of this note
+            // was attached to that other branch and never once fired.
+            if (!verb.confident) {
+                const QString frag = walk::fragmentNote(doc, c);
+                if (!frag.isEmpty())
+                    e += "<div style='font-size:12px;padding-top:2px'>" + frag +
+                         "</div>";
+            }
             if (verb.cls) {
                 e += "<br>Wilson class: <b>" +
                      QString::fromUtf8(verb.cls->label).toHtmlEscaped() +
