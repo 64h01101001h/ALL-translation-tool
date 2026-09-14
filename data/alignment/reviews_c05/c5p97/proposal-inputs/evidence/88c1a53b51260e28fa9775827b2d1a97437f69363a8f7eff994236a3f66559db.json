@@ -1,0 +1,95 @@
+{
+  "seq": 291,
+  "status": "PASS_MECHANICAL_NOT_SEMANTIC_APPROVAL",
+  "counts": {
+    "spans": 48,
+    "depths": {
+      "3": 2,
+      "5": 26,
+      "6": 10,
+      "7": 10
+    },
+    "d5_nonnull": 25,
+    "nulls": 1,
+    "errata": 0,
+    "original_dispositions": 82
+  },
+  "native_exit": 0,
+  "native_attempt": "291/attempts/01",
+  "spec": {
+    "bytes": 7712,
+    "sha256": "2dade5255fb440be38677b33f843f8c7e51cbea0068e30656b9470c1ceecccb2"
+  },
+  "body": {
+    "bytes": 7626,
+    "sha256": "f2ec696448456e8c3ce51bcb8bef130d96f7f6bd3d8cdb2524e9a69e07423f1c"
+  },
+  "stderr_bytes": 0,
+  "body_equals_actual_stdout": true,
+  "complete_plain_source_text_preserved": true,
+  "each_span_text_and_intended_occurrence_verified": true,
+  "eng_order_exact_flat_nonnull_ids": true,
+  "d7_checks": [
+    {
+      "id": "m1",
+      "parent_id": "w1",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m2",
+      "parent_id": "w1",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m3",
+      "parent_id": "w2",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m4",
+      "parent_id": "w2",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m5",
+      "parent_id": "w5",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m6",
+      "parent_id": "w5",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m7",
+      "parent_id": "w14",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m8",
+      "parent_id": "w14",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m9",
+      "parent_id": "w16",
+      "strict_unique_contained": true
+    },
+    {
+      "id": "m10",
+      "parent_id": "w16",
+      "strict_unique_contained": true
+    }
+  ],
+  "final_tuple_keys": [
+    "seq",
+    "id",
+    "d",
+    "tib",
+    "eng",
+    "tib_range",
+    "eng_range"
+  ],
+  "original_tuple_coverage": "Every original tuple compared literally and dispositioned; all original metadata retained.",
+  "head_allowance_proposals": []
+}

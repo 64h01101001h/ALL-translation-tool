@@ -1,0 +1,115 @@
+import json,hashlib,importlib.util,re,collections
+from pathlib import Path
+from html.parser import HTMLParser
+D=Path(__file__).resolve().parent;B=D.parent;W=D.parents[2]/'campaign-worktree';E=D/'evidence'
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def hashfile(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+mod=importlib.util.spec_from_file_location('canonical_generator',W/'tools/gen_alignment_page.py');gen=importlib.util.module_from_spec(mod);mod.loader.exec_module(gen)
+rows=json.loads((E/'corpus-rows.json').read_text());sources={x['seq']:x for x in rows.values() if x['course']=='C05' and x['seq'] in [289,290,291]};original_tuples=json.loads((B/'proposal-verification/root-resolved-spans.json').read_text());assert len(original_tuples)==191
+class Plain(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.texts={'tib':'','eng':''};self.pairs={}
+ def handle_starttag(self,t,ats):
+  a=dict(ats);self.stack.append((t,a))
+  if t=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+ def handle_endtag(self,t):
+  assert self.stack[-1][0]==t;_,a=self.stack.pop()
+  if t=='div' and a.get('class') in ['tib','eng']:self.side=None
+ def handle_data(self,s):
+  if self.side and any(a.get('data-l','').endswith('S') for _,a in self.stack) and not any(a.get('class') in ['lab','nul'] for _,a in self.stack):
+   self.texts[self.side]+=s
+   for _,a in self.stack:
+    if a.get('data-l'):self.pairs.setdefault((self.side,a['data-l']),'');self.pairs[(self.side,a['data-l'])]+=s
+omissions={
+289:[
+ {'tib':'des; rang rang gi genitive; po; de; remaining nominal endings','reason':'Demonstrative/genitive and numeral nominalization structure is distributed through the karmic-agent and fronted-subject paraphrases. The gsum and rang rang lexical cores retain three and each. No null is asserted for unresolved or distributed grammar.'},
+ {'tib':'yin pas; first pa\'i phyir; zhes; final pa\'i phyir','reason':'Counterfactual/copular, inner reason and quotation/outer reason structure is recast across As such and All this is an argument attempting to. The complete final argumentative explanation cannot be allocated as isolated lexical atoms from these particles.'},
+ {'english':'had collected; in their mind; later; the fact is that; those who refuse to accept the denial of outer objects','reason':'These expand the seed-process account and preceding external-object argument. There is no separate local collection verb, mind noun, temporal later word, or final outer-object noun in289. Preserve verbatim unwrapped.'},
+ {'tib':'la brten nas','reason':'Not omitted in final: through is an explicit dependency exponent, supported by local syntax and the positive full construction entry19197. Earlier distributed-omission reasoning is rejected.'},
+ {'tib':'de ltar','reason':'Not omitted in final: phrase-depth this were how is the complete deictic manner recast; positive entry8435 was reconsidered rather than treating both original omissions as proof.'}],
+290:[
+ {'tib':"de'i; yod de; ji ltar ... ltar gyi; ngo zhes bstan pa'i phyir",'reason':'The quotation identification, existence/presentation frame, appearance comparison and reporting/reason frame are distributed across the introduction and explanation. snang ba owns appeared; the same first grub pa is banked only once at the explicitly external-object paraphrase. No separate bstan/meaning or bstan/see pairing.'},
+ {'tib':'yang after \'ga\'; rnag gis; other genitive/nominal endings','reason':'The tighter attested indefinite \'ga\'/single remains under med. Emphatic yang is unclaimed, not declared absent. The first gis participates in full of pus, distinct from the later causal gis/by. No phony lexical unit rnag gis gang ba/full of pus is needed merely because the larger grammatical phrase has a glossary row.'},
+ {'english':'real; by Master Vinitadeva; first existed; to exist; whole; for they are; to do so; their','reason':'Positive don/real meaning was inspected, but meaning is the common tighter lexical boundary. The contextual author name, existence restatement, whole-river emphasis and English verbal/anaphoric support remain unwrapped. dbang/forced and later gis/by retain the explicit causal relation.'}],
+291:[
+ {'tib':"de'i; gyi bdag nyid yin; de after zhes; zhes; other nominal/genitive endings",'reason':'The later-text anaphor and nature/identity relation are distributed across in the text and a part of the mind itself. Positive sems tsam/only a part of the mind and bdag nyid/itself records do not force those larger/distributed wording choices. Citation and resumed subject become author/saying and the second pus and blood expansion; no second source rnag khrag exists.'},
+ {'english':'initial And; second if; provide; being something to; Master Vinitadeva says; He is saying that; second pus and blood; nonetheless; his point; by using; articles','reason':'The single na is banked at the first if; its repeated conditional and concession remain unwrapped. Only the reply has overt byed/perform. Both food/drink compounds use the tighter eat or drink, with narrower members. du mas retains the whole inflected form/great many; the unattached final s is never separated to harvest by using. Supplied author names are omitted.'},
+ {'tib':'des','reason':'Not omitted in final: the explicit demonstrative licenses they in then they, with its attached agentive s intact. Other English they instances are not automatically assigned to it.'},
+ {'tib':'mdzad pa','reason':'mdzad is retained as the narrower honorific support-verb null; pa is left as nominal syntax. This is grammatical fusion into proves, not a claim that the positive lexical entries are empty.'}]
+}
+special={
+ (289,'tibetan','w4'):('boundary-tightened',['w3'],'The numeral core gsum owns three; nominal po adds no separately required English lexical content.'),
+ (289,'tibetan','w13'):('boundary-tightened',['w11'],'The second numeral qualifies the fronted objects. Tighten gsum po to gsum without changing its opening English three occurrence.'),
+ (289,'tibetan','w21'):('boundary-tightened',['w18'],'Tighten the shared necessity mapping from nominalized dgos pa to dgos/have to; retain the exact English necessity occurrence.'),
+ (289,'tibetan','w24'):('boundary-tightened',['w20'],'Tighten bkag pa to the lexical refutation stem bkag/refute. The context-expanded target remains unwrapped.'),
+ (289,'english','w16'):('recast-as-compound-member',['w16','m1'],'gsum belongs inside the established collective gsum ga/all three; keep the narrower three member under that parent.'),
+ (289,'english','p3'):('recast-as-compound-member',['w16','m2'],'ga is the collective member of gsum ga, with all inside the all-three parent; d7 reflects that member role.'),
+ (289,'english','p5'):('recast-as-complete-phrase',['q2'],'ma is retained inside the whole ma rtogs/do not phrase: do is the explicit anaphoric perceptual predicate.'),
+ (289,'english','w19'):('null-rejected-phrase-retained',['q2'],'The claim of no exponent is too strong here: do explicitly resumes perceiving. Preserve the full negative predicate at d3, with nominal pa omitted, and avoid a lexical rtogs/do pair.'),
+ (290,'tibetan','w3'):('boundary-tightened',['w2'],'Both positive HGM real meaning and meaning were read. Use the shared tighter lexical meaning; real expresses contextual insistence on the intended interpretation.'),
+ (290,'tibetan','w10'):('boundary-tightened',['w9'],'The separate positive HGM \'ga\'/single entry supports the tighter indefinite minimizer under med; yang is emphatic grammar left unwrapped, not an omitted meaning labeled null.'),
+ (290,'tibetan','p19'):('depth-reclassified',['w17'],'The established adversative unit \'on kyang/though is retained as a lexical conjunction at d5.'),
+ (290,'tibetan','p25'):('depth-reclassified',['w23'],'sogs is the lexical list-continuation word here. Use d5 and request its exact named allowance; do not classify it at d6 to bypass the head gate.'),
+ (290,'english','q2'):('recast-as-complete-phrase',['q2'],'ga la/How then omits the lta inference/topic element and leaves modal rhetorical content distributed. Retain lta ga la yod/How then could there exist as the complete d3 construction.'),
+ (290,'english','w16'):('recast-as-complete-phrase',['q2'],'The yod existence contribution remains inside the complete rhetorical phrase; no false positive lexical reading of rhetorical negation is introduced.'),
+ (291,'tibetan','w2'):('depth-reclassified',['q2'],'\'og tu is a temporal locative construction, later on, retained at phrase depth rather than treating its case-bearing construction as a single word.'),
+ (291,'tibetan','w12'):('boundary-tightened',['w5','m5','m6'],'Both eat or drink and something to eat or drink are positive HGM variants. Keep the common tighter parent and the sound eating/drinking members; supplied nominal support remains unwrapped.'),
+ (291,'tibetan','w14'):('decomposed-negation-and-capacity',['p6','w7'],'mi is the overt negative particle/never and nus the capacity predicate/could. The established could never whole equivalent is respected semantically without making a two-word negative construction a mandatory lexical compound.'),
+ (291,'tibetan','w25'):('boundary-tightened',['w16','m9','m10'],'The second food/drink compound has its own exact reply occurrence, again narrowed to eat or drink with both sound members.'),
+ (291,'tibetan','p30'):('depth-reclassified',['w21'],'The lexical list-example gesture sogs/such as is d5 consistently with290; it does not own dream or examples.'),
+ (291,'tibetan','w34'):('boundary-tightened-null-retained',['w25'],'Tighten mdzad pa to mdzad. Honorific light-verb fusion is positively licensed by sgrub par mdzad/proves; nominal pa remains unclaimed.'),
+}
+allfinal=[];all_dispositions=[];summary=[]
+for seq in [289,290,291]:
+ p=D/str(seq);s=json.loads((p/'spec.json').read_text())['segments'][0];sp=s['spans'];byid={x['id']:x for x in sp};src=sources[seq];expected={x['id']:x for x in json.loads((p/'author-intended-ranges-and-roles.json').read_text())};native=json.loads((p/'native-proof.json').read_text());a=D/native['attempt_path'];body=(p/'body.html').read_bytes()
+ assert native['native_exit']==0 and (a/'stdin.json').read_bytes()==(p/'spec.json').read_bytes() and (a/'stdout.html').read_bytes()==body and len((a/'stderr.txt').read_bytes())==0
+ tr=gen.resolve(src['wylie'],sp,'tib',seq);er=gen.resolve(src['english'],gen.with_members(sp,[byid[x] for x in s['eng_order']],src['english']),'eng',seq)
+ final=[];parent=None;member_checks=[]
+ for x in sp:
+  i=x['id'];t=list(tr[i]);e=list(er[i]) if x['eng'] is not None else None;assert t==expected[i]['tib_range'] and e==expected[i]['eng_range'],(seq,i,t,e,expected[i])
+  tup={'seq':seq,'id':i,'d':x['d'],'tib':x['tib'],'eng':x['eng'],'tib_range':t,'eng_range':e};final.append(tup)
+  if x['d']==7:
+   assert parent and parent['d']==5 and x['tib']!=parent['tib'] and parent['tib'].count(x['tib'])==1 and x['eng']!=parent['eng'] and parent['eng'].count(x['eng'])==1
+   pt,pe=tr[parent['id']],er[parent['id']];assert pt[0]<=t[0]<t[1]<=pt[1] and pe[0]<=e[0]<e[1]<=pe[1];member_checks.append({'id':i,'parent_id':parent['id'],'strict_unique_contained':True})
+  else:parent=x
+ parser=Plain();parser.feed(body.decode());assert parser.texts['tib']==src['wylie'] and parser.texts['eng']==src['english']
+ for x in sp:
+  assert parser.pairs[('tib',f's{seq}'+x['id'])]==x['tib']
+  if x['eng'] is not None:assert parser.pairs[('eng',f's{seq}'+x['id'])]==x['eng']
+ assert set(s['eng_order'])=={x['id'] for x in sp if x['d']!=7 and x['eng'] is not None}
+ dump(p/'final-ordered-tuples.json',final);allfinal.extend(final)
+ dispositions=[]
+ for angle in ['tibetan','english']:
+  ospec=json.loads((B/angle/str(seq)/'spec.json').read_text())['segments'][0];od=json.loads((B/angle/str(seq)/'decisions.json').read_text());ods={x.get('id',x.get('span_id')):x for x in od.get('entries',od.get('spans',[]))};oss={x['id']:x for x in ospec['spans']}
+  # Verify each original tuple text and declared source; the unchanged root native replay is pinned separately.
+  for orig in [x for x in original_tuples if x['angle']==angle and x['seq']==seq]:
+   i=orig['id'];x=oss[i];assert all(orig[k]==x[k] for k in ['d','tib','eng']);tt=orig['tib_range'];ee=orig['eng_range'];assert src['wylie'][tt[0]:tt[1]]==orig['tib'];assert ee is None or src['english'][ee[0]:ee[1]]==orig['eng']
+   key=(seq,angle,i)
+   if key in special:status,ids,reason=special[key]
+   else:
+    hits=[f for f in final if all(f[k]==orig[k] for k in ['d','tib','eng','tib_range','eng_range'])];assert len(hits)==1,(orig,hits);ids=[hits[0]['id']];status='retained';reason='Retained after source-role review: '+expected[ids[0]]['source_role']
+   assert all(j in byid for j in ids)
+   rec={'original':orig,'original_span':x,'original_decision':ods[i],'original_reason':ods[i].get('role_note',ods[i].get('judgment')),'original_null_reason':x.get('nul'),'original_proposal_source_role':'Independent '+angle+'-first original; actual source/governing origin129e86af through285, not a later acceptance baseline.','original_report':str(B/angle/str(seq)/'report.md'),'status':status,'final_ids':ids,'reason':reason,'final_source_roles':{j:expected[j]['source_role'] for j in ids},'source_evidence':{'source_row_id':src['id'],'corpus':'../evidence/corpus-rows.json','lexical':'../evidence/lexical-queries.json + lexical-entries.json + master-queries.json + master-records.json','original_native_replay':'../evidence/identity-and-original-replay-reuse.json'}}
+   dispositions.append(rec)
+ dump(p/'original-dispositions.json',dispositions);all_dispositions.extend(dispositions)
+ # Complete visible unwrapped intervals; overlapping members do not change coverage.
+ uncovered={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  ranges=sorted([f[side+'_range'] for f in final if f[side+'_range'] is not None]);cur=0;gaps=[]
+  for lo,hi in ranges:
+   if lo>cur:gaps.append({'range':[cur,lo],'text':src[field][cur:lo]})
+   cur=max(cur,hi)
+  if cur<len(src[field]):gaps.append({'range':[cur,len(src[field])],'text':src[field][cur:]})
+  uncovered[side]=gaps
+ dump(p/'material-omissions.json',{'decisions':omissions[seq],'complete_unwrapped_intervals':uncovered,'null_policy':'Omitted means no defensible separate atom claimed; it does not assert absent meaning. Retained nulls have specific grammatical-fusion evidence in spec and source roles.'})
+ heads=[x for x in sp if x['d'] in [5,7] and x['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',x['eng'])]
+ allowances=[]
+ for x in heads:
+  assert seq==290 and x['id']=='w23' and x['tib']=='sogs' and x['eng']=='and so on'
+  allowances.append({'course_directory':'pages_c05','key':'c5p97/s290w23','value':"sogs (C05:290 reconciler Codex: the lexical list-continuation word owns the closing gesture 'and so on', including 'and'; HTG2016 entry20919 and the local rnag sogs/mthong construction license it; no pus noun or supplied participant is captured)",'span_id':'w23','tibetan_licensor':'sogs','exact_english':'and so on','repository_allowance_edited':False})
+ dump(p/'head-allowance-proposal.json',allowances)
+ counts={'spans':len(sp),'depths':dict(sorted(collections.Counter(str(x['d']) for x in sp).items())),'d5_nonnull':sum(x['d']==5 and x['eng'] is not None for x in sp),'nulls':sum(x['eng'] is None for x in sp),'errata':0,'original_dispositions':len(dispositions)}
+ proof={'seq':seq,'status':'PASS_MECHANICAL_NOT_SEMANTIC_APPROVAL','counts':counts,'native_exit':0,'native_attempt':native['attempt_path'],'spec':hashfile(p/'spec.json'),'body':hashfile(p/'body.html'),'stderr_bytes':0,'body_equals_actual_stdout':True,'complete_plain_source_text_preserved':True,'each_span_text_and_intended_occurrence_verified':True,'eng_order_exact_flat_nonnull_ids':True,'d7_checks':member_checks,'final_tuple_keys':['seq','id','d','tib','eng','tib_range','eng_range'],'original_tuple_coverage':'Every original tuple compared literally and dispositioned; all original metadata retained.','head_allowance_proposals':allowances}
+ dump(p/'verification.json',proof);summary.append(proof)
+ print(seq,counts,'SPEC',proof['spec'],'BODY',proof['body'])
+assert len(all_dispositions)==191 and len({(x['original']['angle'],x['original']['seq'],x['original']['id']) for x in all_dispositions})==191
+dump(D/'final-ordered-tuples.json',allfinal);dump(D/'disposition-index.json',{'count':191,'seqs':[{ 'seq':s['seq'],'count':s['counts']['original_dispositions'],'file':f"{s['seq']}/original-dispositions.json"} for s in summary],'source':str(B/'proposal-verification/root-resolved-spans.json'),'source_hash':hashfile(B/'proposal-verification/root-resolved-spans.json')});dump(D/'verification-summary.json',summary)

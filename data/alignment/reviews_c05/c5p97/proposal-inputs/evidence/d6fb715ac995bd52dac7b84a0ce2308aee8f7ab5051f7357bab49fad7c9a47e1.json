@@ -1,0 +1,245 @@
+{
+  "scope": "Tibetan-first C05:289–291 only; full material sources retained once in this angle.",
+  "proposal_source_baseline_commit": "129e86afae8431aacfb1ee1cee65d8635dd265b8",
+  "course_boundary_at_proposal": 285,
+  "not_landing_baseline": true,
+  "source_spine_rows": [
+    1671,
+    1672,
+    1673
+  ],
+  "context_seq_range": [
+    283,
+    297
+  ],
+  "context_count": 15,
+  "corpus_query_count": 13,
+  "unique_original_corpus_rows": 38,
+  "master_query_count": 69,
+  "unique_original_master_entries": 70,
+  "physical_source_identity": "Each complete paragraph retains original CRLF bytes via block text and byte offsets; ACIP and English equal source after whitespace-only joining.",
+  "failures_and_supersessions": [
+    "capture_evidence.py failed only at its physical exact-byte extraction; original script retained and initial failure recorded.",
+    "capture_physical_attempt01.py used an ambiguous short DER THAL prefix; exact native stderr/exit retained and corrected capture_physical.py succeeds.",
+    "run_and_verify_attempt01.py included null annotation text in the source comparison; actual 289 native run succeeded and was reused unchanged after parser correction.",
+    "290 rhetoric phrase completed after initial passing generation; full superseded spec/body/decisions/proof and both native runs retained.",
+    "The first semantic metadata edit used a mandatory tib key on an English-only omission; error recorded. Verification detected stale expected range; corrected metadata now matches the existing successful native output."
+  ],
+  "files": [
+    {
+      "path": "evidence/C05-course-shape.md",
+      "bytes": 2045,
+      "sha256": "44c8c691964015c229396f1fcf11d37096affef5536735b9caf6ca3e9e8eeb9f"
+    },
+    {
+      "path": "evidence/capture-evidence-initial-failure.json",
+      "bytes": 804,
+      "sha256": "ed66c507caeaa682033b72183c274b490d271925d5d24b651c5c312b5b13a42a"
+    },
+    {
+      "path": "evidence/corpus-query-map.json",
+      "bytes": 6993,
+      "sha256": "ae5e8fa5cb0d4eed32ef08898cdb84eef20bbbaaa47f65786b712ac2e4c73a32"
+    },
+    {
+      "path": "evidence/corpus-rows.json",
+      "bytes": 100197,
+      "sha256": "69221b3b5cdc43c67998966d41db72164d8abcbf18784706817169299deb9cbd"
+    },
+    {
+      "path": "evidence/errata-checks.json",
+      "bytes": 2805,
+      "sha256": "9e81d774fb78f5a94d7cd1475395a8e2f94956d4b28f51c124244f666b760900"
+    },
+    {
+      "path": "evidence/governing-AGENTS.md",
+      "bytes": 11061,
+      "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+    },
+    {
+      "path": "evidence/governing-data__alignment__span_head_allow.json",
+      "bytes": 9984,
+      "sha256": "95104b9135581d1b2e2e20a665a3cd7e936da91b4a3386eca22631d22d1d8707"
+    },
+    {
+      "path": "evidence/governing-docs__ALIGNMENT_LAYER_SPEC.md",
+      "bytes": 12007,
+      "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+    },
+    {
+      "path": "evidence/governing-docs__alignment_briefs__PROPOSE_BRIEF.md",
+      "bytes": 8093,
+      "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+    },
+    {
+      "path": "evidence/governing-docs__errata_register.json",
+      "bytes": 262017,
+      "sha256": "dc851e07fe913a904dc8b57f173f0bcbc4f13a884e65136f6560688576dc6c6c"
+    },
+    {
+      "path": "evidence/governing-mapping.json",
+      "bytes": 3648,
+      "sha256": "c9c40abb57c1459b963d4c457102dcacd558ba77c6e964a8d987217b36eaf964"
+    },
+    {
+      "path": "evidence/governing-tools__build_alignment_layer.py",
+      "bytes": 39670,
+      "sha256": "d04f3a37bb878dde9007ed11ef907b3fdd59c4b88a4ba608e3aa40430825d5c1"
+    },
+    {
+      "path": "evidence/governing-tools__gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    {
+      "path": "evidence/instruction-receipts.json",
+      "bytes": 938,
+      "sha256": "a592cacd19ed0d05b528c7e67cb7b3470104edc0d0a56af249f78fac30fd10b6"
+    },
+    {
+      "path": "evidence/instructions-proposal-baseline.json",
+      "bytes": 4637,
+      "sha256": "fb8573e417cfc8bb515e70e70593f8278dd444e922fea09a17ab103655fcc85f"
+    },
+    {
+      "path": "evidence/instructions-proposal-protocol.md",
+      "bytes": 4770,
+      "sha256": "6cf88efbfe2b7a68ea4d3d7fb507043b595760f9d60fd05b44a47e3268c6f752"
+    },
+    {
+      "path": "evidence/instructions-tibetan-brief.md",
+      "bytes": 1660,
+      "sha256": "8bccaaa32e4c5bf8ee13f930580e1bb474a6723e3251eeacc4cd59335e3eafb9"
+    },
+    {
+      "path": "evidence/master-entries.json",
+      "bytes": 153237,
+      "sha256": "c352ba1c52b73c1dc667c8b4d8925ccb7b24a8dd24bd6196edf93ed94846bc6a"
+    },
+    {
+      "path": "evidence/master-query-map.json",
+      "bytes": 12199,
+      "sha256": "609783a74b214d4273dac3e70856c4b523551f9cb9eef500eb8d4f83b42e85e1"
+    },
+    {
+      "path": "evidence/original-corpus-verification.json",
+      "bytes": 24179,
+      "sha256": "6ebacfefe8a488a9d07432c953ad09e168207c46f5875568d60044f09b996fd9"
+    },
+    {
+      "path": "evidence/parallel-comparisons.json",
+      "bytes": 5528,
+      "sha256": "ee4a0a93970496b07ddec4fd2eea89db6edcc49c112f7efd4a54e98b795caac0"
+    },
+    {
+      "path": "evidence/physical-capture-attempt01.execution.json",
+      "bytes": 316,
+      "sha256": "5a53daa9feb1d47897eafbf9b6dbeb68bf0815b5af940fece1cf7986d9065fcc"
+    },
+    {
+      "path": "evidence/physical-capture-attempt01.stderr",
+      "bytes": 349,
+      "sha256": "613f20b3f543a81e1e29941257995a3ff2d3991726449d8bfc805802bbf5c88b"
+    },
+    {
+      "path": "evidence/physical-capture-attempt01.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/physical-capture.execution.json",
+      "bytes": 524,
+      "sha256": "4c4a6220b815e522c94554ce2e7a1401beec1366757a30af9c3b85a056c42589"
+    },
+    {
+      "path": "evidence/physical-capture.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/physical-capture.stdout",
+      "bytes": 73,
+      "sha256": "ff86dfa47841e13463004389eb6be04f05784e0d1d8967270859d0c74677d833"
+    },
+    {
+      "path": "evidence/physical-source-excerpts.json",
+      "bytes": 4966,
+      "sha256": "34d2d76eba088472e4d187d1fd816886945b7d5c3497636ebbcb05af4251ecc8"
+    },
+    {
+      "path": "evidence/run_generator_readonly.py.txt",
+      "bytes": 666,
+      "sha256": "584e87317a295d3bfb0e2bbd96d7c69a2497286c728f75d64f01dc0aa4ba2747"
+    },
+    {
+      "path": "evidence/semantic-change-metadata-failure.json",
+      "bytes": 686,
+      "sha256": "e952d454cd8a86316febc1e9704c4e080751a3114802f4c838f5b49810c2d855"
+    },
+    {
+      "path": "evidence/snapshot-verification.json",
+      "bytes": 527,
+      "sha256": "0f24b96932fde9115f9f04f6cc6f8f5b38c34c31ecc4b0648146479402964d74"
+    },
+    {
+      "path": "evidence/source-pins.json",
+      "bytes": 1846,
+      "sha256": "4413fd6415b2cff64ceb2d450cb7a23fada8703abde62487fdf22c8f31deaf44"
+    },
+    {
+      "path": "evidence/spine-meta.json",
+      "bytes": 788,
+      "sha256": "f42432864a3024629fd8e17048d41c9db99130b229e8284d6b74a9387bddae5f"
+    },
+    {
+      "path": "evidence/verify-after-semantic-change.execution.json",
+      "bytes": 338,
+      "sha256": "0c947b9c1cf650a2c33b6db975cb68493f0ed7991cfcc11334c6c13970dbbfae"
+    },
+    {
+      "path": "evidence/verify-after-semantic-change.stderr",
+      "bytes": 455,
+      "sha256": "6f2aff2f64c03fb3813377fdb57f529f263a29e0a96b3efa0b1685499923f1eb"
+    },
+    {
+      "path": "evidence/verify-after-semantic-change.stdout",
+      "bytes": 116,
+      "sha256": "56e0d463a9313547010457ba5a8470eb685574123d2dd2a3312dcb451025f0c1"
+    },
+    {
+      "path": "evidence/verify-attempt01-failure.json",
+      "bytes": 545,
+      "sha256": "5f12f27133fb8f3dddc42ab691e0f4534b0de0e45e514d9898dd288d83821057"
+    },
+    {
+      "path": "evidence/verify-complete.execution.json",
+      "bytes": 312,
+      "sha256": "fbcef57511341ab8bd5240d6f2ed0ea47cd1bc6a27a8178450de8e6da92b90d0"
+    },
+    {
+      "path": "evidence/verify-complete.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/verify-complete.stdout",
+      "bytes": 207,
+      "sha256": "45bc1483742834df7c5ac945d1e99b6d7a83906c5116e0855c87dc083aa2cd5e"
+    },
+    {
+      "path": "evidence/verify-final.execution.json",
+      "bytes": 306,
+      "sha256": "eda8236db2887a59f717f0fb9bf40ce8c30a90de63ae5115f02b15390273090f"
+    },
+    {
+      "path": "evidence/verify-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/verify-final.stdout",
+      "bytes": 163,
+      "sha256": "df05d0f024d698931567f646f332376eb804da9b3100f257869f3d5a4285a323"
+    }
+  ]
+}

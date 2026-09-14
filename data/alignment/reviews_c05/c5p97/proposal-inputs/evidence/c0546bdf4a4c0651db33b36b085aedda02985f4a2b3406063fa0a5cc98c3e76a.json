@@ -1,0 +1,7 @@
+{
+  "actual_command": "PYTHONDONTWRITEBYTECODE=1 python3 campaign-artifacts/C05-289-291/reconciled/verify_and_document.py",
+  "exit_code": 1,
+  "failed_check": "290/p_gis expected English [397,399], canonical resolved [396,398].",
+  "correction": "The author metadata was off by one; the native generator already wrapped the correct standalone by. Correct intended range to [396,398]; spec, body, note and native proof unchanged.",
+  "native_generators_affected": false
+}

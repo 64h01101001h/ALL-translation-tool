@@ -1,0 +1,20 @@
+from pathlib import Path
+import hashlib,json
+A=Path(__file__).resolve().parent; B=A.parent; E=A/'evidence'
+pins=json.loads((E/'source-pins.json').read_text())
+raw=Path(pins['physical']['path']).read_bytes()
+rows=json.loads((B/'source.json').read_text())
+out=[]
+for r in rows:
+    needle=r['acip'][:50].encode()
+    start=raw.index(needle); assert raw.find(needle,start+1)<0
+    end=raw.index(b'\r\n\r\n',start)+4
+    block=raw[start:end]; text=block.decode('utf-8')
+    eng_start=text.index(r['english'][:40])
+    acip=text[:eng_start]; english=text[eng_start:]
+    acip_equal=' '.join(acip.split())==r['acip']
+    english_equal=' '.join(english.split())==r['english']
+    assert acip_equal and english_equal,r['seq']
+    out.append({'seq':r['seq'],'original_path':pins['physical']['path'],'original_sha256':pins['physical']['sha256'],'block_byte_start':start,'block_byte_end':end,'block_sha256':hashlib.sha256(block).hexdigest(),'block_utf8':text,'split_character_at_english_start':eng_start,'acip_equal_after_whitespace_join':acip_equal,'english_equal_after_whitespace_join':english_equal,'comparison_rule':"' '.join(field.split()); original block remains unmodified in block_utf8",'limits':'This establishes text identity after line-wrap normalization, not independent publication or ingestion lineage; physical source has no Wylie field.'})
+(E/'physical-source-excerpts.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'physical_blocks':len(out),'acip_english_whitespace_normalized_equal':True}))

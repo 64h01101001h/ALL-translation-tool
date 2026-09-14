@@ -1,0 +1,33 @@
+import json,hashlib,datetime,subprocess,collections
+from pathlib import Path
+D=Path(__file__).resolve().parent;B=D.parent;W=D.parents[2]/'campaign-worktree';E=D/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def obj(p):b=p.read_bytes();return {'bytes':len(b),'sha256':sha(b)}
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (D/'freeze.json').exists(),'Never silently overwrite a frozen reconciliation.'
+checks=json.loads((E/'identity-and-original-replay-reuse.json').read_text())
+for x in checks['source_pins']:
+ actual=obj(Path(x['path']));assert actual['bytes']==x['bytes'] and actual['sha256']==x['sha256']
+for x in checks['frozen_originals']:
+ actual=obj(Path(x['path']));assert actual['bytes']==x['bytes'] and actual['sha256']==x['sha256']
+for x in checks['governing_immutable_objects']:
+ raw=subprocess.check_output(['git','show',x['commit']+':'+x['repository_path']],cwd=W)
+ expected=x.get('object_sha256',x.get('sha256'));assert sha(raw)==expected and len(raw)==x['bytes']
+for x in json.loads((D/'external-evidence-reference-pins.json').read_text()):assert obj(Path(x['path']))=={k:x[k] for k in ['bytes','sha256']}
+for rp in checks['native_original_replays_reused']:
+ for stream in ['spec','stdout','stderr','exit']:
+  x=rp[stream];assert obj(Path(x['path']))=={k:x[k] for k in ['bytes','sha256']}
+summ=json.loads((D/'verification-summary.json').read_text());totals=collections.Counter()
+for v in summ:
+ p=D/str(v['seq']);assert obj(p/'spec.json')==v['spec'] and obj(p/'body.html')==v['body']
+ for k in ['spans','d5_nonnull','nulls','errata','original_dispositions']:totals[k]+=v['counts'][k]
+ for depth,count in v['counts']['depths'].items():totals['d'+depth]+=count
+ assert len(json.loads((p/'original-dispositions.json').read_text()))==v['counts']['original_dispositions']
+ f=json.loads((p/'final-ordered-tuples.json').read_text());assert len(f)==v['counts']['spans'] and all(list(x)==['seq','id','d','tib','eng','tib_range','eng_range'] for x in f)
+assert totals['original_dispositions']==191 and totals['spans']==109
+dump(E/'final-source-and-original-preservation.json',{'status':'PASS','source_pins_rechecked':len(checks['source_pins']),'frozen_original_files_rechecked':len(checks['frozen_originals']),'six_actual_original_replays_hash_checked_again':True,'governing_snapshot_rule':'Historical objects compared only to immutable129e86af Git objects; no historical claim inferred from current mutable live governing files.','source_and_originals_unchanged':True,'new_final_native_runs':3,'semantic_approval_claimed':False})
+files=[{'path':str(p.relative_to(D)),**obj(p)} for p in sorted(D.rglob('*')) if p.is_file()]
+payload={'status':'FROZEN_RECONCILIATION_READY_FOR_FRESH_SEPARATE_SEMANTIC_REVIEW','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'actual_producer':'Codex (GPT-6 Astra)','segments':[289,290,291],'source_original_git_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8','source_original_boundary':285,'landing_baseline':'Root captures the separately accepted through288 baseline; no acceptance or landing claimed here.','totals':dict(totals),'per_segment':[{k:v[k] for k in ['seq','counts','native_exit','native_attempt','spec','body','stderr_bytes']} for v in summ],'original_files_unchanged':164,'original_spans_dispositioned':191,'actual_original_replays_reused':6,'new_final_native_generator_runs':3,'all_new_generator_exits':0,'all_new_stderr_bytes':0,'errata':0,'all_five_grounds_for_seven_source_suspicions':True,'head_allowance_proposal':'290/head-allowance-proposal.json; exact pages_c05/c5p97/s290w23, sogs/and so on. No W allowance changed.','helper_history':'One metadata-only intended-by-range correction, preserved in history/01-intended-by-offset-correction; native spec/body already correct and unchanged.','source_roles_and_omissions_complete':True,'fresh_separate_semantic_review_required':True,'W_edits_commits_or_source_mutations':False,'files':files,'file_count':len(files),'total_payload_bytes':sum(x['bytes'] for x in files),'manifest_rule':'freeze.json and freeze.sha256 are excluded from their own payload list; freeze.sha256 pins exact freeze.json bytes.'}
+dump(D/'freeze.json',payload);(D/'freeze.sha256').write_text(sha((D/'freeze.json').read_bytes())+'  freeze.json\n')
+for x in payload['files']:assert obj(D/x['path'])=={k:x[k] for k in ['bytes','sha256']}
+print(json.dumps({'status':payload['status'],'manifest_sha256':sha((D/'freeze.json').read_bytes()),'payload_files':len(files),'payload_bytes':payload['total_payload_bytes'],'totals':dict(totals)},ensure_ascii=False))

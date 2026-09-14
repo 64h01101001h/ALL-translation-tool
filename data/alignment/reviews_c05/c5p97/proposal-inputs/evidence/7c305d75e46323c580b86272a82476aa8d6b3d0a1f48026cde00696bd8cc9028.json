@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-09-12T21:40:29.771768+00:00",
+  "status": "READ-ONLY exploratory schema probe failed; preserved",
+  "query": "SELECT * FROM metadata",
+  "error": "sqlite3.OperationalError: no such table: metadata",
+  "preceding_success": "PRAGMA table_info(corpus_segments) returned actual seven-field schema",
+  "disposition": "Do not infer a metadata table. Read actual corpus_segments and original master/corpus directly; capture helper completed EXIT0 first run.",
+  "canonical_or_source_changes": false,
+  "inline_probe_source_preservation": "Exact query, exception and tool transcript retained; full initial inline script not copied to a separate source file."
+}

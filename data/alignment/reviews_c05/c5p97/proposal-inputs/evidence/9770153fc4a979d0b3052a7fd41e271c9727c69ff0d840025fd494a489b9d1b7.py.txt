@@ -1,0 +1,57 @@
+from pathlib import Path
+import difflib,gzip,hashlib,json
+A=Path(__file__).resolve().parent;B=A.parent;W=B.parent.parent/'campaign-worktree';E=A/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(path,obj):path.write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+terms=['gsum po','gsum ga','re res','bzhag','grub','sgrub','des na','de dag','des','lta','lta ga la yod','ga la yod']
+entries=json.loads((E/'master-entries.json').read_text());queries=json.loads((E/'master-query-map.json').read_text())
+for term in terms:
+    if any(q['term']==term for q in queries):continue
+    found=[(i,r) for i,r in enumerate(master['unified_entries']) if r.get('wylie')==term or term in (r.get('wylie_variants') or [])]
+    for i,r in found:entries[str(i)]=r
+    queries.append({'term':term,'rule':'exact wylie or exact member of wylie_variants','count':len(found),'unified_entry_zero_based_indices':[i for i,r in found],'capture_script':'../complete_evidence.py'})
+write(E/'master-entries.json',entries);write(E/'master-query-map.json',queries)
+receipts=[]
+for p in [B/'tibetan-brief.md',B/'proposal-baseline.json',B.parent/'proposal-protocol.md']:
+    target='instructions-'+p.name
+    (E/target).write_bytes(p.read_bytes())
+    receipts.append({'original_path':str(p),'copy':target,'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+write(E/'instruction-receipts.json',receipts)
+rows=json.loads((E/'corpus-rows.json').read_text())
+comparisons=[]
+for a,b in [(1671,5985),(1672,5986),(1673,5987),(1672,34923)]:
+    r,s=rows[str(a)],rows[str(b)]
+    comp={'source_id':a,'source_citation':r['course']+':'+str(r['seq']),'parallel_id':b,'parallel_citation':s['course']+':'+str(s['seq']),'source_file':'corpus-rows.json','equal_fields':{},'differences':{}}
+    for k in ['acip','wylie','english']:
+        comp['equal_fields'][k]=r[k]==s[k]
+        if r[k]!=s[k]:
+            comp['differences'][k]=[{'operation':tag,'source_range':[i,j],'parallel_range':[u,v],'source':r[k][i:j],'parallel':s[k][u:v]} for tag,i,j,u,v in difflib.SequenceMatcher(None,r[k],s[k],autojunk=False).get_opcodes() if tag!='equal']
+    comp['limits']='Text-field comparisons only; id, course and seq differ. No independent publication or ingestion lineage inferred.'
+    comparisons.append(comp)
+write(E/'parallel-comparisons.json',comparisons)
+register=json.loads((E/'governing-docs__errata_register.json').read_text())
+classes=['E-044','E-071','E-076','E-106','E-107','E-121']
+checks=[]
+for seq in [289,290,291]:
+    r=rows[str(seq+1382)]
+    checks.append({'seq':seq,'complete_source_spine_id':r['id'],'acip_english_verified_in_physical_archive':True,'english_characters':len(r['english']),'exact1500_cap':len(r['english'])==1500,'replacement_character':any('\ufffd' in r[k] for k in ['acip','wylie','english']),'escape_or_braces_in_wylie':any(c in r['wylie'] for c in '{}'),'following_heading':False,'verse_lineation':', ,' in r['wylie'],'verse_lineation_is_apparatus_not_erratum':seq==291,'new_errata':[],'assessment':'No supported source defect found in complete original rows and available parallels. C15:436 punctuation differs but preserves the same quoted content; no correction proposed.'})
+write(E/'errata-checks.json',{'register_git_commit':json.loads((B/'proposal-baseline.json').read_text())['commit'],'register_copy':'governing-docs__errata_register.json','class_records':[{k:r.get(k) for k in ['item_id','kind','segment']} for r in register if r.get('item_id') in classes],'following_heading_policy':'Course shape and PROPOSE brief register the following-section-heading class; none is present in these three rows.','rows':checks})
+alias={'gsum po':['gsum po','gsum'],'re res':['re res','re re'],'bzhag pa':['bzhag pa','bzhag'],'gsum ga':['gsum ga','gsum'],'ma rtogs':['rtogs'],'lta ga la yod':['lta ga la yod','ga la yod','ga la','lta'],'grub':['grub','grub pa'],'du mas':['du ma'],'sgrub':['sgrub','sgrub pa']}
+qmap={q['term']:q for q in queries}
+for seq in [289,290,291]:
+    D=A/str(seq);decision=json.loads((D/'decisions.json').read_text());r=rows[str(seq+1382)]
+    lexmap=[]
+    for entry in decision['entries']:
+        lookups=[qmap[t] for t in alias.get(entry['tib'],[entry['tib']]) if t in qmap]
+        lexmap.append({'span_id':entry['id'],'source_pair':{'tib':entry['tib'],'eng':entry['eng']},'master_query_terms':[q['term'] for q in lookups],'master_entry_indices':sorted(set(i for q in lookups for i in q['unified_entry_zero_based_indices'])),'scope':'Current HGM comparison only. Actual English is attested solely by the complete C05 source row; glossary entries do not automatically license the local mapping.','specific_role_note':entry['role_note']})
+    gaps={}
+    for side,field in [('tib','wylie'),('eng','english')]:
+        ranges=sorted(e['intended_'+side+'_range'] for e in decision['entries'] if e['intended_'+side+'_range'] is not None)
+        pos=0;gaps[side]=[]
+        for start,end in ranges:
+            if start>pos:gaps[side].append({'range':[pos,start],'text':r[field][pos:start]})
+            pos=max(pos,end)
+        if pos<len(r[field]):gaps[side].append({'range':[pos,len(r[field])],'text':r[field][pos:]})
+    write(D/'material-evidence-map.json',{'seq':seq,'spine_id':r['id'],'full_source_file':'../evidence/corpus-rows.json','master_entries_file':'../evidence/master-entries.json','master_query_map':'../evidence/master-query-map.json','spans':lexmap,'all_unwrapped_intervals':gaps,'omission_reasons':'decisions.json','explicit_nulls':[e for e in decision['entries'] if e['eng'] is None]})
+print(json.dumps({'master_queries':len(queries),'unique_master_entries':len(entries),'unique_corpus_rows':len(rows),'parallel_comparisons':len(comparisons),'errata_count':0}))

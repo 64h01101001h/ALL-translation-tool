@@ -1,0 +1,16 @@
+import sys,json,subprocess,os,hashlib,datetime,shutil,importlib.util,re
+from pathlib import Path
+E=Path(__file__).resolve().parent;R=E.parents[2];W=R/'campaign-worktree';B=E.parent
+sha=lambda b:hashlib.sha256(b).hexdigest()
+for seq in [int(x) for x in sys.argv[1:]] or [289,290,291]:
+ D=E/str(seq);attempts=D/'native-attempts';attempts.mkdir(exist_ok=True);n=1
+ while (attempts/('attempt-%02d'%n)).exists():n+=1
+ A=attempts/('attempt-%02d'%n);A.mkdir();stdin=(D/'spec.json').read_bytes();(A/'stdin.json').write_bytes(stdin)
+ command=[sys.executable,str(R/'campaign-artifacts/run_generator_readonly.py')]
+ started=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(command,input=stdin,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (A/'stdout.html').write_bytes(p.stdout);(A/'stderr.txt').write_bytes(p.stderr);(A/'exit.txt').write_text(str(p.returncode)+'\n')
+ proof={'seq':seq,'actual_producer':'Codex','command':command,'cwd':str(W),'env_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite_access':'Existing read-only wrapper enforces SQLite URI mode=ro; unchanged canonical generator and builder files pin to original Git baseline.','started_utc':started,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_exit':p.returncode,'stdin_bytes':len(stdin),'stdin_sha256':sha(stdin),'stdout_bytes':len(p.stdout),'stdout_sha256':sha(p.stdout),'stderr_bytes':len(p.stderr),'stderr_sha256':sha(p.stderr),'body_equals_stdout':p.returncode==0,'original_governing_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8','generator_sha256':sha((W/'tools/gen_alignment_page.py').read_bytes()),'wrapper_sha256':sha((R/'campaign-artifacts/run_generator_readonly.py').read_bytes())}
+ (A/'proof.json').write_text(json.dumps(proof,indent=2)+'\n')
+ if p.returncode==0:
+  (D/'body.html').write_bytes(p.stdout);(D/'native-proof.json').write_text(json.dumps({**proof,'attempt_path':str(A.relative_to(E))},indent=2)+'\n')
+ print(seq,'EXIT='+str(p.returncode),'stdout_bytes='+str(len(p.stdout)),'stderr_bytes='+str(len(p.stderr)),p.stderr.decode())

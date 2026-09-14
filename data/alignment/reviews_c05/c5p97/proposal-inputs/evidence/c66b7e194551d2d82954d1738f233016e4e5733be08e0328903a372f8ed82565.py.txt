@@ -1,0 +1,65 @@
+import json,sqlite3,gzip,hashlib,subprocess,os,re
+from pathlib import Path
+R=Path(__file__).resolve().parents[3]; W=R/'campaign-worktree'; B=R/'campaign-artifacts/C05-289-291'; E=B/'english'; G=E/'evidence'; G.mkdir(exist_ok=True)
+def dump(name,data): (G/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+baseline=json.loads((B/'proposal-baseline.json').read_text()); commit=baseline['commit'];pins={}
+for p,v in baseline['governing_git_pins'].items():
+ raw=subprocess.check_output(['git','show',commit+':'+p],cwd=W); assert sha(raw)==v['sha256']
+ dst=G/'governing'/p;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(raw)
+ pins[p]={'commit':commit,'sha256':sha(raw),'bytes':len(raw),'copy':str(dst.relative_to(E)),'working_copy_matches':(W/p).read_bytes()==raw}
+checks={}
+for k,v in baseline['source_pins'].items():
+ raw=Path(v['path']).read_bytes();checks[k]={'path':v['path'],'bytes':len(raw),'sha256':sha(raw),'matches_pin':len(raw)==v['bytes'] and sha(raw)==v['sha256']};assert checks[k]['matches_pin']
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');con.row_factory=sqlite3.Row
+rows=[dict(r) for r in con.execute('select * from corpus_segments where course=? and seq between ? and ? order by seq',('C05',283,297))]
+for filename,seqs in [('source.json',range(289,292)),('context.json',range(283,298))]:
+ snapshot=json.loads((B/filename).read_text()); selected=[r for r in rows if r['seq'] in seqs]; assert len(snapshot)==len(selected)
+ checks[filename]={'full_rows':len(selected),'fields':['id','course','seq','acip','wylie','english'],'all_match':all(all(a[k]==b[k] for k in a) for a,b in zip(snapshot,selected))};assert checks[filename]['all_match']
+dump('source-context-full-rows.json',{'sql':'select * from corpus_segments where course=? and seq between ? and ? order by seq','params':['C05',283,297],'count':len(rows),'rows':rows})
+with gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt') as f:archive=json.load(f)
+course_rows=[(i,r) for i,r in enumerate(archive) if r.get('course')=='C05']
+archive_evidence=[]
+for row in rows:
+ i,ar=course_rows[row['seq']-1];raw=json.loads(row['raw']);assert ar==raw
+ archive_evidence.append({'course_seq_1based':row['seq'],'archive_index_0based':i,'full_archive_record':ar,'equals_spine_raw_object':True,'acip_wylie_english_match':all(ar[k]==row[k] for k in ('acip','wylie','english'))})
+dump('archive-identity.json',{'archive_total':len(archive),'C05_count':len(course_rows),'identity_rule':'Original array filtered course C05, ordinal 1-based is spine seq. Whole record compared to parsed raw; three text fields compared separately. No independent publication/ingestion-lineage claim.','records':archive_evidence})
+physical=Path(baseline['source_pins']['physical']['path']);raw=physical.read_bytes();txt=raw.decode('utf-8-sig');flat=' '.join(txt.split());pe=[]
+for row in rows:
+ if row['seq'] not in range(289,292):continue
+ ac=' '.join(row['acip'].split());en=' '.join(row['english'].split());a=flat.find(ac);b=flat.find(en)
+ pe.append({'seq':row['seq'],'acip_normalized_offset':a,'english_normalized_offset':b,'acip_normalized_exact_count':flat.count(ac),'english_normalized_exact_count':flat.count(en),'acip_quoted':row['acip'],'english_quoted':row['english']})
+# Preserve only complete physical source blocks that contain the target text, with physical line identities.
+lines=txt.splitlines(keepends=True);starts=[i for i,l in enumerate(lines) if any(x in l for x in ["DE LTAR SNANG NA 'GRO", "DES NA LUNG DE'I DON", "DER THAL, DE'I 'OG TU",'If this were how the three objects', 'The real meaning of the quotation', 'And this is certainly the case, for later'])]
+blocks=[]
+for i in starts:
+ lo=max(0,i-2);hi=min(len(lines),i+50);blocks.append({'line_start_1based':lo+1,'line_end_1based':hi,'text':''.join(lines[lo:hi])})
+dump('physical-source.json',{'path':str(physical),'sha256':sha(raw),'normalization':'whitespace collapse only for identity check; quoted physical line blocks retain originals','comparisons':pe,'blocks':blocks})
+terms=['de ltar','snang','snang ba',"'gro ba",'gsum','rang rang','thun mong ma yin pa','las','bag chags','bzhag pa','smin pa','brten','dngos po','gang zag','re re','rtogs','dgos','bkag','lung','don','yi dvags','ji ltar','phyi rol don','grub','rnag','thigs pa',"'ga'",'med','gang ba','klung',"'on kyang",'dbang','sogs','mthong','bstan',"'og tu",'rnag khrag','sems','tsam','bdag nyid',"bza' btung",'bya ba','nus','rtsod','lan','bya byed','rmi lam','gnod pa',"'dra",'dpe','du ma','sgrub','mdzad']
+with gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt') as f:master=json.load(f)
+lex=[]
+for t in terms:
+ hits=[]
+ for layer in ['unified_entries','curated_entries','glossary_entries']:
+  for i,r in enumerate(master[layer]):
+   if r.get('wylie')==t or t in r.get('wylie_variants',[]):hits.append({'layer':layer,'index':i,'record':r})
+ lex.append({'query':{'wylie_or_variant_exact':t},'count':len(hits),'hits':hits})
+dump('hgm-lexical.json',{'source':str(W/'data/hgm_dictionary_v27_2.json.gz'),'source_sha256':checks['master']['sha256'],'queries':lex})
+# Material comparison queries: save all complete rows once; query-to-row mapping is explicit.
+queries=[]; pool={}
+def query(qid,sql,params):
+ hits=[dict(r) for r in con.execute(sql,params)];ids=[]
+ for r in hits:pool[str(r['id'])]=r;ids.append(r['id'])
+ queries.append({'id':qid,'sql':sql,'params':params,'count':len(hits),'row_ids':ids})
+for row in rows:
+ if row['seq'] in range(289,292):
+  query('exact_text_'+str(row['seq']),'select * from corpus_segments where acip=? or wylie=? or english=? order by course,seq',[row['acip'],row['wylie'],row['english']])
+for qid,t,e in [('unshared','thun mong ma yin','different'),('seed','bag chags','seed'),('force','las kyi dbang','forced'),('actions_objects','bya byed','objects'),('injury','gnod pa','injury'),('mind_itself','bdag nyid','mind'),('function','bya ba','function')]:
+ query(qid,'select * from corpus_segments where wylie like ? and english like ? order by course,seq',['%'+t+'%','%'+e+'%'])
+dump('corpus-material.json',{'database':str(W/'build/hgm_spine_v27_2.db'),'database_sha256':checks['spine']['sha256'],'queries':queries,'rows':pool,'scope_warning':'Identical text fields alone do not establish independent publication or ingestion lineage. HGM corpus English is evidence; comparative dictionary fields cannot supply GMR wording.'})
+register=json.loads((G/'governing/docs/errata_register.json').read_text());dump('source-verification.json',{'actual_producer':'Codex English-first independent proposal','governing_baseline_commit':commit,'course_boundary':285,'baseline_role':'proposal source baseline only; not a through288 landing baseline','governing':pins,'checks':checks,'wrapper':{'path':str(R/'campaign-artifacts/run_generator_readonly.py'),'sha256':sha((R/'campaign-artifacts/run_generator_readonly.py').read_bytes())}})
+print('Verified 3 source rows x6 fields, 15 context rows x6 fields; archive full raw identity; all pins hold.')
+print('PHYSICAL',json.dumps(pe,ensure_ascii=False))
+print('QUERIES',[(q['id'],q['count']) for q in queries])
+for q in lex:
+ print('LEX',q['query']['wylie_or_variant_exact'],[(h['layer'],h['record'].get('hgm_gloss',h['record'].get('hgm_glosses'))) for h in q['hits']])

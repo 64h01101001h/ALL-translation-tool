@@ -1,0 +1,100 @@
+{
+  "status": "PASS",
+  "actual_baseline": {
+    "commit": "ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e",
+    "course_boundary": 288,
+    "full_links": 45621,
+    "null_exponents": 11943,
+    "evidence_headwords": 7102,
+    "evidence_pairs": 15587,
+    "sha256": {
+      "data/hgm_dictionary_v27_2.json.gz": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "data/full_parallel_corpus_v32.json.gz": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "data/alignment/alignment_full_v1.json": "418abb7e653a43c423f788ffdfd1222b061791ee2c1c2f949b4c4902bbce18bf",
+      "data/alignment/alignment_evidence_v1.json": "a9dc4ad4b23379606875d397d45b45a25a09c95865def950cef0f7674961cbf0",
+      "docs/geshe_michael_roach_dictionary.html": "5118cc7df176e5544eec697119b2304ddca134433686aa432da58971d958093c",
+      "docs/geshe_michael_roach_dictionary.csv": "a84419b6948d5d1f77c7d042a722b34e6d5dba9674ea87d68216f3e9b391accb",
+      "docs/geshe_michael_roach_dictionary_reverse.csv": "4ca44d2de5730013cf601ba351f1638e7845955cede05926b0fd9e4a8cb1b3ac",
+      "docs/geshe_michael_roach_dictionary_by_course.csv": "6c61414c2e35b52cef57088c183c7127c2c8fbf5f7dc9af36f52e2e131aac69d",
+      "docs/geshe_michael_roach_dictionary_changes.csv": "bef0bb33b71b83b1ff8d265986e5fcdaccc9bbe6ab83a36f964b5338ed64fc4b"
+    },
+    "required_reference_paths_readable": 8,
+    "source_snapshot_matches_spine": true,
+    "source_snapshot_fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ]
+  },
+  "source_origin_commit": "129e86afae8431aacfb1ee1cee65d8635dd265b8",
+  "source_origin_boundary": 285,
+  "baseline_hash_identity": [
+    {
+      "path": "data/hgm_dictionary_v27_2.json.gz",
+      "mode": "external-readonly-source",
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    {
+      "path": "data/full_parallel_corpus_v32.json.gz",
+      "mode": "external-readonly-source",
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "mode": "immutable-git-object",
+      "sha256": "418abb7e653a43c423f788ffdfd1222b061791ee2c1c2f949b4c4902bbce18bf"
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "mode": "immutable-git-object",
+      "sha256": "a9dc4ad4b23379606875d397d45b45a25a09c95865def950cef0f7674961cbf0"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "mode": "immutable-git-object",
+      "sha256": "5118cc7df176e5544eec697119b2304ddca134433686aa432da58971d958093c"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "mode": "immutable-git-object",
+      "sha256": "a84419b6948d5d1f77c7d042a722b34e6d5dba9674ea87d68216f3e9b391accb"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "mode": "immutable-git-object",
+      "sha256": "4ca44d2de5730013cf601ba351f1638e7845955cede05926b0fd9e4a8cb1b3ac"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "mode": "immutable-git-object",
+      "sha256": "6c61414c2e35b52cef57088c183c7127c2c8fbf5f7dc9af36f52e2e131aac69d"
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "mode": "immutable-git-object",
+      "sha256": "bef0bb33b71b83b1ff8d265986e5fcdaccc9bbe6ab83a36f964b5338ed64fc4b"
+    }
+  ],
+  "freeze_checks": [
+    {
+      "path": "tibetan/freeze.json",
+      "sha256": "5207be24d055b44025429ead8fa57d4d472c787d0ed3e8a7dcd8f67f3398bea0",
+      "files": 97
+    },
+    {
+      "path": "english/freeze-manifest.json",
+      "sha256": "00423c920f7a2c98e5c50b5f2cafd7ebbba74ad8eac507a0483b733b9373f434",
+      "files": 67
+    },
+    {
+      "path": "reconciled/freeze.json",
+      "sha256": "b790040db3a1816d64a1555405d684b402c4beee19f2c20069a4a7478716b603",
+      "files": 85
+    }
+  ],
+  "utc": "2026-09-14T13:54:49.657031+00:00",
+  "initial_helper_failure": "history/supplement-attempt01/failure.json"
+}

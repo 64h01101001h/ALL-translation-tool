@@ -1,0 +1,92 @@
+import json,sqlite3,gzip,hashlib,subprocess,re,os,difflib
+from pathlib import Path
+D=Path(__file__).resolve().parent; B=D.parent; R=B.parents[1]; W=R/'campaign-worktree'; E=D/'evidence'; E.mkdir(exist_ok=True)
+def dump(name,x):
+ p=E/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def info(p):
+ raw=p.read_bytes();return {'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}
+base=json.loads((B/'proposal-baseline.json').read_text()); commit=base['commit']
+refs=['Desktop/HGM DICTIONARY - TRANSLATION APP','ACIP Software Developmeent/Gofer Developmetn Files',"ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/ACIPHypercontext Tool","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/LokeshChandraDictionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/CreateLokeshChandraDIctionary","ACIP Software Developmeent/Ven. Phil's Development Folder/Mac_OSX/FixLokeshChandra",'ACIP Software Developmeent/tibetan-spellchecker','Tibetan Translation Tool']
+access=[{'path':str(Path.home()/r),'readable':os.access(Path.home()/r,os.R_OK)} for r in refs];assert all(x['readable'] for x in access)
+pins=[]
+for k,v in base['source_pins'].items():
+ x=info(Path(v['path']));assert x['sha256']==v['sha256'] and x['bytes']==v['bytes'];pins.append({'source':k,**x})
+gov=[]
+for p,v in base['governing_git_pins'].items():
+ raw=subprocess.check_output(['git','show',commit+':'+p],cwd=W);assert len(raw)==v['bytes'] and hashlib.sha256(raw).hexdigest()==v['sha256']
+ original=B/'english/evidence/governing'/p;assert original.read_bytes()==raw
+ gov.append({'repository_path':p,'commit':commit,'object_sha256':v['sha256'],'bytes':len(raw),'unchanged_original_snapshot':str(original)})
+for p in ['docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md']:
+ raw=subprocess.check_output(['git','show',commit+':'+p],cwd=W);dest=E/Path(p).name;dest.write_bytes(raw);gov.append({'repository_path':p,'commit':commit,**info(dest)})
+originals=[]
+for angle,manifest in [('tibetan','freeze.json'),('english','freeze-manifest.json')]:
+ m=json.loads((B/angle/manifest).read_text())
+ for f in m['files']:
+  p=B/angle/f['path'];x=info(p);assert x['bytes']==f['bytes'] and x['sha256']==f['sha256'];originals.append(x)
+assert len(originals)==164
+replays=[]
+for x in json.loads((B/'proposal-verification/report.json').read_text()):
+ a,s=x['angle'],x['seq'];pref=B/'proposal-verification'/f'{a}-{s}';spec=B/a/str(s)/'spec.json';body=B/a/str(s)/'body.html'
+ assert info(spec)['sha256']==x['spec_sha256'] and info(body)['sha256']==x['body_sha256']
+ out=Path(str(pref)+'.stdout');err=Path(str(pref)+'.stderr');ex=Path(str(pref)+'.exit')
+ assert out.read_bytes()==body.read_bytes() and int(ex.read_text())==0 and len(err.read_bytes())==0
+ replays.append({'angle':a,'seq':s,'spec':info(spec),'stdout':info(out),'stderr':info(err),'exit':info(ex),'body_equals_real_root_replay':True,'native_exit':0})
+dump('identity-and-original-replay-reuse.json',{'source_origin':commit,'source_boundary':285,'landing_baseline':'Separate later through288 baseline is outside this reconciliation; no acceptance claimed.','required_access':access,'source_pins':pins,'governing_immutable_objects':gov,'original_files_checked':len(originals),'frozen_originals':originals,'native_original_replays_reused':replays,'reuse_basis':'User-authorized efficiency: independently hash-check actual unchanged root replays; do not manufacture a second execution for bookkeeping. All newly authored final specs are actually run.'})
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');con.row_factory=sqlite3.Row
+pool={};queries=[];entries={};lqueries=[]
+def cq(label,sql,params):
+ rows=[dict(x) for x in con.execute(sql,params)];pool.update({str(x['id']):x for x in rows});queries.append({'label':label,'sql':sql,'params':params,'count':len(rows),'row_ids':[x['id'] for x in rows]});return rows
+contexts=cq('complete local argument','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',283,297])
+for f in ['source.json','context.json']:
+ for a in json.loads((B/f).read_text()):assert all(pool[str(a['id'])][k]==v for k,v in a.items())
+for fname in ['root-lexical-preparation.json','root-additional-lexical-preparation.json']:
+ for q in json.loads((B/fname).read_text()):
+  rows=[dict(x) for x in con.execute(q['sql'],q['parameters'])];assert rows==q['rows'];entries.update({str(x['id']):x for x in rows});lqueries.append({'term':q['term'],'sql':q['sql'],'params':q['parameters'],'count':len(rows),'entry_ids':[x['id'] for x in rows],'original_lead_file':fname,'exact_original_result_reopened':True})
+for fname in ['root-parallel-preparation.json','root-additional-parallel-preparation.json']:
+ for i,q in enumerate(json.loads((B/fname).read_text())):
+  rows=cq(fname+':'+str(i),q['sql'],q['parameters']);assert rows==q['rows']
+for name,sql,params in [
+ ('seed planting',"SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",['%bag chags bzhag%','%plant%']),
+ ('actions and objects',"SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",['%bya byed%','%objects%']),
+ ('causal force',"SELECT * FROM corpus_segments WHERE wylie LIKE ? AND english LIKE ? ORDER BY course,seq",['%dbang gis%','%forced%'])]:cq(name,sql,params)
+for s,phrase in [(289,"dngos po gsum ga"),(290,"rnag gi thigs pa"),(291,"bya byed rmi lam gnod pa")]:
+ cq(f'C16/P1/TCS parallel search {s}',"SELECT * FROM corpus_segments WHERE (course IN ('C16','P1') OR course LIKE 'TCS%') AND wylie LIKE ? ORDER BY course,seq",['%'+phrase+'%'])
+with gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt') as f:master=json.load(f)
+terms=set(q['term'] for q in lqueries);mrecords={};mqueries=[]
+for term in sorted(terms):
+ ids=[]
+ for layer in ['unified_entries','curated_entries','glossary_entries']:
+  for i,x in enumerate(master[layer]):
+   if x.get('wylie')==term or term in x.get('wylie_variants',[]):
+    key=f'{layer}:{i}';mrecords[key]=x;ids.append(key)
+ mqueries.append({'term':term,'match_rule':'exact wylie or wylie_variants member across three original master layers','count':len(ids),'record_keys':ids})
+with gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt') as f:archive=json.load(f)
+bycourse={}
+for i,x in enumerate(archive):bycourse.setdefault(x['course'],[]).append((i,x))
+archive_checks=[]
+for row in pool.values():
+ i,x=bycourse[row['course']][row['seq']-1];assert x==json.loads(row['raw']);assert all(x[k]==row[k] for k in ['acip','wylie','english'])
+ archive_checks.append({'spine_id':row['id'],'course':row['course'],'seq':row['seq'],'archive_index':i,'full_record_equals_spine_raw':True,'text_fields_match':True})
+dump('lexical-entries.json',entries);dump('lexical-queries.json',lqueries);dump('master-records.json',mrecords);dump('master-queries.json',mqueries);dump('corpus-rows.json',pool);dump('corpus-queries.json',queries);dump('original-corpus-checks.json',{'archive_total':len(archive),'records':archive_checks,'complete_original_records':'corpus-rows.json / raw contains identical complete archive object; stored once'})
+phy=Path(base['source_pins']['physical']['path']);raw=phy.read_bytes();txt=raw.decode('latin-1');norm=' '.join(txt.split());phys=[]
+for row in contexts:
+ if row['seq'] not in [289,290,291]:continue
+ for field in ['acip','english']:
+  needle=' '.join(row[field].split());idx=norm.find(needle);assert idx>=0
+  # Find original exact extent by whitespace-flexible matching, preserving raw physical bytes.
+  m=re.search(r'\s+'.join(re.escape(t) for t in row[field].split()),txt);assert m
+  phys.append({'seq':row['seq'],'field':field,'normalized_count':norm.count(needle),'normalized_offset':idx,'physical_byte_range':[m.start(),m.end()],'physical_line_start':txt.count('\n',0,m.start())+1,'physical_verbatim':txt[m.start():m.end()]})
+dump('physical-source.json',{'source':info(phy),'normalization':'Latin-1 reversible decoding, ASCII whitespace folded for match only; physical extents preserved verbatim.','extents':phys})
+comparisons=[]
+for s,c,t in [(289,'C15',434),(290,'C15',435),(290,'P7',34),(291,'C15',436)]:
+ a=next(x for x in pool.values() if x['course']=='C05' and x['seq']==s);b=next(x for x in pool.values() if x['course']==c and x['seq']==t)
+ fields={}
+ for field in ['acip','wylie','english']:
+  dif=[{'operation':op,'C05_range':[i,j],'parallel_range':[k,l],'C05':a[field][i:j],'parallel':b[field][k:l]} for op,i,j,k,l in difflib.SequenceMatcher(None,a[field],b[field],autojunk=False).get_opcodes() if op!='equal']
+  fields[field]={'C05_chars':len(a[field]),'parallel_chars':len(b[field]),'identical':a[field]==b[field],'differences':dif}
+ comparisons.append({'seq':s,'parallel':[c,t],'source_row_ids':[a['id'],b['id']],'fields':fields,'limit':'Digital field identity/difference alone proves neither independent publication nor ingestion lineage.'})
+dump('parallel-comparisons.json',comparisons)
+reg=json.loads(subprocess.check_output(['git','show',commit+':docs/errata_register.json'],cwd=W));rs=reg if isinstance(reg,list) else reg.get('items',reg.get('errata',[]))
+selected=[r for r in rs if r.get('item_id') in ['E-044','E-071','E-076','E-107','E-111','E-121'] or r.get('course')=='C05' and any(':'+str(s) in str(r.get('segment','')) for s in [289,290,291])]
+dump('registered-classes.json',{'commit':commit,'register_records':len(rs),'selected_count':len(selected),'records':selected})
+print(json.dumps({'status':'PASS','original_files':len(originals),'replays_reused':len(replays),'lexical_queries':len(lqueries),'master_records':len(mrecords),'corpus_queries':len(queries),'corpus_rows':len(pool),'physical_extents':len(phys),'registered_classes':len(selected)}))

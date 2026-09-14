@@ -1,0 +1,9 @@
+{
+  "status": "HELPER_BASELINE_CHECK_FAILED_AFTER_SOURCE_CHECKS_PASSED",
+  "observed_python_exit": 1,
+  "git_exit": 128,
+  "operation": "git show ba35c1bd2007e0b43eebe7661e89d420c1a1fc3e:data/hgm_dictionary_v27_2.json.gz",
+  "reason": "The source archives are external untracked inputs, not Git objects. Initial helper incorrectly treated every baseline hash as a committed object. No canonical generator failed; no W mutation occurred.",
+  "outer_native_streams": "Not separately persisted by the first helper; actual combined traceback appeared in tool output. No reconstructed native stream is claimed.",
+  "recovery": "Reuse completed source, master and five-ground checks; perform only the corrected baseline identity check."
+}

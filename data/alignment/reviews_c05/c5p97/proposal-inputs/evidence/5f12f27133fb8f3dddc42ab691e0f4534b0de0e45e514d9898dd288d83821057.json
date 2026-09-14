@@ -1,0 +1,13 @@
+{
+  "script": "../run_and_verify_attempt01.py",
+  "native_exit_code": 1,
+  "generator_completed": {
+    "seq": 289,
+    "exit": 0,
+    "stdout_bytes": 4409,
+    "stderr_bytes": 0,
+    "retained_native_proof": "../289/attempts/01/"
+  },
+  "failure": "SentenceParser included the .nul explanatory annotation in the unwrapped English comparison. Actual source text was unchanged; parser now excludes null annotation spans.",
+  "recording": "Observed from original exec_command result; successful native generator is reused unchanged, not rerun."
+}

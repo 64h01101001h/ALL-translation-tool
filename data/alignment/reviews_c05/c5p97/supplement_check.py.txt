@@ -1,0 +1,46 @@
+from pathlib import Path
+import json,sqlite3,subprocess,hashlib,gzip,sys,re,difflib,importlib.util,datetime
+S=Path(__file__).resolve().parent;B=S.parent;A=B.parent;W=A.parent/'campaign-worktree'
+read=lambda p:json.loads(p.read_text())
+def save(n,o): (S/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+sha=lambda b:hashlib.sha256(b).hexdigest()
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;db.execute('PRAGMA query_only=ON')
+master=json.loads(gzip.decompress((W/'data/hgm_dictionary_v27_2.json.gz').read_bytes()))
+queries=[];records={}
+for q in read(B/'reconciled/evidence/master-queries.json'):
+ term=q['term'];matches={f'{g}:{i}':e for g in ['unified_entries','curated_entries','glossary_entries'] for i,e in enumerate(master[g]) if e.get('wylie')==term or term in (e.get('wylie_variants') or [])}
+ assert list(matches)==q['record_keys'] and len(matches)==q['count'];records.update(matches);queries.append(q)
+assert all(records[k]==v for k,v in read(B/'reconciled/evidence/master-records.json').items())
+for e in read(S/'evidence/lexical-entries.json'):assert master['unified_entries'][e['id']-1]==json.loads(e['raw'])
+save('evidence/master-records.json',records);save('evidence/master-query-recheck.json',dict(status='PASS',queries=queries,record_count=len(records),spine_raw_records=105))
+archive=json.loads(gzip.decompress((W/'data/full_parallel_corpus_v32.json.gz').read_bytes()));corpus=read(S/'evidence/corpus-rows.json')
+for r in corpus:assert archive[r['id']-1]==json.loads(r['raw'])
+save('evidence/archive-verification.json',dict(status='PASS',total_records=len(archive),verified_records=[dict(id=r['id'],course=r['course'],seq=r['seq'],archive_index=r['id']-1,all_raw_fields_identical=True) for r in corpus]))
+register=read(S/'governing/docs/errata_register.json');register=register if isinstance(register,list) else register['items'];assert len(register)==192
+selected=[e for e in register if e['item_id'] in ['E-044','E-071','E-076','E-107','E-111','E-121']];assert len(selected)==6
+assert not [e for e in register if e.get('segment') in ['C05:289','C05:290','C05:291']]
+save('evidence/registered-class-review.json',dict(status='PASS',records=len(register),selected_classes=selected,target_duplicates=[],target_defect_screen='Complete target ACIP/English physical extents preserved. No escape drop, English running head, fused footnote, cap or row-boundary/heading defect found. Historical class census numbers are not new target claims or reasserted here.'))
+checks=[]
+for x in read(B/'reconciled/source-suspicion-five-ground-checks.json'):
+ seq=x['seq'];r=dict(db.execute("SELECT * FROM corpus_segments WHERE course='C05' AND seq=?",[seq]).fetchone());grounds=x['all_five_grounds'];quote=x['found'];counts={};equalities={};witnesses=[]
+ for field in ['acip','wylie','english']:
+  positions=[m.start() for m in re.finditer('(?='+re.escape(quote)+')',r[field])];counts[field]=dict(count=len(positions),positions=positions);assert counts[field]==grounds['a_quote_presence']['exact_occurrences'][field]
+  rows=[dict(z) for z in db.execute('SELECT * FROM corpus_segments WHERE '+field+'=? ORDER BY course,seq',[r[field]])];equalities[field]=len(rows);assert len(rows)==grounds['e_counts_and_segment_citations']['full_field_equality_counts_including_C05'][field]
+ for witness in grounds['b_parallel_independence']['digital_witnesses']:
+  actual=dict(db.execute('SELECT * FROM corpus_segments WHERE id=?',[witness['source_row_id']]).fetchone());assert actual['course']==witness['course'] and actual['seq']==witness['seq'];assert {f:quote in actual[f] for f in ['acip','wylie','english']}==witness['exact_claim_quote_in_parallel_fields'];witnesses.append(dict(id=actual['id'],course=actual['course'],seq=actual['seq'],equal_fields={f:r[f]==actual[f] for f in ['acip','wylie','english']},differences={f:[dict(op=op,source_range=[a,b],witness_range=[c,d],source=r[f][a:b],witness=actual[f][c:d]) for op,a,b,c,d in difflib.SequenceMatcher(None,r[f],actual[f],autojunk=False).get_opcodes() if op!='equal'] for f in ['acip','wylie','english']}))
+ q=grounds['b_parallel_independence']['targeted_C16_P1_TCS_search'];rr=[dict(z) for z in db.execute(q['sql'],q['params'])];assert len(rr)==q['count'] and [z['id'] for z in rr]==q['row_ids']
+ if seq==291:assert len(witnesses[0]['differences']['english'])==2
+ checks.append(dict(seq=seq,screened_suspicion=x['screened_suspicion'],found=quote,refuted=True,decisive_ground='d',a_actual_quote_counts=counts,b_actual_witnesses=witnesses,b_targeted_query=dict(sql=q['sql'],params=q['params'],actual_count=len(rr),row_ids=[z['id'] for z in rr]),b_limit='No independent publication or ingestion lineage established. C16:833 is a shorter lexical overlap in a different argument, not this passage.',c_register_records=192,c_new_target_duplicate_count=0,d_independent_disposition=grounds['d_expected_and_defensible_reading']['result'],e_requeried_complete_field_equalities=equalities,e_counts_checked=True))
+save('source-suspicion-independent-review.json',checks)
+freeze_counts=[]
+for rel in ['tibetan/freeze.json','english/freeze-manifest.json','reconciled/freeze.json']:
+ p=B/rel;x=read(p)
+ for rec in x['files']:
+  raw=(p.parent/rec['path']).read_bytes();assert len(raw)==rec['bytes'] and sha(raw)==rec['sha256']
+ freeze_counts.append(dict(path=rel,sha256=sha(p.read_bytes()),files=len(x['files'])))
+baseline=read(B/'baseline.json');assert baseline['course_boundary']==288
+assert subprocess.check_output(['git','merge-base','--is-ancestor',baseline['commit'],'HEAD'],cwd=W)==b''
+for rel,digest in baseline['sha256'].items():assert sha(subprocess.check_output(['git','show',baseline['commit']+':'+rel],cwd=W))==digest
+save('acceptance-baseline-binding.json',dict(status='PASS',actual_baseline=baseline,source_origin_commit=read(B/'proposal-baseline.json')['commit'],source_origin_boundary=285,freeze_checks=freeze_counts,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+cs=importlib.util.spec_from_file_location('copy_once',A/'copy_evidence_once.py');cm=importlib.util.module_from_spec(cs);cs.loader.exec_module(cm);cm.preserve(S,S/'original-to-copy-manifest.json',[B/'baseline.json',A/'land_reviewed_page_v2.py'])
+print(json.dumps(dict(status='PASS',master_queries=len(queries),master_records=len(records),archive_records=len(corpus),five_ground_checks=len(checks),freeze_checks=freeze_counts,acceptance_baseline=baseline['commit']),indent=2))

@@ -1,0 +1,18 @@
+import json,subprocess,os,hashlib,datetime,sys
+from pathlib import Path
+D=Path(__file__).resolve().parent;R=D.parents[2];W=R/'campaign-worktree';sha=lambda b:hashlib.sha256(b).hexdigest()
+def dump(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+for seq in [int(x) for x in sys.argv[1:]] or [289,290,291]:
+ p=D/str(seq);root=p/'attempts';root.mkdir(exist_ok=True);i=1
+ while (root/f'{i:02}').exists():i+=1
+ a=root/f'{i:02}';a.mkdir();raw=(p/'spec.json').read_bytes();(a/'stdin.json').write_bytes(raw)
+ cmd=[sys.executable,str(R/'campaign-artifacts/run_generator_readonly.py')];runtime={}
+ for f in ['tools/gen_alignment_page.py','tools/build_alignment_layer.py']:
+  b=(W/f).read_bytes();runtime[f]={'sha256':sha(b),'bytes':len(b)}
+ started=datetime.datetime.now(datetime.timezone.utc).isoformat();r=subprocess.run(cmd,input=raw,stdout=subprocess.PIPE,stderr=subprocess.PIPE,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ (a/'stdout.html').write_bytes(r.stdout);(a/'stderr.txt').write_bytes(r.stderr);(a/'exit.txt').write_text(str(r.returncode)+'\n')
+ for f,v in runtime.items():assert sha((W/f).read_bytes())==v['sha256']
+ proof={'seq':seq,'command':cmd,'cwd':str(W),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'database_access':'Existing read-only wrapper enforces SQLite URI mode=ro','started_utc':started,'finished_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'native_exit':r.returncode,'streams':{n:{'bytes':len(b),'sha256':sha(b)} for n,b in [('stdin',raw),('stdout',r.stdout),('stderr',r.stderr)]},'actual_runtime_files':runtime,'wrapper_sha256':sha(Path(cmd[1]).read_bytes()),'attempt_path':str(a.relative_to(D)),'source_origin':'129e86afae8431aacfb1ee1cee65d8635dd265b8 through285; actual runtime hash is separately recorded, not confused with historical source snapshot.'}
+ dump(a/'execution.json',proof)
+ if r.returncode==0:(p/'body.html').write_bytes(r.stdout);dump(p/'native-proof.json',proof)
+ print(f'{seq} EXIT={r.returncode}; STDOUT_BYTES={len(r.stdout)}; STDERR_BYTES={len(r.stderr)}');print(r.stderr.decode(),end='')

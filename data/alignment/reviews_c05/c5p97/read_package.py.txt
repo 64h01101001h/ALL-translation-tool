@@ -1,0 +1,26 @@
+from pathlib import Path
+import re,json,hashlib
+S=Path(__file__).resolve().parent; B=S.parent
+text=(B/'semantic-input-review-package.txt').read_text()
+parts=re.split(r'^===== (.*?) =====\n',text,flags=re.M)
+seen={}; output=[]
+def dedup(x,path):
+    if isinstance(x,(dict,list)) or isinstance(x,str) and len(x)>80:
+        key=json.dumps(x,ensure_ascii=False,sort_keys=True)
+        if key in seen: return {'EXACT_DUPLICATE_OF':seen[key]}
+        seen[key]=path
+    if isinstance(x,dict): return {k:dedup(v,path+'/'+k) for k,v in x.items()}
+    if isinstance(x,list): return [dedup(v,path+'/'+str(i)) for i,v in enumerate(x)]
+    return x
+for i in range(1,len(parts),2):
+    name,body=parts[i:i+2]
+    output.append('\n===== '+name+' =====\n')
+    try:
+        obj=json.loads(body)
+        result=dedup(obj,name)
+        if isinstance(result,list): output.extend(json.dumps(row,ensure_ascii=False)+'\n' for row in result)
+        else: output.append(json.dumps(result,ensure_ascii=False)+'\n')
+    except json.JSONDecodeError: output.append(body)
+(S/'package-distinct-content.txt').write_text(''.join(output))
+(S/'package-reading-proof.json').write_text(json.dumps({'original_bytes':len(text.encode()),'original_sha256':hashlib.sha256(text.encode()).hexdigest(),'sections':len(parts)//2,'method':'Every package section retained; exact repeated JSON subtrees are losslessly referenced to their first section/key path. Non-JSON text and complete diffs remain verbatim.'},indent=2)+'\n')
+print((S/'package-distinct-content.txt').stat().st_size)

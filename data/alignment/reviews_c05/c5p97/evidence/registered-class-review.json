@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "records": 192,
+  "selected_classes": [
+    {
+      "item_id": "E-044",
+      "course": "C01",
+      "segment": "C01:6",
+      "kind": "INGEST_ARTEFACT",
+      "found": "acip: ,AI Dm GU RU RA{tn} MAnd LA Km NI{ry}'A TA YA MI, ,   |   wylie: ai dM gu ru ra maND la kM ni'a ta ya mi,",
+      "expected": "The Wylie should carry the braced Sanskrit stacks the ACIP encodes: \"ratna\" (from RA{tn}) and \"nirya\" (from NI{ry}). Cf. the same mantra at TCS07:82, which is intact: \"ai daM gu ru ratna maNDa la kaM niryA ta yA mi\".",
+      "evidence": "The seg_hint of 40 is WRONG: C01:40 is the Pabongka title colophon (\"rdo rje 'chang pha bong kha pa...\"). The described strings (dM/kM/ND capitals, ni'a ta ya mi, ra maND la kM) occur at C01:6, verified verbatim. The ACIP source is CORRECT — {tn} and {ry} are the ACIP escapes for Sanskrit stacks, as at C01:344 (BU{ddh} P'A LI TA = Buddhapalita). The derived Wylie column silently drops the braced content: C01:6 \"ra maND la\" loses tn, \"ni'a\" loses ry. The parallel English in the same segment prints the correct \"Idam guru ratna mandalakam niryatayami\" twice, and TCS07:82 carries the undamaged Wylie.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "Systematic, not local: the same converter loss produces \"bu pA li ta\" for Buddhapalita at C01:344 (HIGH severity there — a reader is taught a wrong author name with no adjacent correction), and leaks raw braces at C03:351 (\"a{u2} Ta'i\" from Sm {bh}A{u2} tA'I). Scored MEDIUM here only because C01:6's own English line supplies the correct reading inches away. The fix belongs in the ACIP-to-Wylie conversion, not in the source text. The trailing \"COVERAGE GATE: C01 474->477; 19 open\" in the note is campaign bookkeeping and carries no erratum."
+    },
+    {
+      "item_id": "E-071",
+      "course": "C03",
+      "segment": "C03:303",
+      "kind": "INGEST_ARTEFACT",
+      "found": "the preliminaries",
+      "expected": "",
+      "evidence": "Verified in build/hgm_spine_v27_2.db, row id=867. C03:303 stores wylie='the preliminaries' (17 chars, confirmed with length(wylie)) and english='I. Why the Steps?' (17 chars); the acip column holds 'THE PRELIMINARIES' — English sitting in the transliteration column — and raw carries the same. The wylie is not Wylie: 'preliminaries' has no legal syllable analysis ('prel' is not a possible stack, 'aries' has no root-letter reading). Three courses carry the IDENTICAL wylie against unrelated English, which proves the string is a repeated editorial running head rather than any segment's text: C01:43 'the preliminaries' / 'I. The Lama and the Word'; C09:171 'the preliminaries' / 'The preliminary division of my text has two parts of its own: the offering of praise, and an identification of that which is to be to be explained.'; C03:303 / 'I. Why the Steps?'. The mechanism is visible where the same header stream was concatenated in front of real Tibetan instead of being stranded alone: C03:298 wylie = \"how the teaching was given ,de la 'dir khyab bdag 'khor lo'i mgon po rdo rje 'chang...\" and C09:54 wylie = \"i. the preliminaries de la 'dir rje btsun chos kyi rgyal po shar tsong kha pa chen po blo...\". Sibling header rows of the same class in this course: C03:22 'the asian classics institute'; C03:294 'foreword'; C03:295 'about the authors'; C03:401 'steps shared with those of lesser capacity'; C03:430 'steps shared with those of medium capacity'; C03:476 'open steps for those of greater capacity'; C03:513 'secret steps for those of greater capacity'; C03:558 'the conclusion'. Class boundary, to prevent over-broad remediation: C03:263 wylie='the tshom' / english='Destructive Doubts vi.' IS genuine Wylie (the tshom = doubt) and is NOT part of this class. Effect: the segment carries no Tibetan, so it cannot be aligned, and wylie-side FTS or concordance queries return English strings as though they were Tibetan. No textual correction is possible — the remedy is reclassification as an editorial section header rather than a Tibetan-English parallel segment.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-076",
+      "course": "C03",
+      "segment": "C03:296",
+      "kind": "INGEST_ARTEFACT",
+      "found": "You Should Give Up.1",
+      "expected": "You Should Give Up.  [footnote 1]",
+      "evidence": "CLASS ENTRY, not a single instance. Printed footnote reference numbers have been flattened into the running English at ingest, fused to the sentence-final period with no separator. Measured across the whole spine: 307 occurrences in 281 segments across 5 courses - C01 161, C03 95, C16 38, TCS13 7, TCS15 6. Counted on the signature 'sentence-final punctuation + 1-3 digits + space + capital', which excludes thousands separators ('25,000'), section labels ('(S1)') and verse citations ('[I.1b]'); two looser patterns were tried first and gave 1,054 and 867 before those contaminants were excluded. Every instance breaks exact-match search on the final word of its sentence.",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-107",
+      "course": "corpus-wide",
+      "segment": "class entry (186 segments end at exactly 1,500 characters)",
+      "kind": "INGEST_ARTEFACT",
+      "found": "' '.join(eng)[:1500] in engines/hgm_tools.py - the spine ingest silently caps every segment's English at 1,500 characters",
+      "expected": "the whole English of the segment; a segment whose translation runs past 1,500 characters loses its tail with no marker, no count and no log line",
+      "evidence": "Found by the skeptic pass on C03:429 (E-106), which asked why that field ends mid-sentence at 'there are five ' and measured length(english) = 1500 exactly. Census 2026-09-01 on build/hgm_spine_v27_2.db: 186 segments have length(english) = 1500 (DDA 28, C18 15, C12 14, C13 12, C11 11, Sunlight 11, C17 10, C03 9 - including C03:376, 429, 620, the Reading Eight/Nine/Ten note blocks - MB2 8, C16 7, and 25 further courses); 34 segments EXCEED 1,500, so at least one ingest path does not apply the cap and its reach is not uniform. What is lost is not always apparatus: wherever the cap falls inside a translation, the corpus has no English for the rest of the Tibetan and nothing can align it. The 186 are a floor for the affected rows (a row cut at exactly the cap is certain; a row that happened to be shorter is unaffected).",
+      "severity": "HIGH",
+      "confidence": "CONFIRMED",
+      "note": "OURS, NOT FIXED. The cap lives in the canonical ingest (engines/hgm_tools.py), so removing it changes the spine itself and must be re-proved against the full batteries (inviolable rule 2) before any layer is rebuilt on it; the C03:376/429/620 note blocks and any truncated translation would need re-scanning afterwards. Opened in TODO.md 2026-09-01 for Adam's ruling and the data project. No document edit is asked of ALL for this entry - it is a pipeline defect on our side."
+    },
+    {
+      "item_id": "E-111",
+      "course": "C03",
+      "segment": "C03:440",
+      "kind": "INGEST_ARTEFACT",
+      "found": "phyi ma'i snang shas",
+      "expected": "the row's Tibetan should close the verse line: \"...YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS LDOG,\"",
+      "evidence": "QUOTED AS FILED BY THE RECONCILER: wylie/ACIP of C03:440 end at \"YANG YANG BSAMS PAS PHYI MA'I SNANG SHAS\" (no closing shad) while the row's English ends \"...And the cycle's suffering: stop desire for the future.\" || Confirmed from this row's own text. (1) The quoted verse is in nine-syllable metre: line 1 of the citation, las 'bras mi slu 'khor ba'i sdug bsngal rnams, has nine syllables; line 2, yang yang bsams pas phyi ma'i snang shas, has eight, so the row ends one syllable short of the line. (2) Every other verse line in the row closes with a shad (\", ,\"); the row ends at snang shas with none. (3) The row's English renders the complete line including its verb (\"stop desire for the future\"), and \"stop\" has no Tibetan anywhere in the row. The missing syllable is ldog: C03:441's wylie begins \"ldog,ces pa ltar thog mar 'khor ba'i phun tshogs...\" while its English begins \"Suppose at first we are able to find...\", so the 440/441 boundary is offset by one word. The undivided line is witnessed at C01:207 and C16:98 (\"...PHYI MA'I SNANG SHAS LDOG,CES PAS BSTAN TE\") and at P1:83 (\"...phyi ma'i snang shas ldog\", same source re-ingested, corroborative only). The same split recurs two rows later: C03:443 ends \"...yid la goms pas tshe 'di'i snang shas\" with English \"...Think it constantly, stop desire for this life.\" and C03:444 opens \"ldogs pa ltar...\". Effect: \"stop\" in this row is necessarily left unwrapped, and ldog in C03:441 has no English on its row. Nothing is lost across the pair, hence LOW. SKEPTIC PASS 2026-09-01 (two independent skeptics, one on each side of the boundary, both survived): C03:440's wylie, ACIP and raw ingest record stop at 'snang shas' and 'ldog,ces' opens 441; the independent witnesses C01:207 and C16:98 carry the undivided line '...phyi ma'i snang shas ldog,ces pas bstan te'. The mirror claim filed from 441 ('ldog,' as the tail of 440's verse) is the same defect and is folded into this record rather than billed twice. THE SAME CUT RECURS at eight C03 row boundaries: 36/37, 163/164, 165/166 (filed as E-062), 440/441, 443/444, 472/473, 594/595, 610/611 - a verse line's final syllable spilling into the next row is a class, not a one-off; recorded here as a list rather than as a class entry so every citation stays checkable.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-121",
+      "course": "C03",
+      "segment": "C03:497",
+      "kind": "INGEST_ARTEFACT",
+      "found": "all six perfections77 are covered",
+      "expected": "all six perfections are covered",
+      "evidence": "Footnote marker 77 fused to the preceding word (not to a period, so outside the registered period-fusion class). Re-checked by the reconciler: parallel witness C07:81 carries the identical English sentence and identical wylie but reads 'all six perfections are covered' with no digits; the ACIP field of C03:497 has no numeral. Published reading confirmed; local C03 ingest artefact. SKEPTIC PASS 2026-09-03 (survived, LOW/CONFIRMED): the ACIP and wylie carry no numeral; the independent witness C07:81 has identical wylie and English minus the '77'; the register's footnote class E-076 covers period-fusion only, so this word-fused marker is a distinct, unregistered artefact.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ],
+  "target_duplicates": [],
+  "target_defect_screen": "Complete target ACIP/English physical extents preserved. No escape drop, English running head, fused footnote, cap or row-boundary/heading defect found. Historical class census numbers are not new target claims or reasserted here."
+}

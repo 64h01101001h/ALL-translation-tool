@@ -1,0 +1,17 @@
+import json,sqlite3,gzip
+from pathlib import Path
+D=Path(__file__).resolve().parent;E=D/'evidence';W=D.parents[2]/'campaign-worktree'
+def save(n,x):(E/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+con=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro');con.row_factory=sqlite3.Row
+es=json.loads((E/'lexical-entries.json').read_text());qs=json.loads((E/'lexical-queries.json').read_text());ms=json.loads((E/'master-records.json').read_text());mq=json.loads((E/'master-queries.json').read_text())
+terms=['med','dbang','rang rang','gsum','phyi rol','mdzad','nus','rtogs pa','des','ga','du','gis','kyis','brten','la brten nas',"'ga'",'lan','sems','tsam']
+with gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt') as f:master=json.load(f)
+for term in terms:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';rows=[dict(x) for x in con.execute(sql,[term,term])];es.update({str(x['id']):x for x in rows});qs.append({'term':term,'sql':sql,'params':[term,term],'count':len(rows),'entry_ids':[x['id'] for x in rows],'role':'independent supplementary reconciliation query'})
+ ids=[]
+ for layer in ['unified_entries','curated_entries','glossary_entries']:
+  for i,x in enumerate(master[layer]):
+   if x.get('wylie')==term or term in x.get('wylie_variants',[]):key=f'{layer}:{i}';ms[key]=x;ids.append(key)
+ mq.append({'term':term,'match_rule':'exact wylie or variant in three original layers','count':len(ids),'record_keys':ids})
+ print(term,[(x['id'],x['tier'],x['hgm_gloss']) for x in rows])
+save('lexical-entries.json',es);save('lexical-queries.json',qs);save('master-records.json',ms);save('master-queries.json',mq)

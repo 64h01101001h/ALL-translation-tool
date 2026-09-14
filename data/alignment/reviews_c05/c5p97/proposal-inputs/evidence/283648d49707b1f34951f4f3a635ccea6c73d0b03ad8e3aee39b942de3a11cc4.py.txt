@@ -1,0 +1,162 @@
+from pathlib import Path
+import json,re
+A=Path(__file__).resolve().parent; B=A.parent
+sources={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+
+def make(seq,title,items,notes,omissions,decisions):
+    src=sources[seq]; spans=[]; evidence=[]; cur=0
+    for n,item in enumerate(items,1):
+        d,tib,eng,occ,*extra=item
+        sid=('p' if d==6 else 'x' if d==3 else 'w')+str(n)
+        sp={'id':sid,'d':d,'tib':tib,'eng':eng}
+        if eng is None: sp.update({'cls':'grammar','nul':extra[0]})
+        if extra and isinstance(extra[-1],dict): sp.update(extra[-1])
+        # This authoring inventory records explicit intended occurrences, independently
+        # checked against actual canonical ranges after generation.
+        hits=[m.start() for m in re.finditer(re.escape(tib),src['wylie'])]
+        thits=[i for i in hits if i>=cur and (i==0 or src['wylie'][i-1] in ' ,')]
+        assert thits,(seq,tib)
+        ti=thits[0]; cur=ti+len(tib)
+        ei=None
+        if eng is not None:
+            ehits=[m.start() for m in re.finditer(re.escape(eng),src['english']) if (m.start()==0 or not src['english'][m.start()-1].isalnum()) and (m.end()==len(src['english']) or not src['english'][m.end()].isalnum())]
+            assert len(ehits)>=occ,(seq,eng,occ,ehits)
+            ei=ehits[occ-1]
+        spans.append(sp)
+        evidence.append({'id':sid,'d':d,'tib':tib,'eng':eng,'intended_tib_range':[ti,ti+len(tib)],'intended_tib_exact_occurrence':hits.index(ti)+1,'intended_eng_range':None if ei is None else [ei,ei+len(eng)],'intended_eng_word_occurrence':occ if eng is not None else None,'role_note':extra[0] if extra and isinstance(extra[0],str) else None})
+    order=[r['id'] for r in sorted([r for r in evidence if r['eng'] is not None],key=lambda r:r['intended_eng_range'][0])]
+    spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':order,'note':'PROVISIONAL machine alignment by Codex (GPT-6 Astra), Tibetan-first independent proposal. GMR English and original Wylie remain verbatim. No hgm_gloss changes. '+notes}]}
+    D=A/str(seq)
+    (D/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n')
+    (D/'errata.json').write_text('[]\n')
+    (D/'decisions.json').write_text(json.dumps({'seq':seq,'source_spine_id':src['id'],'source_evidence':'../evidence/corpus-rows.json','entries':evidence,'omissions':omissions,'contentious_decisions':decisions},ensure_ascii=False,indent=2)+'\n')
+
+make(289,'perception and nonshared karma',[
+ (5,'snang','appearing',1),
+ (6,'na','If',1),
+ (5,"'gro ba",'beings',1),
+ (5,'gsum po','three',2),
+ (5,'rang rang','each',1),
+ (5,'thun mong ma yin pa','specific and different',1),
+ (5,'las','karma',1),
+ (6,'kyis',None,0,'Instrumental/agentive marking is realized by karma as the active cause of planting; no separately alignable case word.'),
+ (5,'bag chags','seed',1),
+ (5,'bzhag pa','planted',1),
+ (5,'smin pa','ripened',1),
+ (5,'dngos po','objects',1,'The first explicit objects in English anticipates this Tibetan clause; the following English they resumes the same objects.'),
+ (5,'gsum po','three',1),
+ (5,'snang ba','appearing',2),
+ (6,'ma','not',1),
+ (5,'gang zag','beings',2),
+ (5,'re res','each',2,'Distributive re re with attached agentive s retained intact; each modifies the second group of beings.'),
+ (5,'dngos po','objects',2),
+ (5,'gsum ga','all three',1),
+ (5,'rtogs','perceiving',1),
+ (5,'dgos pa','have to',1),
+ (6,'las','whereas',1),
+ (3,'ma rtogs','do not',1,'Whole negative predicate recast; do is an anaphoric pro-verb for perceiving, not a lexical definition of rtogs.'),
+ (5,'bkag pa','refute',1),
+],
+ 'The three objects named in the opening English clause correspond to the first dngos po gsum po; the three beings correspond to earlier Tibetan \'gro ba gsum po. thun mong ma yin pa owns specific and different as a whole established compound. ma rtogs is retained at phrase depth as do not, where do resumes perceiving. la brten nas is omitted because its dependency relation is distributed through the process explanation; it is not nulled. The final refusal/denial-of-outer-objects explanation supplies the target of bkag pa from preceding context.',
+ [
+  {'tib':'de ltar','reason':'Its manner reference is distributed over this were how and the counterfactual appearance clause; no separate atom proposed.'},
+  {'tib':'la brten nas','reason':'Dependency is expressed across through a process where and the intervening causal narrative; omitted rather than nulled or equated only with process.'},
+  {'tib':'yin pas','reason':'Copular/reason structure belongs to the recast counterfactual account; not separately banked.'},
+  {'tib':"pa'i phyir zhes ... pa'i phyir",'reason':'Quotation/reason structure is recast as All this is an argument attempting to...; no isolated atom asserted.'},
+  {'english':'had collected; in their mind; later; those who refuse to accept the denial of outer objects','reason':'Explanatory expansions or context-supplied participants are preserved unwrapped, not harvested from nearby Tibetan nouns.'},
+  {'tib':'des; gi; de; remaining nominal/case endings','reason':'Unclaimed grammatical/demonstrative scaffolding; no blanket null assertion.'}
+ ],
+ ['Current HGM master recognizes thun mong ma yin pa → specific and different; bag chags → seed; dngos po → objects; gang zag → beings; bkag pa → refute. bzhag pa has an auto-aligned nothing but entry, which cannot determine the local planted construction; the complete causal passage provides the attestation.',
+  'The earlier gsum po belongs to beings (English three occurrence2); later gsum po belongs to objects (English three occurrence1). gsum ga owns the final all three. The two appearances remain occurrence1 and occurrence2; the negative pro-verb is phrase depth.',
+  'C15:434 has identical ACIP, Wylie and English. The evidence establishes field identity, not independent publication or ingestion lineage.'])
+
+make(290,'the meaning of the river quotation',[
+ (3,'des na','therefore',1),
+ (5,'lung','quotation',1),
+ (5,'don','real meaning',1),
+ (5,'yi dvags','craving spirit',1),
+ (5,'snang ba','appeared',1),
+ (5,'phyi rol don','outer object',1),
+ (5,'grub pa','existed',2,'This Tibetan existence modifier is expanded twice in English; bank only the occurrence in which existed as an outer object.'),
+ (5,'rnag','pus',1),
+ (5,'thigs pa','drop',1),
+ (5,"'ga' yang",'single',1,'Indefinite minimizer under med is recast as single in not a single drop; no claim that single is an independent numeral gcig.'),
+ (5,'med',"didn't exist",1),
+ (6,'na','Suppose',1),
+ (5,'phyi rol don','outer object',2),
+ (5,'grub pa','existed',3),
+ (5,'rnag','pus',2),
+ (5,'gang ba','full',1),
+ (5,'klung','river',1),
+ (3,'lta ga la yod','How then could there exist',1,'Complete rhetorical existence question, including the topic/inference lta; no invented positive lexical equivalence for ga la.'),
+ (6,"'on kyang",'though',1),
+ (5,"'gro ba",'beings',1),
+ (5,'de dag','These',1),
+ (5,'las','karma',1),
+ (5,'dbang','forced',1),
+ (5,'rnag','pus',3),
+ (6,'sogs','and so on',1),
+ (5,'mthong','see',1),
+],
+ 'grub pa occurs twice in Tibetan; English restates the first modifier twice. The first grub pa is attached only to the existed directly before the first outer object, and the second to the final existed. The craving spirit anchors the skipped earlier existed. The minimizer \'ga\' yang is rendered single under the negative med; the article remains unwrapped. lta ga la yod is one rhetorical-question phrase, including the topic/inference particle behind then. The closing bstan pa citation structure and ji ltar...ltar gyi comparison are distributed in GMR\'s reformulation and omitted, not nulled. Master Vinitadeva is supplied from the preceding quotation.',
+ [
+  {'tib':"de'i; yod de",'reason':'The introductory quotation/meaning frame is expanded into is ... the following; no isolated existential atom asserted.'},
+  {'tib':'ji ltar ... ltar gyi','reason':'The comparison relation is expressed by the complete as it appeared to exist... explanation and duplicated existence phrasing; appeared alone is licensed by snang ba, the remaining comparison words are left unclaimed.'},
+  {'tib':"ngo zhes bstan pa'i phyir",'reason':'The citation/explanation frame is recast as the introductory meaning statement and following direct explanation; bstan pa is not falsely mapped to see or real meaning and is not nulled.'},
+  {'english':'by Master Vinitadeva; first existed; to exist; whole; for they are; to do so','reason':'Named referent, repeated explanation, expansion or English grammatical support; preserved unwrapped.'},
+  {'tib':'other case/nominal endings','reason':'Unclaimed grammar; no blanket null assertion.'}
+ ],
+ ['The HGM master recognizes yi dvags → craving spirit; phyi rol don → outer object; med → didn\'t exist; dbang → forced. rnag, thigs pa, gang ba and klung preserve the noun and filling roles.',
+  'For \'ga\' yang the current master has any ... at all, at all, any; local not-a-single wording is a polarity-sensitive minimizer equivalent. Read C05:287 and C15:432 for the quoted question; no numeric one is inferred.',
+  'C15:435 matches all three text fields exactly. P7:34 matches full English but has Tibetan spelling/punctuation differences. These do not establish independent publication or a particular ingestion chain.'])
+
+make(291,'dream functions and outer objects',[
+ (3,'der thal','this is certainly the case',1),
+ (5,"'og tu",'later on',1),
+ (5,'rnag khrag','pus and blood',1),
+ (5,'phyi rol don','outer objects',1),
+ (6,'ma','not',1),
+ (5,'grub','exist',1),
+ (6,'cing','and',2),
+ (5,'sems','mind',1),
+ (6,'tsam','only',1),
+ (6,'na','if',1,'Single Tibetan conditional governs both coordinated propositions; bank its first if only, leaving the repeated if unwrapped.'),
+ (5,'des','they',2,'The agentive demonstrative refers to the pus and blood; English then they is the corresponding subject.'),
+ (5,"bza' btung",'something to eat or drink',1,'Nominal food/drink compound rendered as its edible/drinkable object role; exact established HGM gloss, not a claim that something is a freestanding Tibetan pronoun.'),
+ (5,'bya ba','function',1),
+ (5,'mi nus','could never',1),
+ (5,'rtsod pa','argues',1),
+ (5,'lan','response',1),
+ (5,'bya byed','Actions and their objects',1,'Established paired technical compound attested by the current HGM glossary; internal their expresses the compound relation. No separate invented byed→objects member.'),
+ (5,'rmi lam','dream',1),
+ (5,'gnod pa','injury',1),
+ (5,"'dra",'like',1),
+ (5,'phyi rol don','outer objects',2),
+ (6,'ma','not',2),
+ (5,'grub','exist',2),
+ (6,'kyang','even though',1),
+ (5,"bza' btung",'something to eat or drink',2),
+ (5,'bya ba','function',2),
+ (5,'byed','perform',1),
+ (5,'nus pa','can',1),
+ (5,'rmi lam','dream',2),
+ (6,'sogs','such as',1),
+ (5,'dpe','examples',1),
+ (5,'du mas','great many',1,'Indefinite numeral du ma with attached instrumental s preserved intact; no split of agentive/instrumental suffix.'),
+ (5,'sgrub','proves',1),
+ (5,'mdzad pa',None,0,'Honorific light-verb support is fused into the English finite proves; no separately alignable doing or honorific word.'),
+ (6,'phyir','for',1),
+],
+ 'rnag khrag owns only the first pus and blood; the later English repetition expands the Tibetan demonstrative de and remains unwrapped. The first rmi lam is in the quoted verse and the second is the concluding example. bya byed is the established HGM compound Actions and their objects; no atomic byed to objects match is claimed. bza\' btung retains the established nominal rendering something to eat or drink in both occurrences. bdag nyid is omitted because part...itself distributes the nature expression; sems and tsam retain mind and only. The single na governs both conditional propositions and is banked once at the first if. mdzad pa has no separate exponent beyond the honorific verbal construction realized as proves.',
+ [
+  {'tib':"de'i",'reason':'Its anaphoric textual reference is expanded as in the text; later on is attached only to \'og tu.'},
+  {'tib':'gyi bdag nyid yin','reason':'part of the mind itself distributes the nature/identity expression; mind and only are independently sound, but neither part nor itself alone is asserted as the complete bdag nyid equivalent. Omitted, not nulled.'},
+  {'tib':'zhes de','reason':'The citation/exposition is rendered with Master Vinitadeva says and He is saying that; de is then expanded as pus and blood. These English participant/explanatory repetitions remain unwrapped.'},
+  {'english':'second if; provide; nonetheless; his point; by using','reason':'Repeated conditional/concessive marking or explanatory light/support wording beyond the claimed atoms; remains verbatim unwrapped.'},
+  {'tib':'other case/copular/nominal endings','reason':'Unclaimed grammar; no blanket null assertion.'}
+ ],
+ ['HGM master explicitly records bya byed → actions and their objects, bza\' btung → something to eat or drink, mi nus → could never, gnod pa → injury, and der thal → this is certainly the case. The first two are retained as complete lexical compounds without speculative members.',
+  'C15:436 has identical ACIP and Wylie, with English punctuation differences around the first conditional. Its whole quoted verse and continuation support exactly their shared text, not byte identity of full English.',
+  'The second not/exist pair is the concessive explanation after the quotation; it must not attach to the first conditional. Examples and the final dream belong to the proof, not the quoted analogy.'])
+
+print(json.dumps({seq:len(json.loads((A/str(seq)/'spec.json').read_text())['segments'][0]['spans']) for seq in sources}))

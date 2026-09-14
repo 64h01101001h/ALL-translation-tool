@@ -1,0 +1,85 @@
+from pathlib import Path
+import datetime, hashlib, html.parser, json, os, runpy, subprocess, sys
+from types import SimpleNamespace
+A=Path(__file__).resolve().parent; B=A.parent; W=B.parent.parent/'campaign-worktree'
+def sha(b):return hashlib.sha256(b).hexdigest()
+baseline=json.loads((B/'proposal-baseline.json').read_text())
+helper=B.parent/'run_generator_readonly.py'
+generator=W/'tools/gen_alignment_page.py'
+assert sha(generator.read_bytes())==baseline['governing_git_pins']['tools/gen_alignment_page.py']['sha256']
+class SourceParser(html.parser.HTMLParser):
+    def __init__(self):super().__init__(convert_charrefs=True);self.side=None;self.depth=0;self.text={'tib':[],'eng':[]};self.null_depth=None
+    def handle_starttag(self,tag,attrs):
+        attrs=dict(attrs)
+        if tag=='div' and attrs.get('class') in ['tib','eng']:
+            self.side=attrs['class'];self.depth=1
+        elif self.side and tag=='div': self.depth+=1
+        if self.side and tag=='span' and 'nul' in attrs.get('class','').split(): self.null_depth=1
+        elif self.null_depth is not None and tag=='span':self.null_depth+=1
+    def handle_endtag(self,tag):
+        if self.null_depth is not None and tag=='span':
+            self.null_depth-=1
+            if self.null_depth==0:self.null_depth=None
+        if self.side and tag=='div':
+            self.depth-=1
+            if self.depth==0:self.side=None
+    def handle_data(self,data):
+        if self.side and self.null_depth is None:self.text[self.side].append(data)
+
+source={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+canonical=runpy.run_path(str(generator),run_name='canonical_functions_only')
+for seq in [289,290,291]:
+    D=A/str(seq); attempts=D/'attempts'; attempts.mkdir(exist_ok=True)
+    n=1
+    while (attempts/f'{n:02}').exists():n+=1
+    stdin=(D/'spec.json').read_bytes()
+    prior=attempts/f'{n-1:02}'
+    reuse=n>1 and (prior/'stdin.json').read_bytes()==stdin and json.loads((prior/'execution.json').read_text())['exit_code']==0
+    if reuse:
+        n-=1;R=prior
+        proc=SimpleNamespace(returncode=0,stdout=(R/'stdout.html').read_bytes(),stderr=(R/'stderr.txt').read_bytes())
+    else:
+        R=attempts/f'{n:02}';R.mkdir();(R/'stdin.json').write_bytes(stdin)
+    argv=[sys.executable,str(helper)]
+    start=datetime.datetime.now(datetime.timezone.utc).isoformat()
+    if not reuse:
+        proc=subprocess.run(argv,input=stdin,cwd=W,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'},capture_output=True)
+        (R/'stdout.html').write_bytes(proc.stdout);(R/'stderr.txt').write_bytes(proc.stderr)
+    execution={'argv':argv,'cwd':str(W),'environment_overrides':{'PYTHONDONTWRITEBYTECODE':'1'},'sqlite_connection':'existing inspected helper enforces URI mode=ro','start_utc':start,'end_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit_code':proc.returncode,'stdin':{'path':'stdin.json','bytes':len(stdin),'sha256':sha(stdin)},'stdout':{'path':'stdout.html','bytes':len(proc.stdout),'sha256':sha(proc.stdout)},'stderr':{'path':'stderr.txt','bytes':len(proc.stderr),'sha256':sha(proc.stderr)},'generator_path':str(generator),'generator_sha256':sha(generator.read_bytes()),'helper_path':str(helper),'helper_sha256':sha(helper.read_bytes()),'proposal_source_baseline_commit':baseline['commit']}
+    if not reuse:(R/'execution.json').write_text(json.dumps(execution,indent=2)+'\n')
+    print(seq,'native exit',proc.returncode,'stdout',len(proc.stdout),'stderr',len(proc.stderr),'reused captured unchanged run' if reuse else 'new run',flush=True)
+    if proc.returncode or proc.stderr:
+        print(proc.stderr.decode());continue
+    (D/'body.html').write_bytes(proc.stdout)
+    spec=json.loads(stdin)['segments'][0];dec=json.loads((D/'decisions.json').read_text());spans=spec['spans']
+    tib=canonical['resolve'](source[seq]['wylie'],spans,'tib',seq)
+    byid={s['id']:s for s in spans}; engsp=canonical['with_members'](spans,[byid[i] for i in spec['eng_order']],source[seq]['english'])
+    eng=canonical['resolve'](source[seq]['english'],engsp,'eng',seq)
+    occurrence_checks=[]
+    for r in dec['entries']:
+        actual_tib=list(tib[r['id']]);actual_eng=list(eng[r['id']]) if r['id'] in eng else None
+        check={'id':r['id'],'actual_tib_range':actual_tib,'actual_eng_range':actual_eng,'expected_tib_range':r['intended_tib_range'],'expected_eng_range':r['intended_eng_range'],'equal':actual_tib==r['intended_tib_range'] and actual_eng==r['intended_eng_range']}
+        occurrence_checks.append(check)
+        assert check['equal'],(seq,check)
+    parser=SourceParser();parser.feed(proc.stdout.decode())
+    # The generator includes a heading and indentation outside s<seq>S; extract
+    # the actual sentence spans directly for unwrapped full-field fidelity.
+    class SentenceParser(html.parser.HTMLParser):
+        def __init__(self):super().__init__(convert_charrefs=True);self.level=0;self.cur=[];self.results=[];self.null_level=None
+        def handle_starttag(self,tag,attrs):
+            d=dict(attrs)
+            if tag=='span' and d.get('data-l')==f's{seq}S':self.level=1;self.cur=[]
+            elif tag=='span' and self.level:self.level+=1
+            if tag=='span' and self.level and 'nul' in d.get('class','').split():self.null_level=self.level
+        def handle_endtag(self,tag):
+            if tag=='span' and self.level:
+                if self.null_level==self.level:self.null_level=None
+                self.level-=1
+                if not self.level:self.results.append(''.join(self.cur))
+        def handle_data(self,data):
+            if self.level and self.null_level is None:self.cur.append(data)
+    sentences=SentenceParser();sentences.feed(proc.stdout.decode())
+    assert sentences.results==[source[seq]['wylie'],source[seq]['english']],(seq,sentences.results)
+    proof={'seq':seq,'final_attempt':f'attempts/{n:02}','native_generator_exit_code':proc.returncode,'native_stderr_bytes':len(proc.stderr),'spec_bytes':len(stdin),'spec_sha256':sha(stdin),'body_bytes':len(proc.stdout),'body_sha256':sha(proc.stdout),'saved_body_equals_native_stdout':(D/'body.html').read_bytes()==proc.stdout,'errata_bytes':(D/'errata.json').stat().st_size,'errata_sha256':sha((D/'errata.json').read_bytes()),'counts':{'spans':len(spans),'null':sum(s['eng'] is None for s in spans),'d5':sum(s['d']==5 for s in spans),'d3':sum(s['d']==3 for s in spans),'d6':sum(s['d']==6 for s in spans),'d7':sum(s['d']==7 for s in spans),'errata':0},'canonical_occurrence_checks':occurrence_checks,'unwrapped_complete_source_fields_equal':True,'unwrapped_wylie_sha256':sha(sentences.results[0].encode()),'unwrapped_english_sha256':sha(sentences.results[1].encode()),'source_wylie_length':len(source[seq]['wylie']),'source_english_length':len(source[seq]['english']),'semantic_limit':'Canonical/fidelity checks do not prove correspondence. This is an independent provisional proposal.'}
+    (D/'proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+assert sha(generator.read_bytes())==baseline['governing_git_pins']['tools/gen_alignment_page.py']['sha256']

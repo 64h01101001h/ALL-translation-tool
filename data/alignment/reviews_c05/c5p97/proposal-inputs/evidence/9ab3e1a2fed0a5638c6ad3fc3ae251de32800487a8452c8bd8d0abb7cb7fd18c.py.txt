@@ -1,0 +1,101 @@
+from pathlib import Path
+import gzip, hashlib, json, re, sqlite3, subprocess
+
+B = Path(__file__).resolve().parents[1]
+A = B / 'tibetan'
+W = B.parent.parent / 'campaign-worktree'
+E = A / 'evidence'
+E.mkdir(exist_ok=True)
+baseline = json.loads((B / 'proposal-baseline.json').read_text())
+COMMIT = baseline['commit']
+def sha(b): return hashlib.sha256(b).hexdigest()
+def save(name, obj):
+    (E / name).write_text(json.dumps(obj, ensure_ascii=False, indent=2) + '\n')
+
+pins = {}
+for name, v in baseline['source_pins'].items():
+    p = Path(v['path']); b = p.read_bytes()
+    pins[name] = {'path': str(p), 'bytes': len(b), 'sha256': sha(b), 'matches_proposal_baseline': len(b)==v['bytes'] and sha(b)==v['sha256']}
+    assert pins[name]['matches_proposal_baseline'], name
+save('source-pins.json', pins)
+governing=[]
+paths=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','docs/errata_register.json','data/alignment/span_head_allow.json']
+for rel in paths:
+    run=subprocess.run(['git','show',COMMIT+':'+rel],cwd=W,capture_output=True)
+    assert run.returncode==0 and not run.stderr
+    target='governing-'+rel.replace('/','__')
+    (E/target).write_bytes(run.stdout)
+    assert sha(run.stdout)==baseline['governing_git_pins'][rel]['sha256']
+    assert run.stdout==(W/rel).read_bytes()
+    governing.append({'git_commit':COMMIT,'repository_relative_path':rel,'git_object':subprocess.check_output(['git','rev-parse',COMMIT+':'+rel],cwd=W,text=True).strip(),'copy':target,'bytes':len(run.stdout),'sha256':sha(run.stdout),'current_worktree_equal':True})
+rel='data/alignment/C05_CAMPAIGN.md'
+data=subprocess.check_output(['git','show',COMMIT+':'+rel],cwd=W)
+assert sha(data)==baseline['governing_git_pins'][rel]['sha256']
+text=data.decode(); start=text.index('## Course shape'); end=text.index('\n## ',start+3)
+excerpt=text[start:end]+'\n'; (E/'C05-course-shape.md').write_text(excerpt)
+governing.append({'git_commit':COMMIT,'repository_relative_path':rel,'git_object':subprocess.check_output(['git','rev-parse',COMMIT+':'+rel],cwd=W,text=True).strip(),'source_bytes':len(data),'source_sha256':sha(data),'copy':'C05-course-shape.md','extraction':{'start_character':start,'end_character_exclusive':end,'appended_newline':True},'sha256':sha(excerpt.encode()),'scope':'course shape only; no campaign judgments retained'})
+helper=B.parent/'run_generator_readonly.py'; (E/'run_generator_readonly.py.txt').write_bytes(helper.read_bytes())
+governing.append({'original_path':str(helper),'copy':'run_generator_readonly.py.txt','bytes':helper.stat().st_size,'sha256':sha(helper.read_bytes())})
+save('governing-mapping.json',governing)
+
+db=sqlite3.connect((W/'build/hgm_spine_v27_2.db').as_uri()+'?mode=ro',uri=True); db.row_factory=sqlite3.Row
+rows={}
+queries=[]
+def query(label, sql, params):
+    result=[dict(r) for r in db.execute(sql,params)]
+    for r in result: rows[str(r['id'])]=r
+    queries.append({'label':label,'sql':sql,'parameters':params,'count':len(result),'row_ids':[r['id'] for r in result]})
+    return result
+source=query('selected full spine rows','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',289,291])
+context=query('full local source argument and neighbors','SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq',['C05',283,297])
+checks=[]
+for fn, selected in [('source.json',source),('context.json',context)]:
+    snapshot=json.loads((B/fn).read_text())
+    assert len(snapshot)==len(selected)
+    for expected,actual in zip(snapshot,selected):
+        for k,v in expected.items():
+            assert actual[k]==v,(fn,actual['seq'],k)
+    checks.append({'snapshot':fn,'count':len(selected),'fields':['id','course','seq','acip','wylie','english'],'exact':True,'full_original_rows':'corpus-rows.json','raw_field_retained':True})
+
+for r in source:
+    query('exact triple parallel for C05:'+str(r['seq']),'SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq',[r['acip'],r['wylie'],r['english']])
+patterns=[('nonshared karma',"%thun mong ma yin pa'i las%"),('planted seed ripening',"%bag chags bzhag pa smin pa%"),('each individual',"%gang zag re re%"),('river impossibility',"%rnag gis gang ba'i klung%"),('dream actions verse',"%bya byed rmi lam gnod pa%"),('mind-only nature',"%sems tsam gyi bdag nyid%"),('refute argument',"%zhes bkag pa'i phyir%"),('forced by karma',"%'gro ba de dag gi las kyi dbang gis%")]
+for label,pat in patterns:
+    query(label,'SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq',[pat])
+save('snapshot-verification.json',checks)
+save('corpus-query-map.json',queries)
+save('corpus-rows.json',rows)
+save('spine-meta.json',[dict(r) for r in db.execute('SELECT * FROM meta ORDER BY key')])
+
+terms=['de ltar','snang','snang ba',"'gro ba",'gsum','rang rang','thun mong ma yin pa','las','bag chags','bzhag pa','smin pa','brten','dngos po','gang zag','re re','rtogs','dgos pa','bkag pa','lung','don','yi dvags','ji ltar','phyi rol don','grub pa','rnag','thigs pa',"'ga' yang",'med','gang ba','klung','ga la',"'on kyang",'dbang','sogs','mthong','bstan pa','der thal',"'og tu",'rnag khrag','sems','tsam','bdag nyid',"bza' btung",'bya ba','mi nus','rtsod pa','lan','bya byed','rmi lam','gnod pa',"'dra",'byed','nus pa','dpe','du ma','sgrub pa','mdzad pa']
+master=json.load(gzip.open(W/'data/hgm_dictionary_v27_2.json.gz','rt'))
+lexrows={}; lexqueries=[]
+for term in terms:
+    found=[(i,r) for i,r in enumerate(master['unified_entries']) if r.get('wylie')==term or term in (r.get('wylie_variants') or [])]
+    for i,r in found: lexrows[str(i)]=r
+    lexqueries.append({'term':term,'rule':'exact wylie or exact member of wylie_variants','count':len(found),'unified_entry_zero_based_indices':[i for i,r in found]})
+save('master-query-map.json',lexqueries); save('master-entries.json',lexrows)
+
+corpus=json.load(gzip.open(W/'data/full_parallel_corpus_v32.json.gz','rt'))
+archive=[]
+for r in context:
+    match=[(i,c) for i,c in enumerate(corpus) if c.get('course')==r['course'] and all(c.get(k)==r[k] for k in ['acip','wylie','english'])]
+    assert len(match)==1, r['seq']
+    i,c=match[0]
+    archive.append({'spine_id':r['id'],'spine_seq':r['seq'],'corpus_zero_based_index':i,'exact_compared_fields':['course','acip','wylie','english'],'original_archive_record':c,'spine_raw_json_equals_original_record':json.loads(r['raw'])==c})
+save('original-corpus-verification.json',archive)
+physical=Path(pins['physical']['path']); raw=physical.read_bytes()
+physical_records=[]
+for r in source:
+    # Complete original source blocks, bounded by the archive paragraph delimiters.
+    needle=r['acip'].encode()
+    hits=[m.start() for m in re.finditer(re.escape(needle),raw)]
+    for hit in hits:
+        lo=raw.rfind(b'\n\n',0,hit)
+        lo=0 if lo<0 else lo+2
+        hi=raw.find(b'\n\n',hit+len(needle))
+        hi=len(raw) if hi<0 else hi+2
+        physical_records.append({'seq':r['seq'],'acip_hit_start':hit,'acip_hit_end':hit+len(needle),'block_byte_start':lo,'block_byte_end':hi,'block_utf8':raw[lo:hi].decode('utf-8'),'block_sha256':sha(raw[lo:hi])})
+    assert hits,r['seq']
+save('physical-source-excerpts.json',physical_records)
+print(json.dumps({'source':len(source),'context':len(context),'corpus_queries':len(queries),'unique_corpus_rows':len(rows),'master_terms':len(terms),'master_entries':len(lexrows),'physical_blocks':len(physical_records),'all_pins_match':True},indent=2))

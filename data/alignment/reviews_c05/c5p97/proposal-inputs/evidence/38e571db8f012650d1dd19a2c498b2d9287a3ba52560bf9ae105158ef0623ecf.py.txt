@@ -1,0 +1,50 @@
+import json,hashlib,os,re,importlib.util,datetime
+from pathlib import Path
+from html.parser import HTMLParser
+E=Path(__file__).resolve().parent;R=E.parents[2];W=R/'campaign-worktree'
+sha=lambda b:hashlib.sha256(b).hexdigest()
+module=importlib.util.spec_from_file_location('canonical_gen',W/'tools/gen_alignment_page.py');gen=importlib.util.module_from_spec(module);module.loader.exec_module(gen)
+source={r['seq']:r for r in json.loads((E.parent/'source.json').read_text())}
+class Plain(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.texts={'tib':'','eng':''};self.pairs={}
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs);self.stack.append((tag,a))
+  if tag=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+ def handle_endtag(self,tag):
+  assert self.stack and self.stack[-1][0]==tag,(tag,self.stack[-1]);old=self.stack.pop()
+  if tag=='div' and old[1].get('class') in ['tib','eng']:self.side=None
+ def handle_data(self,data):
+  if self.side and not any(a.get('class') in ['lab','nul'] for _,a in self.stack):
+   self.texts[self.side]+=data
+   for _,a in self.stack:
+    if a.get('data-l'):self.pairs.setdefault((self.side,a['data-l']),'');self.pairs[(self.side,a['data-l'])]+=data
+allproof=[]
+for seq in [289,290,291]:
+ D=E/str(seq);spec_bytes=(D/'spec.json').read_bytes();s=json.loads(spec_bytes)['segments'][0];spans=s['spans'];dec=json.loads((D/'decisions.json').read_text());native=json.loads((D/'native-proof.json').read_text());body=(D/'body.html').read_bytes();raw=source[seq]
+ assert native['native_exit']==0 and native['stderr_bytes']==0 and native['stdin_sha256']==sha(spec_bytes) and native['stdout_sha256']==sha(body)
+ assert body==(E/native['attempt_path']/'stdout.html').read_bytes() and spec_bytes==(E/native['attempt_path']/'stdin.json').read_bytes()
+ tib=gen.resolve(raw['wylie'],spans,'tib',seq);byid={s['id']:s for s in spans};english=gen.resolve(raw['english'],gen.with_members(spans,[byid[x] for x in s['eng_order']],raw['english']),'eng',seq)
+ checks=[];parent=None
+ for d in dec['spans']:
+  sid=d['span_id'];assert list(tib[sid])==d['intended_tibetan_range_0based_halfopen'],(seq,sid,tib[sid],d)
+  if d['english'] is not None:assert list(english[sid])==d['intended_english_range_0based_halfopen'],(seq,sid,english[sid],d)
+  sp=byid[sid]
+  if sp['d']==7:
+   assert parent and parent['d']==5
+   assert sp['tib']!=parent['tib'] and parent['tib'].count(sp['tib'])==1
+   if sp['eng']:assert sp['eng']!=parent['eng'] and sp['eng'] in parent['eng']
+  else:parent=sp
+  checks.append({'id':sid,'tib_range':tib[sid],'english_range':english.get(sid),'intended_ranges_match':True})
+ p=Plain();p.feed(body.decode());assert p.texts['tib']==raw['wylie'] and p.texts['eng']==raw['english']
+ for sp in spans:
+  lab='s'+str(seq)+sp['id'];assert p.pairs[('tib',lab)]==sp['tib']
+  if sp['eng'] is not None:assert p.pairs[('eng',lab)]==sp['eng']
+ head_candidates=[{'id':sp['id'],'tib':sp['tib'],'eng':sp['eng']} for sp in spans if sp['d'] in [5,7] and sp['eng'] and re.match(r'^(the|a|an|and|or|his|our|your|I|you)\b',sp['eng'])]
+ assert all(x['tib']=='sogs' and x['eng']=='and so on' for x in head_candidates)
+ proof={'seq':seq,'spec_span_count':len(spans),'null_count':sum(sp['eng'] is None for sp in spans),'d5_count':sum(sp['d']==5 for sp in spans),'d5_nonnull_count':sum(sp['d']==5 and sp['eng'] is not None for sp in spans),'depth_counts':{str(d):sum(sp['d']==d for sp in spans) for d in sorted({sp['d'] for sp in spans})},'errata_count':len(json.loads((D/'errata.json').read_text())),'native_exit':native['native_exit'],'body_bytes':len(body),'body_sha256':sha(body),'spec_sha256':sha(spec_bytes),'body_is_exact_native_stdout':True,'plain_body_wylie_equals_original':True,'plain_body_english_equals_original':True,'every_emitted_span_equals_spec':True,'every_actual_range_equals_author_intended_range':True,'d7_immediate_d5_parent_unique_strictly_tighter':True,'english_order_exact_flat_nonnull_ids':set(s['eng_order'])=={sp['id'] for sp in spans if sp['d']!=7 and sp['eng'] is not None},'repeated_occurrences':checks,'licensed_head_candidates':head_candidates,'limits':'These are mechanical checks, not a semantic approval. Source-role judgments, omissions and positive null grounds remain in decisions.json.'}
+ (D/'verification.json').write_text(json.dumps(proof,indent=2)+'\n');allproof.append(proof)
+ print(seq,proof['spec_span_count'],proof['null_count'],proof['d5_count'],proof['body_bytes'],proof['body_sha256'])
+# Governing copies still correspond to the actual object, not a later landing boundary.
+v=json.loads((E/'evidence/source-verification.json').read_text())
+for p,pin in v['governing'].items():assert sha((W/p).read_bytes())==pin['sha256']
+(E/'verification-summary.json').write_text(json.dumps({'actual_producer':'Codex English-first','proposal_source_commit':v['governing_baseline_commit'],'boundary':285,'governing_files_still_match_source_baseline':True,'segments':[{k:p[k] for k in ['seq','spec_span_count','null_count','d5_count','d5_nonnull_count','errata_count','native_exit','body_bytes','body_sha256','spec_sha256']} for p in allproof]},indent=2)+'\n')

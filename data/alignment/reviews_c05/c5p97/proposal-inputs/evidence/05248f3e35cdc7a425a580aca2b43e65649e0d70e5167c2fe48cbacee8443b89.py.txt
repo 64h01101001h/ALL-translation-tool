@@ -1,0 +1,65 @@
+from pathlib import Path
+import datetime,hashlib,json
+A=Path(__file__).resolve().parent;B=A.parent;E=A/'evidence'
+def sha(b):return hashlib.sha256(b).hexdigest()
+def write(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not (A/'freeze.json').exists(),'Frozen boundary exists; preserve and explicitly supersede it before changing anything.'
+pins=json.loads((E/'source-pins.json').read_text())
+for name,pin in pins.items():
+    b=Path(pin['path']).read_bytes()
+    assert sha(b)==pin['sha256'] and len(b)==pin['bytes'],name
+for row in json.loads((E/'governing-mapping.json').read_text()):
+    if row.get('current_worktree_equal'):
+        worktree=B.parent.parent/'campaign-worktree'
+        assert sha((worktree/row['repository_relative_path']).read_bytes())==row['sha256']
+
+summaries=[]
+report_specific={
+289:[
+ 'The first objects/three in English belong to later Tibetan dngos po/gsum po; earlier \'gro ba/gsum po belong to the three beings. All intended occurrences equal canonical ranges.',
+ 'thun mong ma yin pa → specific and different is an established HGM compound; bzhag pa → planted is justified by the complete seed/karma construction, despite unrelated auto-aligned master glosses.',
+ 'Challenge first: the anticipatory objects placement. ma rtogs → do not is a phrase with an anaphoric pro-verb; brten nas and the final expanded target remain omitted for distributed correspondence.',
+ 'The single null is kyis: active causal subject structure realizes the agentive relation, without a separate case word.'],
+290:[
+ 'First grub pa attaches to existed occurrence2 after craving spirit; second grub pa attaches to occurrence3. The unclaimed first existed is GMR\'s duplicate explanation.',
+ 'Challenge first: \'ga\' yang → single is an indefinite minimizer under med, not an inferred gcig. med → didn\'t exist supplies the negative polarity; the article stays unwrapped.',
+ 'lta ga la yod → How then could there exist is a complete rhetorical phrase. Prior passing ga la yod-only version and native output remain in superseded/01-before-rhetorical-phrase-completion and attempts/01.',
+ 'bstan pa and ji ltar...ltar gyi remain omitted as distributed explanation/comparison; no nulls are used.'],
+291:[
+ 'The two dreams, outer-object clauses, function phrases and negative exist predicates have separate verified occurrences. rnag khrag owns only the first pus and blood; the second names the referent of de.',
+ 'Challenge first: bya byed → Actions and their objects is kept whole on explicit HGM compound evidence; no byed → objects member is invented. bza\' btung retains the nominal HGM gloss something to eat or drink twice.',
+ 'bdag nyid is omitted because part...itself distributes the nature expression. The one na attaches to first if, which governs both clauses; repeated if remains unwrapped.',
+ 'The single null is mdzad pa: honorific light-verb support is fused into proves; no separate doing/honorific exponent is asserted.']}
+
+for seq in [289,290,291]:
+    D=A/str(seq);p=json.loads((D/'proof.json').read_text());c=p['counts']
+    assert sha((D/'spec.json').read_bytes())==p['spec_sha256']
+    assert sha((D/'body.html').read_bytes())==p['body_sha256']
+    assert (D/'body.html').read_bytes()==(D/p['final_attempt']/'stdout.html').read_bytes()
+    assert (D/p['final_attempt']/'stderr.txt').read_bytes()==b''
+    assert json.loads((D/p['final_attempt']/'execution.json').read_text())['exit_code']==0
+    assert all(x['equal'] for x in p['canonical_occurrence_checks'])
+    report=[f'C05:{seq} — Tibetan-first independent proposal; Codex; PROVISIONAL, no semantic approval or hgm_gloss change.',
+      f'Source: full spine row {seq+1382}; all six selected fields and all 15 context rows verified, plus original corpus records and whitespace-normalized physical ACIP/English. See ../evidence/snapshot-verification.json and original-corpus-verification.json.',
+      *report_specific[seq],
+      f'Evidence: material-evidence-map.json maps each span to full originals, current master entries and all unwrapped intervals; decisions.json records roles, omissions and exact intended ranges. Shared complete queries/rows appear once in ../evidence/; exact hashes are in ../freeze.json.',
+      f'Errata: 0. Registered apparatus/cap/escape/footnote classes checked; no source defect supported. '+('C15:434 matches ACIP/Wylie/English.' if seq==289 else 'C15:435 matches ACIP/Wylie/English; P7:34 matches English with Tibetan differences.' if seq==290 else 'C15:436 matches ACIP/Wylie; English differs only in two punctuation locations. Quoted verse lineation is retained.'),
+      'Parallel text identity does not establish independent publication or an ingestion lineage; shared extents and differences are recorded in ../evidence/parallel-comparisons.json.',
+      f'EXIT=0; STDERR_BYTES=0; BODY_BYTES={p["body_bytes"]}; SPANS={c["spans"]}; D5={c["d5"]}; NULLS={c["null"]}; ERRATA=0. Actual native stdin/stdout/stderr/exit: {p["final_attempt"]}/; proof.json verifies exact saved body bytes and unwrapped full source fields.',
+      f'SPEC_SHA256={p["spec_sha256"]}; BODY_SHA256={p["body_sha256"]}.']
+    (D/'report.md').write_text('\n'.join(report)+'\n')
+    summaries.append({'seq':seq,'counts':c,'final_native_attempt':str(seq)+'/'+p['final_attempt'],'body_bytes':p['body_bytes'],'body_sha256':p['body_sha256'],'spec_sha256':p['spec_sha256'],'native_exit':0,'native_stderr_bytes':0})
+
+evidence_files=[]
+for p in sorted(E.iterdir()):
+    if p.is_file():evidence_files.append({'path':'evidence/'+p.name,'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+write(A/'evidence-index.json',{'scope':'Tibetan-first C05:289–291 only; full material sources retained once in this angle.','proposal_source_baseline_commit':json.loads((B/'proposal-baseline.json').read_text())['commit'],'course_boundary_at_proposal':285,'not_landing_baseline':True,'source_spine_rows':[1671,1672,1673],'context_seq_range':[283,297],'context_count':15,'corpus_query_count':len(json.loads((E/'corpus-query-map.json').read_text())),'unique_original_corpus_rows':len(json.loads((E/'corpus-rows.json').read_text())),'master_query_count':len(json.loads((E/'master-query-map.json').read_text())),'unique_original_master_entries':len(json.loads((E/'master-entries.json').read_text())),'physical_source_identity':'Each complete paragraph retains original CRLF bytes via block text and byte offsets; ACIP and English equal source after whitespace-only joining.','failures_and_supersessions':['capture_evidence.py failed only at its physical exact-byte extraction; original script retained and initial failure recorded.','capture_physical_attempt01.py used an ambiguous short DER THAL prefix; exact native stderr/exit retained and corrected capture_physical.py succeeds.','run_and_verify_attempt01.py included null annotation text in the source comparison; actual 289 native run succeeded and was reused unchanged after parser correction.','290 rhetoric phrase completed after initial passing generation; full superseded spec/body/decisions/proof and both native runs retained.','The first semantic metadata edit used a mandatory tib key on an English-only omission; error recorded. Verification detected stale expected range; corrected metadata now matches the existing successful native output.'],'files':evidence_files})
+(A/'README.md').write_text('Tibetan-first C05:289–291 independent proposals. Read each segment report.md, spec.json, body.html, errata.json and proof.json.\nThe actual source/governing baseline is 129e86afae8431aacfb1ee1cee65d8635dd265b8 through285; this is not a through288 landing baseline.\nComplete original material is deduplicated in evidence/ and indexed in evidence-index.json; each segment material-evidence-map.json maps every claimed span and all unwrapped intervals.\nCanonical native runs are in each segment attempts/; failed extraction/verification helpers and the superseded passing290 proposal are retained with their stated corrections.\nfreeze.json enumerates every delivered file; freeze.sha256 pins that manifest. Any later correction must preserve and explicitly supersede this frozen boundary.\n')
+files=[]
+for p in sorted(A.rglob('*')):
+    if p.is_file() and p.name not in ['freeze.json','freeze.sha256']:
+        files.append({'path':str(p.relative_to(A)),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+manifest={'status':'FROZEN_INDEPENDENT_TIBETAN_PROPOSALS','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'actual_producer':'Codex (GPT-6 Astra)','angle':'tibetan-first','segments':[289,290,291],'source_governing_commit':json.loads((B/'proposal-baseline.json').read_text())['commit'],'source_governing_course_boundary':285,'landing_baseline':False,'summary':summaries,'totals':{k:sum(s['counts'][k] for s in summaries) for k in ['spans','d5','d3','d6','d7','null','errata']},'final_source_pins_match':True,'current_governing_files_still_equal_pinned_git_copies':True,'source_text_fidelity_and_native_proofs_complete':True,'semantic_status':'Provisional independent proposal; no reconciliation or approval implied.','genuine_blockers':[],'files':files,'manifest_exclusions':['freeze.json (this manifest)','freeze.sha256 (manifest self-hash sidecar)']}
+write(A/'freeze.json',manifest)
+(A/'freeze.sha256').write_text(sha((A/'freeze.json').read_bytes())+'  freeze.json\n')
+print(json.dumps({'status':manifest['status'],'file_count':len(files),'total_file_bytes':sum(f['bytes'] for f in files),'totals':manifest['totals'],'manifest_sha256':sha((A/'freeze.json').read_bytes()),'summaries':summaries},indent=2))

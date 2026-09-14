@@ -1,0 +1,53 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,re,difflib
+from html.parser import HTMLParser
+S=Path(__file__).resolve().parent;B=S.parent;A=B.parent;W=A.parent/'campaign-worktree'
+read=lambda p:json.loads(p.read_text())
+sha=lambda b:hashlib.sha256(b).hexdigest()
+def save(n,o):(S/n).write_text(json.dumps(o,ensure_ascii=False,indent=2)+'\n')
+assert not (S/'review-freeze.json').exists()
+resolved=read(S/'resolved-spans.json');reasons=read(S/'semantic-reasons.json');out=[]
+for r in resolved:out.append(dict(**r,verdict='SOUND',reason=reasons[str(r['seq'])][r['id']]))
+assert len(out)==sum(len(x) for x in reasons.values())==109
+save('semantic-span-review.json',out)
+class Text(HTMLParser):
+ def __init__(self):super().__init__(convert_charrefs=True);self.stack=[];self.side=None;self.text={'tib':[],'eng':[]}
+ def handle_starttag(self,tag,attrs):
+  a=dict(attrs)
+  if tag=='div' and a.get('class') in ['tib','eng']:self.side=a['class']
+  self.stack.append((tag,a))
+ def handle_endtag(self,tag):
+  if self.stack and self.stack[-1][0]==tag:self.stack.pop()
+  else:raise AssertionError(('unbalanced',tag,self.stack[-1:] ))
+ def handle_data(self,data):
+  if self.side and any(a.get('data-d')=='1' for _,a in self.stack) and not any('nul' in a.get('class','').split() for _,a in self.stack):self.text[self.side].append(data)
+source={r['seq']:r for r in read(S/'evidence/source-rows.json')};fidelity=[]
+for seq in [289,290,291]:
+ p=Text();p.feed((S/f'reviewed-final/{seq}/body.html').read_text());assert ''.join(p.text['tib'])==source[seq]['wylie'];assert ''.join(p.text['eng'])==source[seq]['english'];fidelity.append(dict(seq=seq,wylie_exact=True,english_exact=True))
+save('plain-source-fidelity.json',fidelity)
+baseline=read(S/'acceptance-baseline-binding.json');assert baseline['status']=='PASS' and baseline['actual_baseline']['course_boundary']==288
+gen=read(S/'generator-results.json');assert sum(x['span_count'] for x in gen)==109 and all(x['generator_exit']==0 for x in gen)
+save('span-head-allow-needed.json',{'pages_c05':{'c5p97/s290w23':'sogs (C05:290 independent semantic review, Codex): lexical list-continuation in rnag sogs mthong licenses the complete closing gesture and so on, including and; HGM entry20919 explicitly attests it. The span owns neither pus nor a supplied participant. d5 is retained as the actual word classification.'}})
+save('bank-ready-errata.json',[])
+save('review.json',dict(verdict='APPROVE',spec_verdict='APPROVE',quality_verdict='APPROVE',actual_reviewer='Codex (GPT-6 Astra), fresh independent semantic agent',open_findings=[],segments=gen,total_spans=109,total_nulls=2,total_word_pairs=67,depths={'3':7,'5':68,'6':18,'7':16},new_errata=0,source_suspicions_refuted=7,source_origin_commit=baseline['source_origin_commit'],source_origin_boundary=285,acceptance_baseline_commit=baseline['actual_baseline']['commit'],acceptance_baseline_boundary=288,head_allowance_ids=['c5p97/s290w23'],limitations=['Provisional machine judgment, not human editorial acceptance.','No hgm_gloss promotion.','No desktop main, native rendering, iOS pack or device acceptance claimed.'],utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))
+# No unsupported helper extension is allowed to disappear during landing.
+for p in sorted(S.glob('*.py')):
+ target=p.with_name(p.name+'.txt');assert not target.exists();p.rename(target)
+allowed={'.json','.md','.html','.stderr','.stdout','.log','.txt','.bin','.exit'}
+records=read(S/'original-to-copy-manifest.json');gitcache={}
+for r in records:
+ p=S/r['copy'];raw=p.read_bytes();assert p.suffix.lower() in allowed and p.resolve().is_relative_to(S.resolve());assert len(raw)==r['bytes'] and sha(raw)==r['sha256']
+ if r.get('original_git_commit'):
+  key=(r['original_git_commit'],r['repository_relative_path'])
+  if key not in gitcache:gitcache[key]=subprocess.check_output(['git','show',key[0]+':'+key[1]],cwd=W)
+  original=gitcache[key]
+ else:original=Path(r['original']).read_bytes()
+ assert raw==original
+save('manifest-verification.json',dict(status='PASS',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),records=len(records),unique_copies=len({r['copy'] for r in records}),historical_git_records=sum(bool(r.get('original_git_commit')) for r in records),unique_historical_git_objects=len(gitcache),all_original_bytes_and_copy_hashes_equal=True,all_copy_extensions_supported=True,source_mapping='Original physical/source evidence preserved once; historical Git refs checked against immutable objects, not changed live governing files.'))
+files=[]
+for p in sorted(S.rglob('*')):
+ if p.is_file():
+  assert p.suffix.lower() in allowed,p
+  raw=p.read_bytes();files.append(dict(path=str(p.relative_to(S)),bytes=len(raw),sha256=sha(raw)))
+save('review-freeze.json',dict(status='FROZEN_APPROVED_INDEPENDENT_SEMANTIC_REVIEW',utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),actual_producer='Codex (GPT-6 Astra)',segments=[289,290,291],verdict='APPROVE',open_findings=[],total_spans=109,total_nulls=2,total_word_pairs=67,files=files,file_count=len(files),manifest_exclusions=['review-freeze.json itself'],source_origin_commit=baseline['source_origin_commit'],acceptance_baseline_commit=baseline['actual_baseline']['commit']))
+print(json.dumps(dict(verdict='APPROVE',spans=109,nulls=2,word_pairs=67,open_findings=[],generators=[x['generator_exit'] for x in gen],errata=0,manifest_records=len(records),frozen_files=len(files),review_sha256=sha((S/'review.md').read_bytes()),freeze_sha256=sha((S/'review-freeze.json').read_bytes())),indent=2))

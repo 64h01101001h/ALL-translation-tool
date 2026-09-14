@@ -1,0 +1,168 @@
+import json,re,hashlib
+from pathlib import Path
+E=Path(__file__).resolve().parent; B=E.parent
+sources={r['seq']:r for r in json.loads((B/'source.json').read_text())}
+lex=json.loads((E/'evidence/hgm-lexical.json').read_text())
+lex_terms={q['query']['wylie_or_variant_exact']:i for i,q in enumerate(lex['queries'])}
+
+def make(seq,title,items,note,omissions,discussion):
+ out=E/str(seq);out.mkdir(exist_ok=True);spans=[];positions=[];decisions=[];tcur=0;parent=None
+ src=sources[seq]
+ for item in items:
+  sid,d,tib,eng,n,term,why,*extra=item
+  sp={'id':sid,'d':d,'tib':tib,'eng':eng}
+  if eng is None:sp['nul']=why
+  if extra:sp.update(extra[0])
+  if d==7:
+   assert parent is not None
+   ta=src['wylie'].find(tib,parent[0],parent[1]);assert ta>=0
+  else:
+   ta=src['wylie'].find(tib,tcur);assert ta>=0,(seq,sid,tib)
+   tcur=ta+len(tib)
+   if d==5:parent=(ta,tcur)
+  ea=None
+  if eng is not None:
+   hits=[m.start() for m in re.finditer(re.escape(eng),src['english']) if (not eng[0].isalnum() or m.start()==0 or not src['english'][m.start()-1].isalnum()) and (not eng[-1].isalnum() or m.end()==len(src['english']) or not src['english'][m.end()].isalnum())]
+   assert len(hits)>=n,(seq,sid,eng,hits,n);ea=hits[n-1]
+   if d!=7:positions.append((ea,sid))
+  spans.append(sp)
+  decisions.append({'span_id':sid,'depth':d,'tibetan':tib,'english':eng,'intended_tibetan_range_0based_halfopen':[ta,ta+len(tib)],'intended_english_occurrence_1based':n if eng is not None else None,'intended_english_range_0based_halfopen':[ea,ea+len(eng)] if ea is not None else None,'source_row':'evidence/source-context-full-rows.json / rows where course C05 and seq '+str(seq),'hgm_query_ref':{'file':'evidence/hgm-lexical.json','query_index_0based':lex_terms[term],'query_wylie':term} if term in lex_terms else None,'judgment':why})
+ spec={'course':'C05','segments':[{'seq':seq,'title':title,'spans':spans,'eng_order':[sid for _,sid in sorted(positions)],'note':'PROVISIONAL machine alignment by Codex, independent English-first proposal. '+note+' No hgm_gloss change; mechanical fidelity does not establish semantic approval.'}]}
+ (out/'spec.json').write_text(json.dumps(spec,ensure_ascii=False,indent=2)+'\n');(out/'errata.json').write_text('[]\n')
+ (out/'decisions.json').write_text(json.dumps({'actual_producer':'Codex','angle':'English-first','governing_commit':'129e86afae8431aacfb1ee1cee65d8635dd265b8','source_baseline_boundary':285,'source_role':'Original proposal source baseline only; does not claim through288 landing.','full_local_source_argument_read':'C05:283–297; target and both neighboring argument continuations retained verbatim in evidence/source-context-full-rows.json.','spans':decisions,'omissions':omissions,'discussion':discussion,'errata_conclusion':{'new_proposals':0,'screen':'evidence/errata-screen.json','source_preserved_verbatim':True,'physical_identity':'evidence/physical-source.json','corpus_queries':['exact_text_'+str(seq)],'limits':'Textual matches are not independent publication or ingestion-lineage proof; C15:436 differs in English punctuation. No defect inferred merely from translation expansion or differing punctuation.'}},ensure_ascii=False,indent=2)+'\n')
+
+make(289,'karma and distinct appearances',[
+ ('w1',5,'snang','appearing',1,'snang','First predicate in the hypothetical condition.'),
+ ('p1',6,'na','If',1,None,'Conditional particle introduces the hypothetical manner of appearing.'),
+ ('w2',5,"'gro ba",'beings',1,"'gro ba",'The beings whose karma plants the seeds, not the objects they perceive.'),
+ ('w3',5,'gsum','three',2,'gsum','Second English three modifies beings; first English three modifies objects.'),
+ ('w4',5,'rang rang','each',1,'rang rang','First each distributes the karma among the three beings.'),
+ ('w5',5,'thun mong ma yin pa','specific and different',1,'thun mong ma yin pa','Established unshared/specific compound applies to karma; retain the full two-adjective GMR equivalent, without treating its internal negation as a separate not.'),
+ ('w6',5,'las','karma',1,'las','Karmic action is the seed-planting cause.'),
+ ('w7',5,'bag chags','seed',1,'bag chags','The seed is the lexical exponent; explanatory in their mind remains unwrapped.'),
+ ('w8',5,'bzhag pa','planted',1,'bzhag pa','In bag chags bzhag pa, the seed is planted. The exact bzhag pa dictionary record is not a reliable local gloss; source construction and corpus seed parallels supply attestation, not its unrelated nothing but gloss.'),
+ ('w9',5,'smin pa','ripened',1,'smin pa','The planted seed ripens; later is explanatory temporal wording.'),
+ ('q1',3,'la brten nas','through',1,'brten','Whole dependency construction is rendered as through in the English process paraphrase; no atom brten to process is asserted.'),
+ ('w10',5,'dngos po','objects',1,'dngos po','The source second-clause subject is expressed explicitly in the English opening condition and resumed as they. This is the same three objects, not the concluding outer objects.'),
+ ('w11',5,'gsum','three',1,'gsum','The second source three (objects) corresponds to the first English three; explicit eng_order records the fronting.'),
+ ('w12',5,'snang ba','appearing',2,'snang ba','Second appearing is the predicate negated in the process clause.'),
+ ('p2',6,'ma','not',1,None,'Negates the process-mediated appearance, not the conditional occurrence.'),
+ ('w13',5,'gang zag','beings',2,'gang zag','These are the perceivers individually involved in the proposed consequence.'),
+ ('w14',5,'re res','each',2,'re re','Distributive agentive expression kept whole, without splitting final -s.'),
+ ('w15',5,'dngos po','objects',2,'dngos po','Second English objects belongs to perceiving all three, matching second explicit source object noun.'),
+ ('w16',5,'gsum','three',3,'gsum','Third numeral, in the all-three consequence.'),
+ ('p3',6,'ga','all',1,None,'Collective numeral particle in gsum ga licenses all.'),
+ ('w17',5,'rtogs','perceiving',1,'rtogs','Perceptual predicate under the necessity dgos.'),
+ ('w18',5,'dgos','have to',1,'dgos','Necessity only; conditional would and progressive be remain outside this lexical span.'),
+ ('p4',6,'las','whereas',1,'las','Contrastive particle after dgos pa, not a second occurrence of the karma noun.'),
+ ('p5',6,'ma','not',2,None,'Negation in the elliptic English they do not.'),
+ ('w19',5,'rtogs pa',None,0,'rtogs','The second perceive predicate is lexically elided in English they do not; do is an anaphoric auxiliary. There is no separately alignable perceptual word at this occurrence.'),
+ ('w20',5,'bkag','refute',1,'bkag','Refutation predicate in the final explanatory sentence; the target description comes from the wider argument, not separate source nouns here.')
+],
+ 'The first explicit dngos po gsum subject is fronted into the English opening condition and resumed by they; eng_order ties the two object nouns to the first and second English objects, and the being numeral to the second English three. The final outer objects is contextual expansion. The second rtogs pa has no separate lexical exponent in they do not and receives an ellipsis null.',
+ [
+ {'tib':'de ltar','reason':'Its manner-deictic content is distributed over this were how in a conditional recast; do not atomize how or bank a supplied were as dictionary content.'},
+ {'tib':'des; gi; kyis; yin pas; phyir; zhes; final phyir','reason':'Agentive, genitive, causal and quotation scaffolding is omitted where distributed through the recast. No uncertain mapping is labeled null, and no final -s is detached.'},
+ {'english':'had collected; had; in their mind; later; would; be; the fact is that; All this is an argument attempting to; those who refuse to accept the denial of outer objects','reason':'Explanatory/auxiliary wording stays unwrapped; the final target elaborates the external-object argument in C05:288 and is not a lexical repetition of the two dngos po spans.'},
+ {'tib':'po; de','reason':'Numeral nominalization/demonstrative syntax is not assigned a separate lexical English fragment.'}
+ ],
+ {'material_queries':['unshared','seed','exact_text_289'],'original_parallel':'C15:434 matches ACIP, Wylie and English; no independent-publication claim.','first_challenge':'The source subject dngos po gsum is realized explicitly in the English condition then resumed by they; challenge this sentence-level fronting before altering the repeated occurrence assignments.','no_false_null':'Only the positive perceptual word elided under do not is nulled.'})
+
+make(290,'the meaning of the quotation',[
+ ('q1',3,'des na','therefore',1,None,'Conclusion connective, fronted differently in English.'),
+ ('w1',5,'lung','quotation',1,'lung','The cited statement; the author name in English is contextual identification.'),
+ ('w2',5,'don','meaning',1,'don','Meaning alone; supplied real remains outside the span.'),
+ ('w3',5,'yi dvags','craving spirit',1,'yi dvags','Recipient of the pus appearance.'),
+ ('w4',5,'snang ba','appeared',1,'snang ba','Appearance predicate, distinct from the two external-existence predicates.'),
+ ('w5',5,'phyi rol don','outer object',1,'phyi rol don','First external-object compound, in the explanatory that is clause.'),
+ ('m1',7,'phyi rol','outer',1,None,'Unique tighter modifier within the first external-object compound.'),
+ ('m2',7,'don','object',1,'don','Unique tighter object head within that same compound.'),
+ ('p1',6,'du','as',2,None,'As an outer object; skip the earlier correlative as it appeared.'),
+ ('w6',5,'grub pa','existed',2,'grub','Existence as an external object, explicitly repeated by the English that is paraphrase. The earlier existed and to exist are not separately banked.'),
+ ('w7',5,'rnag','pus',1,'rnag','The drop of pus in the first hypothetical clause.'),
+ ('w8',5,'thigs pa','drop',1,'thigs pa','The amount is one drop, not the later whole river.'),
+ ('w9',5,"'ga'",'single',1,"'ga'",'Indefinite minimizer under negation is rendered single.'),
+ ('w10',5,'med',"didn't exist",1,'med','Single privative existential word requires the negative existential phrase; no separate Tibetan negator is invented.'),
+ ('p2',6,'na','Suppose',1,None,'Conditional construction recast as the introductory Suppose.'),
+ ('w11',5,'phyi rol don','outer object',2,'phyi rol don','Second external-object compound modifies the river pus.'),
+ ('m3',7,'phyi rol','outer',2,None,'Tighter modifier within the second compound.'),
+ ('m4',7,'don','object',2,'don','Tighter head within the second compound.'),
+ ('p3',6,'du','as',3,None,'Third English as belongs to the second external-existence clause.'),
+ ('w12',5,'grub pa','existed',3,'grub','Third English existed is the second source external-existence predicate.'),
+ ('w13',5,'rnag','pus',2,'rnag','Second pus fills the river.'),
+ ('w14',5,'gang ba','full',1,'gang ba','Filling predicate; whole is an unbanked intensifier on river.'),
+ ('w15',5,'klung','river',1,'klung','The river itself.'),
+ ('q2',3,'ga la','How then',1,None,'Rhetorical interrogative construction; do not misattach it to ji ltar in the first clause.'),
+ ('w16',5,'yod','exist',3,None,'The river existential after How then could there; anchors exclude exist in the earlier privative and appearance paraphrases.'),
+ ('w17',5,"'on kyang",'though',1,"'on kyang",'Concessive connector in the final sentence.'),
+ ('w18',5,"'gro ba",'beings',1,"'gro ba",'The beings who see pus due to their karma.'),
+ ('w19',5,'de dag','These',1,None,'Explicit plural demonstrative licenses These, placed before beings in English.'),
+ ('w20',5,'las','karma',1,'las','Karma is the force conditioning the perception.'),
+ ('w21',5,'dbang','forced',1,'dbang','English verbal recast of the force/power noun, corroborated by C05:295; supplied they are and to do so stay outside.'),
+ ('w22',5,'rnag','pus',3,'rnag','Third pus is the object actually seen by the beings.'),
+ ('w23',5,'sogs','and so on',1,'sogs','Only the closing gesture is owned; the following-heading class is not involved. Existing campaign sogs licensor is applicable for a landing allowlist entry.'),
+ ('w24',5,'mthong','see',1,'mthong','Actual seeing, distinguished from appeared earlier.')
+],
+ 'All three pus occurrences and both outer object compounds retain their local roles. The first grub pa is paired with the second English existed in the explanatory that is clause; the initial existed/to exist repetition stays unwrapped. ga la owns How then in the river question, while ji ltar is part of the earlier appearance correlative. dbang is rendered forced; sogs owns only and so on.',
+ [
+ {'tib':'de\'i; yod de; la; ji ltar ... ltar gyi; gi; yang; gis; lta; kyi; zhes bstan pa\'i phyir','reason':'These are unbanked syntax or a distributed interpretive/reporting frame. In particular bstan is not mispaired with meaning, ji ltar is not moved to How then, and no agentive -s is split.'},
+ {'english':'The real; by Master Vinitadeva; is; the following; that existed as it; to exist; that is, which; a whole; could there; do; for they are; to do so by their','reason':'Supplied author identification, auxiliaries, explanatory repetition and process scaffolding remain unwrapped. Existence content is banked once in the explicitly external-object paraphrase.'},
+ ],
+ {'material_queries':['force','exact_text_290'],'original_parallel':'C15:435 matches all three text fields. P7:34 matches English only, with ACIP/Wylie spelling and punctuation differences. No ingestion-lineage inference.','first_challenge':'Check dbang to forced as a local nominal-to-verbal recast, and verify first grub attaches to existed in the external-object paraphrase rather than the first repeated existed.','allowlist_candidate':{'span':'w23','tib':'sogs','eng':'and so on','licensor':'sogs licenses the closing gesture including and; no repository allowlist edited.'}})
+
+make(291,'functioning like an injury in a dream',[
+ ('q1',3,'der thal','this is certainly the case',1,None,'Complete inferential confirmation; initial And is excluded.'),
+ ('q2',3,"'og tu",'later on',1,"'og tu",'Temporal locative construction; supplied in the text remains unwrapped.'),
+ ('w1',5,'rnag khrag','pus and blood',1,'rnag khrag','First explicit source pair under the opponent conditional.'),
+ ('m1',7,'rnag','pus',1,'rnag','Tighter pus member of the first compound.'),
+ ('m2',7,'khrag','blood',1,None,'Tighter blood member of the first compound.'),
+ ('w2',5,'phyi rol don','outer objects',1,'phyi rol don','External objects in the conditional objection.'),
+ ('m3',7,'phyi rol','outer',1,None,'Tighter external modifier.'),
+ ('m4',7,'don','objects',1,'don','Tighter object head in the first compound.'),
+ ('p1',6,'du','as',1,None,'External-object mode of existence in the first conditional.'),
+ ('p2',6,'ma','not',1,None,'First external-existence negation.'),
+ ('w3',5,'grub','exist',1,'grub','First existence predicate; the English did remains auxiliary.'),
+ ('p3',6,'cing','and',3,None,'Conjoins the two conditional premises after outer objects; excludes and inside pus and blood.'),
+ ('w4',5,'sems','mind',1,'sems','Mind is the substantial content word; identity phrasing is dealt with separately as omission.'),
+ ('p4',6,'tsam','only',1,'tsam','Restrictive particle applies to mind alone.'),
+ ('p5',6,'na','if',1,None,'One source condition scopes the two coordinated premises; first English if is retained, repeated second if is explanatory syntax.'),
+ ('w5',5,"bza' btung",'eat or drink',1,"bza' btung",'Whole coordinated food/drink compound in its verbal English rendering; something to is outside the lexical span.'),
+ ('m5',7,"bza'",'eat',1,None,'Unique edible/eating member.'),
+ ('m6',7,'btung','drink',1,None,'Unique drinking member.'),
+ ('w6',5,'bya ba','function',1,'bya ba','Function at issue in the objection.'),
+ ('p6',6,'mi','never',1,None,'Negative modal claim; English never intensifies the denial without changing its scope.'),
+ ('w7',5,'nus','could',1,'nus','Capacity predicate in the objection; provide has no separate byed at this source occurrence.'),
+ ('w8',5,'rtsod pa','argues',1,'rtsod','Opponent argument introduces the conditional, fronted earlier in English.'),
+ ('w9',5,'lan','response',1,'lan','Answer to that objection, not the proof at the end.'),
+ ('w10',5,'bya byed','Actions and their objects',1,'bya byed','Established paired technical compound; HGM glossary and C12:298 attest the action/object structure. No speculative separate bya/byed members.'),
+ ('w11',5,'rmi lam','dream',1,'rmi lam','Dream in the quoted verse, not the final illustrative dream.'),
+ ('w12',5,'gnod pa','injury',1,'gnod pa','Injury inside the dream is the comparison, not a refutation verb.'),
+ ('w13',5,"'dra",'like',1,"'dra",'Simile relation in the quotation.'),
+ ('w14',5,'phyi rol don','outer objects',2,'phyi rol don','Repeated external-object compound in the reply.'),
+ ('m7',7,'phyi rol','outer',2,None,'Tighter external modifier in the reply.'),
+ ('m8',7,'don','objects',3,'don','Third standalone objects token belongs to outer objects in the reply; second is inside Actions and their objects.'),
+ ('p7',6,'du','as',2,None,'External-object mode of existence in the reply.'),
+ ('p8',6,'ma','not',2,None,'Second external-existence negation.'),
+ ('w15',5,'grub','exist',2,'grub','Second existence predicate.'),
+ ('p9',6,'kyang','even though',1,None,'Concessive frame; English nonetheless repeats it and is left unwrapped.'),
+ ('w16',5,"bza' btung",'eat or drink',2,"bza' btung",'Second coordinated food/drink compound, in the reply.'),
+ ('m9',7,"bza'",'eat',2,None,'Eating member of the second compound.'),
+ ('m10',7,'btung','drink',2,None,'Drinking member of the second compound.'),
+ ('w17',5,'bya ba','function',2,'bya ba','Repeated function in the reply.'),
+ ('w18',5,'byed','perform',1,None,'Overt perform predicate exists only in the second source function construction.'),
+ ('w19',5,'nus pa','can',1,'nus','Capacity affirmed in the reply.'),
+ ('w20',5,'rmi lam','dream',2,'rmi lam','Second dream is the final example, not the quoted occurrence.'),
+ ('w21',5,'sogs','such as',1,'sogs','Opening gesture of the example list in English; the dream itself is separately aligned.'),
+ ('w22',5,'dpe','examples',1,'dpe','Plural examples used for the proof.'),
+ ('w23',5,'du mas','great many',1,'du ma','Many with its instrumental ending kept whole; no agentive -s split, and the English indefinite article is excluded.'),
+ ('w24',5,'sgrub','proves',1,'sgrub','Proof predicate rather than the response or argument predicate.'),
+ ('w25',5,'mdzad',None,0,'mdzad','Honorific light verb in sgrub par mdzad; proves carries the lexical predicate and English has no separate honorific exponent.'),
+ ('p10',6,'phyir','for',1,None,'The final source reason supports the opening confirmation; English for introduces the full later-text evidence.')
+],
+ 'The two function constructions are distinct: only the reply has overt byed, paired with perform; provide in the objection is unbanked. bya byed is retained whole as Actions and their objects, without speculative members. sems and tsam are aligned while the distributed identity recast a part of the mind itself is not atomized onto bdag nyid. The second English pus and blood expands source de and is unwrapped. mdzad is an honorific-light-verb null, not an unresolved translation.',
+ [
+ {'tib':"de'i; gyi; bdag nyid; yin; des; gi; par; pa'i; du after lan; zhes; de; par after sgrub; pa'i",'reason':'Syntax and anaphoric/reporting expansions omitted. bdag nyid is distributed over the nature/part/itself recast, so no false part or itself dictionary atom and no null are asserted.'},
+ {'english':'in the text; someone; that; second if; they were; a part of the; itself; then they; provide; being something to; And in; Master Vinitadeva says; He is saying that; second pus and blood; nonetheless; they; He; his point by using; a','reason':'Supplied participants, auxiliaries, anaphoric expansions and repeated reporting/concessive wording remain unwrapped. Initial quotation attribution and honorific source content do not license an author-name span.'}
+ ],
+ {'material_queries':['actions_objects','injury','mind_itself','function','exact_text_291'],'original_parallel':'C15:436 matches ACIP and Wylie, but has dashes where C05 English uses commas; preserve C05 exactly and claim only the compared field identities.','first_challenge':'The strongest compound check is bya byed to Actions and their objects; no member assignment is inferred from a shared glossary spelling. bdag nyid is deliberately omitted because its local identity rendering is distributed.','null_basis':'mdzad supplies an honorific light-verb construction; English proves already carries the main predicate and has no separate honorific exponent.'})
+print('Wrote three independent English-first specs and complete per-span decisions.')

@@ -1,0 +1,9 @@
+{
+  "native_shell_edit_exit": 1,
+  "reported_error": "KeyError: 'tib' at stdin line17",
+  "recording": "Observed exec_command result; edit reached final spec but failed on an English-only omission entry before decisions.json could be saved.",
+  "effect": "Canonical attempt02 succeeds and is retained. The immediately following verification correctly refuses the stale intended x18 range.",
+  "correction": "Use row.get(tib) for optional omission key, update only decisions metadata, and reuse the unchanged successful attempt02.",
+  "failure_verification": "verify-after-semantic-change.execution.json",
+  "prior_version": "../290/superseded/01-before-rhetorical-phrase-completion/"
+}

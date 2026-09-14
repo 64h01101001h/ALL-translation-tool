@@ -1,0 +1,204 @@
+[
+  {
+    "label": "selected full spine rows",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      289,
+      291
+    ],
+    "count": 3,
+    "row_ids": [
+      1671,
+      1672,
+      1673
+    ]
+  },
+  {
+    "label": "full local source argument and neighbors",
+    "sql": "SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+    "parameters": [
+      "C05",
+      283,
+      297
+    ],
+    "count": 15,
+    "row_ids": [
+      1665,
+      1666,
+      1667,
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679
+    ]
+  },
+  {
+    "label": "exact triple parallel for C05:289",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq",
+    "parameters": [
+      "DE LTAR SNANG NA 'GRO BA GSUM PO DES RANG RANG GI THUN MONG MA YIN PA'I LAS KYIS BAG CHAGS BZHAG PA SMIN PA LA BRTEN NAS, DNGOS PO GSUM PO DE SNANG BA MA YIN PAS, GANG ZAG RE RES DNGOS PO GSUM GA RTOGS DGOS PA LAS MA RTOGS PA'I PHYIR ZHES BKAG PA'I PHYIR,",
+      "de ltar snang na 'gro ba gsum po des rang rang gi thun mong ma yin pa'i las kyis bag chags bzhag pa smin pa la brten nas, dngos po gsum po de snang ba ma yin pas, gang zag re res dngos po gsum ga rtogs dgos pa las ma rtogs pa'i phyir zhes bkag pa'i phyir",
+      "If this were how the three objects were appearing, then they would not be appearing through a process where the specific and different karma that each of the three beings had collected had planted a seed in their mind which later ripened. As such each of the beings involved would have to be perceiving all three of the objects, whereas the fact is that they do not. All this is an argument attempting to refute those who refuse to accept the denial of outer objects."
+    ],
+    "count": 2,
+    "row_ids": [
+      1671,
+      5985
+    ]
+  },
+  {
+    "label": "exact triple parallel for C05:290",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq",
+    "parameters": [
+      "DES NA LUNG DE'I DON YOD DE, YI DVAGS LA JI LTAR SNANG BA LTAR GYI PHYI ROL DON DU GRUB PA'I RNAG GI THIGS PA 'GA' YANG MED NA, PHYI ROL DON DU GRUB PA'I RNAG GIS GANG BA'I KLUNG LTA GA LA YOD, 'ON KYANG , 'GRO BA DE DAG GI LAS KYI DBANG GIS RNAG SOGS MTHONG NGO ZHES BSTAN PA'I PHYIR,",
+      "des na lung de'i don yod de, yi dvags la ji ltar snang ba ltar gyi phyi rol don du grub pa'i rnag gi thigs pa 'ga' yang med na, phyi rol don du grub pa'i rnag gis gang ba'i klung lta ga la yod, 'on kyang , 'gro ba de dag gi las kyi dbang gis rnag sogs mthong ngo zhes bstan pa'i phyir",
+      "The real meaning of the quotation by Master Vinitadeva is therefore the following: Suppose there didn't exist a single drop of pus that existed as it appeared to exist to the craving spirit; that is, which existed as an outer object. How then could there exist a whole river full of pus which existed as an outer object? These beings do though see the pus and so on, for they are forced to do so by their karma."
+    ],
+    "count": 2,
+    "row_ids": [
+      1672,
+      5986
+    ]
+  },
+  {
+    "label": "exact triple parallel for C05:291",
+    "sql": "SELECT * FROM corpus_segments WHERE acip=? AND wylie=? AND english=? ORDER BY course,seq",
+    "parameters": [
+      "DER THAL, DE'I 'OG TU RNAG KHRAG PHYI ROL DON DU MA GRUB CING , SEMS TZAM GYI BDAG NYID YIN NA, DES BZA' BTUNG GI BYA BA MI NUS PAR RTZOD PA'I LAN DU, BYA BYED RMI LAM GNOD PA 'DRA, , ZHES DE PHYI ROL DON DU MA GRUB KYANG BZA' BTUNG GI BYA BA BYED NUS PA RMI LAM SOGS DPE DU MAS SGRUB PAR MDZAD PA'I PHYIR,",
+      "der thal, de'i 'og tu rnag khrag phyi rol don du ma grub cing , sems tsam gyi bdag nyid yin na, des bza' btung gi bya ba mi nus par rtsod pa'i lan du, bya byed rmi lam gnod pa 'dra, , zhes de phyi rol don du ma grub kyang bza' btung gi bya ba byed nus pa rmi lam sogs dpe du mas sgrub par mdzad pa'i phyir",
+      "And this is certainly the case, for later on in the text someone argues that, if the pus and blood did not exist as outer objects, and if they were only a part of the mind itself, then they could never provide the function of being something to eat or drink. And in response, Master Vinitadeva says \"Actions and their objects are like an injury in a dream.\" He is saying that, even though the pus and blood do not exist as outer objects, nonetheless they can perform the function of being something to eat or drink. He proves his point by using a great many examples, such as a dream."
+    ],
+    "count": 1,
+    "row_ids": [
+      1673
+    ]
+  },
+  {
+    "label": "nonshared karma",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%thun mong ma yin pa'i las%"
+    ],
+    "count": 15,
+    "row_ids": [
+      1650,
+      1656,
+      1671,
+      2068,
+      5964,
+      5970,
+      5985,
+      6862,
+      7133,
+      8922,
+      33098,
+      27011,
+      34912,
+      32697,
+      22485
+    ]
+  },
+  {
+    "label": "planted seed ripening",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%bag chags bzhag pa smin pa%"
+    ],
+    "count": 7,
+    "row_ids": [
+      1670,
+      1671,
+      5984,
+      5985,
+      32889,
+      28739,
+      34922
+    ]
+  },
+  {
+    "label": "each individual",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%gang zag re re%"
+    ],
+    "count": 2,
+    "row_ids": [
+      1671,
+      5985
+    ]
+  },
+  {
+    "label": "river impossibility",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%rnag gis gang ba'i klung%"
+    ],
+    "count": 6,
+    "row_ids": [
+      1669,
+      1672,
+      5983,
+      5986,
+      34921,
+      34923
+    ]
+  },
+  {
+    "label": "dream actions verse",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%bya byed rmi lam gnod pa%"
+    ],
+    "count": 2,
+    "row_ids": [
+      1673,
+      5987
+    ]
+  },
+  {
+    "label": "mind-only nature",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%sems tsam gyi bdag nyid%"
+    ],
+    "count": 2,
+    "row_ids": [
+      1673,
+      5987
+    ]
+  },
+  {
+    "label": "refute argument",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%zhes bkag pa'i phyir%"
+    ],
+    "count": 2,
+    "row_ids": [
+      1671,
+      5985
+    ]
+  },
+  {
+    "label": "forced by karma",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%'gro ba de dag gi las kyi dbang gis%"
+    ],
+    "count": 3,
+    "row_ids": [
+      1672,
+      5986,
+      34923
+    ]
+  }
+]

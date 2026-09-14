@@ -1,0 +1,50 @@
+{
+  "native_generator_runs": {
+    "289": [
+      {
+        "attempt": 1,
+        "exit": 0,
+        "stderr_bytes": 0
+      }
+    ],
+    "290": [
+      {
+        "attempt": 1,
+        "exit": 0,
+        "stderr_bytes": 0
+      }
+    ],
+    "291": [
+      {
+        "attempt": 1,
+        "exit": 0,
+        "stderr_bytes": 0
+      }
+    ]
+  },
+  "superseded_authoring": [
+    {
+      "files": "291/superseded-authored-v1/",
+      "reason": "Before the first native run, cing/and intended occurrence corrected from third to second lowercase English and; original spec/decisions/maker retained.",
+      "native_generator_run_for_superseded_spec": false
+    }
+  ],
+  "auxiliary_failures": [
+    {
+      "script": "collect_evidence.v1-failed-utf8.py",
+      "observed_exit": 1,
+      "observed_exception": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb8 in position 32644: invalid start byte",
+      "correction": "Physical archive is read by lossless latin-1 byte mapping, without claiming an encoding attribution; all target ASCII text matches after whitespace normalization.",
+      "output_record_kind": "Observed tool-output exception, not a saved native stderr stream."
+    },
+    {
+      "script": "verify_and_freeze.v1-failed-parser.py",
+      "observed_exit": 1,
+      "observed_exception": "AssertionError at plain-body comparison",
+      "correction": "The helper initially counted HTML formatting newlines outside the source sentence. It now restricts text recovery to the canonical source sentence wrapper, excluding null markers. Canonical body/spec did not change.",
+      "output_record_kind": "Observed tool-output exception, not a saved native stderr stream."
+    }
+  ],
+  "evidence_deduplication": "The corpus query mapping references existing context rows in source-context-full-rows.json instead of copying them; overlapping physical line excerpts were merged to one exact original block. No query row was dropped.",
+  "rerun_policy": "No canonical rerun after successful runs because neither specs nor notes changed; later changes only add evidence references and reports."
+}

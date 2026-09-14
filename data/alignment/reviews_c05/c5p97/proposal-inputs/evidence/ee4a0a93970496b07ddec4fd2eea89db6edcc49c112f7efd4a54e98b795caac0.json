@@ -1,0 +1,261 @@
+[
+  {
+    "source_id": 1671,
+    "source_citation": "C05:289",
+    "parallel_id": 5985,
+    "parallel_citation": "C15:434",
+    "source_file": "corpus-rows.json",
+    "equal_fields": {
+      "acip": true,
+      "wylie": true,
+      "english": true
+    },
+    "differences": {},
+    "limits": "Text-field comparisons only; id, course and seq differ. No independent publication or ingestion lineage inferred."
+  },
+  {
+    "source_id": 1672,
+    "source_citation": "C05:290",
+    "parallel_id": 5986,
+    "parallel_citation": "C15:435",
+    "source_file": "corpus-rows.json",
+    "equal_fields": {
+      "acip": true,
+      "wylie": true,
+      "english": true
+    },
+    "differences": {},
+    "limits": "Text-field comparisons only; id, course and seq differ. No independent publication or ingestion lineage inferred."
+  },
+  {
+    "source_id": 1673,
+    "source_citation": "C05:291",
+    "parallel_id": 5987,
+    "parallel_citation": "C15:436",
+    "source_file": "corpus-rows.json",
+    "equal_fields": {
+      "acip": true,
+      "wylie": true,
+      "english": false
+    },
+    "differences": {
+      "english": [
+        {
+          "operation": "replace",
+          "source_range": [
+            76,
+            78
+          ],
+          "parallel_range": [
+            76,
+            78
+          ],
+          "source": ", ",
+          "parallel": "--"
+        },
+        {
+          "operation": "replace",
+          "source_range": [
+            178,
+            179
+          ],
+          "parallel_range": [
+            178,
+            180
+          ],
+          "source": ",",
+          "parallel": "--"
+        }
+      ]
+    },
+    "limits": "Text-field comparisons only; id, course and seq differ. No independent publication or ingestion lineage inferred."
+  },
+  {
+    "source_id": 1672,
+    "source_citation": "C05:290",
+    "parallel_id": 34923,
+    "parallel_citation": "P7:34",
+    "source_file": "corpus-rows.json",
+    "equal_fields": {
+      "acip": false,
+      "wylie": false,
+      "english": true
+    },
+    "differences": {
+      "acip": [
+        {
+          "operation": "delete",
+          "source_range": [
+            27,
+            28
+          ],
+          "parallel_range": [
+            27,
+            27
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "replace",
+          "source_range": [
+            33,
+            34
+          ],
+          "parallel_range": [
+            32,
+            33
+          ],
+          "source": "V",
+          "parallel": "W"
+        },
+        {
+          "operation": "insert",
+          "source_range": [
+            82,
+            82
+          ],
+          "parallel_range": [
+            81,
+            82
+          ],
+          "source": "",
+          "parallel": ","
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            126,
+            127
+          ],
+          "parallel_range": [
+            126,
+            126
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            192,
+            193
+          ],
+          "parallel_range": [
+            191,
+            191
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            203,
+            205
+          ],
+          "parallel_range": [
+            201,
+            201
+          ],
+          "source": " ,",
+          "parallel": ""
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            284,
+            285
+          ],
+          "parallel_range": [
+            280,
+            280
+          ],
+          "source": ",",
+          "parallel": ""
+        }
+      ],
+      "wylie": [
+        {
+          "operation": "delete",
+          "source_range": [
+            27,
+            28
+          ],
+          "parallel_range": [
+            27,
+            27
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "replace",
+          "source_range": [
+            33,
+            34
+          ],
+          "parallel_range": [
+            32,
+            33
+          ],
+          "source": "v",
+          "parallel": "w"
+        },
+        {
+          "operation": "insert",
+          "source_range": [
+            82,
+            82
+          ],
+          "parallel_range": [
+            81,
+            82
+          ],
+          "source": "",
+          "parallel": ","
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            126,
+            127
+          ],
+          "parallel_range": [
+            126,
+            126
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            192,
+            193
+          ],
+          "parallel_range": [
+            191,
+            191
+          ],
+          "source": ",",
+          "parallel": ""
+        },
+        {
+          "operation": "delete",
+          "source_range": [
+            203,
+            205
+          ],
+          "parallel_range": [
+            201,
+            201
+          ],
+          "source": " ,",
+          "parallel": ""
+        }
+      ]
+    },
+    "limits": "Text-field comparisons only; id, course and seq differ. No independent publication or ingestion lineage inferred."
+  }
+]
