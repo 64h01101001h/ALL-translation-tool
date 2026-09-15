@@ -1,0 +1,122 @@
+{
+  "seq": 346,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1728,
+        "course": "C05",
+        "seq": 346,
+        "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+        "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+        "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All six complete physical ASCII extents read and whitespace-collapse verified against exact ACIP/English. The three exact Wylie/English/ACIP fields and full neighboring context were read. Digital agreement establishes the available reading without proving it correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": "../evidence/corpus.json",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1728,
+            6885
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1728,
+            6885
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1728,
+            6885
+          ]
+        }
+      ],
+      "finding": "All three exact fields match C16:867; no independent publication lineage is established. All18 complete focused records and15 complete context rows were read/reused by exact identity. TCS02:73 supports only the last four verse lines of348 and differs in singular meaning plus appended prose; it is not a full-row identical witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Current references and GTHU/LA SOGS BA screened across200 records. Same complete converter, running-head, cap, spill and footnote class records reused from my prior full reading; following-heading class is expressly covered by the unchanged brief. No registered class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "LA SOGS BA is a full glossary-attested closing expression with or similar. The physical source and exact C16 parallel both retain BA; the later LA SOGS PAR has an overt case ending. PA variants elsewhere and conventional morphology motivate caution, but there is insufficient evidence to classify this available attested variant as a probable source spelling error.",
+      "counterevidence": "Dictionary attestation may reflect the same underlying source; exact course duplication is not proof of independent publication. Conversely an unusual form or alternate prose spelling alone does not establish a source error. No speculative emendation, hgm_gloss promotion or correction is made."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 245,
+        "wylie": 244,
+        "english": 453
+      },
+      "utf8_bytes": {
+        "acip": 245,
+        "wylie": 244,
+        "english": 453
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All source fields are physically complete and below1500 characters.347 includes the following folio/heading as registered apparatus;346 is ordinary prose. No hidden clipping or source correction is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "LA SOGS BA is a full glossary-attested closing expression with or similar. The physical source and exact C16 parallel both retain BA; the later LA SOGS PAR has an overt case ending. PA variants elsewhere and conventional morphology motivate caution, but there is insufficient evidence to classify this available attested variant as a probable source spelling error."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

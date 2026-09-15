@@ -1,0 +1,15 @@
+{
+  "scope": "Two read-only inspection mistakes, neither a source/native execution failure. Tool transcript retains actual output; this is a descriptive excerpt, not a fabricated native capture.",
+  "events": [
+    {
+      "command": "cat previous English helpers/author_specs.py plus existing native helper files",
+      "exit": 1,
+      "observed": "author_specs.py did not exist; rg located the existing author.py, which was then fully read."
+    },
+    {
+      "command": "inline corpus evidence inspection using raw_json and original_corpus_record keys",
+      "exit": 1,
+      "observed": "KeyError: 'raw_json'; actual interface keys inspected, then complete corpus objects read using raw and corpus_record."
+    }
+  ]
+}

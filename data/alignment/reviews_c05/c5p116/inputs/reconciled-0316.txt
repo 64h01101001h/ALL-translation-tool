@@ -1,0 +1,80 @@
+"""Literal root selections in the established exact-value reconciliation interface."""
+from pathlib import Path
+import json,hashlib,copy
+R=Path(__file__).resolve().parents[1];B=R.parent;K=['seq','id','d','tib','eng','tib_range','eng_range']
+def read(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+manifest=[]
+def cp(p,q):
+ q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes());manifest.append({'original':str(p),'copy':str(q.relative_to(R)),**pin(q)})
+rp=B/'root-reconciliation-decisions.json';assert pin(rp)=={'bytes':9666,'sha256':'dd9cf7b472b8ca0d0de6528a85868ff9390159a8dbffeb47ad981caa51d42ebd'};root=read(rp);rules={x['topic']:x['reason']for x in root['rulings']};assert len(rules)==11
+assert pin(B/'root-final-346-spec.json')=={'bytes':4913,'sha256':'9e1b009771b476673389ef1a346759d0719471c03196550f9e3de609fc4dff2b'};assert read(B/'baseline.json')['commit']==root['actual_baseline']
+for n in ['source.json','context.json','proposal-baseline.json','baseline.json','root-reconciliation-decisions.json','root-final-346-spec.json']:cp(B/n,R/'evidence'/n)
+for n,expected in root['root_reading'].items():assert pin(B/n)==expected;cp(B/n,R/'evidence'/n)
+p=B/'semantic-review/independent-pre-reconciliation-assessment.json';assert pin(p)==root['independent_preassessment'];cp(p,R/'evidence'/p.name)
+for n in ['proposal-protocol.md','current-alignment-output-contract.md']:cp(B.parent/n,R/'evidence'/n)
+for p in (B/'baseline-through345-caller').iterdir():
+ if p.is_file():cp(p,R/'evidence/baseline-through345-caller'/p.name)
+origins=[]
+for a,h in [('english','ffeebe02cb401893b0e90c01842b67ffe66a7740db920e5be18f5e0fbfe82f47'),('tibetan','86926705074de4389d51d248f2787c7020f7c3a375b1aa2ac792bc0af43441df')]:
+ P=B/a;f=read(P/'freeze.json');assert pin(P/'freeze.json')['sha256']==h and f['file_count']==len(f['files'])and f['source_origin_git_commit']==root['source_origin']
+ for rel,expected in f['files'].items():assert not Path(rel).is_absolute()and'..'not in Path(rel).parts and pin(P/rel)==expected,(a,rel)
+ cp(P/'freeze.json',R/'evidence'/f'{a}-freeze.json');origins.append({'angle':a,'original_root':str(P),'freeze':pin(P/'freeze.json'),'files_verified':len(f['files']),'scope':'Complete source/material/reading/native/history remains here; frozen identity is not a new independent reading claim.'})
+for p,q in [(B/'tibetan/reading-receipt.json',R/'evidence/tibetan-reading-receipt.json'),(B/'english/evidence/reading-and-scope.json',R/'evidence/english-reading-receipt.json'),(B/'english/helpers/canonical.py',R/'evidence/english-canonical.py.txt')]:cp(p,q)
+for rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md','tools/gen_alignment_page.py.txt','tools/build_alignment_layer.py.txt']:cp(B/'tibetan/evidence/governance'/rel,R/'evidence/governance'/rel)
+cp(B/'tibetan/helpers/native_adapter.py',R/'helpers/native_adapter.py');cp(B/'tibetan/helpers/run_native.py',R/'evidence/original-native-runner.py.txt');s=(B/'tibetan/helpers/run_native.py').read_text();assert 'for seq in [346,347,348]:'in s;(R/'helpers/run_native.py').write_text(s.replace('for seq in [346,347,348]:','for seq in [346]:'))
+put(R/'evidence/original-freeze-verification.json',{'status':'PASS_IDENTITY_ONLY','originals':origins,'total_files_verified':sum(x['files_verified']for x in origins)})
+maps={346:dict(x.split(':')for x in 'w1:w1 p1:p2 w2:w31 w3:w3 w4:w5 w5:w7 p2:p8 p3:p9 w6:w10 m1:m11 m2:m12 w7:w13 p4:p14 w8:w15 p5:p16 w9:w18 w10:w19 p6:p20 w11:w21 w12:w23 w13:w24 m3:m25 p7:p26 w14:w27 m4:m28 m5:m29'.split()),347:{f'w{i}':f'w{i}'for i in range(1,8)},348:dict(x.split(':')for x in 'w1:w1 m1:m2 w3:w6 w4:w7 w5:w8 w6:w9 w7:w10 p1:p12 w8:w13 f2:f16 w10:w17 w11:w18 w12:w19 w13:w20 w14:w21 w15:w22 w16:w23 w17:w24 w18:w25'.split())}
+special={(346,'w15'):(['w30'],'possession boundary'),(348,'w2'):(['w3'],'intent/no-mistake boundary'),(348,'f1'):(['p4','w5'],'intent/no-mistake boundary'),(348,'w9'):(['w14','w15'],'BDAG GIR/BYED')}
+omchanges={(346,'english',0):rules['BYAS/engaged']+' NAS and GIS remain unbanked.',(346,'english',4):'The first engaged is now selected as BYAS/w31. Other original listed reporting/participants/articles/support remain unbanked; original complete wording is preserved.',(346,'tibetan',0):rules['PHA ROL PO and NA']+' GIS remains unbanked.',(346,'tibetan',1):rules['first PHYIR and second PAR']+' NAS, DE, question framing, YIN, does and final PHYIR remain unbanked.',(346,'tibetan',2):rules['first PHYIR and second PAR']+' Internal LA and answer-side killing/anaphoric expansions remain unbanked.',(346,'tibetan',3):'Final root selects NA/Suppose, PHA ROL PO/other side, and second PAR/in. Other originally listed expansions remain unbanked; the first locative in is not silently assigned.',(347,'english',0):rules['first BZHI and heading']+' LA and closure remain part of expanded framing.',(347,'tibetan',0):rules['first BZHI and heading'],(348,'tibetan',0):rules['GTHU correspondence and source question']}
+for seq in [346,347,348]:
+ D=R/str(seq);D.mkdir();E=B/'english'/str(seq);T=B/'tibetan'/str(seq);ed=read(E/'decisions.json');td=read(T/'original-decisions.json');ers=ed['spans'];trs=td['decisions'];emap={x['id']:x for x in ers};tmap={x['original_span_id']:x for x in trs}
+ cp(E/'report.md',R/'evidence/original-reports'/f'english-{seq}.md');cp(E/'spec.json',R/'evidence/original-specs'/f'english-{seq}.json')
+ if seq==346:
+  cp(B/'root-final-346-spec.json',D/'spec.json');assert read(D/'spec.json')['segments'][0]['note']==root['corrected346_note'];assert read(E/'spec.json')['segments'][0]['note']==root['original346_note']
+ else:
+  for n in ['spec.json','body.html','resolved-ranges.json']:cp(E/n,D/n)
+  for tool in ['generator','resolver']:
+   P=B/'english/native'/f'{seq}-{tool}-v1';assert sorted(p.name for p in P.iterdir())==['execution.json','exit.txt','stderr.bin','stdin.bin','stdout.bin']
+   for p in P.iterdir():cp(p,R/'native'/P.name/p.name)
+ sp=read(D/'spec.json')['segments'][0]['spans'];by={x['id']:x for x in sp};rows=[];rationales=[]
+ for x in sp:
+  sid=x['id'];a='english';oid=sid;topic=None
+  if seq==346 and sid in ['w31','p14']:
+   a='tibetan';oid={'w31':'w2','p14':'p4'}[sid];o=tmap[oid];old=o['original_span'];ran=o['intended_ranges'];why=o['rationale'];topic='BYAS/engaged'if sid=='w31'else'MA YIN negative answer'
+  else:
+   oid='w8'if(seq==346 and sid=='p8')else sid;o=emap[oid];old=o;ran=o;why=o['rationale'];topic='KHO NA/only'if(seq==346 and sid=='p8')else None
+  assert x['tib']==old['tib']and x['eng']==old['eng'];rows.append({'seq':seq,**{k:x[k]for k in ['id','d','tib','eng']},**{k:ran[k]for k in ['tib_range','eng_range']}})
+  specific={346:{'w4':'PHA ROL PO and NA','p6':'PHA ROL PO and NA','p17':'first PHYIR and second PAR','p22':'first PHYIR and second PAR','w30':'possession boundary'},347:{'w4':'first BZHI and heading'},348:{'w3':'intent/no-mistake boundary','p4':'intent/no-mistake boundary','w5':'intent/no-mistake boundary','w11':'GTHU correspondence and source question','w14':'BDAG GIR/BYED','w15':'BDAG GIR/BYED'}};topic=topic or specific[seq].get(sid)
+  rationales.append({'seq':seq,'id':sid,'span':x,'original_basis':{'seq':seq,'angle':a,'field':'spans'if a=='english'else'decisions','id':oid},'original_semantic_rationale':why,'rationale':rules[topic]if topic else why,'shared_root_judgment':'../evidence/root-reconciliation-decisions.json','judgment_by':'root','mechanical_assembler':'/root/reusable_closure_review'})
+ put(D/'intended-ranges.json',rows);put(D/'final-rationales.json',rationales);rby={x['id']:x for x in rows};disps=[]
+ for a,records in [('tibetan',trs),('english',ers)]:
+  for i,o in enumerate(records):
+   sid=o['original_span_id']if a=='tibetan'else o['id'];action='ACCEPT';why='Exact original pair/ranges retained under root selection; original complete rationale remains preserved.'
+   if a=='english':
+    ids=[{'w8':'p8','f14':'p14'}.get(sid,sid)]if seq==346 else[sid]
+    if seq==346 and sid in ['w8','f14']:action='CHANGE';why=rules['KHO NA/only'if sid=='w8'else'MA YIN negative answer']
+   elif(seq,sid)in special:ids,topic=special[(seq,sid)];action='CHANGE';why=rules[topic]
+   else:ids=[maps[seq][sid]]
+   old=o['original_span']if a=='tibetan'else o;ran=o['intended_ranges']if a=='tibetan'else o
+   if action=='ACCEPT':assert len(ids)==1 and all(old[k]==rby[ids[0]][k]for k in ['d','tib','eng'])and all(ran[k]==rby[ids[0]][k]for k in ['tib_range','eng_range'])
+   disps.append({'seq':seq,'angle':a,'field':'decisions'if a=='tibetan'else'spans','index':i,'original_id':sid,'original':o,'disposition':action,'final_ids':ids,'reason':why,'judgment_by':'root','root_judgment':'../evidence/root-reconciliation-decisions.json'})
+ put(D/'original-dispositions.json',disps);other=[]
+ for a,doc in [('tibetan',td),('english',ed)]:
+  P=B/a/str(seq)
+  for i,o in enumerate(doc['omissions']):why=omchanges.get((seq,a,i));other.append({'seq':seq,'angle':a,'field':'omissions','index':i,'original':o,'disposition':'CHANGE'if why else'ACCEPT','reason':why or o['reason'],'judgment_by':'root'})
+  for f,o in [('spec.note',read(P/'spec.json')['segments'][0]['note']),('report.md',(P/'report.md').read_text())]:other.append({'seq':seq,'angle':a,'field':f,'index':0,'original':o,'disposition':'PRESERVE_ORIGINAL_PROVENANCE','reason':'Original text remains exact provenance. Final346 uses the root exact corrected note before new generation;347/348 retain exact English spec notes and prior execution. Current report.md and final omission records describe current root selection, heading roles and actual native reuse; they do not claim original reports are current.','judgment_by':'root'})
+ put(D/'original-other-dispositions.json',other);om=[{'original_basis':{k:x[k]for k in ['seq','angle','field','index']},'original':x['original'],'disposition':x['disposition'],'retained_or_changed_reason':x['reason']}for x in other if x['field']=='omissions']
+ if seq==346:om.append({'final_scope':'YIN and English does; DANG before LDAN PA and come to','reason':rules['MA YIN negative answer']+' '+rules['possession boundary'],'judgment_by':'root'})
+ if seq==348:om.append({'final_scope':'DU after BSAMS BZHIN; BAR after NOR; English a in without a mistake','reason':rules['intent/no-mistake boundary'],'judgment_by':'root'})
+ put(D/'omissions.json',om);screens=[];docs=[];err=[];questions=[]
+ for a,n,f in [('tibetan','five-ground-screens.json','screens'),('english','errata-review.json','category_screen')]:
+  doc=read(B/a/str(seq)/n);ls=doc if a=='tibetan'else doc['category_screen'];assert len(ls)==5;docs.append({'seq':seq,'angle':a,'source_file':n,'original':doc})
+  for i,o in enumerate(ls):screens.append({'seq':seq,'angle':a,'field':f,'index':i,'original':o,'disposition':'LOW_UNCERTAIN_UNFILED'if(seq==348 and o['kind']=='TIBETAN_SPELLING')else'RETAIN_NO_NEW_ERRATUM','reason':rules['GTHU correspondence and source question']if(seq==348 and o['kind']=='TIBETAN_SPELLING')else'Complete original category/grounds retained; root files no new source correction.','judgment_by':'root'})
+  for i,o in enumerate(read(B/a/str(seq)/'errata.json')):err.append({'seq':seq,'angle':a,'field':'errata.json','index':i,'original':o,'disposition':'REJECT_REGISTRY_ADDITION; DOWNGRADE_LOW_UNCERTAIN_UNFILED','reason':rules['GTHU correspondence and source question'],'judgment_by':'root'})
+  if a=='english':
+   for i,o in enumerate(doc['source_questions']):questions.append({'seq':seq,'angle':a,'field':'errata-review.json.source_questions','index':i,'original':o,'disposition':'RETAIN_LOW_UNCERTAIN_UNFILED','reason':rules['GTHU correspondence and source question'],'judgment_by':'root'})
+ put(D/'errata.json',[]);put(D/'errata-review.json',{'seq':seq,'status':'PROVISIONAL_ROOT_RECONCILIATION','judgment_by':'root','original_screens':screens,'complete_original_screen_documents':docs,'original_errata_candidates':err,'original_source_questions':questions,'final_errata':[],'source_corrections':False})
+put(R/'original-to-copy-manifest.json',manifest);put(R/'provenance.json',{'status':'ROOT_SELECTION_ASSEMBLED_NATIVE_PENDING','reconciler_role':'root','mechanical_assembler':'/root/reusable_closure_review','previous_role':'Tibetan original author','independent_reconciliation':False,'source_origin_git_commit':root['source_origin'],'source_origin_course_boundary':342,'actual_acceptance_baseline':root['actual_baseline'],'actual_baseline_accepted_through':345,'root_decisions':'evidence/root-reconciliation-decisions.json','reading_scope':'Scribe read exact root11 rulings and actual original schema/tuples/omissions/questions for explicit faithful mapping. Own Tibetan material readings reused; no new independent English material or reconciliation claim. Root reading is only its copied exact receipts.','native_plan':'Only346 receives one new generator/resolver pair.347/348 exact English captures reused unchanged; seven actual unique pairs and nine angle/segment views.'})
+print(json.dumps({'status':'PASS_MECHANICAL_ASSEMBLY','final_spans':63,'original_files_verified':216,'new_native_pairs_required':1,'exact_english_pairs_copied':2},indent=2))

@@ -1,0 +1,2752 @@
+{
+  "seq": 346,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 346,
+        "kind": "TIBETAN_SPELLING",
+        "found": "LA SOGS BA",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "LA SOGS BA",
+            "source_row": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "occurrences": {
+              "acip": [
+                5
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gthu"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1730,
+                  6887
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dang"
+                ],
+                "count": 6,
+                "row_ids": [
+                  25255,
+                  24763,
+                  28557,
+                  31584,
+                  10951,
+                  16402
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "la sogs ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1728,
+                  6885,
+                  11463,
+                  17430
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsams bzhin du ma nor bar"
+                ],
+                "count": 10,
+                "row_ids": [
+                  1731,
+                  1733,
+                  1735,
+                  1740,
+                  1741,
+                  6888,
+                  6890,
+                  6892,
+                  6894,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Taking life is killing another being"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1730,
+                  6887,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+            "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+            "register_identity": {
+              "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 277302,
+              "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+            },
+            "count": 200,
+            "search_terms": [
+              "c05:346",
+              "c05:347",
+              "c05:348",
+              "gthu",
+              "la sogs ba",
+              "heading glue"
+            ],
+            "matches": [
+              {
+                "item_id": "E-106",
+                "course": "C03",
+                "segment": "C03:429",
+                "kind": "INGEST_ARTEFACT",
+                "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                "expected": "our Lama to help us find the ability to do so.",
+                "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                "severity": "HIGH",
+                "confidence": "CONFIRMED",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 346,
+                "field": "acip",
+                "start": 236909,
+                "bytes": 245,
+                "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 346,
+                "field": "english",
+                "start": 237156,
+                "bytes": 458,
+                "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 73,
+            "material_master_objects": 133,
+            "personally_read_reused_objects": 61,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 25
+          },
+          "d_defensibility": {
+            "judgment": "The exact BA form directly has HGM or similar and recurs in C16 and other complete corpus passages. Neither variant spelling nor grammatical unfamiliarity licenses silent PA normalization or a new spelling report.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 346,
+        "kind": "ENGLISH_TYPO",
+        "found": "same common goal",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "same common goal",
+            "source_row": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                333
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gthu"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1730,
+                  6887
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dang"
+                ],
+                "count": 6,
+                "row_ids": [
+                  25255,
+                  24763,
+                  28557,
+                  31584,
+                  10951,
+                  16402
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "la sogs ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1728,
+                  6885,
+                  11463,
+                  17430
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsams bzhin du ma nor bar"
+                ],
+                "count": 10,
+                "row_ids": [
+                  1731,
+                  1733,
+                  1735,
+                  1740,
+                  1741,
+                  6888,
+                  6890,
+                  6892,
+                  6894,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Taking life is killing another being"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1730,
+                  6887,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+            "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+            "register_identity": {
+              "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 277302,
+              "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+            },
+            "count": 200,
+            "search_terms": [
+              "c05:346",
+              "c05:347",
+              "c05:348",
+              "gthu",
+              "la sogs ba",
+              "heading glue"
+            ],
+            "matches": [
+              {
+                "item_id": "E-106",
+                "course": "C03",
+                "segment": "C03:429",
+                "kind": "INGEST_ARTEFACT",
+                "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                "expected": "our Lama to help us find the ability to do so.",
+                "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                "severity": "HIGH",
+                "confidence": "CONFIRMED",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 346,
+                "field": "acip",
+                "start": 236909,
+                "bytes": 245,
+                "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 346,
+                "field": "english",
+                "start": 237156,
+                "bytes": 458,
+                "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 73,
+            "material_master_objects": 133,
+            "personally_read_reused_objects": 61,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 25
+          },
+          "d_defensibility": {
+            "judgment": "The expansion common reinforces shared purpose; source GCIG and DON support the sense. Repetition is not itself a typo.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 346,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "all the people involved",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "all the people involved",
+            "source_row": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                351
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gthu"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1730,
+                  6887
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dang"
+                ],
+                "count": 6,
+                "row_ids": [
+                  25255,
+                  24763,
+                  28557,
+                  31584,
+                  10951,
+                  16402
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "la sogs ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1728,
+                  6885,
+                  11463,
+                  17430
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsams bzhin du ma nor bar"
+                ],
+                "count": 10,
+                "row_ids": [
+                  1731,
+                  1733,
+                  1735,
+                  1740,
+                  1741,
+                  6888,
+                  6890,
+                  6892,
+                  6894,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Taking life is killing another being"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1730,
+                  6887,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+            "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+            "register_identity": {
+              "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 277302,
+              "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+            },
+            "count": 200,
+            "search_terms": [
+              "c05:346",
+              "c05:347",
+              "c05:348",
+              "gthu",
+              "la sogs ba",
+              "heading glue"
+            ],
+            "matches": [
+              {
+                "item_id": "E-106",
+                "course": "C03",
+                "segment": "C03:429",
+                "kind": "INGEST_ARTEFACT",
+                "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                "expected": "our Lama to help us find the ability to do so.",
+                "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                "severity": "HIGH",
+                "confidence": "CONFIRMED",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 346,
+                "field": "acip",
+                "start": 236909,
+                "bytes": 245,
+                "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 346,
+                "field": "english",
+                "start": 237156,
+                "bytes": 458,
+                "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 73,
+            "material_master_objects": 133,
+            "personally_read_reused_objects": 61,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 25
+          },
+          "d_defensibility": {
+            "judgment": "Complete preceding343 and local346 both ground common responsibility in shared intention. The English expansion is intelligible; no doctrinal error is established.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 346,
+        "kind": "INGEST_ARTEFACT",
+        "found": "one who commits it.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "one who commits it.",
+            "source_row": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                434
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gthu"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1730,
+                  6887
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dang"
+                ],
+                "count": 6,
+                "row_ids": [
+                  25255,
+                  24763,
+                  28557,
+                  31584,
+                  10951,
+                  16402
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "la sogs ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1728,
+                  6885,
+                  11463,
+                  17430
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsams bzhin du ma nor bar"
+                ],
+                "count": 10,
+                "row_ids": [
+                  1731,
+                  1733,
+                  1735,
+                  1740,
+                  1741,
+                  6888,
+                  6890,
+                  6892,
+                  6894,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Taking life is killing another being"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1730,
+                  6887,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+            "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+            "register_identity": {
+              "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 277302,
+              "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+            },
+            "count": 200,
+            "search_terms": [
+              "c05:346",
+              "c05:347",
+              "c05:348",
+              "gthu",
+              "la sogs ba",
+              "heading glue"
+            ],
+            "matches": [
+              {
+                "item_id": "E-106",
+                "course": "C03",
+                "segment": "C03:429",
+                "kind": "INGEST_ARTEFACT",
+                "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                "expected": "our Lama to help us find the ability to do so.",
+                "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                "severity": "HIGH",
+                "confidence": "CONFIRMED",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 346,
+                "field": "acip",
+                "start": 236909,
+                "bytes": 245,
+                "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 346,
+                "field": "english",
+                "start": 237156,
+                "bytes": 458,
+                "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 73,
+            "material_master_objects": 133,
+            "personally_read_reused_objects": 61,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 25
+          },
+          "d_defensibility": {
+            "judgment": "The complete physical question and response match all source fields and C16; no cap, trailing heading or missing sentence is identified.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 346,
+        "kind": "FORMATTING",
+        "found": "(or whatever activity it may be)",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "(or whatever activity it may be)",
+            "source_row": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                292
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 346,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gthu"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1730,
+                  6887
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dang"
+                ],
+                "count": 6,
+                "row_ids": [
+                  25255,
+                  24763,
+                  28557,
+                  31584,
+                  10951,
+                  16402
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "la sogs ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1728,
+                  6885,
+                  11463,
+                  17430
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsams bzhin du ma nor bar"
+                ],
+                "count": 10,
+                "row_ids": [
+                  1731,
+                  1733,
+                  1735,
+                  1740,
+                  1741,
+                  6888,
+                  6890,
+                  6892,
+                  6894,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "One may raise another question"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Taking life is killing another being"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1730,
+                  6887,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+            "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+            "register_identity": {
+              "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 277302,
+              "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+            },
+            "count": 200,
+            "search_terms": [
+              "c05:346",
+              "c05:347",
+              "c05:348",
+              "gthu",
+              "la sogs ba",
+              "heading glue"
+            ],
+            "matches": [
+              {
+                "item_id": "E-106",
+                "course": "C03",
+                "segment": "C03:429",
+                "kind": "INGEST_ARTEFACT",
+                "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                "expected": "our Lama to help us find the ability to do so.",
+                "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                "severity": "HIGH",
+                "confidence": "CONFIRMED",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 346,
+                "field": "acip",
+                "start": 236909,
+                "bytes": 245,
+                "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 346,
+                "field": "english",
+                "start": 237156,
+                "bytes": 458,
+                "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 73,
+            "material_master_objects": 133,
+            "personally_read_reused_objects": 61,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 25
+          },
+          "d_defensibility": {
+            "judgment": "Parenthesis is the printed expansion of the enumeration, preserved verbatim. Its words are not promoted into extra Tibetan atoms.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "LA SOGS BA is a full glossary-attested closing expression with or similar. The physical source and exact C16 parallel both retain BA; the later LA SOGS PAR has an overt case ending. PA variants elsewhere and conventional morphology motivate caution, but there is insufficient evidence to classify this available attested variant as a probable source spelling error."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category/grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 346,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 346,
+          "kind": "TIBETAN_SPELLING",
+          "found": "LA SOGS BA",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "LA SOGS BA",
+              "source_row": {
+                "id": 1728,
+                "course": "C05",
+                "seq": 346,
+                "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+                "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+              },
+              "occurrences": {
+                "acip": [
+                  5
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gthu"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1730,
+                    6887
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dang"
+                  ],
+                  "count": 6,
+                  "row_ids": [
+                    25255,
+                    24763,
+                    28557,
+                    31584,
+                    10951,
+                    16402
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "la sogs ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1728,
+                    6885,
+                    11463,
+                    17430
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsams bzhin du ma nor bar"
+                  ],
+                  "count": 10,
+                  "row_ids": [
+                    1731,
+                    1733,
+                    1735,
+                    1740,
+                    1741,
+                    6888,
+                    6890,
+                    6892,
+                    6894,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Taking life is killing another being"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1730,
+                    6887,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+              "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "register_identity": {
+                "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 277302,
+                "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+              },
+              "count": 200,
+              "search_terms": [
+                "c05:346",
+                "c05:347",
+                "c05:348",
+                "gthu",
+                "la sogs ba",
+                "heading glue"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-106",
+                  "course": "C03",
+                  "segment": "C03:429",
+                  "kind": "INGEST_ARTEFACT",
+                  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                  "expected": "our Lama to help us find the ability to do so.",
+                  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                  "severity": "HIGH",
+                  "confidence": "CONFIRMED",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 245,
+                "wylie": 244,
+                "english": 453
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 346,
+                  "field": "acip",
+                  "start": 236909,
+                  "bytes": 245,
+                  "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                  "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 346,
+                  "field": "english",
+                  "start": 237156,
+                  "bytes": 458,
+                  "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                  "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 73,
+              "material_master_objects": 133,
+              "personally_read_reused_objects": 61,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 25
+            },
+            "d_defensibility": {
+              "judgment": "The exact BA form directly has HGM or similar and recurs in C16 and other complete corpus passages. Neither variant spelling nor grammatical unfamiliarity licenses silent PA normalization or a new spelling report.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 346,
+          "kind": "ENGLISH_TYPO",
+          "found": "same common goal",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "same common goal",
+              "source_row": {
+                "id": 1728,
+                "course": "C05",
+                "seq": 346,
+                "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+                "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  333
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gthu"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1730,
+                    6887
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dang"
+                  ],
+                  "count": 6,
+                  "row_ids": [
+                    25255,
+                    24763,
+                    28557,
+                    31584,
+                    10951,
+                    16402
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "la sogs ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1728,
+                    6885,
+                    11463,
+                    17430
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsams bzhin du ma nor bar"
+                  ],
+                  "count": 10,
+                  "row_ids": [
+                    1731,
+                    1733,
+                    1735,
+                    1740,
+                    1741,
+                    6888,
+                    6890,
+                    6892,
+                    6894,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Taking life is killing another being"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1730,
+                    6887,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+              "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "register_identity": {
+                "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 277302,
+                "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+              },
+              "count": 200,
+              "search_terms": [
+                "c05:346",
+                "c05:347",
+                "c05:348",
+                "gthu",
+                "la sogs ba",
+                "heading glue"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-106",
+                  "course": "C03",
+                  "segment": "C03:429",
+                  "kind": "INGEST_ARTEFACT",
+                  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                  "expected": "our Lama to help us find the ability to do so.",
+                  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                  "severity": "HIGH",
+                  "confidence": "CONFIRMED",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 245,
+                "wylie": 244,
+                "english": 453
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 346,
+                  "field": "acip",
+                  "start": 236909,
+                  "bytes": 245,
+                  "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                  "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 346,
+                  "field": "english",
+                  "start": 237156,
+                  "bytes": 458,
+                  "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                  "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 73,
+              "material_master_objects": 133,
+              "personally_read_reused_objects": 61,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 25
+            },
+            "d_defensibility": {
+              "judgment": "The expansion common reinforces shared purpose; source GCIG and DON support the sense. Repetition is not itself a typo.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 346,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "all the people involved",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "all the people involved",
+              "source_row": {
+                "id": 1728,
+                "course": "C05",
+                "seq": 346,
+                "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+                "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  351
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gthu"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1730,
+                    6887
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dang"
+                  ],
+                  "count": 6,
+                  "row_ids": [
+                    25255,
+                    24763,
+                    28557,
+                    31584,
+                    10951,
+                    16402
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "la sogs ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1728,
+                    6885,
+                    11463,
+                    17430
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsams bzhin du ma nor bar"
+                  ],
+                  "count": 10,
+                  "row_ids": [
+                    1731,
+                    1733,
+                    1735,
+                    1740,
+                    1741,
+                    6888,
+                    6890,
+                    6892,
+                    6894,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Taking life is killing another being"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1730,
+                    6887,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+              "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "register_identity": {
+                "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 277302,
+                "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+              },
+              "count": 200,
+              "search_terms": [
+                "c05:346",
+                "c05:347",
+                "c05:348",
+                "gthu",
+                "la sogs ba",
+                "heading glue"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-106",
+                  "course": "C03",
+                  "segment": "C03:429",
+                  "kind": "INGEST_ARTEFACT",
+                  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                  "expected": "our Lama to help us find the ability to do so.",
+                  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                  "severity": "HIGH",
+                  "confidence": "CONFIRMED",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 245,
+                "wylie": 244,
+                "english": 453
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 346,
+                  "field": "acip",
+                  "start": 236909,
+                  "bytes": 245,
+                  "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                  "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 346,
+                  "field": "english",
+                  "start": 237156,
+                  "bytes": 458,
+                  "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                  "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 73,
+              "material_master_objects": 133,
+              "personally_read_reused_objects": 61,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 25
+            },
+            "d_defensibility": {
+              "judgment": "Complete preceding343 and local346 both ground common responsibility in shared intention. The English expansion is intelligible; no doctrinal error is established.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 346,
+          "kind": "INGEST_ARTEFACT",
+          "found": "one who commits it.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "one who commits it.",
+              "source_row": {
+                "id": 1728,
+                "course": "C05",
+                "seq": 346,
+                "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+                "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  434
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gthu"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1730,
+                    6887
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dang"
+                  ],
+                  "count": 6,
+                  "row_ids": [
+                    25255,
+                    24763,
+                    28557,
+                    31584,
+                    10951,
+                    16402
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "la sogs ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1728,
+                    6885,
+                    11463,
+                    17430
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsams bzhin du ma nor bar"
+                  ],
+                  "count": 10,
+                  "row_ids": [
+                    1731,
+                    1733,
+                    1735,
+                    1740,
+                    1741,
+                    6888,
+                    6890,
+                    6892,
+                    6894,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Taking life is killing another being"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1730,
+                    6887,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+              "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "register_identity": {
+                "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 277302,
+                "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+              },
+              "count": 200,
+              "search_terms": [
+                "c05:346",
+                "c05:347",
+                "c05:348",
+                "gthu",
+                "la sogs ba",
+                "heading glue"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-106",
+                  "course": "C03",
+                  "segment": "C03:429",
+                  "kind": "INGEST_ARTEFACT",
+                  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                  "expected": "our Lama to help us find the ability to do so.",
+                  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                  "severity": "HIGH",
+                  "confidence": "CONFIRMED",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 245,
+                "wylie": 244,
+                "english": 453
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 346,
+                  "field": "acip",
+                  "start": 236909,
+                  "bytes": 245,
+                  "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                  "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 346,
+                  "field": "english",
+                  "start": 237156,
+                  "bytes": 458,
+                  "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                  "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 73,
+              "material_master_objects": 133,
+              "personally_read_reused_objects": 61,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 25
+            },
+            "d_defensibility": {
+              "judgment": "The complete physical question and response match all source fields and C16; no cap, trailing heading or missing sentence is identified.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 346,
+          "kind": "FORMATTING",
+          "found": "(or whatever activity it may be)",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "(or whatever activity it may be)",
+              "source_row": {
+                "id": 1728,
+                "course": "C05",
+                "seq": 346,
+                "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+                "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  292
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 346,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gthu"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1730,
+                    6887
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dang"
+                  ],
+                  "count": 6,
+                  "row_ids": [
+                    25255,
+                    24763,
+                    28557,
+                    31584,
+                    10951,
+                    16402
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "la sogs ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1728,
+                    6885,
+                    11463,
+                    17430
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsams bzhin du ma nor bar"
+                  ],
+                  "count": 10,
+                  "row_ids": [
+                    1731,
+                    1733,
+                    1735,
+                    1740,
+                    1741,
+                    6888,
+                    6890,
+                    6892,
+                    6894,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "One may raise another question"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1728,
+                    6885
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Taking life is killing another being"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1730,
+                    6887,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+              "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+              "register_identity": {
+                "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 277302,
+                "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+              },
+              "count": 200,
+              "search_terms": [
+                "c05:346",
+                "c05:347",
+                "c05:348",
+                "gthu",
+                "la sogs ba",
+                "heading glue"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-106",
+                  "course": "C03",
+                  "segment": "C03:429",
+                  "kind": "INGEST_ARTEFACT",
+                  "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+                  "expected": "our Lama to help us find the ability to do so.",
+                  "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+                  "severity": "HIGH",
+                  "confidence": "CONFIRMED",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 245,
+                "wylie": 244,
+                "english": 453
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 346,
+                  "field": "acip",
+                  "start": 236909,
+                  "bytes": 245,
+                  "sha256": "e072a5422cae9b9c4ff8532c02df3cd0096fb1e1fe8ad740522070a342043992",
+                  "original_text": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 346,
+                  "field": "english",
+                  "start": 237156,
+                  "bytes": 458,
+                  "sha256": "d731aa1920451425a5d51a834f62910a717da63242b691444bd521381416d101",
+                  "original_text": "One may raise another question: \"Suppose a group of people are engaged in\r\na war or similar activity, and one of these people kills someone from the other\r\nside. Does a path of action occur only for the one person who actually did the\r\nkilling?\" It does not. Because they are engaged in the war (or whatever\r\nactivity it may be) for the same common goal, all the people involved come to\r\npossess a full path of action, just as much as the one who commits it.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 73,
+              "material_master_objects": 133,
+              "personally_read_reused_objects": 61,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 25
+            },
+            "d_defensibility": {
+              "judgment": "Parenthesis is the printed expansion of the enumeration, preserved verbatim. Its words are not promoted into extra Tibetan atoms.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 346,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 346,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1728,
+              "course": "C05",
+              "seq": 346,
+              "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+              "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+              "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All six complete physical ASCII extents read and whitespace-collapse verified against exact ACIP/English. The three exact Wylie/English/ACIP fields and full neighboring context were read. Digital agreement establishes the available reading without proving it correct."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "evidence": "../evidence/corpus.json",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1728,
+                  6885
+                ]
+              }
+            ],
+            "finding": "All three exact fields match C16:867; no independent publication lineage is established. All18 complete focused records and15 complete context rows were read/reused by exact identity. TCS02:73 supports only the last four verse lines of348 and differs in singular meaning plus appended prose; it is not a full-row identical witness."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0:docs/errata_register.json",
+            "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+            "register_count": 200,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "Current references and GTHU/LA SOGS BA screened across200 records. Same complete converter, running-head, cap, spill and footnote class records reused from my prior full reading; following-heading class is expressly covered by the unchanged brief. No registered class is refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "LA SOGS BA is a full glossary-attested closing expression with or similar. The physical source and exact C16 parallel both retain BA; the later LA SOGS PAR has an overt case ending. PA variants elsewhere and conventional morphology motivate caution, but there is insufficient evidence to classify this available attested variant as a probable source spelling error.",
+            "counterevidence": "Dictionary attestation may reflect the same underlying source; exact course duplication is not proof of independent publication. Conversely an unusual form or alternate prose spelling alone does not establish a source error. No speculative emendation, hgm_gloss promotion or correction is made."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "utf8_bytes": {
+              "acip": 245,
+              "wylie": 244,
+              "english": 453
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "All source fields are physically complete and below1500 characters.347 includes the following folio/heading as registered apparatus;346 is ordinary prose. No hidden clipping or source correction is inferred."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "LA SOGS BA is a full glossary-attested closing expression with or similar. The physical source and exact C16 parallel both retain BA; the later LA SOGS PAR has an overt case ending. PA variants elsewhere and conventional morphology motivate caution, but there is insufficient evidence to classify this available attested variant as a probable source spelling error."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

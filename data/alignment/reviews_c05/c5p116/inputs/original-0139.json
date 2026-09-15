@@ -1,0 +1,121 @@
+{
+  "seq": 347,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1729,
+        "course": "C05",
+        "seq": 347,
+        "acip": "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,",
+        "wylie": "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o",
+        "english": "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 76 Definitions of the Four \"Root\" Non-Virtues"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All six complete physical ASCII extents read and whitespace-collapse verified against exact ACIP/English. The three exact Wylie/English/ACIP fields and full neighboring context were read. Digital agreement establishes the available reading without proving it correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": "../evidence/corpus.json",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1729,
+            6886
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1729,
+            6886
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1729
+          ]
+        }
+      ],
+      "finding": "C16:868 matches ACIP/Wylie and the complete prose body; its following heading is numbered38 rather than76, so the complete English fields are not identical. All18 complete focused records and15 complete context rows were read/reused by exact identity. TCS02:73 supports only the last four verse lines of348 and differs in singular meaning plus appended prose; it is not a full-row identical witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Current references and GTHU/LA SOGS BA screened across200 records. Same complete converter, running-head, cap, spill and footnote class records reused from my prior full reading; following-heading class is expressly covered by the unchanged brief. No registered class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The body omits an explicit first four while the following heading states Four Root Non-Virtues. This is expanded outline translation plus registered appended apparatus, not demonstrated factual contradiction or source loss.",
+      "counterevidence": "Dictionary attestation may reflect the same underlying source; exact course duplication is not proof of independent publication. Conversely an unusual form or alternate prose spelling alone does not establish a source error. No speculative emendation, hgm_gloss promotion or correction is made."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 67,
+        "wylie": 66,
+        "english": 224
+      },
+      "utf8_bytes": {
+        "acip": 67,
+        "wylie": 66,
+        "english": 224
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All source fields are physically complete and below1500 characters.347 includes the following folio/heading as registered apparatus;346 is ordinary prose. No hidden clipping or source correction is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The body omits an explicit first four while the following heading states Four Root Non-Virtues. This is expanded outline translation plus registered appended apparatus, not demonstrated factual contradiction or source loss."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The following76 heading is registered apparatus; preserve without refiling."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The following76 heading is registered apparatus; preserve without refiling."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

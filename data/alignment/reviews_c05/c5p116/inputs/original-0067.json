@@ -1,0 +1,41 @@
+{
+  "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+  "path": "docs/errata_register.json",
+  "identity": {
+    "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+    "repository_relative_path": "docs/errata_register.json",
+    "bytes": 277302,
+    "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+  },
+  "count": 200,
+  "direct_search_terms": [
+    "c05:346",
+    "c05:347",
+    "c05:348",
+    "gthu",
+    "la sogs ba",
+    "heading glue"
+  ],
+  "direct_matches": [
+    {
+      "item_id": "E-106",
+      "course": "C03",
+      "segment": "C03:429",
+      "kind": "INGEST_ARTEFACT",
+      "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+      "expected": "our Lama to help us find the ability to do so.",
+      "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+      "severity": "HIGH",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ],
+  "already_registered_classes": [
+    "following-section heading glue",
+    "folio/footnote fusion",
+    "E-044 converter escapes",
+    "E-071 running head",
+    "E-107 cap",
+    "E-111 row spill"
+  ]
+}

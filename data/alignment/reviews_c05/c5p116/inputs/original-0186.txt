@@ -1,0 +1,96 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(346,'shared responsibility for killing in war',[
+ ('dmag','war',5,'in a war or similar','The first war noun belongs to the initial supposition; glossary war. The article and participants stay outside.'),
+ ('la sogs ba','or similar',6,'war or similar','Whole enumerative closing expression, exactly attested as la sogs ba/or similar in the glossary. Preserve BA and exclude the supplied noun activity. Its source function is a closing particle expression.'),
+ ('gcig','one',5,'and one of these people','First gcig identifies the one participant who kills. Exclude the partitive of these people.'),
+ ('pha rol po','other side',5,'someone from the other side','The established other-person/opposing-party term is rendered other side here. Exclude the supplied someone from the frame rather than claiming that the whole participant expansion is a lexical atom.'),
+ ('bsad','kills',5,'people kills someone','Past-form killing verb has exact glossary kills; the English supposition uses present tense.'),
+ ('na','Suppose',6,'Suppose a group','Conditional NA after the killing proposition supplies the initial Suppose frame. This is the condition marker, distinct from the reporting zhe na at the question end.'),
+ ('gcig po','one',5,'the one person who actually','The second one is the single doer in the direct question. Exclude person who actually did the killing, which expands the anaphoric reference.'),
+ ('kho na','only',5,'occur only for','The established restrictive compound has only; it limits the single doer, not all participants in the answer.'),
+ ('la','for',6,'only for the one','Case particle relates occurrence of the action path to that one doer. This is the first English for.'),
+ ('las lam','path of action',5,'Does a path of action','First established action-path compound belongs to the question; exclude Does a.'),
+ ('las','action',7,'Does a path of action','Secure action member inside the first parent.'),
+ ('lam','path',7,'Does a path of action','Secure path member inside the first parent.'),
+ ("'byung",'occur',5,'action occur only','Arising/occurrence verb owns occur; question auxiliary Does stays outside.'),
+ ('ma yin','does not',3,'It does not','Complete negative copular answer is recast as does not, with the omitted proposition understood. The genuine predicate is aligned as a phrase; It stays outside and no does-only copula claim is made.'),
+ ('dmag','war',5,'engaged in the war','The second war noun belongs to the answer, after Because they are engaged. Distinct from the initial supposition.'),
+ ('sogs','or whatever',6,'war (or whatever','Enumerative closing gesture has the exact glossary or whatever. Exclude activity it may be.'),
+ ('par','in',6,'engaged in the war','Whole PAR locates the shared undertaking in war or a similar activity. Owns the second English in, after the second engaged.'),
+ ('don','goal',5,'same common goal','Exact glossary goal, excluding the supplied intensifying common.'),
+ ('gcig','same',5,'the same common goal','The goal is one/the same, exactly glossary-attested. This occurrence is distinct from both participant-number uses.'),
+ ('la','for',6,'for the same common goal','Source LA marks the goal entered upon; the English purpose relation is recast as for. This is the second for, distinct from only for the one person.'),
+ ('zhugs pa','engaged',5,'Because they are engaged','The verbal entry supports engage in in Hopkins; the local shared-goal undertaking yields engaged here. The auto-aligned entered gloss is not promoted, and they are remains outside.'),
+ ('phyir','Because',6,'Because they are engaged','The first answer PHYIR introduces the shared-goal reason. It owns the sole Because; the final justificatory PHYIR is left unbanked rather than assigned the same word again.'),
+ ('thams cad','all',5,'all the people involved','The established universal compound owns all only, excluding the expanded participant phrase.'),
+ ('byed pa po','one who commits',5,'the one who commits it','The agent noun has exact glossary one who commits. Exclude the article and the anaphoric it.'),
+ ('byed','commits',7,'the one who commits it','Secure verbal member inside the agent noun, with ordinary singular inflection of glossary commit.'),
+ ('bzhin du','as much as',6,'just as much as the one','Whole comparative particle expression relates the participants to the doer. The local comparison supplies as much as; exclude the supplied emphasis just. The unrelated mined proper behavior gloss is not promoted.'),
+ ('las lam','path of action',5,'possess a full path of action','Second established action-path compound belongs to the common result. Exclude a full.'),
+ ('las','action',7,'possess a full path of action','Secure action member of the second parent.'),
+ ('lam','path',7,'possess a full path of action','Secure path member of the second parent.'),
+ ('ldan pa','possess',5,'come to possess','Exact glossary possess; the English inchoative come to remains outside.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Distinguish both war/path/for occurrences, the three gcig references, and the sole explicit Because. La sogs ba is preserved as an attested closing expression, not normalized. The negative answer is a genuine ma yin/does not predicate. Killing references redistributed into the English question and shared grammar remain omitted without false nulls. All GMR wording is exact; no source edit or hgm_gloss promotion.',
+ [{'tib':'byas nas; gis','reason':'Performing the war is recast as are engaged in, followed by and one kills. The individual ownership of the light verb, continuation and active agency is less certain than the lexical war/killing claims. Leave these distributed relations unbanked, without an absent-meaning null.'},
+ {'tib':'de after gcig po; ngam; zhe na; te','reason':'Anaphoric reference and question/report structure are expanded across one person who actually did the killing, Does, and One may raise another question. No unique question, raise, or does atom is secure for the reporting formula. Preserve the full question and omit these uncertain separate mappings.'},
+ {'tib':'la before second sogs; gsod pa before don; gsod par before byed pa po','reason':'The enumerative construction is represented by sogs and its final locative PAR. The two answer-side killing mentions are paraphrased through a common goal and one who commits it. The English killing inside the preceding question expands the already identified killer; it is not assigned backwards to one of these answer-side repetitions merely to fill a slot.'},
+ {'tib':'dang before ldan pa; yin pa; final phyir; bound genitives and agent-noun remainder','reason':'Possession grammar, assertion and outer justification are distributed in the English answer. The first reason marker securely owns Because; the final one has no separately established counterpart. No invented null, copula/come or dang/possess mapping is added.'},
+ {'english':'One may raise another question; a group of people are engaged in; activity; and; of these people; someone from the; Does a; person who actually did the killing; It; they are; activity it may be; the; common; the people involved come to; a full; just; final it','reason':'Reporting, conditional expansion, participants, articles, light verbs, anaphors and emphasis stay outside the explicit narrow claims. These additions are legitimate explanatory translation, not a source-error finding.'}])
+build(347,'root expressions and branch nonvirtues',[
+ ('gnyis pa','Next',5,'Next we present','The second division is introduced as Next, exactly glossary-attested. Do not falsely null the ordinal merely because English lacks the literal word second.'),
+ ('rtsa ba','root',5,'the "root" non-virtues','Exact glossary root within the body, excluding the quotation marks and expanded non-virtues. Do not take the repeated Root from the following heading.'),
+ ('tha snyad','expressions',5,'"four expressions,"','Complete glossary includes expressions; this local technical category is the four expressions. The curated conventional sense is not substituted into GMR English.'),
+ ('bzhi','four',5,'"four expressions,"','Second Tibetan BZHI belongs to the body four expressions. The first BZHI after root stays omitted, rather than being redirected into the appended heading.'),
+ ('yan lag','branch',5,'six "branch"','Established compound has branch; exclude the explanatory non-virtues and quotation marks.'),
+ ('drug','six',5,'the six "branch"','Exact number six, governing the branches in the body.'),
+ ('bshad pa','present',5,'Next we present','Exact glossary present for explaining these categories. Exclude we and the expanded definition phrase.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Gnyis pa owns the explicit Next; the second bzhi owns four expressions. The first bzhi remains unbanked because the main-body root phrase lacks a number while the following heading repeats Four Root Non-Virtues. All folio/heading text stays verbatim under the registered following-heading class. No null, source edit or hgm_gloss promotion.',
+ [{'tib':'la; first bzhi after rtsa ba; terminal bound o','reason':'LA and the final declarative closure participate in the expanded presentation frame. The first BZHI has no explicit number in the main-body root phrase, but Four exists in the appended heading; this mixed body/apparatus distribution prevents a confident absence null or a forced heading match.'},
+ {'english':'we; the definition of each individual non-virtue; We start with the; non-virtues; continue to the; and end with the; 76 Definitions of the Four "Root" Non-Virtues','reason':'The prose elaborates the outline and appends the following section heading. Preserve every character and leave the expanded presentation and registered apparatus unwrapped.'}])
+build(348,'definitions of the four root nonvirtues',[
+ ('srog gcod pa','Taking life',5,'Taking life is','Established taking-life compound, with verse-initial capitalization preserved. Exclude the copular is.'),
+ ('srog','life',7,'Taking life is','Secure life member within the taking-life parent. No gcod/Taking member is inferred from the whole idiom.'),
+ ('bsams bzhin','Purposely',5,'Purposely, and without','The established intentionality compound has exact glossary purposely. Preserve its verse-initial capital; do not promote the adjacent ma nor bar mined purposely and without mixture.'),
+ ('ma','without',6,'and without a mistake','Negative particle supplies without in the explicit no-mistake construction; the following article is excluded.'),
+ ('nor','mistake',5,'without a mistake','First NOR is the error sense, exactly glossary-attested. It is distinct from wealth later.'),
+ ('gzhan','another',5,'killing another being','First other/another modifier belongs to the killed being. Exclude being; the unrelated mined a bodhisattva gloss is rejected and unchanged.'),
+ ('gsad pa','killing',5,'is killing another','Exact glossary killing for the verb in the definition; preserve GSAD rather than replacing it with GSOD.'),
+ ('ma byin len pa','Stealing',5,'Stealing is to take','Established compound exactly attested as stealing. The constituent negation and taking elements are not asserted separately inside the indivisible English lexical item.'),
+ ('gzhan','Another',5,"Another's wealth",'Second other/another refers to the owner of the wealth. Exclude the possessive apostrophe and s, whose genitive relation is not a separate word claim.'),
+ ('nor','wealth',5,"Another's wealth",'Second NOR is the wealth sense; complete glossary and local stealing context distinguish it from the first mistake.'),
+ ('gthu','force',5,'by means of force','Exact source GTHU has glossary force, including an EWTS-warning flag in the glossary object. MTHU in the prose expansion is counterevidence to spelling certainty, but does not justify silently normalizing this attested source form.'),
+ ('dang','or',6,'force or stealth','Coordinator supplies the alternatives force or stealth; it does not own the English and in the earlier purposeful/no-mistake description.'),
+ ("'jab bus",'stealth',5,'or stealth','Whole inflected lexical word owns stealth, supported by the complete jab bu glossary. Agentive final s remains inside the source word; no separable -s mapping is invented.'),
+ ('bdag gir','possession',5,'take possession of','Established ownership expression has exact glossary possession. Flat shape keeps the following action verb separate.'),
+ ('byed','take',5,'to take possession','The action verb is recast as take in take possession; take is directly glossary-attested for byed and the ownership complement supplies possession separately. Exclude to and the object relation of.'),
+ ('bgrod min','improper',3,'Engaging in improper','The complete negative eligibility expression is paraphrased as improper in the sexual-conduct definition. Preserve the whole phrase; neither a bgrod/proper mapping nor an unapproved negative-affix split is asserted.'),
+ ("'gro ba",'Engaging',5,'Engaging in improper','The verbal going/engaging action is rendered Engaging here, as the prose expansion at351 confirms. The curated living being noun sense is inapplicable to this verb and is not promoted into the alignment.'),
+ ('log par g-yem pa','Sexual misconduct',5,'Sexual misconduct,','Established sexual-misconduct compound, excluding the following punctuation and of four types. No arbitrary internal sexual/misconduct members are added.'),
+ ('rnam pa','types',5,'of four types','Exact glossary types, describing the four forms of misconduct.'),
+ ('bzhi','four',5,'of four types','Exact number four in the verse definition, distinct from the following-heading Four in347.'),
+ ('rdzun tshig','Lying',5,"Lying's when",'Established lying compound owns Lying, excluding the contracted copula apostrophe-s.'),
+ ("'du shes",'impression',5,'a wrong impression given','Exact glossary impression; the deceptive change is distributed across wrong and given, which remain unbanked.'),
+ ('tshig','words',5,"the meanings of one's words",'Word noun owns words inside the source tshig don compound, kept flat. The attested whole-compound rendering includes an English possessive; the narrow split avoids absorbing supplied one\'s.'),
+ ('don','meanings',5,"the meanings of one's words",'Meaning noun owns meanings, separate from words; the connective of one\'s remains outside.'),
+ ('go ba','understood',5,'Are understood','Exact glossary understood; the passive auxiliary Are and the intensifying mngon par are not assigned arbitrary separate exponents.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Preserve the two NOR senses and the two explicit other-person modifiers. GTHU and GSAD have exact lexical support and remain unchanged. The no-mistake negation is explicit without; the ma inside stealing is not falsely nulled. Improper is assigned only to the complete bgrod min phrase. Desire/sex and deceptive-change/wrong-given recasts stay unbanked; all verse wording is exact and no hgm_gloss is promoted.',
+ [{'tib':'gcod pa as a member; both ni; du after bsams bzhin; bar after nor; terminal bound o forms','reason':'Taking life is an established whole; taking alone does not preserve cutting/killing content. Topic, adverbial and declarative grammar is distributed across the English predicates. Leave these uncertain independent exponents unbanked without asserting nulls.'},
+ {'tib':'ma/byin/len pa inside ma byin len pa; gyi; agentive s inside jab bus','reason':'Stealing lexicalizes taking what is not given and has no separately secure negative/member split. The owner genitive is expressed by the English possessive construction, and the instrumental relation by shared by means of. Do not manufacture a fifth subword convention or split Tibetan agentive s.'},
+ {'tib':"'dod pa yis",'english':'kinds of sex / in','reason':'The complete desire entry has desire/wish/intention, while the verse renders the sexual act through kinds of sex. The prose expansion351 distributes desire and engagement across the same paraphrase. A standalone desire/sex or instrumental yis/in mapping is uncertain, so omit it without a false absence null.'},
+ {'tib':'gzhan before sgyur ba; sgyur ba; bound genitive; mngon par','english':'wrong / given / Are','reason':'Changing the impression into another is recast as a wrong impression given. Wrong and given are not individually secured by the other/change records; preserve impression but omit these distributed claims. MNGON PAR adds manifest recognition without a separate explicit modifier; it does not mean the passive auxiliary Are.'},
+ {'english':"is; being; and; a; is to; possessive 's; of; by means of; in; kinds of sex; of; contracted 's when the; of one's; Are; a wrong; given",'reason':'Articles, copulas, relation frames and explanatory/idiomatic words stay outside the stated lexical claims. Mid-sentence capitals reflect the eight verse lines; none is corrected or filed as new formatting errata.'}])

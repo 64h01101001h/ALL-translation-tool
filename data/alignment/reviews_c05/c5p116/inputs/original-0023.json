@@ -1,0 +1,1247 @@
+[
+  {
+    "seq": 348,
+    "kind": "TIBETAN_SPELLING",
+    "found": "GTHU",
+    "decision": "PROPOSE_LOW_PROBABLE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "GTHU",
+        "source_row": {
+          "id": 1730,
+          "course": "C05",
+          "seq": 348,
+          "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+          "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+          "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+        },
+        "occurrences": {
+          "acip": [
+            97
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gthu"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dang"
+            ],
+            "count": 6,
+            "row_ids": [
+              25255,
+              24763,
+              28557,
+              31584,
+              10951,
+              16402
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "la sogs ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1728,
+              6885,
+              11463,
+              17430
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bsams bzhin du ma nor bar"
+            ],
+            "count": 10,
+            "row_ids": [
+              1731,
+              1733,
+              1735,
+              1740,
+              1741,
+              6888,
+              6890,
+              6892,
+              6894,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "One may raise another question"
+            ],
+            "count": 2,
+            "row_ids": [
+              1728,
+              6885
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being"
+            ],
+            "count": 3,
+            "row_ids": [
+              1730,
+              6887,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+        "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+        "register_identity": {
+          "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "search_terms": [
+          "c05:346",
+          "c05:347",
+          "c05:348",
+          "gthu",
+          "la sogs ba",
+          "heading glue"
+        ],
+        "matches": [
+          {
+            "item_id": "E-106",
+            "course": "C03",
+            "segment": "C03:429",
+            "kind": "INGEST_ARTEFACT",
+            "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+            "expected": "our Lama to help us find the ability to do so.",
+            "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+            "severity": "HIGH",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 262,
+          "wylie": 262,
+          "english": 303
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 348,
+            "field": "acip",
+            "start": 237920,
+            "bytes": 269,
+            "sha256": "a54766aa8ccd107cc14f942ada0d03d7a8340f2905a7ac881a30a4f0731c01bc",
+            "original_text": ",SROG GCOD PA NI BSAMS BZHIN DU,\r\n,MA NOR BAR NI GZHAN GSAD PA'O,\r\n,MA BYIN LEN PA GZHAN GYI NOR,\r\n,GTHU DANG 'JAB BUS BDAG GIR BYED,\r\n,BGROD MIN 'GRO BA 'DOD PA YIS,\r\n,LOG PAR G-YEM PA RNAM PA BZHI,\r\n,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I,\r\n,TSIG DON MNGON PAR GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 348,
+            "field": "english",
+            "start": 238191,
+            "bytes": 310,
+            "sha256": "012f8fa4b5c7181446ccc6c30319543ee8bcd18c7f079b897a30457c969dbe19",
+            "original_text": "Taking life is killing another being\r\nPurposely, and without a mistake.\r\nStealing is to take possession of\r\nAnother's wealth by means of force or stealth.\r\nSexual misconduct, of four types,\r\nEngaging in improper kinds of sex.\r\nLying's when the meanings of one's words\r\nAre understood, a wrong impression given.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 73,
+        "material_master_objects": 133,
+        "personally_read_reused_objects": 61,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 25
+      },
+      "d_defensibility": {
+        "judgment": "GTHU is present in physical ASCII348 and its exact C16:869 repeat. The full GTHU glossary directly says force and carries ewts-warning; this is counterevidence against calling the rendering unattested or silently fixing it. The expected standard MTHU has force as reference comparandum and HGM strength/power; the expanded same-topic commentary351/C16:872 uses MTHU DBANG CHA with superior force. The separate TCS02:72 verse has GATHU, not a clean corrected MTHU witness. Both corpus GTHU matches are the duplicated passage; six MTHU DANG contexts have other meanings/contexts and are not corrections of it. A probable inherited spelling issue merits LOW/PROBABLE human review, not confirmed restoration or new ingest corruption. Raw GTHU is unbanked conservatively; source/master bytes are unchanged.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 348,
+    "kind": "ENGLISH_TYPO",
+    "found": "Purposely, and without a mistake.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Purposely, and without a mistake.",
+        "source_row": {
+          "id": 1730,
+          "course": "C05",
+          "seq": 348,
+          "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+          "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+          "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            37
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gthu"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dang"
+            ],
+            "count": 6,
+            "row_ids": [
+              25255,
+              24763,
+              28557,
+              31584,
+              10951,
+              16402
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "la sogs ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1728,
+              6885,
+              11463,
+              17430
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bsams bzhin du ma nor bar"
+            ],
+            "count": 10,
+            "row_ids": [
+              1731,
+              1733,
+              1735,
+              1740,
+              1741,
+              6888,
+              6890,
+              6892,
+              6894,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "One may raise another question"
+            ],
+            "count": 2,
+            "row_ids": [
+              1728,
+              6885
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being"
+            ],
+            "count": 3,
+            "row_ids": [
+              1730,
+              6887,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+        "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+        "register_identity": {
+          "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "search_terms": [
+          "c05:346",
+          "c05:347",
+          "c05:348",
+          "gthu",
+          "la sogs ba",
+          "heading glue"
+        ],
+        "matches": [
+          {
+            "item_id": "E-106",
+            "course": "C03",
+            "segment": "C03:429",
+            "kind": "INGEST_ARTEFACT",
+            "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+            "expected": "our Lama to help us find the ability to do so.",
+            "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+            "severity": "HIGH",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 262,
+          "wylie": 262,
+          "english": 303
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 348,
+            "field": "acip",
+            "start": 237920,
+            "bytes": 269,
+            "sha256": "a54766aa8ccd107cc14f942ada0d03d7a8340f2905a7ac881a30a4f0731c01bc",
+            "original_text": ",SROG GCOD PA NI BSAMS BZHIN DU,\r\n,MA NOR BAR NI GZHAN GSAD PA'O,\r\n,MA BYIN LEN PA GZHAN GYI NOR,\r\n,GTHU DANG 'JAB BUS BDAG GIR BYED,\r\n,BGROD MIN 'GRO BA 'DOD PA YIS,\r\n,LOG PAR G-YEM PA RNAM PA BZHI,\r\n,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I,\r\n,TSIG DON MNGON PAR GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 348,
+            "field": "english",
+            "start": 238191,
+            "bytes": 310,
+            "sha256": "012f8fa4b5c7181446ccc6c30319543ee8bcd18c7f079b897a30457c969dbe19",
+            "original_text": "Taking life is killing another being\r\nPurposely, and without a mistake.\r\nStealing is to take possession of\r\nAnother's wealth by means of force or stealth.\r\nSexual misconduct, of four types,\r\nEngaging in improper kinds of sex.\r\nLying's when the meanings of one's words\r\nAre understood, a wrong impression given.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 73,
+        "material_master_objects": 133,
+        "personally_read_reused_objects": 61,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 25
+      },
+      "d_defensibility": {
+        "judgment": "Capital Purposely begins the second physical verse line. The comma and and are preserved; they are not evidence of a typo. Complete349–351 explains distinct intent and mistaken-identity criteria.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 348,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "Engaging in improper kinds of sex.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Engaging in improper kinds of sex.",
+        "source_row": {
+          "id": 1730,
+          "course": "C05",
+          "seq": 348,
+          "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+          "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+          "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            186
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gthu"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dang"
+            ],
+            "count": 6,
+            "row_ids": [
+              25255,
+              24763,
+              28557,
+              31584,
+              10951,
+              16402
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "la sogs ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1728,
+              6885,
+              11463,
+              17430
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bsams bzhin du ma nor bar"
+            ],
+            "count": 10,
+            "row_ids": [
+              1731,
+              1733,
+              1735,
+              1740,
+              1741,
+              6888,
+              6890,
+              6892,
+              6894,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "One may raise another question"
+            ],
+            "count": 2,
+            "row_ids": [
+              1728,
+              6885
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being"
+            ],
+            "count": 3,
+            "row_ids": [
+              1730,
+              6887,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+        "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+        "register_identity": {
+          "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "search_terms": [
+          "c05:346",
+          "c05:347",
+          "c05:348",
+          "gthu",
+          "la sogs ba",
+          "heading glue"
+        ],
+        "matches": [
+          {
+            "item_id": "E-106",
+            "course": "C03",
+            "segment": "C03:429",
+            "kind": "INGEST_ARTEFACT",
+            "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+            "expected": "our Lama to help us find the ability to do so.",
+            "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+            "severity": "HIGH",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 262,
+          "wylie": 262,
+          "english": 303
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 348,
+            "field": "acip",
+            "start": 237920,
+            "bytes": 269,
+            "sha256": "a54766aa8ccd107cc14f942ada0d03d7a8340f2905a7ac881a30a4f0731c01bc",
+            "original_text": ",SROG GCOD PA NI BSAMS BZHIN DU,\r\n,MA NOR BAR NI GZHAN GSAD PA'O,\r\n,MA BYIN LEN PA GZHAN GYI NOR,\r\n,GTHU DANG 'JAB BUS BDAG GIR BYED,\r\n,BGROD MIN 'GRO BA 'DOD PA YIS,\r\n,LOG PAR G-YEM PA RNAM PA BZHI,\r\n,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I,\r\n,TSIG DON MNGON PAR GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 348,
+            "field": "english",
+            "start": 238191,
+            "bytes": 310,
+            "sha256": "012f8fa4b5c7181446ccc6c30319543ee8bcd18c7f079b897a30457c969dbe19",
+            "original_text": "Taking life is killing another being\r\nPurposely, and without a mistake.\r\nStealing is to take possession of\r\nAnother's wealth by means of force or stealth.\r\nSexual misconduct, of four types,\r\nEngaging in improper kinds of sex.\r\nLying's when the meanings of one's words\r\nAre understood, a wrong impression given.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 73,
+        "material_master_objects": 133,
+        "personally_read_reused_objects": 61,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 25
+      },
+      "d_defensibility": {
+        "judgment": "The verse and complete351–353 commentary make the action and intentionality context clear. Desire and the wrong-impression transformation are compressed/recast, so uncertain atoms are omitted; no confirmed doctrinal error or invented missing word is asserted.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 348,
+    "kind": "INGEST_ARTEFACT",
+    "found": "a wrong impression given.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "a wrong impression given.",
+        "source_row": {
+          "id": 1730,
+          "course": "C05",
+          "seq": 348,
+          "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+          "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+          "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            278
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gthu"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dang"
+            ],
+            "count": 6,
+            "row_ids": [
+              25255,
+              24763,
+              28557,
+              31584,
+              10951,
+              16402
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "la sogs ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1728,
+              6885,
+              11463,
+              17430
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bsams bzhin du ma nor bar"
+            ],
+            "count": 10,
+            "row_ids": [
+              1731,
+              1733,
+              1735,
+              1740,
+              1741,
+              6888,
+              6890,
+              6892,
+              6894,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "One may raise another question"
+            ],
+            "count": 2,
+            "row_ids": [
+              1728,
+              6885
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being"
+            ],
+            "count": 3,
+            "row_ids": [
+              1730,
+              6887,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+        "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+        "register_identity": {
+          "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "search_terms": [
+          "c05:346",
+          "c05:347",
+          "c05:348",
+          "gthu",
+          "la sogs ba",
+          "heading glue"
+        ],
+        "matches": [
+          {
+            "item_id": "E-106",
+            "course": "C03",
+            "segment": "C03:429",
+            "kind": "INGEST_ARTEFACT",
+            "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+            "expected": "our Lama to help us find the ability to do so.",
+            "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+            "severity": "HIGH",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 262,
+          "wylie": 262,
+          "english": 303
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 348,
+            "field": "acip",
+            "start": 237920,
+            "bytes": 269,
+            "sha256": "a54766aa8ccd107cc14f942ada0d03d7a8340f2905a7ac881a30a4f0731c01bc",
+            "original_text": ",SROG GCOD PA NI BSAMS BZHIN DU,\r\n,MA NOR BAR NI GZHAN GSAD PA'O,\r\n,MA BYIN LEN PA GZHAN GYI NOR,\r\n,GTHU DANG 'JAB BUS BDAG GIR BYED,\r\n,BGROD MIN 'GRO BA 'DOD PA YIS,\r\n,LOG PAR G-YEM PA RNAM PA BZHI,\r\n,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I,\r\n,TSIG DON MNGON PAR GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 348,
+            "field": "english",
+            "start": 238191,
+            "bytes": 310,
+            "sha256": "012f8fa4b5c7181446ccc6c30319543ee8bcd18c7f079b897a30457c969dbe19",
+            "original_text": "Taking life is killing another being\r\nPurposely, and without a mistake.\r\nStealing is to take possession of\r\nAnother's wealth by means of force or stealth.\r\nSexual misconduct, of four types,\r\nEngaging in improper kinds of sex.\r\nLying's when the meanings of one's words\r\nAre understood, a wrong impression given.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 73,
+        "material_master_objects": 133,
+        "personally_read_reused_objects": 61,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 25
+      },
+      "d_defensibility": {
+        "judgment": "All eight physical Tibetan and English verse lines are present below the field cap; C16 repeats the complete verse. The GTHU form exists in the physical source, not just the converter.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 348,
+    "kind": "FORMATTING",
+    "found": "Lying's when",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Lying's when",
+        "source_row": {
+          "id": 1730,
+          "course": "C05",
+          "seq": 348,
+          "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+          "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+          "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            221
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 348,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gthu"
+            ],
+            "count": 2,
+            "row_ids": [
+              1730,
+              6887
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dang"
+            ],
+            "count": 6,
+            "row_ids": [
+              25255,
+              24763,
+              28557,
+              31584,
+              10951,
+              16402
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "la sogs ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1728,
+              6885,
+              11463,
+              17430
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bsams bzhin du ma nor bar"
+            ],
+            "count": 10,
+            "row_ids": [
+              1731,
+              1733,
+              1735,
+              1740,
+              1741,
+              6888,
+              6890,
+              6892,
+              6894,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "One may raise another question"
+            ],
+            "count": 2,
+            "row_ids": [
+              1728,
+              6885
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Taking life is killing another being"
+            ],
+            "count": 3,
+            "row_ids": [
+              1730,
+              6887,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all25 complete corpus objects fully read",
+        "lineage_limit": "C16 repeats the same publication family, not independent corroboration.346/348 match all three full fields.347 matches Tibetan but the page number in its heading is38 rather than76. TCS02 preserves the first four348 lines with GATHU rather than GTHU, not a corrected MTHU verse."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+        "register_identity": {
+          "original_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "search_terms": [
+          "c05:346",
+          "c05:347",
+          "c05:348",
+          "gthu",
+          "la sogs ba",
+          "heading glue"
+        ],
+        "matches": [
+          {
+            "item_id": "E-106",
+            "course": "C03",
+            "segment": "C03:429",
+            "kind": "INGEST_ARTEFACT",
+            "found": "our Lama to help us find the ability to do so. Notes to Reading Nine 37 Three lower realms: According to Buddhism there are six different types of rebirth.",
+            "expected": "our Lama to help us find the ability to do so.",
+            "evidence": "Measured on the spine row: the english field is 1500 characters; the translation of the Tibetan (which ends `gsol ba btab pa yin gsungs`) ends at character 499 with \"do so.\" (character 499) The remaining 1001 characters are the Reading Nine endnote apparatus — the heading \"Notes to Reading Nine\" plus the full BODIES of notes 37 and 38 and the opening of note 39 — and the field ends mid-sentence, verbatim \"there are five \" (trailing space, no terminator). This exceeds the registered heading-only class (\"a following section's heading glued onto the end\"): the parallel witness P1:77 carries the identical Tibetan and the identical 499-character translation and shows exactly the registered form (translation, then only the next heading \"Asian Classics Institute Reading Three: … V. Learning How to Want Freedom\"), whereas C03:429 has absorbed a section body. The following heading is separately segmented here as C03:430 (\"V. Learning How to Want Freedom\"); a spine query for \"Three lower realms: According to Buddhism\" returns C03:429 and nothing else, so the Reading Nine notes exist in the corpus only as this buried, truncated tail. Alignment impact: the tail inflates English-side counts for this segment (e.g. it is where the ambiguity of common words must be measured) and is unsearchable as notes. SKEPTIC PASS 2026-09-01 (independent re-check, survived HIGH/CONFIRMED, two corrections): (1) P1:77's Tibetan is NOT identical — it differs by three punctuation marks (comma/shad placement); the 499-character translation is identical. (2) THE MID-SENTENCE CUT IS OURS. The english field is exactly 1500 characters because the spine ingest caps it: engines/hgm_tools.py, ' '.join(eng)[:1500]. The glued endnote bodies are a source-layout defect; the truncation at 'there are five ' is a pipeline defect. Siblings C03:376 and C03:620 (the Reading Eight and Ten note blocks) are also glued and also exactly 1500 characters; see the class entry filed alongside for the corpus-wide count. Field tail verbatim: 'there are five ' (trailing space, 1500th character).",
+            "severity": "HIGH",
+            "confidence": "CONFIRMED",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; origin200 retained, two unrelated343/344 LOW/PROBABLE entries added through345, total202"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 262,
+          "wylie": 262,
+          "english": 303
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 348,
+            "field": "acip",
+            "start": 237920,
+            "bytes": 269,
+            "sha256": "a54766aa8ccd107cc14f942ada0d03d7a8340f2905a7ac881a30a4f0731c01bc",
+            "original_text": ",SROG GCOD PA NI BSAMS BZHIN DU,\r\n,MA NOR BAR NI GZHAN GSAD PA'O,\r\n,MA BYIN LEN PA GZHAN GYI NOR,\r\n,GTHU DANG 'JAB BUS BDAG GIR BYED,\r\n,BGROD MIN 'GRO BA 'DOD PA YIS,\r\n,LOG PAR G-YEM PA RNAM PA BZHI,\r\n,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I,\r\n,TSIG DON MNGON PAR GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 348,
+            "field": "english",
+            "start": 238191,
+            "bytes": 310,
+            "sha256": "012f8fa4b5c7181446ccc6c30319543ee8bcd18c7f079b897a30457c969dbe19",
+            "original_text": "Taking life is killing another being\r\nPurposely, and without a mistake.\r\nStealing is to take possession of\r\nAnother's wealth by means of force or stealth.\r\nSexual misconduct, of four types,\r\nEngaging in improper kinds of sex.\r\nLying's when the meanings of one's words\r\nAre understood, a wrong impression given.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 73,
+        "material_master_objects": 133,
+        "personally_read_reused_objects": 61,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 25
+      },
+      "d_defensibility": {
+        "judgment": "The apostrophe contracts the copula after the lexical base Lying. Capitals Taking, Purposely, Stealing, Another, Sexual, Engaging, Lying and Are reflect verse line starts, not fragmentary headings or permission for interior positive stems.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete master objects; exact personal-reading reuse; complete corpus objects; original-decisions.json"
+      }
+    }
+  }
+]

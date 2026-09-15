@@ -1,0 +1,140 @@
+{
+  "seq": 348,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1730,
+        "course": "C05",
+        "seq": 348,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All six complete physical ASCII extents read and whitespace-collapse verified against exact ACIP/English. The three exact Wylie/English/ACIP fields and full neighboring context were read. Digital agreement establishes the available reading without proving it correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": "../evidence/corpus.json",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1730,
+            6887
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1730,
+            6887
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1730,
+            6887
+          ]
+        }
+      ],
+      "finding": "All three exact fields match C16:869; no independent publication lineage is established. All18 complete focused records and15 complete context rows were read/reused by exact identity. TCS02:73 supports only the last four verse lines of348 and differs in singular meaning plus appended prose; it is not a full-row identical witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Current references and GTHU/LA SOGS BA screened across200 records. Same complete converter, running-head, cap, spill and footnote class records reused from my prior full reading; following-heading class is expressly covered by the unchanged brief. No registered class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "GTHU is unusual and its complete glossary object carries ewts-warning, while MTHU is the conventional force/power form and the prose expansion351 uses MTHU DBANG. That is positive reason to question spelling, not proof of a corruption. Counterevidence: exact physical/C16 GTHU and the full GTHU glossary explicitly attesting force, with no independently collated corrected same-line witness. Keep this source question LOW/UNCERTAIN and unfiled. GSAD PA/killing and MA BYIN LEN PA/stealing also have exact full lexical records; neither is normalized.",
+      "counterevidence": "Dictionary attestation may reflect the same underlying source; exact course duplication is not proof of independent publication. Conversely an unusual form or alternate prose spelling alone does not establish a source error. No speculative emendation, hgm_gloss promotion or correction is made."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 262,
+        "wylie": 262,
+        "english": 303
+      },
+      "utf8_bytes": {
+        "acip": 262,
+        "wylie": 262,
+        "english": 303
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        6
+      ],
+      "finding": "Eight physical verse lines remain exact; the last has six space-separated written tokens, including contracted BA'O, while the preceding seven have seven. Written-token count alone does not prove a missing syllable or permit inserting GI. Exact C16 and the shared TCS02 extent preserve the same final wording. English capitals mark lineation."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "UNCERTAIN_UNFILED",
+      "reason": "GTHU is unusual and its complete glossary object carries ewts-warning, while MTHU is the conventional force/power form and the prose expansion351 uses MTHU DBANG. That is positive reason to question spelling, not proof of a corruption. Counterevidence: exact physical/C16 GTHU and the full GTHU glossary explicitly attesting force, with no independently collated corrected same-line witness. Keep this source question LOW/UNCERTAIN and unfiled. GSAD PA/killing and MA BYIN LEN PA/stealing also have exact full lexical records; neither is normalized."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new finding. GMR explanatory wording, contractions, capitalization and punctuation stay exact; no source correction."
+    }
+  ],
+  "source_questions": [
+    {
+      "found": "GTHU",
+      "candidate": "MTHU",
+      "severity": "LOW",
+      "confidence": "UNCERTAIN",
+      "disposition": "UNFILED; preserve source and exact lexical proposal; independent review may challenge",
+      "reason": "GTHU is unusual and its complete glossary object carries ewts-warning, while MTHU is the conventional force/power form and the prose expansion351 uses MTHU DBANG. That is positive reason to question spelling, not proof of a corruption. Counterevidence: exact physical/C16 GTHU and the full GTHU glossary explicitly attesting force, with no independently collated corrected same-line witness. Keep this source question LOW/UNCERTAIN and unfiled. GSAD PA/killing and MA BYIN LEN PA/stealing also have exact full lexical records; neither is normalized."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

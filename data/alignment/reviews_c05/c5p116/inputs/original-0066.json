@@ -1,0 +1,38 @@
+{
+  "status": "PASS_APPEND_ONLY_REGISTER_DELTA",
+  "source_origin_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+  "actual_baseline_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+  "origin_count": 200,
+  "later_count": 202,
+  "prior_records_unchanged": true,
+  "later_register_pin": {
+    "bytes": 280652,
+    "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+  },
+  "added_records": [
+    {
+      "item_id": "E-201",
+      "course": "C05",
+      "segment": "C05:343",
+      "kind": "TIBETAN_SPELLING",
+      "found": "LUS GZHAN SKYES PHYER RO",
+      "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+      "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-202",
+      "course": "C05",
+      "segment": "C05:344",
+      "kind": "TIBETAN_SPELLING",
+      "found": "'CHI NGES PA'I MTSAN BSNUN NAS",
+      "expected": "For human review: 'CHI NGES PA'I MTSON BSNUN NAS is the supported weapon-striking candidate. No automatic source replacement.",
+      "evidence": "ACIP344 and its physical ASCII read MTSAN; wylie mtshan is faithful. Complete mtshan records support name/sign/night and do not list weapon; mtshon records explicitly have weapon, and a complete mtshon bsnun scaffold has the Sanskrit weapon-struck sense but no HGM equivalent. The local English explicitly says takes a weapon and delivers a blow. Ten full mtshon bsnun corpus records were read: C05:459/460, C11:140, C12:110, C16:969/970, C18:247, GK:192/363/364. Different-context C11:140 explicitly pairs the construction with struck them with a weapon; C05:459 and C12:110 likewise concern weapon strikes. They support usage, not a corrected witness to this exact sentence; C05:459/460 also have their own field-boundary distribution and are not treated as clean word pairs. Counterevidence: C16:865 repeats all three344 fields exactly, including MTSAN. The same MTSAN BSNUN also occurs metaphorically at C05:462/C16:972, struck a blow to the reality body. That repeated source form makes an isolated local corruption unproved and leaves nonstandard/variant wording possible. Four exact mtshan bsnun rows and ten mtshon bsnun rows were measured; no direct344/MTSAN BSNUN register match among200 records. Full fields are below1500 and physically complete. Propose LOW/PROBABLE spelling review, not CONFIRMED and not an ingest/converter correction. Preserve mtshan unbanked and source/master unchanged.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ]
+}

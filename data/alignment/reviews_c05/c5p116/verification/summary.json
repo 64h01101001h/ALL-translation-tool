@@ -1,0 +1,1723 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-15T03:22:26.745737+00:00",
+  "page": 116,
+  "segments": [
+    346,
+    347,
+    348
+  ],
+  "semantic_review": {
+    "schema": "c05-independent-semantic-review-v1",
+    "verdict": "APPROVE",
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "open_findings": [],
+    "source_origin_git_commit": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+    "source_origin_accepted_through": 342,
+    "later_supplied_acceptance_baseline": "58b8846b0affaac576ace5b0789a45df1e462a53",
+    "later_baseline_accepted_through": 345,
+    "reconciliation_freeze_sha256": "81344b2cb24a7fad9e54a17e0c557712389d92574fa304c4c548d893d117dfb2",
+    "total_spans": 63,
+    "total_nulls": 0,
+    "total_word_pairs": 44,
+    "total_d7": 6,
+    "total_errata": 0,
+    "segments": [
+      {
+        "seq": 346,
+        "span_count": 31,
+        "null_count": 0,
+        "word_pair_count": 16,
+        "d7_count": 5,
+        "spec_path": "reviewed-final/346/spec.json",
+        "body_path": "reviewed-final/346/body.html",
+        "spec_bytes": 4913,
+        "spec_sha256": "9e1b009771b476673389ef1a346759d0719471c03196550f9e3de609fc4dff2b",
+        "body_bytes": 5053,
+        "body_sha256": "13036d5d31995a6de90469bc509f74660623add017f1006729f9bcc2539ec6ac",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/346-generator-v1/execution.json",
+            "stdin": "native/reconciled/346-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/346-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/346-generator-v1/stderr.bin",
+            "exit": "native/reconciled/346-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/346-resolver-v1/execution.json",
+            "stdin": "native/reconciled/346-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/346-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/346-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/346-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION"
+          }
+        }
+      },
+      {
+        "seq": 347,
+        "span_count": 7,
+        "null_count": 0,
+        "word_pair_count": 7,
+        "d7_count": 0,
+        "spec_path": "reviewed-final/347/spec.json",
+        "body_path": "reviewed-final/347/body.html",
+        "spec_bytes": 1515,
+        "spec_sha256": "48969d7284dfbe0394c6c2a611fb15bc6301d87dd38c650dd91bcb645defaad1",
+        "body_bytes": 1838,
+        "body_sha256": "d64fe2b1900c9c895c5050fff09d9cb01b18034bf69679edefaa5e3721493a2f",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/347-generator-v1/execution.json",
+            "stdin": "native/reconciled/347-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/347-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/347-generator-v1/stderr.bin",
+            "exit": "native/reconciled/347-generator-v1/exit.txt",
+            "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/347-resolver-v1/execution.json",
+            "stdin": "native/reconciled/347-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/347-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/347-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/347-resolver-v1/exit.txt",
+            "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+          }
+        }
+      },
+      {
+        "seq": 348,
+        "span_count": 25,
+        "null_count": 0,
+        "word_pair_count": 21,
+        "d7_count": 1,
+        "spec_path": "reviewed-final/348/spec.json",
+        "body_path": "reviewed-final/348/body.html",
+        "spec_bytes": 3956,
+        "spec_sha256": "7a06a3e4b2281965b76c1d24c1aa3f363e5975b015854354999db726b0b707e5",
+        "body_bytes": 4021,
+        "body_sha256": "2a4ff7d711d13741a4cca4288e3a197073da8e981005b3ab928e0ecdb251c118",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/348-generator-v1/execution.json",
+            "stdin": "native/reconciled/348-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/348-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/348-generator-v1/stderr.bin",
+            "exit": "native/reconciled/348-generator-v1/exit.txt",
+            "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/348-resolver-v1/execution.json",
+            "stdin": "native/reconciled/348-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/348-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/348-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/348-resolver-v1/exit.txt",
+            "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+          }
+        }
+      }
+    ],
+    "independence": "Source-first notes preceded either original. Independent preassessment99d7c2a301499a2814dc39b50e1fe74ee78f103bf25df99ccb88aac56c141122 was banked before root choices and changed reconciliation generation. Root decisions and the final immutable129-member reconciliation were compared against those independently formed judgments. Root acceptance remains separate.",
+    "initial_assessment": {
+      "bytes": 11211,
+      "sha256": "99d7c2a301499a2814dc39b50e1fe74ee78f103bf25df99ccb88aac56c141122"
+    },
+    "source_reading": {
+      "original_spans": 118,
+      "original_omissions": 25,
+      "category_screens": 30,
+      "full_unique_master_objects": 152,
+      "new_full_master_objects_read": 76,
+      "exact_prior_personal_full_object_reuse": 76,
+      "full_corpus_records": 31,
+      "full_physical_extents": 6,
+      "context": "340–354;340–351 match prior personal full-reading objects exactly;352–354 newly read fully.",
+      "material_inventory": "evidence/master-read-inventory.json",
+      "identity_proof": "source-identity-results.json",
+      "register": "Source-origin200 records remain structurally identical at actual baseline345, with only previously independently read E-201/E-202 added. The prior register was screened and materially relevant class readings reused; no new full linguistic reading of202 historical entries is claimed.",
+      "limits": "Complete master/corpus assets were hash/structure-verified; no full asset linguistic read claimed. No new SQL/native generator/resolver was run."
+    },
+    "reading_completion": "All118 original spans,25 original omissions,30 screens with all five grounds, six original reports/notes,63 final rationales,37 grouped dispositions, all six changed original span dispositions,27 final omission records and the original GTHU candidate/question dispositions were read. Repeated screen grounds were verified structurally and read once; all distinct judgments read. Final tuples exactly match the independent63 span assessments.",
+    "span_semantic_review": [
+      {
+        "seq": 346,
+        "id": "w1",
+        "d": 5,
+        "tib": "dmag",
+        "eng": "war",
+        "tib_range": [
+          0,
+          4
+        ],
+        "eng_range": [
+          76,
+          79
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first DMAG names the war in the hypothesis, distinct from the repeated answer occurrence."
+      },
+      {
+        "seq": 346,
+        "id": "p2",
+        "d": 6,
+        "tib": "la sogs ba",
+        "eng": "or similar",
+        "tib_range": [
+          5,
+          15
+        ],
+        "eng_range": [
+          80,
+          90
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete LA SOGS BA formula supplies or similar; activity is an added noun and remains outside."
+      },
+      {
+        "seq": 346,
+        "id": "w31",
+        "d": 5,
+        "tib": "byas",
+        "eng": "engaged",
+        "tib_range": [
+          16,
+          20
+        ],
+        "eng_range": [
+          63,
+          70
+        ],
+        "verdict": "APPROVE",
+        "reason": "BYAS is doing or undertaking the war, locally rendered by the first engaged; it is not the later ZHUGS PA occurrence."
+      },
+      {
+        "seq": 346,
+        "id": "w3",
+        "d": 5,
+        "tib": "gcig",
+        "eng": "one",
+        "tib_range": [
+          25,
+          29
+        ],
+        "eng_range": [
+          105,
+          108
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first GCIG selects one member; of these people is supplied partitive framing."
+      },
+      {
+        "seq": 346,
+        "id": "w4",
+        "d": 5,
+        "tib": "pha rol po",
+        "eng": "other side",
+        "tib_range": [
+          34,
+          44
+        ],
+        "eng_range": [
+          148,
+          158
+        ],
+        "verdict": "APPROVE",
+        "reason": "PHA ROL PO identifies the opposing side. Other side is tight; someone from the remains outside."
+      },
+      {
+        "seq": 346,
+        "id": "w5",
+        "d": 5,
+        "tib": "bsad",
+        "eng": "kills",
+        "tib_range": [
+          45,
+          49
+        ],
+        "eng_range": [
+          125,
+          130
+        ],
+        "verdict": "APPROVE",
+        "reason": "BSAD is the killing verb, directly rendered kills in the hypothetical question."
+      },
+      {
+        "seq": 346,
+        "id": "p6",
+        "d": 6,
+        "tib": "na",
+        "eng": "Suppose",
+        "tib_range": [
+          50,
+          52
+        ],
+        "eng_range": [
+          33,
+          40
+        ],
+        "verdict": "APPROVE",
+        "reason": "NA marks the hypothesis introduced by Suppose, distinct from the reporting/question formula."
+      },
+      {
+        "seq": 346,
+        "id": "w7",
+        "d": 5,
+        "tib": "gcig po",
+        "eng": "one",
+        "tib_range": [
+          54,
+          61
+        ],
+        "eng_range": [
+          201,
+          204
+        ],
+        "verdict": "APPROVE",
+        "reason": "GCIG PO selects the single doer in the question; one excludes explanatory person and relative clause."
+      },
+      {
+        "seq": 346,
+        "id": "p8",
+        "d": 6,
+        "tib": "kho na",
+        "eng": "only",
+        "tib_range": [
+          65,
+          71
+        ],
+        "eng_range": [
+          188,
+          192
+        ],
+        "verdict": "APPROVE",
+        "reason": "KHO NA restricts that person with only and is a complete exclusive particle at d6."
+      },
+      {
+        "seq": 346,
+        "id": "p9",
+        "d": 6,
+        "tib": "la",
+        "eng": "for",
+        "tib_range": [
+          72,
+          74
+        ],
+        "eng_range": [
+          193,
+          196
+        ],
+        "verdict": "APPROVE",
+        "reason": "This LA marks the person for whom the path occurs, owning the first for."
+      },
+      {
+        "seq": 346,
+        "id": "w10",
+        "d": 5,
+        "tib": "las lam",
+        "eng": "path of action",
+        "tib_range": [
+          75,
+          82
+        ],
+        "eng_range": [
+          167,
+          181
+        ],
+        "verdict": "APPROVE",
+        "reason": "LAS LAM is the established action-path compound and excludes the article."
+      },
+      {
+        "seq": 346,
+        "id": "m11",
+        "d": 7,
+        "tib": "las",
+        "eng": "action",
+        "tib_range": [
+          75,
+          78
+        ],
+        "eng_range": [
+          175,
+          181
+        ],
+        "verdict": "APPROVE",
+        "reason": "LAS is the independently supported action member, strictly inside the first compound in both languages."
+      },
+      {
+        "seq": 346,
+        "id": "m12",
+        "d": 7,
+        "tib": "lam",
+        "eng": "path",
+        "tib_range": [
+          79,
+          82
+        ],
+        "eng_range": [
+          167,
+          171
+        ],
+        "verdict": "APPROVE",
+        "reason": "LAM is the independently supported path member, strictly inside the first compound despite reversed English order."
+      },
+      {
+        "seq": 346,
+        "id": "w13",
+        "d": 5,
+        "tib": "'byung",
+        "eng": "occur",
+        "tib_range": [
+          83,
+          89
+        ],
+        "eng_range": [
+          182,
+          187
+        ],
+        "verdict": "APPROVE",
+        "reason": "BYUNG explicitly asks whether the path occurs, giving occur without inventing a negative ellipsis."
+      },
+      {
+        "seq": 346,
+        "id": "p14",
+        "d": 6,
+        "tib": "ma",
+        "eng": "not",
+        "tib_range": [
+          103,
+          105
+        ],
+        "eng_range": [
+          251,
+          254
+        ],
+        "verdict": "APPROVE",
+        "reason": "MA directly owns not in the answer; YIN and does are left as copular/do-support framing."
+      },
+      {
+        "seq": 346,
+        "id": "w15",
+        "d": 5,
+        "tib": "dmag",
+        "eng": "war",
+        "tib_range": [
+          114,
+          118
+        ],
+        "eng_range": [
+          288,
+          291
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second DMAG belongs to the explanatory war, with a distinct English occurrence."
+      },
+      {
+        "seq": 346,
+        "id": "p16",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "or whatever",
+        "tib_range": [
+          122,
+          126
+        ],
+        "eng_range": [
+          293,
+          304
+        ],
+        "verdict": "APPROVE",
+        "reason": "SOGS owns the complete or whatever closing gesture; activity it may be is excluded."
+      },
+      {
+        "seq": 346,
+        "id": "p17",
+        "d": 6,
+        "tib": "par",
+        "eng": "in",
+        "tib_range": [
+          127,
+          130
+        ],
+        "eng_range": [
+          281,
+          283
+        ],
+        "verdict": "APPROVE",
+        "reason": "PAR marks the locative circumstance of the second war example, corresponding to in; no suffix is split."
+      },
+      {
+        "seq": 346,
+        "id": "w18",
+        "d": 5,
+        "tib": "don",
+        "eng": "goal",
+        "tib_range": [
+          141,
+          144
+        ],
+        "eng_range": [
+          345,
+          349
+        ],
+        "verdict": "APPROVE",
+        "reason": "DON supplies goal, excluding the added common modifier."
+      },
+      {
+        "seq": 346,
+        "id": "w19",
+        "d": 5,
+        "tib": "gcig",
+        "eng": "same",
+        "tib_range": [
+          145,
+          149
+        ],
+        "eng_range": [
+          333,
+          337
+        ],
+        "verdict": "APPROVE",
+        "reason": "GCIG makes the shared goal the same; it is not the earlier individual one."
+      },
+      {
+        "seq": 346,
+        "id": "p20",
+        "d": 6,
+        "tib": "la",
+        "eng": "for",
+        "tib_range": [
+          150,
+          152
+        ],
+        "eng_range": [
+          325,
+          328
+        ],
+        "verdict": "APPROVE",
+        "reason": "This LA marks the purpose entered upon, giving the second for before the same common goal."
+      },
+      {
+        "seq": 346,
+        "id": "w21",
+        "d": 5,
+        "tib": "zhugs pa",
+        "eng": "engaged",
+        "tib_range": [
+          153,
+          161
+        ],
+        "eng_range": [
+          273,
+          280
+        ],
+        "verdict": "APPROVE",
+        "reason": "ZHUGS PA supplies the response engagement. This local engaged is distinct from BYAS and is not promoted from the mined entered gloss."
+      },
+      {
+        "seq": 346,
+        "id": "p22",
+        "d": 6,
+        "tib": "phyir",
+        "eng": "Because",
+        "tib_range": [
+          164,
+          169
+        ],
+        "eng_range": [
+          256,
+          263
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first PHYIR closes the shared-engagement cause introduced by Because; the final higher-level justification remains omitted."
+      },
+      {
+        "seq": 346,
+        "id": "w23",
+        "d": 5,
+        "tib": "thams cad",
+        "eng": "all",
+        "tib_range": [
+          170,
+          179
+        ],
+        "eng_range": [
+          351,
+          354
+        ],
+        "verdict": "APPROVE",
+        "reason": "THAMS CAD includes all participants; the people involved is English explanatory framing."
+      },
+      {
+        "seq": 346,
+        "id": "w24",
+        "d": 5,
+        "tib": "byed pa po",
+        "eng": "one who commits",
+        "tib_range": [
+          189,
+          199
+        ],
+        "eng_range": [
+          434,
+          449
+        ],
+        "verdict": "APPROVE",
+        "reason": "The agent expression BYED PA PO is one who commits, excluding the article and object it."
+      },
+      {
+        "seq": 346,
+        "id": "m25",
+        "d": 7,
+        "tib": "byed",
+        "eng": "commits",
+        "tib_range": [
+          189,
+          193
+        ],
+        "eng_range": [
+          442,
+          449
+        ],
+        "verdict": "APPROVE",
+        "reason": "BYED supplies commits within its agent noun; both complete words are strictly narrower than the parent."
+      },
+      {
+        "seq": 346,
+        "id": "p26",
+        "d": 6,
+        "tib": "bzhin du",
+        "eng": "as much as",
+        "tib_range": [
+          200,
+          208
+        ],
+        "eng_range": [
+          419,
+          429
+        ],
+        "verdict": "APPROVE",
+        "reason": "BZHIN DU gives the comparison as much as without just or either participant."
+      },
+      {
+        "seq": 346,
+        "id": "w27",
+        "d": 5,
+        "tib": "las lam",
+        "eng": "path of action",
+        "tib_range": [
+          209,
+          216
+        ],
+        "eng_range": [
+          398,
+          412
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second LAS LAM is the consequence path of action; a full remains outside."
+      },
+      {
+        "seq": 346,
+        "id": "m28",
+        "d": 7,
+        "tib": "las",
+        "eng": "action",
+        "tib_range": [
+          209,
+          212
+        ],
+        "eng_range": [
+          406,
+          412
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second LAS/action member is independently supported, unique and strictly contained."
+      },
+      {
+        "seq": 346,
+        "id": "m29",
+        "d": 7,
+        "tib": "lam",
+        "eng": "path",
+        "tib_range": [
+          213,
+          216
+        ],
+        "eng_range": [
+          398,
+          402
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second LAM/path member is independently supported, unique and strictly contained."
+      },
+      {
+        "seq": 346,
+        "id": "w30",
+        "d": 5,
+        "tib": "ldan pa",
+        "eng": "possess",
+        "tib_range": [
+          222,
+          229
+        ],
+        "eng_range": [
+          383,
+          390
+        ],
+        "verdict": "APPROVE",
+        "reason": "LDAN PA directly supplies possess; DANG relation and come to need not enter the tighter lexical predicate."
+      },
+      {
+        "seq": 347,
+        "id": "w1",
+        "d": 5,
+        "tib": "gnyis pa",
+        "eng": "Next",
+        "tib_range": [
+          0,
+          8
+        ],
+        "eng_range": [
+          0,
+          4
+        ],
+        "verdict": "APPROVE",
+        "reason": "GNYIS PA introduces the next outline topic and is locally and lexically supported by Next."
+      },
+      {
+        "seq": 347,
+        "id": "w2",
+        "d": 5,
+        "tib": "rtsa ba",
+        "eng": "root",
+        "tib_range": [
+          13,
+          20
+        ],
+        "eng_range": [
+          81,
+          85
+        ],
+        "verdict": "APPROVE",
+        "reason": "RTSA BA matches lower-case body root; the later capital heading is apparatus."
+      },
+      {
+        "seq": 347,
+        "id": "w3",
+        "d": 5,
+        "tib": "tha snyad",
+        "eng": "expressions",
+        "tib_range": [
+          27,
+          36
+        ],
+        "eng_range": [
+          122,
+          133
+        ],
+        "verdict": "APPROVE",
+        "reason": "THA SNYAD has the glossary equivalent expressions; curated conventional and the KUN RDZOB variant do not overwrite this usage."
+      },
+      {
+        "seq": 347,
+        "id": "w4",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          37,
+          41
+        ],
+        "eng_range": [
+          117,
+          121
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second BZHI counts expressions, supplying body four. The first root count is not assigned across the heading boundary."
+      },
+      {
+        "seq": 347,
+        "id": "w5",
+        "d": 5,
+        "tib": "yan lag",
+        "eng": "branch",
+        "tib_range": [
+          43,
+          50
+        ],
+        "eng_range": [
+          158,
+          164
+        ],
+        "verdict": "APPROVE",
+        "reason": "YAN LAG supplies branch, excluding the expanded non-virtues."
+      },
+      {
+        "seq": 347,
+        "id": "w6",
+        "d": 5,
+        "tib": "drug",
+        "eng": "six",
+        "tib_range": [
+          51,
+          55
+        ],
+        "eng_range": [
+          153,
+          156
+        ],
+        "verdict": "APPROVE",
+        "reason": "DRUG gives the explicit count six, distinct from both fours."
+      },
+      {
+        "seq": 347,
+        "id": "w7",
+        "d": 5,
+        "tib": "bshad pa",
+        "eng": "present",
+        "tib_range": [
+          56,
+          64
+        ],
+        "eng_range": [
+          8,
+          15
+        ],
+        "verdict": "APPROVE",
+        "reason": "BSHAD PA gives present; we and definition framing remain unwrapped."
+      },
+      {
+        "seq": 348,
+        "id": "w1",
+        "d": 5,
+        "tib": "srog gcod pa",
+        "eng": "Taking life",
+        "tib_range": [
+          0,
+          12
+        ],
+        "eng_range": [
+          0,
+          11
+        ],
+        "verdict": "APPROVE",
+        "reason": "SROG GCOD PA is the established Taking life term, preserving initial verse capitalization."
+      },
+      {
+        "seq": 348,
+        "id": "m2",
+        "d": 7,
+        "tib": "srog",
+        "eng": "life",
+        "tib_range": [
+          0,
+          4
+        ],
+        "eng_range": [
+          7,
+          11
+        ],
+        "verdict": "APPROVE",
+        "reason": "SROG/life is a complete supported member strictly inside the parent; no idiomatic GCOD/Taking is invented."
+      },
+      {
+        "seq": 348,
+        "id": "w3",
+        "d": 5,
+        "tib": "bsams bzhin",
+        "eng": "Purposely",
+        "tib_range": [
+          16,
+          27
+        ],
+        "eng_range": [
+          37,
+          46
+        ],
+        "verdict": "APPROVE",
+        "reason": "BSAMS BZHIN itself attests Purposely; DU is manner grammar outside the tighter lexical word."
+      },
+      {
+        "seq": 348,
+        "id": "p4",
+        "d": 6,
+        "tib": "ma",
+        "eng": "without",
+        "tib_range": [
+          33,
+          35
+        ],
+        "eng_range": [
+          52,
+          59
+        ],
+        "verdict": "APPROVE",
+        "reason": "MA supplies the explicit negative without; it is not the lexical negation inside Stealing."
+      },
+      {
+        "seq": 348,
+        "id": "w5",
+        "d": 5,
+        "tib": "nor",
+        "eng": "mistake",
+        "tib_range": [
+          36,
+          39
+        ],
+        "eng_range": [
+          62,
+          69
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first NOR supplies mistake; the indefinite article remains outside."
+      },
+      {
+        "seq": 348,
+        "id": "w6",
+        "d": 5,
+        "tib": "gzhan",
+        "eng": "another",
+        "tib_range": [
+          47,
+          52
+        ],
+        "eng_range": [
+          23,
+          30
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first GZHAN is another in the killed-being clause; being is explanatory."
+      },
+      {
+        "seq": 348,
+        "id": "w7",
+        "d": 5,
+        "tib": "gsad pa",
+        "eng": "killing",
+        "tib_range": [
+          53,
+          60
+        ],
+        "eng_range": [
+          15,
+          22
+        ],
+        "verdict": "APPROVE",
+        "reason": "The printed GSAD PA directly denotes killing; its spelling is preserved."
+      },
+      {
+        "seq": 348,
+        "id": "w8",
+        "d": 5,
+        "tib": "ma byin len pa",
+        "eng": "Stealing",
+        "tib_range": [
+          65,
+          79
+        ],
+        "eng_range": [
+          71,
+          79
+        ],
+        "verdict": "APPROVE",
+        "reason": "MA BYIN LEN PA is the established whole Stealing term, with no invented internal English negation."
+      },
+      {
+        "seq": 348,
+        "id": "w9",
+        "d": 5,
+        "tib": "gzhan",
+        "eng": "Another",
+        "tib_range": [
+          80,
+          85
+        ],
+        "eng_range": [
+          105,
+          112
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second GZHAN gives capitalized Another before the possessive apostrophe; the apostrophe delimits the full word."
+      },
+      {
+        "seq": 348,
+        "id": "w10",
+        "d": 5,
+        "tib": "nor",
+        "eng": "wealth",
+        "tib_range": [
+          90,
+          93
+        ],
+        "eng_range": [
+          115,
+          121
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second NOR means wealth, distinguished from the preceding error sense."
+      },
+      {
+        "seq": 348,
+        "id": "w11",
+        "d": 5,
+        "tib": "gthu",
+        "eng": "force",
+        "tib_range": [
+          96,
+          100
+        ],
+        "eng_range": [
+          134,
+          139
+        ],
+        "verdict": "APPROVE",
+        "reason": "Raw GTHU is explicitly force in the local text and full glossary. The provisional pair retains its spelling uncertainty and does not assert standard MTHU."
+      },
+      {
+        "seq": 348,
+        "id": "p12",
+        "d": 6,
+        "tib": "dang",
+        "eng": "or",
+        "tib_range": [
+          101,
+          105
+        ],
+        "eng_range": [
+          140,
+          142
+        ],
+        "verdict": "APPROVE",
+        "reason": "DANG expresses the alternative means force or stealth; the selected or is the separate word after force."
+      },
+      {
+        "seq": 348,
+        "id": "w13",
+        "d": 5,
+        "tib": "'jab bus",
+        "eng": "stealth",
+        "tib_range": [
+          106,
+          114
+        ],
+        "eng_range": [
+          143,
+          150
+        ],
+        "verdict": "APPROVE",
+        "reason": "The whole inflected JAB BUS supplies stealth; the agentive-s is inseparable and is not assigned by."
+      },
+      {
+        "seq": 348,
+        "id": "w14",
+        "d": 5,
+        "tib": "bdag gir",
+        "eng": "possession",
+        "tib_range": [
+          115,
+          123
+        ],
+        "eng_range": [
+          91,
+          101
+        ],
+        "verdict": "APPROVE",
+        "reason": "BDAG GIR directly supplies possession as the object of the taking predicate."
+      },
+      {
+        "seq": 348,
+        "id": "w15",
+        "d": 5,
+        "tib": "byed",
+        "eng": "take",
+        "tib_range": [
+          124,
+          128
+        ],
+        "eng_range": [
+          86,
+          90
+        ],
+        "verdict": "APPROVE",
+        "reason": "BYED supplies take in this possession construction, supported by its full lexical record; to and of are excluded."
+      },
+      {
+        "seq": 348,
+        "id": "f16",
+        "d": 3,
+        "tib": "bgrod min",
+        "eng": "improper",
+        "tib_range": [
+          131,
+          140
+        ],
+        "eng_range": [
+          198,
+          206
+        ],
+        "verdict": "APPROVE",
+        "reason": "BGROD MIN is the complete negative eligibility phrase rendered improper at d3; no positive proper subword is claimed."
+      },
+      {
+        "seq": 348,
+        "id": "w17",
+        "d": 5,
+        "tib": "'gro ba",
+        "eng": "Engaging",
+        "tib_range": [
+          141,
+          148
+        ],
+        "eng_range": [
+          186,
+          194
+        ],
+        "verdict": "APPROVE",
+        "reason": "GRO BA is the local verbal Engaging, not the curated noun living being; the explanatory prose confirms the action sense."
+      },
+      {
+        "seq": 348,
+        "id": "w18",
+        "d": 5,
+        "tib": "log par g-yem pa",
+        "eng": "Sexual misconduct",
+        "tib_range": [
+          163,
+          179
+        ],
+        "eng_range": [
+          152,
+          169
+        ],
+        "verdict": "APPROVE",
+        "reason": "LOG PAR G-YEM PA is the whole Sexual misconduct term; no speculative internal sex member is made."
+      },
+      {
+        "seq": 348,
+        "id": "w19",
+        "d": 5,
+        "tib": "rnam pa",
+        "eng": "types",
+        "tib_range": [
+          180,
+          187
+        ],
+        "eng_range": [
+          179,
+          184
+        ],
+        "verdict": "APPROVE",
+        "reason": "RNAM PA gives types; the later kinds is English explanatory repetition."
+      },
+      {
+        "seq": 348,
+        "id": "w20",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          188,
+          192
+        ],
+        "eng_range": [
+          174,
+          178
+        ],
+        "verdict": "APPROVE",
+        "reason": "BZHI gives four in the types count, independently from the outline counts."
+      },
+      {
+        "seq": 348,
+        "id": "w21",
+        "d": 5,
+        "tib": "rdzun tshig",
+        "eng": "Lying",
+        "tib_range": [
+          195,
+          206
+        ],
+        "eng_range": [
+          221,
+          226
+        ],
+        "verdict": "APPROVE",
+        "reason": "RDZUN TSHIG supplies Lying, a complete lexical base before the contracted copula apostrophe."
+      },
+      {
+        "seq": 348,
+        "id": "w22",
+        "d": 5,
+        "tib": "'du shes",
+        "eng": "impression",
+        "tib_range": [
+          207,
+          215
+        ],
+        "eng_range": [
+          286,
+          296
+        ],
+        "verdict": "APPROVE",
+        "reason": "DU SHES directly supplies impression; the joint wrong/given recast is left outside."
+      },
+      {
+        "seq": 348,
+        "id": "w23",
+        "d": 5,
+        "tib": "tshig",
+        "eng": "words",
+        "tib_range": [
+          235,
+          240
+        ],
+        "eng_range": [
+          256,
+          261
+        ],
+        "verdict": "APPROVE",
+        "reason": "The later TSHIG supplies words, distinct from TSHIG inside the lying compound."
+      },
+      {
+        "seq": 348,
+        "id": "w24",
+        "d": 5,
+        "tib": "don",
+        "eng": "meanings",
+        "tib_range": [
+          241,
+          244
+        ],
+        "eng_range": [
+          238,
+          246
+        ],
+        "verdict": "APPROVE",
+        "reason": "DON supplies meanings, not the goal sense in346; the supplied possessor phrase is excluded."
+      },
+      {
+        "seq": 348,
+        "id": "w25",
+        "d": 5,
+        "tib": "go ba",
+        "eng": "understood",
+        "tib_range": [
+          255,
+          260
+        ],
+        "eng_range": [
+          266,
+          276
+        ],
+        "verdict": "APPROVE",
+        "reason": "GO BA gives understood; Are and MNGON PAR emphatic framing are not forced into extra word pairs."
+      }
+    ],
+    "original_omission_review": [
+      {
+        "seq": 346,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "byas nas; gis",
+          "reason": "Performing the war is recast as are engaged in, followed by and one kills. The individual ownership of the light verb, continuation and active agency is less certain than the lexical war/killing claims. Leave these distributed relations unbanked, without an absent-meaning null."
+        },
+        "independent_reason": "Partial supersession: BYAS now owns first engaged. NAS/GIS and the remaining shared engagement/agent grammar remain unbanked; no absence is claimed."
+      },
+      {
+        "seq": 346,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "de after gcig po; ngam; zhe na; te",
+          "reason": "Anaphoric reference and question/report structure are expanded across one person who actually did the killing, Does, and One may raise another question. No unique question, raise, or does atom is secure for the reporting formula. Preserve the full question and omit these uncertain separate mappings."
+        },
+        "independent_reason": "DE and the expanded question/answer frame remain distributed. The explicit hypothesis NA/Suppose is separate and retained; no invented reporting atom."
+      },
+      {
+        "seq": 346,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "tib": "la before second sogs; gsod pa before don; gsod par before byed pa po",
+          "reason": "The enumerative construction is represented by sogs and its final locative PAR. The two answer-side killing mentions are paraphrased through a common goal and one who commits it. The English killing inside the preceding question expands the already identified killer; it is not assigned backwards to one of these answer-side repetitions merely to fill a slot."
+        },
+        "independent_reason": "The two answer killing expressions contribute the purpose/anaphoric commits it rather than the question killing word. Internal LA and unmatched killing matter stay omitted."
+      },
+      {
+        "seq": 346,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "tib": "dang before ldan pa; yin pa; final phyir; bound genitives and agent-noun remainder",
+          "reason": "Possession grammar, assertion and outer justification are distributed in the English answer. The first reason marker securely owns Because; the final one has no separately established counterpart. No invented null, copula/come or dang/possess mapping is added."
+        },
+        "independent_reason": "DANG, YIN PA and the outer final PHYIR remain unbanked. The first PHYIR owns Because by the explicit causal-clause scope, not by first occurrence alone."
+      },
+      {
+        "seq": 346,
+        "angle": "english",
+        "field": "omissions",
+        "index": 4,
+        "original": {
+          "english": "One may raise another question; a group of people are engaged in; activity; and; of these people; someone from the; Does a; person who actually did the killing; It; they are; activity it may be; the; common; the people involved come to; a full; just; final it",
+          "reason": "Reporting, conditional expansion, participants, articles, light verbs, anaphors and emphasis stay outside the explicit narrow claims. These additions are legitimate explanatory translation, not a source-error finding."
+        },
+        "independent_reason": "English participants, articles, auxiliaries and reporting expansions remain outside the supported atoms; BYAS/engaged is the specifically recovered exponent."
+      },
+      {
+        "seq": 347,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "la; first bzhi after rtsa ba; terminal bound o",
+          "reason": "LA and the final declarative closure participate in the expanded presentation frame. The first BZHI has no explicit number in the main-body root phrase, but Four exists in the appended heading; this mixed body/apparatus distribution prevents a confident absence null or a forced heading match."
+        },
+        "independent_reason": "First BZHI lacks a numeral in the main prose; the later heading Four is apparatus and cannot serve as a competing body exponent. Omit it with this precise role distinction; LA/closure remain distributed."
+      },
+      {
+        "seq": 347,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "english": "we; the definition of each individual non-virtue; We start with the; non-virtues; continue to the; and end with the; 76 Definitions of the Four \"Root\" Non-Virtues",
+          "reason": "The prose elaborates the outline and appends the following section heading. Preserve every character and leave the expanded presentation and registered apparatus unwrapped."
+        },
+        "independent_reason": "Expanded presentation wording and the complete following folio/heading remain unwrapped under the existing heading class."
+      },
+      {
+        "seq": 348,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "gcod pa as a member; both ni; du after bsams bzhin; bar after nor; terminal bound o forms",
+          "reason": "Taking life is an established whole; taking alone does not preserve cutting/killing content. Topic, adverbial and declarative grammar is distributed across the English predicates. Leave these uncertain independent exponents unbanked without asserting nulls."
+        },
+        "independent_reason": "No GCOD/Taking child is established; NI, DU, BAR and closure material stay outside the secure flat lexical spans. No uncertainty null."
+      },
+      {
+        "seq": 348,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "ma/byin/len pa inside ma byin len pa; gyi; agentive s inside jab bus",
+          "reason": "Stealing lexicalizes taking what is not given and has no separately secure negative/member split. The owner genitive is expressed by the English possessive construction, and the instrumental relation by shared by means of. Do not manufacture a fifth subword convention or split Tibetan agentive s."
+        },
+        "independent_reason": "The lexical theft term stays whole. Possessive/instrumental grammar is distributed and the final agentive-s is not separable."
+      },
+      {
+        "seq": 348,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "tib": "'dod pa yis",
+          "english": "kinds of sex / in",
+          "reason": "The complete desire entry has desire/wish/intention, while the verse renders the sexual act through kinds of sex. The prose expansion351 distributes desire and engagement across the same paraphrase. A standalone desire/sex or instrumental yis/in mapping is uncertain, so omit it without a false absence null."
+        },
+        "independent_reason": "DOD PA YIS is absorbed into the sexual-act framing; neither desire/sex nor YIS/in is securely localizable. Omission preserves uncertainty."
+      },
+      {
+        "seq": 348,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "tib": "gzhan before sgyur ba; sgyur ba; bound genitive; mngon par",
+          "english": "wrong / given / Are",
+          "reason": "Changing the impression into another is recast as a wrong impression given. Wrong and given are not individually secured by the other/change records; preserve impression but omit these distributed claims. MNGON PAR adds manifest recognition without a separate explicit modifier; it does not mean the passive auxiliary Are."
+        },
+        "independent_reason": "GZHAN SGYUR BA contributes the joint wrong-impression-given recast; do not claim wrong or given as a direct isolated equivalent. MNGON PAR is also not assigned a fictive separate word."
+      },
+      {
+        "seq": 348,
+        "angle": "english",
+        "field": "omissions",
+        "index": 4,
+        "original": {
+          "english": "is; being; and; a; is to; possessive 's; of; by means of; in; kinds of sex; of; contracted 's when the; of one's; Are; a wrong; given",
+          "reason": "Articles, copulas, relation frames and explanatory/idiomatic words stay outside the stated lexical claims. Mid-sentence capitals reflect the eight verse lines; none is corrected or filed as new formatting errata."
+        },
+        "independent_reason": "Supplied articles, auxiliaries, possessors and explanatory kinds-of-sex framing remain exact but unwrapped."
+      },
+      {
+        "seq": 346,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 346,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "gis; pha rol po; na",
+          "reason": "The agentive/conditional question is recast by Suppose, and the opponent phrase is expanded as someone from the other side. No unique tight independent atom or absent exponent is asserted."
+        },
+        "independent_reason": "Partially superseded: PHA ROL PO/other side and NA/Suppose have supported separate exponents and are retained. GIS remains distributed and unbanked."
+      },
+      {
+        "seq": 346,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 346,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "nas; de; ngam zhe na; yin te; final yin pa; both phyir",
+          "reason": "Question/answer framing, do-support and causal hierarchy are expanded/reordered. Both PHYIR contributions share one Because; neither gets arbitrary exclusive ownership or a false null."
+        },
+        "independent_reason": "Partially superseded: the first PHYIR owns Because on causal-clause scope. Final PHYIR, NAS, DE, question framing and copular/do-support material remain omitted without false nulls."
+      },
+      {
+        "seq": 346,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 346,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "tib": "la/par around second sogs; gsod pa before don; gsod par before byed pa po",
+          "reason": "Locative/enumerative grammar and explicit killing are distributed over war activity, common goal, and anaphoric it. No false killing/goal or killing/it word pair is composed."
+        },
+        "independent_reason": "Partially superseded: second PAR/in is retained as the locative case. LA and the two explicit killing expressions remain distributed in the purpose and anaphoric frame."
+      },
+      {
+        "seq": 346,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 346,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "english": "One may raise another question; Suppose; a group of people; are; in; activity; of these people; someone from the other side; Does; the; person who actually did the killing; It does; they are; activity it may be; common; the people involved; come to; a full; just; it",
+          "reason": "All source wording remains exact. Added participants, auxiliaries, explanatory repetition, articles and the unbanked anaphoric killing expansion remain outside selected source words."
+        },
+        "independent_reason": "The specific English other side and Suppose exponents are retained; the remaining added participants, auxiliaries, relative clauses, articles and object anaphora stay unwrapped."
+      },
+      {
+        "seq": 347,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 347,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "first bzhi after rtsa ba",
+          "reason": "The main translated outline does not express this count separately. Four occurs only in the glued next heading, which is apparatus, so no cross-heading correspondence or uncertainty null is banked."
+        },
+        "independent_reason": "Accept the body/heading distinction: first BZHI remains unbanked, and the heading Four is never a translation-body candidate."
+      },
+      {
+        "seq": 347,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 347,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "la; final 'o",
+          "reason": "Outline grammar and closure are distributed in the presentation framing, not securely owned standalone English exponents."
+        },
+        "independent_reason": "LA and closure are distributed into presentation framing; no separate exponent is secure."
+      },
+      {
+        "seq": 347,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 347,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "english": "the definition of each individual non-virtue; We start with; non-virtues; continue to; and end with; 76 Definitions of the Four \"Root\" Non-Virtues",
+          "reason": "Expanded explanation, prose sequencing, repeated non-virtues and the physically distinct page/next-title tail remain unwrapped. The known heading-glue class is not refiled."
+        },
+        "independent_reason": "Expanded outline sequencing and the physically separate heading remain unwrapped; no new ingest report duplicates the established class."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "gthu",
+          "reason": "Exact physical GTHU has a glossary force entry with ewts-warning; C16 repeats it and TCS02 has GATHU. The usual MTHU force is supported by full references and expanded351 MTHU DBANG CHA, but no corrected identical verse is present. Preserve raw spelling, propose LOW/PROBABLE review, and leave this uncertain source form unbanked."
+        },
+        "independent_reason": "Superseded: literal GTHU/force is provisionally retained from exact source and glossary. The MTHU question remains LOW/UNCERTAIN and unfiled after counterevidence review, rather than PROBABLE restoration."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "both ni; bound genitives; final 'o closures; mngon par",
+          "reason": "Topic/copular, possessive and emphatic/closure grammar is distributed across is, apostrophes, of, punctuation and Are understood. No exclusive atom or absence claim is secure."
+        },
+        "independent_reason": "Topic, genitive and closure grammar remains distributed; MNGON PAR has no defensible independent lexical slot."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "tib": "'dod pa yis",
+          "english": "sex",
+          "reason": "Desire/instrumental contribution is absorbed into the sexual-act frame; no directly attested desire/sex atom is asserted. Do not label that uncertainty as missing content."
+        },
+        "independent_reason": "Desire/instrumental material remains distributed in the sexual-act frame. Omit uncertain desire/sex pairing without asserting missing meaning."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "tib": "gzhan sgyur ba'i",
+          "english": "wrong ... given",
+          "reason": "Otherness and transformation jointly produce the recast wrong impression given. The English exponents are distributed around impression; no false GZHAN/wrong or SGYUR BA/given pair is banked."
+        },
+        "independent_reason": "The wrong-impression transformation is jointly recast. No isolated GZHAN/wrong or SGYUR/given correspondence is secure."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 4,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 4,
+          "english": "is; and; a; being; to; of; possessive apostrophes; by means of; in; kinds of sex; when; the; of one's; Are; a wrong; given",
+          "reason": "GMR supplies articles, auxiliaries, possessors and explanatory frame. These remain exact but unwrapped. Agentive-s is not separated, positive proper is not cut from improper, and no uncertain null is used."
+        },
+        "independent_reason": "Articles, auxiliaries, possessors and explanatory framing remain outside the tight words. No agentive-s separation or positive substring extraction."
+      },
+      {
+        "seq": 348,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 5,
+        "original": {
+          "seq": 348,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 5,
+          "tib": "members of srog gcod pa, ma byin len pa and log par g-yem pa",
+          "reason": "Only the secure full-word SROG/life member is selected. Idiomatic taking, lexical theft negation and sexual-compound components do not receive invented narrower English exponents."
+        },
+        "independent_reason": "Only the strict SROG/life member is supported; idiomatic taking and theft/sexual-compound members are not invented."
+      }
+    ],
+    "additional_final_omissions": [
+      {
+        "seq": 346,
+        "scope": "YIN/does; DANG and come to",
+        "verdict": "APPROVE",
+        "reason": "The tighter MA/not and LDAN PA/possess pairs leave copular/do-support and possession-relation grammar unbanked without asserting absence."
+      },
+      {
+        "seq": 348,
+        "scope": "DU; BAR; English a",
+        "verdict": "APPROVE",
+        "reason": "The lexical BSAMS BZHIN/Purposely and flat MA/without,NOR/mistake are secure; manner grammar and the supplied article remain outside."
+      }
+    ],
+    "source_error_review": "errata-independent-review.json",
+    "final_source_question": "GTHU/MTHU remains LOW/UNCERTAIN and unfiled, with literal gthu/force provisional. The full original Tibetan LOW/PROBABLE candidate and English LOW/UNCERTAIN question are preserved. No source normalization.",
+    "native_history": {
+      "original_pairs": 6,
+      "new_reconciliation_pairs": 1,
+      "reused_english_pairs": 2,
+      "total_actual_unique_pairs": 7,
+      "selected_angle_segment_views": 9,
+      "reviewer_generator_runs": 0,
+      "reviewer_resolver_runs": 0,
+      "root_generator_runs": 0,
+      "proof": "final-identity-results.json",
+      "selected": "native/reconciled/{seq}-{generator|resolver}-v1",
+      "actual_reuse": "347/348 five native files match English originals exactly;346 root-corrected spec/note alone generated/resolved once."
+    },
+    "manifest": "original-to-copy-manifest.json",
+    "process_history": "process-history.json",
+    "reviewer_limits": "APPROVE applies only to these provisional exact alignment data. Source/master/hgm_gloss, W, registration, production and root acceptance remain outside this role.",
+    "utc": "2026-09-15T03:18:12.054743+00:00"
+  },
+  "fidelity_tests": {
+    "passed": 17,
+    "failed": 0,
+    "execution": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "../campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+        "-R",
+        "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+        "--output-on-failure"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-15T03:21:29.465729+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-15T03:21:41.066771+00:00",
+      "wall_seconds": 11.600181624758989,
+      "exit": 0,
+      "stdout_bytes": 2166,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d56b2d7382beeb311180044a5b6f168b93f9ae9348bb7a27471451c579722ee3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retention": {
+    "baseline_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+    "page": "c5p116",
+    "segments": [
+      346,
+      347,
+      348
+    ],
+    "prior_links_retained": 47421,
+    "added_links": 66,
+    "added_by_segment": {
+      "346": 32,
+      "347": 8,
+      "348": 26
+    },
+    "reviewed_analyst_spans": 63,
+    "full_links": 47487,
+    "null_exponents": 11985,
+    "evidence_headwords": 7197,
+    "evidence_pairs": 15971,
+    "prior_notes_trees_evidence_and_acip_retained": true,
+    "prior_csv_rows_retained": 23185,
+    "current_csv_rows": 23214,
+    "prior_csv_content_and_references_retained": true,
+    "csv_acip_enrichments_from_newly_banked_source": [
+      {
+        "key": [
+          "translation",
+          "7",
+          "bdag gir",
+          "\"mine.\""
+        ],
+        "acip": "BDAG GIR",
+        "new_source_refs": [
+          "C05:348"
+        ]
+      }
+    ],
+    "source_hashes_unchanged": true,
+    "review_tuples_and_source_ranges_match": true,
+    "navigation_targets_exist": true,
+    "rendering_verified": false
+  },
+  "course_csv": {
+    "baseline_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+    "prior_course_depth_groups_retained": 24848,
+    "current_course_depth_groups": 24882,
+    "all_depths_counts_and_metadata_match_main_csv_refs": true,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": "3e81ee95beceb2cfb61bbc268918149fd2443d23aa8fad557f4375e2c45b9663"
+  },
+  "reproduction_outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 10366910,
+      "sha256": "412e2d6610ac5fb44e92fe0d827546fbf7f045417748c9a5d95b009843219b61",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2266499,
+      "sha256": "6cc2bde50bb8e90cadb4e792b50dda34e5e7a106495363e0e836b315f7cfe4d6",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2279729,
+      "sha256": "a534905a53b80305f4ad1424b9f61fe05783182daa2dd8856da480d9f6f53a84",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16736697,
+      "sha256": "a29f7ed634dc8d84478b28e97a2e9c0b3ee8521994608b8a80a8e3955e508af8",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5407898,
+      "sha256": "6bcae653e800155d57f825abb32a3ea5c7fea126e90bccf000c0304d89bb3252",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5331354,
+      "sha256": "3e81ee95beceb2cfb61bbc268918149fd2443d23aa8fad557f4375e2c45b9663",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 4811,
+      "sha256": "06decfa9f6bfd3aee7957ca927f2ec4b6290a7c4ac890a638852b73c4af1e91c",
+      "complete_bytes_equal": true
+    }
+  ],
+  "archive": {
+    "file": "native-evidence.tar.gz",
+    "members": 163,
+    "bytes": 173716,
+    "sha256": "a91dc183d6efc28625d8e1fc2c054dfcbbaff448f78e44f5be3069a920a8e30b"
+  },
+  "external_reproduction_inputs": "/Volumes/Oct2024(8TB)/Codex-ACI-Alignment-20260915-01a09398/compact-reproduction-through348",
+  "seed_retention": "Actual incoming CSV seed is retained externally and byte-bound to baseline Git CSV; not redundantly copied into this archive.",
+  "integration_limits": "Isolated desktop-consumable outputs only. MAIN remains OPEN_NO_APPLICATION. Private phone pack FAILED_UNACCEPTED for four inherited C01 mappings; no install. Installed through171 unchanged. External evidence drive required.",
+  "later_proofs": "Staging/whitespace/commit/checkpoint evidence follows separately; it is not claimed to be an input to its own earlier archive."
+}

@@ -1,0 +1,717 @@
+{
+  "queries": [
+    {
+      "term": "bsams bzhin",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "bsams bzhin",
+        "bsams bzhin"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 21401,
+          "wylie": "bsams bzhin",
+          "tibetan": "བསམས་བཞིན",
+          "tibetan_source": null,
+          "acip": "BSAMS BZHIN",
+          "pronunciation": "samshin",
+          "pronunciation_source": null,
+          "sanskrit": "{C}saṃcintya",
+          "hopkins_english": "according to one's thought; spontaneously; {C}as a free agent; at will; deliberately",
+          "hgm_gloss": "[\"purposely\", \"intentionally\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"C05\", \"C16\", \"TCS02\", \"TCS05\", \"TCS16Reading\"]",
+          "corpus_n_segments": 20,
+          "raw": "{\"tibetan\": \"བསམས་བཞིན\", \"wylie\": \"bsams bzhin\", \"wylie_variants\": [\"bsams bzhin\"], \"tenses\": null, \"sanskrit\": \"{C}saṃcintya\", \"hopkins_english\": \"according to one's thought; spontaneously; {C}as a free agent; at will; deliberately\", \"hgm_gloss\": [\"purposely\", \"intentionally\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"samshin\", \"acip\": \"BSAMS BZHIN\", \"corpus_occurrences\": {\"courses\": [\"C05\", \"C16\", \"TCS02\", \"TCS05\", \"TCS16Reading\"], \"n_segments\": 20}, \"hopkins_realigned\": \"uma-v26\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:21400",
+        "glossary_entries:7887"
+      ]
+    },
+    {
+      "term": "'jab bu",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "'jab bu",
+        "'jab bu"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 22895,
+          "wylie": "'jab bu",
+          "tibetan": "འཇབ་བུ",
+          "tibetan_source": null,
+          "acip": "'JAB BU",
+          "pronunciation": "jabbu",
+          "pronunciation_source": null,
+          "sanskrit": null,
+          "hopkins_english": null,
+          "hgm_gloss": "[\"stealth\", \"stealth--undetected\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested (not in Great Dictionary)",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": null,
+          "corpus_n_segments": null,
+          "raw": "{\"tibetan\": \"འཇབ་བུ\", \"wylie\": \"'jab bu\", \"wylie_variants\": [\"'jab bu\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"stealth\", \"stealth--undetected\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"jabbu\", \"acip\": \"'JAB BU\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:22894",
+        "glossary_entries:2170"
+      ]
+    },
+    {
+      "term": "bdag gir byed pa",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "bdag gir byed pa",
+        "bdag gir byed pa"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 44393,
+          "wylie": "bdag gir byed pa",
+          "tibetan": "བདག་གིར་བྱེད་པ",
+          "tibetan_source": "generated-ewts-v27-1",
+          "acip": "BDAG GIR BYED PA",
+          "pronunciation": "dakir jepa",
+          "pronunciation_source": null,
+          "sanskrit": "{LC}svaka; {LC}svīkaraṇa; {LC}svīkāra",
+          "hopkins_english": null,
+          "hgm_gloss": null,
+          "tier": null,
+          "hgm_source": null,
+          "status": "awaiting-hgm-equivalent",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"DDA\"]",
+          "corpus_n_segments": 1,
+          "raw": "{\"tibetan\": \"བདག་གིར་བྱེད་པ\", \"wylie\": \"bdag gir byed pa\", \"wylie_variants\": [\"bdag gir byed pa\"], \"tenses\": null, \"sanskrit\": \"{LC}svaka; {LC}svīkaraṇa; {LC}svīkāra\", \"hopkins_english\": null, \"hgm_gloss\": null, \"hgm_evidence\": null, \"status\": \"awaiting-hgm-equivalent\", \"acip\": \"BDAG GIR BYED PA\", \"lc_source\": [\"main\"], \"lc_refs\": [\"{sc35}2313\", \"{sc27}117\", \"{sc41}212.10\"], \"pronunciation\": \"dakir jepa\", \"scaffold_added\": \"lc-v27\", \"corpus_occurrences\": {\"courses\": [\"DDA\"], \"n_segments\": 1}, \"attestation_contexts\": [{\"course\": \"DDA\", \"tibetan_wylie\": \"nga dang phung po bden pa yi, ,tha dad du ni grub pa na, ,'brel med don gzhan yin dgos pas, ,lag pa na yang nga na zhes, ,bdag gir byed pa 'brel med yin\", \"hgm_english\": \"And now suppose instead That the “me” existed as something Which was separate, in truth, From the body and the mind. In this case, this “me” And body & mind would have to be Completely unrelated, separate things. And then it would be Completely irrelevant To c\"}], \"tibetan_source\": \"generated-ewts-v27-1\"}"
+        }
+      ],
+      "master_count": 1,
+      "master_keys": [
+        "unified_entries:44392"
+      ]
+    },
+    {
+      "term": "bgrod",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "bgrod",
+        "bgrod"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 2496,
+          "wylie": "bgrod",
+          "tibetan": "བགྲོད",
+          "tibetan_source": null,
+          "acip": "BGROD",
+          "pronunciation": "dru",
+          "pronunciation_source": null,
+          "sanskrit": "{L}yāna; {LC}vrajanti; {LC}pravāsa; {LC}gata; {LC}gati; {LC}gantum; {LC}gamana; {LC}tāna; {LC}prayāta; {LC}prayānti; {LC}mārga; {LC}yāti; {LC}yātrā; {LC}yāyin; {LC}vraja; {LC}vrajat; {LC}śālā; {LC}saṅgama; {LC}sarpati",
+          "hopkins_english": "progress; get along; advance; proceed; travel; go; traverse; vehicle",
+          "hgm_gloss": "[\"journey\", \"travel\", \"engaging\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": "bgrod bgrod/'grod bgrod bgrod",
+          "flags": null,
+          "corpus_courses": "[\"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P6\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 193,
+          "raw": "{\"tibetan\": \"བགྲོད\", \"wylie\": \"bgrod\", \"wylie_variants\": [\"bgrod\"], \"tenses\": \"bgrod bgrod/'grod bgrod bgrod\", \"sanskrit\": \"{L}yāna; {LC}vrajanti; {LC}pravāsa; {LC}gata; {LC}gati; {LC}gantum; {LC}gamana; {LC}tāna; {LC}prayāta; {LC}prayānti; {LC}mārga; {LC}yāti; {LC}yātrā; {LC}yāyin; {LC}vraja; {LC}vrajat; {LC}śālā; {LC}saṅgama; {LC}sarpati\", \"hopkins_english\": \"progress; get along; advance; proceed; travel; go; traverse; vehicle\", \"hgm_gloss\": [\"journey\", \"travel\", \"engaging\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"dru\", \"acip\": \"BGROD\", \"corpus_occurrences\": {\"courses\": [\"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P6\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 193}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:2495",
+        "glossary_entries:1022"
+      ]
+    },
+    {
+      "term": "min",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "min",
+        "min"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 14426,
+          "wylie": "min",
+          "tibetan": "མིན",
+          "tibetan_source": null,
+          "acip": "MIN",
+          "pronunciation": "min",
+          "pronunciation_source": null,
+          "sanskrit": "{MSA}na; {LC}a!!, an!!; {LC}anudaya; {LC}akīrti; {LC}anīlatva; {LC}avarṇa; {LC}adharma; {LC}akliṣṭa; {LC}aśāśvata; {LC}kālākāle; {LC}asattva; {LC}amama; {LC}asat; {LC}asatya; {LC}asthāna; {LC}abhājana; {LC}agocara; {LC}alakṣmī; {LC}akṛta; {LC}asaṃbhava; {LC}apramāṇatā; {LC}apramāṇa; {LC}ananya; {LC}asadbhūta; {LC}abhāva; {LC}ayukta; {LC}acikitsya; {LC}acintya; {LC}asura; {LC}na kṛpaṇaḥ; {LC}na...utpadyate; {LC}na kiñcit; {LC}na dharmakāmaḥ; {LC}na pūjyate; {LC}nātmā; {LC}na miśram; {LC}na kurute; {LC}na dadāti; {LC}na kadāci vidyate; {LC}asti na; {LC}na...asti; {LC}na vidyante; {LC}nāsti; {LC}na tu; {LC}na...bhonti; {LC}na syāt; {LC}naiva; {LC}no bhavet; {LC}apaha; {LC}nidrāsukhāpaha; {LC}ṛte; {LC}na bhavanti; {LC}bhavati na",
+          "hopkins_english": "is not; non-; not",
+          "hgm_gloss": "[\"no\", \"doesn't\", \"not\", \"can't be called\", \"is not\", \"are not\", \"is no\", \"are though not\", \"impossible\", \"neither\", \"cannot\", \"cannot be\", \"nor are\", \"neither ... is\", \"didn't\", \"nor\", \"wasn't\", \"nor is\", \"neither is it the case\", \"there is no\", \"it is not\", \"nor ... is\", \"am neither\", \"none\", \"lacks\", \"can't be\", \"are nothing\", \"wrong\", \"isn't\", \"no such thing\", \"do not\", \"is not ... not\", \"does not\", \"were not\", \"not being\", \"it is not the case\", \"never\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 1853,
+          "raw": "{\"tibetan\": \"མིན\", \"wylie\": \"min\", \"wylie_variants\": [\"min\"], \"tenses\": null, \"sanskrit\": \"{MSA}na; {LC}a!!, an!!; {LC}anudaya; {LC}akīrti; {LC}anīlatva; {LC}avarṇa; {LC}adharma; {LC}akliṣṭa; {LC}aśāśvata; {LC}kālākāle; {LC}asattva; {LC}amama; {LC}asat; {LC}asatya; {LC}asthāna; {LC}abhājana; {LC}agocara; {LC}alakṣmī; {LC}akṛta; {LC}asaṃbhava; {LC}apramāṇatā; {LC}apramāṇa; {LC}ananya; {LC}asadbhūta; {LC}abhāva; {LC}ayukta; {LC}acikitsya; {LC}acintya; {LC}asura; {LC}na kṛpaṇaḥ; {LC}na...utpadyate; {LC}na kiñcit; {LC}na dharmakāmaḥ; {LC}na pūjyate; {LC}nātmā; {LC}na miśram; {LC}na kurute; {LC}na dadāti; {LC}na kadāci vidyate; {LC}asti na; {LC}na...asti; {LC}na vidyante; {LC}nāsti; {LC}na tu; {LC}na...bhonti; {LC}na syāt; {LC}naiva; {LC}no bhavet; {LC}apaha; {LC}nidrāsukhāpaha; {LC}ṛte; {LC}na bhavanti; {LC}bhavati na\", \"hopkins_english\": \"is not; non-; not\", \"hgm_gloss\": [\"no\", \"doesn't\", \"not\", \"can't be called\", \"is not\", \"are not\", \"is no\", \"are though not\", \"impossible\", \"neither\", \"cannot\", \"cannot be\", \"nor are\", \"neither ... is\", \"didn't\", \"nor\", \"wasn't\", \"nor is\", \"neither is it the case\", \"there is no\", \"it is not\", \"nor ... is\", \"am neither\", \"none\", \"lacks\", \"can't be\", \"are nothing\", \"wrong\", \"isn't\", \"no such thing\", \"do not\", \"is not ... not\", \"does not\", \"were not\", \"not being\", \"it is not the case\", \"never\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"min\", \"acip\": \"MIN\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 1853}, \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:14425",
+        "glossary_entries:5671"
+      ]
+    },
+    {
+      "term": "mngon par",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "mngon par",
+        "mngon par"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 3834,
+          "wylie": "mngon par",
+          "tibetan": "མངོན་པར",
+          "tibetan_source": null,
+          "acip": "MNGON PAR",
+          "pronunciation": "ngunpar",
+          "pronunciation_source": null,
+          "sanskrit": "{LC}abhi!!",
+          "hopkins_english": "manifestly",
+          "hgm_gloss": "[\"firmly\", \"reach\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C04\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P6\", \"P7\", \"P8\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 393,
+          "raw": "{\"tibetan\": \"མངོན་པར\", \"wylie\": \"mngon par\", \"wylie_variants\": [\"mngon par\"], \"tenses\": null, \"sanskrit\": \"{LC}abhi!!\", \"hopkins_english\": \"manifestly\", \"hgm_gloss\": [\"firmly\", \"reach\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ngunpar\", \"acip\": \"MNGON PAR\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C04\", \"C05\", \"C08\", \"C10\", \"C11\", \"C12\", \"C13\", \"C15\", \"C16\", \"C17\", \"C18\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P6\", \"P7\", \"P8\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS11\", \"TCS13\", \"TCS14\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 393}, \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:3833",
+        "glossary_entries:1603"
+      ]
+    },
+    {
+      "term": "gathu",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "gathu",
+        "gathu"
+      ],
+      "spine_count": 0,
+      "spine_rows": [],
+      "master_count": 0,
+      "master_keys": []
+    }
+  ],
+  "master_objects": {
+    "unified_entries:21400": {
+      "collection": "unified_entries",
+      "index": 21400,
+      "entry": {
+        "tibetan": "བསམས་བཞིན",
+        "wylie": "bsams bzhin",
+        "wylie_variants": [
+          "bsams bzhin"
+        ],
+        "tenses": null,
+        "sanskrit": "{C}saṃcintya",
+        "hopkins_english": "according to one's thought; spontaneously; {C}as a free agent; at will; deliberately",
+        "hgm_gloss": [
+          "purposely",
+          "intentionally"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "samshin",
+        "acip": "BSAMS BZHIN",
+        "corpus_occurrences": {
+          "courses": [
+            "C05",
+            "C16",
+            "TCS02",
+            "TCS05",
+            "TCS16Reading"
+          ],
+          "n_segments": 20
+        },
+        "hopkins_realigned": "uma-v26"
+      }
+    },
+    "glossary_entries:7887": {
+      "collection": "glossary_entries",
+      "index": 7887,
+      "entry": {
+        "acip": "BSAMS BZHIN",
+        "wylie": "bsams bzhin",
+        "tibetan": "བསམས་བཞིན",
+        "hgm_glosses": [
+          "purposely",
+          "intentionally"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:22894": {
+      "collection": "unified_entries",
+      "index": 22894,
+      "entry": {
+        "tibetan": "འཇབ་བུ",
+        "wylie": "'jab bu",
+        "wylie_variants": [
+          "'jab bu"
+        ],
+        "tenses": null,
+        "sanskrit": null,
+        "hopkins_english": null,
+        "hgm_gloss": [
+          "stealth",
+          "stealth--undetected"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested (not in Great Dictionary)",
+        "pronunciation": "jabbu",
+        "acip": "'JAB BU"
+      }
+    },
+    "glossary_entries:2170": {
+      "collection": "glossary_entries",
+      "index": 2170,
+      "entry": {
+        "acip": "'JAB BU",
+        "wylie": "'jab bu",
+        "tibetan": "འཇབ་བུ",
+        "hgm_glosses": [
+          "stealth",
+          "stealth--undetected"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:44392": {
+      "collection": "unified_entries",
+      "index": 44392,
+      "entry": {
+        "tibetan": "བདག་གིར་བྱེད་པ",
+        "wylie": "bdag gir byed pa",
+        "wylie_variants": [
+          "bdag gir byed pa"
+        ],
+        "tenses": null,
+        "sanskrit": "{LC}svaka; {LC}svīkaraṇa; {LC}svīkāra",
+        "hopkins_english": null,
+        "hgm_gloss": null,
+        "hgm_evidence": null,
+        "status": "awaiting-hgm-equivalent",
+        "acip": "BDAG GIR BYED PA",
+        "lc_source": [
+          "main"
+        ],
+        "lc_refs": [
+          "{sc35}2313",
+          "{sc27}117",
+          "{sc41}212.10"
+        ],
+        "pronunciation": "dakir jepa",
+        "scaffold_added": "lc-v27",
+        "corpus_occurrences": {
+          "courses": [
+            "DDA"
+          ],
+          "n_segments": 1
+        },
+        "attestation_contexts": [
+          {
+            "course": "DDA",
+            "tibetan_wylie": "nga dang phung po bden pa yi, ,tha dad du ni grub pa na, ,'brel med don gzhan yin dgos pas, ,lag pa na yang nga na zhes, ,bdag gir byed pa 'brel med yin",
+            "hgm_english": "And now suppose instead That the “me” existed as something Which was separate, in truth, From the body and the mind. In this case, this “me” And body & mind would have to be Completely unrelated, separate things. And then it would be Completely irrelevant To c"
+          }
+        ],
+        "tibetan_source": "generated-ewts-v27-1"
+      }
+    },
+    "unified_entries:2495": {
+      "collection": "unified_entries",
+      "index": 2495,
+      "entry": {
+        "tibetan": "བགྲོད",
+        "wylie": "bgrod",
+        "wylie_variants": [
+          "bgrod"
+        ],
+        "tenses": "bgrod bgrod/'grod bgrod bgrod",
+        "sanskrit": "{L}yāna; {LC}vrajanti; {LC}pravāsa; {LC}gata; {LC}gati; {LC}gantum; {LC}gamana; {LC}tāna; {LC}prayāta; {LC}prayānti; {LC}mārga; {LC}yāti; {LC}yātrā; {LC}yāyin; {LC}vraja; {LC}vrajat; {LC}śālā; {LC}saṅgama; {LC}sarpati",
+        "hopkins_english": "progress; get along; advance; proceed; travel; go; traverse; vehicle",
+        "hgm_gloss": [
+          "journey",
+          "travel",
+          "engaging"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "dru",
+        "acip": "BGROD",
+        "corpus_occurrences": {
+          "courses": [
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "P1",
+            "P3",
+            "P6",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 193
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:1022": {
+      "collection": "glossary_entries",
+      "index": 1022,
+      "entry": {
+        "acip": "BGROD",
+        "wylie": "bgrod",
+        "tibetan": "བགྲོད",
+        "hgm_glosses": [
+          "journey",
+          "travel",
+          "engaging"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:14425": {
+      "collection": "unified_entries",
+      "index": 14425,
+      "entry": {
+        "tibetan": "མིན",
+        "wylie": "min",
+        "wylie_variants": [
+          "min"
+        ],
+        "tenses": null,
+        "sanskrit": "{MSA}na; {LC}a!!, an!!; {LC}anudaya; {LC}akīrti; {LC}anīlatva; {LC}avarṇa; {LC}adharma; {LC}akliṣṭa; {LC}aśāśvata; {LC}kālākāle; {LC}asattva; {LC}amama; {LC}asat; {LC}asatya; {LC}asthāna; {LC}abhājana; {LC}agocara; {LC}alakṣmī; {LC}akṛta; {LC}asaṃbhava; {LC}apramāṇatā; {LC}apramāṇa; {LC}ananya; {LC}asadbhūta; {LC}abhāva; {LC}ayukta; {LC}acikitsya; {LC}acintya; {LC}asura; {LC}na kṛpaṇaḥ; {LC}na...utpadyate; {LC}na kiñcit; {LC}na dharmakāmaḥ; {LC}na pūjyate; {LC}nātmā; {LC}na miśram; {LC}na kurute; {LC}na dadāti; {LC}na kadāci vidyate; {LC}asti na; {LC}na...asti; {LC}na vidyante; {LC}nāsti; {LC}na tu; {LC}na...bhonti; {LC}na syāt; {LC}naiva; {LC}no bhavet; {LC}apaha; {LC}nidrāsukhāpaha; {LC}ṛte; {LC}na bhavanti; {LC}bhavati na",
+        "hopkins_english": "is not; non-; not",
+        "hgm_gloss": [
+          "no",
+          "doesn't",
+          "not",
+          "can't be called",
+          "is not",
+          "are not",
+          "is no",
+          "are though not",
+          "impossible",
+          "neither",
+          "cannot",
+          "cannot be",
+          "nor are",
+          "neither ... is",
+          "didn't",
+          "nor",
+          "wasn't",
+          "nor is",
+          "neither is it the case",
+          "there is no",
+          "it is not",
+          "nor ... is",
+          "am neither",
+          "none",
+          "lacks",
+          "can't be",
+          "are nothing",
+          "wrong",
+          "isn't",
+          "no such thing",
+          "do not",
+          "is not ... not",
+          "does not",
+          "were not",
+          "not being",
+          "it is not the case",
+          "never"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "min",
+        "acip": "MIN",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "P1",
+            "P3",
+            "P5",
+            "P6",
+            "P7",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS08SourceOfAllMyGood",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 1853
+        },
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:5671": {
+      "collection": "glossary_entries",
+      "index": 5671,
+      "entry": {
+        "acip": "MIN",
+        "wylie": "min",
+        "tibetan": "མིན",
+        "hgm_glosses": [
+          "no",
+          "doesn't",
+          "not",
+          "can't be called",
+          "is not",
+          "are not",
+          "is no",
+          "are though not",
+          "impossible",
+          "neither",
+          "cannot",
+          "cannot be",
+          "nor are",
+          "neither ... is",
+          "didn't",
+          "nor",
+          "wasn't",
+          "nor is",
+          "neither is it the case",
+          "there is no",
+          "it is not",
+          "nor ... is",
+          "am neither",
+          "none",
+          "lacks",
+          "can't be",
+          "are nothing",
+          "wrong",
+          "isn't",
+          "no such thing",
+          "do not",
+          "is not ... not",
+          "does not",
+          "were not",
+          "not being",
+          "it is not the case",
+          "never"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:3833": {
+      "collection": "unified_entries",
+      "index": 3833,
+      "entry": {
+        "tibetan": "མངོན་པར",
+        "wylie": "mngon par",
+        "wylie_variants": [
+          "mngon par"
+        ],
+        "tenses": null,
+        "sanskrit": "{LC}abhi!!",
+        "hopkins_english": "manifestly",
+        "hgm_gloss": [
+          "firmly",
+          "reach"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "ngunpar",
+        "acip": "MNGON PAR",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C04",
+            "C05",
+            "C08",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "MBL",
+            "P6",
+            "P7",
+            "P8",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS11",
+            "TCS13",
+            "TCS14",
+            "TCS16KaliWang",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 393
+        },
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:1603": {
+      "collection": "glossary_entries",
+      "index": 1603,
+      "entry": {
+        "acip": "MNGON PAR",
+        "wylie": "mngon par",
+        "tibetan": "མངོན་པར",
+        "hgm_glosses": [
+          "firmly",
+          "reach"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    }
+  }
+}

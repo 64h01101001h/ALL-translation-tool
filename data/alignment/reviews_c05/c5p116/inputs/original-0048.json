@@ -1,0 +1,675 @@
+{
+  "queries": [
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 346,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1728,
+        6885
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 346,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir"
+      ],
+      "count": 2,
+      "row_ids": [
+        1728,
+        6885
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 346,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+      ],
+      "count": 2,
+      "row_ids": [
+        1728,
+        6885
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 347,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1729,
+        6886
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 347,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o"
+      ],
+      "count": 2,
+      "row_ids": [
+        1729,
+        6886
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 347,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 76 Definitions of the Four \"Root\" Non-Virtues"
+      ],
+      "count": 1,
+      "row_ids": [
+        1729
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 348,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1730,
+        6887
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 348,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o"
+      ],
+      "count": 2,
+      "row_ids": [
+        1730,
+        6887
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 348,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      ],
+      "count": 2,
+      "row_ids": [
+        1730,
+        6887
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "gthu"
+      ],
+      "count": 2,
+      "row_ids": [
+        1730,
+        6887
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "mthu dang"
+      ],
+      "count": 6,
+      "row_ids": [
+        25255,
+        24763,
+        28557,
+        31584,
+        10951,
+        16402
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "la sogs ba"
+      ],
+      "count": 4,
+      "row_ids": [
+        1728,
+        6885,
+        11463,
+        17430
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "bsams bzhin du ma nor bar"
+      ],
+      "count": 10,
+      "row_ids": [
+        1731,
+        1733,
+        1735,
+        1740,
+        1741,
+        6888,
+        6890,
+        6892,
+        6894,
+        6895
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "One may raise another question"
+      ],
+      "count": 2,
+      "row_ids": [
+        1728,
+        6885
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "Taking life is killing another being"
+      ],
+      "count": 3,
+      "row_ids": [
+        1730,
+        6887,
+        9346
+      ]
+    }
+  ],
+  "complete_records": {
+    "1728": {
+      "spine_row": {
+        "id": 1728,
+        "course": "C05",
+        "seq": 346,
+        "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+        "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+        "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,\", \"wylie\": \"dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir\", \"english\": \"One may raise another question: \\\"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\\\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it.\"}"
+      },
+      "corpus_index": 1727,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+        "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+        "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+      }
+    },
+    "6885": {
+      "spine_row": {
+        "id": 6885,
+        "course": "C16",
+        "seq": 867,
+        "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+        "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+        "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,\", \"wylie\": \"dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir\", \"english\": \"One may raise another question: \\\"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\\\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it.\"}"
+      },
+      "corpus_index": 6884,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "DMAG LA SOGS BA BYAS NAS GCIG GIS PHA ROL PO BSAD NA, GCIG PO DE KHO NA LA LAS LAM 'BYUNG NGAM ZHE NA, MA YIN TE, DMAG LA SOGS PAR GSOD PA'I DON GCIG LA ZHUGS PA'I PHYIR THAMS CAD GSOD PAR BYED PA PO BZHIN DU LAS LAM DANG LDAN PA YIN PA'I PHYIR,",
+        "wylie": "dmag la sogs ba byas nas gcig gis pha rol po bsad na, gcig po de kho na la las lam 'byung ngam zhe na, ma yin te, dmag la sogs par gsod pa'i don gcig la zhugs pa'i phyir thams cad gsod par byed pa po bzhin du las lam dang ldan pa yin pa'i phyir",
+        "english": "One may raise another question: \"Suppose a group of people are engaged in a war or similar activity, and one of these people kills someone from the other side. Does a path of action occur only for the one person who actually did the killing?\" It does not. Because they are engaged in the war (or whatever activity it may be) for the same common goal, all the people involved come to possess a full path of action, just as much as the one who commits it."
+      }
+    },
+    "1729": {
+      "spine_row": {
+        "id": 1729,
+        "course": "C05",
+        "seq": 347,
+        "acip": "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,",
+        "wylie": "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o",
+        "english": "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 76 Definitions of the Four \"Root\" Non-Virtues",
+        "raw": "{\"course\": \"C05\", \"acip\": \"GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,\", \"wylie\": \"gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o\", \"english\": \"Next we present the definition of each individual non-virtue. We start with the \\\"root\\\" non-virtues, continue to the \\\"four expressions,\\\" and end with the six \\\"branch\\\" non-virtues. 76 Definitions of the Four \\\"Root\\\" Non-Virtues\"}"
+      },
+      "corpus_index": 1728,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,",
+        "wylie": "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o",
+        "english": "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 76 Definitions of the Four \"Root\" Non-Virtues"
+      }
+    },
+    "6886": {
+      "spine_row": {
+        "id": 6886,
+        "course": "C16",
+        "seq": 868,
+        "acip": "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,",
+        "wylie": "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o",
+        "english": "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 38 Definitions of the Four \"Root\" Non-Virtues",
+        "raw": "{\"course\": \"C16\", \"acip\": \"GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,\", \"wylie\": \"gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o\", \"english\": \"Next we present the definition of each individual non-virtue. We start with the \\\"root\\\" non-virtues, continue to the \\\"four expressions,\\\" and end with the six \\\"branch\\\" non-virtues. 38 Definitions of the Four \\\"Root\\\" Non-Virtues\"}"
+      },
+      "corpus_index": 6885,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "GNYIS PA LA, RTZA BA BZHI, THA SNYAD BZHI, YAN LAG DRUG BSHAD PA'O,",
+        "wylie": "gnyis pa la, rtsa ba bzhi, tha snyad bzhi, yan lag drug bshad pa'o",
+        "english": "Next we present the definition of each individual non-virtue. We start with the \"root\" non-virtues, continue to the \"four expressions,\" and end with the six \"branch\" non-virtues. 38 Definitions of the Four \"Root\" Non-Virtues"
+      }
+    },
+    "1730": {
+      "spine_row": {
+        "id": 1730,
+        "course": "C05",
+        "seq": 348,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,\", \"wylie\": \"srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o\", \"english\": \"Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.\"}"
+      },
+      "corpus_index": 1729,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      }
+    },
+    "6887": {
+      "spine_row": {
+        "id": 6887,
+        "course": "C16",
+        "seq": 869,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,\", \"wylie\": \"srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o\", \"english\": \"Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.\"}"
+      },
+      "corpus_index": 6886,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      }
+    },
+    "25255": {
+      "spine_row": {
+        "id": 25255,
+        "course": "AK",
+        "seq": 461,
+        "acip": "SROG GCOD PA SPANGS PA'I RNAM PAR SMIN PAS NI SA'I MTHU DANG GZI BYIN MED PAR MI 'GYUR RO,,",
+        "wylie": "srog gcod pa spangs pa'i rnam par smin pas ni sa'i mthu dang gzi byin med par mi 'gyur ro",
+        "english": "When we give up taking the life of other beings, it comes back to us in a way where we no longer see the very appearance of the land around us worsen, or its power to grow things decline. Learning & following the ten good deeds leads to economic prosperity (2) Respecting others' things",
+        "raw": "{\"course\": \"AK\", \"acip\": \"SROG GCOD PA SPANGS PA'I RNAM PAR SMIN PAS NI SA'I MTHU DANG GZI BYIN MED PAR MI 'GYUR RO,,\", \"wylie\": \"srog gcod pa spangs pa'i rnam par smin pas ni sa'i mthu dang gzi byin med par mi 'gyur ro\", \"english\": \"When we give up taking the life of other beings, it comes back to us in a way where we no longer see the very appearance of the land around us worsen, or its power to grow things decline. Learning & following the ten good deeds leads to economic prosperity (2) Respecting others' things\"}"
+      },
+      "corpus_index": 25254,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "SROG GCOD PA SPANGS PA'I RNAM PAR SMIN PAS NI SA'I MTHU DANG GZI BYIN MED PAR MI 'GYUR RO,,",
+        "wylie": "srog gcod pa spangs pa'i rnam par smin pas ni sa'i mthu dang gzi byin med par mi 'gyur ro",
+        "english": "When we give up taking the life of other beings, it comes back to us in a way where we no longer see the very appearance of the land around us worsen, or its power to grow things decline. Learning & following the ten good deeds leads to economic prosperity (2) Respecting others' things"
+      }
+    },
+    "24763": {
+      "spine_row": {
+        "id": 24763,
+        "course": "GIE",
+        "seq": 1251,
+        "acip": "[E156] MKHYEN PA RNAM PA BCU CHOS CAN, STOBS KYI RNAM PA YIN TE, MI MTHUN PHYOGS 'JOMS PA LA MTHU DANG LDAN PAS RAB TU PHYE BA'I THUN MONG MIN PA'I MKHYEN PA MTHAR THUG YIN PA'I PHYIR,",
+        "wylie": "[e156] mkhyen pa rnam pa bcu chos can, stobs kyi rnam pa yin te, mi mthun phyogs 'joms pa la mthu dang ldan pas rab tu phye ba'i thun mong min pa'i mkhyen pa mthar thug yin pa'i phyir",
+        "english": "Let us consider, then, these ten different types of knowledge. These we refer to as the “forces,” Because they are ultimate forms of knowledge—and knowledge which is completely unique—which is distinguished by a special power to defeat anything that would work against our spiritual progress. B. The four types of fearlessness (aspects 82–85)",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"[E156] MKHYEN PA RNAM PA BCU CHOS CAN, STOBS KYI RNAM PA YIN TE, MI MTHUN PHYOGS 'JOMS PA LA MTHU DANG LDAN PAS RAB TU PHYE BA'I THUN MONG MIN PA'I MKHYEN PA MTHAR THUG YIN PA'I PHYIR,\", \"wylie\": \"[e156] mkhyen pa rnam pa bcu chos can, stobs kyi rnam pa yin te, mi mthun phyogs 'joms pa la mthu dang ldan pas rab tu phye ba'i thun mong min pa'i mkhyen pa mthar thug yin pa'i phyir\", \"english\": \"Let us consider, then, these ten different types of knowledge. These we refer to as the “forces,” Because they are ultimate forms of knowledge—and knowledge which is completely unique—which is distinguished by a special power to defeat anything that would work against our spiritual progress. B. The four types of fearlessness (aspects 82–85)\"}"
+      },
+      "corpus_index": 24762,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "[E156] MKHYEN PA RNAM PA BCU CHOS CAN, STOBS KYI RNAM PA YIN TE, MI MTHUN PHYOGS 'JOMS PA LA MTHU DANG LDAN PAS RAB TU PHYE BA'I THUN MONG MIN PA'I MKHYEN PA MTHAR THUG YIN PA'I PHYIR,",
+        "wylie": "[e156] mkhyen pa rnam pa bcu chos can, stobs kyi rnam pa yin te, mi mthun phyogs 'joms pa la mthu dang ldan pas rab tu phye ba'i thun mong min pa'i mkhyen pa mthar thug yin pa'i phyir",
+        "english": "Let us consider, then, these ten different types of knowledge. These we refer to as the “forces,” Because they are ultimate forms of knowledge—and knowledge which is completely unique—which is distinguished by a special power to defeat anything that would work against our spiritual progress. B. The four types of fearlessness (aspects 82–85)"
+      }
+    },
+    "28557": {
+      "spine_row": {
+        "id": 28557,
+        "course": "ILL",
+        "seq": 1238,
+        "acip": "DANG PO NI, SKYON GZHAN YANG YOD DE MYU GU SKYED PAR BYED PA'I RGYU SA BON GYI KHA DOG DANG DBYIBS LA SOGS PA LAS THA DAD PA'I MYU GU'I RING THUNG SOGS KYI DBYIBS DANG, SNGO SER SOGS KYI KHA DOG DANG, MNGAR SKYUR SOGS KYI RO DANG NUS MTHU DANG, SMIN PA RNAMS KYI THA DAD PA KHYOD LA MED PAR 'GYUR TE, SA MYUG GNYIS KYI NGO BO DANG RANG BZHIN LA RNAM PA THAMS CAD DU KHYAD PAR MED PA'I PHYIR RO,,",
+        "wylie": "dang po ni, skyon gzhan yang yod de myu gu skyed par byed pa'i rgyu sa bon gyi kha dog dang dbyibs la sogs pa las tha dad pa'i myu gu'i ring thung sogs kyi dbyibs dang, sngo ser sogs kyi kha dog dang, mngar skyur sogs kyi ro dang nus mthu dang, smin pa rnams kyi tha dad pa khyod la med par 'gyur te, sa myug gnyis kyi ngo bo dang rang bzhin la rnam pa thams cad du khyad par med pa'i phyir ro",
+        "english": "Here is the first. There is yet another problem with saying that to be the seed is to be the sprout. If that were the case, then the sprout could have no qualities (color, shape, and so on) that were different from those of the seed which had given it birth. That is, the sprout would never possess a different shape—its length, or whatever; or color—whether it be green, yellow, or whatever; or taste—sweetness or sourness and such; or particular functional properties; or a particular manner of ripening. And that's because, according to you, there is no difference of any kind between the essence, and the nature, of this pair: the seed & the sprout.",
+        "raw": "{\"course\": \"ILL\", \"acip\": \"DANG PO NI, SKYON GZHAN YANG YOD DE MYU GU SKYED PAR BYED PA'I RGYU SA BON GYI KHA DOG DANG DBYIBS LA SOGS PA LAS THA DAD PA'I MYU GU'I RING THUNG SOGS KYI DBYIBS DANG, SNGO SER SOGS KYI KHA DOG DANG, MNGAR SKYUR SOGS KYI RO DANG NUS MTHU DANG, SMIN PA RNAMS KYI THA DAD PA KHYOD LA MED PAR 'GYUR TE, SA MYUG GNYIS KYI NGO BO DANG RANG BZHIN LA RNAM PA THAMS CAD DU KHYAD PAR MED PA'I PHYIR RO,,\", \"wylie\": \"dang po ni, skyon gzhan yang yod de myu gu skyed par byed pa'i rgyu sa bon gyi kha dog dang dbyibs la sogs pa las tha dad pa'i myu gu'i ring thung sogs kyi dbyibs dang, sngo ser sogs kyi kha dog dang, mngar skyur sogs kyi ro dang nus mthu dang, smin pa rnams kyi tha dad pa khyod la med par 'gyur te, sa myug gnyis kyi ngo bo dang rang bzhin la rnam pa thams cad du khyad par med pa'i phyir ro\", \"english\": \"Here is the first. There is yet another problem with saying that to be the seed is to be the sprout. If that were the case, then the sprout could have no qualities (color, shape, and so on) that were different from those of the seed which had given it birth. That is, the sprout would never possess a different shape—its length, or whatever; or color—whether it be green, yellow, or whatever; or taste—sweetness or sourness and such; or particular functional properties; or a particular manner of ripening. And that's because, according to you, there is no difference of any kind between the essence, and the nature, of this pair: the seed & the sprout.\"}"
+      },
+      "corpus_index": 28556,
+      "corpus_record": {
+        "course": "ILL",
+        "acip": "DANG PO NI, SKYON GZHAN YANG YOD DE MYU GU SKYED PAR BYED PA'I RGYU SA BON GYI KHA DOG DANG DBYIBS LA SOGS PA LAS THA DAD PA'I MYU GU'I RING THUNG SOGS KYI DBYIBS DANG, SNGO SER SOGS KYI KHA DOG DANG, MNGAR SKYUR SOGS KYI RO DANG NUS MTHU DANG, SMIN PA RNAMS KYI THA DAD PA KHYOD LA MED PAR 'GYUR TE, SA MYUG GNYIS KYI NGO BO DANG RANG BZHIN LA RNAM PA THAMS CAD DU KHYAD PAR MED PA'I PHYIR RO,,",
+        "wylie": "dang po ni, skyon gzhan yang yod de myu gu skyed par byed pa'i rgyu sa bon gyi kha dog dang dbyibs la sogs pa las tha dad pa'i myu gu'i ring thung sogs kyi dbyibs dang, sngo ser sogs kyi kha dog dang, mngar skyur sogs kyi ro dang nus mthu dang, smin pa rnams kyi tha dad pa khyod la med par 'gyur te, sa myug gnyis kyi ngo bo dang rang bzhin la rnam pa thams cad du khyad par med pa'i phyir ro",
+        "english": "Here is the first. There is yet another problem with saying that to be the seed is to be the sprout. If that were the case, then the sprout could have no qualities (color, shape, and so on) that were different from those of the seed which had given it birth. That is, the sprout would never possess a different shape—its length, or whatever; or color—whether it be green, yellow, or whatever; or taste—sweetness or sourness and such; or particular functional properties; or a particular manner of ripening. And that's because, according to you, there is no difference of any kind between the essence, and the nature, of this pair: the seed & the sprout."
+      }
+    },
+    "31584": {
+      "spine_row": {
+        "id": 31584,
+        "course": "ILL",
+        "seq": 4265,
+        "acip": "SANGS RGYAS DE DAG GI SKU DANG SPYOD PA'I MTHU DANG STOBS PHUL DU BYUNG BA JI 'DRA BA DANG, DE DAG GI 'KHOR NYAN THOS KYI DGE 'DUN 'DUS PA JI SNYED PA DANG,",
+        "wylie": "sangs rgyas de dag gi sku dang spyod pa'i mthu dang stobs phul du byung ba ji 'dra ba dang, de dag gi 'khor nyan thos kyi dge 'dun 'dus pa ji snyed pa dang",
+        "english": "And the mystic power and magnificent force of the activities and the holy bodies of these Enlightened Beings comes in just the right way; and they are surrounded by a gathering of disciples—the community of the listeners—in just the right number.",
+        "raw": "{\"course\": \"ILL\", \"acip\": \"SANGS RGYAS DE DAG GI SKU DANG SPYOD PA'I MTHU DANG STOBS PHUL DU BYUNG BA JI 'DRA BA DANG, DE DAG GI 'KHOR NYAN THOS KYI DGE 'DUN 'DUS PA JI SNYED PA DANG,\", \"wylie\": \"sangs rgyas de dag gi sku dang spyod pa'i mthu dang stobs phul du byung ba ji 'dra ba dang, de dag gi 'khor nyan thos kyi dge 'dun 'dus pa ji snyed pa dang\", \"english\": \"And the mystic power and magnificent force of the activities and the holy bodies of these Enlightened Beings comes in just the right way; and they are surrounded by a gathering of disciples—the community of the listeners—in just the right number.\"}"
+      },
+      "corpus_index": 31583,
+      "corpus_record": {
+        "course": "ILL",
+        "acip": "SANGS RGYAS DE DAG GI SKU DANG SPYOD PA'I MTHU DANG STOBS PHUL DU BYUNG BA JI 'DRA BA DANG, DE DAG GI 'KHOR NYAN THOS KYI DGE 'DUN 'DUS PA JI SNYED PA DANG,",
+        "wylie": "sangs rgyas de dag gi sku dang spyod pa'i mthu dang stobs phul du byung ba ji 'dra ba dang, de dag gi 'khor nyan thos kyi dge 'dun 'dus pa ji snyed pa dang",
+        "english": "And the mystic power and magnificent force of the activities and the holy bodies of these Enlightened Beings comes in just the right way; and they are surrounded by a gathering of disciples—the community of the listeners—in just the right number."
+      }
+    },
+    "10951": {
+      "spine_row": {
+        "id": 10951,
+        "course": "TCS04Initiation",
+        "seq": 814,
+        "acip": "GANG LA PHYAG RGYA 'DIS LUNG BSTAN PA DE LA DE BZHIN GSHEGS PA THAMS CAD DANG BYANG CHUB SEMS DPA' 'KHOR DANG BCAS PA'I DKYIL 'KHOR BA THAMS CAD KYIS MGRIN GCIG TU BLA NA MED PA YANG DAG PAR RDZOGS PA'I BYANG CHUB TU LUNG BSTAN PAR MDZAD DE, PHYAG RGYA 'DI NYID KYI MTHU DANG SNGAGS 'DI'I STOBS YIN NO,",
+        "wylie": "gang la phyag rgya 'dis lung bstan pa de la de bzhin gshegs pa thams cad dang byang chub sems dpa' 'khor dang bcas pa'i dkyil 'khor ba thams cad kyis mgrin gcig tu bla na med pa yang dag par rdzogs pa'i byang chub tu lung bstan par mdzad de, phyag rgya 'di nyid kyi mthu dang sngags 'di'i stobs yin no",
+        "english": "Whosoever receives this prediction with this sacred gesture thus receives prediction from every being of the secret world: from every Buddha Gone That Way, and from all the bodhisattvas who attend them.  Singing out as one, in a single voice, they foretell that you will attain perfect and total enlightenment.  This is the mystic power of this gesture, and the might of the mantra spoken.",
+        "raw": "{\"course\": \"TCS04Initiation\", \"acip\": \"GANG LA PHYAG RGYA 'DIS LUNG BSTAN PA DE LA DE BZHIN GSHEGS PA THAMS CAD DANG BYANG CHUB SEMS DPA' 'KHOR DANG BCAS PA'I DKYIL 'KHOR BA THAMS CAD KYIS MGRIN GCIG TU BLA NA MED PA YANG DAG PAR RDZOGS PA'I BYANG CHUB TU LUNG BSTAN PAR MDZAD DE, PHYAG RGYA 'DI NYID KYI MTHU DANG SNGAGS 'DI'I STOBS YIN NO,\", \"wylie\": \"gang la phyag rgya 'dis lung bstan pa de la de bzhin gshegs pa thams cad dang byang chub sems dpa' 'khor dang bcas pa'i dkyil 'khor ba thams cad kyis mgrin gcig tu bla na med pa yang dag par rdzogs pa'i byang chub tu lung bstan par mdzad de, phyag rgya 'di nyid kyi mthu dang sngags 'di'i stobs yin no\", \"english\": \"Whosoever receives this prediction with this sacred gesture thus receives prediction from every being of the secret world: from every Buddha Gone That Way, and from all the bodhisattvas who attend them.  Singing out as one, in a single voice, they foretell that you will attain perfect and total enlightenment.  This is the mystic power of this gesture, and the might of the mantra spoken.\", \"repair_wave\": \"tcs-v25\"}"
+      },
+      "corpus_index": 10950,
+      "corpus_record": {
+        "course": "TCS04Initiation",
+        "acip": "GANG LA PHYAG RGYA 'DIS LUNG BSTAN PA DE LA DE BZHIN GSHEGS PA THAMS CAD DANG BYANG CHUB SEMS DPA' 'KHOR DANG BCAS PA'I DKYIL 'KHOR BA THAMS CAD KYIS MGRIN GCIG TU BLA NA MED PA YANG DAG PAR RDZOGS PA'I BYANG CHUB TU LUNG BSTAN PAR MDZAD DE, PHYAG RGYA 'DI NYID KYI MTHU DANG SNGAGS 'DI'I STOBS YIN NO,",
+        "wylie": "gang la phyag rgya 'dis lung bstan pa de la de bzhin gshegs pa thams cad dang byang chub sems dpa' 'khor dang bcas pa'i dkyil 'khor ba thams cad kyis mgrin gcig tu bla na med pa yang dag par rdzogs pa'i byang chub tu lung bstan par mdzad de, phyag rgya 'di nyid kyi mthu dang sngags 'di'i stobs yin no",
+        "english": "Whosoever receives this prediction with this sacred gesture thus receives prediction from every being of the secret world: from every Buddha Gone That Way, and from all the bodhisattvas who attend them.  Singing out as one, in a single voice, they foretell that you will attain perfect and total enlightenment.  This is the mystic power of this gesture, and the might of the mantra spoken.",
+        "repair_wave": "tcs-v25"
+      }
+    },
+    "16402": {
+      "spine_row": {
+        "id": 16402,
+        "course": "TCS12",
+        "seq": 320,
+        "acip": "KHYAD PAR DU YANG RJE BTZUN RDO RJE RNAL 'BYOR MA'I LHA TSOGS 'KHOR DANG BCAS PA RNAMS KYI BDEN PA DANG , BDEN PA CHEN PO'I BYIN GYIS BRLABS PA'I MTHU DANG NUS PA LA BRTEN NAS",
+        "wylie": "khyad par du yang rje btsun rdo rje rnal 'byor ma'i lha tshogs 'khor dang bcas pa rnams kyi bden pa dang , bden pa chen po'i byin gyis brlabs pa'i mthu dang nus pa la brten nas",
+        "english": "And most especially By the truth Of the Holy Angel of Diamond And of all those Many In Her company; And by the mystic power and might Of the blessings Of the greatest truth there is--",
+        "raw": "{\"course\": \"TCS12\", \"acip\": \"KHYAD PAR DU YANG RJE BTZUN RDO RJE RNAL 'BYOR MA'I LHA TSOGS 'KHOR DANG BCAS PA RNAMS KYI BDEN PA DANG , BDEN PA CHEN PO'I BYIN GYIS BRLABS PA'I MTHU DANG NUS PA LA BRTEN NAS\", \"wylie\": \"khyad par du yang rje btsun rdo rje rnal 'byor ma'i lha tshogs 'khor dang bcas pa rnams kyi bden pa dang , bden pa chen po'i byin gyis brlabs pa'i mthu dang nus pa la brten nas\", \"english\": \"And most especially By the truth Of the Holy Angel of Diamond And of all those Many In Her company; And by the mystic power and might Of the blessings Of the greatest truth there is--\"}"
+      },
+      "corpus_index": 16401,
+      "corpus_record": {
+        "course": "TCS12",
+        "acip": "KHYAD PAR DU YANG RJE BTZUN RDO RJE RNAL 'BYOR MA'I LHA TSOGS 'KHOR DANG BCAS PA RNAMS KYI BDEN PA DANG , BDEN PA CHEN PO'I BYIN GYIS BRLABS PA'I MTHU DANG NUS PA LA BRTEN NAS",
+        "wylie": "khyad par du yang rje btsun rdo rje rnal 'byor ma'i lha tshogs 'khor dang bcas pa rnams kyi bden pa dang , bden pa chen po'i byin gyis brlabs pa'i mthu dang nus pa la brten nas",
+        "english": "And most especially By the truth Of the Holy Angel of Diamond And of all those Many In Her company; And by the mystic power and might Of the blessings Of the greatest truth there is--"
+      }
+    },
+    "11463": {
+      "spine_row": {
+        "id": 11463,
+        "course": "TCS04PrayerBook",
+        "seq": 124,
+        "acip": "DE BZHIN GSHEGS BA RNAMS KYIS BDAG LA MNGON PAR DBANG BSKUR DU GSOL, ZHES GSOL BA BTAB PAS, DE RNAMS KYIS SPROS PA'I LHA MO TZA RTZI KA LA SOGS BA RNAMS KYIS SHIS PA BRJOD PA SNGON DU 'GRO BAS, ZLA BA LTA BU'I BUM PA DKAR PO BDUD RTZI LNGAS BKANG BA BZUNG NAS,",
+        "wylie": "de bzhin gshegs ba rnams kyis bdag la mngon par dbang bskur du gsol, zhes gsol ba btab pas, de rnams kyis spros pa'i lha mo tsa rtsi ka la sogs ba rnams kyis shis pa brjod pa sngon du 'gro bas, zla ba lta bu'i bum pa dkar po bdud rtsi lngas bkang ba bzung nas",
+        "english": "Those of You Gone Thus, You who have gone before me, Please, I beg you, Grant me initiation. Because of the my request, These Holy Ones Send forth Charchika And the other goddesses. First they sing auspicious songs, And then raise a vase, White as the moon, Overflowing with five kinds of nectar.",
+        "raw": "{\"course\": \"TCS04PrayerBook\", \"acip\": \"DE BZHIN GSHEGS BA RNAMS KYIS BDAG LA MNGON PAR DBANG BSKUR DU GSOL, ZHES GSOL BA BTAB PAS, DE RNAMS KYIS SPROS PA'I LHA MO TZA RTZI KA LA SOGS BA RNAMS KYIS SHIS PA BRJOD PA SNGON DU 'GRO BAS, ZLA BA LTA BU'I BUM PA DKAR PO BDUD RTZI LNGAS BKANG BA BZUNG NAS,\", \"wylie\": \"de bzhin gshegs ba rnams kyis bdag la mngon par dbang bskur du gsol, zhes gsol ba btab pas, de rnams kyis spros pa'i lha mo tsa rtsi ka la sogs ba rnams kyis shis pa brjod pa sngon du 'gro bas, zla ba lta bu'i bum pa dkar po bdud rtsi lngas bkang ba bzung nas\", \"english\": \"Those of You Gone Thus, You who have gone before me, Please, I beg you, Grant me initiation. Because of the my request, These Holy Ones Send forth Charchika And the other goddesses. First they sing auspicious songs, And then raise a vase, White as the moon, Overflowing with five kinds of nectar.\"}"
+      },
+      "corpus_index": 11462,
+      "corpus_record": {
+        "course": "TCS04PrayerBook",
+        "acip": "DE BZHIN GSHEGS BA RNAMS KYIS BDAG LA MNGON PAR DBANG BSKUR DU GSOL, ZHES GSOL BA BTAB PAS, DE RNAMS KYIS SPROS PA'I LHA MO TZA RTZI KA LA SOGS BA RNAMS KYIS SHIS PA BRJOD PA SNGON DU 'GRO BAS, ZLA BA LTA BU'I BUM PA DKAR PO BDUD RTZI LNGAS BKANG BA BZUNG NAS,",
+        "wylie": "de bzhin gshegs ba rnams kyis bdag la mngon par dbang bskur du gsol, zhes gsol ba btab pas, de rnams kyis spros pa'i lha mo tsa rtsi ka la sogs ba rnams kyis shis pa brjod pa sngon du 'gro bas, zla ba lta bu'i bum pa dkar po bdud rtsi lngas bkang ba bzung nas",
+        "english": "Those of You Gone Thus, You who have gone before me, Please, I beg you, Grant me initiation. Because of the my request, These Holy Ones Send forth Charchika And the other goddesses. First they sing auspicious songs, And then raise a vase, White as the moon, Overflowing with five kinds of nectar."
+      }
+    },
+    "17430": {
+      "spine_row": {
+        "id": 17430,
+        "course": "TCS13",
+        "seq": 881,
+        "acip": "SNGAGS STON PA NA H'A SV'A ZHES BYA BA LA SOGS BA LUGS LDOG TU GSUNGS PA NI, RGYUD LA RANG DGAR 'JUG PA DGAG PA'I PHYIR YIN LA, GO RIM LUGS MTHUN DU BSHAD NA, AOm SARBA BUDDHA ZHES SOGS GSUNGS PA LTAR YIN LA, DES NA YI GE STAR GCIG TU BRIS NA KLOG PA PO'I G-YAS NAS G-YON DU GLOG PA DANG 'DRA BA LUGS LDOG G-YON SKOR DANG, G-YON NAS G-YAS SU KLOG PA DANG 'DRI BA LUGS 'BYUNG G-YAS SKOR YIN PAR NGES SO,,",
+        "wylie": "sngags ston pa na hA svA zhes bya ba la sogs ba lugs ldog tu gsungs pa ni, rgyud la rang dgar 'jug pa dgag pa'i phyir yin la, go rim lugs mthun du bshad na, aoM sarba buddha zhes sogs gsungs pa ltar yin la, des na yi ge star gcig tu bris na klog pa po'i g-yas nas g-yon du glog pa dang 'dra ba lugs ldog g-yon skor dang, g-yon nas g-yas su klog pa dang 'dri ba lugs 'byung g-yas skor yin par nges so",
+        "english": "When you teach the secret words, it has been said that you should do it in a backwards way: aH avS....  This is in order to prevent people entering into the secret practices just on some whim of their own.  When explaining their proper order, it starts with Om Sarva Buddha... And it is just as Je Tsongkapa says.  The letters are written in one continuous line; and so when it is written in a backwards way, the reader should read and recite the words from right to left.  And when it is written in the original way, clockwise, one should read and recite the words from left to right.",
+        "raw": "{\"course\": \"TCS13\", \"acip\": \"SNGAGS STON PA NA H'A SV'A ZHES BYA BA LA SOGS BA LUGS LDOG TU GSUNGS PA NI, RGYUD LA RANG DGAR 'JUG PA DGAG PA'I PHYIR YIN LA, GO RIM LUGS MTHUN DU BSHAD NA, AOm SARBA BUDDHA ZHES SOGS GSUNGS PA LTAR YIN LA, DES NA YI GE STAR GCIG TU BRIS NA KLOG PA PO'I G-YAS NAS G-YON DU GLOG PA DANG 'DRA BA LUGS LDOG G-YON SKOR DANG, G-YON NAS G-YAS SU KLOG PA DANG 'DRI BA LUGS 'BYUNG G-YAS SKOR YIN PAR NGES SO,,\", \"wylie\": \"sngags ston pa na hA svA zhes bya ba la sogs ba lugs ldog tu gsungs pa ni, rgyud la rang dgar 'jug pa dgag pa'i phyir yin la, go rim lugs mthun du bshad na, aoM sarba buddha zhes sogs gsungs pa ltar yin la, des na yi ge star gcig tu bris na klog pa po'i g-yas nas g-yon du glog pa dang 'dra ba lugs ldog g-yon skor dang, g-yon nas g-yas su klog pa dang 'dri ba lugs 'byung g-yas skor yin par nges so\", \"english\": \"When you teach the secret words, it has been said that you should do it in a backwards way: aH avS....  This is in order to prevent people entering into the secret practices just on some whim of their own.  When explaining their proper order, it starts with Om Sarva Buddha... And it is just as Je Tsongkapa says.  The letters are written in one continuous line; and so when it is written in a backwards way, the reader should read and recite the words from right to left.  And when it is written in the original way, clockwise, one should read and recite the words from left to right.\"}"
+      },
+      "corpus_index": 17429,
+      "corpus_record": {
+        "course": "TCS13",
+        "acip": "SNGAGS STON PA NA H'A SV'A ZHES BYA BA LA SOGS BA LUGS LDOG TU GSUNGS PA NI, RGYUD LA RANG DGAR 'JUG PA DGAG PA'I PHYIR YIN LA, GO RIM LUGS MTHUN DU BSHAD NA, AOm SARBA BUDDHA ZHES SOGS GSUNGS PA LTAR YIN LA, DES NA YI GE STAR GCIG TU BRIS NA KLOG PA PO'I G-YAS NAS G-YON DU GLOG PA DANG 'DRA BA LUGS LDOG G-YON SKOR DANG, G-YON NAS G-YAS SU KLOG PA DANG 'DRI BA LUGS 'BYUNG G-YAS SKOR YIN PAR NGES SO,,",
+        "wylie": "sngags ston pa na hA svA zhes bya ba la sogs ba lugs ldog tu gsungs pa ni, rgyud la rang dgar 'jug pa dgag pa'i phyir yin la, go rim lugs mthun du bshad na, aoM sarba buddha zhes sogs gsungs pa ltar yin la, des na yi ge star gcig tu bris na klog pa po'i g-yas nas g-yon du glog pa dang 'dra ba lugs ldog g-yon skor dang, g-yon nas g-yas su klog pa dang 'dri ba lugs 'byung g-yas skor yin par nges so",
+        "english": "When you teach the secret words, it has been said that you should do it in a backwards way: aH avS....  This is in order to prevent people entering into the secret practices just on some whim of their own.  When explaining their proper order, it starts with Om Sarva Buddha... And it is just as Je Tsongkapa says.  The letters are written in one continuous line; and so when it is written in a backwards way, the reader should read and recite the words from right to left.  And when it is written in the original way, clockwise, one should read and recite the words from left to right."
+      }
+    },
+    "1731": {
+      "spine_row": {
+        "id": 1731,
+        "course": "C05",
+        "seq": 349,
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,\", \"wylie\": \"[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan\", \"english\": \"\\\"What,\\\" one may ask, \\\"is the basic nature of each of the ten non-virtues?\\\" The taking of life is defined as killing another being purposely, and without a mistake. The word \\\"purposely\\\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.\"}"
+      },
+      "corpus_index": 1730,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      }
+    },
+    "1733": {
+      "spine_row": {
+        "id": 1733,
+        "course": "C05",
+        "seq": 351,
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,\", \"wylie\": \"ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de\", \"english\": \"Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.\"}"
+      },
+      "corpus_index": 1732,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      }
+    },
+    "1735": {
+      "spine_row": {
+        "id": 1735,
+        "course": "C05",
+        "seq": 353,
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions",
+        "raw": "{\"course\": \"C05\", \"acip\": \"RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,\", \"wylie\": \"rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,\", \"english\": \"Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \\\"four expressions.\\\" 77 The Four Expressions\"}"
+      },
+      "corpus_index": 1734,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+      }
+    },
+    "1740": {
+      "spine_row": {
+        "id": 1740,
+        "course": "C05",
+        "seq": 358,
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,\", \"wylie\": \"[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o\", \"english\": \"Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.\"}"
+      },
+      "corpus_index": 1739,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      }
+    },
+    "1741": {
+      "spine_row": {
+        "id": 1741,
+        "course": "C05",
+        "seq": 359,
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person.",
+        "raw": "{\"course\": \"C05\", \"acip\": \", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,\", \"wylie\": \"tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o\", \"english\": \"Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person.\"}"
+      },
+      "corpus_index": 1740,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+      }
+    },
+    "6888": {
+      "spine_row": {
+        "id": 6888,
+        "course": "C16",
+        "seq": 870,
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,\", \"wylie\": \"[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan\", \"english\": \"\\\"What,\\\" one may ask, \\\"is the basic nature of each of the ten non-virtues?\\\" The taking of life is defined as killing another being purposely, and without a mistake. The word \\\"purposely\\\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.\"}"
+      },
+      "corpus_index": 6887,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      }
+    },
+    "6890": {
+      "spine_row": {
+        "id": 6890,
+        "course": "C16",
+        "seq": 872,
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,\", \"wylie\": \"ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de\", \"english\": \"Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.\"}"
+      },
+      "corpus_index": 6889,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      }
+    },
+    "6892": {
+      "spine_row": {
+        "id": 6892,
+        "course": "C16",
+        "seq": 874,
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \"Branch\" Non-Virtues",
+        "raw": "{\"course\": \"C16\", \"acip\": \"RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,\", \"wylie\": \"rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,\", \"english\": \"Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \\\"Branch\\\" Non-Virtues\"}"
+      },
+      "corpus_index": 6891,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \"Branch\" Non-Virtues"
+      }
+    },
+    "6894": {
+      "spine_row": {
+        "id": 6894,
+        "course": "C16",
+        "seq": 876,
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,\", \"wylie\": \"[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o\", \"english\": \"Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.\"}"
+      },
+      "corpus_index": 6893,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      }
+    },
+    "6895": {
+      "spine_row": {
+        "id": 6895,
+        "course": "C16",
+        "seq": 877,
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person.",
+        "raw": "{\"course\": \"C16\", \"acip\": \", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,\", \"wylie\": \"tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o\", \"english\": \"Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person.\"}"
+      },
+      "corpus_index": 6894,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person."
+      }
+    },
+    "9346": {
+      "spine_row": {
+        "id": 9346,
+        "course": "TCS02",
+        "seq": 72,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GATHU DANG 'JAB BUS BDAG GIR BYED,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gathu dang 'jab bus bdag gir byed",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. \"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" (1) The taking of life is defined as killing another being purposely, and without a mistake.  The word \"purposely\" is meant to indicate that there is no fault where the being in question has died but there was no intent. The words \"without a mistake\" are meant to indicate that no \"actual-commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill Devadatta but instead kill Yajana because you have mistaken him for Devadatta.  The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life. (2) Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force of by stealth-                -undetected.",
+        "raw": "{\"course\": \"TCS02\", \"acip\": \",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GATHU DANG 'JAB BUS BDAG GIR BYED,\", \"wylie\": \"srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gathu dang 'jab bus bdag gir byed\", \"english\": \"Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. \\\"What,\\\" one may ask, \\\"is the basic nature of each of the ten non-virtues?\\\" (1) The taking of life is defined as killing another being purposely, and without a mistake.  The word \\\"purposely\\\" is meant to indicate that there is no fault where the being in question has died but there was no intent. The words \\\"without a mistake\\\" are meant to indicate that no \\\"actual-commission\\\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill Devadatta but instead kill Yajana because you have mistaken him for Devadatta.  The word \\\"another,\\\" finally, is meant to indicate that no \\\"actual-commission\\\" stage occurs either in an instance where one takes his own life. (2) Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force of by stealth-                -undetected.\"}"
+      },
+      "corpus_index": 9345,
+      "corpus_record": {
+        "course": "TCS02",
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GATHU DANG 'JAB BUS BDAG GIR BYED,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gathu dang 'jab bus bdag gir byed",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. \"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" (1) The taking of life is defined as killing another being purposely, and without a mistake.  The word \"purposely\" is meant to indicate that there is no fault where the being in question has died but there was no intent. The words \"without a mistake\" are meant to indicate that no \"actual-commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill Devadatta but instead kill Yajana because you have mistaken him for Devadatta.  The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life. (2) Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force of by stealth-                -undetected."
+      }
+    }
+  }
+}

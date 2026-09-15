@@ -1,0 +1,137 @@
+{
+  "status": "ROOT_RECONCILIATION_DECISIONS_BEFORE_CHANGED_GENERATION",
+  "utc": "2026-09-15T02:45:11.319662+00:00",
+  "producer": "root, independent of both original proposers; final separate skeptic review still required",
+  "source_origin": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+  "actual_baseline": "58b8846b0affaac576ace5b0789a45df1e462a53",
+  "independent_preassessment": {
+    "bytes": 11211,
+    "sha256": "99d7c2a301499a2814dc39b50e1fe74ee78f103bf25df99ccb88aac56c141122"
+  },
+  "root_reading": {
+    "root-english-preliminary-reading.json": {
+      "bytes": 5309,
+      "sha256": "c2783fa80c0f498ba2488e4a63deed6c9732e73b10cf3e4dc913c6cc28ef75c0"
+    },
+    "root-tibetan-preliminary-reading.json": {
+      "bytes": 1828,
+      "sha256": "a3330a09f0d6cdaa9a8728e3964b836d33c8c02d8c02501485addf66a9c3631a"
+    },
+    "root-original-freeze-intake.json": {
+      "bytes": 3453,
+      "sha256": "4c108b2ca2f26c87ad3b731738403c278b5a2951efb10f1bfe3e6bd6267709dc"
+    },
+    "root-material-reading-addendum.json": {
+      "bytes": 1708,
+      "sha256": "d28d34c14ff7baeb7a6c40464d6178b3a12811c3cc69cb62740fcc11b7fe1d8e"
+    }
+  },
+  "selection": {
+    "346": {
+      "base": "english/346/spec.json",
+      "final_exact_spec": "root-final-346-spec.json",
+      "pin": {
+        "bytes": 4913,
+        "sha256": "9e1b009771b476673389ef1a346759d0719471c03196550f9e3de609fc4dff2b"
+      },
+      "changes": "Add Tibetan w2 as w31 after p2; place w31 before w1 in eng_order. Rename/change w8 to p8 d6. Replace f14 with p14 ma/not d6. eng_order exact rename references. Replace singular note before one new native pair."
+    },
+    "347": {
+      "exact_spec_body_ranges_native_from": "english/347",
+      "new_native_runs": 0
+    },
+    "348": {
+      "exact_spec_body_ranges_native_from": "english/348",
+      "new_native_runs": 0
+    }
+  },
+  "original346_note": "PROVISIONAL machine alignment by Codex, independent English-first proposal. Distinguish both war/path/for occurrences, the three gcig references, and the sole explicit Because. La sogs ba is preserved as an attested closing expression, not normalized. The negative answer is a genuine ma yin/does not predicate. Killing references redistributed into the English question and shared grammar remain omitted without false nulls. All GMR wording is exact; no source edit or hgm_gloss promotion.",
+  "corrected346_note": "PROVISIONAL machine alignment by Codex, root reconciliation of independent Tibetan-first and English-first originals. BYAS owns the first engaged in the war hypothesis; ZHUGS PA owns the second engaged in the response. KHO NA/only is an exclusive particle at d6. The negative answer retains standalone MA/not at d6; YIN and English does remain unbanked as copular/do-support framing, without a false absence null. Distinguish both war/path/for occurrences, the three gcig references, and the first PHYIR/Because causal-clause scope; final PHYIR remains unbanked. LA SOGS BA is preserved as an attested closing expression, not normalized. Expanded participants, killing references and shared grammar remain unbanked with reasons. All GMR wording is exact; no source edit or hgm_gloss promotion.",
+  "counts": {
+    "spans": 63,
+    "by_segment": [
+      31,
+      7,
+      25
+    ],
+    "nonnull_d5": 44,
+    "total_d5": 44,
+    "d7": 6,
+    "nulls": 0,
+    "errata": 0
+  },
+  "rulings": [
+    {
+      "seq": 346,
+      "topic": "BYAS/engaged",
+      "decision": "ADD_TIBETAN_w2_AS_w31",
+      "reason": "The initial doing/undertaking of war is explicitly rendered engaged and has a distinct first occurrence. Complete BYAS supports performing/doing/undertake; this contextual provisional rendering is not an exact engaged glossary claim. Its ranges are Tibetan[16,20],English[63,70], separate from later ZHUGS PA/engaged."
+    },
+    {
+      "seq": 346,
+      "topic": "KHO NA/only",
+      "decision": "ENGLISH_w8_TO_p8_D6",
+      "reason": "The expression restricts the one person and functions as the exclusive particle, not a content noun/verb. Full lexical attestation of only supports meaning without determining d5. Preserve whole KHO NA."
+    },
+    {
+      "seq": 346,
+      "topic": "MA YIN negative answer",
+      "decision": "ENGLISH_f14_TO_p14_MA_NOT_D6",
+      "reason": "Whole MA YIN/does not is an intelligible compositional predicate, as root preliminary reading acknowledged; the separate printed not makes the tighter MA/not atom defensible. Prefer that secure atom, leaving YIN and does as copular/do-support framing without null. Dictionary entry inclusion alone does not require a compound or an extra phrase."
+    },
+    {
+      "seq": 346,
+      "topic": "PHA ROL PO and NA",
+      "decision": "KEEP_ENGLISH_w4_p6",
+      "reason": "Full PHA ROL PO glossary directly attests other side; source identifies the opponent, excluding someone from the. NA introduces the conditional hypothesis expressed by Suppose, separate from reporting ZHE NA. Original blanket omission is superseded only for these supported exponents."
+    },
+    {
+      "seq": 346,
+      "topic": "first PHYIR and second PAR",
+      "decision": "KEEP_ENGLISH_p22_p17",
+      "reason": "The first PHYIR closes the shared-engagement/purpose clause introduced by Because; final PHYIR closes the higher justification and is not given that same token. Distinct clause scope supports first ownership, unlike repeated equal-scope predicates. PAR supplies locative in for the second war situation; SOGS owns or whatever, leaving internal LA and added activity wording unbanked. PAR is local grammatical evidence, not a claimed glossary entry."
+    },
+    {
+      "seq": 346,
+      "topic": "possession boundary",
+      "decision": "KEEP_ENGLISH_LDAN_PA",
+      "reason": "LDAN PA itself supplies possess. Complete DANG LDAN PA is real larger-formula counterevidence, but the secure narrower lexical predicate is preferred here; DANG relation and come to remain unbanked without null."
+    },
+    {
+      "seq": 347,
+      "topic": "first BZHI and heading",
+      "decision": "KEEP_ALL7_ENGLISH_TUPLES;CLARIFY_OMISSION_REASON",
+      "reason": "First BZHI is unexpressed as a numeral in the translated prose body; Four in the next heading is apparatus, not an alternative body exponent. Leave the first count unbanked in the expanded outline and do not claim an absence null based on uncertainty about which four to choose. Root/branch/four-expressions/six/Next/present tuples are secure. Preserve exact English spec/note/body/native; note describes body lack and heading distinction, while final omission reasoning makes source roles explicit."
+    },
+    {
+      "seq": 348,
+      "topic": "intent/no-mistake boundary",
+      "decision": "KEEP_ENGLISH_BSAMS_BZHIN_MA_NOR",
+      "reason": "BSAMS BZHIN directly attests purposely; DU is manner grammar and is not required inside this lexical d5. MA/without and NOR/mistake are secure separate negative/word atoms; BAR manner and English a remain outside. The complete MA NOR BAR phrase is intelligible, but tighter supported atoms are preferred; its auto-mined purposely and without is not authoritative."
+    },
+    {
+      "seq": 348,
+      "topic": "BDAG GIR/BYED",
+      "decision": "KEEP_ENGLISH_FLAT_POSSESSION_TAKE",
+      "reason": "Full BDAG GIR attests possession and BYED attests take; local taking-possession frame supports the two direct words. The full BDAG GIR BYED scaffold and repeated commentary show a meaningful predicate without establishing that every such grammatical predicate is a d5 lexical compound. No new d7."
+    },
+    {
+      "seq": 348,
+      "topic": "GTHU correspondence and source question",
+      "decision": "KEEP_ENGLISH_gthu_force;LOW_UNCERTAIN_UNFILED",
+      "reason": "GTHU/force is explicit in both local source and full glossary, with warning preserved; this literal provisional correspondence does not assert standardized spelling. MTHU reference/prose and the EWTS warning motivate inquiry, but GATHU in TCS02:72 is not a corrected MTHU witness and neither duplicate source nor potentially same-source glossary proves correctness independently. Evidence does not establish a PROBABLE restoration; preserve Tibetan LOW/PROBABLE candidate with an explicit downgrade disposition and preserve the English LOW/UNCERTAIN question. No register addition or source correction."
+    },
+    {
+      "seq": 348,
+      "topic": "remaining negative/sexual/lying recasts",
+      "decision": "KEEP_OTHER_ENGLISH_TUPLES_OMISSIONS",
+      "reason": "BGROD MIN/improper is a complete negative phrase at d3, with no invented positive substring. GRO BA/Engaging is a contextual verb rather than the curated living-being noun. Desire/sex and GZHAN SGYUR BA/wrong...given remain distributed and unbanked. TSHIG/words and DON/meanings remain flat without supplied possessor framing; no false null or speculative compound member."
+    }
+  ],
+  "bank_ready_errata": [],
+  "head_allowances": {
+    "pages_c05": {}
+  },
+  "preservation": "Preserve all118 original spans,25 original omissions,30 category screens, complete source grounds and all original spelling candidate/question objects with exact angle/field/index dispositions. Preserve original authors, flags, counterevidence and genuine failures. Final347/348 reuse exact English bytes and actual five-file native records; copies do not create executions. Only346 changes and needs one new pair; predicted7unique actualpairs versus9selectedviews. Scribe makes no independent reconciliation/acceptance claim.",
+  "limits": "All alignments PROVISIONAL; no source/master/hgm_gloss change or registration. No final semantic acceptance until immutable separate review."
+}

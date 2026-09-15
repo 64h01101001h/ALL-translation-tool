@@ -1,0 +1,54 @@
+{
+  "status": "COMPLETE",
+  "source_first_then_original_then_root_then_final": true,
+  "first_source_note": {
+    "bytes": 2925,
+    "sha256": "d11e5a064f8898d1b7aa6a50abe8dec329005116df60da61aec9c76cfd23828e"
+  },
+  "precommitted_assessment": {
+    "bytes": 11211,
+    "sha256": "99d7c2a301499a2814dc39b50e1fe74ee78f103bf25df99ccb88aac56c141122"
+  },
+  "read_failures": [
+    {
+      "operation": "combined large corpus/screens output",
+      "result": "truncated",
+      "recovery": "Corpus objects printed without duplicate raw copies after parsed-raw equality, and screen shared grounds deduplicated by structural equality; all distinct material then read."
+    },
+    {
+      "operation": "read Tibetan errata-review.json using English filename assumption",
+      "result": "FileNotFoundError",
+      "recovery": "rg located five-ground-screens.json; actual files read completely through structural deduplication."
+    },
+    {
+      "operation": "first large frozen-rationale output",
+      "result": "truncated",
+      "recovery": "All63 rationale strings read in compact follow-up without repeated wrapper fields."
+    }
+  ],
+  "usage_interruption": {
+    "reported_by": "root continuation task",
+    "event": "Previous final-review turn ended with an account usage-limit error before review.json/freeze.json existed.",
+    "effect": "Previously banked reading/identity/original-copy work was retained. No native engine or query reran.",
+    "external_outcome": "Root reported a later read-only usage call permitted resumption; reviewer makes no claim about reset cause, purchase, redemption or credits."
+  },
+  "original_failures": "Both original authors preserved the pre-native or-inside-force anchor failures and their corrections. Tibetan packaging preserved the corrected TCS02 citation history. Neither author reran a generator/resolver; copies retain the complete original freezes.",
+  "reviewer_native_captures": [
+    {
+      "path": "native/final-evidence-copy",
+      "exit": 0
+    },
+    {
+      "path": "native/source-and-original-identity",
+      "exit": 0
+    },
+    {
+      "path": "native/source-evidence-copy",
+      "exit": 0
+    }
+  ],
+  "new_native_generators": 0,
+  "new_native_resolvers": 0,
+  "new_SQL_queries": 0,
+  "open_semantic_findings": []
+}

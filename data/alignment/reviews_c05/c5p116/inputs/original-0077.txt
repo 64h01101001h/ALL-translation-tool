@@ -1,0 +1,14 @@
+import pathlib,json,gzip,sqlite3
+T=pathlib.Path(__file__).resolve().parents[1];base=json.loads((T/'evidence/proposal-baseline.json').read_bytes());m=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+terms=['bsams bzhin',"'jab bu",'bdag gir byed pa','bgrod','min','mngon par','gathu']
+objects={};lex=[]
+for term in terms:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';found=[dict(r)for r in db.execute(sql,(term,term))];keys=[]
+ for arr in['unified_entries','curated_entries','glossary_entries']:
+  for i,e in enumerate(m[arr]):
+   if e.get('wylie')==term or term in(e.get('wylie_variants')or[]):k=f'{arr}:{i}';objects[k]={'collection':arr,'index':i,'entry':e};keys.append(k)
+ lex.append({'term':term,'sql':sql,'parameters':[term,term],'spine_count':len(found),'spine_rows':found,'master_count':len(keys),'master_keys':keys})
+ for r in found:assert json.loads(r['raw'])==m['unified_entries'][r['id']-1]
+
+(T/'evidence/lexical-supplement.json').write_text(json.dumps({'queries':lex,'master_objects':objects},ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({'queries':len(lex),'objects':len(objects),'counts':[[q['term'],q['spine_count'],q['master_count']]for q in lex]},indent=2))
