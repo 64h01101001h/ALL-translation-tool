@@ -1,0 +1,446 @@
+"""Independent literal decisions using the established proposal author/cursor helper."""
+from pathlib import Path
+import json
+T=Path(__file__).resolve().parents[1];base=json.loads((T/'evidence/proposal-baseline.json').read_bytes());source={x['seq']:x for x in json.loads((T/'evidence/source.json').read_bytes())}
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+data={358: [('w1',
+        5,
+        'phra ma',
+        'Divisive speech',
+        'Divisive speech consists',
+        'The complete technical term directly attests divisive speech. Its English phrase names the action; no speculative PHRA/divisive '
+        'member is forced.'),
+       ('f1',
+        3,
+        'bsams bzhin du',
+        'purposely',
+        'spoken purposely, without',
+        'The complete according-to-intention adverbial construction is rendered purposely. BSAMS supplies thinking/intention and BZHIN DU '
+        'as/in accordance with; no exact full master entry exists and its proper behavior mined fragment does not attest this meaning. '
+        'Keep the grammatical construction whole at d3.'),
+       ('p1',
+        6,
+        'ma',
+        'without',
+        'purposely, without any',
+        'The explicit negative MA owns without in the lack-of-mistake condition. It does not also own purposely, despite the misleading '
+        'mined full MA NOR BAR gloss purposely and without.'),
+       ('w2',
+        5,
+        'nor',
+        'mistake',
+        'any mistake, and',
+        'NOR directly supports mistake within the negated condition. The adverbial BAR and supplied any remain outside, with no invented '
+        'identity noun.'),
+       ('w3',
+        5,
+        'pha rol po',
+        'others',
+        'split up others who',
+        'The first PHA ROL PO denotes the people being divided, directly supported by others. It is distinct from the later complete '
+        'agentive PHA ROL POS naming the hearer.'),
+       ('w4',
+        5,
+        "mdza' ba",
+        'friends',
+        'who are friends,',
+        'MDZA BA directly attests friends, including a separate uncertain friends? entry retained as counterevidence. The relative who are '
+        'is supplied grammar around this relational noun.'),
+       ('w5',
+        5,
+        'dbye ba',
+        'split up',
+        'meant to split up others',
+        'The complete DBYE BA glossary directly attests split up. Its bound genitive supports the following purpose construction without a '
+        'separate English word.'),
+       ('p2',
+        6,
+        'phyir',
+        'meant to',
+        'they are meant to split',
+        'Purpose PHYIR supplies the local grammatical meant to. Direct is meant to/for/to candidates and the clause support this, without '
+        'treating the predicate as an extra source meant verb.'),
+       ('w6',
+        5,
+        'nyon mongs pa can',
+        'mentally afflicted',
+        'in a mentally afflicted state',
+        'This complete PA CAN form directly attests mentally afflicted, and its qualification modifies explicit SEMS/state. The broader '
+        'afflicted state of mind candidate does not justify claiming the same state twice.'),
+       ('w7',
+        5,
+        'sems',
+        'state',
+        'afflicted state; they',
+        'Explicit SEMS is the mind/state-of-mind noun, locally rendered state after mentally afflicted. This contextual head is supported '
+        'by the complete mind/state-of-thought material, not a claim of a standalone literal state HGM gloss.'),
+       ('w8',
+        5,
+        'tshig',
+        'words',
+        'of words which',
+        'The explicit TSHIG supplies the opening words, whose meaning is later required to be understood. Although full TSHIG DON has '
+        'meanings of words material, this English realization is discontinuous and the two lexical heads are kept separate.'),
+       ('w9',
+        5,
+        'don',
+        'meaning',
+        'their meaning should',
+        'DON directly attests meaning. It is not transferred to GO BA even though that separate master has a meaning gloss; GO BA is the '
+        'understanding predicate here.'),
+       ('f2',
+        3,
+        'pha rol pos',
+        'by the other person',
+        'understood by the other person',
+        'Keep the complete agentive-inflected phrase with its by the other person counterpart at d3. Do not strip final -s from POS to '
+        'fabricate a particle; no exact full master entry is claimed, but PHA ROL PO person and the complete case construction support the '
+        'phrase.'),
+       ('w10',
+        5,
+        'go ba',
+        'understood',
+        'should be understood by',
+        'GO BA directly attests understood and is the hearer-comprehension predicate. The final bound apostrophe-O closes the statement; '
+        'English should be is explanatory/passive support and stays unwrapped.')],
+ 359: [('w1',
+        5,
+        'tshig rtsub po',
+        'Harsh speech',
+        'Harsh speech consists',
+        'The complete technical compound directly attests harsh speech. Its source members have unique complete English words inside this '
+        'parent.'),
+       ('m1',
+        7,
+        'tshig',
+        'speech',
+        'Harsh speech',
+        'TSHIG has full word/speech reference material and owns the complete speech member of this parent. The later independent TSHIG '
+        'owns words instead.'),
+       ('m2',
+        7,
+        'rtsub po',
+        'Harsh',
+        'Harsh speech',
+        'RTSUB PO directly attests harsh; preserve the full capital word within the parent, with no English interior stem cut.'),
+       ('f1',
+        3,
+        'bsams bzhin du',
+        'purposely',
+        'spoken purposely, and',
+        'The whole intention/manner construction supplies purposely. Its exact query has zero entries; the component references and '
+        'identical local conditions support the phrase, without relocating the misleading MA NOR BAR mined purposely gloss.'),
+       ('p1',
+        6,
+        'ma',
+        'without',
+        'and without any',
+        'The actual negative particle supplies without, distinct from purposeful intent. Any is the English quantificational support, not '
+        'a separate source word.'),
+       ('w2',
+        5,
+        'nor',
+        'mistake',
+        'any mistake; their',
+        'NOR directly attests mistake. Keep the source BAR ending outside this word, without fabricating a positive error or an identity '
+        'noun.'),
+       ('f2',
+        3,
+        'mi snyan pa',
+        'unpleasant',
+        'of unpleasant words',
+        'The complete negative-adjective phrase directly attests unpleasant. Keep it whole at d3; SNYAN PA good/pleasant reference '
+        'material does not license a prohibited interior pleasant word span.'),
+       ('w3',
+        5,
+        'tshig',
+        'words',
+        'unpleasant words which',
+        'This independent TSHIG supplies words, not the speech member of the earlier compound. The following genitive and meaning are '
+        'separately represented in the English anaphora.'),
+       ('p2',
+        6,
+        'gi',
+        'their',
+        'mistake; their meaning',
+        'The explicit GI linking words to meaning is recast as the possessive anaphor their. The exact glossary includes their, and its '
+        'local antecedent is the already selected words; this is not a newly invented participant.'),
+       ('w4',
+        5,
+        'don',
+        'meaning',
+        'their meaning too',
+        'DON directly attests meaning and owns the content which the hearer understands. The English too is additive cross-definition '
+        'framing, without a separate current source token.'),
+       ('f3',
+        3,
+        'pha rol pos',
+        'by the other person',
+        'understood by the other person',
+        'The whole agentive phrase supplies by the other person, exactly as in358. Preserve the POS ending intact; no split agentive-s or '
+        'd7 member of this grammatical phrase.'),
+       ('w5',
+        5,
+        'go ba',
+        'understood',
+        'should be understood by',
+        'GO BA directly supplies understood. Current source says too, whereas C16:877 has to; that other-row difference is not a reason to '
+        'alter this correct current English or the Tibetan predicate.')],
+ 360: [('w1',
+        5,
+        'nyon mongs pa can',
+        'afflicted state of mind',
+        'an afflicted state of mind.',
+        'This full PA CAN expression directly attests afflicted state of mind, and this clause has no separate SEMS noun. The complete '
+        'nominal realization is therefore retained, unlike358 where explicit SEMS owns state separately.'),
+       ('p1',
+        6,
+        'gyi',
+        'in',
+        'spoken in an afflicted',
+        'The first GYI relates the words to their afflicted condition; English recasts that relation as spoken in an afflicted state. The '
+        'unique local in is proposed as grammatical correspondence, with spoken/an outside, not as a claim that genitives universally mean '
+        'in.'),
+       ('w2',
+        5,
+        'tshig',
+        'words',
+        'case of words spoken',
+        'The first independent TSHIG directly attests words and owns the first definition. The later source TSHIG is singular spoken word '
+        'in the alternative account.'),
+       ('w3',
+        5,
+        'kun',
+        'every',
+        'to every case of',
+        'The single explicit totalizer KUN supplies the first every. The later every in the alternative definition is an English '
+        'restatement and receives no duplicated KUN.'),
+       ('w4',
+        5,
+        'ngag kyal pa',
+        'Meaningless speech',
+        '"Meaningless speech" really',
+        'The complete technical expression directly attests meaningless speech. Its exact glossary and explicit NGAG/KYAL PA members '
+        'support the two complete member words inside this first parent.'),
+       ('m1',
+        7,
+        'ngag',
+        'speech',
+        'Meaningless speech',
+        'NGAG directly attests speech, uniquely inside the first technical parent. It does not own the preceding independent words noun.'),
+       ('m2',
+        7,
+        'kyal pa',
+        'Meaningless',
+        'Meaningless speech',
+        'KYAL PA directly attests meaningless. The entire capital English word is selected; no interior less affix analysis is '
+        'introduced.'),
+       ('p2',
+        6,
+        'nyid',
+        'really',
+        'speech" really refers',
+        'The first emphatic NYID supplies really in the first definition. Complete reference eva and precisely/real candidates support '
+        'this local emphasis; the glossary does not literally list really.'),
+       ('p3',
+        6,
+        'yin',
+        'refers to',
+        'really refers to every',
+        'The first definitional YIN is recast as refers to. This local classification has a single English predicate; retain the whole '
+        'grammatical phrase at d6 without a lexical source refer verb or a duplicated copula.'),
+       ('w5',
+        5,
+        'sde pa',
+        'groups',
+        'Other groups say',
+        'SDE PA directly attests groups/schools. Current source is clean SDE PA, distinct from the registered GNGSDE PA anomaly in326.'),
+       ('w6',
+        5,
+        'gzhan',
+        'Other',
+        'Other groups say',
+        'GZHAN qualifies these alternative interpretive groups, rendered capital Other. The mined a bodhisattva gloss is irrelevant; '
+        'complete other/another reference material and the exact contrast support the local noun modifier.'),
+       ('w7',
+        5,
+        'gsum po',
+        'three',
+        'those three already',
+        'The complete nominalized GSUM PO directly attests three. It refers to the preceding three speech actions and is not a count of '
+        'all the examples that follow.'),
+       ('p4',
+        6,
+        'de las',
+        'than those',
+        'other than those three',
+        'The complete demonstrative-case phrase supplies than those in this comparison. GZHAN PA owns other separately; LAS is not removed '
+        'from DE and given an arbitrary second than. The order is transposed around the numeral between the two languages.'),
+       ('w8',
+        5,
+        'gzhan pa',
+        'other',
+        'word other than those',
+        'The other/else modifier is the lexical head of the exclusion construction, rendered tight other. Its mined other than candidate '
+        'includes comparison support, but the explicit DE LAS phrase already owns than those; no overlapping English ownership is '
+        'claimed.'),
+       ('w9',
+        5,
+        'nyon mongs can',
+        'afflicted',
+        'every afflicted type',
+        'The shorter second afflicted expression directly attests afflicted and modifies the alternative category. Type is expanded '
+        'nominal framing, not part of a source lexical gloss to import.'),
+       ('w10',
+        5,
+        'tshig',
+        'word',
+        'the spoken word other',
+        'The second independent TSHIG directly attests word, singular here. Spoken is English participial framing; do not borrow the NGAG '
+        'inside the next separate technical title to supply it.'),
+       ('w11',
+        5,
+        'ngag kyal pa',
+        'meaningless speech',
+        'what "meaningless speech" actually',
+        'The second complete technical compound owns its separately quoted lowercase occurrence. The first title cannot be reused for this '
+        'second source occurrence.'),
+       ('m3',
+        7,
+        'ngag',
+        'speech',
+        'meaningless speech',
+        'This NGAG supplies speech within the second parent only. Its unique member range is separate from both independent TSHIG nouns '
+        'and the first title.'),
+       ('m4',
+        7,
+        'kyal pa',
+        'meaningless',
+        'meaningless speech',
+        'Second KYAL PA supplies the full lowercase meaningless member, without any English subword cut or duplicate first-parent range.'),
+       ('p5',
+        6,
+        'nyid',
+        'actually',
+        'speech" actually refers',
+        'Second NYID supplies actually, the local emphatic clarification. Its distinct English occurrence is separated from the first '
+        'NYID/really; no shared English emphasis is claimed.'),
+       ('p6',
+        6,
+        'dper na',
+        'like',
+        'would be like a monk',
+        'The complete exemplifying formula is rendered like. Reference for example and the ensuing examples support this grammatical d6 '
+        'correspondence; the mined present life gloss is unrelated and is not treated as evidence.'),
+       ('w12',
+        5,
+        'dge slong',
+        'monk',
+        "like a monk's engaging",
+        'The complete DGE SLONG directly attests monk. Its full English word ends at the apostrophe delimiter; the article and possessive '
+        'apostrophe-s stay outside, with no invented virtue/beggar members.'),
+       ('w13',
+        5,
+        'log pas',
+        'improper',
+        'the improper livelihood',
+        'Keep complete inflected LOG PAS with improper. The exact full query is empty, but base LOG PA directly attests improper and the '
+        'local qualification of livelihood supports this form; no final agentive-s split.'),
+       ('w14',
+        5,
+        "'tsho ba",
+        'livelihood',
+        'improper livelihood of',
+        'The complete livelihood noun directly attests livelihood. Its initial apostrophe is preserved in Wylie, and ACIP TSO versus Wylie '
+        'TSHO is the established conversion rather than a current spelling correction.'),
+       ('w15',
+        5,
+        'kha gsag',
+        'flattering',
+        'of flattering someone',
+        'KHA GSAG directly attests flattering and broader flattery for gain. Here the gain purpose is expanded around the verbal head; '
+        'select only flattering and leave the supplied someone/purpose/gain wording unbanked rather than force an enormous compound or '
+        'relocate BSLANGS from the next clause.'),
+       ('w16',
+        5,
+        'byed pa',
+        'engaging',
+        "monk's engaging in",
+        'BYED PA directly includes engaging and supplies the action of doing this livelihood/flattery. English raises that verb before the '
+        'livelihood phrase; in is its English complement support, not another source verb.'),
+       ('p7',
+        6,
+        'dang',
+        'or else',
+        'gain, or else singing',
+        'The first DANG links the flattery example to the next singing example and directly supports or else. Final source DANG instead '
+        'continues into361 and has no further coordinator in this English row.'),
+       ('f1',
+        3,
+        'chags pas kun nas bslangs nas',
+        'out of desire',
+        'song out of desire.',
+        'Keep the entire motivated-by-desire construction with the causal phrase out of desire. CHAGS supplies desire and BSLANGS supplies '
+        'motivation, with PAS/NAS grammatical linkage; the exact composite has no master entry. Neither isolated NAS/out of nor '
+        'BSLANGS/purpose is banked across the preceding flattery clause.'),
+       ('f2',
+        3,
+        'glu len pa',
+        'singing a song',
+        'else singing a song',
+        'The full song-taking verb phrase directly attests singing a song. It remains a d3 phrase including its object and supplied '
+        'article, not a forced d5 compound. LEN PA alone lists taking/accepting rather than singing, so no unsupported separate singing '
+        'member is claimed.')]}
+notes={358: 'Keep purposeful intent separate from the without-mistake condition. First others are the friends being divided; the complete later agentive phrase identifies the hearer. Mentally afflicted and explicit state have separate source heads. Shared passive/definition grammar stays unbanked.', 359: 'Harsh-speech members use full English words; unpleasant remains a complete negative phrase. GI/their is the local words-to-meaning relation. The complete hearer agentive stays whole, and additive too is preserved as correct current source wording.', 360: 'Two technical-title occurrences and two emphatics have unique ranges. First afflicted state of mind has no separate SEMS token; second afflicted stays tight. Repeated every/reporting language is unbanked. Motivation and singing remain whole phrases; gain-purpose expansion is not assigned to the following BSLANGS.'}
+omissions={358: [{'tib': '[iv.301-11a]; gsum pa ni; topic ni after phra ma; bar after nor; bound genitive after dbye ba; gyi/kyi around sems; final '
+               'apostrophe-o',
+        'reason': 'Citation/outline, topical definition, adverbial/case support and sentence closure distribute through the English '
+                  'sentence. Consists of, spoken, in and should be are not assigned to a random one of these markers; the clear '
+                  'PHYIR/meant to and MA/without selections retain their own local scope. No uncertain punctuation null is introduced.'},
+       {'english': 'consists of; which are spoken; any; and; in a; they are; who are; and their; should be; articles/relative and passive '
+                   'support',
+        'reason': 'These words unfold the definition, intentional conditions, relations and comprehension requirement. TSHIG/DON supply '
+                  'separated words/meaning, but no complete contiguous TSHIG DON compound or borrowed speech predicate is fabricated.'},
+       {'tib': 'members inside phra ma and all depth3 phrases',
+        'reason': 'Do not infer a narrow PHRA/divisive member or d7 members under grammatical phrases. Whole BSAMS BZHIN DU/purposely and '
+                  'PHA ROL POS/by the other person retain their complete construction and case endings.'}],
+ 359: [{'tib': 'topic ni; bar after nor; bound genitive after snyan pa; final apostrophe-o',
+        'reason': 'The definition frame, adverbial/attributive links and closure have no separately selected narrow word. English consists '
+                  'of/which are spoken/should be is expanded grammatical support; no disputed particle null is needed.'},
+       {'english': 'consists of; which are spoken; and; any; too; should be; articles',
+        'reason': 'The second definition repeats intentionality and the hearer-comprehension requirement. Too is correct additive English, '
+                  'absent as an independent Tibetan token; a C16 parallel to typo does not authorize changing current too.'},
+       {'tib': 'snyan pa inside mi snyan pa; members of bsams bzhin du and pha rol pos',
+        'reason': 'No unhyphenated pleasant stem, split agentive-s or d7 member of a d3 construction is proposed. The complete negative '
+                  'adjective and complete grammatical phrases keep their scopes.'}],
+ 360: [{'tib': 'first no; ni after sde pa gzhan; second gyi; second yin te; final dang',
+        'reason': 'The first statement closes with punctuation; the alternative account distributes definition/reporting grammar over say '
+                  'that what...refers to is; the second genitive participates in type of the spoken word. Final DANG continues the example '
+                  'list into361. These frames remain unbanked without copying the first predicate or inventing an extra English '
+                  'continuation.'},
+       {'english': 'case of; spoken; an; second every; type of the spoken; already mentioned; groups say that what; second refers to is; '
+                   'They say cases would be; articles and possessive apostrophe-s; in after engaging; of before flattering; someone for '
+                   'the purpose of some gain',
+        'reason': 'The prose supplies nominal, reporting, relative and illustrative support. The second TSHIG owns only word. KHA GSAG '
+                  'owns flattering and can semantically imply gain-seeking, but no separate purpose/gain source noun is invented; BSLANGS '
+                  'belongs to the following desire-motivation clause.'},
+       {'tib': 'members of first nyon mongs pa can, dge slong and kha gsag; individual words/particles inside chags pas kun nas bslangs '
+               'nas and glu len pa',
+        'reason': 'The first complete afflicted-state expression has a direct whole glossary attestation without a separate SEMS. No '
+                  'fabricated member is split from the monk/flattery terms. Motivation and singing are whole d3 constructions: isolated '
+                  'NAS/out of would hide their causal scope, and bare LEN PA lacks a singing attestation.'}]}
+for seq,items in data.items():
+ D=T/str(seq);D.mkdir(exist_ok=True);sp=[];rr=[];ds=[];cursor=0;parent=None
+ for sid,d,t,e,anchor,why in items:
+  if d==7:
+   assert parent;ps,pr=parent;assert ps['tib'].count(t)==1 and ps['eng'].count(e)==1;a=pr['tib_range'][0]+ps['tib'].index(t);b=pr['eng_range'][0]+ps['eng'].index(e)
+  else:
+   a=source[seq]['wylie'].index(t,cursor);cursor=a+len(t);assert source[seq]['english'].count(anchor)==1 and anchor.count(e)==1,(seq,sid,anchor);b=source[seq]['english'].index(anchor)+anchor.index(e)
+  tr=[a,a+len(t)];er=[b,b+len(e)];assert source[seq]['wylie'][slice(*tr)]==t and source[seq]['english'][slice(*er)]==e
+  x={'id':sid,'d':d,'tib':t,'eng':e}
+  r={'seq':seq,'id':sid,'d':d,'tib':t,'eng':e,'tib_range':tr,'eng_range':er};sp.append(x);rr.append(r);ds.append({'seq':seq,'angle':'TIBETAN-FIRST','original_span_id':sid,'original_span':x,'intended_ranges':{'tib_range':tr,'eng_range':er},'rationale':why})
+  if d==5:parent=(x,r)
+  elif d!=7:parent=None
+ note='Codex independent TIBETAN-FIRST PROVISIONAL proposal. '+notes[seq]+' Source origin '+base['commit']+' through354; actual through357 acceptance is a separately supplied later checkpoint, never invented.'
+ spec={'course':'C05','segments':[{'seq':seq,'title':{358:'divisive speech and comprehension',359:'harsh speech and comprehension',360:'meaningless speech and examples'}[seq],'spans':sp,'eng_order':[x['id']for x in sorted([x for x in rr if x['d']!=7],key=lambda x:x['eng_range'][0])],'note':note}]};put(D/'spec.json',spec);put(D/'intended-ranges.json',rr);put(D/'original-decisions.json',{'producer':'Codex Tibetan-first proposer','status':'PROVISIONAL','source_origin_git_commit':base['commit'],'decisions':ds,'omissions':[{'seq':seq,'angle':'TIBETAN-FIRST','field':'omissions','index':i,**x}for i,x in enumerate(omissions[seq])]});put(D/'errata.json',[])
+print('AUTHORED',[(seq,len(x))for seq,x in data.items()])

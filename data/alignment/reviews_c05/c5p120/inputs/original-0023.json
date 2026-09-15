@@ -1,0 +1,1187 @@
+[
+  {
+    "seq": 360,
+    "kind": "TIBETAN_SPELLING",
+    "found": "SDE PA GZHAN NI",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "SDE PA GZHAN NI",
+        "source_row": {
+          "id": 1742,
+          "course": "C05",
+          "seq": 360,
+          "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+          "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+          "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+        },
+        "occurrences": {
+          "acip": [
+            60
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 258,
+          "wylie": 258,
+          "english": 411
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 360,
+            "field": "acip",
+            "start": 245382,
+            "bytes": 258,
+            "sha256": "729122bf0829060ae74b3cddda0ef0c978bff89e81382ce1192c2f75fd4522b8",
+            "original_text": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 360,
+            "field": "english",
+            "start": 245642,
+            "bytes": 418,
+            "sha256": "8bce55482e4f3ac802f5f269d5a3c64f075711bd06896632d00992539f8490ea",
+            "original_text": "\"Meaningless speech\" really refers to every case of words spoken in an\r\nafflicted state of mind. Other groups say that what \"meaningless speech\"\r\n\r\nactually refers to is every afflicted type of the spoken word other than those\r\nthree already mentioned. They say cases would be like a monk's engaging in\r\nthe improper livelihood of flattering someone for the purpose of some gain,\r\nor else singing a song out of desire.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "Current SDE PA is a clean attested groups/schools noun, with full physical and C16 agreement. The register’s E-198 GNGSDE PA anomaly is a separate326 form and is not refiled here. Inflected LOG PAS and CHAGS PAS are retained despite zero exact entries; no final-s split or source normalization follows from lexical absence.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 360,
+    "kind": "ENGLISH_TYPO",
+    "found": "actually refers to is",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "actually refers to is",
+        "source_row": {
+          "id": 1742,
+          "course": "C05",
+          "seq": 360,
+          "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+          "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+          "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            144
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 258,
+          "wylie": 258,
+          "english": 411
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 360,
+            "field": "acip",
+            "start": 245382,
+            "bytes": 258,
+            "sha256": "729122bf0829060ae74b3cddda0ef0c978bff89e81382ce1192c2f75fd4522b8",
+            "original_text": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 360,
+            "field": "english",
+            "start": 245642,
+            "bytes": 418,
+            "sha256": "8bce55482e4f3ac802f5f269d5a3c64f075711bd06896632d00992539f8490ea",
+            "original_text": "\"Meaningless speech\" really refers to every case of words spoken in an\r\nafflicted state of mind. Other groups say that what \"meaningless speech\"\r\n\r\nactually refers to is every afflicted type of the spoken word other than those\r\nthree already mentioned. They say cases would be like a monk's engaging in\r\nthe improper livelihood of flattering someone for the purpose of some gain,\r\nor else singing a song out of desire.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "In the full sentence what meaningless speech actually refers to is every afflicted type is a grammatical free-relative subject followed by is. The adjacent verbs are not a typo. Keep their distributed definition/reporting scope unbanked rather than deleting one or assigning both to an arbitrary narrow Tibetan predicate.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 360,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "other than those three already mentioned",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "other than those three already mentioned",
+        "source_row": {
+          "id": 1742,
+          "course": "C05",
+          "seq": 360,
+          "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+          "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+          "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            206
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 258,
+          "wylie": 258,
+          "english": 411
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 360,
+            "field": "acip",
+            "start": 245382,
+            "bytes": 258,
+            "sha256": "729122bf0829060ae74b3cddda0ef0c978bff89e81382ce1192c2f75fd4522b8",
+            "original_text": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 360,
+            "field": "english",
+            "start": 245642,
+            "bytes": 418,
+            "sha256": "8bce55482e4f3ac802f5f269d5a3c64f075711bd06896632d00992539f8490ea",
+            "original_text": "\"Meaningless speech\" really refers to every case of words spoken in an\r\nafflicted state of mind. Other groups say that what \"meaningless speech\"\r\n\r\nactually refers to is every afflicted type of the spoken word other than those\r\nthree already mentioned. They say cases would be like a monk's engaging in\r\nthe improper livelihood of flattering someone for the purpose of some gain,\r\nor else singing a song out of desire.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "GSUM PO DE LAS GZHAN PA excludes the preceding three forms of verbal non-virtue in the alternative account, not all three mental non-virtues or all following examples. The two source accounts are distinguished by SDE PA GZHAN. Desire motivates the singing example; BSLANGS is not moved to the earlier flattery-for-gain purpose despite that tempting glossary word.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 360,
+    "kind": "INGEST_ARTEFACT",
+    "found": "or else singing a song out of desire.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "or else singing a song out of desire.",
+        "source_row": {
+          "id": 1742,
+          "course": "C05",
+          "seq": 360,
+          "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+          "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+          "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            374
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 258,
+          "wylie": 258,
+          "english": 411
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 360,
+            "field": "acip",
+            "start": 245382,
+            "bytes": 258,
+            "sha256": "729122bf0829060ae74b3cddda0ef0c978bff89e81382ce1192c2f75fd4522b8",
+            "original_text": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 360,
+            "field": "english",
+            "start": 245642,
+            "bytes": 418,
+            "sha256": "8bce55482e4f3ac802f5f269d5a3c64f075711bd06896632d00992539f8490ea",
+            "original_text": "\"Meaningless speech\" really refers to every case of words spoken in an\r\nafflicted state of mind. Other groups say that what \"meaningless speech\"\r\n\r\nactually refers to is every afflicted type of the spoken word other than those\r\nthree already mentioned. They say cases would be like a monk's engaging in\r\nthe improper livelihood of flattering someone for the purpose of some gain,\r\nor else singing a song out of desire.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The complete current English ends after the singing example, and the complete Tibetan ends in DANG continuing the list into361. Both exact C16 fields preserve that boundary. The current extents are intact below the field cap; the continuing Tibetan coordinator is not proof of accidental clipping or a missing English word to invent.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 360,
+    "kind": "FORMATTING",
+    "found": "\"Meaningless speech\" really",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "\"Meaningless speech\" really",
+        "source_row": {
+          "id": 1742,
+          "course": "C05",
+          "seq": 360,
+          "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+          "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+          "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            0
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 360,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 258,
+          "wylie": 258,
+          "english": 411
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 360,
+            "field": "acip",
+            "start": 245382,
+            "bytes": 258,
+            "sha256": "729122bf0829060ae74b3cddda0ef0c978bff89e81382ce1192c2f75fd4522b8",
+            "original_text": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 360,
+            "field": "english",
+            "start": 245642,
+            "bytes": 418,
+            "sha256": "8bce55482e4f3ac802f5f269d5a3c64f075711bd06896632d00992539f8490ea",
+            "original_text": "\"Meaningless speech\" really refers to every case of words spoken in an\r\nafflicted state of mind. Other groups say that what \"meaningless speech\"\r\n\r\nactually refers to is every afflicted type of the spoken word other than those\r\nthree already mentioned. They say cases would be like a monk's engaging in\r\nthe improper livelihood of flattering someone for the purpose of some gain,\r\nor else singing a song out of desire.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "Two printed quoted titles are separate source occurrences, with initial capital in the first and lowercase in the second. Physical paragraph/line breaks in the second definition collapse exactly to the current field. Preserve quotation marks, apostrophe-s on monk and the final period without typographic repair or etymological subword cuts.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

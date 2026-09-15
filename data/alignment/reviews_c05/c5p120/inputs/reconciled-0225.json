@@ -1,0 +1,2705 @@
+{
+  "seq": 358,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 358,
+        "kind": "TIBETAN_SPELLING",
+        "found": "MA NOR BAR",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "MA NOR BAR",
+            "source_row": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "occurrences": {
+              "acip": [
+                52
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha rol po mdza' ba dbye ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mi snyan pa'i tshig gi don"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1741,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa can gyi tshig kun"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "log pas 'tsho ba kha gsag byed pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "chags pas kun nas bslangs nas glu len pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "their meaning to should be understood"
+                ],
+                "count": 2,
+                "row_ids": [
+                  6895,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+            "register_identity": {
+              "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:358",
+              "c05:359",
+              "c05:360",
+              "their meaning too should",
+              "their meaning to should",
+              "sde pa gzhan"
+            ],
+            "matches": [
+              {
+                "item_id": "E-198",
+                "course": "C05",
+                "segment": "C05:326",
+                "kind": "TIBETAN_SPELLING",
+                "found": "GNGSDE PA GZHAN NI",
+                "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+            "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 358,
+                "field": "acip",
+                "start": 244732,
+                "bytes": 162,
+                "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 358,
+                "field": "english",
+                "start": 244896,
+                "bytes": 230,
+                "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 67,
+            "material_master_objects": 114,
+            "personally_read_reused_objects": 84,
+            "complete_new_master_objects_read": 30,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Current BAR is preserved in both physical and exact C16 Tibetan; an earlier PAR source question does not license correction here. BSAMS BZHIN DU is an ordinary intention/manner construction despite zero exact master matches. PHA ROL POS is the complete hearer agentive and is not normalized or split merely because that inflected full query has no entry.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 358,
+        "kind": "ENGLISH_TYPO",
+        "found": "their meaning should be understood",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "their meaning should be understood",
+            "source_row": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                173
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha rol po mdza' ba dbye ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mi snyan pa'i tshig gi don"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1741,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa can gyi tshig kun"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "log pas 'tsho ba kha gsag byed pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "chags pas kun nas bslangs nas glu len pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "their meaning to should be understood"
+                ],
+                "count": 2,
+                "row_ids": [
+                  6895,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+            "register_identity": {
+              "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:358",
+              "c05:359",
+              "c05:360",
+              "their meaning too should",
+              "their meaning to should",
+              "sde pa gzhan"
+            ],
+            "matches": [
+              {
+                "item_id": "E-198",
+                "course": "C05",
+                "segment": "C05:326",
+                "kind": "TIBETAN_SPELLING",
+                "found": "GNGSDE PA GZHAN NI",
+                "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+            "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 358,
+                "field": "acip",
+                "start": 244732,
+                "bytes": 162,
+                "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 358,
+                "field": "english",
+                "start": 244896,
+                "bytes": 230,
+                "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 67,
+            "material_master_objects": 114,
+            "personally_read_reused_objects": 84,
+            "complete_new_master_objects_read": 30,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "This exact current sentence is grammatical and repeated by the complete C16:876 English. The later to/too variant belongs to the harsh-speech definition in C16:877 and spilling TCS02:74, not this sentence. Expanded passive should be and plural anaphoric their do not establish a typo.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 358,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "others who are friends",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "others who are friends",
+            "source_row": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                145
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha rol po mdza' ba dbye ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mi snyan pa'i tshig gi don"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1741,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa can gyi tshig kun"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "log pas 'tsho ba kha gsag byed pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "chags pas kun nas bslangs nas glu len pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "their meaning to should be understood"
+                ],
+                "count": 2,
+                "row_ids": [
+                  6895,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+            "register_identity": {
+              "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:358",
+              "c05:359",
+              "c05:360",
+              "their meaning too should",
+              "their meaning to should",
+              "sde pa gzhan"
+            ],
+            "matches": [
+              {
+                "item_id": "E-198",
+                "course": "C05",
+                "segment": "C05:326",
+                "kind": "TIBETAN_SPELLING",
+                "found": "GNGSDE PA GZHAN NI",
+                "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+            "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 358,
+                "field": "acip",
+                "start": 244732,
+                "bytes": 162,
+                "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 358,
+                "field": "english",
+                "start": 244896,
+                "bytes": 230,
+                "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 67,
+            "material_master_objects": 114,
+            "personally_read_reused_objects": 84,
+            "complete_new_master_objects_read": 30,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The explicit first PHA ROL PO and MDZA BA identify other people who are friends, and DBYE BA/PHYIR make their division the purpose. The later complete PHA ROL POS identifies the hearer who understands the meaning. Distinguishing these roles preserves the intentional, non-mistaken, afflicted and comprehension conditions without a factual reversal.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 358,
+        "kind": "INGEST_ARTEFACT",
+        "found": "[IV.301-11a]",
+        "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+        "five_grounds": {
+          "a_quote": {
+            "found": "[IV.301-11a]",
+            "source_row": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "occurrences": {
+              "acip": [
+                0
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha rol po mdza' ba dbye ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mi snyan pa'i tshig gi don"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1741,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa can gyi tshig kun"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "log pas 'tsho ba kha gsag byed pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "chags pas kun nas bslangs nas glu len pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "their meaning to should be understood"
+                ],
+                "count": 2,
+                "row_ids": [
+                  6895,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+            "register_identity": {
+              "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:358",
+              "c05:359",
+              "c05:360",
+              "their meaning too should",
+              "their meaning to should",
+              "sde pa gzhan"
+            ],
+            "matches": [
+              {
+                "item_id": "E-198",
+                "course": "C05",
+                "segment": "C05:326",
+                "kind": "TIBETAN_SPELLING",
+                "found": "GNGSDE PA GZHAN NI",
+                "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+            "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 358,
+                "field": "acip",
+                "start": 244732,
+                "bytes": 162,
+                "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 358,
+                "field": "english",
+                "start": 244896,
+                "bytes": 230,
+                "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 67,
+            "material_master_objects": 114,
+            "personally_read_reused_objects": 84,
+            "complete_new_master_objects_read": 30,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The bracketed verse-range citation and GSUM PA outline are printed before the full Tibetan definition. Both complete physical extents include the entire understanding condition below the field cap; there is no current clipping or added following heading. Citation/outline apparatus is left unwrapped without inventing body equivalents.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 358,
+        "kind": "FORMATTING",
+        "found": "state; they are",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "state; they are",
+            "source_row": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                111
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 358,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha rol po mdza' ba dbye ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mi snyan pa'i tshig gi don"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1741,
+                  6895
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa can gyi tshig kun"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "log pas 'tsho ba kha gsag byed pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "chags pas kun nas bslangs nas glu len pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1742,
+                  6896
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "their meaning to should be understood"
+                ],
+                "count": 2,
+                "row_ids": [
+                  6895,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+            "register_identity": {
+              "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:358",
+              "c05:359",
+              "c05:360",
+              "their meaning too should",
+              "their meaning to should",
+              "sde pa gzhan"
+            ],
+            "matches": [
+              {
+                "item_id": "E-198",
+                "course": "C05",
+                "segment": "C05:326",
+                "kind": "TIBETAN_SPELLING",
+                "found": "GNGSDE PA GZHAN NI",
+                "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+            "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 358,
+                "field": "acip",
+                "start": 244732,
+                "bytes": 162,
+                "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 358,
+                "field": "english",
+                "start": 244896,
+                "bytes": 230,
+                "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 67,
+            "material_master_objects": 114,
+            "personally_read_reused_objects": 84,
+            "complete_new_master_objects_read": 30,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The semicolon and relative clauses unpack the source definition and purpose. Physical line breaks collapse to exactly the current English, including all punctuation. The abbreviated bracketed citation is preserved, not silently expanded to a guessed numbering format.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "MDZA' BA is an attested friends form, and physical ACIP agrees with all remaining Tibetan. No corrected witness supports a spelling change.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "The definition and its two other-person references read coherently. The absent outline ordinal is a translation-scope choice, not a mistyped English word.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "The statement distinguishes intentional speech, nonmistake, an afflicted condition, friends being separated and recipient understanding; no source-specific factual contradiction is established.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Citation apparatus and the complete sentence match the physical extent; no1500 cap or demonstrated column/row corruption.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "The bracketed verse-range citation precedes prose; capitals, commas and line wraps are preserved and do not warrant a new register entry.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "All30 category screens and five material grounds read. C05:359 physical too is correct; other-row to is not a local correction. E-198 concerns326, not current clean SDE PA. Citation, prose line breaks, short field lengths and final continuation do not establish ingest loss.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 358,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 358,
+          "kind": "TIBETAN_SPELLING",
+          "found": "MA NOR BAR",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "MA NOR BAR",
+              "source_row": {
+                "id": 1740,
+                "course": "C05",
+                "seq": 358,
+                "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+                "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+              },
+              "occurrences": {
+                "acip": [
+                  52
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha rol po mdza' ba dbye ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mi snyan pa'i tshig gi don"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1741,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa can gyi tshig kun"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "log pas 'tsho ba kha gsag byed pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "chags pas kun nas bslangs nas glu len pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "their meaning to should be understood"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    6895,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "register_identity": {
+                "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:358",
+                "c05:359",
+                "c05:360",
+                "their meaning too should",
+                "their meaning to should",
+                "sde pa gzhan"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-198",
+                  "course": "C05",
+                  "segment": "C05:326",
+                  "kind": "TIBETAN_SPELLING",
+                  "found": "GNGSDE PA GZHAN NI",
+                  "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                  "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                  "severity": "LOW",
+                  "confidence": "PROBABLE",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+              "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 159,
+                "wylie": 159,
+                "english": 228
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 358,
+                  "field": "acip",
+                  "start": 244732,
+                  "bytes": 162,
+                  "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                  "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 358,
+                  "field": "english",
+                  "start": 244896,
+                  "bytes": 230,
+                  "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                  "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 67,
+              "material_master_objects": 114,
+              "personally_read_reused_objects": 84,
+              "complete_new_master_objects_read": 30,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "Current BAR is preserved in both physical and exact C16 Tibetan; an earlier PAR source question does not license correction here. BSAMS BZHIN DU is an ordinary intention/manner construction despite zero exact master matches. PHA ROL POS is the complete hearer agentive and is not normalized or split merely because that inflected full query has no entry.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 358,
+          "kind": "ENGLISH_TYPO",
+          "found": "their meaning should be understood",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "their meaning should be understood",
+              "source_row": {
+                "id": 1740,
+                "course": "C05",
+                "seq": 358,
+                "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+                "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  173
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha rol po mdza' ba dbye ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mi snyan pa'i tshig gi don"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1741,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa can gyi tshig kun"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "log pas 'tsho ba kha gsag byed pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "chags pas kun nas bslangs nas glu len pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "their meaning to should be understood"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    6895,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "register_identity": {
+                "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:358",
+                "c05:359",
+                "c05:360",
+                "their meaning too should",
+                "their meaning to should",
+                "sde pa gzhan"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-198",
+                  "course": "C05",
+                  "segment": "C05:326",
+                  "kind": "TIBETAN_SPELLING",
+                  "found": "GNGSDE PA GZHAN NI",
+                  "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                  "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                  "severity": "LOW",
+                  "confidence": "PROBABLE",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+              "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 159,
+                "wylie": 159,
+                "english": 228
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 358,
+                  "field": "acip",
+                  "start": 244732,
+                  "bytes": 162,
+                  "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                  "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 358,
+                  "field": "english",
+                  "start": 244896,
+                  "bytes": 230,
+                  "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                  "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 67,
+              "material_master_objects": 114,
+              "personally_read_reused_objects": 84,
+              "complete_new_master_objects_read": 30,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "This exact current sentence is grammatical and repeated by the complete C16:876 English. The later to/too variant belongs to the harsh-speech definition in C16:877 and spilling TCS02:74, not this sentence. Expanded passive should be and plural anaphoric their do not establish a typo.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 358,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "others who are friends",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "others who are friends",
+              "source_row": {
+                "id": 1740,
+                "course": "C05",
+                "seq": 358,
+                "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+                "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  145
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha rol po mdza' ba dbye ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mi snyan pa'i tshig gi don"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1741,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa can gyi tshig kun"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "log pas 'tsho ba kha gsag byed pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "chags pas kun nas bslangs nas glu len pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "their meaning to should be understood"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    6895,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "register_identity": {
+                "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:358",
+                "c05:359",
+                "c05:360",
+                "their meaning too should",
+                "their meaning to should",
+                "sde pa gzhan"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-198",
+                  "course": "C05",
+                  "segment": "C05:326",
+                  "kind": "TIBETAN_SPELLING",
+                  "found": "GNGSDE PA GZHAN NI",
+                  "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                  "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                  "severity": "LOW",
+                  "confidence": "PROBABLE",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+              "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 159,
+                "wylie": 159,
+                "english": 228
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 358,
+                  "field": "acip",
+                  "start": 244732,
+                  "bytes": 162,
+                  "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                  "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 358,
+                  "field": "english",
+                  "start": 244896,
+                  "bytes": 230,
+                  "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                  "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 67,
+              "material_master_objects": 114,
+              "personally_read_reused_objects": 84,
+              "complete_new_master_objects_read": 30,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The explicit first PHA ROL PO and MDZA BA identify other people who are friends, and DBYE BA/PHYIR make their division the purpose. The later complete PHA ROL POS identifies the hearer who understands the meaning. Distinguishing these roles preserves the intentional, non-mistaken, afflicted and comprehension conditions without a factual reversal.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 358,
+          "kind": "INGEST_ARTEFACT",
+          "found": "[IV.301-11a]",
+          "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+          "five_grounds": {
+            "a_quote": {
+              "found": "[IV.301-11a]",
+              "source_row": {
+                "id": 1740,
+                "course": "C05",
+                "seq": 358,
+                "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+                "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+              },
+              "occurrences": {
+                "acip": [
+                  0
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha rol po mdza' ba dbye ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mi snyan pa'i tshig gi don"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1741,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa can gyi tshig kun"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "log pas 'tsho ba kha gsag byed pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "chags pas kun nas bslangs nas glu len pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "their meaning to should be understood"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    6895,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "register_identity": {
+                "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:358",
+                "c05:359",
+                "c05:360",
+                "their meaning too should",
+                "their meaning to should",
+                "sde pa gzhan"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-198",
+                  "course": "C05",
+                  "segment": "C05:326",
+                  "kind": "TIBETAN_SPELLING",
+                  "found": "GNGSDE PA GZHAN NI",
+                  "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                  "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                  "severity": "LOW",
+                  "confidence": "PROBABLE",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+              "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 159,
+                "wylie": 159,
+                "english": 228
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 358,
+                  "field": "acip",
+                  "start": 244732,
+                  "bytes": 162,
+                  "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                  "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 358,
+                  "field": "english",
+                  "start": 244896,
+                  "bytes": 230,
+                  "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                  "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 67,
+              "material_master_objects": 114,
+              "personally_read_reused_objects": 84,
+              "complete_new_master_objects_read": 30,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The bracketed verse-range citation and GSUM PA outline are printed before the full Tibetan definition. Both complete physical extents include the entire understanding condition below the field cap; there is no current clipping or added following heading. Citation/outline apparatus is left unwrapped without inventing body equivalents.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 358,
+          "kind": "FORMATTING",
+          "found": "state; they are",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "state; they are",
+              "source_row": {
+                "id": 1740,
+                "course": "C05",
+                "seq": 358,
+                "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+                "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  111
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 358,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha rol po mdza' ba dbye ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1740,
+                    6894
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mi snyan pa'i tshig gi don"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1741,
+                    6895
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa can gyi tshig kun"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "log pas 'tsho ba kha gsag byed pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "chags pas kun nas bslangs nas glu len pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1742,
+                    6896
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "their meaning to should be understood"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    6895,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+              "register_identity": {
+                "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:358",
+                "c05:359",
+                "c05:360",
+                "their meaning too should",
+                "their meaning to should",
+                "sde pa gzhan"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-198",
+                  "course": "C05",
+                  "segment": "C05:326",
+                  "kind": "TIBETAN_SPELLING",
+                  "found": "GNGSDE PA GZHAN NI",
+                  "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+                  "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+                  "severity": "LOW",
+                  "confidence": "PROBABLE",
+                  "note": "filed from the alignment batch, spine-verified on merge"
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+              "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 159,
+                "wylie": 159,
+                "english": 228
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 358,
+                  "field": "acip",
+                  "start": 244732,
+                  "bytes": 162,
+                  "sha256": "ffb9a3f6dc730400bab56ba73eff420617103925f1735095c8e9be88131e528f",
+                  "original_text": "[IV.301-11a]\r\n\r\n,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 358,
+                  "field": "english",
+                  "start": 244896,
+                  "bytes": 230,
+                  "sha256": "c725f2ebadc82968fb750a7e40e7170202b8ccbae69b6acd3a5be9b46505f4ba",
+                  "original_text": "Divisive speech consists of words which are spoken purposely, without any\r\nmistake, and in a mentally afflicted state; they are meant to split up others\r\nwho are friends, and their meaning should be understood by the other person.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 67,
+              "material_master_objects": 114,
+              "personally_read_reused_objects": 84,
+              "complete_new_master_objects_read": 30,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The semicolon and relative clauses unpack the source definition and purpose. Physical line breaks collapse to exactly the current English, including all punctuation. The abbreviated bracketed citation is preserved, not silently expanded to a guessed numbering format.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 358,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 358,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1740,
+              "course": "C05",
+              "seq": 358,
+              "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+              "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+              "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "Complete current fields and six physical extents read; original native source capture is reused by its exact pin, without rerunning its query. Agreement proves the recorded source, not independent publication."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1740,
+                  6894
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:876 repeats all three complete ACIP/Wylie/English fields. This establishes textual repetition only, not independent publication or a corrected witness."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "f614639348a03fa30cc53db1b27c6b2034df43cb:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "Seven complete registered-class records are exact same-agent personal-reading reuses. The current204-entry register has no358–360 entry; new203/204 concern352. No registered converter/running-head/cap/spill/heading/footnote class is refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "MDZA' BA/friends and GO BA/understood agree with complete lexical records and the local definition. MA NOR BAR is a negated mistake condition; its mined purposely and without gloss straddles BSAMS BZHIN and is not used as authority. GSUM PA is an unrendered third-outline label, not an English numbering typo. The two other-person expressions have distinct target and recipient roles.",
+            "counterevidence": "Complete curated/glossary/scaffold/auto-aligned tiers remain distinct. Identical C16 text is not an independently collated correction. An omitted or expanded English construction does not itself establish a source error, and no hgm_gloss or source/master field is changed."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "utf8_bytes": {
+              "acip": 159,
+              "wylie": 159,
+              "english": 228
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "The physical extent includes [IV.301-11a], the GSUM outline introduction in uppercase ACIP, and the complete English sentence ending other person. This is prose with citation apparatus, not a verse line needing syllable restoration. All fields are below1500; there is no running head, glued footnote or abrupt cap."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "MDZA' BA is an attested friends form, and physical ACIP agrees with all remaining Tibetan. No corrected witness supports a spelling change.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "The definition and its two other-person references read coherently. The absent outline ordinal is a translation-scope choice, not a mistyped English word.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "The statement distinguishes intentional speech, nonmistake, an afflicted condition, friends being separated and recipient understanding; no source-specific factual contradiction is established.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Citation apparatus and the complete sentence match the physical extent; no1500 cap or demonstrated column/row corruption.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "The bracketed verse-range citation precedes prose; capitals, commas and line wraps are preserved and do not warrant a new register entry.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

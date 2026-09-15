@@ -1,0 +1,50 @@
+{
+  "status": "APPROVE_INDEPENDENT_PROVISIONAL_SEMANTIC_REVIEW",
+  "reconciliation_freeze": {
+    "bytes": 23625,
+    "sha256": "29cf6c6aa2204de1510f1e470e0006a290d97c932d2569ca2f2c6b0c54c6edc7"
+  },
+  "stable_reading": {
+    "path": "evidence/stable-assembled-reading.json",
+    "bytes": 4743,
+    "sha256": "24b3bf6a88758f28ba8877f7b28cde9703626a587fda6146f14566324ee63c04"
+  },
+  "native_and_copy_verification": {
+    "path": "final-identity-results.json",
+    "bytes": 1235,
+    "sha256": "ff087eece6c559cbb320375eec223f35e3ba798d73c6fd2277841b887e041e23"
+  },
+  "preliminary_selection": {
+    "path": "selected-span-assessment.json",
+    "bytes": 40535,
+    "sha256": "283891d2b9ebc406761f289b817a595be2aca43cb16e40e34273dd1a19269ec4"
+  },
+  "selected_tuples_exact": 59,
+  "final_rationales_fully_read": 59,
+  "exact_original_rationale_origins": 33,
+  "exact_root_ruling_rationale_origins": 26,
+  "original_span_dispositions_exact": 113,
+  "grouped_original_dispositions_exact": 28,
+  "final_omissions_read": 17,
+  "complete_original_screen_documents_retained": 6,
+  "category_judgments_retained": 30,
+  "resolved_findings": [
+    {
+      "id": "I-LEN-PA-EVIDENCE-SCOPE",
+      "status": "RESOLVED",
+      "scope": "T360 f2 original rationale and omission index2 if their factual evidence claim is adopted; original files remain immutable.",
+      "finding": "The assertion that bare LEN PA lacks a singing attestation is too broad.",
+      "support": "Complete unified_entries:19615 contains gāyati and gīyate. The HGM glossary7249 lists take/accept and does not itself list singing. Whole GLU LEN PA22215/883 and GLU LEN71647 add collocational support.",
+      "required_resolution": "Preserve the original claim and state this distinction in the adopted reconciliation evidence. No source/master correction or original regeneration is needed.",
+      "original_status": "NEEDS_CORRECTION",
+      "resolution": "The frozen adopted rationale, note and omission explanation now distinguish LC Sanskrit reference singing evidence in unified19615 from HGM glossary7249 take/accept. Whole22215/883 and contextual members support the selected compound;71647 remains awaiting-HGM comparanda only. Original broad claims and this finding's NEEDS_CORRECTION preimage remain unchanged. No source/master/HGM-gloss change.",
+      "correction_evidence": "inputs/reconciled-0266.json"
+    }
+  ],
+  "baseline": {
+    "bytes": 1456,
+    "sha256": "4b635c7b2890b8c38b03b92170b35175a1ac03a4ea8e7b6668854c4b70d62c44"
+  },
+  "new_material_queries_or_native_engines": 0,
+  "scope": "Distinct immutable final reading and byte/range identity verification. Own preliminary semantics are unchanged; all59 judgments change only pending verdict to APPROVE. Sixteen own original-omission assessment objects are retained exactly; the additional rejected GI pair has its separate final disposition."
+}

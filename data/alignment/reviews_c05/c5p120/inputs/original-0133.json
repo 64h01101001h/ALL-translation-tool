@@ -1,0 +1,159 @@
+{
+  "seq": 359,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1741,
+        "course": "C05",
+        "seq": 359,
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current fields and six physical extents read; original native source capture is reused by its exact pin, without rerunning its query. Agreement proves the recorded source, not independent publication."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1741,
+            6895
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1741,
+            6895
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1741
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:877 repeats the entire ACIP and Wylie, but its English reads their meaning to should be understood. Current C05:359 and its physical extent read their meaning too should be understood. Thus English exact match is current-row only; the nonlocal to variant is not an error in current C05 wording and is not filed here."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "f614639348a03fa30cc53db1b27c6b2034df43cb:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete registered-class records are exact same-agent personal-reading reuses. The current204-entry register has no358–360 entry; new203/204 concern352. No registered converter/running-head/cap/spill/heading/footnote class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The full harsh-speech and unpleasant compounds are supported. Purposely and without any mistake preserve the two distinct conditions; too adds continuity to the preceding definition. Nothing requires importing a mentally-afflicted phrase absent from this row or changing too to the parallel to.",
+      "counterevidence": "Complete curated/glossary/scaffold/auto-aligned tiers remain distinct. Identical C16 text is not an independently collated correction. An omitted or expanded English construction does not itself establish a source error, and no hgm_gloss or source/master field is changed."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 91,
+        "wylie": 90,
+        "english": 154
+      },
+      "utf8_bytes": {
+        "acip": 91,
+        "wylie": 90,
+        "english": 154
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The complete physical English contains too, wraps after and and other, and finishes person. Its source is ordinary prose and no field reaches1500 characters. These line wraps and the initial ACIP comma are source formatting, not a new spelling or ingestion defect."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The complete harsh-speech and unpleasant forms match physical ACIP and C16:877; no local malformed word was found.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Current English too is grammatically defensible and physically present. C16:877 to is a nonlocal variant and cannot be filed as this row's typo.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Understanding the intended unpleasant words coheres with the definition. The mentally-afflicted state need not be repeated in every compressed clause; no correction is inferred.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "All short prose fields are complete and match their raw physical extent. The English too/to parallel variation does not establish a local converter or ingestion error.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The initial ACIP comma and English line wraps are ordinary physical formatting, with no attached heading or footnote to refile.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

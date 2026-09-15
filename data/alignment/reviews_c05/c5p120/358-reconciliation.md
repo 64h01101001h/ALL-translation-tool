@@ -1,0 +1,13 @@
+C05:358 — PROVISIONAL root reconciliation; mechanical assembly by /root/c05_325_327_reconciliation.
+Source/proposal origin f614639348a03fa30cc53db1b27c6b2034df43cb through354; actual baseline e4da4c94f59f4af61de90fde63127890130c5902 through357 is separately bound. Both registers have204 unchanged entries.
+Root-reconciliation-decisions.json supplies all13 current rulings and59 exact selections after independent preassessment. The scribe authored the English original and has no independent reconciliation or acceptance role.
+Keep the entire English original spec/note/body/native pair. GSUM PA is the affirmative ordinal-absence null. Whole afflicted-mind phrase plus KYI/in, narrow intention and complete recipient noun follow root selection; DU and bound endings remain unbanked.
+All113 original spans,16 original omissions,30 category screens,6 notes and6 reports remain complete original values with explicit dispositions. All five source grounds are preserved; zero source questions or errata candidates were filed by either original.
+C05:359 physically reads correct too; C16:877 and spilling TCS02:74 have to in other rows. E198 concerns326, not current clean SDE PA. Source text remains unchanged.
+Counts: 15 spans; 10 nonnull d5 pairs; 11 total d5; 0 d7; 1 nulls; zero errata additions.
+358 reuses the exact successful English pair without a run; changed359 and360 each passed one new generator/resolver pair with empty stderr. No original process was repeated.
+Spec 2854 bytes SHA256 d49c507337fb504bee99a4f79d11c89d008eedd362025cc7adc601cacdd23ed2; body 2978 bytes SHA256 cdfb5b8075f4c4f89658289443ae24c7d8e0b58117414cf9ea13592b5a701ed7. Both source plaintexts reconstruct exactly and canonical ranges equal intent.
+Selected evidence: ../native/358-generator-v1/ and ../native/358-resolver-v1/. Eight actual unique pairs exist: six original plus two changed pairs; nine angle/segment views include one copied358 pair.
+All59 full-word intentions and eight strict members passed before the changed native runs. Two nulls retain exact annotations:358 GSUM PA d5/nul only and360 NO d6/cls=conj/nul. No subword flags, detached agentive S or manufactured participants.
+All205 frozen original members and both original freezes were verified; complete material/history remains at those pinned immutable roots. Original source/origin/baseline captures and root reading/process receipts remain exact. No new assembly, range, native or packaging failure occurred.
+No source/master edits, hgm_gloss promotion, W writes, registration or acceptance. Independent final semantic review remains required.

@@ -1,0 +1,52 @@
+"""Current source capture; lexical/corpus loops reused from the completed proposal helper."""
+import json,hashlib,sqlite3,gzip,pathlib,datetime
+T=pathlib.Path(__file__).resolve().parents[1];B=T.parent
+base=json.loads((T/'evidence/proposal-baseline.json').read_text())
+def put(n,x):(T/'evidence'/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+for n,p in base['source_pins'].items():assert ident(pathlib.Path(p['path']).read_bytes())=={k:p[k]for k in['bytes','sha256']}
+db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+sql='SELECT * FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq';rows=[dict(r)for r in db.execute(sql,('C05',352,366))];context=json.loads((T/'evidence/context.json').read_text());assert[{k:v for k,v in r.items()if k!='raw'}for r in rows]==context;put('independent-source-query.json',{'status':'PASS_SOURCE_IDENTITY_ONLY','sql':sql,'parameters':['C05',352,366],'count':len(rows),'rows':rows,'connection':'SQLite URI mode=ro'})
+m=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+terms=['gsum pa', 'ni', 'phra ma', 'bsams bzhin du', 'bsams', 'bzhin du', 'ma', 'nor', 'ma nor bar', 'pha rol po', 'pha rol', "mdza' ba", 'dbye ba', 'phyir', 'nyon mongs pa can', 'nyon mongs pa', 'nyon mongs can', 'nyon mongs', 'can', 'sems', 'gyi', 'kyi', 'tshig', 'don', 'tshig don', 'pha rol pos', 'go ba', 'go', "go ba'o", 'tshig rtsub po', 'rtsub po', 'mi snyan pa', 'mi', 'snyan pa', 'gi', 'kun', 'ngag kyal pa', 'ngag', 'kyal pa', 'nyid', 'yin', 'no', 'sde pa', 'gzhan', 'gsum po', 'de las', 'gzhan pa', 'dang', 'te', 'dper na', 'dge slong', 'log pas', 'log pa', "'tsho ba", "'tsho", "log pas 'tsho ba", 'kha gsag', 'byed pa', 'chags pas', 'chags', 'kun nas bslangs', 'kun nas bslangs nas', 'bslangs', 'nas', 'glu', 'len pa', 'glu len pa']
+objects={};lex=[]
+for term in terms:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';found=[dict(r)for r in db.execute(sql,(term,term))];keys=[]
+ for arr in['unified_entries','curated_entries','glossary_entries']:
+  for i,e in enumerate(m[arr]):
+   if e.get('wylie')==term or term in(e.get('wylie_variants')or[]):k=f'{arr}:{i}';objects[k]={'collection':arr,'index':i,'entry':e};keys.append(k)
+ lex.append({'term':term,'sql':sql,'parameters':[term,term],'spine_count':len(found),'spine_rows':found,'master_count':len(keys),'master_keys':keys})
+ for r in found:assert json.loads(r['raw'])==m['unified_entries'][r['id']-1]
+put('lexical.json',{'queries':lex,'master_objects':objects})
+qs=[];records={};prepared=json.loads((T/'evidence/root-parallel-preparation.json').read_text())
+for q in prepared:
+ assert q['count']==len(q['rows'])
+ for r in q['rows']:assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+ qs.append({'origin':'REUSED_NEUTRAL_CAPTURE_NOT_RERUN',**{k:v for k,v in q.items()if k!='rows'},'row_ids':[r['id']for r in q['rows']]})
+for f,term in [('wylie', "pha rol po mdza' ba dbye ba"), ('wylie', "mi snyan pa'i tshig gi don"), ('wylie', 'nyon mongs pa can gyi tshig kun'), ('wylie', "log pas 'tsho ba kha gsag byed pa"), ('wylie', 'chags pas kun nas bslangs nas glu len pa'), ('english', 'their meaning to should be understood')]:
+ sql='SELECT * FROM corpus_segments WHERE course <> \'C13\' AND instr('+f+',?)>0 ORDER BY course,seq';found=[dict(r)for r in db.execute(sql,(term,))]
+ for r in found:assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+ qs.append({'origin':'ACTUAL_NEW_QUERY','field':f,'sql':sql,'parameters':[term],'count':len(found),'row_ids':[r['id']for r in found]})
+put('corpus.json',{'queries':qs,'complete_records':records})
+physical=pathlib.Path(base['source_pins']['physical']['path']).read_bytes();prep=json.loads((T/'evidence/root-preparation-proof.json').read_text());source={r['seq']:r for r in context}
+for e in prep['physical_extents']:
+ b=physical[e['start']:e['start']+e['bytes']];assert ident(b)=={k:e[k]for k in['bytes','sha256']};assert b.decode('ascii')==e['original_text'];assert ' '.join(b.decode('ascii').split())==source[e['seq']][e['field']]
+put('physical-verification.json',{'status':'PASS_COMPLETE_SIX_EXTENTS','original':base['source_pins']['physical'],'extents':prep['physical_extents'],'method':'Verify exact prepared ASCII byte extents against physical file; no one-line or whole-file encoding assumption.'})
+reg=json.loads((T/'evidence/governance/docs/errata_register.json').read_text());terms=['c05:358','c05:359','c05:360','their meaning too should','their meaning to should','sde pa gzhan'];matches=[r for r in reg if any(s in json.dumps(r).lower()for s in terms)];put('register.json',{'original_git_commit':base['commit'],'path':'docs/errata_register.json','identity':base['governing_git_pins']['docs/errata_register.json'],'count':len(reg),'direct_search_terms':terms,'direct_matches':matches,'already_registered_classes':['following-section heading glue','folio/footnote fusion','E-044 converter escapes','E-071 running head','E-107 cap','E-111 row spill']})
+prior_dirs=[B.parent/'C05-355-357/tibetan',B.parent/'C05-352-354/tibetan',B.parent/'C05-349-351/tibetan',B.parent/'C05-346-348/tibetan',B.parent/'C05-343-345/tibetan',B.parent/'C05-340-342/tibetan',B.parent/'C05-337-339/tibetan',B.parent/'C05-334-336/tibetan']
+reused=[];new=[]
+for key,obj in objects.items():
+ match=None
+ for prior in prior_dirs:
+  fr=json.loads((prior/'freeze.json').read_bytes());pp=prior/'evidence/lexical.json';rr=prior/'reading-receipt.json'
+  assert ident(pp.read_bytes())==fr['files']['evidence/lexical.json'] and ident(rr.read_bytes())==fr['files']['reading-receipt.json']
+  po=json.loads(pp.read_bytes())['master_objects']
+  supplement=prior/'evidence/lexical-supplement.json'
+  if key not in po and supplement.exists():
+   assert ident(supplement.read_bytes())==fr['files']['evidence/lexical-supplement.json'];po=json.loads(supplement.read_bytes())['master_objects'];pp=supplement
+  if key in po and po[key]==obj:
+   match={'current_key':key,'original_key':key,'prior_evidence':str(pp),'prior_evidence_pin':ident(pp.read_bytes()),'prior_reading_receipt':str(rr),'prior_reading_receipt_pin':ident(rr.read_bytes()),'object_canonical_json_pin':ident(json.dumps(obj,sort_keys=True,ensure_ascii=False).encode()),'reuse':'Exact complete structure identity to a material object personally read in the prior proposal; no new semantic judgment implied.'};break
+ if match:reused.append(match)
+ else:new.append(key)
+put('personally-read-object-reuse.json',{'scope':'Identity reuse of complete material master objects actually read by this same proposer; new or changed complete objects require full reading.','reused_count':len(reused),'new_count':len(new),'reused':reused,'new_keys_requiring_full_read':new})
+print(json.dumps({'status':'PASS_CAPTURE_ONLY_READING_REQUIRED','origin':base['commit'],'source_context_rows':len(rows),'lexical_queries':len(lex),'unique_master_objects':len(objects),'personally_read_objects_reused':len(reused),'new_master_objects_to_read':len(new),'lexical_counts':[[q['term'],q['spine_count'],q['master_count']]for q in lex],'existing_parallel_queries_reused':len(prepared),'new_corpus_queries':6,'unique_corpus_records':len(records),'new_corpus_counts':[[q['parameters'][0],q['count']]for q in qs if q['origin']=='ACTUAL_NEW_QUERY'],'physical_extents':6,'direct_errata_matches':len(matches)},indent=2))

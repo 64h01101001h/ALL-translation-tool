@@ -1,0 +1,1182 @@
+[
+  {
+    "seq": 359,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MI SNYAN PA",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MI SNYAN PA",
+        "source_row": {
+          "id": 1741,
+          "course": "C05",
+          "seq": 359,
+          "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+          "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+          "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+        },
+        "occurrences": {
+          "acip": [
+            45
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+            ],
+            "count": 1,
+            "row_ids": [
+              1741
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 91,
+          "wylie": 90,
+          "english": 154
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 359,
+            "field": "acip",
+            "start": 245129,
+            "bytes": 91,
+            "sha256": "eed25b5216dbc775f1a992598843a266facfdb284299704918b7640bbf97ba0e",
+            "original_text": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 359,
+            "field": "english",
+            "start": 245222,
+            "bytes": 156,
+            "sha256": "7dc8612613ff9fb1b1d1b4ae5129d87fc09077476411d4ffa0e8a60e37d0e5af",
+            "original_text": "Harsh speech consists of unpleasant words which are spoken purposely, and\r\nwithout any mistake; their meaning too should be understood by the other\r\nperson.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The complete negative adjective agrees with physical source and C16 Tibetan, and directly attests unpleasant. TSIG/RTZUB versus converted TSHIG/RTSUB follows the captured converter. No change to the source or an interior pleasant word is justified.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 359,
+    "kind": "ENGLISH_TYPO",
+    "found": "their meaning too should be understood",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "their meaning too should be understood",
+        "source_row": {
+          "id": 1741,
+          "course": "C05",
+          "seq": 359,
+          "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+          "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+          "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            95
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+            ],
+            "count": 1,
+            "row_ids": [
+              1741
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 91,
+          "wylie": 90,
+          "english": 154
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 359,
+            "field": "acip",
+            "start": 245129,
+            "bytes": 91,
+            "sha256": "eed25b5216dbc775f1a992598843a266facfdb284299704918b7640bbf97ba0e",
+            "original_text": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 359,
+            "field": "english",
+            "start": 245222,
+            "bytes": 156,
+            "sha256": "7dc8612613ff9fb1b1d1b4ae5129d87fc09077476411d4ffa0e8a60e37d0e5af",
+            "original_text": "Harsh speech consists of unpleasant words which are spoken purposely, and\r\nwithout any mistake; their meaning too should be understood by the other\r\nperson.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "Current C05 physical and spine both correctly print too as the additive reference to the preceding definition. C16:877 and TCS02:74 instead print to; their exact query returns two other-row occurrences. That variant is explicitly recorded but is not filed as an error in correct current359, and no authority to edit those other rows is implied.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 359,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "purposely, and without any mistake",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "purposely, and without any mistake",
+        "source_row": {
+          "id": 1741,
+          "course": "C05",
+          "seq": 359,
+          "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+          "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+          "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            59
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+            ],
+            "count": 1,
+            "row_ids": [
+              1741
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 91,
+          "wylie": 90,
+          "english": 154
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 359,
+            "field": "acip",
+            "start": 245129,
+            "bytes": 91,
+            "sha256": "eed25b5216dbc775f1a992598843a266facfdb284299704918b7640bbf97ba0e",
+            "original_text": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 359,
+            "field": "english",
+            "start": 245222,
+            "bytes": 156,
+            "sha256": "7dc8612613ff9fb1b1d1b4ae5129d87fc09077476411d4ffa0e8a60e37d0e5af",
+            "original_text": "Harsh speech consists of unpleasant words which are spoken purposely, and\r\nwithout any mistake; their meaning too should be understood by the other\r\nperson.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "BSAMS BZHIN DU supplies purposeful intent, while MA NOR BAR supplies absence of mistake. The mined MA NOR BAR gloss purposely and without conflates scopes and is not treated as source meaning. The correct English additionally requires unpleasant words and comprehension by the other person, matching the current definition without borrowed source predicates.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 359,
+    "kind": "INGEST_ARTEFACT",
+    "found": "by the other person.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "by the other person.",
+        "source_row": {
+          "id": 1741,
+          "course": "C05",
+          "seq": 359,
+          "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+          "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+          "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            134
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+            ],
+            "count": 1,
+            "row_ids": [
+              1741
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 91,
+          "wylie": 90,
+          "english": 154
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 359,
+            "field": "acip",
+            "start": 245129,
+            "bytes": 91,
+            "sha256": "eed25b5216dbc775f1a992598843a266facfdb284299704918b7640bbf97ba0e",
+            "original_text": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 359,
+            "field": "english",
+            "start": 245222,
+            "bytes": 156,
+            "sha256": "7dc8612613ff9fb1b1d1b4ae5129d87fc09077476411d4ffa0e8a60e37d0e5af",
+            "original_text": "Harsh speech consists of unpleasant words which are spoken purposely, and\r\nwithout any mistake; their meaning too should be understood by the other\r\nperson.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "Both full physical extents include the entire definition and completed comprehension condition, below the field cap. Exact Tibetan queries return current and C16 rows, while exact current English returns only current359 because of the to/too variation. That measured difference is textual variation, not evidence that current ingest clipped or duplicated a token.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 359,
+    "kind": "FORMATTING",
+    "found": "mistake; their meaning too",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "mistake; their meaning too",
+        "source_row": {
+          "id": 1741,
+          "course": "C05",
+          "seq": 359,
+          "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+          "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+          "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            86
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 359,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+            ],
+            "count": 1,
+            "row_ids": [
+              1741
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "pha rol po mdza' ba dbye ba"
+            ],
+            "count": 2,
+            "row_ids": [
+              1740,
+              6894
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mi snyan pa'i tshig gi don"
+            ],
+            "count": 2,
+            "row_ids": [
+              1741,
+              6895
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa can gyi tshig kun"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "log pas 'tsho ba kha gsag byed pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "chags pas kun nas bslangs nas glu len pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1742,
+              6896
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "their meaning to should be understood"
+            ],
+            "count": 2,
+            "row_ids": [
+              6895,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six complete new records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:876 and878 repeat all three fields of358 and360. C16:877 repeats359 Tibetan but has their meaning to rather than correct current too. TCS02:74 English spills into these commentaries while its Tibetan covers only preceding verse357; it also has to. Neither duplication nor a variant in a different corpus row is an independent corrected edition or a current-source defect."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+        "register_identity": {
+          "original_git_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:358",
+          "c05:359",
+          "c05:360",
+          "their meaning too should",
+          "their meaning to should",
+          "sde pa gzhan"
+        ],
+        "matches": [
+          {
+            "item_id": "E-198",
+            "course": "C05",
+            "segment": "C05:326",
+            "kind": "TIBETAN_SPELLING",
+            "found": "GNGSDE PA GZHAN NI",
+            "expected": "For human review: inspect the fused GNG prefix before SDE PA; SDE PA GZHAN NI is the probable intended opening. Preserve the original until a human establishes the correction.",
+            "evidence": "The complete original ASCII contains GNGSDE PA; spine Wylie is gngsde pa. Grounds checked: (a) original bytes precede ingest, so this is not proven converter damage; (b) exact master gngsde pa yields no entry in any of the three collections, while sde pa is attested as groups/schools; lexical absence alone is not proof; (c) local grammar: later YANG SDE PA GZHAN NI and English 'Still other groups' contrast with the first 'certain other groups', making an intrusive prefix plausible; a source-specific mark cannot be excluded; (d) full corpus gngsde query returns only this row and exact326 only this row, so no independent witness or publication-level restoration is claimed; (e) all196 prior register records have no gng or C05:326 match; bracketed verse number and following English heading remain separately classified apparatus, not duplicate errata. Candidate leaves gngsde pa unaligned and never extracts sde mid-token or maps it to the later groups. Reconciliation: retain LOW/PROBABLE for the observed textual anomaly, not a certified replacement. The competing Tibetan-first UNCERTAIN assessment is preserved in errata-review.json; lack of a corrected witness blocks restoration but does not erase the convergent local evidence of a probable defect.",
+            "severity": "LOW",
+            "confidence": "PROBABLE",
+            "note": "filed from the alignment batch, spine-verified on merge"
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole match E-198 is the registered GNGSDE PA prefix question in C05:326. Current360 clean SDE PA does not inherit that error.",
+        "later_baseline_delta": "Acceptance through357 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 91,
+          "wylie": 90,
+          "english": 154
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 359,
+            "field": "acip",
+            "start": 245129,
+            "bytes": 91,
+            "sha256": "eed25b5216dbc775f1a992598843a266facfdb284299704918b7640bbf97ba0e",
+            "original_text": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 359,
+            "field": "english",
+            "start": 245222,
+            "bytes": 156,
+            "sha256": "7dc8612613ff9fb1b1d1b4ae5129d87fc09077476411d4ffa0e8a60e37d0e5af",
+            "original_text": "Harsh speech consists of unpleasant words which are spoken purposely, and\r\nwithout any mistake; their meaning too should be understood by the other\r\nperson.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 67,
+        "material_master_objects": 114,
+        "personally_read_reused_objects": 84,
+        "complete_new_master_objects_read": 30,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The semicolon separates the circumstances from the comprehension requirement; current too is a full word rather than a punctuation or whitespace accident. Preserve the comma and final period exactly. Neither the full unpleasant phrase nor the complete agentive construction requires a new subword exception.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

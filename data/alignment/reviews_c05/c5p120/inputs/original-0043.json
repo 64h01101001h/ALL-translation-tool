@@ -1,0 +1,335 @@
+{
+  "queries": [
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 358,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1740,
+        6894
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 358,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o"
+      ],
+      "count": 2,
+      "row_ids": [
+        1740,
+        6894
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 358,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      ],
+      "count": 2,
+      "row_ids": [
+        1740,
+        6894
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 359,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1741,
+        6895
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 359,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o"
+      ],
+      "count": 2,
+      "row_ids": [
+        1741,
+        6895
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 359,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+      ],
+      "count": 1,
+      "row_ids": [
+        1741
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 360,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 360,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang"
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 360,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "pha rol po mdza' ba dbye ba"
+      ],
+      "count": 2,
+      "row_ids": [
+        1740,
+        6894
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "mi snyan pa'i tshig gi don"
+      ],
+      "count": 2,
+      "row_ids": [
+        1741,
+        6895
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "nyon mongs pa can gyi tshig kun"
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "log pas 'tsho ba kha gsag byed pa"
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "chags pas kun nas bslangs nas glu len pa"
+      ],
+      "count": 2,
+      "row_ids": [
+        1742,
+        6896
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "their meaning to should be understood"
+      ],
+      "count": 2,
+      "row_ids": [
+        6895,
+        9348
+      ]
+    }
+  ],
+  "complete_records": {
+    "1740": {
+      "spine_row": {
+        "id": 1740,
+        "course": "C05",
+        "seq": 358,
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,\", \"wylie\": \"[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o\", \"english\": \"Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.\"}"
+      },
+      "corpus_index": 1739,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      }
+    },
+    "6894": {
+      "spine_row": {
+        "id": 6894,
+        "course": "C16",
+        "seq": 876,
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,\", \"wylie\": \"[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o\", \"english\": \"Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person.\"}"
+      },
+      "corpus_index": 6893,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      }
+    },
+    "1741": {
+      "spine_row": {
+        "id": 1741,
+        "course": "C05",
+        "seq": 359,
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person.",
+        "raw": "{\"course\": \"C05\", \"acip\": \", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,\", \"wylie\": \"tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o\", \"english\": \"Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person.\"}"
+      },
+      "corpus_index": 1740,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning too should be understood by the other person."
+      }
+    },
+    "6895": {
+      "spine_row": {
+        "id": 6895,
+        "course": "C16",
+        "seq": 877,
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person.",
+        "raw": "{\"course\": \"C16\", \"acip\": \", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,\", \"wylie\": \"tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o\", \"english\": \"Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person.\"}"
+      },
+      "corpus_index": 6894,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ", TSIG RTZUB PO NI BSAMS BZHIN DU MA NOR BAR MI SNYAN PA'I TSIG GI DON PHA ROL POS GO BA'O,",
+        "wylie": "tshig rtsub po ni bsams bzhin du ma nor bar mi snyan pa'i tshig gi don pha rol pos go ba'o",
+        "english": "Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person."
+      }
+    },
+    "1742": {
+      "spine_row": {
+        "id": 1742,
+        "course": "C05",
+        "seq": 360,
+        "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+        "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+        "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,\", \"wylie\": \"nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang\", \"english\": \"\\\"Meaningless speech\\\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \\\"meaningless speech\\\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire.\"}"
+      },
+      "corpus_index": 1741,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+        "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+        "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+      }
+    },
+    "6896": {
+      "spine_row": {
+        "id": 6896,
+        "course": "C16",
+        "seq": 878,
+        "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+        "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+        "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,\", \"wylie\": \"nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang\", \"english\": \"\\\"Meaningless speech\\\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \\\"meaningless speech\\\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire.\"}"
+      },
+      "corpus_index": 6895,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+        "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+        "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+      }
+    },
+    "9348": {
+      "spine_row": {
+        "id": 9348,
+        "course": "TCS02",
+        "seq": 74,
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist.",
+        "raw": "{\"course\": \"TCS02\", \"acip\": \",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN\", \"wylie\": \"phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin\", \"english\": \"Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \\\"Meaningless speech\\\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \\\"meaningless speech\\\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist.\"}"
+      },
+      "corpus_index": 9347,
+      "corpus_record": {
+        "course": "TCS02",
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+      }
+    }
+  }
+}

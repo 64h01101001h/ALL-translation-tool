@@ -1,0 +1,160 @@
+{
+  "seq": 358,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1740,
+        "course": "C05",
+        "seq": 358,
+        "acip": "[IV.301-11a] ,GSUM PA NI, PHRA MA NI BSAMS BZHIN DU MA NOR BAR PHA ROL PO MDZA' BA DBYE BA'I PHYIR NYON MONGS PA CAN GYI SEMS KYI TSIG DON PHA ROL POS GO BA'O,",
+        "wylie": "[iv.301-11a] ,gsum pa ni, phra ma ni bsams bzhin du ma nor bar pha rol po mdza' ba dbye ba'i phyir nyon mongs pa can gyi sems kyi tshig don pha rol pos go ba'o",
+        "english": "Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current fields and six physical extents read; original native source capture is reused by its exact pin, without rerunning its query. Agreement proves the recorded source, not independent publication."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1740,
+            6894
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1740,
+            6894
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1740,
+            6894
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:876 repeats all three complete ACIP/Wylie/English fields. This establishes textual repetition only, not independent publication or a corrected witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "f614639348a03fa30cc53db1b27c6b2034df43cb:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete registered-class records are exact same-agent personal-reading reuses. The current204-entry register has no358–360 entry; new203/204 concern352. No registered converter/running-head/cap/spill/heading/footnote class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "MDZA' BA/friends and GO BA/understood agree with complete lexical records and the local definition. MA NOR BAR is a negated mistake condition; its mined purposely and without gloss straddles BSAMS BZHIN and is not used as authority. GSUM PA is an unrendered third-outline label, not an English numbering typo. The two other-person expressions have distinct target and recipient roles.",
+      "counterevidence": "Complete curated/glossary/scaffold/auto-aligned tiers remain distinct. Identical C16 text is not an independently collated correction. An omitted or expanded English construction does not itself establish a source error, and no hgm_gloss or source/master field is changed."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 159,
+        "wylie": 159,
+        "english": 228
+      },
+      "utf8_bytes": {
+        "acip": 159,
+        "wylie": 159,
+        "english": 228
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical extent includes [IV.301-11a], the GSUM outline introduction in uppercase ACIP, and the complete English sentence ending other person. This is prose with citation apparatus, not a verse line needing syllable restoration. All fields are below1500; there is no running head, glued footnote or abrupt cap."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "MDZA' BA is an attested friends form, and physical ACIP agrees with all remaining Tibetan. No corrected witness supports a spelling change.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The definition and its two other-person references read coherently. The absent outline ordinal is a translation-scope choice, not a mistyped English word.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The statement distinguishes intentional speech, nonmistake, an afflicted condition, friends being separated and recipient understanding; no source-specific factual contradiction is established.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Citation apparatus and the complete sentence match the physical extent; no1500 cap or demonstrated column/row corruption.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The bracketed verse-range citation precedes prose; capitals, commas and line wraps are preserved and do not warrant a new register entry.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,65 @@
+import json,hashlib,sqlite3,gzip,subprocess,re
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];B=A.parent;W=A.parents[2]/'campaign-worktree'
+def put(n,x):(A/'evidence'/n).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+def pin(p):b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=sha(b))
+def objsha(x):return sha(json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode())
+base=json.loads((B/'proposal-baseline.json').read_text());put('proposal-baseline.json',base)
+for p in base['source_pins'].values():
+ b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256']
+refs=[]
+for n,p in base['governing_git_pins'].items():
+ b=subprocess.check_output(['git','show',base['commit']+':'+n],cwd=W);assert len(b)==p['bytes']and sha(b)==p['sha256'];refs.append({'git_object':base['commit']+':'+n,**p})
+ if n=='docs/errata_register.json':reg=json.loads(b)
+ if n=='data/alignment/C05_CAMPAIGN.md':shape=b.decode().split('## Gates')[0]
+put('governance.json',{'original_git_objects':refs,'course_shape':shape,'scope':'AGENTS/spec/brief unchanged from personally read351 origin; spec/brief reread at354. Builder delta is only the approved c5p118 registration. Current course ledger appended by the just-completed G closure; no future357 baseline.'})
+for n in ['proposal-protocol.md','current-alignment-output-contract.md']:(A/'evidence'/n).write_bytes((B.parent/n).read_bytes())
+source=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());orig=json.loads((B/'root-preparation-original-rows.json').read_text());priorctx=json.loads((B.parent/'C05-355-357/english/evidence/original-context-rows.json').read_text());byid={r['id']:r for r in priorctx}
+for r,o in zip(context,orig):assert all(o[k]==v for k,v in r.items())
+assert all(r in context for r in source)
+put('source-context.json',context);put('original-context-rows.json',orig)
+put('source-verification.json',{'status':'PASS_EXACT_REUSE_OF_NATIVE_SOURCE_CAPTURE','capture':pin(B/'root-preparation-proof.json'),'original_rows':pin(B/'root-preparation-original-rows.json'),'preparation_history':'preparation-history.json','source_rows':3,'context_rows':15,'new_source_queries':0,'context_prior_personal_reading':{'prior':pin(B.parent/'C05-355-357/english/evidence/original-context-rows.json'),'identical_complete_rows':[r['seq']for r in orig if r['id']in byid and r==byid[r['id']]],'new_complete_rows':[r['seq']for r in orig if r['id']not in byid]}})
+m=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+priorq={};priorobj={}
+for batch in ['C05-352-354','C05-355-357']:
+ for n in ['lexical.json','supplemental-lexical.json']:
+  p=B.parent/batch/'english/evidence'/n
+  if not p.exists():continue
+  x=json.loads(p.read_text());pi=pin(p)
+  for q in x['queries']:priorq[q['term']]=(q,pi)
+  for k,v in x['master_objects'].items():priorobj[k]=(v,pi)
+terms=['gsum pa','phra ma','bsams bzhin du','ma nor bar','ma','nor ba','nor','bar','pha rol po',"mdza' ba",'dbye ba','phyir','nyon mongs pa can','nyon mongs can','nyon mongs','sems','gyi','kyi','tshig','tshig don','don','pha rol pos','go ba','tshig rtsub po','rtsub po','mi snyan pa','gi','ngag kyal pa','ngag','kyal pa','kun','nyid','yin','no','sde pa','gzhan','ni','gsum po','de','las','gzhan pa','te','dper na','dge slong','log pas','log pa',"'tsho ba",'kha gsag','byed pa','dang','chags pas','chags','kun nas bslangs','kun nas bslangs nas','glu','len pa']
+objects={};lex=[];queryreuse=[];newterms=[]
+for term in terms:
+ keys=[]
+ for coll in ['unified_entries','curated_entries','glossary_entries']:
+  for i,e in enumerate(m[coll]):
+   if e.get('wylie')==term or term in(e.get('wylie_variants')or[]):
+    key=f'{coll}:{i}';objects[key]={'collection':coll,'index':i,'entry':e};keys.append(key)
+ if term in priorq:
+  q,p=priorq[term];assert q['master_keys']==keys
+  for row in q['spine_rows']:assert json.loads(row['raw'])==m['unified_entries'][row['id']-1]
+  lex.append(q);queryreuse.append({'term':term,'prior_evidence':p,'query_object_sha256':objsha(q)})
+ else:
+  sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';rows=[dict(r)for r in db.execute(sql,(term,term))]
+  lex.append({'term':term,'sql':sql,'parameters':[term,term],'spine_count':len(rows),'spine_rows':rows,'master_count':len(keys),'master_keys':keys});newterms.append(term)
+put('lexical.json',{'queries':lex,'master_objects':objects})
+reused=[];new=[]
+for k,v in objects.items():
+ if k in priorobj and v==priorobj[k][0]:reused.append({'master_key':k,'full_entry_sha256':objsha(v['entry']),'prior_evidence':priorobj[k][1]})
+ else:new.append(k)
+put('reading-reuse.json',{'reused_complete_objects':reused,'new_or_different_full_objects_to_read':new,'reused_exact_queries':queryreuse,'new_executed_lexical_terms':newterms})
+qs=json.loads((B/'root-parallel-preparation.json').read_text());records={}
+for q in qs:
+ for r in q['rows']:
+  assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+put('corpus.json',{'queries':qs,'complete_records':records,'native_query_reuse':{'source':pin(B/'root-parallel-preparation.json'),'new_exact_parallel_queries':0,'scope':'Reuse nine completed source-preparation exact-field queries by exact identity, then personally read material full returned objects.'}})
+physical=Path(base['source_pins']['physical']['path']).read_bytes();prep=json.loads((B/'root-preparation-proof.json').read_text());byseq={r['seq']:r for r in source}
+for x in prep['physical_extents']:
+ b=physical[x['start']:x['start']+x['bytes']];assert sha(b)==x['sha256'] and b.decode('ascii')==x['original_text'];assert re.sub(rb'\s+',b' ',b).strip().decode('ascii')==byseq[x['seq']][x['field']]
+put('physical-extents.json',{'physical_pin':base['source_pins']['physical'],'original_preparation_pin':pin(B/'root-preparation-proof.json'),'extents':prep['physical_extents'],'scope':'All six complete selected ASCII extents read; original source capture reused without rerunning query. No whole-file encoding claim.'})
+terms=['C05:358','C05:359','C05:360'];direct=[r for r in reg if any(t in json.dumps(r)for t in terms)]
+put('register.json',{'original_git_object':base['commit']+':docs/errata_register.json','sha256':base['governing_git_pins']['docs/errata_register.json']['sha256'],'count':len(reg),'search_terms':terms,'direct_matches':direct,'classes_checked':['E-044 converter escapes','E-071 running head','E-107 cap','E-111 spill','following-heading','footnote/folio fusion']})
+print(json.dumps({'lexical_terms':len(lex),'new_lexical_queries':len(newterms),'reused_lexical_queries':len(queryreuse),'unique_master_objects':len(objects),'personally_read_exact_prior_reuse':len(reused),'new_master_objects':len(new),'new_keys':new,'new_terms':newterms,'exact_parallel_queries_reused':len(qs),'complete_corpus_records':len(records),'corpus_counts':[[q['seq'],q['field'],q['count']]for q in qs],'context_new':list(range(364,367)),'direct_register_matches':len(direct)},indent=2))

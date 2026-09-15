@@ -1,0 +1,160 @@
+{
+  "seq": 360,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1742,
+        "course": "C05",
+        "seq": 360,
+        "acip": ",NYON MONGS PA CAN GYI TSIG KUN NGAG KYAL PA NYID YIN NO, , SDE PA GZHAN NI GSUM PO DE LAS GZHAN PA'I NYON MONGS CAN GYI TSIG NGAG KYAL PA NYID YIN TE, DPER NA, DGE SLONG LOG PAS 'TSO BA KHA GSAG BYED PA DANG , CHAGS PAS KUN NAS BSLANGS NAS GLU LEN PA DANG ,",
+        "wylie": "nyon mongs pa can gyi tshig kun ngag kyal pa nyid yin no, , sde pa gzhan ni gsum po de las gzhan pa'i nyon mongs can gyi tshig ngag kyal pa nyid yin te, dper na, dge slong log pas 'tsho ba kha gsag byed pa dang , chags pas kun nas bslangs nas glu len pa dang",
+        "english": "\"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind. Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned. They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current fields and six physical extents read; original native source capture is reused by its exact pin, without rerunning its query. Agreement proves the recorded source, not independent publication."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1742,
+            6896
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1742,
+            6896
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1742,
+            6896
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:878 repeats all three complete ACIP/Wylie/English fields. The neighboring361 continues the example list with a performer, stories and wrong commentary. Exact repetition does not independently establish editing or ingestion history."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "f614639348a03fa30cc53db1b27c6b2034df43cb:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete registered-class records are exact same-agent personal-reading reuses. The current204-entry register has no358–360 entry; new203/204 concern352. No registered converter/running-head/cap/spill/heading/footnote class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The two schools use broad versus restricted definitions: first every afflicted utterance, then afflicted utterances other than the preceding three types. NYID is rendered really/actually; the second every is supplied. The desire-motivation clause belongs to singing, not to the earlier purpose-of-gain expansion. DPER NA's unrelated mined present life gloss is rejected. GLU LEN PA has complete attested singing a song; the bare LEN PA HGM take/accept senses are not generalized into a standalone singing gloss.",
+      "counterevidence": "Complete curated/glossary/scaffold/auto-aligned tiers remain distinct. Identical C16 text is not an independently collated correction. An omitted or expanded English construction does not itself establish a source error, and no hgm_gloss or source/master field is changed."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 258,
+        "wylie": 258,
+        "english": 411
+      },
+      "utf8_bytes": {
+        "acip": 258,
+        "wylie": 258,
+        "english": 411
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical English paragraph break falls between speech and actually while the sentence continues. The full English finishes desire; the Tibetan finishes a DANG conjunction whose examples continue in361. This is a readable row division in an ongoing explanation, not proof of missing source text. NO closes the first definition at mind. No field reaches1500 characters; no verse metre applies."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "NYON MONGS PA CAN versus shorter NYON MONGS CAN and the two NGAG KYAL PA forms are coherent in their respective definitions. The complete physical text and C16:878 agree.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Both quoted titles, really/actually contrast and flattery/singing examples are grammatical. No exact independently corrected version establishes a wording defect.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The alternative definition excludes the three preceding speech types, as GSUM PO DE LAS GZHAN PA states. Desire motivates the singing example; supplied expanded frames do not prove a doctrinal error.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The full extents are below1500 characters. Final DANG continues the example list into361, while English360 is a complete sentence; no unproved missing-text correction is proposed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The physical paragraph break inside the second definition and the quoted category names remain verbatim. NO's closure corresponds to the period after mind, and the final English period does not terminate the Tibetan list.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

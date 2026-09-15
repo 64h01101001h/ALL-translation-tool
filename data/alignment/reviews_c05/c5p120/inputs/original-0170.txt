@@ -1,0 +1,87 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update(({'cls':'conj','nul':why} if d==6 else {'nul':why}) if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(358,'divisive speech and its intended effect',[
+ ('gsum pa',None,5,'','The complete ordinal is the third outline point. The entire English starts directly with Divisive speech and contains no number, ordinal, next/now transition or other exponent of third. This is affirmative absence of the outline label, not an uncertainty null; NI is separately omitted.'),
+ ('phra ma','Divisive speech',5,'Divisive speech','Established speech-category compound, without fabricated PHRA/MA members or the supplied definition frame.'),
+ ('bsams bzhin','purposely',5,'spoken purposely','The intentionality compound supplies purposely in this actual utterance condition. DU is omitted; the MA NOR BAR auto-aligned purposely and without string wrongly mixes adjacent expressions.'),
+ ('ma','without',6,'without any mistake','Standalone negation denies error; without owns only that negation, excluding supplied any.'),
+ ('nor','mistake',5,'any mistake','The error sense is mistake here, not mistaken identity from353. BAR completes adverbial grammar and is not mapped to between.'),
+ ('pha rol po','others',5,'split up others','This first other-person expression names the people being divided. It is distinct from the later recipient who understands the words.'),
+ ("mdza' ba",'friends',5,'who are friends','The complete friendship adjective/noun is rendered friends; exclude who are. The full glossary supports friends without correcting the source.'),
+ ('dbye ba','split up',5,'to split up others','Dividing/separating verb owns the complete phrasal verb split up, excluding to, which belongs to the purpose relation.'),
+ ('phyir','meant to',6,'they are meant to','Purpose particle gives meant to in this purpose construction. Exclude they are; do not turn BSAMS/purposely into this second purpose expression.'),
+ ('nyon mongs pa can gyi sems','mentally afflicted state',3,'in a mentally afflicted state','The entire afflicted-mind phrase owns the recast mentally afflicted state. SEMS is not independently banked as state or a fragment of mentally; internal GYI remains within the phrase.'),
+ ('kyi','in',6,'and in a mentally','The following case relation links the utterance to its afflicted mental condition; English in supplies that relation. The separate internal GYI is already inside the whole mind phrase.'),
+ ('tshig','words',5,'consists of words','The sole independent speech noun owns words in the initial definition; spoken is supplied verbal framing, not another source verb.'),
+ ('don','meaning',5,'their meaning should','Content/meaning of those words is the later singular meaning. The Tibetan compound is flattened into its real separated English words and meaning, with no larger discontinuous claim.'),
+ ('pha rol pos','other person',5,'by the other person','The complete agentive-inflected recipient noun owns other person, preserving final S. No detached agentive suffix or supplied by/the is added to the noun.'),
+ ('go ba','understood',5,'be understood by','The understanding verb owns understood in the passive English. Should be remains outside; the attached declarative ending is not split.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. GSUM PA is an unrendered outline ordinal with affirmative whole-sentence absence evidence. Distinguish the others who are friends from the recipient other person. The afflicted-mind phrase stays whole at d3; source and GMR English remain exact. No source correction or hgm_gloss promotion.',
+[{'tib':'[iv.301-11a]; both ni; du; bar; bound genitive and declarative endings','reason':'Apparatus and topic/adverbial/bound grammar have no secure separate English atom in this reordered definition. They remain omitted rather than being labeled absent. The distinct full GSUM PA ordinal alone has affirmative absence evidence.'},
+ {'english':'consists of; which are spoken; any; and; a; they are; who are; and their; should be; by the','reason':'Definition framing, auxiliaries, participants, determiners and anaphoric possession are supplied or distributed. KYI/in records the actual state relation, not these other frames. No detached English or Tibetan suffix is claimed.'}])
+build(359,'harsh speech understood by its recipient',[
+ ('tshig rtsub po','Harsh speech',5,'Harsh speech','Established harsh-speech compound; the following two members are unique and strictly tighter than this title.'),
+ ('tshig','speech',7,'Harsh speech','Speech member is inside the title, not the later independent words noun.'),
+ ('rtsub po','Harsh',7,'Harsh speech','Harsh member belongs to the title and excludes the speech component.'),
+ ('bsams bzhin','purposely',5,'spoken purposely','The intentionally/purposely compound qualifies this harsh utterance. It does not include and or without.'),
+ ('ma','without',6,'and without any mistake','The negative particle owns without in the nonmistaken-utterance condition; exclude any.'),
+ ('nor','mistake',5,'any mistake;','Error noun is the singular mistake; do not import353 mistaken identity or a wealth sense of NOR.'),
+ ('mi snyan pa','unpleasant',5,'of unpleasant words','Whole negative evaluative compound is unpleasant. No English un affix is extracted, because the proposed whole compound already makes the correct lexical claim.'),
+ ('tshig','words',5,'unpleasant words which','This independent noun is words in the definition, distinct from TSHIG inside the earlier title.'),
+ ('don','meaning',5,'their meaning too','The word-content noun owns meaning. Too is a supplied connective, not part of the meaning noun.'),
+ ('pha rol pos','other person',5,'by the other person','Whole agentive-inflected recipient expression owns other person, excluding by/the and preserving the source S.'),
+ ('go ba','understood',5,'be understood by','The understanding verb owns understood. Its passive/necessity framing remains unwrapped.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Harsh speech has two strict members; its speech noun differs from the later words. MA/without and NOR/mistake stay flat. The source English reads too; C16:877 instead reads to, an out-of-row variant rather than an erratum for this correct wording.',
+[{'tib':'ni; du; bar; bound genitive after mi snyan pa; gi; attached declarative o','reason':'The topic, adverbial and genitive grammar is distributed into the definition and anaphoric their meaning. No unique GI/of occurs in that phrase, and their combines the referent and possession. These are omitted without false nulls.'},
+ {'english':'consists of; which are spoken; and; any; their; too; should be; by the','reason':'Definition framing, connectors, determiner, possession and auxiliaries remain outside narrow lexical claims. The previous358 mental-state condition is not copied into this shorter source row.'}])
+build(360,'two definitions of meaningless speech',[
+ ('nyon mongs pa can','afflicted state of mind',5,'an afflicted state of mind','Complete attested compound explicitly has afflicted state of mind. No separate SEMS occurs here; its mental-state expansion is owned whole, excluding an.'),
+ ('gyi','in',6,'words spoken in an','First GYI relates the spoken words to their afflicted condition; the actual English relation is in, before the full afflicted-state expression.'),
+ ('tshig','words',5,'case of words spoken','First independent speech noun owns words; case of and spoken remain outside.'),
+ ('kun','every',5,'every case of words','Only the first definition has this KUN. It owns the first every, not every in the alternative definition or KUN inside the later motivation phrase.'),
+ ('ngag kyal pa','Meaningless speech',5,'"Meaningless speech" really','First full title compound owns the initial capitalized quoted title, excluding quotation marks.'),
+ ('ngag','speech',7,'"Meaningless speech" really','Speech is a unique member of the first title, not either independent TSHIG word.'),
+ ('kyal pa','Meaningless',7,'"Meaningless speech" really','Meaningless is the remaining lexical member of the first title; no English negative suffix is fabricated.'),
+ ('nyid','really',6,'"Meaningless speech" really','First emphasis/identity particle is rendered really in the first definition; distinguish second actually.'),
+ ('no',None,6,'','This standalone statement terminator closes the first definition. Its grammatical closure is fused into the English period immediately after mind, before Other groups. The full NO entry explicitly lists punctuation; this null records proven punctuation fusion, not missing meaning.'),
+ ('sde pa','groups',5,'Other groups say','The complete school/group noun is plural groups in the contrasting school statement.'),
+ ('gzhan','Other',5,'Other groups say','First GZHAN qualifies the groups; it is not the later other-than comparison.'),
+ ('gsum po','three',5,'those three already','The full number expression retains PO and owns three; do not mistake it for the absent358 outline ordinal.'),
+ ('de','those',5,'than those three','The demonstrative identifies the preceding three speech types. Already mentioned is explanatory anaphoric wording outside this narrow demonstrative.'),
+ ('las','than',6,'other than those three','Comparative/ablative LAS owns than in the alternative-to-three relation, not an unrelated of or from.'),
+ ('gzhan pa','other',5,'word other than','The second OTHER expression is the comparison adjective. Its bound genitive stays attached outside the selected complete PA syllable; than is separately owned by LAS.'),
+ ('nyon mongs can','afflicted',5,'every afflicted type','The second afflicted compound qualifies the alternative class. English every is supplied in this definition and has no separate local KUN.'),
+ ('tshig','word',5,'the spoken word other','Second independent noun is singular word. Spoken and type of the are explanatory framing outside this noun.'),
+ ('ngag kyal pa','meaningless speech',5,'what "meaningless speech" actually','Second title occurs within the other groups statement, not the opening capitalized title.'),
+ ('ngag','speech',7,'what "meaningless speech" actually','Speech member belongs uniquely inside the second title.'),
+ ('kyal pa','meaningless',7,'what "meaningless speech" actually','Lowercase meaningless member belongs uniquely inside the second title, preserving case.'),
+ ('nyid','actually',6,'"meaningless speech" actually','Second emphasis/identity particle is rendered actually in the second definition, distinct from the first really.'),
+ ('dper na','like',6,'cases would be like','The example-introducing expression is locally rendered like. Exclude They say cases would be; the unrelated mined present life gloss supplies no license.'),
+ ('dge slong','monk',5,"like a monk's",'The complete monastic noun owns monk, excluding a and the English possessive clitic.'),
+ ('log pas','improper',5,'the improper livelihood','Whole inflected wrong/improper qualifier is preserved. No detached final S or false proper member is created.'),
+ ("'tsho ba",'livelihood',5,'improper livelihood','The complete livelihood noun has this explicit attested English sense.'),
+ ('kha gsag','flattering',5,'of flattering someone','The flattery compound owns flattering in this gain-seeking example. Someone and for the purpose of some gain expand the beneficiary/motive and remain unwrapped; no false separate KHA/gain member is proposed.'),
+ ('byed pa','engaging',5,"monk's engaging in",'The action verb is explicitly attested as engaging and perform. Here it describes the monk engaging in this flattery livelihood; keep the supplied in and possessive outside. This is supported by the full verb record and actual actor/action, not merely by an unmatched English verb.'),
+ ('dang','or else',6,'gain, or else singing','This coordinator joins flattery with singing and is rendered the complete or else. The final DANG instead continues to361 and is omitted.'),
+ ('chags pas kun nas bslangs nas','out of desire',3,'song out of desire','The complete instrumental desire-plus-aroused-motivation phrase owns the causal recast out of desire. KUN NAS is not a second every, and BSLANGS does not own purpose in the earlier flattery example.'),
+ ('glu len pa','singing a song',5,'or else singing a song','Established song-singing compound has the complete attested gloss singing a song, including its internal grammatical article. This excludes or else and out of desire; a is not a separate claim.'),
+ ('glu','song',7,'singing a song','The explicit song noun is a unique strictly tighter member inside the song-singing compound; exclude its article.'),
+ ('len pa','singing',7,'singing a song','In this song collocation LEN PA is the singing action: its complete comparative record includes gāyati/gīyate, while the whole attested GLU LEN PA gives singing a song. Its general HGM take/accept senses alone would not license this contextual member; no generic take-to-sing equation is asserted.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Distinguish the two title/definition occurrences, first every and second supplied every, and first really versus second actually. NO has a punctuation-fusion null at the end of the first definition. The full desire/motivation phrase stays d3. GLU LEN PA is an attested whole song-singing compound with two strict members. Source and GMR wording remain exact.',
+[{'tib':'both yin; ni; bound genitive after gzhan pa; second gyi; te','reason':'Both copulas participate in expanded definition frames: first refers to and second what ... refers to is. No unique word-sized correspondence is asserted for those recasts. Second GYI participates in the added type of the spoken word frame. These remain uncertain/distributed omissions, not absence nulls.'},
+ {'tib':'final dang','reason':'The source example list continues into361 with performers/storytelling and wrong commentary. The English360 ends a complete sentence; no within-row lexical coordinator or proven isolated fusion is claimed for this cross-row conjunction.'},
+ {'english':'case of; spoken; say that what; second every; type of the; already mentioned; They say cases would be; a; possessive clitic; in the; of; someone; for the purpose of some gain','reason':'These articles, speech-report frames, anaphoric expansions and motive explanation remain outside the selected atoms. The internal a in the full attested singing a song compound is retained only within that whole compound, never as a member. Gain-seeking is part of the KHA GSAG context but cannot supply a disconnected gain target or false BSLANGS/purpose from the next example.'}])
