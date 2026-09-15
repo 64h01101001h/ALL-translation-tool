@@ -1,0 +1,10 @@
+{
+  "status": "ACTUAL_READ_ONLY_PREFLIGHT_FAILURE",
+  "evidence_kind": "RECONSTRUCTED_FROM_ACTUAL_TOOL_RESPONSE_NOT_CONTEMPORANEOUS_NATIVE_CAPTURE",
+  "tool_chunk_id": "885773",
+  "exit_code": 1,
+  "output": "Traceback (most recent call last):\n  File \"<stdin>\", line 10, in <module>\nAssertionError: (366, 'w6', 'the thinking,')\n",
+  "cause": "The intended first thinking anchor also occurs in the second thinking clause. Failure occurred during read-only AST anchor validation, before any author output or canonical generation.",
+  "preimage": "author-before-anchor-correction.py.txt",
+  "correction": "Use unique first-clause anchor conception, the thinking,; proposed semantic word remains thinking."
+}

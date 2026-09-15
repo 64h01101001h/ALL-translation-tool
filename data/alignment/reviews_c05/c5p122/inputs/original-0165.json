@@ -1,0 +1,159 @@
+{
+  "seq": 366,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1748,
+        "course": "C05",
+        "seq": 366,
+        "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+        "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+        "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-attempt02-caller, followed by the successful proposal-origin-caller. The initial missing-argument failure is preserved separately in preparation-history.json; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1748,
+            6901
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1748,
+            6901
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1748,
+            6901
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:883 repeats all three complete fields. Following367 explains the killing object;368–369 explain conceptions;370 states the bad thought and motivation;371 explains undertaking;372 explains conclusion. These complete contextual records confirm the functional organization while leaving the source translation and its condensed list untouched."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no364–366 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The initial five parts are object, conception, thinking, bad thought and conclusion. The middle three are included in thinking and undertaking is added, yielding four. English condenses the repeated four-part list: later GZHI, BSAM PA, SBYOR BA and MTHAR THUG cannot reuse the first list words. BSDU BAR is the text title Abbreviation, distinct from both BSDUS operations. BSHAD/presentation is a local nominal recasting of exposition; JUG PA and conditional/linking grammar remain partly unbanked. Terminal LO has only a punctuation-fusion null.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 311,
+        "wylie": 308,
+        "english": 429
+      },
+      "utf8_bytes": {
+        "acip": 311,
+        "wylie": 308,
+        "english": 429
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are below1500 characters, with the complete English paragraph ending the intention of the original text. The physical source includes both Tibetan five-part and four-part lists. English restructuring and reordered inclusion/shortening statements do not prove a cap, spill or missing line. The next367 begins the object explanation, while372 supplies the later conclusion discussion."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Both full list enumerations and the surrounding prose agree with physical ACIP and C16:883. BSDU BAR, BSAM PAR and LNGAR retain their full inflected syllables; different dictionary headword forms do not justify source correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The five-to-four exposition is grammatical, including the two thinking occurrences and the separate included/shortened verbs. No source-specific mistyped word is observed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The middle-three inclusion plus added undertaking explains the four categories, supported by367–372. Compression of the repeated Tibetan list and question framing constrains alignment but does not establish a false claim in the translation.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Both complete physical extents and the full C16:883 parallel preserve this passage. The condensed English list is not evidence of an ingestion loss, running head or cap.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The opening question, colon, list commas, semicolon and closing period remain exact. Terminal LO is represented only as an alignment punctuation-fusion null, not as a source-format correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

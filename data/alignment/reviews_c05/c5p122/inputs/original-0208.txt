@@ -1,0 +1,100 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update(({'cls':'conj','nul':why} if d==6 else {'nul':why}) if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(364,'why ten deeds are called paths of action',[
+ ('bcu po','ten',5,'group of ten','The ten are the previously listed actions. Exclude group of and just listed, which expand their collective/anaphoric reference.'),
+ ("'di",'them',5,'"them"','The demonstrative points to those ten and is rendered the quoted pronoun them. Do not also align it to the explanatory just listed.'),
+ ('la','in reference to',6,'in reference to','The standalone object relation is rendered the complete in reference to phrase. This is distinct from the later action/deed nouns spelled LAS.'),
+ ("ci'i phyir",'why',5,'why the expression','The complete interrogative expression is independently attested as why. Do not split its genitive ending or purpose noun into invented English atoms.'),
+ ('las kyi lam','path of action',5,'"path of action"','Established compound names the expression being explained. It is the opening singular quoted occurrence, not the later plural explanation or final English-only heading.'),
+ ('las','action',7,'action" is used','Unique action member inside the opening compound. It is not either later independent deed/action noun.'),
+ ('lam','path',7,'path of action" is used','Unique path member inside the opening singular compound.'),
+ ('zhe na','ask',3,'ask why','The question-introducing formula owns ask. Supplied One may and the separate why question content remain outside.'),
+ ('yid','thought',5,'with thought','The mental faculty is rendered thought here, distinct from the mental movement expression that follows.'),
+ ('gsum','three',5,'the three involved','The cardinal names the three mental actions. It is not the omitted initial outline ordinal GSUM PA.'),
+ ('las','action',5,'"action" or deed','This independent LAS is the quoted action in the mental-movement clause. The synonymous or deed remains outside rather than creating two claims from one Tibetan occurrence.'),
+ ('sems pa','mental movement',5,'deed of mental movement','The complete established mental-event noun owns mental movement. No separate nominal PA or invented English subword member is asserted.'),
+ ("'jug pa",'expressed',5,'is expressed. Moreover','The expression/manifestation sense is supported by the complete record and this account of action entering a path. Exclude the passive auxiliary is.'),
+ ('lam','paths',5,'are paths by which','The first independent path noun names the paths of mental movement, not the opening quotation.'),
+ ('yin pa','are',6,'are paths by which','The complete copular form supplies are in the three-actions predicate. NI and unrelated supplied definition verbs are not conflated with this copula.'),
+ ('dang','Moreover',6,'Moreover,','The clause coordinator introduces the second, bodily/verbal group. English makes this connection the sentence-initial Moreover. The later YANG separately marks the added path predicate.'),
+ ('lus','body',5,'body and speech','Body is the first of the two faculties associated with the seven deeds. The supplied English and does not license an absent Tibetan conjunction between LUS and NGAG.'),
+ ('ngag','speech',5,'speech are action','Speech is the second faculty; preserve its distinction from thought in the preceding clause.'),
+ ('bdun','seven',5,'the seven involved','The cardinal counts bodily and verbal deeds. No plural suffix or group noun is invented.'),
+ ('las','deeds',5,'deeds themselves','This LAS is the deed noun of the seven bodily/verbal actions. English action or deeds gives synonymous expansion; the narrow deeds realization is selected once, with action or left outside.'),
+ ('yin','are',6,'are action or deeds','This copula predicates action/deed status of the seven. It is the second explicit are, not the first three-paths predicate or final summary are.'),
+ ('sems pa','mental movement',5,'which mental movement','The second complete mental-event noun belongs to the bodily/verbal paths explanation; it is not a duplicate of the first occurrence.'),
+ ("'jug pa",'expressed',5,'is expressed. Thus','Second manifestation verb owns the second expressed. Its passive auxiliary remains outside.'),
+ ('lam','paths',5,'as well as paths','This second independent path noun is the additional predicate of the seven deeds. It is not the final quoted term.'),
+ ('yang','as well as',6,'as well as paths','The additive marks that these deeds are also paths. The complete as well as phrase supplies that addition; it does not own either neighboring noun.'),
+ ('pas na','Thus',6,'Thus they','The complete causal connective supplies the inferential Thus introducing the naming conclusion. PAS is retained whole, with no detached agentive S.'),
+ ('las kyi lam','paths of action',5,'"paths of action."','Final established compound owns the quoted plural expression in the naming conclusion. The additional repetition in the following English transition has no second Tibetan term here.'),
+ ('las','action',7,'action." The fourth','Action member lies strictly inside the final quoted compound.'),
+ ('lam','paths',7,'paths of action."','Path member lies strictly inside that same final compound.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep the three mental paths and seven bodily/verbal deeds distinct, including both mental-movement and expressed occurrences. Synonymous action/deed expansions receive one narrow claim each. The full English fourth-part transition and asterisks remain verbatim and unwrapped. No source correction or hgm_gloss promotion.',
+[{'tib':'[iv.311b-12]; gsum pa ni','reason':'Citation and initial third-section outline are not explicitly reproduced by the English opening. English first of all explains the name, while fourth major part belongs to the later transition; neither is a faithful third-ordinal counterpart. Leave the outline/citation unbanked, without converting uncertain discourse correspondence into nulls.'},
+ {'tib':'zhes bya; final zhes bya\'o','reason':'The naming construction is distributed through expression, is used, The name derives and the concluding they are all quotation. No single contiguous narrow counterpart securely owns either full occurrence. The mined unrelated every living creature gloss is not evidence for this context.'},
+ {'tib':'bound genitive endings; ni after bdun; kyang; la after yin; final yin before pas na','reason':'Bound relations and topic framing are not detached into suffix spans. KYANG emphasizes deed status while English uses synonymous action/deeds and themselves; themselves alone is not a secure additive equivalent. LA and the final path copula are distributed across as well as paths, whose addition is banked narrowly under YANG. The summary are does not safely belong to that earlier copula. None of these uncertainties is an absence null.'},
+ {'english':'One may; the expression; is used; --to the group of; just listed; The name derives first of all from the fact that; the; involved with; by which; or deed of; is; the; involved with; and between body and speech; action or; themselves; through which; is; they are all','reason':'Supplied question/definition framing, articles, participation and relative constructions, synonymous expansions and summary participants remain outside the chosen local spans. These unwrapped words do not authorize copying a Tibetan occurrence or mapping the same source word twice.'},
+ {'english':'The fourth major part in our presentation of the "paths of action" concerns the ways in which one loses, and then regains, his most basic virtue. *********','reason':'This complete GMR transition and divider have no corresponding Tibetan clause within364. Physical source lineation preserves them as English framing. C16:882 shares the explanation but has a different following section transition; that same-corpus parallel does not establish a source error or authorize removing this wording.'}])
+build(365,'attribution to the Great Book on the Steps of the Path',[
+ ('rje tsong kha pa','Je Tsongkapa',5,'Je Tsongkapa','The complete author name is explicitly attested. Dates remain outside the name because they have no Tibetan source characters here.'),
+ ('rje','Je',7,'Je Tsongkapa','Honorific/name member is the printed Je within the complete author name. It is not the title adjective Great.'),
+ ('tsong kha pa','Tsongkapa',7,'Tsongkapa (1357','The personal-name member is unique and strictly tighter inside Je Tsongkapa.'),
+ ('gis','by',6,'by Je','Standalone agentive GIS marks the author of the composition and is rendered by. No detached suffix is used.'),
+ ('brtsoms pa','composed',5,'composed by','The complete source spelling is supported by full BRTSOMS PA records with compose/composed senses. Preserve this form; neither a different tense paradigm nor a spelling preference warrants correction.'),
+ ('lam rim chen mo','Great Book on the Steps of the Path',5,'Great Book on the Steps of the Path','The complete established work title has this exact translated title in the full lexical evidence. Do not align the author honorific MCHOG to the title Great.'),
+ ('lam','Path',7,'Path, composed','The path member belongs inside the book title, with its printed capital letter.'),
+ ('rim','Steps',7,'Steps of the Path','The steps member is unique inside the title; preserve GMR Steps, without substituting stages.'),
+ ('chen mo','Great',7,'Great Book','The great member is unique and strictly tighter inside the title. Book remains part of the whole title rather than being forced onto MO or another absent noun.'),
+ ('las','from',6,'from the Great','Final LAS is the source/ablative relation from this book, not the action noun used in364.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Preserve the full title, author spelling, dates and BRTZOMS PA source form. MCHOG is not assigned Great, which belongs to CHEN MO in the title. No source correction or hgm_gloss promotion.',
+[{'tib':'mchog; bound pa\'i','reason':'The additional supreme honorific has no separate certain English exponent. Je already belongs to RJE, and Great belongs to CHEN MO in the book title; broader honorific/name interpretation remains possible, so MCHOG is omitted rather than marked absent. The bound attribution/genitive ending is not split into a separate English word.'},
+ {'english':'The following selections are; the; on the; of the; (1357-1419)','reason':'Selection framing, articles and supplied dates remain verbatim outside independent spans. Relational title words are covered by the whole established title, without invented Tibetan particle members. Full name records also contain dates, but dictionary context does not create absent Tibetan date characters.'}])
+build(366,'five parts condensed into four',[
+ ('dang po','first',5,'first.','The outline ordinal is explicitly rendered first in the opening sentence, unlike the unbanked third-section outline in364.'),
+ ('srog gcod pa','killing',5,'killing?','The complete killing compound supplies the single English word killing. There is no independent life word for a SROG member, and GCOD is not split into a degenerate member covering the whole English parent.'),
+ ('zhe na','ask',3,'ask,','The question-introducing formula owns ask. One may and the definition question content remain outside this narrow formula.'),
+ ('bsdu bar','Abbreviation',5,'Abbreviation says','The complete inflected title form refers to the work named Abbreviation. Full BSDU BA records support that title; preserve the final R rather than cutting BAR into BA plus a suffix.'),
+ ('gzhi','object',5,'object,','First GZHI names the object in the initial five-part list. The later repeated GZHI is not assigned this same word.'),
+ ("'du shes",'conception',5,'conception,','The complete cognition/conception term names the second part, not an English thinking repetition.'),
+ ('bsam pa','thinking',5,'thinking, the bad','First BSAM PA names the third part in the initial five-part list.'),
+ ('nyon mongs','bad thought',5,'bad thought,','The complete afflictive-state term is rendered bad thought here. Its whole lexical evidence supports this established translation; no separate NYON or MONGS members are invented.'),
+ ('dang','and',6,'and the conclusion','This last DANG in the five-part list has the explicit final and. Earlier serial conjunctions are not copied onto it.'),
+ ("mtha'",'conclusion',5,'conclusion.','First conclusion term is the end of the five-part list. It is distinct from later MTHAR THUG in the condensed four-part Tibetan list.'),
+ ('lngar','five',5,'five parts','The complete inflected numeral owns the first five, preserving its final R. The later English These five is an anaphoric repetition and receives no second claim.'),
+ ('gsungs','says',5,'says that','The saying verb introduces the cited classification. Exclude supplied that and parts are involved.'),
+ ('bar pa','middle',5,'middle three','The middle subset comprises conception, thinking and bad thought. Middle belongs with three, not with the first or final numbers.'),
+ ('gsum','three',5,'three can be included','The cardinal counts those middle three components.'),
+ ('bsam par','thinking',5,'into the thinking','The complete inflected BSAM PAR supplies the second thinking, the category into which the middle three are included. Retain PAR whole; no detached R claim.'),
+ ('bsdus','included',5,'included into','This first BSDUS is the inclusion of the middle three into thinking. The later final BSDUS is represented separately by shortened in the English overview.'),
+ ('te','and',6,'and we can add','This connective joins the inclusion and adding-undertaking operations. The exact and before we can add is distinct from the initial list conjunction and the closing coordination.'),
+ ('sbyor ba','undertaking',5,'undertaking;','First undertaking noun names the newly added stage. Stage of is English explanatory wording and stays outside.'),
+ ('bsnan','add',5,'add the stage','The adding verb owns add in the four-part restructuring. Supplied we can remains outside.'),
+ ('bzhi bzhir','into four',3,'into four:','The complete repeated distributive numeral phrase describes arrangement into four. English states that result once; the whole phrase avoids inventing a second four or treating the repetition as an absence null.'),
+ ('bsdus','shortened',5,'shortened into four','Final BSDUS is the overall condensation into four, recast earlier in English as shortened. Source order and English order differ; this is not the first BSDUS/included occurrence.'),
+ ('bshad','presentation',5,'presentation easier','The explanation/exposition sense is rendered by the noun presentation. The source conditional and ease-of-engagement construction is recast around it; this narrow noun excludes this makes and easier.'),
+ ('bde','easier',5,'easier,','The ease word supplies easier, with an ordinary comparative form. The preceding engagement verb is not independently mapped to the same word.'),
+ ('zhing','and',6,'and in no way','The connective coordinates ease of presentation with consistency with the text intention. It owns this final and, not either earlier list/operation connector.'),
+ ('dgongs pa','intention',5,'intention of the original','The complete intention term owns intention. Of the original text supplies the referent explicitly in English and remains outside this noun.'),
+ ('mi','in no way',6,'in no way','Standalone negation is realized by the complete negative phrase in no way. Exclude violates, which belongs to the following lexical verb.'),
+ ("'gal",'violates',5,'violates the intention','The contravene/conflict verb is rendered violates. The following LO remains a separate terminal marker, not part of the lexical verb.'),
+ ('lo',None,6,None,'The terminal LO closes the completed statement after MI \u2019GAL. English closes the same statement with its final period; there is no additional lexical English word for this closure. This is affirmative punctuation fusion, not an uncertain lexical omission.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep the initial five-part list, the middle-three inclusion and the final four-part condensation distinct. The repeated later Tibetan nouns remain unbanked because English condenses that list. Terminal LO has one explicit punctuation-fusion null (d6, cls=conj, nul reason); no source correction or hgm_gloss promotion.',
+[{'tib':"ni; gang; 'di la",'reason':'The opening topic and this-case frame are distributed through Here is the first and the ensuing definition. GANG literally asks what, while English asks How do you define the act of killing; How alone is not a secure lexical equivalent and the expanded definition would absorb supplied wording. None is converted to an absence null.'},
+ {'tib':'first three dang in the five-part list; ste after mtha\'; kyang','reason':'Serial punctuation and introductory five-part classification distribute the earlier connectors; only the final explicitly worded and is banked. The contrast/concession between five and four is expressed by the reorganization as a whole, without a secure separate English but/although. Leave these grammatical uncertainties unbanked.'},
+ {'tib':'nas after bsnan; second gzhi dang bsam pa dang sbyor ba dang mthar thug; te after final bsdus; na; \'jug pa; dang after dgongs pa','reason':'English condenses the repeated final four-part enumeration into into four and explanatory sequencing. The second object/thinking/undertaking/conclusion nouns have no separately secure occurrences and may not reuse the first list. Conditional explanation/ease-of-engagement is recast as this makes the presentation easier, and the relation to the intention is realized by English verb transitivity. These distributed elements remain omitted rather than asserted absent.'},
+ {'english':'Here is the; One may; How do you define the act of; The; that; parts are involved; the; These five can be; the; can be; into the; we can; the stage of; this makes the; the; of the original text','reason':'Supplied question/definition frames, determiners, passive auxiliaries, anaphoric repetition of five, stage framing and explicit original-text referent remain unwrapped. The whole INTO FOUR phrase belongs to the repeated numeral phrase; the other into relation before thinking remains outside that noun. LO null accounts only for final punctuation closure, not these supplied words.'}])

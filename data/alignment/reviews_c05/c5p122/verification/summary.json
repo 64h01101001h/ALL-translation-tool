@@ -1,0 +1,2998 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-15T08:31:06.225113+00:00",
+  "page": 122,
+  "segments": [
+    364,
+    365,
+    366
+  ],
+  "semantic_review": {
+    "schema": "c05-independent-semantic-review-v1",
+    "verdict": "APPROVE",
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "open_findings": [],
+    "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+    "source_origin_accepted_through": 357,
+    "later_supplied_acceptance_baseline": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+    "later_baseline_accepted_through": 363,
+    "reconciliation_freeze_sha256": "76ba7b775b96564577ca3cf605ec0ad4873114622da4251482379832a5a8b623",
+    "total_spans": 70,
+    "total_nulls": 1,
+    "total_word_pairs": 42,
+    "total_d7": 9,
+    "total_errata": 0,
+    "segments": [
+      {
+        "seq": 364,
+        "span_count": 31,
+        "null_count": 0,
+        "word_pair_count": 18,
+        "d7_count": 4,
+        "spec_path": "reviewed-final/364/spec.json",
+        "body_path": "reviewed-final/364/body.html",
+        "spec_bytes": 4834,
+        "spec_sha256": "bb1813d33d7fefc8921e8d70d07f08a899eecb207ace6e796245f8c8d8f3f77f",
+        "body_bytes": 5143,
+        "body_sha256": "f28a63871dee6cf49ee63fd6fc3302f7978ab990f5ff39e36fecab12b3644d88",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/364-generator-v1/execution.json",
+            "stdin": "native/reconciled/364-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/364-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/364-generator-v1/stderr.bin",
+            "exit": "native/reconciled/364-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/364-resolver-v1/execution.json",
+            "stdin": "native/reconciled/364-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/364-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/364-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/364-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "span_count": 10,
+        "null_count": 0,
+        "word_pair_count": 3,
+        "d7_count": 5,
+        "spec_path": "reviewed-final/365/spec.json",
+        "body_path": "reviewed-final/365/body.html",
+        "spec_bytes": 1734,
+        "spec_sha256": "d72639d41946867db2e41b3382d5a815a08ac9eaf540da778b999593bc87a5ff",
+        "body_bytes": 1845,
+        "body_sha256": "c9a8f498d62bc6b78ef679645ec4b37669479f79e85d467034599629fb81f9a7",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/365-generator-v1/execution.json",
+            "stdin": "native/reconciled/365-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/365-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/365-generator-v1/stderr.bin",
+            "exit": "native/reconciled/365-generator-v1/exit.txt",
+            "mode": "EXACT_ORIGINAL_ENGLISH_REUSE"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/365-resolver-v1/execution.json",
+            "stdin": "native/reconciled/365-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/365-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/365-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/365-resolver-v1/exit.txt",
+            "mode": "EXACT_ORIGINAL_ENGLISH_REUSE"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "span_count": 29,
+        "null_count": 1,
+        "word_pair_count": 21,
+        "d7_count": 0,
+        "spec_path": "reviewed-final/366/spec.json",
+        "body_path": "reviewed-final/366/body.html",
+        "spec_bytes": 4924,
+        "spec_sha256": "8d09c0379541548f53d1ce7a40419359ec0dea4c0d7dd8fd56b3a216d76cb1b1",
+        "body_bytes": 5049,
+        "body_sha256": "1f7a189f032ad7be0bb415733bea979ab7844a16575a368e4aa005773fe41332",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/366-generator-v1/execution.json",
+            "stdin": "native/reconciled/366-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/366-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/366-generator-v1/stderr.bin",
+            "exit": "native/reconciled/366-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/366-resolver-v1/execution.json",
+            "stdin": "native/reconciled/366-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/366-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/366-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/366-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          }
+        }
+      }
+    ],
+    "independence": "Own source-first notes preceded either original. Both frozen originals and all material were independently assessed;14 recommendations and a register-scope finding were banked before root choices or changed generation. Exact immutable final reconciliation was distinctly read and matched to that precommit, allowing only the366 NI local-ID rename. Actual363 baseline is separately bound. No root acceptance or production is claimed.",
+    "initial_assessment": {
+      "path": "independent-pre-reconciliation-assessment.json",
+      "bytes": 11477,
+      "sha256": "8ddd5bd1a0daa865767e2afaf422a6b3fead4a58619bb9dc4aff8e42833685b2"
+    },
+    "source_reading": {
+      "original_spans": 135,
+      "original_omissions": 22,
+      "original_notes_and_reports": 12,
+      "category_screens": 30,
+      "master_unique_complete_objects": 155,
+      "master_prior_same_reviewer_full_reuse": 73,
+      "master_fully_read_here": 82,
+      "focused_complete_corpus_objects": 5,
+      "corpus_fully_read_here": 5,
+      "corpus_prior_same_reviewer_full_reuse": 0,
+      "context_complete_objects": 15,
+      "context_exact_prior_reuse": 12,
+      "new_context_full_reads": 3,
+      "physical_extents": 6,
+      "native_original_pairs_verified": 6,
+      "new_generator_resolver_or_query_runs": 0,
+      "reading_receipts": [
+        "evidence/master-reading-complete.json",
+        "evidence/corpus-reading-complete.json",
+        "source-identity-results.json",
+        "evidence/source-origin-to-through363.diff.txt"
+      ]
+    },
+    "reading_completion": {
+      "immutable_final": "evidence/immutable-final-reading.json",
+      "stable_assembled": "evidence/stable-assembled-reading.json",
+      "final_identity": "final-identity-results.json",
+      "all_original_dispositions_and34_grouped_values_exact": true,
+      "all30_screens_and6_complete_ground_documents_exact": true,
+      "governance_delta": "Actual through3631be02f91d0c7546f4997d25cafd19c976ba4db3e is now bound separately from source-origin357e4da4c94f59f4af61de90fde63127890130c5902. Both204-entry registers and allowances are byte-identical. The complete actual governance delta adds I/J ledger entries and c5p120/121 registrations only; semantic rules are unchanged. Earlier pending-baseline records remain history."
+    },
+    "span_semantic_review": [
+      {
+        "seq": 364,
+        "id": "w1",
+        "d": 5,
+        "tib": "bcu po",
+        "eng": "ten",
+        "tib_range": [
+          26,
+          32
+        ],
+        "eng_range": [
+          96,
+          99
+        ],
+        "verdict": "APPROVE",
+        "reason": "The ten are the previously listed actions. Exclude group of and just listed, which expand their collective/anaphoric reference.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w2",
+        "d": 5,
+        "tib": "'di",
+        "eng": "them",
+        "tib_range": [
+          33,
+          36
+        ],
+        "eng_range": [
+          73,
+          77
+        ],
+        "verdict": "APPROVE",
+        "reason": "The demonstrative points to those ten and is rendered the quoted pronoun them. Do not also align it to the explanatory just listed.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w2"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p3",
+        "d": 6,
+        "tib": "la",
+        "eng": "in reference to",
+        "tib_range": [
+          37,
+          39
+        ],
+        "eng_range": [
+          56,
+          71
+        ],
+        "verdict": "APPROVE",
+        "reason": "The standalone object relation is rendered the complete in reference to phrase. This is distinct from the later action/deed nouns spelled LAS.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p3"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w4",
+        "d": 5,
+        "tib": "ci'i phyir",
+        "eng": "why",
+        "tib_range": [
+          40,
+          50
+        ],
+        "eng_range": [
+          12,
+          15
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete unified22658 and glossary1737 establish the interrogative dictionary expression why. Preserve its genitive and PHYIR whole; d5 is the lexical expression layer, with no internal particle atom invented.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R01",
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w4"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w5",
+        "d": 5,
+        "tib": "las kyi lam",
+        "eng": "path of action",
+        "tib_range": [
+          51,
+          62
+        ],
+        "eng_range": [
+          32,
+          46
+        ],
+        "verdict": "APPROVE",
+        "reason": "Established compound names the expression being explained. It is the opening singular quoted occurrence, not the later plural explanation or final English-only heading.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w5"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "m6",
+        "d": 7,
+        "tib": "las",
+        "eng": "action",
+        "tib_range": [
+          51,
+          54
+        ],
+        "eng_range": [
+          40,
+          46
+        ],
+        "verdict": "APPROVE",
+        "reason": "Unique action member inside the opening compound. It is not either later independent deed/action noun.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "m6"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "m7",
+        "d": 7,
+        "tib": "lam",
+        "eng": "path",
+        "tib_range": [
+          59,
+          62
+        ],
+        "eng_range": [
+          32,
+          36
+        ],
+        "verdict": "APPROVE",
+        "reason": "Unique path member inside the opening singular compound.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "m7"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "f8",
+        "d": 3,
+        "tib": "zhe na",
+        "eng": "ask",
+        "tib_range": [
+          72,
+          78
+        ],
+        "eng_range": [
+          8,
+          11
+        ],
+        "verdict": "APPROVE",
+        "reason": "Both local question formulas introduce asking. The full reference if it is asked supports that function; supplied One may is avoidable framing. The complete GANG ZHE NA entry really lists one may ask/how, but it does not make the isolated ZHE NA own the expanded definition question. Preserve broader counterevidence without overcapture.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R02",
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "f8"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w9",
+        "d": 5,
+        "tib": "yid",
+        "eng": "thought",
+        "tib_range": [
+          80,
+          83
+        ],
+        "eng_range": [
+          186,
+          193
+        ],
+        "verdict": "APPROVE",
+        "reason": "The mental faculty is rendered thought here, distinct from the mental movement expression that follows.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w9"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p30",
+        "d": 6,
+        "tib": "kyi",
+        "eng": "with",
+        "tib_range": [
+          84,
+          87
+        ],
+        "eng_range": [
+          181,
+          185
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first genitive relates the three to thought; the second relates the seven to body/speech. English expresses these same relationships as involved with. Full unified284/glossary73 and unified1788/glossary739 support with; GI also literally lists involved with, so the narrower choice must not deny that broader evidence. Both standalone syllables retain a local exponent; these are not detached suffixes.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R03",
+          "original_basis": {
+            "seq": 364,
+            "angle": "tibetan",
+            "id": "p3"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w10",
+        "d": 5,
+        "tib": "gsum",
+        "eng": "three",
+        "tib_range": [
+          88,
+          92
+        ],
+        "eng_range": [
+          166,
+          171
+        ],
+        "verdict": "APPROVE",
+        "reason": "The cardinal names the three mental actions. It is not the omitted initial outline ordinal GSUM PA.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w10"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w11",
+        "d": 5,
+        "tib": "las",
+        "eng": "action",
+        "tib_range": [
+          93,
+          96
+        ],
+        "eng_range": [
+          218,
+          224
+        ],
+        "verdict": "APPROVE",
+        "reason": "This independent LAS is the quoted action in the mental-movement clause. The synonymous or deed remains outside rather than creating two claims from one Tibetan occurrence.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w11"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w12",
+        "d": 5,
+        "tib": "sems pa",
+        "eng": "mental movement",
+        "tib_range": [
+          97,
+          104
+        ],
+        "eng_range": [
+          237,
+          252
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete established mental-event noun owns mental movement. No separate nominal PA or invented English subword member is asserted.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w12"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w13",
+        "d": 5,
+        "tib": "'jug pa",
+        "eng": "expressed",
+        "tib_range": [
+          105,
+          112
+        ],
+        "eng_range": [
+          256,
+          265
+        ],
+        "verdict": "APPROVE",
+        "reason": "The expression/manifestation sense is supported by the complete record and this account of action entering a path. Exclude the passive auxiliary is.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w13"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w14",
+        "d": 5,
+        "tib": "lam",
+        "eng": "paths",
+        "tib_range": [
+          115,
+          118
+        ],
+        "eng_range": [
+          198,
+          203
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first independent path noun names the paths of mental movement, not the opening quotation.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w14"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p15",
+        "d": 6,
+        "tib": "yin pa",
+        "eng": "are",
+        "tib_range": [
+          119,
+          125
+        ],
+        "eng_range": [
+          194,
+          197
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete copular form supplies are in the three-actions predicate. NI and unrelated supplied definition verbs are not conflated with this copula.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p15"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p16",
+        "d": 6,
+        "tib": "dang",
+        "eng": "Moreover",
+        "tib_range": [
+          126,
+          130
+        ],
+        "eng_range": [
+          267,
+          275
+        ],
+        "verdict": "APPROVE",
+        "reason": "The clause coordinator introduces the second, bodily/verbal group. English makes this connection the sentence-initial Moreover. The later YANG separately marks the added path predicate.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p16"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w17",
+        "d": 5,
+        "tib": "lus",
+        "eng": "body",
+        "tib_range": [
+          133,
+          136
+        ],
+        "eng_range": [
+          301,
+          305
+        ],
+        "verdict": "APPROVE",
+        "reason": "Body is the first of the two faculties associated with the seven deeds. The supplied English and does not license an absent Tibetan conjunction between LUS and NGAG.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w17"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w18",
+        "d": 5,
+        "tib": "ngag",
+        "eng": "speech",
+        "tib_range": [
+          137,
+          141
+        ],
+        "eng_range": [
+          310,
+          316
+        ],
+        "verdict": "APPROVE",
+        "reason": "Speech is the second faculty; preserve its distinction from thought in the preceding clause.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w18"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p31",
+        "d": 6,
+        "tib": "gi",
+        "eng": "with",
+        "tib_range": [
+          142,
+          144
+        ],
+        "eng_range": [
+          296,
+          300
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first genitive relates the three to thought; the second relates the seven to body/speech. English expresses these same relationships as involved with. Full unified284/glossary73 and unified1788/glossary739 support with; GI also literally lists involved with, so the narrower choice must not deny that broader evidence. Both standalone syllables retain a local exponent; these are not detached suffixes.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R03",
+          "original_basis": {
+            "seq": 364,
+            "angle": "tibetan",
+            "id": "p6"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w19",
+        "d": 5,
+        "tib": "bdun",
+        "eng": "seven",
+        "tib_range": [
+          145,
+          149
+        ],
+        "eng_range": [
+          281,
+          286
+        ],
+        "verdict": "APPROVE",
+        "reason": "The cardinal counts bodily and verbal deeds. No plural suffix or group noun is invented.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w19"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w20",
+        "d": 5,
+        "tib": "las",
+        "eng": "deeds",
+        "tib_range": [
+          153,
+          156
+        ],
+        "eng_range": [
+          331,
+          336
+        ],
+        "verdict": "APPROVE",
+        "reason": "The seven are action or deeds: both nouns restate one source LAS. Curated deed and glossary action are both relevant; deeds is the selected lexical realization, while action or remains an unbanked restatement. Do not map one Tibetan occurrence twice or borrow the appended title occurrence.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R04",
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w20"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p21",
+        "d": 6,
+        "tib": "yin",
+        "eng": "are",
+        "tib_range": [
+          163,
+          166
+        ],
+        "eng_range": [
+          317,
+          320
+        ],
+        "verdict": "APPROVE",
+        "reason": "This copula predicates action/deed status of the seven. It is the second explicit are, not the first three-paths predicate or final summary are.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p21"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w22",
+        "d": 5,
+        "tib": "sems pa",
+        "eng": "mental movement",
+        "tib_range": [
+          171,
+          178
+        ],
+        "eng_range": [
+          380,
+          395
+        ],
+        "verdict": "APPROVE",
+        "reason": "The second complete mental-event noun belongs to the bodily/verbal paths explanation; it is not a duplicate of the first occurrence.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w22"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w23",
+        "d": 5,
+        "tib": "'jug pa",
+        "eng": "expressed",
+        "tib_range": [
+          179,
+          186
+        ],
+        "eng_range": [
+          399,
+          408
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second manifestation verb owns the second expressed. Its passive auxiliary remains outside.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w23"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w24",
+        "d": 5,
+        "tib": "lam",
+        "eng": "paths",
+        "tib_range": [
+          189,
+          192
+        ],
+        "eng_range": [
+          360,
+          365
+        ],
+        "verdict": "APPROVE",
+        "reason": "This second independent path noun is the additional predicate of the seven deeds. It is not the final quoted term.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w24"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p25",
+        "d": 6,
+        "tib": "yang",
+        "eng": "as well as",
+        "tib_range": [
+          193,
+          197
+        ],
+        "eng_range": [
+          349,
+          359
+        ],
+        "verdict": "APPROVE",
+        "reason": "The additive marks that these deeds are also paths. The complete as well as phrase supplies that addition; it does not own either neighboring noun.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p25"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "p26",
+        "d": 6,
+        "tib": "pas na",
+        "eng": "Thus",
+        "tib_range": [
+          202,
+          208
+        ],
+        "eng_range": [
+          410,
+          414
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete PAS NA has glossary because and LC iti/tasmat causal evidence. The inference Thus is the local relation following the seven's additional path status. Tibetan full YIN PAS NA is a defensible larger causal construction, but its copula does not need to enlarge the relation span; prefer the tighter flat particle. The unselected YIN may be elliptical/distributed and is not an absence null. The full59714 scaffold is awaiting HGM, not a literal Thus glossary.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R05",
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "p26"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "w27",
+        "d": 5,
+        "tib": "las kyi lam",
+        "eng": "paths of action",
+        "tib_range": [
+          209,
+          220
+        ],
+        "eng_range": [
+          429,
+          444
+        ],
+        "verdict": "APPROVE",
+        "reason": "Final established compound owns the quoted plural expression in the naming conclusion. The additional repetition in the following English transition has no second Tibetan term here.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "w27"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "m28",
+        "d": 7,
+        "tib": "las",
+        "eng": "action",
+        "tib_range": [
+          209,
+          212
+        ],
+        "eng_range": [
+          438,
+          444
+        ],
+        "verdict": "APPROVE",
+        "reason": "Action member lies strictly inside the final quoted compound.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "m28"
+          }
+        }
+      },
+      {
+        "seq": 364,
+        "id": "m29",
+        "d": 7,
+        "tib": "lam",
+        "eng": "paths",
+        "tib_range": [
+          217,
+          220
+        ],
+        "eng_range": [
+          429,
+          434
+        ],
+        "verdict": "APPROVE",
+        "reason": "Path member lies strictly inside that same final compound.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 364,
+            "angle": "english",
+            "id": "m29"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "w1",
+        "d": 5,
+        "tib": "rje tsong kha pa",
+        "eng": "Je Tsongkapa",
+        "tib_range": [
+          0,
+          16
+        ],
+        "eng_range": [
+          87,
+          99
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete24787/glossary5971 positively attest composed/written for BRTSOMS PA. The separate BRTSAMS/BRTSAM/BRTSOM paradigm comparanda do not prove this printed vowel wrong. The physical source and direct full-title records support current wording; dates remain outside Tibetan spans.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R06",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "m2",
+        "d": 7,
+        "tib": "rje",
+        "eng": "Je",
+        "tib_range": [
+          0,
+          3
+        ],
+        "eng_range": [
+          87,
+          89
+        ],
+        "verdict": "APPROVE",
+        "reason": "RJE's standalone HGM gloss is lord; je is pronunciation metadata, not a standalone HGM gloss. Nevertheless the full attested RJE TSONG KHA PA/Je Tsongkapa proper name and independently attested TSONG KHA PA/Tsongkapa member establish Je as the corresponding retained honorific inside that name. This is a locally supported proper-name member, not promotion of phonetic metadata or a claim that RJE has a literal Je glossary. Tibetan omission is cautious counterevidence; it does not defeat the uniquely contained named honorific.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R07",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "m2"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "m3",
+        "d": 7,
+        "tib": "tsong kha pa",
+        "eng": "Tsongkapa",
+        "tib_range": [
+          4,
+          16
+        ],
+        "eng_range": [
+          90,
+          99
+        ],
+        "verdict": "APPROVE",
+        "reason": "RJE's standalone HGM gloss is lord; je is pronunciation metadata, not a standalone HGM gloss. Nevertheless the full attested RJE TSONG KHA PA/Je Tsongkapa proper name and independently attested TSONG KHA PA/Tsongkapa member establish Je as the corresponding retained honorific inside that name. This is a locally supported proper-name member, not promotion of phonetic metadata or a claim that RJE has a literal Je glossary. Tibetan omission is cautious counterevidence; it does not defeat the uniquely contained named honorific.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R07",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "m3"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "p4",
+        "d": 6,
+        "tib": "gis",
+        "eng": "by",
+        "tib_range": [
+          23,
+          26
+        ],
+        "eng_range": [
+          84,
+          86
+        ],
+        "verdict": "APPROVE",
+        "reason": "Standalone agentive GIS marks the author of the composition and is rendered by. No detached suffix is used.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "p4"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "w5",
+        "d": 5,
+        "tib": "brtsoms pa",
+        "eng": "composed",
+        "tib_range": [
+          27,
+          37
+        ],
+        "eng_range": [
+          75,
+          83
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete24787/glossary5971 positively attest composed/written for BRTSOMS PA. The separate BRTSAMS/BRTSAM/BRTSOM paradigm comparanda do not prove this printed vowel wrong. The physical source and direct full-title records support current wording; dates remain outside Tibetan spans.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R06",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "w5"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "w6",
+        "d": 5,
+        "tib": "lam rim chen mo",
+        "eng": "Great Book on the Steps of the Path",
+        "tib_range": [
+          40,
+          55
+        ],
+        "eng_range": [
+          38,
+          73
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete24787/glossary5971 positively attest composed/written for BRTSOMS PA. The separate BRTSAMS/BRTSAM/BRTSOM paradigm comparanda do not prove this printed vowel wrong. The physical source and direct full-title records support current wording; dates remain outside Tibetan spans.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R06",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "w6"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "m7",
+        "d": 7,
+        "tib": "lam",
+        "eng": "Path",
+        "tib_range": [
+          40,
+          43
+        ],
+        "eng_range": [
+          69,
+          73
+        ],
+        "verdict": "APPROVE",
+        "reason": "Both proposed broader members are genuinely attested: curated77/linked7112 support Steps of the Path, and22778/1954 literally list great book as well as great. The narrower English members each own complete independent words and lie strictly inside the same title. Preserve that positive broader evidence; Book and supplied relational wording remain inside the whole title without a fabricated separate morpheme.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R08",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "m7"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "m8",
+        "d": 7,
+        "tib": "rim",
+        "eng": "Steps",
+        "tib_range": [
+          44,
+          47
+        ],
+        "eng_range": [
+          56,
+          61
+        ],
+        "verdict": "APPROVE",
+        "reason": "Both proposed broader members are genuinely attested: curated77/linked7112 support Steps of the Path, and22778/1954 literally list great book as well as great. The narrower English members each own complete independent words and lie strictly inside the same title. Preserve that positive broader evidence; Book and supplied relational wording remain inside the whole title without a fabricated separate morpheme.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R08",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "m8"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "m9",
+        "d": 7,
+        "tib": "chen mo",
+        "eng": "Great",
+        "tib_range": [
+          48,
+          55
+        ],
+        "eng_range": [
+          38,
+          43
+        ],
+        "verdict": "APPROVE",
+        "reason": "Both proposed broader members are genuinely attested: curated77/linked7112 support Steps of the Path, and22778/1954 literally list great book as well as great. The narrower English members each own complete independent words and lie strictly inside the same title. Preserve that positive broader evidence; Book and supplied relational wording remain inside the whole title without a fabricated separate morpheme.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R08",
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "m9"
+          }
+        }
+      },
+      {
+        "seq": 365,
+        "id": "p10",
+        "d": 6,
+        "tib": "las",
+        "eng": "from",
+        "tib_range": [
+          56,
+          59
+        ],
+        "eng_range": [
+          29,
+          33
+        ],
+        "verdict": "APPROVE",
+        "reason": "Final LAS is the source/ablative relation from this book, not the action noun used in364.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 365,
+            "angle": "english",
+            "id": "p10"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w1",
+        "d": 5,
+        "tib": "dang po",
+        "eng": "first",
+        "tib_range": [
+          0,
+          7
+        ],
+        "eng_range": [
+          12,
+          17
+        ],
+        "verdict": "APPROVE",
+        "reason": "The outline ordinal is explicitly rendered first in the opening sentence, unlike the unbanked third-section outline in364.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p29",
+        "d": 6,
+        "tib": "ni",
+        "eng": "Here is",
+        "tib_range": [
+          8,
+          10
+        ],
+        "eng_range": [
+          0,
+          7
+        ],
+        "verdict": "APPROVE",
+        "reason": "The immediate DANG PO NI opening introduces the first topic, and full NI10207/4124 explicitly supports here is. Here is has an identifiable local topic particle and no competing copula or other source demonstrative in this opening sentence. This differs from forcing NI onto a disputed is in a larger recast clause; the article the stays outside.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R09",
+          "original_basis": {
+            "seq": 366,
+            "angle": "tibetan",
+            "id": "p1"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w2",
+        "d": 5,
+        "tib": "srog gcod pa",
+        "eng": "killing",
+        "tib_range": [
+          12,
+          24
+        ],
+        "eng_range": [
+          62,
+          69
+        ],
+        "verdict": "APPROVE",
+        "reason": "The whole killing term supports both broader and narrower renderings, but killing is a complete tighter lexical realization. SROG has no separately printed life and GCOD/killing would equal its parent. BSDU BAR is the complete title form supported by BSDU BA/Abbreviation and the citation GSUNGS; preserve BAR and omit supplied article The.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R10",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w2"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "f3",
+        "d": 3,
+        "tib": "zhe na",
+        "eng": "ask",
+        "tib_range": [
+          30,
+          36
+        ],
+        "eng_range": [
+          27,
+          30
+        ],
+        "verdict": "APPROVE",
+        "reason": "Both local question formulas introduce asking. The full reference if it is asked supports that function; supplied One may is avoidable framing. The complete GANG ZHE NA entry really lists one may ask/how, but it does not make the isolated ZHE NA own the expanded definition question. Preserve broader counterevidence without overcapture.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R02",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "f3"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w4",
+        "d": 5,
+        "tib": "bsdu bar",
+        "eng": "Abbreviation",
+        "tib_range": [
+          45,
+          53
+        ],
+        "eng_range": [
+          76,
+          88
+        ],
+        "verdict": "APPROVE",
+        "reason": "The whole killing term supports both broader and narrower renderings, but killing is a complete tighter lexical realization. SROG has no separately printed life and GCOD/killing would equal its parent. BSDU BAR is the complete title form supported by BSDU BA/Abbreviation and the citation GSUNGS; preserve BAR and omit supplied article The.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R10",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w4"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w5",
+        "d": 5,
+        "tib": "gzhi",
+        "eng": "object",
+        "tib_range": [
+          54,
+          58
+        ],
+        "eng_range": [
+          128,
+          134
+        ],
+        "verdict": "APPROVE",
+        "reason": "First GZHI names the object in the initial five-part list. The later repeated GZHI is not assigned this same word.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w5"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w6",
+        "d": 5,
+        "tib": "'du shes",
+        "eng": "conception",
+        "tib_range": [
+          64,
+          72
+        ],
+        "eng_range": [
+          140,
+          150
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete cognition/conception term names the second part, not an English thinking repetition.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w6"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w7",
+        "d": 5,
+        "tib": "bsam pa",
+        "eng": "thinking",
+        "tib_range": [
+          78,
+          85
+        ],
+        "eng_range": [
+          156,
+          164
+        ],
+        "verdict": "APPROVE",
+        "reason": "First BSAM PA names the third part in the initial five-part list.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w7"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w8",
+        "d": 5,
+        "tib": "nyon mongs",
+        "eng": "bad thought",
+        "tib_range": [
+          91,
+          101
+        ],
+        "eng_range": [
+          170,
+          181
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete afflictive-state term is rendered bad thought here. Its whole lexical evidence supports this established translation; no separate NYON or MONGS members are invented.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w8"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p9",
+        "d": 6,
+        "tib": "dang",
+        "eng": "and",
+        "tib_range": [
+          102,
+          106
+        ],
+        "eng_range": [
+          183,
+          186
+        ],
+        "verdict": "APPROVE",
+        "reason": "This last DANG in the five-part list has the explicit final and. Earlier serial conjunctions are not copied onto it.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "p9"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w10",
+        "d": 5,
+        "tib": "mtha'",
+        "eng": "conclusion",
+        "tib_range": [
+          107,
+          112
+        ],
+        "eng_range": [
+          191,
+          201
+        ],
+        "verdict": "APPROVE",
+        "reason": "First conclusion term is the end of the five-part list. It is distinct from later MTHAR THUG in the condensed four-part Tibetan list.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w10"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w11",
+        "d": 5,
+        "tib": "lngar",
+        "eng": "five",
+        "tib_range": [
+          117,
+          122
+        ],
+        "eng_range": [
+          99,
+          103
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete inflected numeral owns the first five, preserving its final R. The later English These five is an anaphoric repetition and receives no second claim.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w11"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w12",
+        "d": 5,
+        "tib": "gsungs",
+        "eng": "says",
+        "tib_range": [
+          123,
+          129
+        ],
+        "eng_range": [
+          89,
+          93
+        ],
+        "verdict": "APPROVE",
+        "reason": "The saying verb introduces the cited classification. Exclude supplied that and parts are involved.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w12"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w13",
+        "d": 5,
+        "tib": "bar pa",
+        "eng": "middle",
+        "tib_range": [
+          138,
+          144
+        ],
+        "eng_range": [
+          246,
+          252
+        ],
+        "verdict": "APPROVE",
+        "reason": "The middle subset comprises conception, thinking and bad thought. Middle belongs with three, not with the first or final numbers.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w13"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w14",
+        "d": 5,
+        "tib": "gsum",
+        "eng": "three",
+        "tib_range": [
+          145,
+          149
+        ],
+        "eng_range": [
+          253,
+          258
+        ],
+        "verdict": "APPROVE",
+        "reason": "The cardinal counts those middle three components.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w14"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w15",
+        "d": 5,
+        "tib": "bsam par",
+        "eng": "thinking",
+        "tib_range": [
+          150,
+          158
+        ],
+        "eng_range": [
+          284,
+          292
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete inflected BSAM PAR supplies the second thinking, the category into which the middle three are included. Retain PAR whole; no detached R claim.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w15"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w16",
+        "d": 5,
+        "tib": "bsdus",
+        "eng": "included",
+        "tib_range": [
+          159,
+          164
+        ],
+        "eng_range": [
+          266,
+          274
+        ],
+        "verdict": "APPROVE",
+        "reason": "The source redundantly enumerates the four after its earlier five; English summarizes the result then explains middle-three inclusion plus added undertaking. Whole distributive numeral avoids arbitrary repeated four ownership. The two BSDUS have secure distinct English predicates despite reordering; later GZHI/BSAM PA/SBYOR BA/MTHAR THUG cannot steal the first list words. Preserve glossary/reference/auto-aligned tiers and uncertainty rather than false absence.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R11",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w16"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p17",
+        "d": 6,
+        "tib": "te",
+        "eng": "and",
+        "tib_range": [
+          165,
+          167
+        ],
+        "eng_range": [
+          294,
+          297
+        ],
+        "verdict": "APPROVE",
+        "reason": "This connective joins the inclusion and adding-undertaking operations. The exact and before we can add is distinct from the initial list conjunction and the closing coordination.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "p17"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w18",
+        "d": 5,
+        "tib": "sbyor ba",
+        "eng": "undertaking",
+        "tib_range": [
+          168,
+          176
+        ],
+        "eng_range": [
+          322,
+          333
+        ],
+        "verdict": "APPROVE",
+        "reason": "First undertaking noun names the newly added stage. Stage of is English explanatory wording and stays outside.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w18"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w19",
+        "d": 5,
+        "tib": "bsnan",
+        "eng": "add",
+        "tib_range": [
+          177,
+          182
+        ],
+        "eng_range": [
+          305,
+          308
+        ],
+        "verdict": "APPROVE",
+        "reason": "The adding verb owns add in the four-part restructuring. Supplied we can remains outside.",
+        "reason_provenance": {
+          "kind": "EXACT_PERSONALLY_READ_ORIGINAL_RATIONALE_INDEPENDENTLY_ENDORSED",
+          "recommendation": null,
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w19"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "f20",
+        "d": 3,
+        "tib": "bzhi bzhir",
+        "eng": "into four",
+        "tib_range": [
+          235,
+          245
+        ],
+        "eng_range": [
+          231,
+          240
+        ],
+        "verdict": "APPROVE",
+        "reason": "The source redundantly enumerates the four after its earlier five; English summarizes the result then explains middle-three inclusion plus added undertaking. Whole distributive numeral avoids arbitrary repeated four ownership. The two BSDUS have secure distinct English predicates despite reordering; later GZHI/BSAM PA/SBYOR BA/MTHAR THUG cannot steal the first list words. Preserve glossary/reference/auto-aligned tiers and uncertainty rather than false absence.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R11",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "f20"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w21",
+        "d": 5,
+        "tib": "bsdus",
+        "eng": "shortened",
+        "tib_range": [
+          246,
+          251
+        ],
+        "eng_range": [
+          221,
+          230
+        ],
+        "verdict": "APPROVE",
+        "reason": "The source redundantly enumerates the four after its earlier five; English summarizes the result then explains middle-three inclusion plus added undertaking. Whole distributive numeral avoids arbitrary repeated four ownership. The two BSDUS have secure distinct English predicates despite reordering; later GZHI/BSAM PA/SBYOR BA/MTHAR THUG cannot steal the first list words. Preserve glossary/reference/auto-aligned tiers and uncertainty rather than false absence.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R11",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w21"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w22",
+        "d": 5,
+        "tib": "bshad",
+        "eng": "presentation",
+        "tib_range": [
+          255,
+          260
+        ],
+        "eng_range": [
+          350,
+          362
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w22"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w23",
+        "d": 5,
+        "tib": "bde",
+        "eng": "easier",
+        "tib_range": [
+          272,
+          275
+        ],
+        "eng_range": [
+          363,
+          369
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w23"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p24",
+        "d": 6,
+        "tib": "zhing",
+        "eng": "and",
+        "tib_range": [
+          276,
+          281
+        ],
+        "eng_range": [
+          371,
+          374
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "p24"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w25",
+        "d": 5,
+        "tib": "dgongs pa",
+        "eng": "intention",
+        "tib_range": [
+          282,
+          291
+        ],
+        "eng_range": [
+          398,
+          407
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w25"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p26",
+        "d": 6,
+        "tib": "mi",
+        "eng": "in no way",
+        "tib_range": [
+          297,
+          299
+        ],
+        "eng_range": [
+          375,
+          384
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "p26"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "w27",
+        "d": 5,
+        "tib": "'gal",
+        "eng": "violates",
+        "tib_range": [
+          300,
+          304
+        ],
+        "eng_range": [
+          385,
+          393
+        ],
+        "verdict": "APPROVE",
+        "reason": "These are complete local heads and relations in the nominal recasting. DGONGS PA curated thought(honorific) coexists with literal glossary intention; ZHING uses its grammatical connective evidence, not curated paradise. MI scopes over violates without absorbing the verb, and DANG after intention is the argument relation expressed by English transitivity, not supplied of the original text.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R12",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "w27"
+          }
+        }
+      },
+      {
+        "seq": 366,
+        "id": "p28",
+        "d": 6,
+        "tib": "lo",
+        "eng": null,
+        "cls": "conj",
+        "nul": "The terminal LO closes the completed statement after MI ’GAL. English closes the same statement with its final period; there is no additional lexical English word for this closure. This is affirmative punctuation fusion, not an uncertain lexical omission.",
+        "tib_range": [
+          305,
+          307
+        ],
+        "eng_range": null,
+        "verdict": "APPROVE",
+        "reason": "The complete LO19627/7254 record supports statement-end particle and punctuation. Final LO closes exactly the statement ending with the English period. This affirmative fusion does not justify nulling uncertain prior connectors, repeated nouns or opening topic material.",
+        "reason_provenance": {
+          "kind": "INDEPENDENT_RECOMMENDATION",
+          "recommendation": "K-R13",
+          "original_basis": {
+            "seq": 366,
+            "angle": "english",
+            "id": "p28"
+          }
+        }
+      }
+    ],
+    "original_omission_review": [
+      {
+        "seq": 364,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "[iv.311b-12]; gsum pa ni",
+          "reason": "Citation and initial third-section outline are not explicitly reproduced by the English opening. English first of all explains the name, while fourth major part belongs to the later transition; neither is a faithful third-ordinal counterpart. Leave the outline/citation unbanked, without converting uncertain discourse correspondence into nulls."
+        },
+        "independent_reason": "Citation and initial third-section outline are not explicitly reproduced by the English opening. English first of all explains the name, while fourth major part belongs to the later transition; neither is a faithful third-ordinal counterpart. Leave the outline/citation unbanked, without converting uncertain discourse correspondence into nulls.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "zhes bya; final zhes bya'o",
+          "reason": "The naming construction is distributed through expression, is used, The name derives and the concluding they are all quotation. No single contiguous narrow counterpart securely owns either full occurrence. The mined unrelated every living creature gloss is not evidence for this context."
+        },
+        "independent_reason": "The naming construction is distributed through expression, is used, The name derives and the concluding they are all quotation. No single contiguous narrow counterpart securely owns either full occurrence. The mined unrelated every living creature gloss is not evidence for this context.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "tib": "bound genitive endings; ni after bdun; kyang; la after yin; final yin before pas na",
+          "reason": "Bound relations and topic framing are not detached into suffix spans. KYANG emphasizes deed status while English uses synonymous action/deeds and themselves; themselves alone is not a secure additive equivalent. LA and the final path copula are distributed across as well as paths, whose addition is banked narrowly under YANG. The summary are does not safely belong to that earlier copula. None of these uncertainties is an absence null."
+        },
+        "independent_reason": "Bound relations and topic framing are not detached into suffix spans. KYANG emphasizes deed status while English uses synonymous action/deeds and themselves; themselves alone is not a secure additive equivalent. LA and the final path copula are distributed across as well as paths, whose addition is banked narrowly under YANG. The summary are does not safely belong to that earlier copula. None of these uncertainties is an absence null. Current independent qualification: The first genitive relates the three to thought; the second relates the seven to body/speech. English expresses these same relationships as involved with. Full unified284/glossary73 and unified1788/glossary739 support with; GI also literally lists involved with, so the narrower choice must not deny that broader evidence. Both standalone syllables retain a local exponent; these are not detached suffixes.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "english": "One may; the expression; is used; --to the group of; just listed; The name derives first of all from the fact that; the; involved with; by which; or deed of; is; the; involved with; and between body and speech; action or; themselves; through which; is; they are all",
+          "reason": "Supplied question/definition framing, articles, participation and relative constructions, synonymous expansions and summary participants remain outside the chosen local spans. These unwrapped words do not authorize copying a Tibetan occurrence or mapping the same source word twice."
+        },
+        "independent_reason": "Supplied question/definition framing, articles, participation and relative constructions, synonymous expansions and summary participants remain outside the chosen local spans. These unwrapped words do not authorize copying a Tibetan occurrence or mapping the same source word twice. Current independent qualification: The first genitive relates the three to thought; the second relates the seven to body/speech. English expresses these same relationships as involved with. Full unified284/glossary73 and unified1788/glossary739 support with; GI also literally lists involved with, so the narrower choice must not deny that broader evidence. Both standalone syllables retain a local exponent; these are not detached suffixes.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "english",
+        "field": "omissions",
+        "index": 4,
+        "original": {
+          "english": "The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********",
+          "reason": "This complete GMR transition and divider have no corresponding Tibetan clause within364. Physical source lineation preserves them as English framing. C16:882 shares the explanation but has a different following section transition; that same-corpus parallel does not establish a source error or authorize removing this wording."
+        },
+        "independent_reason": "This complete GMR transition and divider have no corresponding Tibetan clause within364. Physical source lineation preserves them as English framing. C16:882 shares the explanation but has a different following section transition; that same-corpus parallel does not establish a source error or authorize removing this wording.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 364,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "gsum pa ni",
+          "english": "first of all; The fourth major part",
+          "reason": "The source third ordinal introduces this organizational topic. English first of all organizes the derivation and the appended fourth major part introduces following material. Neither is a secure third exponent; retain this organizational mismatch as unbanked, not an arbitrary first/third alignment or a false lexical absence null."
+        },
+        "independent_reason": "The source third ordinal introduces this organizational topic. English first of all organizes the derivation and the appended fourth major part introduces following material. Neither is a secure third exponent; retain this organizational mismatch as unbanked, not an arbitrary first/third alignment or a false lexical absence null.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 364,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "zhes bya; terminal zhes bya and bound apostrophe-o",
+          "english": "the expression; is used; The name derives first of all from the fact that; they are all",
+          "reason": "The naming formula is distributed across expression/is used and the later name derivation/conclusion. Its complete entry has an unrelated mined every living creature gloss and quotation-reference evidence. No exclusive atom is selected merely from leftover wording; the full technical names remain banked."
+        },
+        "independent_reason": "The naming formula is distributed across expression/is used and the later name derivation/conclusion. Its complete entry has an unrelated mined every living creature gloss and quotation-reference evidence. No exclusive atom is selected merely from leftover wording; the full technical names remain banked.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 364,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "tib": "bound genitives after the two jug pa occurrences; la after yin; earlier kyang",
+          "english": "by which; through which; is; themselves; and between body and speech",
+          "reason": "Relative/instrumental and copular support is distributed or supplied; no separate bound genitive is attached outside its parent. Earlier KYANG emphasizes action status whereas later YANG supplies the additive path-status phrase. Themselves is not securely a standalone KYANG exponent, and the source body/speech pair has no intervening DANG."
+        },
+        "independent_reason": "Relative/instrumental and copular support is distributed or supplied; no separate bound genitive is attached outside its parent. Earlier KYANG emphasizes action status whereas later YANG supplies the additive path-status phrase. Themselves is not securely a standalone KYANG exponent, and the source body/speech pair has no intervening DANG.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 364,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "english": "or deed; or deeds; to the group of ten just listed; involved; articles and supplied participants",
+          "reason": "These are synonymous restatements and explanatory support around secure heads. The two deed alternatives each repeat their own LAS/action; they do not provide additional Tibetan nouns. Tight KYI/GI with leaves the involvement expansion outside."
+        },
+        "independent_reason": "These are synonymous restatements and explanatory support around secure heads. The two deed alternatives each repeat their own LAS/action; they do not provide additional Tibetan nouns. Tight KYI/GI with leaves the involvement expansion outside. Current independent qualification: The seven are action or deeds: both nouns restate one source LAS. Curated deed and glossary action are both relevant; deeds is the selected lexical realization, while action or remains an unbanked restatement. Do not map one Tibetan occurrence twice or borrow the appended title occurrence.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 364,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 4,
+        "original": {
+          "seq": 364,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 4,
+          "english": "The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********",
+          "reason": "The complete physical English appends a forward transition and asterisks after the present naming argument. C16:882 preserves the same Tibetan/current body but appends a different heading and introduction. This supports treating the trailing text as apparatus of an already registered class, not as alternative current-body exponents or a newly filed error."
+        },
+        "independent_reason": "All fields and six extents are complete below the1500 cap. C05's physical fourth-part transition differs from C16:882's Parts of a Karmic Act continuation; neither is an independently corrected edition. Registered running-head/footnote/folio/spill analogies support a source-role caution, not a proven identical registered defect here. E-120 concerns omitted sickness, not following-heading glue. Preserve originals and the unfiled question; no spelling, factual or ingestion mechanism is demonstrated.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 365,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "mchog; bound pa'i",
+          "reason": "The additional supreme honorific has no separate certain English exponent. Je already belongs to RJE, and Great belongs to CHEN MO in the book title; broader honorific/name interpretation remains possible, so MCHOG is omitted rather than marked absent. The bound attribution/genitive ending is not split into a separate English word."
+        },
+        "independent_reason": "The additional supreme honorific has no separate certain English exponent. Je already belongs to RJE, and Great belongs to CHEN MO in the book title; broader honorific/name interpretation remains possible, so MCHOG is omitted rather than marked absent. The bound attribution/genitive ending is not split into a separate English word.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 365,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "english": "The following selections are; the; on the; of the; (1357-1419)",
+          "reason": "Selection framing, articles and supplied dates remain verbatim outside independent spans. Relational title words are covered by the whole established title, without invented Tibetan particle members. Full name records also contain dates, but dictionary context does not create absent Tibetan date characters."
+        },
+        "independent_reason": "Selection framing, articles and supplied dates remain verbatim outside independent spans. Relational title words are covered by the whole established title, without invented Tibetan particle members. Full name records also contain dates, but dictionary context does not create absent Tibetan date characters.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 365,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 365,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "mchog",
+          "english": "Great Book",
+          "reason": "MCHOG is an honorific/supreme qualifier of the author. Great Book belongs to CHEN MO in the separate title. The honorific is not assigned there or to the already aligned RJE/Je proper name; no speculative independent exponent or absence marker is banked."
+        },
+        "independent_reason": "MCHOG is an honorific/supreme qualifier of the author. Great Book belongs to CHEN MO in the separate title. The honorific is not assigned there or to the already aligned RJE/Je proper name; no speculative independent exponent or absence marker is banked.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 365,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 365,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "bound genitive after brtsoms pa; rje member",
+          "english": "The following selections are; the; (1357-1419)",
+          "reason": "Introduction, articles and biographical dates expand the bibliographic sentence. The full author name and reference dates are supported, but there are no separate source date tokens. The composition genitive is realized by the relative structure; do not invent another standalone of or derive Je solely from pronunciation metadata."
+        },
+        "independent_reason": "Introduction, articles and biographical dates expand the bibliographic sentence. The full author name and reference dates are supported, but there are no separate source date tokens. The composition genitive is realized by the relative structure; do not invent another standalone of or derive Je solely from pronunciation metadata. Current independent qualification: RJE's standalone HGM gloss is lord; je is pronunciation metadata, not a standalone HGM gloss. Nevertheless the full attested RJE TSONG KHA PA/Je Tsongkapa proper name and independently attested TSONG KHA PA/Tsongkapa member establish Je as the corresponding retained honorific inside that name. This is a locally supported proper-name member, not promotion of phonetic metadata or a claim that RJE has a literal Je glossary. Tibetan omission is cautious counterevidence; it does not defeat the uniquely contained named honorific.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "ni; gang; 'di la",
+          "reason": "The opening topic and this-case frame are distributed through Here is the first and the ensuing definition. GANG literally asks what, while English asks How do you define the act of killing; How alone is not a secure lexical equivalent and the expanded definition would absorb supplied wording. None is converted to an absence null."
+        },
+        "independent_reason": "The opening topic and this-case frame are distributed through Here is the first and the ensuing definition. GANG literally asks what, while English asks How do you define the act of killing; How alone is not a secure lexical equivalent and the expanded definition would absorb supplied wording. None is converted to an absence null. Current independent qualification: The immediate DANG PO NI opening introduces the first topic, and full NI10207/4124 explicitly supports here is. Here is has an identifiable local topic particle and no competing copula or other source demonstrative in this opening sentence. This differs from forcing NI onto a disputed is in a larger recast clause; the article the stays outside.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "first three dang in the five-part list; ste after mtha'; kyang",
+          "reason": "Serial punctuation and introductory five-part classification distribute the earlier connectors; only the final explicitly worded and is banked. The contrast/concession between five and four is expressed by the reorganization as a whole, without a secure separate English but/although. Leave these grammatical uncertainties unbanked."
+        },
+        "independent_reason": "Serial punctuation and introductory five-part classification distribute the earlier connectors; only the final explicitly worded and is banked. The contrast/concession between five and four is expressed by the reorganization as a whole, without a secure separate English but/although. Leave these grammatical uncertainties unbanked.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "tib": "nas after bsnan; second gzhi dang bsam pa dang sbyor ba dang mthar thug; te after final bsdus; na; 'jug pa; dang after dgongs pa",
+          "reason": "English condenses the repeated final four-part enumeration into into four and explanatory sequencing. The second object/thinking/undertaking/conclusion nouns have no separately secure occurrences and may not reuse the first list. Conditional explanation/ease-of-engagement is recast as this makes the presentation easier, and the relation to the intention is realized by English verb transitivity. These distributed elements remain omitted rather than asserted absent."
+        },
+        "independent_reason": "English condenses the repeated final four-part enumeration into into four and explanatory sequencing. The second object/thinking/undertaking/conclusion nouns have no separately secure occurrences and may not reuse the first list. Conditional explanation/ease-of-engagement is recast as this makes the presentation easier, and the relation to the intention is realized by English verb transitivity. These distributed elements remain omitted rather than asserted absent.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "english": "Here is the; One may; How do you define the act of; The; that; parts are involved; the; These five can be; the; can be; into the; we can; the stage of; this makes the; the; of the original text",
+          "reason": "Supplied question/definition frames, determiners, passive auxiliaries, anaphoric repetition of five, stage framing and explicit original-text referent remain unwrapped. The whole INTO FOUR phrase belongs to the repeated numeral phrase; the other into relation before thinking remains outside that noun. LO null accounts only for final punctuation closure, not these supplied words."
+        },
+        "independent_reason": "Supplied question/definition frames, determiners, passive auxiliaries, anaphoric repetition of five, stage framing and explicit original-text referent remain unwrapped. The whole INTO FOUR phrase belongs to the repeated numeral phrase; the other into relation before thinking remains outside that noun. LO null accounts only for final punctuation closure, not these supplied words. Current independent qualification: The immediate DANG PO NI opening introduces the first topic, and full NI10207/4124 explicitly supports here is. Here is has an identifiable local topic particle and no competing copula or other source demonstrative in this opening sentence. This differs from forcing NI onto a disputed is in a larger recast clause; the article the stays outside.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 366,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "gang; 'di la; ste after mtha'; kyang",
+          "english": "How do you define; parts are involved; These five can be",
+          "reason": "The question and five-to-four transition are expanded or reorganized. Only ZHE NA/One may ask is selected from the question frame. The first list has one explicit five, while These five resumes it; neither additional parts nor the resumed five receives an invented source word. Contrast/continuation is not reduced to an arbitrary auxiliary or absence null."
+        },
+        "independent_reason": "The question and five-to-four transition are expanded or reorganized. Only ZHE NA/One may ask is selected from the question frame. The first list has one explicit five, while These five resumes it; neither additional parts nor the resumed five receives an invented source word. Contrast/continuation is not reduced to an arbitrary auxiliary or absence null. Current independent qualification: Both local question formulas introduce asking. The full reference if it is asked supports that function; supplied One may is avoidable framing. The complete GANG ZHE NA entry really lists one may ask/how, but it does not make the isolated ZHE NA own the expanded definition question. Preserve broader counterevidence without overcapture.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 366,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "earlier dang list coordinators; nas after bsnan; repeated gzhi dang bsam pa dang sbyor ba dang mthar thug",
+          "english": "the object; the thinking; undertaking; conclusion; this makes",
+          "reason": "The source explicitly lists the four resulting parts again, but English summarizes the four before explaining the regrouping and addition. The first three middle items and first undertaking retain their own exponents; the final repeated list has no independently repeated English nouns. Leave this distributed correspondence unbanked rather than stealing the first list occurrences or asserting absence."
+        },
+        "independent_reason": "The source explicitly lists the four resulting parts again, but English summarizes the four before explaining the regrouping and addition. The first three middle items and first undertaking retain their own exponents; the final repeated list has no independently repeated English nouns. Leave this distributed correspondence unbanked rather than stealing the first list occurrences or asserting absence.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 366,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "tib": "final te; na after bshad; jug pa before bde; dang after dgongs pa",
+          "english": "this makes; of the original text",
+          "reason": "Conditional, ease-of-access and argument relations contribute to the sentence-level reformulation. BSHAD/presentation, BDE/easier and DGONGS PA/intention remain secure heads. DANG relates non-contradiction to intention, not the supplied original-text of phrase; no separate JUG PA/expressed is imported from364."
+        },
+        "independent_reason": "Conditional, ease-of-access and argument relations contribute to the sentence-level reformulation. BSHAD/presentation, BDE/easier and DGONGS PA/intention remain secure heads. DANG relates non-contradiction to intention, not the supplied original-text of phrase; no separate JUG PA/expressed is imported from364.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      },
+      {
+        "seq": 366,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 366,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "tib": "internal members of srog gcod pa, du shes, nyon mongs; case-r inside bsdu bar, bsam par and bzhir",
+          "reason": "The complete technical terms and inflected forms are retained at their warranted layers. The source members do not supply uniquely separate complete English lexical members in this use; case-r is not split and no unapproved subword is created. BZHI BZHIR stays a phrase, with no redundant child box."
+        },
+        "independent_reason": "The complete technical terms and inflected forms are retained at their warranted layers. The source members do not supply uniquely separate complete English lexical members in this use; case-r is not split and no unapproved subword is created. BZHI BZHIR stays a phrase, with no redundant child box.",
+        "status": "PRELIMINARY_FINAL_BINDING_PENDING"
+      }
+    ],
+    "additional_final_omissions": [],
+    "resolved_findings": [
+      {
+        "id": "K-REGISTERED-CLASS-SCOPE",
+        "status": "RESOLVED",
+        "affected_originals": [
+          "tibetan/364/original-decisions.json omissions[4]",
+          "tibetan/364/five-ground-screens.json INGEST_ARTEFACT d_defensibility"
+        ],
+        "finding": "Original adopted-language candidate calls this trailing apparatus an already registered class, but the cited registry analogies do not independently demonstrate that exact C05/C16 differing-transition defect.",
+        "required_adopted_correction": "Preserve original wording; describe apparatus as a physical/source-role inference, retain the unresolved edition relationship and scope registry analogies accurately. No erratum or source correction is required.",
+        "original_status": "NEEDS_CORRECTION",
+        "resolution": "Both adopted Tibetan364 omission[4] and INGEST screen[3] now state a physical/source-role inference and retain the unresolved C05/C16 edition relationship. Actual registry analogies keep their individual scopes; an identical already registered defect or corrected edition is not claimed. The exact complete original values and preliminary NEEDS_CORRECTION record remain unchanged.",
+        "correction_evidence": "inputs/reconciled-0310.json"
+      }
+    ],
+    "source_error_review": {
+      "status": "INDEPENDENT_SOURCE_REVIEW_COMPLETE",
+      "new_errata": [],
+      "selected_exact_english_records": [],
+      "source_corrections": false,
+      "questions": [
+        {
+          "seq": 364,
+          "original_angle": "english",
+          "original": {
+            "topic": "different following English section transitions",
+            "assessment": "UNRESOLVED_EDITION_RELATION; no erratum proposed",
+            "reason": "C05 physically includes the fourth-part loss/regaining transition; C16:882 instead includes a numbered Parts of a Karmic Act transition. The shared naming explanation is intact. Without an independently collated publication or a demonstrated extraction error, preserve the current English-only framing and leave it unbanked."
+          },
+          "assessment": "RETAIN_UNFILED_UNRESOLVED_EDITION_RELATION",
+          "independent_reason": "C16:882 exactly repeats ACIP/Wylie and the naming argument, then prints folio41 / The Parts of a Karmic Act / a return to Je Tsongkapa. Current C05 physically prints a fourth-part loss/regaining transition and nine asterisks. This supports a source-role distinction and an unresolved edition relationship, not an independently corrected witness. Physical source contains the complete transition and divider, below the cap. Preserve the English unresolved question; narrow the Tibetan registered-class claim rather than declaring an exact registered defect.",
+          "status": "UNFILED",
+          "five_grounds": [
+            {
+              "ground": 1,
+              "conclusion": "Complete current fields, source-first context358–372 and all six physical extents were personally read. Source/master/corpus/native identity is separately verified with the established receipt.",
+              "source_row": {
+                "id": 1746,
+                "course": "C05",
+                "seq": 364,
+                "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+                "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+                "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+              },
+              "physical_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/physical-source-extents.json",
+                "bytes": 3353,
+                "sha256": "5d989ee23e5e1e5ab2b5b4f859ae4ee4e464a1a12e9f026349676b7293de4846"
+              }
+            },
+            {
+              "ground": 2,
+              "conclusion": "C16:882 exactly repeats ACIP/Wylie and the naming argument, then prints folio41 / The Parts of a Karmic Act / a return to Je Tsongkapa. Current C05 physically prints a fourth-part loss/regaining transition and nine asterisks. This supports a source-role distinction and an unresolved edition relationship, not an independently corrected witness.",
+              "complete_corpus_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/corpus-reading-complete.json",
+                "bytes": 571,
+                "sha256": "bbcfe470c9f729f1e9ec58ec19049d628fb907429a0650815151a6cfa5276a2a"
+              }
+            },
+            {
+              "ground": 3,
+              "conclusion": "Origin357 register204 is byte-identical to my previously assessed J origin register. No current364–366 record. E-044 converter/E-071 source-side running heads/E-107 cap/E-111 row spill/E-076 and E-121 footnote fusions are limited analogies; E-120 is omitted sickness, not a following-heading class. No fresh linguistic read of all204 entries claimed.",
+              "current_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "exact_prior_same_reviewer_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "own_prior_assessment": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/semantic-review/source-error-independent-preassessment.json",
+                "bytes": 36298,
+                "sha256": "aeb02b7cd6cb3e2f95c90b06825e364772f4bc2d803985f479051b3dbe82ca52"
+              },
+              "later_verified_baseline_addendum": "Actual through3631be02f91d0c7546f4997d25cafd19c976ba4db3e is now bound separately from source-origin357e4da4c94f59f4af61de90fde63127890130c5902. Both204-entry registers and allowances are byte-identical. The complete actual governance delta adds I/J ledger entries and c5p120/121 registrations only; semantic rules are unchanged. Earlier pending-baseline records remain history."
+            },
+            {
+              "ground": 4,
+              "conclusion": "The three mental actions are paths for mental movement; the seven bodily/verbal actions are deeds as well as paths. Repeated LAS/LAM/SEMS PA/JUG PA and the two genitive with relations have separate clause-local exponents. The first third ordinal does not become first of all or the later fourth transition.",
+              "counterevidence": "Dictionary inclusion, reference comparanda, auto-aligned suggestions and same-corpus repetition are not equivalent to curated HGM authority or independent corrected publication. Translation expansion/distribution may justify omission without a source-error finding.",
+              "material_reading": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/master-reading-complete.json",
+                "bytes": 94118,
+                "sha256": "a231b7270b3871bdcf506a76e1ce95c623f60fae5db239b30706cdda81ec13d3"
+              }
+            },
+            {
+              "ground": 5,
+              "conclusion": "All fields are prose and below1500 characters; no metre test or truncation inference is warranted. Exact physical boundaries retain the complete text.",
+              "characters": {
+                "acip": 232,
+                "wylie": 231,
+                "english": 602
+              }
+            }
+          ]
+        }
+      ],
+      "segments": [
+        {
+          "seq": 364,
+          "original_screen_pins": {
+            "english": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/english/364/errata-review.json",
+              "bytes": 8101,
+              "sha256": "d5882defc2e51559e80a63b0fe080c8bde9328212eb6996f030028bce88c0339"
+            },
+            "tibetan": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/364/five-ground-screens.json",
+              "bytes": 52648,
+              "sha256": "ba3572ba06052718129b302e7d0f9c04d45054c6b6a7aeed9c4af5c001421af8"
+            }
+          },
+          "five_grounds": [
+            {
+              "ground": 1,
+              "conclusion": "Complete current fields, source-first context358–372 and all six physical extents were personally read. Source/master/corpus/native identity is separately verified with the established receipt.",
+              "source_row": {
+                "id": 1746,
+                "course": "C05",
+                "seq": 364,
+                "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+                "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+                "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+              },
+              "physical_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/physical-source-extents.json",
+                "bytes": 3353,
+                "sha256": "5d989ee23e5e1e5ab2b5b4f859ae4ee4e464a1a12e9f026349676b7293de4846"
+              }
+            },
+            {
+              "ground": 2,
+              "conclusion": "C16:882 exactly repeats ACIP/Wylie and the naming argument, then prints folio41 / The Parts of a Karmic Act / a return to Je Tsongkapa. Current C05 physically prints a fourth-part loss/regaining transition and nine asterisks. This supports a source-role distinction and an unresolved edition relationship, not an independently corrected witness.",
+              "complete_corpus_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/corpus-reading-complete.json",
+                "bytes": 571,
+                "sha256": "bbcfe470c9f729f1e9ec58ec19049d628fb907429a0650815151a6cfa5276a2a"
+              }
+            },
+            {
+              "ground": 3,
+              "conclusion": "Origin357 register204 is byte-identical to my previously assessed J origin register. No current364–366 record. E-044 converter/E-071 source-side running heads/E-107 cap/E-111 row spill/E-076 and E-121 footnote fusions are limited analogies; E-120 is omitted sickness, not a following-heading class. No fresh linguistic read of all204 entries claimed.",
+              "current_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "exact_prior_same_reviewer_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "own_prior_assessment": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/semantic-review/source-error-independent-preassessment.json",
+                "bytes": 36298,
+                "sha256": "aeb02b7cd6cb3e2f95c90b06825e364772f4bc2d803985f479051b3dbe82ca52"
+              },
+              "later_verified_baseline_addendum": "Actual through3631be02f91d0c7546f4997d25cafd19c976ba4db3e is now bound separately from source-origin357e4da4c94f59f4af61de90fde63127890130c5902. Both204-entry registers and allowances are byte-identical. The complete actual governance delta adds I/J ledger entries and c5p120/121 registrations only; semantic rules are unchanged. Earlier pending-baseline records remain history."
+            },
+            {
+              "ground": 4,
+              "conclusion": "The three mental actions are paths for mental movement; the seven bodily/verbal actions are deeds as well as paths. Repeated LAS/LAM/SEMS PA/JUG PA and the two genitive with relations have separate clause-local exponents. The first third ordinal does not become first of all or the later fourth transition.",
+              "counterevidence": "Dictionary inclusion, reference comparanda, auto-aligned suggestions and same-corpus repetition are not equivalent to curated HGM authority or independent corrected publication. Translation expansion/distribution may justify omission without a source-error finding.",
+              "material_reading": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/master-reading-complete.json",
+                "bytes": 94118,
+                "sha256": "a231b7270b3871bdcf506a76e1ce95c623f60fae5db239b30706cdda81ec13d3"
+              }
+            },
+            {
+              "ground": 5,
+              "conclusion": "All fields are prose and below1500 characters; no metre test or truncation inference is warranted. Exact physical boundaries retain the complete text.",
+              "characters": {
+                "acip": 232,
+                "wylie": 231,
+                "english": 602
+              }
+            }
+          ],
+          "category_assessments": [
+            {
+              "kind": "TIBETAN_SPELLING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "No malformed source form is established. Same Tibetan in C16 corroborates the captured text but is not an independent corrected edition.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_TYPO",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Double hyphen and quoted them are physically present and coherent apposition; no mistyped token or repair is demonstrated.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_FACTUAL_ERROR",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "The three/seven distinction is coherent. Organizational ordinal and appended fourth-part wording are left unbanked; no demonstrated mistranslation of the core explanation.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "INGEST_ARTEFACT",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Physical source contains the complete transition and divider, below the cap. Preserve the English unresolved question; narrow the Tibetan registered-class claim rather than declaring an exact registered defect.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "FORMATTING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Citation, prose lineation, transition and asterisks retain exact bytes. Apparatus is not used as a third Tibetan title occurrence.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "seq": 365,
+          "original_screen_pins": {
+            "english": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/english/365/errata-review.json",
+              "bytes": 6220,
+              "sha256": "968b34e85ac4a95e05bee8c26653d9c1e16f054924025beed6f83e06a50f9a77"
+            },
+            "tibetan": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/365/five-ground-screens.json",
+              "bytes": 40175,
+              "sha256": "575c20f0dbffd5d7bfea735748019b48c6f95fbb1982925edcc450a693cdd614"
+            }
+          },
+          "five_grounds": [
+            {
+              "ground": 1,
+              "conclusion": "Complete current fields, source-first context358–372 and all six physical extents were personally read. Source/master/corpus/native identity is separately verified with the established receipt.",
+              "source_row": {
+                "id": 1747,
+                "course": "C05",
+                "seq": 365,
+                "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+                "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+                "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+              },
+              "physical_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/physical-source-extents.json",
+                "bytes": 3353,
+                "sha256": "5d989ee23e5e1e5ab2b5b4f859ae4ee4e464a1a12e9f026349676b7293de4846"
+              }
+            },
+            {
+              "ground": 2,
+              "conclusion": "Exact fields return only C05:365. Full name/title and composition objects plus neighboring366 support attribution function. Dates are corroborated by the name entries, with no independent historical verification claimed.",
+              "complete_corpus_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/corpus-reading-complete.json",
+                "bytes": 571,
+                "sha256": "bbcfe470c9f729f1e9ec58ec19049d628fb907429a0650815151a6cfa5276a2a"
+              }
+            },
+            {
+              "ground": 3,
+              "conclusion": "Origin357 register204 is byte-identical to my previously assessed J origin register. No current364–366 record. E-044 converter/E-071 source-side running heads/E-107 cap/E-111 row spill/E-076 and E-121 footnote fusions are limited analogies; E-120 is omitted sickness, not a following-heading class. No fresh linguistic read of all204 entries claimed.",
+              "current_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "exact_prior_same_reviewer_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "own_prior_assessment": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/semantic-review/source-error-independent-preassessment.json",
+                "bytes": 36298,
+                "sha256": "aeb02b7cd6cb3e2f95c90b06825e364772f4bc2d803985f479051b3dbe82ca52"
+              },
+              "later_verified_baseline_addendum": "Actual through3631be02f91d0c7546f4997d25cafd19c976ba4db3e is now bound separately from source-origin357e4da4c94f59f4af61de90fde63127890130c5902. Both204-entry registers and allowances are byte-identical. The complete actual governance delta adds I/J ledger entries and c5p120/121 registrations only; semantic rules are unchanged. Earlier pending-baseline records remain history."
+            },
+            {
+              "ground": 4,
+              "conclusion": "Full BRTSOMS PA24787/5971 supports composed/written; BRTSAMS and other paradigms are distinct comparanda. RJE and MCHOG are author honorifics, CHEN MO belongs to the book title. RJE/Je is supported within the complete attested proper name, not by claiming a standalone Je glossary.",
+              "counterevidence": "Dictionary inclusion, reference comparanda, auto-aligned suggestions and same-corpus repetition are not equivalent to curated HGM authority or independent corrected publication. Translation expansion/distribution may justify omission without a source-error finding.",
+              "material_reading": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/master-reading-complete.json",
+                "bytes": 94118,
+                "sha256": "a231b7270b3871bdcf506a76e1ce95c623f60fae5db239b30706cdda81ec13d3"
+              }
+            },
+            {
+              "ground": 5,
+              "conclusion": "All fields are prose and below1500 characters; no metre test or truncation inference is warranted. Exact physical boundaries retain the complete text.",
+              "characters": {
+                "acip": 61,
+                "wylie": 59,
+                "english": 112
+              }
+            }
+          ],
+          "category_assessments": [
+            {
+              "kind": "TIBETAN_SPELLING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Positive complete BRTSOMS PA attestation defeats correction from tense-form expectation alone. Preserve raw BRTZOMS and generated brtsoms.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_TYPO",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Name, dates, capitalization and punctuation are physically present; no supported repair was found.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_FACTUAL_ERROR",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Full title/name records support attribution and date context. Supplied dates lack Tibetan tokens here but that does not demonstrate false dates.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "INGEST_ARTEFACT",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Short complete attribution extents match the row, including the wrapped composed by phrase; no lost title, name or cap mechanism.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "FORMATTING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Keep the full bibliographic sentence and date punctuation. The proper-name/title spans are lexical units, and supplied introductory words remain outside.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        },
+        {
+          "seq": 366,
+          "original_screen_pins": {
+            "english": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/english/366/errata-review.json",
+              "bytes": 7492,
+              "sha256": "0c5da0126371a9ca4e62802b5c8729727dbf7acca72456adb001804cae3d8e64"
+            },
+            "tibetan": {
+              "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/366/five-ground-screens.json",
+              "bytes": 51982,
+              "sha256": "8a860f346f6b040561e6b0080384ce002cabaef3d784c130f3d0529d27239586"
+            }
+          },
+          "five_grounds": [
+            {
+              "ground": 1,
+              "conclusion": "Complete current fields, source-first context358–372 and all six physical extents were personally read. Source/master/corpus/native identity is separately verified with the established receipt.",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "physical_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/physical-source-extents.json",
+                "bytes": 3353,
+                "sha256": "5d989ee23e5e1e5ab2b5b4f859ae4ee4e464a1a12e9f026349676b7293de4846"
+              }
+            },
+            {
+              "ground": 2,
+              "conclusion": "C16:883 repeats every full source field. Context367 explains object,368–369 conceptions,370 bad thought and an English motivation introduction,371 Tibetan motivation/undertaking,372 conclusion. Preserve those row-local differences rather than borrowing neighboring exponents.",
+              "complete_corpus_receipt": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/corpus-reading-complete.json",
+                "bytes": 571,
+                "sha256": "bbcfe470c9f729f1e9ec58ec19049d628fb907429a0650815151a6cfa5276a2a"
+              }
+            },
+            {
+              "ground": 3,
+              "conclusion": "Origin357 register204 is byte-identical to my previously assessed J origin register. No current364–366 record. E-044 converter/E-071 source-side running heads/E-107 cap/E-111 row spill/E-076 and E-121 footnote fusions are limited analogies; E-120 is omitted sickness, not a following-heading class. No fresh linguistic read of all204 entries claimed.",
+              "current_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "exact_prior_same_reviewer_register": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/tibetan/evidence/governance/docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "own_prior_assessment": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/semantic-review/source-error-independent-preassessment.json",
+                "bytes": 36298,
+                "sha256": "aeb02b7cd6cb3e2f95c90b06825e364772f4bc2d803985f479051b3dbe82ca52"
+              },
+              "later_verified_baseline_addendum": "Actual through3631be02f91d0c7546f4997d25cafd19c976ba4db3e is now bound separately from source-origin357e4da4c94f59f4af61de90fde63127890130c5902. Both204-entry registers and allowances are byte-identical. The complete actual governance delta adds I/J ledger entries and c5p120/121 registrations only; semantic rules are unchanged. Earlier pending-baseline records remain history."
+            },
+            {
+              "ground": 4,
+              "conclusion": "Grouping the middle three into thinking removes two components, then adding undertaking gives four. The two BSDUS predicates refer to inclusion and overall shortening; English moves the overall result earlier and omits separate repetition of the final four-item list. Complete BZHI BZHIR is a phrase, inflected BSDU BAR/BSAM PAR/LNGAR stay intact, and MI scopes over GAL.",
+              "counterevidence": "Dictionary inclusion, reference comparanda, auto-aligned suggestions and same-corpus repetition are not equivalent to curated HGM authority or independent corrected publication. Translation expansion/distribution may justify omission without a source-error finding.",
+              "material_reading": {
+                "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-364-366/semantic-review/evidence/master-reading-complete.json",
+                "bytes": 94118,
+                "sha256": "a231b7270b3871bdcf506a76e1ce95c623f60fae5db239b30706cdda81ec13d3"
+              }
+            },
+            {
+              "ground": 5,
+              "conclusion": "All fields are prose and below1500 characters; no metre test or truncation inference is warranted. Exact physical boundaries retain the complete text.",
+              "characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              }
+            }
+          ],
+          "category_assessments": [
+            {
+              "kind": "TIBETAN_SPELLING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Inflected and reduplicated forms agree with physical source/C16. Exact empty headword queries for BSDU BAR and BSAM PAR do not prove spelling errors when full bases/context explain them.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_TYPO",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "The count transformation and English colon/semicolon exposition are coherent, including two thinking occurrences. No demonstrable typo or restoration.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "ENGLISH_FACTUAL_ERROR",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Five minus two plus one equals four; compression of the repeated list does not show a lost part or factual contradiction. The original-text intention remains the object of non-violation.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "INGEST_ARTEFACT",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Both complete physical extents end normally and match the repeated C16 text below the cap. List compression is present in physical English and does not establish extraction loss.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            },
+            {
+              "kind": "FORMATTING",
+              "decision": "NO_NEW_FILED_ERRATUM",
+              "independent_reason": "Preserve quotation/list/colon/semicolon/final-period punctuation. Only terminal LO has affirmative punctuation fusion; other uncertain grammar is not nulled.",
+              "all_five_grounds_considered": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        }
+      ],
+      "final_reconciliation_source_questions": [
+        {
+          "status": "UNFILED",
+          "assessment": "UNRESOLVED_EDITION_RELATION; no erratum proposed",
+          "topic": "different following English section transitions",
+          "correction": null,
+          "reason": "The physical C05 transition and stars follow the completed explanation. C16 repeats the explanation with a different continuation; this supports a source-role inference, not an independently established identical registered defect or corrected edition. Keep the full original T claim and E question as provenance. Registry examples retain their actual scopes: E-071 running head, E-076/E-121 footnotes, E-120 omitted sickness. No source-specific correction is established.",
+          "original_bases": [
+            {
+              "seq": 364,
+              "angle": "english",
+              "field": "source_questions",
+              "index": 0
+            }
+          ]
+        }
+      ],
+      "original_question_objects_exact": 1,
+      "scope": "The English364 unresolved edition relationship remains unfiled. Its complete original and five own grounds are retained. The source-role correction resolves an evidence-description finding, not a source error. Repeated nouns, organizational ordinals, copular compression, title members and inflected source spelling retain their explicit uncertainty/counterevidence; no uncertainty becomes an absence null."
+    },
+    "final_source_questions": "One English364 unresolved edition question remains unfiled with complete original and independent five-ground review. No errata or source corrections.",
+    "native_history": {
+      "original_pairs": 6,
+      "new_reconciler_pairs": 2,
+      "exact_english_reused_pairs": 1,
+      "actual_unique_pairs": 8,
+      "selected_angle_segment_views": 9,
+      "reviewer_generator_runs": 0,
+      "reviewer_resolver_runs": 0,
+      "source_queries_run_here": 0
+    },
+    "manifest": "original-to-copy-manifest.json",
+    "process_history": "process-history.json",
+    "reviewer_limits": "PROVISIONAL alignment only, never hgm_gloss. No W/source/master/main writes, queries/native engine reruns, paid API or publishing. Root acceptance, production and closure remain separate.",
+    "utc": "2026-09-15T08:17:50.002493+00:00"
+  },
+  "fidelity_tests": {
+    "passed": 17,
+    "failed": 0,
+    "execution": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "../campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+        "-R",
+        "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+        "--output-on-failure"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-15T08:28:04.332774+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-15T08:28:15.268969+00:00",
+      "wall_seconds": 10.935873624868691,
+      "exit": 0,
+      "stdout_bytes": 2166,
+      "stderr_bytes": 0,
+      "stdout_sha256": "f01154fee878299b61204306414b610538fc6cda7f24399a2300f71147313cb7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retention": {
+    "baseline_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+    "page": "c5p122",
+    "segments": [
+      364,
+      365,
+      366
+    ],
+    "prior_links_retained": 47859,
+    "added_links": 73,
+    "added_by_segment": {
+      "364": 32,
+      "365": 11,
+      "366": 30
+    },
+    "reviewed_analyst_spans": 70,
+    "full_links": 47932,
+    "null_exponents": 11991,
+    "evidence_headwords": 7228,
+    "evidence_pairs": 16069,
+    "prior_notes_trees_evidence_and_acip_retained": true,
+    "prior_csv_rows_retained": 23357,
+    "current_csv_rows": 23384,
+    "prior_csv_content_and_references_retained": true,
+    "csv_acip_enrichments_from_newly_banked_source": [],
+    "source_hashes_unchanged": true,
+    "review_tuples_and_source_ranges_match": true,
+    "navigation_targets_exist": true,
+    "rendering_verified": false
+  },
+  "course_csv": {
+    "baseline_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+    "prior_course_depth_groups_retained": 25043,
+    "current_course_depth_groups": 25076,
+    "all_depths_counts_and_metadata_match_main_csv_refs": true,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": "613548bcce51fe93a45737afde24be80b946d8f07cf34ebf8482eb3c29218e4b"
+  },
+  "reproduction_outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 10447699,
+      "sha256": "3bf5e4ad8226051aac855c68d9fe272eea2e53ac02d49e10ed23f15687a7f4e2",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2280769,
+      "sha256": "72539c87792ad48d3bcb54cff2a3a5d7e02d0cbb4d348da4439d3d4b8bc18771",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2297818,
+      "sha256": "4f35caef2529a4636e3d928203c94abe6211e09a0545daed4b18586074ce4dd5",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16858709,
+      "sha256": "8d4c083d246ccecb36b631b177757aad2c02f9bda27409a7be5bb09135c4ab11",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5447326,
+      "sha256": "491b7affaffbe80aac6ea93ec695271057dcb048c46217eb4c608bdf8fa6b242",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5369583,
+      "sha256": "613548bcce51fe93a45737afde24be80b946d8f07cf34ebf8482eb3c29218e4b",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 4785,
+      "sha256": "00c3b53fde1cba23482df03452007175f58a712bff1b8859d9683560f71c078b",
+      "complete_bytes_equal": true
+    }
+  ],
+  "archive": {
+    "file": "native-evidence.tar.gz",
+    "members": 170,
+    "bytes": 185973,
+    "sha256": "412853efef2f977361124b237b4f8ea7e70acffe3e5d13151b50c7cf49d89e2e"
+  },
+  "external_reproduction_inputs": "/Volumes/Oct2024(8TB)/Codex-ACI-Alignment-20260915-01a09398/compact-reproduction-through366",
+  "seed_retention": "Actual incoming CSV seed is retained externally and byte-bound to baseline Git CSV; not redundantly copied into this archive.",
+  "integration_limits": "Isolated desktop-consumable outputs only. MAIN remains OPEN_NO_APPLICATION. Private phone pack FAILED_UNACCEPTED for four inherited C01 mappings; no install. Installed through171 unchanged. External evidence drive required.",
+  "later_proofs": "Staging/whitespace/commit/checkpoint evidence follows separately; it is not claimed to be an input to its own earlier archive."
+}

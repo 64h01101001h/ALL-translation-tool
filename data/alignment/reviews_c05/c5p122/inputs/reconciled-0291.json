@@ -1,0 +1,2555 @@
+{
+  "seq": 366,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 366,
+        "kind": "TIBETAN_SPELLING",
+        "found": "BZHI BZHIR",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "BZHI BZHIR",
+            "source_row": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "occurrences": {
+              "acip": [
+                236
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bcu po 'di la ci'i phyir las kyi lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sems pa 'jug pa'i lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rje tsong kha pa mchog gis brtsoms pa'i"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1747
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bar pa gsum bsam par bsdus te"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bzhi bzhir bsdus te bshad na"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "The Abbreviation says that five parts are involved"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+            "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:364",
+              "c05:365",
+              "c05:366",
+              "brtsoms",
+              "brtzoms",
+              "bsdu bar",
+              "bzhi bzhir"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+            "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 366,
+                "field": "acip",
+                "start": 248236,
+                "bytes": 311,
+                "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 366,
+                "field": "english",
+                "start": 248549,
+                "bytes": 434,
+                "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 78,
+            "material_master_objects": 148,
+            "personally_read_reused_objects": 73,
+            "complete_new_master_objects_read": 75,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 5
+          },
+          "d_defensibility": {
+            "judgment": "The reduplicated numeral gives the four-part grouping. BZHI reference four and BZHIR reference as four support it; unrelated mined BZHI leisure and fortune is not attestation, and the auto-aligned BZHIR gloss is labeled as such. Exact BSDU BAR and BSAM PAR lack entries but their attested bases and local inflections do not establish spelling errors. Full physical/C16 source agrees.",
+            "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The reduplicated numeral gives the four-part grouping. BZHI reference four and BZHIR reference as four support it; unrelated mined BZHI leisure and fortune is not attestation, and the auto-aligned BZHIR gloss is labeled as such. Exact BSDU BAR and BSAM PAR lack entries but their attested bases and local inflections do not establish spelling errors. Full physical/C16 source agrees.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 366,
+        "kind": "ENGLISH_TYPO",
+        "found": "These five can be shortened into four:",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "These five can be shortened into four:",
+            "source_row": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                203
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bcu po 'di la ci'i phyir las kyi lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sems pa 'jug pa'i lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rje tsong kha pa mchog gis brtsoms pa'i"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1747
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bar pa gsum bsam par bsdus te"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bzhi bzhir bsdus te bshad na"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "The Abbreviation says that five parts are involved"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+            "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:364",
+              "c05:365",
+              "c05:366",
+              "brtsoms",
+              "brtzoms",
+              "bsdu bar",
+              "bzhi bzhir"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+            "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 366,
+                "field": "acip",
+                "start": 248236,
+                "bytes": 311,
+                "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 366,
+                "field": "english",
+                "start": 248549,
+                "bytes": 434,
+                "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 78,
+            "material_master_objects": 148,
+            "personally_read_reused_objects": 73,
+            "complete_new_master_objects_read": 75,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 5
+          },
+          "d_defensibility": {
+            "judgment": "The count changes by grouping the middle three within thinking and adding undertaking: five minus two plus one is four. The colon introduces that explanation. All complete C16 English and physical source agree; a repeated source numeral or English recap does not establish a typo.",
+            "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The count changes by grouping the middle three within thinking and adding undertaking: five minus two plus one is four. The colon introduces that explanation. All complete C16 English and physical source agree; a repeated source numeral or English recap does not establish a typo.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 366,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "the middle three can be included into the thinking",
+        "decision": "NO_NEW_ERRATUM_DISTRIBUTED_LIST_SCOPE",
+        "five_grounds": {
+          "a_quote": {
+            "found": "the middle three can be included into the thinking",
+            "source_row": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                242
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bcu po 'di la ci'i phyir las kyi lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sems pa 'jug pa'i lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rje tsong kha pa mchog gis brtsoms pa'i"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1747
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bar pa gsum bsam par bsdus te"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bzhi bzhir bsdus te bshad na"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "The Abbreviation says that five parts are involved"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+            "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:364",
+              "c05:365",
+              "c05:366",
+              "brtsoms",
+              "brtzoms",
+              "bsdu bar",
+              "bzhi bzhir"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+            "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 366,
+                "field": "acip",
+                "start": 248236,
+                "bytes": 311,
+                "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 366,
+                "field": "english",
+                "start": 248549,
+                "bytes": 434,
+                "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 78,
+            "material_master_objects": 148,
+            "personally_read_reused_objects": 73,
+            "complete_new_master_objects_read": 75,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 5
+          },
+          "d_defensibility": {
+            "judgment": "The middle three are conception, thinking and bad thought; they become the umbrella thinking component while undertaking is added. Source then restates the four-part list, whereas English fronts the four-part result and does not repeat all four nouns. Preserve that distributed scope unbanked rather than misaligning repeated source nouns or claiming that a part was lost.",
+            "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The middle three are conception, thinking and bad thought; they become the umbrella thinking component while undertaking is added. Source then restates the four-part list, whereas English fronts the four-part result and does not repeat all four nouns. Preserve that distributed scope unbanked rather than misaligning repeated source nouns or claiming that a part was lost.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 366,
+        "kind": "INGEST_ARTEFACT",
+        "found": "in no way violates the intention of the original text.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "in no way violates the intention of the original text.",
+            "source_row": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                375
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bcu po 'di la ci'i phyir las kyi lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sems pa 'jug pa'i lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rje tsong kha pa mchog gis brtsoms pa'i"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1747
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bar pa gsum bsam par bsdus te"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bzhi bzhir bsdus te bshad na"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "The Abbreviation says that five parts are involved"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+            "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:364",
+              "c05:365",
+              "c05:366",
+              "brtsoms",
+              "brtzoms",
+              "bsdu bar",
+              "bzhi bzhir"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+            "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 366,
+                "field": "acip",
+                "start": 248236,
+                "bytes": 311,
+                "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 366,
+                "field": "english",
+                "start": 248549,
+                "bytes": 434,
+                "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 78,
+            "material_master_objects": 148,
+            "personally_read_reused_objects": 73,
+            "complete_new_master_objects_read": 75,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 5
+          },
+          "d_defensibility": {
+            "judgment": "Both full physical extents contain the completed explanation through final LO and the English period. C16:883 repeats all text fields exactly and all lengths are below the cap. The repeated source list is already reflected in physical English as a summarized count, not shown to be ingest loss.",
+            "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both full physical extents contain the completed explanation through final LO and the English period. C16:883 repeats all text fields exactly and all lengths are below the cap. The repeated source list is already reflected in physical English as a summarized count, not shown to be ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 366,
+        "kind": "FORMATTING",
+        "found": "Here is the first. One may ask,",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Here is the first. One may ask,",
+            "source_row": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 366,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bcu po 'di la ci'i phyir las kyi lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sems pa 'jug pa'i lam"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1746,
+                  6900
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rje tsong kha pa mchog gis brtsoms pa'i"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1747
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bar pa gsum bsam par bsdus te"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bzhi bzhir bsdus te bshad na"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "The Abbreviation says that five parts are involved"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+            "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:364",
+              "c05:365",
+              "c05:366",
+              "brtsoms",
+              "brtzoms",
+              "bsdu bar",
+              "bzhi bzhir"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+            "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 366,
+                "field": "acip",
+                "start": 248236,
+                "bytes": 311,
+                "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 366,
+                "field": "english",
+                "start": 248549,
+                "bytes": 434,
+                "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 78,
+            "material_master_objects": 148,
+            "personally_read_reused_objects": 73,
+            "complete_new_master_objects_read": 75,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 5
+          },
+          "d_defensibility": {
+            "judgment": "The opening introduces the first act and a quoted definition question. Original quotation marks, serial commas, colon, semicolon and terminal period remain untouched. Only terminal LO has an affirmative statement-end punctuation-fusion null; uncertain connective or list scope is not treated as punctuation fusion.",
+            "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The opening introduces the first act and a quoted definition question. Original quotation marks, serial commas, colon, semicolon and terminal period remain untouched. Only terminal LO has an affirmative statement-end punctuation-fusion null; uncertain connective or list scope is not treated as punctuation fusion.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Both full list enumerations and the surrounding prose agree with physical ACIP and C16:883. BSDU BAR, BSAM PAR and LNGAR retain their full inflected syllables; different dictionary headword forms do not justify source correction.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both full list enumerations and the surrounding prose agree with physical ACIP and C16:883. BSDU BAR, BSAM PAR and LNGAR retain their full inflected syllables; different dictionary headword forms do not justify source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The five-to-four exposition is grammatical, including the two thinking occurrences and the separate included/shortened verbs. No source-specific mistyped word is observed.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The five-to-four exposition is grammatical, including the two thinking occurrences and the separate included/shortened verbs. No source-specific mistyped word is observed.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The middle-three inclusion plus added undertaking explains the four categories, supported by367–372. Compression of the repeated Tibetan list and question framing constrains alignment but does not establish a false claim in the translation.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The middle-three inclusion plus added undertaking explains the four categories, supported by367–372. Compression of the repeated Tibetan list and question framing constrains alignment but does not establish a false claim in the translation.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Both complete physical extents and the full C16:883 parallel preserve this passage. The condensed English list is not evidence of an ingestion loss, running head or cap.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both complete physical extents and the full C16:883 parallel preserve this passage. The condensed English list is not evidence of an ingestion loss, running head or cap.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The opening question, colon, list commas, semicolon and closing period remain exact. Terminal LO is represented only as an alignment punctuation-fusion null, not as a source-format correction.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The opening question, colon, list commas, semicolon and closing period remain exact. Terminal LO is represented only as an alignment punctuation-fusion null, not as a source-format correction.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 366,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 366,
+          "kind": "TIBETAN_SPELLING",
+          "found": "BZHI BZHIR",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "BZHI BZHIR",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "occurrences": {
+                "acip": [
+                  236
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bcu po 'di la ci'i phyir las kyi lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sems pa 'jug pa'i lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rje tsong kha pa mchog gis brtsoms pa'i"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1747
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bar pa gsum bsam par bsdus te"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bzhi bzhir bsdus te bshad na"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "The Abbreviation says that five parts are involved"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+              "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:364",
+                "c05:365",
+                "c05:366",
+                "brtsoms",
+                "brtzoms",
+                "bsdu bar",
+                "bzhi bzhir"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+              "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 366,
+                  "field": "acip",
+                  "start": 248236,
+                  "bytes": 311,
+                  "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                  "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 366,
+                  "field": "english",
+                  "start": 248549,
+                  "bytes": 434,
+                  "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                  "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 78,
+              "material_master_objects": 148,
+              "personally_read_reused_objects": 73,
+              "complete_new_master_objects_read": 75,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 5
+            },
+            "d_defensibility": {
+              "judgment": "The reduplicated numeral gives the four-part grouping. BZHI reference four and BZHIR reference as four support it; unrelated mined BZHI leisure and fortune is not attestation, and the auto-aligned BZHIR gloss is labeled as such. Exact BSDU BAR and BSAM PAR lack entries but their attested bases and local inflections do not establish spelling errors. Full physical/C16 source agrees.",
+              "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 366,
+          "kind": "ENGLISH_TYPO",
+          "found": "These five can be shortened into four:",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "These five can be shortened into four:",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  203
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bcu po 'di la ci'i phyir las kyi lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sems pa 'jug pa'i lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rje tsong kha pa mchog gis brtsoms pa'i"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1747
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bar pa gsum bsam par bsdus te"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bzhi bzhir bsdus te bshad na"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "The Abbreviation says that five parts are involved"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+              "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:364",
+                "c05:365",
+                "c05:366",
+                "brtsoms",
+                "brtzoms",
+                "bsdu bar",
+                "bzhi bzhir"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+              "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 366,
+                  "field": "acip",
+                  "start": 248236,
+                  "bytes": 311,
+                  "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                  "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 366,
+                  "field": "english",
+                  "start": 248549,
+                  "bytes": 434,
+                  "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                  "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 78,
+              "material_master_objects": 148,
+              "personally_read_reused_objects": 73,
+              "complete_new_master_objects_read": 75,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 5
+            },
+            "d_defensibility": {
+              "judgment": "The count changes by grouping the middle three within thinking and adding undertaking: five minus two plus one is four. The colon introduces that explanation. All complete C16 English and physical source agree; a repeated source numeral or English recap does not establish a typo.",
+              "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 366,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "the middle three can be included into the thinking",
+          "decision": "NO_NEW_ERRATUM_DISTRIBUTED_LIST_SCOPE",
+          "five_grounds": {
+            "a_quote": {
+              "found": "the middle three can be included into the thinking",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  242
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bcu po 'di la ci'i phyir las kyi lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sems pa 'jug pa'i lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rje tsong kha pa mchog gis brtsoms pa'i"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1747
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bar pa gsum bsam par bsdus te"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bzhi bzhir bsdus te bshad na"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "The Abbreviation says that five parts are involved"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+              "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:364",
+                "c05:365",
+                "c05:366",
+                "brtsoms",
+                "brtzoms",
+                "bsdu bar",
+                "bzhi bzhir"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+              "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 366,
+                  "field": "acip",
+                  "start": 248236,
+                  "bytes": 311,
+                  "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                  "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 366,
+                  "field": "english",
+                  "start": 248549,
+                  "bytes": 434,
+                  "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                  "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 78,
+              "material_master_objects": 148,
+              "personally_read_reused_objects": 73,
+              "complete_new_master_objects_read": 75,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 5
+            },
+            "d_defensibility": {
+              "judgment": "The middle three are conception, thinking and bad thought; they become the umbrella thinking component while undertaking is added. Source then restates the four-part list, whereas English fronts the four-part result and does not repeat all four nouns. Preserve that distributed scope unbanked rather than misaligning repeated source nouns or claiming that a part was lost.",
+              "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 366,
+          "kind": "INGEST_ARTEFACT",
+          "found": "in no way violates the intention of the original text.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "in no way violates the intention of the original text.",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  375
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bcu po 'di la ci'i phyir las kyi lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sems pa 'jug pa'i lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rje tsong kha pa mchog gis brtsoms pa'i"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1747
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bar pa gsum bsam par bsdus te"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bzhi bzhir bsdus te bshad na"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "The Abbreviation says that five parts are involved"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+              "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:364",
+                "c05:365",
+                "c05:366",
+                "brtsoms",
+                "brtzoms",
+                "bsdu bar",
+                "bzhi bzhir"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+              "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 366,
+                  "field": "acip",
+                  "start": 248236,
+                  "bytes": 311,
+                  "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                  "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 366,
+                  "field": "english",
+                  "start": 248549,
+                  "bytes": 434,
+                  "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                  "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 78,
+              "material_master_objects": 148,
+              "personally_read_reused_objects": 73,
+              "complete_new_master_objects_read": 75,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 5
+            },
+            "d_defensibility": {
+              "judgment": "Both full physical extents contain the completed explanation through final LO and the English period. C16:883 repeats all text fields exactly and all lengths are below the cap. The repeated source list is already reflected in physical English as a summarized count, not shown to be ingest loss.",
+              "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 366,
+          "kind": "FORMATTING",
+          "found": "Here is the first. One may ask,",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Here is the first. One may ask,",
+              "source_row": {
+                "id": 1748,
+                "course": "C05",
+                "seq": 366,
+                "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+                "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 366,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bcu po 'di la ci'i phyir las kyi lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sems pa 'jug pa'i lam"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1746,
+                    6900
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rje tsong kha pa mchog gis brtsoms pa'i"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1747
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bar pa gsum bsam par bsdus te"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bzhi bzhir bsdus te bshad na"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "The Abbreviation says that five parts are involved"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1748,
+                    6901
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+              "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:364",
+                "c05:365",
+                "c05:366",
+                "brtsoms",
+                "brtzoms",
+                "bsdu bar",
+                "bzhi bzhir"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+              "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 311,
+                "wylie": 308,
+                "english": 429
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 366,
+                  "field": "acip",
+                  "start": 248236,
+                  "bytes": 311,
+                  "sha256": "baf2ade7fc03626f98015bba8da17b5102672d5bf3bfdaa063327bcb38db88f6",
+                  "original_text": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 366,
+                  "field": "english",
+                  "start": 248549,
+                  "bytes": 434,
+                  "sha256": "300eb401c6c42e900c7d51532c382d27729d217d6c07a35b83455246463a4d6f",
+                  "original_text": "Here is the first. One may ask, \"How do you define the act of killing?\" The\r\nAbbreviation says that five parts are involved: the object, the conception, the\r\nthinking, the bad thought, and the conclusion. These five can be shortened\r\ninto four: the middle three can be included into the thinking, and we can add\r\nthe stage of undertaking; this makes the presentation easier, and in no way\r\nviolates the intention of the original text.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 78,
+              "material_master_objects": 148,
+              "personally_read_reused_objects": 73,
+              "complete_new_master_objects_read": 75,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 5
+            },
+            "d_defensibility": {
+              "judgment": "The opening introduces the first act and a quoted definition question. Original quotation marks, serial commas, colon, semicolon and terminal period remain untouched. Only terminal LO has an affirmative statement-end punctuation-fusion null; uncertain connective or list scope is not treated as punctuation fusion.",
+              "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 366,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 366,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1748,
+              "course": "C05",
+              "seq": 366,
+              "acip": ",DANG PO NI, SROG GCOD PA GANG ZHE NA, 'DI LA BSDU BAR GZHI DANG 'DU SHES DANG BSAM PA DANG NYON MONGS DANG MTHA' STE LNGAR GSUNGS KYANG , BAR PA GSUM BSAM PAR BSDUS TE SBYOR BA BSNAN NAS GZHI DANG BSAM PA DANG SBYOR BA DANG MTHAR THUG BZHI BZHIR BSDUS TE BSHAD NA 'JUG PA BDE ZHING DGONGS PA DANG MI 'GAL LO, ,",
+              "wylie": "dang po ni, srog gcod pa gang zhe na, 'di la bsdu bar gzhi dang 'du shes dang bsam pa dang nyon mongs dang mtha' ste lngar gsungs kyang , bar pa gsum bsam par bsdus te sbyor ba bsnan nas gzhi dang bsam pa dang sbyor ba dang mthar thug bzhi bzhir bsdus te bshad na 'jug pa bde zhing dgongs pa dang mi 'gal lo,",
+              "english": "Here is the first. One may ask, \"How do you define the act of killing?\" The Abbreviation says that five parts are involved: the object, the conception, the thinking, the bad thought, and the conclusion. These five can be shortened into four: the middle three can be included into the thinking, and we can add the stage of undertaking; this makes the presentation easier, and in no way violates the intention of the original text."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-attempt02-caller, followed by the successful proposal-origin-caller. The initial missing-argument failure is preserved separately in preparation-history.json; no source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1748,
+                  6901
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:883 repeats all three complete fields. Following367 explains the killing object;368–369 explain conceptions;370 states the bad thought and motivation;371 explains undertaking;372 explains conclusion. These complete contextual records confirm the functional organization while leaving the source translation and its condensed list untouched."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "The unchanged204-entry origin register has no364–366 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The initial five parts are object, conception, thinking, bad thought and conclusion. The middle three are included in thinking and undertaking is added, yielding four. English condenses the repeated four-part list: later GZHI, BSAM PA, SBYOR BA and MTHAR THUG cannot reuse the first list words. BSDU BAR is the text title Abbreviation, distinct from both BSDUS operations. BSHAD/presentation is a local nominal recasting of exposition; JUG PA and conditional/linking grammar remain partly unbanked. Terminal LO has only a punctuation-fusion null.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "utf8_bytes": {
+              "acip": 311,
+              "wylie": 308,
+              "english": 429
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "All fields are below1500 characters, with the complete English paragraph ending the intention of the original text. The physical source includes both Tibetan five-part and four-part lists. English restructuring and reordered inclusion/shortening statements do not prove a cap, spill or missing line. The next367 begins the object explanation, while372 supplies the later conclusion discussion."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Both full list enumerations and the surrounding prose agree with physical ACIP and C16:883. BSDU BAR, BSAM PAR and LNGAR retain their full inflected syllables; different dictionary headword forms do not justify source correction.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The five-to-four exposition is grammatical, including the two thinking occurrences and the separate included/shortened verbs. No source-specific mistyped word is observed.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The middle-three inclusion plus added undertaking explains the four categories, supported by367–372. Compression of the repeated Tibetan list and question framing constrains alignment but does not establish a false claim in the translation.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Both complete physical extents and the full C16:883 parallel preserve this passage. The condensed English list is not evidence of an ingestion loss, running head or cap.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The opening question, colon, list commas, semicolon and closing period remain exact. Terminal LO is represented only as an alignment punctuation-fusion null, not as a source-format correction.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

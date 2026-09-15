@@ -1,0 +1,13 @@
+{
+  "status": "PRESERVED_READ_ONLY_LOOKUP_FAILURE",
+  "evidence_kind": "RECONSTRUCTED_FROM_ACTUAL_TOOL_RESPONSE_NOT_CONTEMPORANEOUS_NATIVE_CAPTURE",
+  "tool_chunk_id": "f0ffde",
+  "exit_code": 1,
+  "missing_paths": [
+    "C05-361-363/reconciled-assembly-caller/command.json",
+    "C05-361-363/reconciled-native-caller/command.json",
+    "C05-361-363/reconciled-package-caller/command.json"
+  ],
+  "actual_stderr": "cat: campaign-artifacts/C05-361-363/reconciled-assembly-caller/command.json: No such file or directory\ncat: campaign-artifacts/C05-361-363/reconciled-native-caller/command.json: No such file or directory\ncat: campaign-artifacts/C05-361-363/reconciled-package-caller/command.json: No such file or directory\n",
+  "scope": "Prior caller names were guessed during read-only method lookup; actual existing helper paths and shared record_external_step.py were then located. The same read displayed current Tibetan runner/adapter successfully. No source query, assembly, native engine or W mutation occurred in this lookup."
+}

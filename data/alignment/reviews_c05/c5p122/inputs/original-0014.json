@@ -1,0 +1,1097 @@
+[
+  {
+    "seq": 365,
+    "kind": "TIBETAN_SPELLING",
+    "found": "BRTZOMS",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "BRTZOMS",
+        "source_row": {
+          "id": 1747,
+          "course": "C05",
+          "seq": 365,
+          "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+          "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+          "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+        },
+        "occurrences": {
+          "acip": [
+            28
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 61,
+          "wylie": 59,
+          "english": 112
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 365,
+            "field": "acip",
+            "start": 248056,
+            "bytes": 61,
+            "sha256": "b0c87a781069d4302890fde9426278b4357a94dd9ebda8eb3a8fc9e217534538",
+            "original_text": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 365,
+            "field": "english",
+            "start": 248119,
+            "bytes": 113,
+            "sha256": "6a0ef8be2fd673828cb570b5d9b3ad1e40114ac70c534cd89d8d10c5f2ae09b0",
+            "original_text": "The following selections are from the Great Book on the Steps of the Path,\r\ncomposed by Je Tsongkapa (1357-1419).",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "Raw BRTZOMS converts to BRTSOMS, and the complete BRTSOMS PA master/glossary explicitly attests composed/written. BRTSAMS PA and BRTSAMS are distinct captured comparanda, not authority to replace the actual vowel. GIS remains whole, and the author name ACIP TZONG converts through the unchanged convention.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 365,
+    "kind": "ENGLISH_TYPO",
+    "found": "Je Tsongkapa (1357-1419)",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Je Tsongkapa (1357-1419)",
+        "source_row": {
+          "id": 1747,
+          "course": "C05",
+          "seq": 365,
+          "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+          "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+          "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            87
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 61,
+          "wylie": 59,
+          "english": 112
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 365,
+            "field": "acip",
+            "start": 248056,
+            "bytes": 61,
+            "sha256": "b0c87a781069d4302890fde9426278b4357a94dd9ebda8eb3a8fc9e217534538",
+            "original_text": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 365,
+            "field": "english",
+            "start": 248119,
+            "bytes": 113,
+            "sha256": "6a0ef8be2fd673828cb570b5d9b3ad1e40114ac70c534cd89d8d10c5f2ae09b0",
+            "original_text": "The following selections are from the Great Book on the Steps of the Path,\r\ncomposed by Je Tsongkapa (1357-1419).",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "The full name record directly includes Je Tsongkapa (1357-1419), and the complete TSONG KHA PA reference also supplies those dates. The physical English matches the captured sentence; no name/date typo or silently normalized hyphen is supported.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 365,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "Great Book on the Steps of the Path",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Great Book on the Steps of the Path",
+        "source_row": {
+          "id": 1747,
+          "course": "C05",
+          "seq": 365,
+          "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+          "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+          "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            38
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 61,
+          "wylie": 59,
+          "english": 112
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 365,
+            "field": "acip",
+            "start": 248056,
+            "bytes": 61,
+            "sha256": "b0c87a781069d4302890fde9426278b4357a94dd9ebda8eb3a8fc9e217534538",
+            "original_text": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 365,
+            "field": "english",
+            "start": 248119,
+            "bytes": 113,
+            "sha256": "6a0ef8be2fd673828cb570b5d9b3ad1e40114ac70c534cd89d8d10c5f2ae09b0",
+            "original_text": "The following selections are from the Great Book on the Steps of the Path,\r\ncomposed by Je Tsongkapa (1357-1419).",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "The complete LAM RIM CHEN MO entry directly supports the full title, with LAM RIM Steps of the Path and CHEN MO Great Book as explicit members. MCHOG qualifies the author and is not reassigned to Great Book. Bibliographic introduction and dates are expansions, not evidence of a wrong author or title.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 365,
+    "kind": "INGEST_ARTEFACT",
+    "found": "The following selections are from",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "The following selections are from",
+        "source_row": {
+          "id": 1747,
+          "course": "C05",
+          "seq": 365,
+          "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+          "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+          "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            0
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 61,
+          "wylie": 59,
+          "english": 112
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 365,
+            "field": "acip",
+            "start": 248056,
+            "bytes": 61,
+            "sha256": "b0c87a781069d4302890fde9426278b4357a94dd9ebda8eb3a8fc9e217534538",
+            "original_text": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 365,
+            "field": "english",
+            "start": 248119,
+            "bytes": 113,
+            "sha256": "6a0ef8be2fd673828cb570b5d9b3ad1e40114ac70c534cd89d8d10c5f2ae09b0",
+            "original_text": "The following selections are from the Great Book on the Steps of the Path,\r\ncomposed by Je Tsongkapa (1357-1419).",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "Both full physical extents form a complete source-attribution sentence, below the field cap. Each exact complete-field query has only current365, so no independent parallel edition is claimed. The following source366 begins a new quotation rather than supplying missing text to this row.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 365,
+    "kind": "FORMATTING",
+    "found": "(1357-1419).",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "(1357-1419).",
+        "source_row": {
+          "id": 1747,
+          "course": "C05",
+          "seq": 365,
+          "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+          "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+          "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            100
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 365,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 61,
+          "wylie": 59,
+          "english": 112
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 365,
+            "field": "acip",
+            "start": 248056,
+            "bytes": 61,
+            "sha256": "b0c87a781069d4302890fde9426278b4357a94dd9ebda8eb3a8fc9e217534538",
+            "original_text": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 365,
+            "field": "english",
+            "start": 248119,
+            "bytes": 113,
+            "sha256": "6a0ef8be2fd673828cb570b5d9b3ad1e40114ac70c534cd89d8d10c5f2ae09b0",
+            "original_text": "The following selections are from the Great Book on the Steps of the Path,\r\ncomposed by Je Tsongkapa (1357-1419).",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "Parenthetical life dates, title capitals and the final period are printed in the physical source. The final LAS/from introduces the bibliographic source, while bound composition grammar links author/title. Keep punctuation and unwrapped supplied introduction exactly.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "import json,pathlib,hashlib,subprocess\nR=pathlib.Path.cwd();B=R/'campaign-artifacts/C05-364-366';S=B/'semantic-review';W=R/'campaign-worktree'\ndef load(p):return json.loads(p.read_text())\ndef pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}\ndef put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\\n')\nmanifest=[];byid={}\ndef copy(p,dest=None,meta=None):\n q=pin(p);key=(q['bytes'],q['sha256']);dest=dest or byid.get(key) or ('inputs/original-'+str(len(manifest)).zfill(4)+(p.suffix if p.suffix in ['.json','.html','.md','.bin','.txt'] else '.txt'));t=S/dest;t.parent.mkdir(parents=True,exist_ok=True)\n if t.exists():assert t.read_bytes()==p.read_bytes()\n else:t.write_bytes(p.read_bytes())\n assert pin(t)==q;manifest.append({'original':str(p),'copy':dest,**q,**(meta or {})});byid.setdefault(key,dest)\nfor angle in ['tibetan','english']:\n p=B/angle/'freeze.json';f=load(p);copy(p,'inputs/'+angle+'-freeze.json')\n for n,q in f['files'].items():\n  p=B/angle/n;assert pin(p)==q;copy(p,'native/'+angle+'/'+n[7:] if n.startswith('native/') else None)\nfor n in ['source.json','context.json','proposal-baseline.json','baseline.json']:copy(B/n,'inputs/'+n)\ncopy(B/'root-reconciliation-decisions.json','inputs/root-reconciliation-decisions.json')\ncopy(R/'campaign-artifacts/current-alignment-output-contract.md','governing/current-alignment-output-contract.md')\ncommit='1be02f91d0c7546f4997d25cafd19c976ba4db3e'\nrels=['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/PROPOSE_BRIEF.md','data/alignment/C05_CAMPAIGN.md','tools/gen_alignment_page.py','tools/build_alignment_layer.py','data/alignment/span_head_allow.json','docs/errata_register.json']\nfor rel in rels:\n raw=subprocess.check_output(['git','show',commit+':'+rel],cwd=W);dest='governing/'+rel.replace('/','__')+('.txt' if rel.endswith('.py') else '');t=S/dest;t.parent.mkdir(parents=True,exist_ok=True);t.write_bytes(raw);manifest.append({'original':'git:'+commit+':'+rel,'copy':dest,**pin(t),'original_git_commit':commit,'repository_relative_path':rel})\nassert sum(len(load(B/a/'freeze.json')['files']) for a in ['tibetan','english'])==243\nput(S/'original-to-copy-manifest.json',manifest);print(json.dumps({'status':'PASS','exact_original_members':243,'manifest_records':len(manifest),'new_generators':0,'new_resolvers':0}))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-15T08:14:45.163963+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-15T08:14:45.445975+00:00",
+  "wall_seconds": 0.2809892916120589,
+  "exit": 0,
+  "stdout_bytes": 116,
+  "stderr_bytes": 0,
+  "stdout_sha256": "d0c16658dd3f7af79b1e71f296e9efa480cd2a5c28f5d69c1e41ef5e15a04cde",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

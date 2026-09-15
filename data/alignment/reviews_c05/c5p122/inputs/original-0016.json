@@ -1,0 +1,203 @@
+{
+  "producer": "Codex Tibetan-first proposer",
+  "status": "PROVISIONAL",
+  "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+  "decisions": [
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "w1",
+      "original_span": {
+        "id": "w1",
+        "d": 5,
+        "tib": "rje tsong kha pa",
+        "eng": "Je Tsongkapa"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          0,
+          16
+        ],
+        "eng_range": [
+          87,
+          99
+        ]
+      },
+      "rationale": "The complete proper name has direct HGM Je Tsongkapa (1357-1419). Keep the name tight; the printed biographical dates are explanatory English support corroborated in the complete TSONG KHA PA reference, not separate source tokens."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "m1",
+      "original_span": {
+        "id": "m1",
+        "d": 7,
+        "tib": "tsong kha pa",
+        "eng": "Tsongkapa"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          4,
+          16
+        ],
+        "eng_range": [
+          90,
+          99
+        ]
+      },
+      "rationale": "The full personal-name member is uniquely inside the parent and directly attests Tsongkapa. Do not derive an unsupported interior English honorific from pronunciation metadata."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "p1",
+      "original_span": {
+        "id": "p1",
+        "d": 6,
+        "tib": "gis",
+        "eng": "by"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          23,
+          26
+        ],
+        "eng_range": [
+          84,
+          86
+        ]
+      },
+      "rationale": "The complete agentive GIS is rendered by, identifying the author. Its final-s is never split."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "w2",
+      "original_span": {
+        "id": "w2",
+        "d": 5,
+        "tib": "brtsoms pa",
+        "eng": "composed"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          27,
+          37
+        ],
+        "eng_range": [
+          75,
+          83
+        ]
+      },
+      "rationale": "BRTSOMS PA directly attests composed/written. The raw BRTZOMS source converts to this Wylie form; the distinct BRTSAMS entries do not license a spelling change or replacement of the actual source."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "w3",
+      "original_span": {
+        "id": "w3",
+        "d": 5,
+        "tib": "lam rim chen mo",
+        "eng": "Great Book on the Steps of the Path"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          40,
+          55
+        ],
+        "eng_range": [
+          38,
+          73
+        ]
+      },
+      "rationale": "The full established title directly attests great book on the steps of the path. Keep the supplied preceding the outside while preserving internal title wording verbatim."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "m2",
+      "original_span": {
+        "id": "m2",
+        "d": 7,
+        "tib": "lam rim",
+        "eng": "Steps of the Path"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          40,
+          47
+        ],
+        "eng_range": [
+          56,
+          73
+        ]
+      },
+      "rationale": "The full LAM RIM member directly attests Steps of the Path; the curated material explicitly distinguishes this GMR wording from stages. It is uniquely contained and tighter than the full title."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "m3",
+      "original_span": {
+        "id": "m3",
+        "d": 7,
+        "tib": "chen mo",
+        "eng": "Great Book"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          48,
+          55
+        ],
+        "eng_range": [
+          38,
+          48
+        ]
+      },
+      "rationale": "CHEN MO directly attests great book, matching the title expansion as a complete member. It is not the separate MCHOG honorific qualifying the author."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "original_span_id": "p2",
+      "original_span": {
+        "id": "p2",
+        "d": 6,
+        "tib": "las",
+        "eng": "from"
+      },
+      "intended_ranges": {
+        "tib_range": [
+          56,
+          59
+        ],
+        "eng_range": [
+          29,
+          33
+        ]
+      },
+      "rationale": "The final LAS is an ablative source relation, rendered from. It is not the action noun found in364."
+    }
+  ],
+  "omissions": [
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "field": "omissions",
+      "index": 0,
+      "tib": "mchog",
+      "english": "Great Book",
+      "reason": "MCHOG is an honorific/supreme qualifier of the author. Great Book belongs to CHEN MO in the separate title. The honorific is not assigned there or to the already aligned RJE/Je proper name; no speculative independent exponent or absence marker is banked."
+    },
+    {
+      "seq": 365,
+      "angle": "TIBETAN-FIRST",
+      "field": "omissions",
+      "index": 1,
+      "tib": "bound genitive after brtsoms pa; rje member",
+      "english": "The following selections are; the; (1357-1419)",
+      "reason": "Introduction, articles and biographical dates expand the bibliographic sentence. The full author name and reference dates are supported, but there are no separate source date tokens. The composition genitive is realized by the relative structure; do not invent another standalone of or derive Je solely from pronunciation metadata."
+    }
+  ]
+}

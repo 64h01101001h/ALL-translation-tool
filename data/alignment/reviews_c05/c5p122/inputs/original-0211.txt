@@ -1,0 +1,86 @@
+import json,hashlib,re,html,datetime
+from pathlib import Path
+A=Path(__file__).resolve().parents[1]
+def load(p):return json.loads(p.read_text())
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not(A/'freeze.json').exists()
+base=load(A/'evidence/proposal-baseline.json');source={r['seq']:r for r in load(A/'evidence/source-context.json')};reg=load(A/'evidence/register.json');cor=load(A/'evidence/corpus.json');lex=load(A/'evidence/lexical.json');extra={'queries':[],'master_objects':{}}
+for name,p in base['source_pins'].items():
+ b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256'],name
+assert not reg['direct_matches']
+materials={str(p.relative_to(A)):{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted((A/'evidence').glob('*.json'))}
+put(A/'evidence/material-manifest.json',materials)
+summary=[]
+for seq in [364,365,366]:
+ p=A/str(seq);s=load(p/'spec.json')['segments'][0];spec=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();resolved=load(p/'resolved-ranges.json');dec=load(p/'decisions.json')['spans'];ks=['id','d','tib','eng','seq','tib_range','eng_range'];assert [{k:x[k]for k in ks}for x in dec]==[{k:x[k]for k in ks}for x in resolved]
+ for tool,name in [('generator','body.html'),('resolver','resolved-ranges.json')]:
+  n=A/'native'/f'{seq}-{tool}-v1';assert(n/'stdin.bin').read_bytes()==spec and(n/'stdout.bin').read_bytes()==(p/name).read_bytes();assert(n/'stderr.bin').read_bytes()==b''and(n/'exit.txt').read_text()=='0\n'
+ for side,field in [('tib','wylie'),('eng','english')]:
+  part=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S).group(1);part=re.sub(r'<span class="nul">.*?</span>','',part,flags=re.S);plain=html.unescape(re.sub('<[^>]*>','',part));assert plain==source[seq][field]
+ for d in dec:
+  t=d['tib_range'];e=d['eng_range'];assert source[seq]['wylie'][t[0]:t[1]]==d['tib']and (e is None and d['eng'] is None or e is not None and source[seq]['english'][e[0]:e[1]]==d['eng'])
+ counts={'spans':len(s['spans']),'nulls':sum(x['eng']is None for x in s['spans']),'d5_total':sum(x['d']==5 for x in s['spans']),'nonnull_d5':sum(x['d']==5 and x['eng']is not None for x in s['spans']),'d7':sum(x['d']==7 for x in s['spans']),'d6':sum(x['d']==6 for x in s['spans']),'d3':sum(x['d']==3 for x in s['spans']),'errata_proposed':len(load(p/'errata.json'))}
+ proof={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'stderr_bytes':0,'spec_bytes':len(spec),'spec_sha256':sha(spec),'body_bytes':len(body),'body_sha256':sha(body),'body_equals_native_stdout':True,'source_fields_exact_after_markup_removal':True,'canonical_ranges_equal_intended':True,'native_generator_path':f'native/{seq}-generator-v1','native_resolver_path':f'native/{seq}-resolver-v1','counts':counts};put(p/'verification.json',proof);summary.append(proof)
+ put(p/'resolved-spans.json',[{k:x[k]for k in ['seq','id','d','tib','eng','tib_range','eng_range']}for x in resolved])
+ challenge={364:'Review the DANG/Moreover, YANG/as well as and PAS NA/Thus connectors first. Naming language, KYANG emphasis and final copular scope remain unbanked. The complete English fourth-part transition stays verbatim.',365:'Review the title and name members first. BRTZOMS PA has positive composition lexical support; MCHOG is unbanked and is not assigned the title Great.',366:'Review the repeated numeral phrase, BSHAD/presentation and MI/in no way first. Later repeated four-part nouns remain unbanked. The one LO null asserts only final punctuation fusion.'}[seq]
+ lines=[f'C05:{seq} — Codex independent English-first; PROVISIONAL proposal only.',challenge,
+ f"Counts: {counts['spans']} spans; {counts['nonnull_d5']} non-null d5 pairs; {counts['d5_total']} total d5; {counts['d7']} d7; {counts['nulls']} nulls; {counts['errata_proposed']} proposed errata.",
+ f"Source/proposal origin {base['commit']} through357; no future363 acceptance baseline consumed.",
+ 'Context358–372 complete records read or exactly reused from my own prior English reading. All six current physical extents read and verified. evidence/reading-reuse.json binds the exact earlier complete master and query identities.',
+ '141 complete masters:65 exact prior personal full readings plus76 new full readings.75 lexical terms comprise48 new queries and27 exact prior query reuses. Nine neutral exact-field queries are reused, not rerun. Five focused corpus records and15 context rows give17 unique complete material records.',
+ 'decisions.json gives every intended range, rationale and omission. errata-review.json contains five source-specific grounds and five category screens; zero errata.364 records an unresolved relationship between the physically present C05 and C16 following section transitions; no source correction is inferred.',
+ f"Actual canonical generator EXIT=0; stdout/body={len(body)} bytes; stderr=0; body SHA256 {sha(body)}.",
+ f"Actual canonical resolver EXIT=0; stderr=0; all intentions agree. Captures: ../native/{seq}-generator-v1 and ../native/{seq}-resolver-v1.",
+ f"Spec SHA256 {sha(spec)}. Exactly one generator/resolver pair ran per segment; complete plaintext and every range checked without regeneration.",
+ 'All67 intended ranges and nine strict members passed preflight. No pre-native boundary assertion or native run failed. The initial ROOT source-preparation missing-argument failure is a separate preserved history; successful attempt02 is the selected source capture.',
+ 'One terminal LO d6 null carries cls=conj and the complete nul reason in366; zero subword flags. The null is not an uncertain omitted lexical word.',
+ 'No other K angle or root/reviewer choice read; no W writes, paid calls, source/master changes, hgm_gloss promotion or semantic acceptance. Original failed preparation, successful attempt02 and sequential successful origin captures are retained byte-exact.']
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+totals={k:sum(x['counts'][k]for x in summary)for k in summary[0]['counts']}
+assert totals=={'spans':67,'nulls':1,'d5_total':42,'nonnull_d5':42,'d7':9,'d6':13,'d3':3,'errata_proposed':0},totals
+put(A/'summary.json',{'producer':'Codex independent English-first proposal','segments':summary,'total':totals,'source_origin_git_commit':base['commit'],'source_course_boundary':357,'future_acceptance_baseline_consumed':False,'semantic_status':'PROPOSAL ONLY'})
+masters=lex['master_objects']
+for q in lex['queries']:
+ for r in q['spine_rows']:assert json.loads(r['raw'])==masters['unified_entries:'+str(r['id']-1)]['entry']
+reuse=load(A/'evidence/reading-reuse.json');ctx=load(A/'evidence/original-context-rows.json');records=cor['complete_records'];read_ids=sorted(set(map(int,records))|{r['id']for r in ctx});newkeys=reuse['new_or_different_full_objects_to_read'];reused_count=len(reuse['reused_complete_objects'])
+assert len(masters)==141 and reused_count==65 and len(newkeys)==76 and len(read_ids)==17 and len(records)==5
+assert len(lex['queries'])==75 and len(reuse['new_executed_lexical_terms'])==48 and len(reuse['reused_exact_queries'])==27
+assert set(newkeys).isdisjoint(x['master_key']for x in reuse['reused_complete_objects'])
+assert set(newkeys)|{x['master_key']for x in reuse['reused_complete_objects']}==set(masters)
+def objsha(x):return sha(json.dumps(x,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode())
+cache={}
+for x in reuse['reused_complete_objects']:
+ p=x['prior_evidence'];b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256'];cache.setdefault(p['path'],json.loads(b));v=masters[x['master_key']];assert cache[p['path']]['master_objects'][x['master_key']]==v and objsha(v['entry'])==x['full_entry_sha256']
+for x in reuse['reused_exact_queries']:
+ p=x['prior_evidence'];b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256'];cache.setdefault(p['path'],json.loads(b));q=next(q for q in lex['queries']if q['term']==x['term']);assert next(q0 for q0 in cache[p['path']]['queries']if q0['term']==x['term'])==q and objsha(q)==x['query_object_sha256']
+import gzip,subprocess
+corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+assert all(json.loads(r['raw'])==corpus[r['id']-1]for r in ctx)
+assert all(v['corpus_record']==json.loads(v['spine_row']['raw'])==corpus[int(k)-1]for k,v in records.items())
+J=A.parent.parent/'C05-361-363/english/evidence'
+for name in ['canonical.py','run_native.py']:assert (A/'helpers'/name).read_bytes()==(J.parent/'helpers'/name).read_bytes()
+priorctx={r['id']:r for r in load(J/'original-context-rows.json')};assert [r['seq']for r in ctx if r['id']in priorctx and r==priorctx[r['id']]]==list(range(358,370))
+oldbase=load(J/'proposal-baseline.json')
+for n in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/PROPOSE_BRIEF.md']:
+ assert base['governing_git_pins'][n]['sha256']==oldbase['governing_git_pins'][n]['sha256']
+classes=load(A/'evidence/register-material-reuse.json');p=classes['prior_complete_class_records'];b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256'];oldclasses=json.loads(b)
+regbytes=subprocess.check_output(['git','show',base['commit']+':docs/errata_register.json'],cwd=A.parents[2]/'campaign-worktree');assert sha(regbytes)==reg['sha256'];regobjects=json.loads(regbytes)
+assert all(next(x for x in regobjects if x['item_id']==v['item_id'])==v for v in oldclasses)
+for n in ['source-preparation-caller','source-preparation-attempt02-caller','proposal-origin-caller']:
+ d=A/'evidence'/n
+ for p in d.iterdir():assert p.read_bytes()==(A.parent/n/p.name).read_bytes()
+ if n=='source-preparation-caller':assert (d/'exit.txt').read_text()=='1\n'and(d/'stderr.bin').stat().st_size==335
+ else:assert(d/'stderr.bin').read_bytes()==b''and(d/'exit.txt').read_text()=='0\n'
+for seq in [364,365,366]:
+ for mode in ['generator','resolver']:
+  d=A/'native'/f'{seq}-{mode}-v1';x=load(d/'execution.json');assert set(q.name for q in d.iterdir())=={'execution.json','stdin.bin','stdout.bin','stderr.bin','exit.txt'}and x['exit']==0
+  for n,pin in x['streams'].items():b=(d/(n+'.bin')).read_bytes();assert len(b)==pin['bytes']and sha(b)==pin['sha256']
+  assert x['argv'][-1]==mode and x['cwd']==str(A.parents[2]/'campaign-worktree')
+put(A/'evidence/reading-and-scope.json',{'producer':'Codex independent English-first','complete_source_context_read':list(range(358,373)),'master_queries_examined':[q['term']for q in lex['queries']],'unique_complete_master_objects':141,'reused_complete_master_objects':65,'new_or_different_objects_fully_read':newkeys,'prior_reading_and_exact_identity':'65 complete master objects exactly match this same agent\'s personally fully read earlier English proposal evidence.76 new complete objects were read in full, including Sanskrit, references, tiers and attestation metadata, in three untruncated groups. Additional older same-agent identities discovered after the48 new term queries reduce rereading by11 objects; those executed queries remain counted as new.75 term results comprise48 new exact SQL queries and27 exact prior query reuses. No mined hgm_gloss is promoted.','complete_corpus_records_read':read_ids,'corpus_reading_scope':'Twelve complete context358–369 objects equal this agent\'s prior J reading exactly. New complete C05:370–372 objects and full C16:882–883 records were read. The three current C05 query records are already among the context objects; the union has17 unique material records. Nine existing exact-field queries are reused by exact identity with no new source/context or exact-parallel query. C16:882 has a different following English section transition. No C13 or external publication query.','source_evidence':'All six complete physical extents read and byte/whitespace-collapse verified.364 preserves the citation, explanation, following English transition and nine asterisks.365 preserves the attribution and dates.366 preserves both Tibetan list enumerations and the complete English condensation. All current fields are below1500 characters and are prose.','occurrence_review':'364 distinguishes all path/action compounds, mental-movement occurrences, manifestation verbs and copulas; narrow synonym choices do not create duplicate source claims.365 title Great belongs to CHEN MO, not the unbanked MCHOG.366 distinguishes first-list nouns, the second thinking, first BSDUS/included and final BSDUS/shortened; later repeated four-list nouns remain unbanked. All67 final intentions and nine strict members passed before native runs; all six native processes agree.','null_and_subword_metadata':'One366 terminal LO d6 null with cls=conj and complete nul reason; it asserts final punctuation fusion only. No ordinal, honorific, repeated noun or uncertain grammar is nulled. Zero subword flags. Inflected BAR/PAR/LNGAR/PAS remain intact. No Tibetan suffix or English subword is manufactured.','governance':'AGENTS/spec/brief exact identities match prior personal readings and immutable357 origin Git objects. Protocol/contract are copied and read. Current source/master/corpus/physical pins verified unchanged. canonical.py and run_native.py are exact prior J helper bytes. Seven complete registered class objects exactly match prior personal reading and the unchanged204-record origin register. No whole spine snapshot or copied fixture tree.','isolation':'No other K proposal or future root/reviewer K choices read. No W writes, subagents, paid API, reset or account action. Source/proposal origin e4da4c94f59f4af61de90fde63127890130c5902 through357 remains distinct from future363 acceptance, which is not consumed.','failure_history':'Initial ROOT source-preparation failed on omitted TERMS_JSON before source reads/queries/output; exact335-byte stderr and complete standard capture are preserved. Successful source-preparation-attempt02 and subsequent origin passed0/empty once and are reused. No author pre-native assertion, generator, resolver or postcapture range failure. Three original canonical pairs succeeded on first runs; no reruns.'})
+put(A/'evidence/final-evidence-verification.json',{'status':'PASS_MECHANICAL_ONLY','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_source_pins_verified':list(base['source_pins']),'source_context_original_rows_reused':15,'source_context_queries_new':0,'lexical_terms_total':75,'lexical_queries_new':48,'lexical_queries_reused':27,'exact_parallel_queries_reused':9,'exact_parallel_queries_new':0,'captured_complete_corpus_query_objects':5,'unique_master_objects':141,'reused_complete_master_objects':65,'new_full_master_objects_read':76,'spine_raw_equals_complete_unified_master':True,'unique_complete_material_corpus_objects_read':17,'complete_physical_fields_verified':6,'unique_native_pairs':3,'native_processes':6,'generator_successes':3,'resolver_successes':3,'native_process_failures':0,'postcapture_intention_failure_count':0,'pre_native_intention_failure_count':0,'root_initial_source_preparation_failures_preserved':1,'source_queries_repeated_for_packaging':False,'body_and_range_fidelity':'All three native stdout bodies equal saved files and complete source fields after markup removal. All67 canonical ranges agree with final intentions. No source/spec/body/native alteration or rerun after first canonical generation. All native stream hashes and exits verified.','semantic_limit':'Mechanical fidelity is not semantic acceptance.'})
+materials={str(p.relative_to(A)):{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted((A/'evidence').glob('*.json'))if p.name!='material-manifest.json'};put(A/'evidence/material-manifest.json',materials)
+files={str(p.relative_to(A)):{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted(A.rglob('*'))if p.is_file()and p.name!='freeze.json'}
+freeze={'schema':'c05-independent-proposal-freeze-v1','producer':'Codex independent English-first proposal','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':base['commit'],'source_course_boundary':357,'segments':[364,365,366],'acceptance_baseline_consumed':None,'semantic_status':'PROPOSAL_ONLY; independent reconciliation and review required','files':files,'file_count':len(files),'counts':totals,'total_spans':67,'total_nulls':1,'total_word_pairs':42,'total_d7':9,'original_external_sources':base['source_pins'],'complete_evidence_strategy':'65 exact same-agent complete master reading reuses and76 new full readings;17 unique complete corpus/context objects.75 term results comprise48 new queries and27 exact prior reuses. Six successful native processes, failed initial source preparation, successful attempt02 and sequential origin captures are preserved. No complete spine copies, fixture trees or new verifier framework.'}
+put(A/'freeze.json',freeze)
+print(json.dumps({'freeze_sha256':sha((A/'freeze.json').read_bytes()),'freeze_bytes':(A/'freeze.json').stat().st_size,'files':len(files),'payload_bytes':sum(x['bytes']for x in files.values()),'totals':totals},indent=2))

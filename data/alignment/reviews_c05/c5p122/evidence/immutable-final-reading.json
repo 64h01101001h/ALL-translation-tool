@@ -1,0 +1,59 @@
+{
+  "status": "APPROVE_INDEPENDENT_PROVISIONAL_SEMANTIC_REVIEW",
+  "utc": "2026-09-15T08:17:50.002493+00:00",
+  "reconciliation_freeze": {
+    "bytes": 29664,
+    "sha256": "76ba7b775b96564577ca3cf605ec0ad4873114622da4251482379832a5a8b623"
+  },
+  "stable_reading": {
+    "path": "evidence/stable-assembled-reading.json",
+    "bytes": 7514,
+    "sha256": "b35c7e0a881fcad7f881255f79e97e9c517cb95cdc52578f1984e4a98330c749"
+  },
+  "native_and_copy_verification": {
+    "path": "final-identity-results.json",
+    "bytes": 1400,
+    "sha256": "c194c54f83e6fd88d49c5145e96db222ce94133320d7abc337596111db7b1d07"
+  },
+  "preliminary_selection": {
+    "path": "selected-span-assessment.json",
+    "bytes": 50164,
+    "sha256": "a827187c64ac2d9ff7117ae76081df5b29149dfebd1682d582998547626ab7c1"
+  },
+  "selected_tuples_exact": 70,
+  "final_rationales_fully_read": 70,
+  "exact_original_rationale_origins": 41,
+  "exact_root_ruling_rationale_origins": 29,
+  "original_span_dispositions_exact": 135,
+  "grouped_original_dispositions_exact": 34,
+  "final_omissions_read": 22,
+  "complete_original_screen_documents_retained": 6,
+  "category_judgments_retained": 30,
+  "reconciliation_original_to_copy_records_verified": 86,
+  "resolved_findings": [
+    {
+      "id": "K-REGISTERED-CLASS-SCOPE",
+      "status": "RESOLVED",
+      "affected_originals": [
+        "tibetan/364/original-decisions.json omissions[4]",
+        "tibetan/364/five-ground-screens.json INGEST_ARTEFACT d_defensibility"
+      ],
+      "finding": "Original adopted-language candidate calls this trailing apparatus an already registered class, but the cited registry analogies do not independently demonstrate that exact C05/C16 differing-transition defect.",
+      "required_adopted_correction": "Preserve original wording; describe apparatus as a physical/source-role inference, retain the unresolved edition relationship and scope registry analogies accurately. No erratum or source correction is required.",
+      "original_status": "NEEDS_CORRECTION",
+      "resolution": "Both adopted Tibetan364 omission[4] and INGEST screen[3] now state a physical/source-role inference and retain the unresolved C05/C16 edition relationship. Actual registry analogies keep their individual scopes; an identical already registered defect or corrected edition is not claimed. The exact complete original values and preliminary NEEDS_CORRECTION record remain unchanged.",
+      "correction_evidence": "inputs/reconciled-0310.json"
+    }
+  ],
+  "baseline": {
+    "bytes": 1456,
+    "sha256": "1d5ab3ed38ec7151a369c26a1ec781a7a2f411e27abc13a2b1206ad32ae3a5f5"
+  },
+  "baseline_governance_binding": {
+    "path": "evidence/baseline-and-governance-binding.json",
+    "bytes": 8806,
+    "sha256": "29492eeef7db19112e1701f46889daff46d4bd20f73766ffd8cd71cc59aaf616"
+  },
+  "new_material_queries_or_native_engines": 0,
+  "scope": "Distinct immutable final reading and byte/range identity verification. All70 own precommitted semantic reasons are unchanged; only pending verdict becomes APPROVE and366 NI local id p1 becomes p29. Twenty-two own original-omission objects remain exact, and all22 current adopted reasons were independently read and endorsed with their keyed partial-incorporation changes. Root acceptance remains separate."
+}

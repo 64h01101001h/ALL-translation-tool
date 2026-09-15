@@ -1,0 +1,1108 @@
+[
+  {
+    "seq": 364,
+    "kind": "TIBETAN_SPELLING",
+    "found": "LAS KYI LAM",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "LAS KYI LAM",
+        "source_row": {
+          "id": 1746,
+          "course": "C05",
+          "seq": 364,
+          "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+          "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+          "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+        },
+        "occurrences": {
+          "acip": [
+            51,
+            209
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+            ],
+            "count": 1,
+            "row_ids": [
+              1746
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 232,
+          "wylie": 231,
+          "english": 602
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 364,
+            "field": "acip",
+            "start": 247205,
+            "bytes": 235,
+            "sha256": "c46848e19d16cd6a5d0dae61ee0a995c47410db7c9b0f387663c7aa5db02d8a3",
+            "original_text": "[IV.311b-12]\r\n\r\n,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 364,
+            "field": "english",
+            "start": 247442,
+            "bytes": 610,
+            "sha256": "3712742d6d66a0ffaf18103886d25796a2992327370893f4d15582495b85a2c5",
+            "original_text": "One may ask why the expression \"path of action\" is used in reference to\r\n\"them\"--to the group of ten just listed. The name derives first of all from the\r\nfact that the three involved with thought are paths by which the \"action\" or\r\ndeed of mental movement is expressed. Moreover, the seven involved with\r\nbody and speech are action or deeds themselves, as well as paths through\r\nwhich mental movement is expressed. Thus they are all \"paths of action.\"\r\nThe fourth major part in our presentation of the \"paths of action\" concerns the\r\nways in which one loses, and then regains, his most basic virtue.\r\n*********",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "Repeated LAS/KYI/LAM forms occur in the defining compound and in the explanation of mental/bodily/verbal action. The complete technical name and SEMS PA mental movement/JUG PA expressed are attested. Both full Tibetan fields and the physical ACIP match C16:882; their repetition does not license a spelling correction.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 364,
+    "kind": "ENGLISH_TYPO",
+    "found": "\"them\"--to the group of ten just listed",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "\"them\"--to the group of ten just listed",
+        "source_row": {
+          "id": 1746,
+          "course": "C05",
+          "seq": 364,
+          "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+          "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+          "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            72
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+            ],
+            "count": 1,
+            "row_ids": [
+              1746
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 232,
+          "wylie": 231,
+          "english": 602
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 364,
+            "field": "acip",
+            "start": 247205,
+            "bytes": 235,
+            "sha256": "c46848e19d16cd6a5d0dae61ee0a995c47410db7c9b0f387663c7aa5db02d8a3",
+            "original_text": "[IV.311b-12]\r\n\r\n,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 364,
+            "field": "english",
+            "start": 247442,
+            "bytes": 610,
+            "sha256": "3712742d6d66a0ffaf18103886d25796a2992327370893f4d15582495b85a2c5",
+            "original_text": "One may ask why the expression \"path of action\" is used in reference to\r\n\"them\"--to the group of ten just listed. The name derives first of all from the\r\nfact that the three involved with thought are paths by which the \"action\" or\r\ndeed of mental movement is expressed. Moreover, the seven involved with\r\nbody and speech are action or deeds themselves, as well as paths through\r\nwhich mental movement is expressed. Thus they are all \"paths of action.\"\r\nThe fourth major part in our presentation of the \"paths of action\" concerns the\r\nways in which one loses, and then regains, his most basic virtue.\r\n*********",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "The double hyphen introduces an explanatory apposition to quoted them. Physical English and the C16 body repeat it. Retain the exact punctuation and synonymous action/deed alternatives; no replacement is justified by typographic preference.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 364,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "The name derives first of all",
+    "decision": "NO_NEW_ERRATUM_SPARSE_ORGANIZATIONAL_SCOPE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "The name derives first of all",
+        "source_row": {
+          "id": 1746,
+          "course": "C05",
+          "seq": 364,
+          "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+          "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+          "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            113
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+            ],
+            "count": 1,
+            "row_ids": [
+              1746
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 232,
+          "wylie": 231,
+          "english": 602
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 364,
+            "field": "acip",
+            "start": 247205,
+            "bytes": 235,
+            "sha256": "c46848e19d16cd6a5d0dae61ee0a995c47410db7c9b0f387663c7aa5db02d8a3",
+            "original_text": "[IV.311b-12]\r\n\r\n,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 364,
+            "field": "english",
+            "start": 247442,
+            "bytes": 610,
+            "sha256": "3712742d6d66a0ffaf18103886d25796a2992327370893f4d15582495b85a2c5",
+            "original_text": "One may ask why the expression \"path of action\" is used in reference to\r\n\"them\"--to the group of ten just listed. The name derives first of all from the\r\nfact that the three involved with thought are paths by which the \"action\" or\r\ndeed of mental movement is expressed. Moreover, the seven involved with\r\nbody and speech are action or deeds themselves, as well as paths through\r\nwhich mental movement is expressed. Thus they are all \"paths of action.\"\r\nThe fourth major part in our presentation of the \"paths of action\" concerns the\r\nways in which one loses, and then regains, his most basic virtue.\r\n*********",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "The naming argument distinguishes the three mental actions as paths and the seven bodily/verbal actions as both deeds and paths. Source GSUM PA is the third organizational topic, whereas English first of all organizes the derivation and fourth major part introduces following material. Keep those organizational words unbanked, without inferring a mistranslation of the action/path distinction or identifying them as lexical third.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 364,
+    "kind": "INGEST_ARTEFACT",
+    "found": "The fourth major part in our presentation",
+    "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+    "five_grounds": {
+      "a_quote": {
+        "found": "The fourth major part in our presentation",
+        "source_row": {
+          "id": 1746,
+          "course": "C05",
+          "seq": 364,
+          "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+          "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+          "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            447
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+            ],
+            "count": 1,
+            "row_ids": [
+              1746
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 232,
+          "wylie": 231,
+          "english": 602
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 364,
+            "field": "acip",
+            "start": 247205,
+            "bytes": 235,
+            "sha256": "c46848e19d16cd6a5d0dae61ee0a995c47410db7c9b0f387663c7aa5db02d8a3",
+            "original_text": "[IV.311b-12]\r\n\r\n,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 364,
+            "field": "english",
+            "start": 247442,
+            "bytes": 610,
+            "sha256": "3712742d6d66a0ffaf18103886d25796a2992327370893f4d15582495b85a2c5",
+            "original_text": "One may ask why the expression \"path of action\" is used in reference to\r\n\"them\"--to the group of ten just listed. The name derives first of all from the\r\nfact that the three involved with thought are paths by which the \"action\" or\r\ndeed of mental movement is expressed. Moreover, the seven involved with\r\nbody and speech are action or deeds themselves, as well as paths through\r\nwhich mental movement is expressed. Thus they are all \"paths of action.\"\r\nThe fourth major part in our presentation of the \"paths of action\" concerns the\r\nways in which one loses, and then regains, his most basic virtue.\r\n*********",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "The physical English includes the complete subsequent transition and asterisks. C16:882 has the same Tibetan and naming body followed instead by folio41, The Parts of a Karmic Act and the next-selection introduction. This trailing apparatus belongs to an already registered class; preserve it unwrapped, without claiming an independent corrected witness or a new missing current-body exponent.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 364,
+    "kind": "FORMATTING",
+    "found": "*********",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "*********",
+        "source_row": {
+          "id": 1746,
+          "course": "C05",
+          "seq": 364,
+          "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+          "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+          "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            593
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 364,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+            ],
+            "count": 1,
+            "row_ids": [
+              1746
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bcu po 'di la ci'i phyir las kyi lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sems pa 'jug pa'i lam"
+            ],
+            "count": 2,
+            "row_ids": [
+              1746,
+              6900
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rje tsong kha pa mchog gis brtsoms pa'i"
+            ],
+            "count": 1,
+            "row_ids": [
+              1747
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bar pa gsum bsam par bsdus te"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "bzhi bzhir bsdus te bshad na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "The Abbreviation says that five parts are involved"
+            ],
+            "count": 2,
+            "row_ids": [
+              1748,
+              6901
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all five complete source/master/raw objects read",
+        "lineage_limit": "C16:882 repeats364 ACIP/Wylie and the whole naming argument but has a different appended heading/introduction. C16:883 repeats366 all three text fields.365 has only its own complete-field matches. Text identity is not proof of independent publication or a corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:364",
+          "c05:365",
+          "c05:366",
+          "brtsoms",
+          "brtzoms",
+          "bsdu bar",
+          "bzhi bzhir"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "Zero direct current-source matches; known heading/folio, formatting and converter classes considered without claiming a fresh full-register linguistic reread.",
+        "later_baseline_delta": "Actual through363 acceptance is not yet available; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 232,
+          "wylie": 231,
+          "english": 602
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 364,
+            "field": "acip",
+            "start": 247205,
+            "bytes": 235,
+            "sha256": "c46848e19d16cd6a5d0dae61ee0a995c47410db7c9b0f387663c7aa5db02d8a3",
+            "original_text": "[IV.311b-12]\r\n\r\n,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 364,
+            "field": "english",
+            "start": 247442,
+            "bytes": 610,
+            "sha256": "3712742d6d66a0ffaf18103886d25796a2992327370893f4d15582495b85a2c5",
+            "original_text": "One may ask why the expression \"path of action\" is used in reference to\r\n\"them\"--to the group of ten just listed. The name derives first of all from the\r\nfact that the three involved with thought are paths by which the \"action\" or\r\ndeed of mental movement is expressed. Moreover, the seven involved with\r\nbody and speech are action or deeds themselves, as well as paths through\r\nwhich mental movement is expressed. Thus they are all \"paths of action.\"\r\nThe fourth major part in our presentation of the \"paths of action\" concerns the\r\nways in which one loses, and then regains, his most basic virtue.\r\n*********",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 78,
+        "material_master_objects": 148,
+        "personally_read_reused_objects": 73,
+        "complete_new_master_objects_read": 75,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 5
+      },
+      "d_defensibility": {
+        "judgment": "Asterisks close the appended transition before the new bibliographic row365. The field is complete below the cap; literal punctuation and line collapse match the original extent. No removal, title normalization or new span is justified merely by formatting.",
+        "material": "../evidence/lexical.json complete objects and exact personally-read reuse; corpus.json complete wrappers; original-decisions.json"
+      }
+    }
+  }
+]

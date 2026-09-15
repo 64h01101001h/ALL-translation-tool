@@ -1,0 +1,164 @@
+{
+  "seq": 364,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1746,
+        "course": "C05",
+        "seq": 364,
+        "acip": "[IV.311b-12] ,GSUM PA NI, BCU PO 'DI LA CI'I PHYIR LAS KYI LAM ZHES BYA ZHE NA, YID KYI GSUM LAS SEMS PA 'JUG PA'I LAM YIN PA DANG , LUS NGAG GI BDUN NI LAS KYANG YIN LA, SEMS PA 'JUG PA'I LAM YANG YIN PAS NA LAS KYI LAM ZHES BYA'O,",
+        "wylie": "[iv.311b-12] ,gsum pa ni, bcu po 'di la ci'i phyir las kyi lam zhes bya zhe na, yid kyi gsum las sems pa 'jug pa'i lam yin pa dang , lus ngag gi bdun ni las kyang yin la, sems pa 'jug pa'i lam yang yin pas na las kyi lam zhes bya'o",
+        "english": "One may ask why the expression \"path of action\" is used in reference to \"them\"--to the group of ten just listed. The name derives first of all from the fact that the three involved with thought are paths by which the \"action\" or deed of mental movement is expressed. Moreover, the seven involved with body and speech are action or deeds themselves, as well as paths through which mental movement is expressed. Thus they are all \"paths of action.\" The fourth major part in our presentation of the \"paths of action\" concerns the ways in which one loses, and then regains, his most basic virtue. *********"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-attempt02-caller, followed by the successful proposal-origin-caller. The initial missing-argument failure is preserved separately in preparation-history.json; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1746,
+            6900
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1746,
+            6900
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1746
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:882 repeats the complete ACIP and Wylie and the English naming explanation through Thus they are all \"paths of action.\" Its following English transition is instead 41 The Parts of a Karmic Act and a return to Je Tsongkapa. The current C05 transition concerning loss/regaining of basic virtue is physically present and remains verbatim. The same-corpus parallel is not an independently collated publication or corrected witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no364–366 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The three mental actions are paths through which mental movement is expressed; the seven bodily/verbal actions are deeds themselves and also paths. Repeated LAS, LAM, SEMS PA and JUG PA have distinct local occurrences. Action/deed synonyms receive one narrow claim each. The initial third-section outline is not mapped to first of all or to the English-only fourth-part transition. Naming language, additive emphasis and some copular/linker scope are distributed and remain unbanked; the mined ZHES BYA gloss every living creature is irrelevant.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 232,
+        "wylie": 231,
+        "english": 602
+      },
+      "utf8_bytes": {
+        "acip": 232,
+        "wylie": 231,
+        "english": 602
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All three fields are below1500 characters. The physical source separates the citation from Tibetan prose, and separates the complete naming explanation, fourth-part English transition and nine asterisks by line breaks. The final divider is not a fabricated truncation mark. Citation/outline and English transition are retained in full; no prose metre is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Physical ACIP, Wylie and the exact Tibetan C16:882 parallel agree. No malformed form or independently supported correction was found in this prose explanation.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The naming explanation is grammatical. The full fourth-part transition and nine asterisks are physically present; their absence or replacement in the C16 continuation does not demonstrate a mistyped word here.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The three/seven doctrinal explanation agrees with preceding363 and the C16 explanation. The English-only fourth-part transition is edition framing whose source relationship is not independently established; it is not assigned a fabricated Tibetan span or corrected as a contradiction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The complete physical extent contains the transition and divider. Existing heading/folio/spill classes were considered; no cap or source-specific loss mechanism is demonstrated and no known class is refiled.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Citation, prose lineation, following transition and divider remain exact and unwrapped where no Tibetan counterpart exists. Their physical separation is recorded without a new source correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [
+    {
+      "topic": "different following English section transitions",
+      "assessment": "UNRESOLVED_EDITION_RELATION; no erratum proposed",
+      "reason": "C05 physically includes the fourth-part loss/regaining transition; C16:882 instead includes a numbered Parts of a Karmic Act transition. The shared naming explanation is intact. Without an independently collated publication or a demonstrated extraction error, preserve the current English-only framing and leave it unbanked."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

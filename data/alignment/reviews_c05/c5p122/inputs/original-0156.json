@@ -1,0 +1,156 @@
+{
+  "seq": 365,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1747,
+        "course": "C05",
+        "seq": 365,
+        "acip": ",RJE TZONG KHA PA MCHOG GIS BRTZOMS PA'I LAM RIM CHEN MO LAS,",
+        "wylie": "rje tsong kha pa mchog gis brtsoms pa'i lam rim chen mo las",
+        "english": "The following selections are from the Great Book on the Steps of the Path, composed by Je Tsongkapa (1357-1419)."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-attempt02-caller, followed by the successful proposal-origin-caller. The initial missing-argument failure is preserved separately in preparation-history.json; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 1,
+          "row_ids": [
+            1747
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 1,
+          "row_ids": [
+            1747
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1747
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "The three exact-field queries return only the current C05:365 record. Neighboring366 begins a selection and names the Abbreviation within it. Full author and LAM RIM CHEN MO records support the attribution/title. No second exact parallel, independent corrected publication or date verification is claimed."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no364–366 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "Full BRTSOMS PA records explicitly contain compose/composed/written senses, alongside other tense forms in RTSOM PA/BRTSAMS PA records. This supports the exact printed BRTZOMS PA rather than a correction based on tense-form expectation alone. The complete work title and Je Tsongkapa name are supported. MCHOG is an extra honorific and is not assigned the title Great. Dates remain English framing without invented Tibetan counterparts.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 61,
+        "wylie": 59,
+        "english": 112
+      },
+      "utf8_bytes": {
+        "acip": 61,
+        "wylie": 59,
+        "english": 112
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are below1500 characters. Physical English wraps before composed by; the author dates and final period are physically present. Tibetan retains its opening comma in ACIP and complete final LAS. The attribution is prose, not a metrically defective verse."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The complete BRTZOMS PA source form has positive compose/composed lexical support. Other tense spellings do not outweigh this evidence or justify changing the source; no corrected witness was found.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The complete title, Je Tsongkapa name and date punctuation are coherent and physically present. No mistaken English token or supported repair was found.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The author/title attribution is supported by complete local lexical evidence. The supplied dates have no Tibetan exponent here, but that is not evidence of a factual error; no independent historical verification is claimed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Both short complete physical extents agree with the source, including the wrapped composed by phrase. There is no1500-character cap, clipped name or lost attribution.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The title and author attribution remain prose with original capitalization and date punctuation. Line wrapping does not require a new register entry.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}
