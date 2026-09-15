@@ -434,7 +434,7 @@ std::pair<std::string, bool> iastToDevanagari(const std::string& iast) {
 // The ALL Sanskrit pronunciation standard — ported from
 // engines/sanskrit_convert.py::iast_to_all_pronunciation (2026-09-09).
 //
-// Adam's architecture: the FPMT Translation Services values are the BASE, Geshe Michael's
+// Adam's architecture: the FPMT Translation Services values are the BASE, his
 // own amendments sit on top, and the whole thing is an ADDITIONAL line that
 // replaces neither iastToIpa (classical) nor iastToPronunciation (the plain
 // letter strip).
@@ -445,7 +445,7 @@ std::pair<std::string, bool> iastToDevanagari(const std::string& iast) {
 // word in its own right and no letter rule may take it apart.
 //
 // Measured against Geshe Michael Roach's own published readings — the 681
-// mantra lines in the corpus that print the ACIP code and Geshe Michael's reading side by
+// mantra lines in the corpus that print the ACIP code and his reading side by
 // side — at 94.4% weighted agreement. The evidence is banked at
 // data/pronunciation/gmr_mantra_evidence.csv and the remaining disagreements
 // are listed in docs/standards/ALL_SANSKRIT_PRONUNCIATION_STANDARD.md as open
@@ -463,7 +463,7 @@ static const std::vector<std::pair<std::u32string, std::u32string>>& allTable() 
             {U"ś", U"sh"}, {U"ṣ", U"sh"},
             {U"ch", U"ch"}, {U"c", U"ch"},
             {U"ṃ", U"m"}, {U"ṁ", U"m"},
-            // layer 2 — matched from Geshe Michael's own courses
+            // layer 2 — matched from his own courses
             {U"ṛ", U"ir"},        // vikṛtānana → "vikirta-anana", 65/65
             {U"cch", U"ch"},      // praticcha → "praticha", 205/205
             {U"ḥ", U"h"},         // āḥ → "ah" 185, hrīḥ → "hrih" 71 (572/644)
@@ -623,7 +623,7 @@ std::string inputcodeToIast(const std::string& code) {
     // emits, so they only ever need reading. Found 2026-09-09 by running Geshe
     // Michael Roach's own mantra lines back through this function: 644
     // occurrences of the visarga written ":" and 327 of ś written "s*" or "s#"
-    // were refused outright, which is a fifth of Geshe Michael's mantra corpus.
+    // were refused outright, which is a fifth of his mantra corpus.
     static const std::vector<std::pair<std::u32string, std::u32string>> READ_ONLY = {
         {U"sh*", U"ś"}, {U"s*", U"ś"}, {U"s#", U"ś"}, {U":", U"ḥ"},
     };

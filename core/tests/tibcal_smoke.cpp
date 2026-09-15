@@ -39,10 +39,10 @@ int main() {
     y = tibetanYear(1357);
     CHECK(y.element_en == "fire" && y.animal_en == "bird",
           "1357 (Je Tsongkapa's birth) = fire-bird");
-    // and Geshe Michael's death 1419 = earth-pig
+    // and his death 1419 = earth-pig
     y = tibetanYear(1419);
     CHECK(y.element_en == "earth" && y.animal_en == "pig",
-          "1419 (Geshe Michael's passing) = earth-pig");
+          "1419 (his passing) = earth-pig");
     CHECK(y.element_wylie == "sa" && y.animal_wylie == "phag",
           "wylie names carried (sa phag)");
 

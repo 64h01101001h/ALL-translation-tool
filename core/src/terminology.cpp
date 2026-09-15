@@ -104,11 +104,11 @@ TermReport checkTerminology(const Spine& spine, const HeadwordIndex& index,
         }
         // Maximality ranks by extent — but never across tiers. A longer
         // AUTO-ALIGNED span must not delete a curated or glossary term inside
-        // it, because that term is Geshe Michael's own English and this report exists to
-        // check Geshe Michael's terminology. Deleting it is worse than mislabelling it:
+        // it, because that term is his own English and this report exists to
+        // check his terminology. Deleting it is worse than mislabelling it:
         // the row is never built, so no downstream label can rescue it, and
         // the verdict then reads as an unrendered term for a draft that used
-        // Geshe Michael's equivalent verbatim.
+        // his equivalent verbatim.
         //
         // Measured repro: source SANGS RGYAS CHOS, draft "the Buddha's
         // Dharma". Before this, the report held exactly one term —

@@ -139,7 +139,7 @@ std::string translationPrepToRtf(const TranslationPrep& prep,
                                  const std::string& title_en = "");
 
 // Splitting over-long paragraphs is the editor's "executive decision"
-// in Geshe Michael's own words, so this does NOT split anything. It reports where
+// in his own words, so this does NOT split anything. It reports where
 // the long ones are, with the folio to navigate to, because that is the
 // part a machine can honestly do. No threshold is invented: the caller
 // asks for the longest N, and the distribution is reported alongside so

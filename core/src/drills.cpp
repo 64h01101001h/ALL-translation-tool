@@ -125,7 +125,7 @@ std::optional<PickedClause> pickClause(const OverlayDoc& doc,
 //     prefers short segments, so it selected them at 2-3x their share:
 //     measured at 20.8-25.0% of adaptive draws, with TITLS the single
 //     most-drawn course of all 75. Roughly a quarter of Adam's drills were
-//     title lines, which is exactly what Geshe Michael kept screenshotting.
+//     title lines, which is exactly what he kept screenshotting.
 //
 //  2. ENGLISH SITTING IN THE ACIP FIELD. 254 segments (0.60%) carry English
 //     prose where the Tibetan should be — front matter that was never

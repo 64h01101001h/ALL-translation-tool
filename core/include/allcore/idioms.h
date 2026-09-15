@@ -6,7 +6,7 @@
 //
 // The register marks WHICH Tibetan strings are idioms — fixed expressions
 // that must not be read word by word. It carries NO English of its own.
-// English belongs to Geshe Michael (rule 1): the app may MATCH Geshe Michael's English
+// English belongs to Geshe Michael (rule 1): the app may MATCH his English
 // from corpus evidence, never COMPOSE it. So an entry here is a Tibetan
 // form, a status, and the evidence for it — nothing more. The renderings a
 // translator sees beside an idiom come from the parallel corpus and the

@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
               "an unknown address answers empty, not a fabrication");
     }
 
-    {   // lookup() is ORDERED, Geshe Michael's English first. A great many callers take
+    {   // lookup() is ORDERED, his English first. A great many callers take
         // lookup(w).front() as "the entry for this word"; without an ORDER BY
         // that was whichever row SQLite happened to yield, which is rowid
         // order, which is ingest order. `rnam pa thams cad mkhyen pa nyid` --

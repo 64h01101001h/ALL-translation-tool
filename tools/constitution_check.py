@@ -447,8 +447,8 @@ def main():
 
     # L3 — the human-gated view must not drift from the backlog.
     # Incident: ten items needing Adam, including every one filed that
-    # day, existed in CLOSER.md and appeared nowhere on the page Geshe Michael
-    # reads. An item only Geshe Michael can move, that Geshe Michael cannot see, is lost.
+    # day, existed in CLOSER.md and appeared nowhere on the page he
+    # reads. An item only he can move, that he cannot see, is lost.
     try:
         import subprocess
         r = subprocess.run(
@@ -465,7 +465,7 @@ def main():
         fails.append("L3 reconcile could not run: %s" % e)
 
     # R9 — a fixed light ground must carry fixed dark ink.
-    # Incident (2026-09-11): Geshe Michael's English sits on a pale-green plaque whose
+    # Incident (2026-09-11): his English sits on a pale-green plaque whose
     # background was written by hand at eight sites with no colour beside it.
     # The plaque does not follow the theme — it always means the same thing —
     # so in Night mode the inherited near-white text landed on a near-white
@@ -492,7 +492,7 @@ def main():
                 f"({m.group(1)}) with no text colour beside it — on a "
                 f"theme-independent ground the ink must be fixed too, or "
                 f"Night mode inherits light text onto a light plaque "
-                f"(incident: Geshe Michael's English vanished on the GMR plaque)")
+                f"(incident: his English vanished on the GMR plaque)")
 
     for x in notes:
         print("  note:", x)

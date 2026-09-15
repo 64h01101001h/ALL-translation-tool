@@ -136,7 +136,7 @@ def battery_sanskrit():
     # vowel — and the bug it hid printed a bare म with an implied 'a' that is
     # not in the Sanskrit. Nagarjuna's dedication, 2026-09-09.
     # The ALL Sanskrit pronunciation standard (2026-09-09): Adam's two founding
-    # rules, on the exact words Geshe Michael named.
+    # rules, on the exact words he named.
     checks.append(('ALL standard  rule 1: hūṁ',
                    sk.iast_to_all_pronunciation('hūṁ'), 'hung'))
     checks.append(('ALL standard  rule 2: svāhā',

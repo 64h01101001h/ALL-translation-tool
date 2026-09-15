@@ -254,10 +254,10 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             size_t j = i + 1;
             while (j < s.size() && std::isalnum((unsigned char)s[j])) ++j;
             folio = s.substr(i + 1, j - i - 1);
-            // GMR's stipulated form is [f. 1a], not [f. 001A]: Geshe Michael
+            // GMR's stipulated form is [f. 1a], not [f. 001A]: he
             // replaces "[f. 00" with "[f. " to strip the input centre's
             // zero padding, and "A]" with "a]" (ignore-case OFF) to
-            // lowercase the side letter. Geshe Michael leaves the B side to be done
+            // lowercase the side letter. He leaves the B side to be done
             // by hand only because Word made it awkward - "in this
             // simplified system I've done" - so we normalise both sides.
             std::string ref = folio;
@@ -275,11 +275,11 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             out += "[f. " + ref + "] ";
             i = j;
             // Recto ornamentation. The A-side of a folio traditionally
-            // opens with an ornament, coded "*, ," - Geshe Michael's find string is
+            // opens with an ornament, coded "*, ," - his find string is
             // "A *,^p," replaced by "a] ", 192 matches, so the ornament
             // is deleted along with its shads. Measured here: 186 of 187
             // recto markers carry it and no verso marker does. Asterisk
-            // only, recto only - Geshe Michael never touches the "#" that appears
+            // only, recto only - he never touches the "#" that appears
             // in the same position, so neither do we.
             if (!ref.empty() && ref.back() == 'a') {
                 size_t k = i;
@@ -365,7 +365,7 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
             // Measure the WHOLE shad run before deciding anything. On
             // the real text 2,168 pairs are spaced ", ," and 9 are tight
             // ",," - and every tight one follows a final O, so a rule
-            // that requires the space (as Geshe Michael's Find & Replace literally
+            // that requires the space (as his Find & Replace literally
             // did) drops 9 real paragraph ends. 26 runs are FOUR commas,
             // ",, ,,", every one after a final O: a doubled nyis shad
             // marking a major section break. Splitting a four-run into
@@ -393,7 +393,7 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
                 // quoted verse and takes a line break instead, keeping
                 // its shad at both ends. Treating all pairs as
                 // paragraphs turns the opening homage verses into prose.
-                // Capital only: Geshe Michael searches with ignore-case OFF and
+                // Capital only: he searches with ignore-case OFF and
                 // warns against confusing the letter with a zero.
                 const bool afterO = !out.empty() && out.back() == 'O';
                 if (commas == 2) {
@@ -470,7 +470,7 @@ TranslationPrep formatForTranslation(const std::string& acip_document) {
 std::string translationPrepToRtf(const TranslationPrep& prep,
                                  const std::string& title_en) {
     // US Letter in twips, 1" margins - Word's own defaults, which is
-    // what Geshe Michael is working in.
+    // what he is working in.
     std::string r =
         "{\\rtf1\\ansi\\ansicpg1252\\deff0\n"
         "{\\fonttbl{\\f0\\froman\\fcharset0 Palatino Linotype;}}\n"
@@ -518,7 +518,7 @@ std::string translationPrepToRtf(const TranslationPrep& prep,
     r += "\\par\n";
 
     {
-        // Where to look, not what to do. Splitting is Geshe Michael's "executive
+        // Where to look, not what to do. Splitting is his "executive
         // decision"; this only says which paragraphs are outliers and
         // gives the folio to navigate to.
         const ParagraphReport pr = translationPrepParagraphs(prep, 10);

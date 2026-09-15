@@ -56,7 +56,7 @@ CaseReading caseOf(const std::string& marker);
 //
 // The specialized pair breaks the clean mapping this file shipped with. They
 // take a SUBJECT — Preston's word for the intransitive actor — and they also
-// take an OBJECT, which Geshe Michael says only transitive verbs have; and Geshe Michael's p.219
+// take an OBJECT, which he says only transitive verbs have; and his p.219
 // entry calls loc-nom outright "class of transitive verbs whose subject is in
 // the locative (7th) case". My first version answered isTransitive(LocativeNom)
 // = false, which p.219 contradicts.
@@ -109,7 +109,7 @@ const char* unstatedAgentCaution(VerbClass c, bool sawThirdCase);
 //
 // This exists because the engine's role labels commit to ONE function each —
 // "la don, to/at/in/for" for la, which is the qualifier reading — and Preston
-// diagrams the same fused particle as the complement in both of Geshe Michael's worked
+// diagrams the same fused particle as the complement in both of his worked
 // examples. A label that names one of four possibilities as though it were
 // the answer is the same overreach as resolving a la don particle to a single
 // case, and this file already refuses that.

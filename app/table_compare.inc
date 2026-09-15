@@ -201,7 +201,7 @@ public:
         {   // the binding-gloss census made us look at this: a compared column can BE the English
             bool glossy = false;
             for (const auto& c : res_->columns) if (QString::fromStdString(c).contains("gloss", Qt::CaseInsensitive)) glossy = true;
-            if (glossy) bans << "One of the columns compared holds Geshe Michael's English. These are the two files' own cells, shown as they stand, with the tier column pinned beside them so a tier can never be dropped from a reading. This page compares data; it neither composes English nor promotes anything into Geshe Michael's.";
+            if (glossy) bans << "One of the columns compared holds Geshe Michael's English. These are the two files' own cells, shown as they stand, with the tier column pinned beside them so a tier can never be dropped from a reading. This page compares data; it neither composes English nor promotes anything into his.";
         }
         if (res_->ambiguous) bans << "Rows whose key occurs more than once are listed as AMBIGUOUS KEY and are never paired by position — pairing them would be a guess. Choose a second key column, or resolve them in the source.";
         banners_->setText(bans.join("<br>").toHtmlEscaped().replace("&lt;br&gt;", "<br>")); banners_->setVisible(!bans.isEmpty());

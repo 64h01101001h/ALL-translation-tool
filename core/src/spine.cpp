@@ -205,8 +205,8 @@ std::vector<Entry> Spine::sampleEntries(int stride, int cap) const {
 
 // The beginner's rung. Everything on one of these cards is Geshe Michael
 // Roach's own: the Tibetan is source-attested (tibetan_source empty — never one
-// of the 79,316 generated-ewts forms), the pronunciation comes from Geshe Michael's own
-// course Language Study Guides, and the gloss is Geshe Michael's. 1,308 entries qualify,
+// of the 79,316 generated-ewts forms), the pronunciation comes from his own
+// course Language Study Guides, and the gloss is his. 1,308 entries qualify,
 // spread across C01–C18, so a student can drill the card for the course they
 // are actually sitting in.
 //
@@ -261,7 +261,7 @@ std::vector<std::string> Spine::scriptCardCourses() const {
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
     try {
     std::vector<Entry> out;
-    // ORDERED, and the order is the project's: Geshe Michael's English first. Without it
+    // ORDERED, and the order is the project's: his English first. Without it
     // SQLite returned rows in rowid order, so `lookup(w).front()` -- which a
     // great many callers take as "the entry for this word" -- was whichever
     // row happened to be inserted first. `rnam pa thams cad mkhyen pa nyid`,

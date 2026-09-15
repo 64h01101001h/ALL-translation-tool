@@ -95,9 +95,9 @@ std::vector<AuthorHit> matchAuthors(const std::string& query,
 // The catalog writes one person's name many ways. BDRC person id P64
 // carries SEVEN spellings of Tsongkhapa ("RJE T ZONG KHA PA",
 // "...BLO BZANG GR AGS PA"), P423 ten of Jamyang Zhepa. Matching
-// author STRINGS returns the same man seven times with Geshe Michael's 161 works
+// author STRINGS returns the same man seven times with his 161 works
 // split between the copies, which is useless to someone asking what
-// Geshe Michael wrote.
+// he wrote.
 //
 // So the searchable unit is the PERSON: every spelling is an alias,
 // and a hit on any alias returns that person once. The grouping comes
