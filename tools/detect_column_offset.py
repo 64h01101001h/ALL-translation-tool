@@ -22,7 +22,7 @@ It was found by accident, because an agent happened to cross-reference
 C13 while working on C03. Nothing was looking for it. This looks.
 
 THE ANCHOR IDEA. Geshe Michael frequently prints a Tibetan name inside
-Geshe Michael's English -- "(Ganden Hlagyama)", "('Heart Sutra')", "(Drolma, or
+his English -- "(Ganden Hlagyama)", "('Heart Sutra')", "(Drolma, or
 Tara)", "[shamata]". Those parentheticals say which Tibetan text the
 English line is about WITHOUT reference to the wylie column, so they are
 an independent witness to the pairing. If an anchor systematically

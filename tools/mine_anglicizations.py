@@ -4,7 +4,7 @@ from the corpus itself.
 
 The corpus English carries Geshe Michael's own published
 anglicizations (Lobsang, Ganden, Tengyur, Kriya…), which sometimes
-differ from Geshe Michael's pronunciation convention (losang, genden, tenngyur,
+differ from his pronunciation convention (losang, genden, tenngyur,
 triya). Those published spellings are attestation of the highest
 tier the colloquial register can hold: HIS OWN usage.
 

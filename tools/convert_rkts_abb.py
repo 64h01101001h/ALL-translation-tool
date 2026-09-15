@@ -2,7 +2,7 @@
 """rKTs abbreviations XML -> the app's abbreviation-table CSV.
 
 Source: data/rkts/abb.xml — Dr. Bruno Lainé's export of the rKTs
-Tibetan Abbreviations list (CC BY 4.0; permission + Geshe Michael's exact words
+Tibetan Abbreviations list (CC BY 4.0; permission + his exact words
 in docs/licenses/RKTS_ABBREVIATIONS.md).
 
 Output: data/abbreviations/rkts_abb.csv in the same 4-column shape

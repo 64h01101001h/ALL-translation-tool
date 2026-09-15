@@ -422,7 +422,7 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                     //      uncontracted form with a case particle between
                     //      the two words (Wilson p.573: "the dot where the
                     //      case-marking particle would normally have been
-                    //      seen"; Geshe Michael's preferred label = the case number);
+                    //      seen"; his preferred label = the case number);
                     //   3. NN|APP narrowing on unambiguous SOAS noun tags.
                     // Anything unattested/ambiguous stays undetermined.
                     d.label = "NOM|NA|NN|APP (undetermined)";

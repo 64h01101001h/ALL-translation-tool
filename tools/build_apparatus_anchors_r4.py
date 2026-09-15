@@ -5,7 +5,7 @@ resolve footnote lemmas through HGM's OWN reverse index.
 A lemma anchors here only when it is EXACTLY one of an entry's own
 hgm_glosses (fold: lowercase, punctuation out). That makes every
 candidate HGM's own English equivalence — rule 1 is satisfied by
-construction (we MATCH Geshe Michael's English, never compose it).
+construction (we MATCH his English, never compose it).
 
 Tier discipline (the 0.5-floor lesson — candidates spend a
 translator's attention): curated/glossary candidates are kept

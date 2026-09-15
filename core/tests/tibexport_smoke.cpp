@@ -236,7 +236,7 @@ int main() {
         CHECK(verse.paragraphs == 1,
               "prep: a verse line break is not a new paragraph");
 
-        // capital O only - Geshe Michael warns against confusing it with a zero,
+        // capital O only - he warns against confusing it with a zero,
         // and searches with ignore-case OFF.
         auto lower = allcore::formatForTranslation("blo, ,GANG");
         CHECK(lower.text == "blo,\n,GANG",
@@ -278,7 +278,7 @@ int main() {
         }
 
         {
-            // Paragraph-length reporting. Geshe Michael calls splitting long
+            // Paragraph-length reporting. He calls splitting long
             // paragraphs an "executive decision" and keeps it, so this
             // reports and never splits.
             auto pr = allcore::formatForTranslation(
@@ -412,8 +412,8 @@ int main() {
             // a traditional ornament coded "*, ,", and it is deleted.
             // Measured on the real text: 186 of 187 recto markers are
             // followed by "*, "; NO verso marker is. Asterisk only and
-            // recto only, exactly as Geshe Michael's pattern has it - a "#" is left
-            // alone because Geshe Michael never touches one.
+            // recto only, exactly as his pattern has it - a "#" is left
+            // alone because he never touches one.
             auto r = allcore::formatForTranslation("@001A *, ,TSAD MA");
             CHECK(r.text == "[f. 1a] TSAD MA",
                   "prep: recto ornamentation is stripped with the folio");
@@ -426,7 +426,7 @@ int main() {
         }
 
         // S3: the stipulated folio form is [f. 1a] - leading zeros
-        // stripped (Geshe Michael replaces "[f. 00" with "[f. ") and the side
+        // stripped (he replaces "[f. 00" with "[f. ") and the side
         // letter lowercased ("A]" -> "a]", ignore-case OFF).
         auto fol = allcore::formatForTranslation("@001A TEXT");
         CHECK(fol.text.find("[f. 1a]") != std::string::npos,
