@@ -11,25 +11,26 @@ running.
 
 ## What got done
 
-### The tool was preferring a machine's guess to his own words
+### The tool was preferring a machine's guess to Geshe Michael's own words
 
 The dictionary marks each English equivalent with where it came from. A
-little over eight thousand are his, from his glossary and his own
-curated list. About four thousand are a machine's attempt to match his
-English to a Tibetan phrase, and those are labelled provisional because
-that is what they are.
+little over eight thousand are Geshe Michael's, from the glossary and
+the curated list. About four thousand are a machine's attempt to match
+Geshe Michael's English to a Tibetan phrase, and those are labelled
+provisional because that is what they are.
 
 When the tool needed to show what a phrase means, it looked at every
 possible reading and took **the longest one**. Nothing in that rule
-asked which was his. So a four-word machine guess beat the two-word
-curated entry sitting inside it, and "the Victors" --- his own word for
-it, hand-curated --- was passed over for "farthest shore".
+asked which reading was Geshe Michael's. So a four-word machine guess
+beat the two-word curated entry sitting inside it, and "the Victors" ---
+Geshe Michael's own word for it, hand-curated --- was passed over for
+"farthest shore".
 
 I measured how often. Of 877,004 times the reading page looks up a word,
-**63,956 --- one in fourteen --- reached past his English to show a
-machine's guess instead.** The translator's checking page was worse: it
-*deleted* his term entirely rather than ranking it second, in **65% of
-passages**.
+**63,956 --- one in fourteen --- reached past Geshe Michael's English to
+show a machine's guess instead.** The translator's checking page was
+worse: it *deleted* Geshe Michael's term entirely rather than ranking it
+second, in **65% of passages**.
 
 It was written out by hand in five places and four of them had the same
 fault. It is now one piece of code that all five use, with one test.
@@ -37,8 +38,8 @@ fault. It is now one piece of code that all five use, with one test.
 ### Where the wrong definitions came from
 
 The machine had to learn its guesses from somewhere, and I found it. Our
-corpus pairs Tibetan with his English, and **1,066 of its 42,199
-passages hold something in the English column that was never a
+corpus pairs Tibetan with Geshe Michael's English, and **1,066 of its
+42,199 passages hold something in the English column that was never a
 translation at all**:
 
 - the **chanted prayers**, printed in transliteration so a student can
@@ -51,25 +52,25 @@ treated that column as ground truth. That is where "sadang lamgyi yunten
 rabdzok" became a dictionary definition.
 
 The tool now recognises both kinds. Sixty-four exercises on my phone
-were presenting one of these as his English; there are none now. Where
-the reading page quotes such a passage it still shows it --- it is what
-the corpus says --- but it is labelled **NOT A TRANSLATION** rather than
-badged as his.
+were presenting one of these as Geshe Michael's English; there are none
+now. Where the reading page quotes such a passage it still shows it ---
+it is what the corpus says --- but it is labelled **NOT A TRANSLATION**
+rather than badged as Geshe Michael's.
 
 ### Three tests that had never tested anything
 
 Chasing the first fault, I checked whether our automated tests would
 have caught it. Several could not have:
 
-- A test of whether his English is shown before reference material
-  searched the page for two words that page never prints. It passed on
-  their absence, every time, for months.
+- A test of whether Geshe Michael's English is shown before reference
+  material searched the page for two words that page never prints. It
+  passed on their absence, every time, for months.
 - A test marked in the code as **required** only ran if a randomly drawn
   flashcard happened to be a machine guess. On a fresh deck it ran not
   at all.
-- A test proved the AI assistant receives his definitions, but never
-  that it receives which ones are *his* --- the one thing that prompt
-  calls mandatory.
+- A test proved the AI assistant receives Geshe Michael's definitions,
+  but never that it receives **which of them are Geshe Michael's own**
+  --- the one thing that prompt calls mandatory.
 
 All three now fail when they should. I check this by deliberately
 breaking the thing each test guards and confirming the test notices; a
@@ -98,6 +99,10 @@ working material was stripped out of the image before it was sealed.
 
 - Caught the wrong definition on screen and asked what was going on.
   Everything above came out of that one question.
+- Ruled that Geshe Michael is to be named everywhere the software or its
+  records refer to those translations --- no pronoun standing in for the
+  person whose English the whole project exists to keep straight. That
+  sweep is under way across the app, the code and these digests.
 - Cleared 12 GB of old build images after the machine ran out of disk
   twice.
 - Paused the separate dictionary-alignment work to conserve capacity;
@@ -108,16 +113,18 @@ working material was stripped out of the image before it was sealed.
 
   ----------------------------------- -----------------------------------
   Word lookups where a machine's      63,956 of 877,004 (7.3%)
-  guess displaced his English         
+  guess displaced Geshe Michael's     
+  English                             
 
-  His terms deleted outright from the 101,733, in 65% of passages
-  translator's checking page          
+  Geshe Michael's terms deleted       101,733, in 65% of passages
+  outright from the translator's      
+  checking page                       
 
   Corpus passages whose English       1,066 of 42,199 (2.5%)
   column is not English               
 
   Exercises on my phone presenting    64 → 0
-  one as his English                  
+  one as Geshe Michael's English      
 
   Places the same rule was written by 5 (now 1)
   hand                                
@@ -137,6 +144,8 @@ working material was stripped out of the image before it was sealed.
 
 ## Tomorrow
 
+- Finish naming Geshe Michael everywhere in the software and its
+  records.
 - Re-run the second review of the tool; it was cut short by a capacity
   limit with four of its six areas never examined, and an empty result
   there means *unlooked-at*, not *clean*.

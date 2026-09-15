@@ -153,7 +153,7 @@ int main() {
         // THE overreach gate. The second case is what fused r marks, and the
         // engine used to label it "la don, to/at/in" — the qualifier reading,
         // named as though it were the answer. Preston diagrams that same
-        // fused particle as the COMPLEMENT in both of his worked examples.
+        // fused particle as the COMPLEMENT in both of Geshe Michael's worked examples.
         const auto second = functionsForCase(2);
         CHECK(second.size() == 4 && has(second, F::QualifierOfVerb) &&
                   has(second, F::ComplementToObject) &&

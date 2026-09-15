@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
           "user prompt injects verified anchors");
     // The gloss reaching the model was gated; its TIER was not, though the
     // prompt itself calls that mandatory. Without the tier the model cannot
-    // tell his curated English from the machine's auto-aligned match, and
+    // tell Geshe Michael's curated English from the machine's auto-aligned match, and
     // rule 1 stops holding at exactly the boundary where we can least see it.
     {
         std::string tier;

@@ -18,7 +18,7 @@ Four files, each answering a different question:
                                   provenance included, so a lone CSV on
                                   someone else's desk still says what tier it
                                   is and where its English came from.
-  geshe_michael_roach_dictionary_reverse.csv  English -> Tibetan. "Has he rendered this
+  geshe_michael_roach_dictionary_reverse.csv  English -> Tibetan. "Has Geshe Michael rendered this
                                   word before, and as what?" is the question
                                   an editor actually asks, and the page
                                   cannot answer it.

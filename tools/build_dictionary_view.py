@@ -68,9 +68,9 @@ def is_phonetic(tib, eng):
     # Adam caught this in the published view, 2026-08-28.
     if len(ph) >= 8 and ne.startswith(ph[:max(10, int(len(ph) * 0.8))]):
         return True
-    # Geshe Michael's phonetics are his own convention and vary from the
+    # Geshe Michael's phonetics are Geshe Michael's own convention and vary from the
     # engine's: for `sku gsung thugs kyi dngos grub rtsol du gsol` the engine
-    # says "tsul du sul" and he writes "tsoldu sol". Exact prefix matching
+    # says "tsul du sul" and Geshe Michael writes "tsoldu sol". Exact prefix matching
     # misses those, so compare the head of the English against the engine's
     # output by similarity. 0.75 is deliberately high -- a real translation
     # scores far below it against a transliteration.

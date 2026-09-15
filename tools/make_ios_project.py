@@ -12,9 +12,9 @@ references the DiamondDrills/ FOLDER, so adding a Swift file or an asset is
 picked up with no project edit at all.
 
 Signing is left as "Automatic" with an EMPTY team on purpose. Adam signs in
-once in Xcode (Settings ▸ Accounts), picks his team in the target's Signing
+once in Xcode (Settings ▸ Accounts), picks Geshe Michael's team in the target's Signing
 tab, and Xcode mints the certificate and provisioning profile itself. Neither
-this script nor anyone else needs his credentials.
+this script nor anyone else needs Geshe Michael's credentials.
 """
 import os
 import sys

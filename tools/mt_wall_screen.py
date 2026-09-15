@@ -4,7 +4,7 @@ models (Adam's Hugging Face question, 2026-08-13).
 
 Any machine-produced English destined for this project must be
 screened against Geshe Michael Roach's published English before it
-is kept: model weights (ours or anyone's) may have memorized his
+is kept: model weights (ours or anyone's) may have memorized Geshe Michael's
 translations, and a silent reproduction would violate the
 project's first inviolable rule. This tool makes that violation
 detectable: it flags any candidate text sharing a verbatim

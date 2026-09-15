@@ -249,7 +249,7 @@ int main(int argc, char** argv) {
 
     {   // OverlayDoc::bestSpan -- the ONE ranking. It was written out by
         // hand in five places and four of them stopped at "longest", so a
-        // machine's auto-aligned match beat his curated word wherever the
+        // machine's auto-aligned match beat Geshe Michael's curated word wherever the
         // machine's covered more of the line. Gated here so the rule has one
         // home and one test rather than five of each.
         auto d = allcore::buildOverlay(spine, "RGYAL BA'I YON TAN MA LUS");
@@ -262,7 +262,7 @@ int main(int argc, char** argv) {
               "bestSpan: a GMR tier beats an auto-aligned span even when the "
               "auto-aligned one covers MORE of the line (rule 1)");
         CHECK(e.wylie == "rgyal ba",
-              "bestSpan: and the span it returns is his curated one, not the "
+              "bestSpan: and the span it returns is Geshe Michael's curated one, not the "
               "four-token auto-aligned span that swallows it");
         CHECK(d.bestSpan({}) < 0,
               "bestSpan: nothing in, -1 out -- the caller flags rather than "

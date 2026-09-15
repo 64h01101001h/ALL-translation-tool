@@ -60,8 +60,8 @@ std::string tib(const std::string& acip) {
 // A small but CORRECT JSON reader, used only by the reading-order section.
 // The other sections scan for a literal "key":" and stop at the next quote.
 // That is safe for ACIP, which has no quotes and no escapes. It is NOT safe
-// for his English: the prose carries apostrophes, quotation marks and \u
-// escapes, and this is the one drill whose key is labelled ATTESTED — his own
+// for Geshe Michael's English: the prose carries apostrophes, quotation marks and \u
+// escapes, and this is the one drill whose key is labelled ATTESTED — Geshe Michael's own
 // rendering of that very span. A key that is silently truncated at an
 // apostrophe would be a false claim of attestation, which is worse than no
 // drill at all.
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
     field(out, "built_by", "allcore, on the Mac; the phone generates nothing");
     field(out, "source", spine.metaValue("source_corpus"));
     field(out, "tier",
-          "Every English line is Geshe Michael Roach's own text from his "
+          "Every English line is Geshe Michael Roach's own text from Geshe Michael's "
           "courses. Engine guidance is labeled guidance.");
     field(out, "built_from", stamp);
     out += "\"schema\":1},\"cloze\":[";
@@ -240,22 +240,22 @@ int main(int argc, char** argv) {
         // correctly a couple of times and STILL wondered what the English
         // equivalent was." Rule 1 forbids composing English, so this is
         // strictly a MATCH: allcore::checkTerminology takes the blanked chunk
-        // and his own English for this segment, and reports which of his
+        // and Geshe Michael's own English for this segment, and reports which of Geshe Michael's
         // recorded equivalents actually occur in it. Evidence that the match
-        // is real rather than coincidence: against his English for THIS
+        // is real rather than coincidence: against Geshe Michael's English for THIS
         // segment one or more equivalents occur 50.3% of the time; against a
         // random other segment, 14.6%. A lift of 35.7 points.
         //
         // Never "the answer means X" — the median glossed headword has four
         // attested equivalents and the worst has 137, so naming one would be
-        // picking a sense, which is a guess. The card shows his recorded range
-        // and marks which of them he used here.
+        // picking a sense, which is a guess. The card shows Geshe Michael's recorded range
+        // and marks which of them Geshe Michael used here.
         {
             const allcore::TermReport tr = allcore::checkTerminology(
                 spine, index, ans, c->segment.english);
             // checkTerminology orders unmatched first, because it was built
             // to flag gaps in a translator's draft. A learner's card wants the
-            // opposite: the word he actually used here is the answer to the
+            // opposite: the word Geshe Michael actually used here is the answer to the
             // question being asked, and a content word teaches more than a
             // nominaliser. So: matched first, then the longer headword.
             std::vector<allcore::TermUse> terms = tr.terms;
@@ -303,8 +303,8 @@ int main(int argc, char** argv) {
     out += "],";
 
     // ---- The other drill kinds (Adam, 2026-09-11: "the iOS version just has
-    // the cloze option"). He was right, and it was a parity failure against
-    // his own standing order. The phone generates nothing — the pack is built
+    // the cloze option"). Geshe Michael was right, and it was a parity failure against
+    // Geshe Michael's own standing order. The phone generates nothing — the pack is built
     // here — so every kind it can offer has to be baked, and that is what the
     // rest of this file does now.
     //
@@ -384,8 +384,8 @@ int main(int argc, char** argv) {
         }
         out += "],";
 
-        // Script cards: his own Language Study Guide cards. Everything on one
-        // is his — source-attested Tibetan, his pronunciation, his gloss — so
+        // Script cards: Geshe Michael's own Language Study Guide cards. Everything on one
+        // is Geshe Michael's — source-attested Tibetan, Geshe Michael's pronunciation, Geshe Michael's gloss — so
         // it is the beginner's rung and the phone should have it.
         out += "\"script\":[";
         int ns = 0;
@@ -483,7 +483,7 @@ int main(int argc, char** argv) {
                 const std::string tibw = sfield("tib");
                 const std::string course = sfield("course");
                 // the record runs from rec to the next '}'; "eng":null
-                // inside it means he rendered this span with no English word
+                // inside it means Geshe Michael rendered this span with no English word
                 const size_t recEnd = j.find('}', at);
                 const size_t nullAt = j.find("\"eng\":null", rec);
                 const bool rendered =
@@ -773,7 +773,7 @@ int main(int argc, char** argv) {
             return 1;
         }
 
-        // Reading order — which chunk does his English take first? The
+        // Reading order — which chunk does Geshe Michael's English take first? The
         // fourteenth drill, and the one that answers the difficulty Adam
         // actually named: not what the words mean, but what order to take
         // them in. It landed on the desktop on 13 September against a pack
@@ -782,7 +782,7 @@ int main(int argc, char** argv) {
         //
         // The key here is ATTESTED and must stay that way: it is where each
         // child's English actually sits inside the parent's English in the
-        // bank — his rendering of that very span — and never the engine's
+        // bank — Geshe Michael's rendering of that very span — and never the engine's
         // ruling about what order the chunks ought to be read in.
         out += "\"readorder\":[";
         int nro = 0, nro_reorder = 0, nro_identity = 0;
@@ -864,7 +864,7 @@ int main(int argc, char** argv) {
                         continue;
                     // The bank does not pass through isDrillable, so the
                     // chanted prayers reach this drill by their own road: 23
-                    // cards presented "dakki jinsok gyipay sunam kyi," as his
+                    // cards presented "dakki jinsok gyipay sunam kyi," as Geshe Michael's
                     // English, under a badge reading ATTESTED. It is the sound
                     // of the Tibetan, not a rendering of it.
                     if (allcore::englishIsNotEnglish(p.eng, p.acip)) continue;
@@ -885,17 +885,17 @@ int main(int argc, char** argv) {
                                   return p.tib.find(a->tib) <
                                          p.tib.find(b2->tib);
                               });
-                    // and where his English puts each of them. `find` is an
+                    // and where Geshe Michael's English puts each of them. `find` is an
                     // unanchored substring probe, so when one piece's English
                     // occurs inside another's it is located in the WRONG place
-                    // and the order derived from it is not his: "The definition
+                    // and the order derived from it is not Geshe Michael's: "The definition
                     // of an apparent refuge is" put `refuge` at 30, which is
                     // inside `apparent refuge` at 21. Three cards in 300
                     // shipped such a key under a badge reading ATTESTED.
                     //
                     // Distinct positions were not enough — the two positions
                     // there differ. The pieces must occupy DISJOINT stretches
-                    // of his sentence, and a card that cannot show that is
+                    // of Geshe Michael's sentence, and a card that cannot show that is
                     // refused rather than guessed at (rule 3).
                     std::vector<std::pair<size_t, size_t>> at;
                     bool ok = true;
@@ -914,7 +914,7 @@ int main(int argc, char** argv) {
                     pos.reserve(at.size());
                     for (const auto& r : at) pos.push_back(r.first);
                     // Every piece must have Tibetan to tap. The bank holds
-                    // one-sided records — his English for a span with no
+                    // one-sided records — Geshe Michael's English for a span with no
                     // Tibetan exponent of its own — and 44 of the first 300
                     // cards shipped with a numbered row and nothing beside it.
                     // A chunk with no Tibetan cannot be put in reading order.
@@ -965,7 +965,7 @@ int main(int argc, char** argv) {
             }
         }
         out += "],";
-        std::printf("  readorder %d  (his English reorders in %d, runs "
+        std::printf("  readorder %d  (Geshe Michael's English reorders in %d, runs "
                     "straight through in %d)\n",
                     nro, nro_reorder, nro_identity);
         if (nro < 200) {
@@ -1027,7 +1027,7 @@ int main(int argc, char** argv) {
                 // overwhelmingly multi-syllable, so requiring a space is a
                 // cheap filter that costs almost no real words.
                 if (w.find(' ') == std::string::npos) continue;
-                // his most-attested English for it
+                // Geshe Michael's most-attested English for it
                 std::string gloss; int best = -1;
                 size_t e = 0;
                 while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
@@ -1045,7 +1045,7 @@ int main(int argc, char** argv) {
                 const std::string wd = tib(w);
                 if (wd.find("\u27e8") != std::string::npos) continue;
                 auto hits = spine.corpusSearch("\"" + w + "\"", "", 8);
-                // two DISTINCT segments, each carrying his English
+                // two DISTINCT segments, each carrying Geshe Michael's English
                 const allcore::CorpusSegment* a = nullptr;
                 const allcore::CorpusSegment* b2 = nullptr;
                 for (const auto& h : hits) {

@@ -441,14 +441,15 @@ struct OrderView: View {
                 // different questions -- this drill asks for the TIBETAN one --
                 // and a learner shown his English first will reach for the
                 // English order, which is what the Reading order drill is for.
-                Text("The answer is the order he WROTE them in, not the order "
-                     + "his English takes them. Those are different questions; "
+                Text("The answer is the order Geshe Michael WROTE them in, not the "
+                     + "Geshe Michael's English takes them. Those are different "
+                     + "questions; "
                      + "the second one is the Reading order drill.")
                     .font(.system(size: 12)).foregroundColor(c.machine)
                     .fixedSize(horizontal: false, vertical: true)
-                Text("ATTESTED · the key is his Tibetan for [\(drill.course):\(drill.seq)]")
+                Text("ATTESTED · the key is Geshe Michael's Tibetan for [\(drill.course):\(drill.seq)]")
                     .font(.system(size: 11)).foregroundColor(c.act)
-                Text("his English for the whole segment, for sense — not the key:")
+                Text("Geshe Michael's English for the whole segment, for sense — not the key:")
                     .font(.system(size: 11)).foregroundColor(c.muted)
                 EnglishHint(text: drill.english, ink: c)
                 ForEach(Array(drill.presented.enumerated()), id: \.offset) { i, ix in
@@ -582,7 +583,7 @@ struct ScriptView: View {
                     Text(card.wylie).font(.system(size: 15)).foregroundColor(c.muted)
                     if !card.gloss.isEmpty {
                         Text(card.provisional
-                             ? "auto-aligned [PROVISIONAL] — not his own English: "
+                             ? "auto-aligned [PROVISIONAL] — not Geshe Michael's own English: "
                                + card.gloss.joined(separator: " · ")
                              : "Geshe Michael Roach has: " + card.gloss.joined(separator: " · "))
                             .font(.system(size: 14))
@@ -653,7 +654,7 @@ struct DebateView: View {
                     Text(picked == answer ? "Correct." : "Not that one.")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(picked == answer ? c.act : c.machine)
-                    Text("Word-level drills are refused in this mode: his English for a debate segment is an expansion with the opponent's turns supplied, not a word-for-word rendering.")
+                    Text("Word-level drills are refused in this mode: Geshe Michael's English for a debate segment is an expansion with the opponent's turns supplied, not a word-for-word rendering.")
                         .font(.system(size: 12)).foregroundColor(c.muted)
                     Text("[\(st.course):\(st.seq)]")
                         .font(.system(size: 12)).foregroundColor(c.muted)
@@ -709,8 +710,8 @@ struct SilentView: View {
                 Text("\(span.wylie) · \(span.course) · the alignment layer is TENTATIVE")
                     .font(.system(size: 12)).foregroundColor(c.muted)
                 Divider()
-                ForEach(Array(["He rendered it in English",
-                               "He did not render it",
+                ForEach(Array(["Geshe Michael rendered it in English",
+                               "Geshe Michael did not render it",
                                "I cannot tell from this alone"].enumerated()),
                         id: \.offset) { i, t in
                     Button { if !checked { picked = i } } label: {
@@ -727,10 +728,10 @@ struct SilentView: View {
                         .foregroundColor(picked == 2 ? c.muted
                                          : (said == span.rendered ? c.act : c.machine))
                     Text(span.rendered
-                         ? "He rendered it with a word of English."
-                         : "He rendered it with no English word at all — the relation is carried by the shape of his sentence.")
+                         ? "Geshe Michael rendered it with a word of English."
+                         : "Geshe Michael rendered it with no English word at all — the relation is carried by the shape of the sentence.")
                         .font(.system(size: 14)).foregroundColor(c.ink)
-                    Text("In the aligned layer he leaves case particles unrendered 93.9% of the time. Your run: \(right) right · \(wrong) wrong · \(abstain) abstained.")
+                    Text("In the aligned layer Geshe Michael leaves case particles unrendered 93.9% of the time. Your run: \(right) right · \(wrong) wrong · \(abstain) abstained.")
                         .font(.system(size: 12)).foregroundColor(c.muted)
                 }
             }.padding(20)
@@ -779,13 +780,13 @@ struct SecondThoughtView: View {
         let c = Ink.of(scheme)
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                Text("He renders this term more than one way. How many can you name before you look?")
+                Text("Geshe Michael renders this term more than one way. How many can you name before you look?")
                     .font(.system(size: 15)).foregroundColor(c.muted)
                 Text(item.tib).font(.system(size: 44)).foregroundColor(c.ink)
                 Text(item.wylie).font(.system(size: 14)).foregroundColor(c.muted)
                 if shown {
                     Divider()
-                    Text("Everything he has been recorded writing for it, most used first:")
+                    Text("Everything Geshe Michael has been recorded writing for it, most used first:")
                         .font(.system(size: 13)).foregroundColor(c.muted)
                     ForEach(Array(item.renderings.enumerated()), id: \.offset) { _, r in
                         HStack {
@@ -794,9 +795,9 @@ struct SecondThoughtView: View {
                             Spacer()
                         }
                     }
-                    Text("None of these is the right translation of the term. They are all his, and which one fits depends on the passage — that is the lesson, and this drill does not resolve it.")
+                    Text("None of these is the right translation of the term. They are all Geshe Michael's, and which one fits depends on the passage — that is the lesson, and this drill does not resolve it.")
                         .font(.system(size: 12)).foregroundColor(c.muted)
-                    Text("TENTATIVE — machine-aligned from his courses, awaiting his ruling.")
+                    Text("TENTATIVE — machine-aligned from Geshe Michael's courses, awaiting Geshe Michael's ruling.")
                         .font(.system(size: 11)).foregroundColor(c.machine)
                 }
             }.padding(20)
@@ -861,7 +862,7 @@ struct PeelView: View {
                         Text("\(i + 1)  \(p)").font(.system(size: 20))
                             .foregroundColor(c.ink)
                     }
-                    Text("The nesting is the alignment layer's own, TENTATIVE throughout — machine-matched from his courses and awaiting his ruling.")
+                    Text("The nesting is the alignment layer's own, TENTATIVE throughout — machine-matched from Geshe Michael's courses and awaiting Geshe Michael's ruling.")
                         .font(.system(size: 11)).foregroundColor(c.machine)
                 }
             }.padding(20)
@@ -921,7 +922,7 @@ struct BoundaryView: View {
                      : "Warm-up pool: the scribe marked these boundaries himself, so the key is attested.")
                     .font(.system(size: 12))
                     .foregroundColor(item.hard ? c.machine : c.muted)
-                Text("[\(item.course):\(item.seq)] — there is a key: his own English for this segment.")
+                Text("[\(item.course):\(item.seq)] — there is a key: Geshe Michael's own English for this segment.")
                     .font(.system(size: 11)).foregroundColor(c.muted)
                 Divider()
                 FlowTokens(tokens: item.tokens, ink: c,
@@ -939,7 +940,7 @@ struct BoundaryView: View {
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(perfect ? c.act : c.machine)
                     ForEach(Array(item.ends.enumerated()), id: \.offset) { i, e in
-                        Text("after word \(e + 1) — \(item.functions[i])  (\(item.attested[i] ? "the scribe marked this one" : "engine ruling, not his own mark"))")
+                        Text("after word \(e + 1) — \(item.functions[i])  (\(item.attested[i] ? "the scribe marked this one" : "engine ruling, not Geshe Michael's own mark"))")
                             .font(.system(size: 12)).foregroundColor(c.muted)
                     }
                     let hit = marks.intersection(waived).count
@@ -992,15 +993,15 @@ struct ReadOrderView: View {
         guard let at = picked.firstIndex(of: i) else { return nil }
         return at + 1
     }
-    private func his(_ i: Int) -> Int { (item.answer.firstIndex(of: i) ?? 0) + 1 }
+    private func gmOrder(_ i: Int) -> Int { (item.answer.firstIndex(of: i) ?? 0) + 1 }
 
     var body: some View {
         let c = Ink.of(scheme)
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Text("These chunks are shown in the order they are written. Tap them in the order his English takes them.")
+                Text("These chunks are shown in the order they are written. Tap them in the order Geshe Michael's English takes them.")
                     .font(.system(size: 15)).foregroundColor(c.muted)
-                Text("ATTESTED — the key is his own English for this very span, not the engine's ruling.")
+                Text("ATTESTED — the key is Geshe Michael's own English for this very span, not the engine's ruling.")
                     .font(.system(size: 12)).foregroundColor(c.act)
                 Text("[\(item.ref)]")
                     .font(.system(size: 11)).foregroundColor(c.muted)
@@ -1030,9 +1031,9 @@ struct ReadOrderView: View {
                             }
                             Spacer(minLength: 8)
                             if checked {
-                                Text("his \(his(i))")
+                                Text("reads \(gmOrder(i))")
                                     .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(mine(i) == his(i) ? c.act : c.machine)
+                                    .foregroundColor(mine(i) == gmOrder(i) ? c.act : c.machine)
                                     .padding(.top, 8)
                             } else if let m = mine(i) {
                                 Text("\(m)")
@@ -1052,7 +1053,7 @@ struct ReadOrderView: View {
                 }
                 if checked {
                     Text(correct
-                         ? "That is his order."
+                         ? "That is Geshe Michael's order."
                          : "His order is \(item.answer.map { String($0 + 1) }.joined(separator: " ")) — yours was \(picked.map { String($0 + 1) }.joined(separator: " ")).")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(correct ? c.act : c.machine)
@@ -1061,7 +1062,7 @@ struct ReadOrderView: View {
                         .font(.system(size: 11)).foregroundColor(c.muted)
                 } else {
                     Text(picked.isEmpty
-                         ? "Tap the chunk his English takes first."
+                         ? "Tap the chunk Geshe Michael's English takes first."
                          : "So far: \(picked.map { String($0 + 1) }.joined(separator: " "))")
                         .font(.system(size: 13))
                         .foregroundColor(picked.isEmpty ? c.muted : c.ink)
@@ -1125,8 +1126,9 @@ struct ProvenanceSheet: View {
                             .font(.system(size: 15)).foregroundColor(ink.muted)
                     }
                     Text("The phone generates nothing. Every exercise here was "
-                         + "built on the Mac from his corpus, and anything the "
-                         + "engine ruled rather than he wrote says so on the card.")
+                         + "built on the Mac from Geshe Michael's corpus, and anything "
+                         + "the engine ruled rather than Geshe Michael wrote says "
+                         + "so on the card.")
                         .font(.system(size: 12)).foregroundColor(ink.muted)
                         .fixedSize(horizontal: false, vertical: true)
                 }.padding(20)
@@ -1252,7 +1254,7 @@ struct VocabView: View {
                     EnglishHint(text: ctx.english, ink: c)
                     Text("aligned evidence, TENTATIVE — \(item.aligned_eng)")
                         .font(.system(size: 12)).foregroundColor(c.machine)
-                    Text("Machine-matched from his courses, not his dictionary gloss. His English above is the attested part.")
+                    Text("Machine-matched from Geshe Michael's courses, not the dictionary gloss. Geshe Michael's English above is the attested part.")
                         .font(.system(size: 11)).foregroundColor(c.muted)
                 }
             }.padding(20)
@@ -1331,7 +1333,7 @@ struct TrainerView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.seal.fill")
                         .font(.system(size: 12)).foregroundColor(c.act)
-                    Text("THERE IS A KEY — his own English for this segment · [\(passage.course):\(passage.seq)]")
+                    Text("THERE IS A KEY — Geshe Michael's own English for this segment · [\(passage.course):\(passage.seq)]")
                         .font(.system(size: 10, weight: .semibold)).tracking(0.6)
                         .foregroundColor(c.act)
                 }
@@ -1631,14 +1633,14 @@ struct DrillView: View {
                                             ? " (+\(m.more) more not carried)" : ""))
                                         .font(.system(size: 14)).foregroundColor(c.muted)
                                     if !m.used.isEmpty {
-                                        Text("\(m.used.joined(separator: ", ")) — his word here, above.")
+                                        Text("\(m.used.joined(separator: ", ")) — Geshe Michael's word here, above.")
                                             .font(.system(size: 13)).foregroundColor(c.act)
                                     } else {
-                                        Text("None of these appears verbatim in his English above.")
+                                        Text("None of these appears verbatim in Geshe Michael's English above.")
                                             .font(.system(size: 13)).foregroundColor(c.muted)
                                     }
                                     if m.provisional {
-                                        Text("\(m.tier) [PROVISIONAL] — not his own English")
+                                        Text("\(m.tier) [PROVISIONAL] — not Geshe Michael's own English")
                                             .font(.system(size: 12)).foregroundColor(c.machine)
                                     }
                                     // "Look up" is reachable only here, after
@@ -1648,7 +1650,7 @@ struct DrillView: View {
                                     // pack holds; the phone ships no dictionary
                                     // and does not pretend to one.
                                     if m.glosses.count > 8 && !expanded {
-                                        Button("Look up — \(m.glosses.count - 8) more of his equivalents") {
+                                        Button("Look up — \(m.glosses.count - 8) more of Geshe Michael's equivalents") {
                                             expanded = true
                                         }
                                         .font(.system(size: 13)).foregroundColor(c.act)
@@ -2017,7 +2019,7 @@ struct RootView: View {
                                 ScriptView(card: a[sAt % a.count]) {
                                     sAt = (sAt + 1) % a.count
                                 }
-                            } else { missing("his own cards", c) }
+                            } else { missing("Geshe Michael's own cards", c) }
                         case .debate:
                             if let a = pack.debate, !a.isEmpty {
                                 DebateView(st: a[bAt % a.count], deck: deck) {
@@ -2059,7 +2061,7 @@ struct RootView: View {
                                 ReadOrderView(item: a[roAt % a.count], deck: deck) {
                                     roAt = (roAt + 1) % a.count
                                 }
-                            } else { missing("aligned spans with his reading order", c) }
+                            } else { missing("aligned spans with Geshe Michael's reading order", c) }
                         case .mixed:
                             mixedBody(pack, c)
                         }

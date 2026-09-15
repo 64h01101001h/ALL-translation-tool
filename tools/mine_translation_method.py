@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Find where Geshe Michael teaches TRANSLATION METHOD, in his own classes.
+"""Find where Geshe Michael teaches TRANSLATION METHOD, in Geshe Michael's own classes.
 
-Backlog #32. He has taught the craft for decades in passing — how to
+Backlog #32. Geshe Michael has taught the craft for decades in passing — how to
 render a term, when a word shifts register, what to do with Sanskrit,
-what he tells students about the work — and almost none of it is
+what Geshe Michael tells students about the work — and almost none of it is
 collected. The dictionary records the RESULTS of that method; the
 classes record the method itself.
 
@@ -14,7 +14,7 @@ captions, and the RECORDING is the authority — captions mishear, and a
 sentence pulled out of a class can lose the case it was answering.
 Nothing here is a rule. A passage becomes a rule only if Geshe Michael
 rules it one through the approval channel (inviolable rule 1: machine
-work may MATCH his English from evidence, never COMPOSE it).
+work may MATCH Geshe Michael's English from evidence, never COMPOSE it).
 
 Patterns are weighted by how specifically they indicate METHOD rather
 than mere subject matter. "we translate this as" is method; "in
@@ -214,21 +214,21 @@ def main():
 
 
 KIND_HEADS = [
-    ("refuses-rendering", "He rules a rendering OUT",
+    ("refuses-rendering", "Geshe Michael rules a rendering OUT",
      "The strongest kind of instruction here: not what a word means, "
      "but what it must not be called."),
-    ("renders-as", "He gives a rendering",
-     "\"we translate this as…\" — his own English, spoken in class."),
-    ("better-rendering", "He prefers one rendering over another", ""),
-    ("mistranslation", "He names a mistranslation", ""),
-    ("hard-to-render", "He says a thing is hard or impossible to render",
+    ("renders-as", "Geshe Michael gives a rendering",
+     "\"we translate this as…\" — Geshe Michael's own English, spoken in class."),
+    ("better-rendering", "Geshe Michael prefers one rendering over another", ""),
+    ("mistranslation", "Geshe Michael names a mistranslation", ""),
+    ("hard-to-render", "Geshe Michael says a thing is hard or impossible to render",
      "Often the most useful passages for a working translator: they "
      "name the problem rather than paper over it."),
-    ("no-english-word", "He says English has no word for it", ""),
-    ("word-means", "He defines a term", ""),
-    ("literally-means", "He gives a literal sense",
+    ("no-english-word", "Geshe Michael says English has no word for it", ""),
+    ("word-means", "Geshe Michael defines a term", ""),
+    ("literally-means", "Geshe Michael gives a literal sense",
      "Usually a step toward a rendering rather than the rendering."),
-    ("term-is-called", "He names the Tibetan for something", ""),
+    ("term-is-called", "Geshe Michael names the Tibetan for something", ""),
 ]
 
 
@@ -238,19 +238,19 @@ def digest():
     meta = doc["_meta"]
     L = []
     L.append("# Where Geshe Michael teaches translation method\n")
-    L.append("*Machine-located passages from %d caption files of his own "
+    L.append("*Machine-located passages from %d caption files of Geshe Michael's own "
              "recorded classes (Diamond Cutter Classics and The Knowledge "
              "Base). Backlog #32.*\n" % meta["files_read"])
     L.append("> **These are candidates, and the recording is the "
              "authority.**\n>\n"
              "> They are auto-generated captions: they mishear. In one "
-             "passage below he says a term must not be rendered "
+             "passage below Geshe Michael says a term must not be rendered "
              "\"sutra\" and the caption writes \"citrus\". A sentence "
              "lifted out of a class can also lose the question it was "
              "answering.\n>\n"
              "> **Nothing here is a rule.** A passage becomes one only "
              "when Geshe Michael rules it one through the approval "
-             "channel. Machine work may MATCH his English from evidence; "
+             "channel. Machine work may MATCH Geshe Michael's English from evidence; "
              "it may never COMPOSE it.\n")
     L.append("**%d passages** across %d files. Every timecode links to "
              "the moment in the recording.\n" % (len(ps), meta["files_read"]))

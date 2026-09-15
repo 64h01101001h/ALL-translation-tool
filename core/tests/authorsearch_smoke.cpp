@@ -90,7 +90,7 @@ int main() {
     }
     CHECK(hasAuthor(matchAuthors("gendun drup", kAuthors),
                     "RGYAL BA DGE 'DUN GRUB"),
-          "the 1st Dalai Lama is found from his English phonetic name");
+          "the 1st Dalai Lama is found from Geshe Michael's English phonetic name");
 
     // ---- REGRESSION: the stub-pronunciation false positive ----
     CHECK(!hasAuthor(matchAuthors("sakya pandita", kAuthors),
