@@ -1,0 +1,15 @@
+{
+  "source_origin_git_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+  "sql": "SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq BETWEEN ? AND ? ORDER BY seq",
+  "parameters": [
+    "C05",
+    325,
+    339
+  ],
+  "count": 15,
+  "exact_context_match": true,
+  "prepared_query_proof_reused": "root-preparation-proof.json",
+  "query_replays": 0,
+  "raw_master_object_equality": true,
+  "raw_context_object_equality": true
+}

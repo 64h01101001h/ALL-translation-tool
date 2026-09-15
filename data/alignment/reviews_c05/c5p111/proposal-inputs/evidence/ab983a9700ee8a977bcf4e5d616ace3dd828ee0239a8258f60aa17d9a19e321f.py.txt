@@ -1,0 +1,54 @@
+import json,hashlib,sqlite3,gzip,subprocess
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];B=A.parent;W=A.parents[2]/'campaign-worktree'
+def put(name,x):(A/'evidence'/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=json.loads((B/'proposal-baseline.json').read_text());put('proposal-baseline.json',base)
+for name,p in base['source_pins'].items():
+ b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256']
+refs=[]
+for name,p in base['governing_git_pins'].items():
+ b=subprocess.check_output(['git','show',base['commit']+':'+name],cwd=W);assert len(b)==p['bytes']and sha(b)==p['sha256'];refs.append({'git_object':base['commit']+':'+name,**p})
+ if name=='docs/errata_register.json':reg=json.loads(b)
+ if name=='data/alignment/C05_CAMPAIGN.md':shape=b.decode().split('## Gates')[0]
+put('governance.json',{'original_git_objects':refs,'course_shape':shape,'consumed':'Same exact AGENTS/spec/brief/protocol/governance already read in this continuing independent role; immutable objects independently hash-verified for this batch.'})
+protocol=(B.parent/'proposal-protocol.md').read_bytes();(A/'evidence/proposal-protocol.md').write_bytes(protocol)
+db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());sql='SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq=?'
+for row in context:assert dict(db.execute(sql,(row['course'],row['seq'])).fetchone())==row
+assert all(r in context for r in source);put('source-context.json',context)
+put('source-verification.json',{'status':'PASS','sql':sql,'parameters':[[r['course'],r['seq']]for r in context],'sqlite_uri_mode':'ro','selected_source_rows':3,'context_rows':15,'no_packaging_query_repeats':True})
+m=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+terms=['ma byin par len pa','sbyor ba',"'dod chags",'skyes ba','nor','chags pa','sgo nas','zhe sdang','skyes pa','dgra bo','rku ba','gti mug','bram ze','chos','bshad','lta bu',"'dod pas log par g-yem pa","log par 'jug pa",'log par',"'jug pa",'gzhan','sma dbab pa',"sma 'bebs","'khrig pa",'spyod pa','me tog',"'bras bu",'zas g-yos','zas g.yos','zas gyos','legs par grub pa','grub pa','chu dogs','chu rdogs','chu rdzing','lam',"'dra ba",'bsten','bya','brnab sems','sogs','yid','rtsa ba','gsum','mjug thogs','byung ba','dge ba','bcu','mjug','dngos gzhi','bcas pa','rnams','chags','sdang','gti mug med','med']
+objects={};lex=[]
+for term in terms:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';rows=[dict(r)for r in db.execute(sql,(term,term))];keys=[]
+ for coll in ['unified_entries','curated_entries','glossary_entries']:
+  for i,e in enumerate(m[coll]):
+   if e.get('wylie')==term or term in(e.get('wylie_variants')or[]):
+    key=f'{coll}:{i}';objects[key]={'collection':coll,'index':i,'entry':e};keys.append(key)
+ lex.append({'term':term,'sql':sql,'parameters':[term,term],'spine_count':len(rows),'spine_rows':rows,'master_count':len(keys),'master_keys':keys})
+put('lexical.json',{'queries':lex,'master_objects':objects})
+queries=[];records={}
+for row in source:
+ for f in ['acip','wylie','english']:queries.append((f,'=',row[f]))
+for f,p in [('wylie','chu dogs'),('wylie','chu rdogs'),('english','pool in the river'),('wylie','zas g-yos'),('wylie','zas g.yos'),('wylie','sma dbab'),('wylie',"sma 'bebs"),('wylie','chags sdang gti mug med')]:queries.append((f,'instr',p))
+qs=[]
+for f,op,p in queries:
+ sql='SELECT * FROM corpus_segments WHERE '+(f+'=?'if op=='='else'instr('+f+',?)>0')+' ORDER BY course,seq';rows=[dict(r)for r in db.execute(sql,(p,))]
+ for r in rows:assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+ expected=[i+1 for i,r in enumerate(corpus)if (r[f]==p if op=='='else p in r[f])];assert set(expected)=={r['id']for r in rows}
+ qs.append({'field':f,'op':op,'sql':sql,'parameters':[p],'count':len(rows),'row_ids':[r['id']for r in rows]})
+put('corpus.json',{'queries':qs,'complete_records':records})
+physical=Path(base['source_pins']['physical']['path']).read_bytes();lines=physical.decode('latin-1').splitlines();ext=[]
+for row in source:
+ ai=next(i for i,l in enumerate(lines)if l.strip()==row['acip']);wanted=row['english'];got='';ei=ai+1
+ while len(got)<len(wanted):
+  if lines[ei].strip():got+=(' 'if got else'')+lines[ei].strip()
+  ei+=1
+ assert got==wanted
+ ext.append({'seq':row['seq'],'original_path':base['source_pins']['physical']['path'],'original_sha256':sha(physical),'acip_lines_1based':[ai+1],'english_lines_1based':[ai+2,ei],'acip':row['acip'],'english':got,'raw_extent_latin1':'\n'.join(lines[ai:ei]),'method':'Latin-1 byte-preserving decode; strip nonempty lines and join with one space; all selected text is ASCII.','complete_fields_exact':True})
+put('physical-extents.json',ext)
+direct=[r for r in reg if any(t in json.dumps(r).lower()for t in ['c05:331','c05:332','c05:333','chu dogs','sma dbab','zas g-yos'])]
+put('register.json',{'original_git_object':base['commit']+':docs/errata_register.json','sha256':base['governing_git_pins']['docs/errata_register.json']['sha256'],'count':len(reg),'search_terms':['C05:331','C05:332','C05:333','chu dogs','sma dbab','zas g-yos'],'direct_matches':direct,'applicable_registered_classes':['E-044 converter escapes','E-071 running head','E-107 cap','E-111 spill','following-heading','footnote/folio fusion']})
+print(json.dumps({'source':'PASS','lexical_queries':len(lex),'unique_master_objects':len(objects),'corpus_queries':len(qs),'unique_corpus_rows':len(records),'physical_complete_fields':6,'lexical_counts':[[x['term'],x['master_count']]for x in lex],'corpus_counts':[[x['parameters'][0][:65],x['count']]for x in qs]},ensure_ascii=False,indent=2))

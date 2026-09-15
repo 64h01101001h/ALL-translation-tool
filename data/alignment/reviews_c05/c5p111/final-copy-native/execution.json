@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "\nfrom pathlib import Path\nimport json,importlib.util\nS=Path.cwd();Y=S.parent;Q=Y/'reconciled';A=Y.parent\nmfile=S/'original-to-copy-manifest.json';existing=json.loads(mfile.read_text());seen={r['original']for r in existing};originals=[]\nfor d in [Y/'tibetan',Y/'english',Q]:\n f=json.loads((d/'freeze.json').read_text());originals += [d/'freeze.json']+[d/x for x in f['files']]\nfor name in ['source.json','context.json','baseline.json','proposal-baseline.json','root-lexical-preparation.json','root-parallel-preparation.json','root-preparation-proof.json']:\n if (Y/name).exists():originals.append(Y/name)\noriginals += list((Y/'baseline-through330-caller').iterdir())+[A/'current-alignment-output-contract.md',A/'record_external_step.py',A/'copy_evidence_once_v2.py']\nmod=importlib.util.spec_from_file_location('copy_once',A/'copy_evidence_once_v2.py');m=importlib.util.module_from_spec(mod);mod.loader.exec_module(m)\nr=m.preserve(S,mfile,[p for p in originals if str(p.resolve()) not in seen]);print(json.dumps(r,indent=2))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-331-333/semantic-review",
+  "started_at": "2026-09-14T23:43:28.306482+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-14T23:43:28.390304+00:00",
+  "wall_seconds": 0.0834136251360178,
+  "exit": 0,
+  "stdout_bytes": 76,
+  "stderr_bytes": 0,
+  "stdout_sha256": "ea9b6790cdd90e7cb4f32618f54f19a9abc94ebcf1cb4205134505cfa92b6578",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

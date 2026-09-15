@@ -1,0 +1,16 @@
+import json,hashlib,re,subprocess
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];B=A.parent;W=A.parents[2]/'campaign-worktree'
+def load(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=load(A/'evidence/proposal-baseline.json');source={r['seq']:r for r in load(A/'evidence/source-context.json')};raw=Path(base['source_pins']['physical']['path']).read_bytes();prep=load(B/'root-preparation-proof.json');ext=[]
+for x in prep['physical_extents']:
+ b=raw[x['start']:x['start']+x['bytes']];assert sha(b)==x['sha256']and b.decode('ascii')==x['original_text'];assert re.sub(rb'\s+',b' ',b).strip().decode('ascii')==source[x['seq']][x['field']];ext.append(x)
+put(A/'evidence/physical-extents.json',{'original_path':base['source_pins']['physical']['path'],'original_sha256':sha(raw),'independently_verified_complete_fields':6,'method':'Read exact original byte extents; verify hash, ASCII decode and whitespace folding. No full-file encoding assumption.','extents':ext})
+rbytes=subprocess.check_output(['git','show',base['commit']+':docs/errata_register.json'],cwd=W);assert sha(rbytes)==base['governing_git_pins']['docs/errata_register.json']['sha256'];reg=json.loads(rbytes);terms=['c05:331','c05:332','c05:333','chu dogs','sma dbab','zas g-yos'];matches=[r for r in reg if any(t in json.dumps(r).lower()for t in terms)]
+put(A/'evidence/register.json',{'original_git_object':base['commit']+':docs/errata_register.json','sha256':sha(rbytes),'count':len(reg),'search_terms':terms,'direct_matches':matches,'classes_checked':['E-044 converter escapes','E-071 running head','E-107 cap','E-111 spill','following-heading','footnote/folio fusion']})
+lex=load(A/'evidence/lexical.json');cor=load(A/'evidence/corpus.json');print('Source PASS; lexical queries',len(lex['queries']),'master objects',len(lex['master_objects']),'corpus queries',len(cor['queries']),'unique corpus rows',len(cor['complete_records']),'physical fields6; register',len(reg),'direct matches',len(matches))
+for q in lex['queries']:
+ print(q['term'],'master',q['master_count'],[(lex['master_objects'][k]['entry'].get('hgm_gloss')or lex['master_objects'][k]['entry'].get('hgm_glosses'))for k in q['master_keys']])
+for q in cor['queries']:print(q['parameters'][0][:60],q['count'])

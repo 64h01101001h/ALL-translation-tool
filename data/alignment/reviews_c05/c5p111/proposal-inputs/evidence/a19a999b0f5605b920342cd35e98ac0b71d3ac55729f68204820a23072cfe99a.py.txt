@@ -1,0 +1,182 @@
+"""Author current reconciliation from explicitly selected, frozen original IDs."""
+import copy,hashlib,json,pathlib,shutil
+R=pathlib.Path(__file__).resolve().parents[1];Y=R.parent
+ORIGIN='daad5db6ea6207085dc820101b3a2e9aaf942417'
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+# Explicit English original ID -> final ID(s), in the verified complete original order.
+E_MAP={
+331:'w1 w2 w3 p1 w4 w5 p2 w6 f1 w7 w8 w9 p3 w10 w11 w12 w13 w14 w15 p4 w16 w17 w18 w19 w20 w21'.split(),
+332:'w1 w2 p1 w3 w4 f1 w5 w6 w7 w8 p2 w9 f2 p3 w10 w11 w12 w13 p4 w14 p5 w15 OMIT w16 w18 p6 f4 f5+w19'.split(),
+333:'w1 w2 w3 p1 w4 w5 w6 p2 w7 w8 w9 w10 w11 w12 p4 w13 w14 w15 p5 w16 p6 w17 f1 w18 w19 w20 p7 w22'.split()}
+REASONS={
+331:{
+'w1':'The established stealing compound owns initial stealing, where the English introduces the act; the later repeated subject description has no second source occurrence here.',
+'w2':'The sole sbyor ba owns the first quoted undertaking stage label. Stage is part of the attested technical equivalent; later English repetitions remain unwrapped.',
+'w3':'The first root is desire, governing the first coming-from-desire clause; it is not the following longing token.',
+'p1':'This source ablative is the first from after coming, within the desire root clause.',
+'w4':'Raw skyes ba is retained: the full HGM glossary explicitly includes coming, and comparison with later pa does not prove an error.',
+'w5':'First nor denotes the value of the desired object, matching first value. Supplied something of and the later resumptive it are not extra lexical pairs.',
+'p2':'la marks the object of longing, rendered for in longing for it; this relation is separate from the following sgo nas motive phrase.',
+'w6':'chags pa is the longing for the valuable object in this example; a is supplied and stays outside.',
+'f1':'The complete sgo nas idiom combines a lexical basis noun with an ablative and is represented by out of. Keep the complete idiom at d3; its grammatical function does not make the whole phrase a standalone d6 particle.',
+'w7':'The second stealing compound owns the first finite steal inside the desire example. The distinct later rku ba occurrences handle the enemy and Brahmin examples.',
+'w8':'This first lta bu is the example that introduces the desire undertaking. Pair only the actual example token, leaving An outside.',
+'w9':'The second root is dislike. The master zhe sdang record is only auto-aligned, medium confidence, 3 of 6 support; the current local root clause supports this provisional pair independently of promotion of that record.',
+'p3':'Second las belongs to comes from dislike; do not take the separate from your enemy phrase.',
+'w10':'Second skyes pa is comes in the dislike undertaking clause; the distinct later skyes pa is coming from ignorance.',
+'w11':'dgra bo is the enemy whose property is stolen. The English source relation from your is a recast of the larger noun construction, not a separate root las.',
+'w12':'Second nor owns second value in the enemy example, excluding the supplied something of.',
+'w13':'First rku ba owns the second finite steal, after the dislike example frame. It does not reuse the earlier ma byin par len pa token.',
+'w14':'Second lta bu is for example in the enemy example. This complete attested English example gesture includes for.',
+'w15':'The third root is ignorance, governing the final coming-from-ignorance undertaking description.',
+'p4':'The last root las owns from immediately before ignorance, not either preceding source relation.',
+'w16':'Last skyes pa is coming immediately before from ignorance, with its own source and English occurrence.',
+'w17':'bram ze names the Brahmin in the cited description; the explanatory subject/article when a remains unwrapped.',
+'w18':'Second rku ba owns steals in the Brahmin quotation. It is not the unrepresented repeated stealing label outside that quotation.',
+'w19':'chos owns religion in this quoted ignorance example. Curated C01 Dharma/phenomena and the glossary religion reading remain distinct evidence; this provisional local pair changes neither tier nor hgm_gloss.',
+'w20':'bshad is recast as the noun description introducing the quotation; the definite article is unclaimed.',
+'f2':'ces pa supplies the quoted-complement that after description. The complete quotative expression is kept at d3 without inventing a word-level say token.',
+'w21':'Final lta bu owns exemplified. Tighten the English proposal lta bu\'o to lexical lta bu; the terminal copula has no independently assigned exponent. The repeated An example before this clause stays unwrapped.'},
+332:{
+'w1':'The entire established sexual-misconduct term owns the initial Sexual misconduct only. The repeated subjects and quoted Sex are explanatory restatements, not additional source atoms.',
+'w2':'First root desire belongs to the initial comes-from clause, distinct from the example\'s lustful feelings.',
+'p1':'First las owns first from, relating the undertaking to desire.',
+'w3':'First skyes pa owns comes. The later skyes pa/born is a different occurrence and the third skyes pa/do recast remains uncertain.',
+'w4':'chags pa owns lustful feelings, an explicit HGM glossary equivalent and the motive in this local example, without the supplied sexual-activity explanation.',
+'f1':'The complete sgo nas basis-to-cause idiom owns because of at d3. A noun-plus-case idiom does not become a standalone d6 particle merely through its causal function.',
+'w5':'Retain the complete attested adverbial log par for wrong, recast as an adjective in some wrong kind of sexual activity. The rest of that explanatory phrase is unwrapped; no invented par/adverb English token.',
+'w6':'The first engagement verb owns engages. The later spyod pa/engaging belongs to the dislike example.',
+'w7':'First lta bu owns the complete for example gesture within the desire example; a case where is supplied framing.',
+'w8':'The second motivation is dislike. The master zhe sdang record remains auto-mined, not curated; the current source and clause support the provisional occurrence.',
+'p2':'Second las is from after born, not the ignorance clause\'s from.',
+'w9':'Second skyes pa owns born in born from dislike. No normalization or other predicate borrowing occurs.',
+'f2':'The complete gzhan sma dbab pa action owns harm someone else\'s reputation at d3. The glossary sma dbab pa/reputation omits the harming predicate if treated in isolation. Full TCS17:562–563 corroborate disgrace in different narratives, not independent copies of this sentence. The auto-derived gzhan master entry is not a curated other equivalent.',
+'p3':'The purpose expression phyir du relates the act to harming another\'s reputation and owns in order to, excluding the harm predicate itself.',
+'w10':'The whole intercourse compound owns sexual intercourse in the dislike example. Repeated sexual misconduct elsewhere is not its occurrence.',
+'w11':'spyod pa owns engaging immediately before sexual intercourse; in is an English construction element left unwrapped.',
+'w12':'The second lta bu example gesture owns represented by, an attested complete English realization in the local frame. Retaining by here expresses representation by the example; this is a different by from the later agentive kyis.',
+'w13':'gti mug owns ignorance in the third motivation clause. Source arising is broadly recast as that you do; the secure root remains bankable.',
+'p4':'Third las owns from preceding ignorance; the neighboring third skyes pa is omitted rather than forced into do.',
+'w14':'me tog owns flowers in the quoted shared-use analogy, without the article.',
+'p5':'The first list dang owns the sole and between flowers and fruits. Subsequent list junctions are represented by punctuation/repeated comparisons and remain unassigned.',
+'w15':'The concrete fruit term owns fruits. The added of the earth explanation remains outside.',
+'w16':'lam owns road in the last analogy item. The contextual public qualification has no separate source lexeme here.',
+'w17':'The single whole comparative word \'dra bas owns the first like as one representative rendering of the shared comparison over the full analogy list. All four English likes have that scope; the remaining three are unbanked repetitions. No causal -s is split off or assigned an invented English because.',
+'w18':'thams cad supplies everyone as the users in the quoted recommendation; together is not separately forced into it.',
+'p6':'Whole kyis marks the agents of the modal use/enjoyment predicate and owns by immediately before everyone. Rule 9 forbids splitting an agentive -s; it does not forbid whole kyis/by. No user action or new head allowance is required.',
+'f4':'Keep the whole bsten par bya\'o modal predicate at d3 for should be enjoyed. This local use/enjoyment construction governs the implicit quoted object Sex; it does not borrow enjoyed from the earlier food modifier merely because that glossary has the same English string.',
+'f5':'zhes pa owns statement that as the complete nominalized quotative at d3. This is separable from the following example expression; supplied in the is unwrapped.',
+'w19':'Final lexical lta bu owns typified. Splitting the English proposal\'s broad quotation-plus-example phrase preserves this clear lexical counterpart while leaving is and terminal \'o unassigned.'},
+333:{
+'w1':'The established mental-misdeed compound brnab sems owns Coveting, the first named member of the mental trio.',
+'w2':'sogs is the enumerative closing gesture, owning and the rest at d6. Rest alone at d5 misclassifies the function and drops part of its explicit English realization. Three misdeeds remains outside this particle span.',
+'w3':'yid owns thought as the mental domain of the first three misdeeds; the explanatory misdeeds head is not sourced by this noun.',
+'p1':'kyi marks the domain relation rendered of immediately before thought.',
+'w4':'First gsum counts the three mental misdeeds. It is distinct from the two later three-roots occurrences.',
+'w5':'First rtsa ba owns the first roots, introducing the origins of the mental misdeeds; of non-virtue is an explanatory qualification.',
+'w6':'Second gsum counts the first three roots; the later numeral belongs to their explicit restatement.',
+'p2':'First las is from after the first come, for the mental misdeeds arising from their roots.',
+'w7':'First skyes owns the first come predicated of the mental misdeeds, not the later virtues.',
+'w8':'Second rtsa ba owns roots in them--to these three roots, the explicit restatement of the referent.',
+'w9':'Take gsum alone for the third three occurrence. Nominal po stays unwrapped; it supplies no separate numeral meaning.',
+'w10':'The whole demonstrative de\'i owns them, referring to the already named three roots. The genitive participates in the temporal construction; no separate \'i exponent or unsupported null is asserted.',
+'w11':'The complete mjug thogs expression owns just subsequent: thogs contributes immediate adjacency, so just is part of the temporal meaning, not a supplied participant. The full HGM record has subsequent and the reference comparanda clarify immediacy without becoming GMR wording.',
+'p3':'The middle las participates in the temporal after/succession construction, locally recast as to after subsequent. The following root restatement repeats to but has no second source las.',
+'w12':'byung ba is occur in the reason clause about the mental misdeeds; the English they is supplied.',
+'p4':'phyir gives because, expressing the reason for the preceding statement without taking its supplied subject.',
+'w13':'dge ba denotes virtues in this karma commentary. The HGM glossary virtues is relevant here; curated prayer-register goodness remains intact and is not overwritten.',
+'w14':'bcu counts the ten virtues, not the three stages or the three roots.',
+'w15':'sbyor ba owns undertaking in the actual parenthesized stages list, with the whole technical unit retained.',
+'p5':'First stage-list dang owns and between undertaking and conclusion, not the earlier explanatory and here we consider.',
+'w16':'mjug owns conclusion as a named stage, distinct from the earlier mjug thogs temporal compound.',
+'p6':'Second stage-list dang owns as well as before actual commission, the second list coordinator.',
+'w17':'The complete technical dngos gzhi compound owns actual commission at d5. This does not authorize a new standalone gzhi/commission pair.',
+'m1':'The transparent dngos member owns actual within its unique dngos gzhi/actual commission parent at d7. One new exact read-only dngos query returned the complete HGM HTG2016 entry with actual, plus its full master glossary object. The reference comparanda remain distinct; no member for gzhi/commission is inferred.',
+'f1':'Keep complete dang bcas pa/with at d3: the comitative construction attaches the enumerated stages to the virtues. It is not bare lexical bcas and not a standalone d6 particle. The later possessing belongs to the root-negation clause and is not borrowed.',
+'w18':'chags owns desire as the first lexical stem under the single shared med. This does not assert that the virtues arise from positive desire; shared negative scope is recorded separately.',
+'w19':'sdang owns dislike as the second stem under shared med; no dislike is not invented as a separate Tibetan compound.',
+'w20':'gti mug owns ignorance as the third stem under the same med; negation is not restricted to this nearest stem.',
+'w21':'The single med has semantic scope over all three root names and is rendered three times as no. Bank it once at first no, the start of the English negative list; leave the other two no occurrences unbanked repetitions. This representative pair does not exhaust or narrow the shared scope and is not a null.',
+'p7':'Final las owns from after the second come, for the virtues arising from absence of the three afflictive roots.',
+'w22':'Final skyes pa owns the second come, whose subject is the ten virtues together with their stages.'}}
+FOOD='OMIT WITH UNCERTAINTY: the list position and zas food/meal suggest the banquet phrase, but raw g-yos has no exact lexical entry. The distinct g.yos record is awaiting HGM, with empty HGM gloss and motion/stir reference comparanda; it is not a cooking attestation. Complete legs par grub pa lists correctly proven/enjoyed, which is counterevidence, not permission to take enjoyed from later bsten par bya\'o. Neither narrower banquet ready nor broader banquet ready for the feast has a securely established local allocation on these witnesses. Leave both source and English food phrases unbanked, with no null, spelling correction, or claim that the source is absent.'
+OTHER={331:{
+('english',0):'CHANGE only ces pa in this grouped omission: ces pa/that is independently identifiable at d3. Retain ni, bound relational and predicative omissions without an absence/null claim.',
+('english',1):'Retain the omissions of repeated stage/act labels and example framing. Each Tibetan lexical occurrence is paired once in its own local clause.',
+('english',2):'Retain supplied framing and participants, including something of and the resumed it; these do not become additional lexical atoms.',
+('tibetan',0):'Retain the unassigned genitive, topic, predicative and terminal grammar; no false null is added.',
+('tibetan',1):'Retain supplied/repeated English framing and participants; nor is represented once at value, and the later it remains a resumption.'},332:{
+('english',0):'Retain third skyes pa/do as an uncertain recast, unbanked and not null.',
+('english',1):'Retain unresolved chu dogs and the pool image unbanked; identical C05/C16 copies and LC-only chu dong do not establish a correction.',
+('english',2):'CHANGE: whole comparative \'dra bas maps once to first like, with the whole list scope explicit and later three likes unbanked. Serial dang remains unassigned.',
+('english',3):'CHANGE the scope of the food omission: retain explanatory repetitions/qualifications. In addition, the complete banquet phrase is unbanked because its local allocation remains uncertain; do not label that whole phrase supplied.',
+('tibetan',0):'CHANGE: whole kyis/by is allowed and retained; the alleged standing policy prohibition is unsupported. Complete log par replaces log, so its par is not left outside. Other unassigned grammar/list junctions remain unbanked.',
+('tibetan',1):'Retain third skyes pa/do as uncertain, not null.',
+('tibetan',2):'Retain unresolved chu dogs/pool image, without inventing chu dong or treating its LC comparanda as GMR evidence.',
+('tibetan',3):'CHANGE both by observations: represented by is the second exemplar realization and whole kyis maps the by before everyone. Keep other explanatory material and later repeated likes unwrapped; preserve pool/food uncertainty rather than calling them supplied.'},333:{
+('english',0):'CHANGE: shared med maps once to first no, with all three negated roots explicitly preserved in scope; other no occurrences are repetitions, not missing Tibetan negatives.',
+('english',1):'Retain uncertain distributed rnams scope across virtues and stages. No isolated exponent or null is asserted.',
+('english',2):'CHANGE the middle las omission: retain its temporal to after subsequent. Keep ni, te, po and yin no unassigned.',
+('english',3):'Retain supplied/distributed framing and qualifications; none becomes a lexical head. Shared negative meaning remains explicit in the final rationale.',
+('tibetan',0):'Retain uncertain grammatical/distributed omissions, except the gsum nominal po is now also unwrapped after tightening the numeral.',
+('tibetan',1):'CHANGE: retain other explanatory English and repeated scope markers unwrapped; just is included in mjug thogs/just subsequent and full and the rest in sogs at d6.'}}
+NOTES={331:'Three motives for stealing are kept in their own clauses. sgo nas/out of is d3; ces pa/that is retained as a d3 quotative and final lta bu/exemplified is tightened. The quoted religion claim exemplifies ignorance. All expanded/repeated act labels stay outside. Raw skyes ba and source punctuation are preserved.',332:'sgo nas is d3; the reputational-harm action remains one d3 phrase. The entire banquet phrase and chu dogs/pool phrase remain uncertain and unbanked. Whole kyis/by is retained; first like represents the single comparative across the full list, with later likes unbanked. The food glossary enjoyed is not relocated. The final quotative and exemplar are separately paired; the quotation exemplifies ignorance.',333:'sogs/and the rest is d6; dang bcas pa/with is a complete d3 comitative, not bare bcas. mjug thogs owns just subsequent and middle las owns to. The single med is represented at first no while its scope covers all three roots. The sole d7 dngos/actual stays inside its technical parent; rnams remains uncertain and unbanked.'}
+source={r['seq']:r for r in read(Y/'source.json')}
+for seq in [331,332,333]:
+ D=R/str(seq);D.mkdir(exist_ok=True)
+ originals={a:read(Y/a/str(seq)/('decisions.json'if a=='english'else'original-decisions.json'))for a in ['english','tibetan']}
+ trows=originals['tibetan']['decisions']; final={}
+ for r in trows:
+  if seq==332 and r['original_span_id']=='f3':continue
+  final[r['original_span_id']]={'seq':seq,**copy.deepcopy(r['original_span']),**copy.deepcopy(r['intended_ranges'])}
+ edits={332:{'w5':{'tib':'log par','tib_range':[73,80]},'w12':{'eng':'represented by','eng_range':[201,215]}},333:{'w2':{'d':6,'eng':'and the rest','eng_range':[9,21]},'w9':{'tib':'gsum','tib_range':[67,71]},'w11':{'eng':'just subsequent','eng_range':[116,131]}}}
+ for sid,changes in edits.get(seq,{}).items():final[sid].update(changes)
+ if seq==332:final['p6']={'seq':seq,'id':'p6','d':6,'tib':'kyis','eng':'by','tib_range':[313,317],'eng_range':[393,395]}
+ rows=sorted(final.values(),key=lambda r:(r['tib_range'][0],r['d']==7))
+ assert set(final)==set(REASONS[seq]);assert all(source[seq]['wylie'][slice(*r['tib_range'])]==r['tib'] and source[seq]['english'][slice(*r['eng_range'])]==r['eng']for r in rows)
+ keys=['seq','id','d','tib','eng','tib_range','eng_range'];rows=[{k:r[k]for k in keys}for r in rows]
+ put(D/'intended-ranges.json',rows)
+ note='PROVISIONAL Codex reconciliation; independent semantic acceptance still required; no hgm_gloss promotion. '+NOTES[seq]+' Source/proposal origin is through324; no actual through330 acceptance baseline is yet supplied. C16 byte identity does not prove independent publication.'
+ spec={'course':'C05','segments':[{'seq':seq,'title':read(Y/'tibetan'/str(seq)/'spec.json')['segments'][0]['title'],'spans':[{k:r[k]for k in ['id','d','tib','eng']}for r in rows],'eng_order':[r['id']for r in sorted(rows,key=lambda r:r['eng_range'][0])if r['d']!=7],'note':note}]}
+ put(D/'spec.json',spec);put(D/'final-rationales.json',[{**r,'reason':REASONS[seq][r['id']]}for r in rows]);put(D/'errata.json',[])
+ dispositions=[]
+ for a in ['english','tibetan']:
+  ors=originals[a]['spans'if a=='english'else'decisions'];spans=read(Y/a/str(seq)/'spec.json')['segments'][0]['spans'];assert len(ors)==len(spans)
+  if a=='english':assert len(ors)==len(E_MAP[seq])
+  for i,(o,s)in enumerate(zip(ors,spans)):
+   sid=o['id']if a=='english'else o['original_span_id'];os={k:o[k]for k in ['id','d','tib','eng']}if a=='english'else o['original_span'];assert os==s and sid==s['id']
+   target=E_MAP[seq][i]if a=='english'else ('OMIT'if seq==332 and sid=='f3'else sid);ids=[]if target=='OMIT'else target.split('+');new=[final[k]for k in ids]
+   unchanged=len(new)==1 and all(os[k]==new[0][k]for k in ['d','tib','eng'])
+   status='OMIT'if not ids else'ACCEPT'if unchanged else'CHANGE'
+   reason=FOOD if not ids else' '.join(REASONS[seq][k]for k in ids)
+   dispositions.append({'seq':seq,'angle':a,'original_span_id':sid,'original':o,'original_spec_span':s,'decision':status,'final_ids':ids,'reason':reason})
+ put(D/'original-dispositions.json',dispositions)
+ other=[]
+ for a in ['english','tibetan']:
+  for i,o in enumerate(originals[a]['omissions']):
+   reason=OTHER[seq][a,i];other.append({'seq':seq,'angle':a,'field':'omissions','index':i,'original':o,'decision':'CHANGE'if reason.startswith('CHANGE')else'ACCEPT','reason':reason})
+  seg=read(Y/a/str(seq)/'spec.json')['segments'][0]
+  for field,original in [('spec.segments[0].note',seg['note']),('report.md',(Y/a/str(seq)/'report.md').read_text())]:other.append({'seq':seq,'angle':a,'field':field,'index':0,'original':original,'decision':'CHANGE','reason':NOTES[seq]+' Final native counts and acceptance state are reported independently; original results remain valid only for their frozen original specs.'})
+ put(D/'original-other-dispositions.json',other)
+ audit=[]
+ for a in ['english','tibetan']:
+  screen=read(Y/a/str(seq)/('errata-review.json'if a=='english'else'five-ground-screens.json'));rs=screen['categories']if a=='english'else screen
+  for i,o in enumerate(rs):
+   reason='No new source correction is established. Exact source/physical fields are preserved, complete C05/C16 copies are digitally identical without independently established publication, and the source-origin register has no batch duplicate. '+NOTES[seq]
+   if seq==332 and ((a=='english'and i==0)or(a=='tibetan'and i in [1,2])):reason+=' '+FOOD+' The pool correspondence also remains uncertain.'
+   audit.append({'seq':seq,'angle':a,'field':'errata-review.categories'if a=='english'else'five-ground-screens','index':i,'original':o,'decision':'ACCEPT_NO_NEW_ERRATUM_WITH_RECONCILED_LIMITS','reason':reason})
+  audit.append({'seq':seq,'angle':a,'field':'errata.json','index':0,'original':read(Y/a/str(seq)/'errata.json'),'decision':'ACCEPT','reason':'No source correction is established by the five-ground screens; uncertain correspondences remain omitted rather than silently corrected.'})
+ put(D/'errata-review.json',{'status':'RECONCILED_NOT_INDEPENDENTLY_ACCEPTED','source_origin_git_commit':ORIGIN,'original_screen_dispositions':audit,'new_errata':[],'decision_reason':NOTES[seq]+(' '+FOOD if seq==332 else'')})
+ omissions=[{'source':'original-other-dispositions.json','reason':'Complete explicit dispositions for every original omission, with their intact original values.'},{'source':'complete-unwrapped-extents.json','reason':'Mechanical complement of final native non-member ranges; an unwrapped interval is not itself evidence of source absence.'}]
+ if seq==331:omissions.extend([{'tib':'genitive/topic/predicative/final grammar','reason':'Unassigned where grammar is recast; no null/absence assertion.'},{'eng':'Repeated act/stage/example framing, something of, resumed it, from your, It\'s, when a','reason':'One source token is paired once; explanatory participants and repeated labels are unwrapped.'}])
+ if seq==332:omissions.extend([{'tib':'zas g-yos legs par grub pa','eng':'banquet ready for the feast','reason':FOOD},{'tib':'chu dogs','eng':'pool in the river','reason':'Exact phrase has no lexical entry; dogs has unrelated HGM readings, LC-only chu dong lacks HGM evidence, and identical C05/C16 copies do not establish a correction. Uncertain, not null or supplied.'},{'tib':'third skyes pa','eng':'do','reason':'Arising and doing are not secure standalone counterparts in this clause recast; omit with uncertainty.'},{'eng':'later three like occurrences','reason':'Repetitions of the single comparative over the full list; represented once by first like. No additional Tibetan comparatives invented.'},{'tib':'unassigned topic/genitive/final/list grammar','eng':'subject repetitions, kind of sexual activity, of the earth, public, together, Sex, framing is/in the','reason':'Expanded or distributed material with no secure individual exponent; source and English remain exact.'}])
+ if seq==333:omissions.extend([{'tib':'rnams','reason':'Scope/plurality is distributed across the ten virtues and the expanded stages clause. No isolated exponent or affirmative null is justified.'},{'eng':'second and third no; repeated to','reason':'Repeated renderings of shared med and the one temporal relation; first occurrences are banked with full scope retained.'},{'tib':'ni, te, po, yin no','eng':'misdeeds, of non-virtue, they, here we consider them, all their various stages, states of possessing, for something, for a thing, of things','reason':'Unassigned grammar and supplied/distributed explanation. Do not invent a bcas/possessing or gzhi/commission correspondence.'}])
+ put(D/'omissions.json',omissions)
+# Existing compact native mechanics: identical English canonical adapter, N loop with only sequence constants changed.
+shutil.copyfile(Y/'english/helpers/canonical.py',R/'helpers/native_adapter.py')
+src=Y.parent/'C05-325-327/reconciled/helpers/run_native.py';s=src.read_text();assert s.count('[325,326,327]')==1;(R/'helpers/run_native.py').write_text(s.replace('[325,326,327]','[331,332,333]'))
+put(R/'helpers/reuse.json',{'adapter':{'original':str(Y/'english/helpers/canonical.py'),**ident(Y/'english/helpers/canonical.py'),'change':'Byte-identical copy; same directory-depth contract, current role baseline copy.'},'native_recorder':{'original':str(src),**ident(src),'change':'Only fixed three-segment list changed from [325,326,327] to [331,332,333]. No resolver/generator logic changed.'}})
+put(R/'bank-ready-errata.json',[]);put(R/'span-head-allow-needed.json',{'pages_c05':{}})
+print('AUTHORED',[(s,len(read(R/str(s)/'intended-ranges.json')),len(read(R/str(s)/'original-dispositions.json')))for s in [331,332,333]])

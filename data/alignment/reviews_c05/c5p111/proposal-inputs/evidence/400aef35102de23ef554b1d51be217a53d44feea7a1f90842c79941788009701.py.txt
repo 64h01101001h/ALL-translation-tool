@@ -1,0 +1,21 @@
+"""Record six actual native executions; canonical matching remains unchanged."""
+from pathlib import Path
+import datetime,hashlib,json,os,subprocess,sys,time
+T=Path(__file__).resolve().parent;A=T.parents[1];W=T.parents[2]/'campaign-worktree'
+def ident(p):
+ b=p.read_bytes();return dict(path=str(p),bytes=len(b),sha256=hashlib.sha256(b).hexdigest())
+def execute(seq,kind,argv,raw):
+ D=T/str(seq)/('native-'+kind);D.mkdir(exist_ok=False);(D/'stdin.bin').write_bytes(raw)
+ record=dict(argv=argv,cwd=str(W),started_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),environment_overrides={'PYTHONDONTWRITEBYTECODE':'1','GIT_OPTIONAL_LOCKS':'0'},inherited_environment=True,stdin=ident(D/'stdin.bin'),caller=ident(Path(__file__)),canonical_generator=ident(W/'tools/gen_alignment_page.py'),canonical_builder_dependency=ident(W/'tools/build_alignment_layer.py'))
+ (D/'command.json').write_text(json.dumps(record,indent=2)+'\n');start=time.perf_counter()
+ p=subprocess.run(argv,cwd=W,env=dict(os.environ,PYTHONDONTWRITEBYTECODE='1',GIT_OPTIONAL_LOCKS='0'),input=raw,capture_output=True)
+ for name,data in [('stdout.bin',p.stdout),('stderr.bin',p.stderr),('exit.txt',(str(p.returncode)+'\n').encode())]:(D/name).write_bytes(data)
+ record.update(finished_at=datetime.datetime.now(datetime.timezone.utc).isoformat(),wall_seconds=time.perf_counter()-start,exit=p.returncode,stdout=ident(D/'stdout.bin'),stderr=ident(D/'stderr.bin'),exit_file=ident(D/'exit.txt'))
+ (D/'execution.json').write_text(json.dumps(record,indent=2)+'\n')
+ assert p.returncode==0 and p.stderr==b'',(seq,kind,p.returncode,p.stderr)
+ return p.stdout
+for seq in [331,332,333]:
+ D=T/str(seq);raw=(D/'spec.json').read_bytes()
+ html=execute(seq,'generator',[sys.executable,'-B',str(A/'run_generator_readonly.py')],raw);(D/'body.html').write_bytes(html)
+ ranges=execute(seq,'resolver',[sys.executable,'-B',str(T/'resolve.py')],raw);(D/'resolved-spans.json').write_bytes(ranges)
+ print(json.dumps(dict(seq=seq,generator_exit=0,resolver_exit=0,body_bytes=len(html),body_sha256=hashlib.sha256(html).hexdigest(),span_count=len(json.loads(ranges)))))

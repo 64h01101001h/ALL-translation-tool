@@ -1,0 +1,60 @@
+from pathlib import Path
+import json
+T=Path(__file__).resolve().parent
+sources={r['seq']:r for r in json.loads((T/'evidence/source.json').read_text())}
+data={
+331:dict(title='three motives for stealing', rows=[
+('w1',5,'ma byin par len pa','stealing'),('w2',5,'sbyor ba','"undertaking" stage'),
+('w3',5,"'dod chags",'desire'),('p1',6,'las','from'),('w4',5,'skyes ba','coming'),
+('w5',5,'nor','value'),('p2',6,'la','for'),('w6',5,'chags pa','longing'),('f1',3,'sgo nas','out of'),
+('w7',5,'ma byin par len pa','steal'),('w8',5,'lta bu','example'),
+('w9',5,'zhe sdang','dislike'),('p3',6,'las','from'),('w10',5,'skyes pa','comes'),
+('w11',5,'dgra bo','enemy'),('w12',5,'nor','value'),('w13',5,'rku ba','steal'),('w14',5,'lta bu','for example'),
+('w15',5,'gti mug','ignorance'),('p4',6,'las','from'),('w16',5,'skyes pa','coming'),
+('w17',5,'bram ze','Brahmin'),('w18',5,'rku ba','steals'),('w19',5,'chos','religion'),
+('w20',5,'bshad','description'),('f2',3,'ces pa','that'),('w21',5,'lta bu','exemplified')],
+order=['w1','w8','w2','w4','p1','w3','w7','w5','f1','w6','p2','w10','p3','w9','w14','w13','w12','w11','w16','p4','w15','w21','w20','f2','w19','w17','w18'],
+note="Codex Tibetan-first PROVISIONAL machine alignment; no hgm_gloss change. The two ma byin par len pa occurrences identify stealing and the first steal, while the two rku ba occurrences identify the enemy example's steal and the Brahmin quotation's steals. The sole sbyor ba owns the first technical undertaking label; later English repetitions are explanatory. nor owns value without the supplied something of, and the first nor is resumed by the unwrapped it after longing for. Source skyes ba is kept verbatim. The three motive relations use their own coming/comes and from; the additional from your enemy is not borrowed for the ignorance clause. Each lta bu takes its local example frame, with the last exemplified distinct from the supplied later An example. The quoted religion claim is an example of ignorance in this source, not an endorsement. C16:856 repeats ACIP, Wylie and English; publication independence is unestablished."),
+332:dict(title='motives and the quoted common-use analogy', rows=[
+('w1',5,"'dod pas log par g-yem pa",'Sexual misconduct'),('w2',5,"'dod chags",'desire'),('p1',6,'las','from'),('w3',5,'skyes pa','comes'),
+('w4',5,'chags pa','lustful feelings'),('f1',3,'sgo nas','because of'),('w5',5,'log','wrong'),('w6',5,"'jug pa",'engages'),('w7',5,'lta bu','for example'),
+('w8',5,'zhe sdang','dislike'),('p2',6,'las','from'),('w9',5,'skyes pa','born'),
+('f2',3,'gzhan sma dbab pa',"harm someone else's reputation"),('p3',6,'phyir du','in order to'),('w10',5,"'khrig pa",'sexual intercourse'),('w11',5,'spyod pa','engaging'),('w12',5,'lta bu','represented'),
+('w13',5,'gti mug','ignorance'),('p4',6,'las','from'),
+('w14',5,'me tog','flowers'),('p5',6,'dang','and'),('w15',5,"'bras bu",'fruits'),
+('f3',3,'zas g-yos legs par grub pa','banquet ready for the feast'),('w16',5,'lam','road'),('w17',5,"'dra bas",'like'),('w18',5,'thams cad','everyone'),
+('f4',3,"bsten par bya'o",'should be enjoyed'),('f5',3,'zhes pa','statement that'),('w19',5,'lta bu','typified')],
+order=['w1','w3','p1','w2','w7','w6','w5','f1','w4','w9','p2','w8','w12','w11','w10','p3','f2','p4','w13','w19','f5','f4','w18','w17','w14','p5','w15','f3','w16'],
+note="Codex Tibetan-first PROVISIONAL machine alignment; no hgm_gloss change. Only the initial full sexual-misconduct label is paired; repeated English subjects and the sexual-activity explanation remain unwrapped. The third skyes pa is omitted because do is a recast of the whole ignorance-based action, not a defensible birth/do word pair. Harm to another's reputation is retained as a complete phrase. The prepared-food expression is a phrase-level banquet recast: the glossary enjoyed under legs par grub pa does not authorize borrowing the later predicate from bsten par bya'o. chu dogs is preserved but omitted: its precise lexical analysis is unresolved, and the LC-only chu dong comparison does not establish a correction. Public, in the river and of the earth are unwrapped. The single shared comparison owns only the first like; repeated likes are left unwrapped. The modal predicate should be enjoyed is retained as a complete phrase, and the quote remains explicitly an example of ignorance. C16:857 repeats all three source fields without established publication independence."),
+333:dict(title='mental deeds and the roots of virtue', rows=[
+('w1',5,'brnab sems','Coveting'),('w2',5,'sogs','rest'),('w3',5,'yid','thought'),('p1',6,'kyi','of'),('w4',5,'gsum','three'),
+('w5',5,'rtsa ba','roots'),('w6',5,'gsum','three'),('p2',6,'las','from'),('w7',5,'skyes','come'),
+('w8',5,'rtsa ba','roots'),('w9',5,'gsum po','three'),('w10',5,"de'i",'them'),('w11',5,'mjug thogs','subsequent'),('p3',6,'las','to'),('w12',5,'byung ba','occur'),('p4',6,'phyir','because'),
+('w13',5,'dge ba','virtues'),('w14',5,'bcu','ten'),('w15',5,'sbyor ba','undertaking'),('p5',6,'dang','and'),('w16',5,'mjug','conclusion'),('p6',6,'dang','as well as'),
+('w17',5,'dngos gzhi','actual commission'),('m1',7,'dngos','actual'),('f1',3,'dang bcas pa','with'),
+('w18',5,'chags','desire'),('w19',5,'sdang','dislike'),('w20',5,'gti mug','ignorance'),('w21',5,'med','no'),('p7',6,'las','from'),('w22',5,'skyes pa','come')],
+order=['w1','w2','w4','p1','w3','w7','p2','w6','w5','p4','w12','w11','p3','w10','w9','w8','w14','w13','f1','w15','p5','w16','p6','w17','w22','p7','w21','w18','w19','w20'],
+note="Codex Tibetan-first PROVISIONAL machine alignment; no hgm_gloss change. The first three counts mental misdeeds; the next two threes and two roots belong to the root clauses. de'i owns them in subsequent to them, not the mental-deed subject they. sogs owns only rest, leaving the supplied head misdeeds unwrapped. The stages remain distinct: undertaking, conclusion and actual commission; dngos/actual stays inside the latter compound. dang bcas pa owns with in the virtues-with-stages phrase; it does not borrow possessing from the later description of absent afflictions. rnams has distributed plural force and is omitted rather than assigned to the narrower various stages or falsely nulled. The one med scopes over all three roots and is paired once at the first no; the later two English no repetitions remain unwrapped. The two come/from pairs concern mental misdeeds and virtues respectively. C16:858 repeats the source fields; this establishes no independent publication."),
+}
+intended=[]
+for seq,d in data.items():
+ D=T/str(seq);D.mkdir(exist_ok=True)
+ spans=[dict(id=id,d=depth,tib=tib,eng=eng) for id,depth,tib,eng in d['rows']]
+ seg=dict(seq=seq,title=d['title'],spans=spans,eng_order=d['order'],note=d['note'])
+ (D/'spec.json').write_text(json.dumps(dict(course='C05',segments=[seg]),ensure_ascii=False,indent=2)+'\n')
+ tr={};er={};cur=0;parent=None;source=sources[seq]
+ for s in spans:
+  if s['d']==7:i=source['wylie'].index(s['tib'],*parent)
+  else:
+   i=source['wylie'].index(s['tib'],cur);cur=i+len(s['tib'])
+   if s['d']==5:parent=(i,cur)
+  tr[s['id']]=[i,i+len(s['tib'])]
+ cur=0;byid={s['id']:s for s in spans}
+ for id in seg['eng_order']:
+  s=byid[id];i=source['english'].index(s['eng'],cur);cur=i+len(s['eng']);er[id]=[i,cur]
+  pos=spans.index(s)+1
+  while pos<len(spans) and spans[pos]['d']==7:
+   child=spans[pos];a=source['english'].index(child['eng'],i,cur);er[child['id']]=[a,a+len(child['eng'])];pos+=1
+ for s in spans:intended.append(dict(seq=seq,id=s['id'],d=s['d'],tib=s['tib'],eng=s['eng'],tib_range=tr[s['id']],eng_range=er[s['id']]))
+(T/'intended-ranges.json').write_text(json.dumps(intended,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({seq:len(d['rows']) for seq,d in data.items()}))

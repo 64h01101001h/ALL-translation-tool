@@ -1,0 +1,677 @@
+{
+  "queries": [
+    {
+      "term": "zas",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "zas",
+        "zas"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 16642,
+          "wylie": "zas",
+          "tibetan": "ཟས",
+          "tibetan_source": null,
+          "acip": "ZAS",
+          "pronunciation": "se",
+          "pronunciation_source": null,
+          "sanskrit": "{C,MV,MSA}āhāra; anna; {MSA}bhojana; {MSA}bhojya; {MSA}aśana; {LC}aśanaka; {LC}āmiṣa; {LC}kavalikāhāra,; {LC}sparśāhāra,; {LC}manaḥ-saṃcetanāhāra,; {LC}vijñānāhāra; {LC}odana; {LC}grāsa; {LC}tarpaṇa; {LC}piṇḍa; {LC}piṇḍaka; {LC}piṇḍapāta; {LC}piṇḍapātra; {LC}bhakta; {LC}paścādbhakta; {LC}bhaktika; {LC}bhakṣa; {LC}bhakṣaṇa; {LC}bhukti; {LC}andhas; {LC}abhyūṣa; {LC}aśita; {LC}indhana; {LC}kṣaya; {LC}ghāsa, jagdha, jagdhi; {LC}dravya; {LC}dhānya; {LC}jīrṇa dhānyam; {LC}bhakṣya; {LC}bhakṣyāt; {LC}bhukta??; {LC}bhokṣa; {LC}bhokṣya",
+          "hopkins_english": "food; sustenance; nourishment",
+          "hgm_gloss": "[\"meal\", \"food\", \"what they try to eat or drink\", \"sustenance\", \"having devoured\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 325,
+          "raw": "{\"tibetan\": \"ཟས\", \"wylie\": \"zas\", \"wylie_variants\": [\"zas\"], \"tenses\": null, \"sanskrit\": \"{C,MV,MSA}āhāra; anna; {MSA}bhojana; {MSA}bhojya; {MSA}aśana; {LC}aśanaka; {LC}āmiṣa; {LC}kavalikāhāra,; {LC}sparśāhāra,; {LC}manaḥ-saṃcetanāhāra,; {LC}vijñānāhāra; {LC}odana; {LC}grāsa; {LC}tarpaṇa; {LC}piṇḍa; {LC}piṇḍaka; {LC}piṇḍapāta; {LC}piṇḍapātra; {LC}bhakta; {LC}paścādbhakta; {LC}bhaktika; {LC}bhakṣa; {LC}bhakṣaṇa; {LC}bhukti; {LC}andhas; {LC}abhyūṣa; {LC}aśita; {LC}indhana; {LC}kṣaya; {LC}ghāsa, jagdha, jagdhi; {LC}dravya; {LC}dhānya; {LC}jīrṇa dhānyam; {LC}bhakṣya; {LC}bhakṣyāt; {LC}bhukta??; {LC}bhokṣa; {LC}bhokṣya\", \"hopkins_english\": \"food; sustenance; nourishment\", \"hgm_gloss\": [\"meal\", \"food\", \"what they try to eat or drink\", \"sustenance\", \"having devoured\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"se\", \"acip\": \"ZAS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 325}, \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:16641",
+        "glossary_entries:6315"
+      ]
+    },
+    {
+      "term": "g-yos",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "g-yos",
+        "g-yos"
+      ],
+      "spine_count": 0,
+      "spine_rows": [],
+      "master_count": 0,
+      "master_keys": []
+    },
+    {
+      "term": "g.yos",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "g.yos",
+        "g.yos"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 18223,
+          "wylie": "g.yos",
+          "tibetan": "གཡོས",
+          "tibetan_source": null,
+          "acip": "G.YOS",
+          "pronunciation": "g.yu",
+          "pronunciation_source": null,
+          "sanskrit": "g.yo/ g.yo/ g.yos/ g.yos/; {MSA}(√kamp): kampate; {C}pravicalati",
+          "hopkins_english": "move; fluctuate; stir; waver; remove; dissimulation; {C}shakes",
+          "hgm_gloss": null,
+          "tier": null,
+          "hgm_source": null,
+          "status": "awaiting-hgm-equivalent",
+          "tenses": "g.yo/ g.yo/ g.yos/ g.yos",
+          "flags": "[\"pronunciation-review\"]",
+          "corpus_courses": null,
+          "corpus_n_segments": null,
+          "raw": "{\"tibetan\": \"གཡོས\", \"wylie\": \"g.yos\", \"wylie_variants\": [\"g.yos\"], \"tenses\": \"g.yo/ g.yo/ g.yos/ g.yos\", \"sanskrit\": \"g.yo/ g.yo/ g.yos/ g.yos/; {MSA}(√kamp): kampate; {C}pravicalati\", \"hopkins_english\": \"move; fluctuate; stir; waver; remove; dissimulation; {C}shakes\", \"hgm_gloss\": [], \"hgm_evidence\": null, \"status\": \"awaiting-hgm-equivalent\", \"pronunciation\": \"g.yu\", \"acip\": \"G.YOS\", \"flags\": [\"pronunciation-review\"], \"hopkins_realigned\": \"uma-v26\"}"
+        }
+      ],
+      "master_count": 1,
+      "master_keys": [
+        "unified_entries:18222"
+      ]
+    },
+    {
+      "term": "dogs",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "dogs",
+        "dogs"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 8604,
+          "wylie": "dogs",
+          "tibetan": "དོགས",
+          "tibetan_source": null,
+          "acip": "DOGS",
+          "pronunciation": "dok",
+          "pronunciation_source": null,
+          "sanskrit": "{LCh}śaṃkā; {C}kāṅkṣati; {C}kāṅkṣā; {MSA}śoka; {LC}saṃdeha; {LC}abhiśaṅkayet; {LC}aśaṅkata; {LC}āśaṅke; {LC}kūla; {LC}śaṅkante; {LC}śaṅkita; {LC}śaṅke; {LC}saṃśaya; {LC}saṃkaṭa",
+          "hopkins_english": "qualm; fear; doubt; {C}hesitates; desires; doubts; hesitation",
+          "hgm_gloss": "[\"felt\", \"to suspect\", \"fears\", \"fear\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS12\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"]",
+          "corpus_n_segments": 159,
+          "raw": "{\"tibetan\": \"དོགས\", \"wylie\": \"dogs\", \"wylie_variants\": [\"dogs\"], \"tenses\": null, \"sanskrit\": \"{LCh}śaṃkā; {C}kāṅkṣati; {C}kāṅkṣā; {MSA}śoka; {LC}saṃdeha; {LC}abhiśaṅkayet; {LC}aśaṅkata; {LC}āśaṅke; {LC}kūla; {LC}śaṅkante; {LC}śaṅkita; {LC}śaṅke; {LC}saṃśaya; {LC}saṃkaṭa\", \"hopkins_english\": \"qualm; fear; doubt; {C}hesitates; desires; doubts; hesitation\", \"hgm_gloss\": [\"felt\", \"to suspect\", \"fears\", \"fear\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"dok\", \"acip\": \"DOGS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C10\", \"C11\", \"C12\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P5\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS06\", \"TCS07\", \"TCS09\", \"TCS10\", \"TCS12\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\"], \"n_segments\": 159}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:8603",
+        "glossary_entries:3452"
+      ]
+    },
+    {
+      "term": "thams cad",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "thams cad",
+        "thams cad"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 7339,
+          "wylie": "thams cad",
+          "tibetan": "ཐམས་ཅད",
+          "tibetan_source": null,
+          "acip": "THAMS CAD",
+          "pronunciation": "tamche",
+          "pronunciation_source": null,
+          "sanskrit": "{LCh,MSA,MV}sarva; {L} sarvatra; {MSA}sarvatva; {C}pṛthu; {C}sakala(m); {MSA}sakala; {LC}kṛtsna; {LC}yāvat; {LC}viśva; {LC}sarvi; {LC}apāyāḥ; {LC}ye kecit; {LC}sasyāni; {LC}teṣu ruteṣu; {LC}sarvataḥ; {LC}sarvamātra; {LC}sarvāṇi; {LC}sarve; {LC}sākalya",
+          "hopkins_english": "all; all places (everywhere); {C}many; long; very much; broad; vast; large; whole; everywhere; always",
+          "hgm_gloss": "[\"every\", \"all\", \"every single\", \"each and every\", \"every form of\", \"each of these\", \"every one of\", \"every ... every\", \"any\", \"every sort\", \"every one of them\", \"all of them\", \"anything\", \"everywhere\", \"always\", \"each\", \"entire\", \"every ... every ... every\", \"everyone\", \"every kind of\", \"all of\", \"at all\", \"everything\", \"those\", \"every one\", \"all things\", \"any of\", \"each and every one of\", \"all the other\", \"all the different kinds\", \"everything there is\", \"each and every knowable thing\", \"\\\"it all\\\"\", \"every existing thing\", \"every knowable thing\", \"world\", \"every kind of thing there is\", \"anyone\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 3128,
+          "raw": "{\"tibetan\": \"ཐམས་ཅད\", \"wylie\": \"thams cad\", \"wylie_variants\": [\"thams cad\"], \"tenses\": null, \"sanskrit\": \"{LCh,MSA,MV}sarva; {L} sarvatra; {MSA}sarvatva; {C}pṛthu; {C}sakala(m); {MSA}sakala; {LC}kṛtsna; {LC}yāvat; {LC}viśva; {LC}sarvi; {LC}apāyāḥ; {LC}ye kecit; {LC}sasyāni; {LC}teṣu ruteṣu; {LC}sarvataḥ; {LC}sarvamātra; {LC}sarvāṇi; {LC}sarve; {LC}sākalya\", \"hopkins_english\": \"all; all places (everywhere); {C}many; long; very much; broad; vast; large; whole; everywhere; always\", \"hgm_gloss\": [\"every\", \"all\", \"every single\", \"each and every\", \"every form of\", \"each of these\", \"every one of\", \"every ... every\", \"any\", \"every sort\", \"every one of them\", \"all of them\", \"anything\", \"everywhere\", \"always\", \"each\", \"entire\", \"every ... every ... every\", \"everyone\", \"every kind of\", \"all of\", \"at all\", \"everything\", \"those\", \"every one\", \"all things\", \"any of\", \"each and every one of\", \"all the other\", \"all the different kinds\", \"everything there is\", \"each and every knowable thing\", \"\\\"it all\\\"\", \"every existing thing\", \"every knowable thing\", \"world\", \"every kind of thing there is\", \"anyone\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tamche\", \"acip\": \"THAMS CAD\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 3128}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:7338",
+        "glossary_entries:2879"
+      ]
+    },
+    {
+      "term": "bsten pa",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "bsten pa",
+        "bsten pa"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 7166,
+          "wylie": "bsten pa",
+          "tibetan": "བསྟེན་པ",
+          "tibetan_source": null,
+          "acip": "BSTEN PA",
+          "pronunciation": "tenpa",
+          "pronunciation_source": "GMR card (C04 Language Study Guide)",
+          "sanskrit": "{C}sevate; {C}seva; {MSA}seva; {MV}asevana; {MSA}asevya; {MSA}nisevana; {C} sevana; {C}samstava; {C}bhajati; {MSA}bhajana; {LC}avaṣṭambhanatā; {LC}āśrita; {LC}sarvadoṣāstvadā-śritāḥ; {LC}āsevita; {LC}upanīta; {LC}niścita; {LC}niṣevaṇa; {LC}saṃgama; {LC}saṃbhajana; {LC}sevamāna; {LC}sevā; {LC}sevyate; {LC}evaṃ tasyāpi tatsaṃgāt tenārthasamāgamaḥ; {LC}abhyāsa; {LC}avalambin; {LC}āśraya; {LC}āśrayat; {LC}āsevamāna; {LC}!!juṣ; {LC}juṣṭa; {LC}niṣevita; {LC}bhajate; {LC}bhajante; {LC}!!bhāk; {LC}!!śīlin; {LC}śuśrūṣā, śraya; {LC}śrita; {LC}saṃvāhana; {LC}pādasaṃvāhana; {LC}saṃśraya; {LC}saṃjuṣ; {LC}samāśraya; {LC}jinasevā; {LC}sevita",
+          "hopkins_english": "rely on; adhere to; use; to make use of; stay close to; {C}tending; cultivation; use; tend; resort to; serve upon; placate; intimacy; familiarity; loves; attends upon",
+          "hgm_gloss": "[\"keep a high level of\", \"spending time\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": "bsten sten bstend stend",
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C14\", \"C16\", \"C17\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"P1\", \"P5\", \"P6\", \"SOS\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 102,
+          "raw": "{\"tibetan\": \"བསྟེན་པ\", \"wylie\": \"bsten pa\", \"wylie_variants\": [\"bsten pa\"], \"tenses\": \"bsten sten bstend stend\", \"sanskrit\": \"{C}sevate; {C}seva; {MSA}seva; {MV}asevana; {MSA}asevya; {MSA}nisevana; {C} sevana; {C}samstava; {C}bhajati; {MSA}bhajana; {LC}avaṣṭambhanatā; {LC}āśrita; {LC}sarvadoṣāstvadā-śritāḥ; {LC}āsevita; {LC}upanīta; {LC}niścita; {LC}niṣevaṇa; {LC}saṃgama; {LC}saṃbhajana; {LC}sevamāna; {LC}sevā; {LC}sevyate; {LC}evaṃ tasyāpi tatsaṃgāt tenārthasamāgamaḥ; {LC}abhyāsa; {LC}avalambin; {LC}āśraya; {LC}āśrayat; {LC}āsevamāna; {LC}!!juṣ; {LC}juṣṭa; {LC}niṣevita; {LC}bhajate; {LC}bhajante; {LC}!!bhāk; {LC}!!śīlin; {LC}śuśrūṣā, śraya; {LC}śrita; {LC}saṃvāhana; {LC}pādasaṃvāhana; {LC}saṃśraya; {LC}saṃjuṣ; {LC}samāśraya; {LC}jinasevā; {LC}sevita\", \"hopkins_english\": \"rely on; adhere to; use; to make use of; stay close to; {C}tending; cultivation; use; tend; resort to; serve upon; placate; intimacy; familiarity; loves; attends upon\", \"hgm_gloss\": [\"keep a high level of\", \"spending time\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"tenpa\", \"acip\": \"BSTEN PA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C14\", \"C16\", \"C17\", \"DDA\", \"EM\", \"GIE\", \"ILL\", \"P1\", \"P5\", \"P6\", \"SOS\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 102}, \"pronunciation_source\": \"GMR card (C04 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:7165",
+        "glossary_entries:2821"
+      ]
+    }
+  ],
+  "master_objects": {
+    "unified_entries:16641": {
+      "collection": "unified_entries",
+      "index": 16641,
+      "entry": {
+        "tibetan": "ཟས",
+        "wylie": "zas",
+        "wylie_variants": [
+          "zas"
+        ],
+        "tenses": null,
+        "sanskrit": "{C,MV,MSA}āhāra; anna; {MSA}bhojana; {MSA}bhojya; {MSA}aśana; {LC}aśanaka; {LC}āmiṣa; {LC}kavalikāhāra,; {LC}sparśāhāra,; {LC}manaḥ-saṃcetanāhāra,; {LC}vijñānāhāra; {LC}odana; {LC}grāsa; {LC}tarpaṇa; {LC}piṇḍa; {LC}piṇḍaka; {LC}piṇḍapāta; {LC}piṇḍapātra; {LC}bhakta; {LC}paścādbhakta; {LC}bhaktika; {LC}bhakṣa; {LC}bhakṣaṇa; {LC}bhukti; {LC}andhas; {LC}abhyūṣa; {LC}aśita; {LC}indhana; {LC}kṣaya; {LC}ghāsa, jagdha, jagdhi; {LC}dravya; {LC}dhānya; {LC}jīrṇa dhānyam; {LC}bhakṣya; {LC}bhakṣyāt; {LC}bhukta??; {LC}bhokṣa; {LC}bhokṣya",
+        "hopkins_english": "food; sustenance; nourishment",
+        "hgm_gloss": [
+          "meal",
+          "food",
+          "what they try to eat or drink",
+          "sustenance",
+          "having devoured"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "se",
+        "acip": "ZAS",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "ILL",
+            "MB2",
+            "P1",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 325
+        },
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:6315": {
+      "collection": "glossary_entries",
+      "index": 6315,
+      "entry": {
+        "acip": "ZAS",
+        "wylie": "zas",
+        "tibetan": "ཟས",
+        "hgm_glosses": [
+          "meal",
+          "food",
+          "what they try to eat or drink",
+          "sustenance",
+          "having devoured"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:18222": {
+      "collection": "unified_entries",
+      "index": 18222,
+      "entry": {
+        "tibetan": "གཡོས",
+        "wylie": "g.yos",
+        "wylie_variants": [
+          "g.yos"
+        ],
+        "tenses": "g.yo/ g.yo/ g.yos/ g.yos",
+        "sanskrit": "g.yo/ g.yo/ g.yos/ g.yos/; {MSA}(√kamp): kampate; {C}pravicalati",
+        "hopkins_english": "move; fluctuate; stir; waver; remove; dissimulation; {C}shakes",
+        "hgm_gloss": [],
+        "hgm_evidence": null,
+        "status": "awaiting-hgm-equivalent",
+        "pronunciation": "g.yu",
+        "acip": "G.YOS",
+        "flags": [
+          "pronunciation-review"
+        ],
+        "hopkins_realigned": "uma-v26"
+      }
+    },
+    "unified_entries:8603": {
+      "collection": "unified_entries",
+      "index": 8603,
+      "entry": {
+        "tibetan": "དོགས",
+        "wylie": "dogs",
+        "wylie_variants": [
+          "dogs"
+        ],
+        "tenses": null,
+        "sanskrit": "{LCh}śaṃkā; {C}kāṅkṣati; {C}kāṅkṣā; {MSA}śoka; {LC}saṃdeha; {LC}abhiśaṅkayet; {LC}aśaṅkata; {LC}āśaṅke; {LC}kūla; {LC}śaṅkante; {LC}śaṅkita; {LC}śaṅke; {LC}saṃśaya; {LC}saṃkaṭa",
+        "hopkins_english": "qualm; fear; doubt; {C}hesitates; desires; doubts; hesitation",
+        "hgm_gloss": [
+          "felt",
+          "to suspect",
+          "fears",
+          "fear"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "dok",
+        "acip": "DOGS",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C10",
+            "C11",
+            "C12",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P5",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS06",
+            "TCS07",
+            "TCS09",
+            "TCS10",
+            "TCS12",
+            "TCS13",
+            "TCS15",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary"
+          ],
+          "n_segments": 159
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:3452": {
+      "collection": "glossary_entries",
+      "index": 3452,
+      "entry": {
+        "acip": "DOGS",
+        "wylie": "dogs",
+        "tibetan": "དོགས",
+        "hgm_glosses": [
+          "felt",
+          "to suspect",
+          "fears",
+          "fear"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:7338": {
+      "collection": "unified_entries",
+      "index": 7338,
+      "entry": {
+        "tibetan": "ཐམས་ཅད",
+        "wylie": "thams cad",
+        "wylie_variants": [
+          "thams cad"
+        ],
+        "tenses": null,
+        "sanskrit": "{LCh,MSA,MV}sarva; {L} sarvatra; {MSA}sarvatva; {C}pṛthu; {C}sakala(m); {MSA}sakala; {LC}kṛtsna; {LC}yāvat; {LC}viśva; {LC}sarvi; {LC}apāyāḥ; {LC}ye kecit; {LC}sasyāni; {LC}teṣu ruteṣu; {LC}sarvataḥ; {LC}sarvamātra; {LC}sarvāṇi; {LC}sarve; {LC}sākalya",
+        "hopkins_english": "all; all places (everywhere); {C}many; long; very much; broad; vast; large; whole; everywhere; always",
+        "hgm_gloss": [
+          "every",
+          "all",
+          "every single",
+          "each and every",
+          "every form of",
+          "each of these",
+          "every one of",
+          "every ... every",
+          "any",
+          "every sort",
+          "every one of them",
+          "all of them",
+          "anything",
+          "everywhere",
+          "always",
+          "each",
+          "entire",
+          "every ... every ... every",
+          "everyone",
+          "every kind of",
+          "all of",
+          "at all",
+          "everything",
+          "those",
+          "every one",
+          "all things",
+          "any of",
+          "each and every one of",
+          "all the other",
+          "all the different kinds",
+          "everything there is",
+          "each and every knowable thing",
+          "\"it all\"",
+          "every existing thing",
+          "every knowable thing",
+          "world",
+          "every kind of thing there is",
+          "anyone"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "tamche",
+        "acip": "THAMS CAD",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "P8",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaSadhana",
+            "TCS08NaropaTrials1_12",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 3128
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:2879": {
+      "collection": "glossary_entries",
+      "index": 2879,
+      "entry": {
+        "acip": "THAMS CAD",
+        "wylie": "thams cad",
+        "tibetan": "ཐམས་ཅད",
+        "hgm_glosses": [
+          "every",
+          "all",
+          "every single",
+          "each and every",
+          "every form of",
+          "each of these",
+          "every one of",
+          "every ... every",
+          "any",
+          "every sort",
+          "every one of them",
+          "all of them",
+          "anything",
+          "everywhere",
+          "always",
+          "each",
+          "entire",
+          "every ... every ... every",
+          "everyone",
+          "every kind of",
+          "all of",
+          "at all",
+          "everything",
+          "those",
+          "every one",
+          "all things",
+          "any of",
+          "each and every one of",
+          "all the other",
+          "all the different kinds",
+          "everything there is",
+          "each and every knowable thing",
+          "\"it all\"",
+          "every existing thing",
+          "every knowable thing",
+          "world",
+          "every kind of thing there is",
+          "anyone"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:7165": {
+      "collection": "unified_entries",
+      "index": 7165,
+      "entry": {
+        "tibetan": "བསྟེན་པ",
+        "wylie": "bsten pa",
+        "wylie_variants": [
+          "bsten pa"
+        ],
+        "tenses": "bsten sten bstend stend",
+        "sanskrit": "{C}sevate; {C}seva; {MSA}seva; {MV}asevana; {MSA}asevya; {MSA}nisevana; {C} sevana; {C}samstava; {C}bhajati; {MSA}bhajana; {LC}avaṣṭambhanatā; {LC}āśrita; {LC}sarvadoṣāstvadā-śritāḥ; {LC}āsevita; {LC}upanīta; {LC}niścita; {LC}niṣevaṇa; {LC}saṃgama; {LC}saṃbhajana; {LC}sevamāna; {LC}sevā; {LC}sevyate; {LC}evaṃ tasyāpi tatsaṃgāt tenārthasamāgamaḥ; {LC}abhyāsa; {LC}avalambin; {LC}āśraya; {LC}āśrayat; {LC}āsevamāna; {LC}!!juṣ; {LC}juṣṭa; {LC}niṣevita; {LC}bhajate; {LC}bhajante; {LC}!!bhāk; {LC}!!śīlin; {LC}śuśrūṣā, śraya; {LC}śrita; {LC}saṃvāhana; {LC}pādasaṃvāhana; {LC}saṃśraya; {LC}saṃjuṣ; {LC}samāśraya; {LC}jinasevā; {LC}sevita",
+        "hopkins_english": "rely on; adhere to; use; to make use of; stay close to; {C}tending; cultivation; use; tend; resort to; serve upon; placate; intimacy; familiarity; loves; attends upon",
+        "hgm_gloss": [
+          "keep a high level of",
+          "spending time"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "tenpa",
+        "acip": "BSTEN PA",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C14",
+            "C16",
+            "C17",
+            "DDA",
+            "EM",
+            "GIE",
+            "ILL",
+            "P1",
+            "P5",
+            "P6",
+            "SOS",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08SourceOfAllMyGood",
+            "TCS09",
+            "TCS10",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 102
+        },
+        "pronunciation_source": "GMR card (C04 Language Study Guide)",
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:2821": {
+      "collection": "glossary_entries",
+      "index": 2821,
+      "entry": {
+        "acip": "BSTEN PA",
+        "wylie": "bsten pa",
+        "tibetan": "བསྟེན་པ",
+        "hgm_glosses": [
+          "keep a high level of",
+          "spending time"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    }
+  }
+}

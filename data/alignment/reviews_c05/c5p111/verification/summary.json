@@ -1,0 +1,319 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-14T23:58:45.586983+00:00",
+  "page": 111,
+  "segments": [
+    331,
+    332,
+    333
+  ],
+  "semantic_review": {
+    "schema": "c05-independent-semantic-review-v1",
+    "verdict": "APPROVE",
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "open_findings": [],
+    "source_origin_git_commit": "daad5db6ea6207085dc820101b3a2e9aaf942417",
+    "source_origin_accepted_through": 324,
+    "later_supplied_acceptance_baseline": "9e6e7a5e278a109b7cf7d171410073cb8a0051d2",
+    "later_baseline_accepted_through": 330,
+    "source_role_note": "The original proposals and frozen reconciliation truthfully recorded a pending through330 baseline. The actual later baseline was supplied after F closed and independently checked. Source origin remains through324; exact frozen specs/bodies/reports retain their original timing statements. This review supplies the later factual acceptance context without rewriting those artifacts.",
+    "reconciliation_freeze_sha256": "1a96bca03438486638fa7c0dc5fe4210d09e807644477e1acc2009643e27ba80",
+    "total_spans": 87,
+    "total_nulls": 0,
+    "total_word_pairs": 61,
+    "total_d7": 1,
+    "segments": [
+      {
+        "seq": 331,
+        "span_count": 27,
+        "null_count": 0,
+        "word_pair_count": 21,
+        "d7_count": 0,
+        "spec_bytes": 4287,
+        "spec_sha256": "a3d1beedccf1bbf27ac197536ccbe3f76b8a6baf6490be5ca7ae79964273546c",
+        "body_bytes": 4420,
+        "body_sha256": "a16c3e7a96b0410d4226858ba0f49d984db92481dc90a8d2558d8825cb500d69",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "spec_path": "reviewed-final/331/spec.json",
+        "body_path": "reviewed-final/331/body.html",
+        "report_path": "reviewed-final/331/report.md",
+        "errata_path": "reviewed-final/331/errata.json",
+        "errata_count": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/331-generator-v1/execution.json",
+            "stdin": "native/reconciled/331-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/331-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/331-generator-v1/stderr.bin",
+            "exit": "native/reconciled/331-generator-v1/exit.txt"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/331-resolver-v1/execution.json",
+            "stdin": "native/reconciled/331-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/331-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/331-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/331-resolver-v1/exit.txt"
+          }
+        },
+        "native_generator_path": "native/reconciled/331-generator-v1",
+        "native_resolver_path": "native/reconciled/331-resolver-v1"
+      },
+      {
+        "seq": 332,
+        "span_count": 29,
+        "null_count": 0,
+        "word_pair_count": 19,
+        "d7_count": 0,
+        "spec_bytes": 4746,
+        "spec_sha256": "7b32fc4f87c1624f1d58b1a52a63e3db3928f89766ffb27b81d02e3f7aa6b2aa",
+        "body_bytes": 4934,
+        "body_sha256": "c1db6e6d28dba24097628723d3e3c6572711bc811e4a2648b055e093bbc78fe5",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "spec_path": "reviewed-final/332/spec.json",
+        "body_path": "reviewed-final/332/body.html",
+        "report_path": "reviewed-final/332/report.md",
+        "errata_path": "reviewed-final/332/errata.json",
+        "errata_count": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/332-generator-v1/execution.json",
+            "stdin": "native/reconciled/332-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/332-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/332-generator-v1/stderr.bin",
+            "exit": "native/reconciled/332-generator-v1/exit.txt"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/332-resolver-v1/execution.json",
+            "stdin": "native/reconciled/332-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/332-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/332-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/332-resolver-v1/exit.txt"
+          }
+        },
+        "native_generator_path": "native/reconciled/332-generator-v1",
+        "native_resolver_path": "native/reconciled/332-resolver-v1"
+      },
+      {
+        "seq": 333,
+        "span_count": 31,
+        "null_count": 0,
+        "word_pair_count": 21,
+        "d7_count": 1,
+        "spec_bytes": 4758,
+        "spec_sha256": "ba1da4026bcb558faddc4dd9f9dbd2e8907f2b9a2271e9f58ed30e231444b23e",
+        "body_bytes": 4731,
+        "body_sha256": "5c6aa7f2e81164d818ad2d4eee851341f0cb9a14b6979d463e5f4572eddb95b9",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "spec_path": "reviewed-final/333/spec.json",
+        "body_path": "reviewed-final/333/body.html",
+        "report_path": "reviewed-final/333/report.md",
+        "errata_path": "reviewed-final/333/errata.json",
+        "errata_count": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/333-generator-v1/execution.json",
+            "stdin": "native/reconciled/333-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/333-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/333-generator-v1/stderr.bin",
+            "exit": "native/reconciled/333-generator-v1/exit.txt"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/333-resolver-v1/execution.json",
+            "stdin": "native/reconciled/333-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/333-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/333-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/333-resolver-v1/exit.txt"
+          }
+        },
+        "native_generator_path": "native/reconciled/333-generator-v1",
+        "native_resolver_path": "native/reconciled/333-resolver-v1"
+      }
+    ],
+    "producer": "Codex independent semantic skeptic /root/c05_325_327_skeptic",
+    "review_scope": "C05:331–333. Independent source and complete materially relevant original evidence reading preceded frozen reconciliation review. Every original keyed span, grouped observation, source screen, final span and uncertain omission was considered.",
+    "provisional_status": "PROVISIONAL machine alignment; no human source correction, hgm_gloss promotion or root landing is claimed.",
+    "original_proposal_freezes": {
+      "tibetan": "68ba292470e88c4c96e07ba55e9f321203d2ae90e99bf367e86cabb39477aaba",
+      "english": "b0fe6e2e574b68d2c632470cf98848c34bd8325424b64f252d9d853d66cefe76"
+    },
+    "span_semantic_review": "span-semantic-review.json",
+    "omission_semantic_review": "omission-semantic-review.json",
+    "omission_count": 16,
+    "original_span_proposals_considered": 169,
+    "original_grouped_dispositions_reviewed": 31,
+    "original_screen_dispositions_reviewed": 23,
+    "source_reading_receipt": "source-reading-receipt.json",
+    "resolved_spans": "resolved-spans.json",
+    "copy_manifest": "original-to-copy-manifest.json",
+    "resolved_findings": "findings-resolved.json",
+    "mechanical_identity_evidence": {
+      "source_verification": "source-verification-native/execution.json",
+      "frozen_reconciliation_identity": "final-verification-native/execution.json",
+      "completed_final_evidence_copy": "final-copy-native/execution.json",
+      "preserved_copy_failure": "copy-attempt01-failure.json",
+      "identity_results": "final-identity-results.json",
+      "completed_package_validation": "package-validation-native/execution.json"
+    },
+    "native_reuse": {
+      "verified_unchanged_generations": 3,
+      "verified_unchanged_canonical_resolutions": 3,
+      "new_generator_runs": 0,
+      "new_resolver_runs": 0,
+      "basis": "Every final generator/resolver stdin equals its exact final spec, every generator stdout equals its body, and every resolver stdout equals the canonical range list. All six final captures exited0 with empty stderr. The six original generations and six original resolutions were already verified by source-verification-native."
+    },
+    "semantic_limits": [
+      "Each source token is represented once within its own clause. Shared med and comparative meanings keep their full coordinated scope even when English repeats the rendering.",
+      "Both proposed banquet spans, chu dogs/pool, third skyes pa/do and rnams remain explicitly uncertain omissions, with no null or reconstructed source wording.",
+      "dngos/actual is a transparent member of actual commission supported by complete separate master records; no gzhi/commission member is inferred.",
+      "Reference comparanda, curated entries, HGM glossary and mined evidence remain distinct. Neither dictionary bytes nor GMR/source wording were altered.",
+      "Reconciler pre-native disposition corrections and packaging exit1/exit0, original English physical-line failure, and the skeptic first copy-helper failure remain preserved.",
+      "Root must independently accept and land. This role made no W/source/main writes, paid API, publication or account action."
+    ],
+    "errata_count": 0,
+    "errata_verdicts": "errata-verdicts.json",
+    "bank_ready_errata": "bank-ready-errata.json",
+    "errata_route": "EXISTING_EMPTY_POLICY_PATH",
+    "span_head_allow_needed": "span-head-allow-needed.json",
+    "span_head_allow_additions": 0,
+    "review_utc": "2026-09-14T23:46:31.267889+00:00"
+  },
+  "fidelity_tests": {
+    "passed": 17,
+    "failed": 0,
+    "execution": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "../campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+        "-R",
+        "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+        "--output-on-failure"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-14T23:57:12.461946+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-14T23:57:23.321741+00:00",
+      "wall_seconds": 10.85936737479642,
+      "exit": 0,
+      "stdout_bytes": 2166,
+      "stderr_bytes": 0,
+      "stdout_sha256": "658323c4fc775c01d41c299c36d5a5ab4343eaa6fe2f6a6d46b2ef707d17c2a5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retention": {
+    "baseline_commit": "9e6e7a5e278a109b7cf7d171410073cb8a0051d2",
+    "page": "c5p111",
+    "segments": [
+      331,
+      332,
+      333
+    ],
+    "prior_links_retained": 47067,
+    "added_links": 90,
+    "added_by_segment": {
+      "331": 28,
+      "332": 30,
+      "333": 32
+    },
+    "reviewed_analyst_spans": 87,
+    "full_links": 47157,
+    "null_exponents": 11982,
+    "evidence_headwords": 7169,
+    "evidence_pairs": 15882,
+    "prior_notes_trees_evidence_and_acip_retained": true,
+    "prior_csv_rows_retained": 23048,
+    "current_csv_rows": 23085,
+    "prior_csv_content_and_references_retained": true,
+    "csv_acip_enrichments_from_newly_banked_source": [
+      {
+        "key": [
+          "translation",
+          "7",
+          "log par",
+          "mistaken"
+        ],
+        "acip": "LOG PAR",
+        "new_source_refs": [
+          "C05:332"
+        ]
+      }
+    ],
+    "source_hashes_unchanged": true,
+    "review_tuples_and_source_ranges_match": true,
+    "navigation_targets_exist": true,
+    "rendering_verified": false
+  },
+  "course_csv": {
+    "baseline_commit": "9e6e7a5e278a109b7cf7d171410073cb8a0051d2",
+    "prior_course_depth_groups_retained": 24696,
+    "current_course_depth_groups": 24736,
+    "all_depths_counts_and_metadata_match_main_csv_refs": true,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": "39a35b3804754a1fa4c64b014ee4d39222c8da943cd137655df3a0036a4ac791"
+  },
+  "reproduction_outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 10306497,
+      "sha256": "628dba6f6089bbdb3b6dc4973dc0e1a4fa5f2fd5d47dd029d47451523956e062",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2254092,
+      "sha256": "4b309103004c8323fd94daa567b9e6b302bfb738c2e46df045843d386c485e65",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2267305,
+      "sha256": "60db51ddc4e92007cec6bca0b9c3e56fea8a2cab4e60a200bda347fb89f5ac6d",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16647482,
+      "sha256": "0e42efd56548f1024bb04c3e9e0faad16e9ad19d5193fe25a74d2583dd355040",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5381358,
+      "sha256": "429f3ae3f1b8bb30e466be4edcc2e21a109cc4c45227378d1a30b16f1669757d",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5305791,
+      "sha256": "39a35b3804754a1fa4c64b014ee4d39222c8da943cd137655df3a0036a4ac791",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 6754,
+      "sha256": "52fe43304bd49f4f3f4bdc35a7b5176f427218dd817fcc73544e7dc1d94aa7ca",
+      "complete_bytes_equal": true
+    }
+  ],
+  "archive": {
+    "file": "native-evidence.tar.gz",
+    "members": 157,
+    "bytes": 169946,
+    "sha256": "84ca9c10d1274b0dee1ac893aab4fffb53ba16eb3bccab486cb3fa1308164a80"
+  },
+  "external_reproduction_inputs": "/Volumes/Oct2024(8TB)/Codex-ACI-Alignment-20260915-01a09398/compact-reproduction-through333",
+  "seed_retention": "Actual incoming CSV seed is retained externally and byte-bound to baseline Git CSV; not redundantly copied into this archive.",
+  "integration_limits": "Isolated desktop-consumable outputs only. MAIN remains OPEN_NO_APPLICATION. Private phone pack FAILED_UNACCEPTED for four inherited C01 mappings; no install. Installed through171 unchanged. External evidence drive required.",
+  "later_proofs": "Staging/whitespace/commit/checkpoint evidence follows separately; it is not claimed to be an input to its own earlier archive."
+}

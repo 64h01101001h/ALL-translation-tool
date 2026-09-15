@@ -1,0 +1,10 @@
+{
+  "status": "ACTUAL_FAILED_COPY_CALL_PRESERVED",
+  "command_kind": "direct exec_command Python heredoc, not a native recorder invocation",
+  "exit": 1,
+  "failure": "copy_evidence_once_v2.preserve raised AssertionError: Preserve changed originals as explicit historical versions",
+  "cause": "Required per-segment copies preseeded the manifest with different destinations for equal bytes; passing those originals again made the content-dedup helper choose its first equal-content destination and reject the changed copy field. Original bytes were unchanged.",
+  "correction": "Keep every required exact copy and its existing record; invoke the helper only for original paths not already recorded. This changes no source, final spec, body, rationale or native result.",
+  "native_stderr_available": false,
+  "scope": "The actual helper command output was returned by exec_command. No separate native streams were captured for this first copy attempt."
+}
