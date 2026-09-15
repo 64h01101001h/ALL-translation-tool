@@ -3,12 +3,12 @@
 *Added 2026-09-09 at Adam's request: "a bank of previously used idioms, and a way of adding new ones to the idiom register that need to be approved by Geshe Michael. Idioms can be big in our translation group — I feel like Geshe Michael uses them a lot." Files: `core/include/allcore/idioms.h`, `core/src/idioms.cpp`, `core/tests/idioms_smoke.cpp` (17 checks), `app/idioms.inc`; data `data/idioms/idioms.json` (shipped seed, started 2026-08-10) and `<dataRoot>/library/idioms.json` (the team register).*
 
 ## 1. Justification (steelman before test)
-An idiom is the one thing a word-by-word reader gets exactly wrong. The group's English is Geshe Michael's, and he uses fixed expressions heavily, so two questions come up daily: is this string an idiom, and how has he rendered it before? Both were answered from memory. The register answers the first and the corpus answers the second.
+An idiom is the one thing a word-by-word reader gets exactly wrong. The group's English comes from Geshe Michael, who uses fixed expressions heavily, so two questions come up daily: is this string an idiom, and how has Geshe Michael rendered it before? Both were answered from memory. The register answers the first and the corpus answers the second.
 
 The register file already existed with the rule written into it and nothing reading it. This closes that gap rather than inventing a scheme.
 
 ## 2. The line this feature does not cross
-The register marks WHICH Tibetan forms are idioms. It holds no English of its own. English is Geshe Michael's (rule 1): the app may match his English from corpus evidence, never compose it. So an entry is a Tibetan form, a status, and its evidence. The renderings shown beside an idiom are fetched at the moment of asking from his own parallel corpus, counted, and labelled his. A translator's English lives in exactly one place — the payload of a proposal awaiting his ruling — and is labelled as theirs wherever it appears.
+The register marks WHICH Tibetan forms are idioms. It holds no English of its own. English is Geshe Michael's (rule 1): the app may match that English from corpus evidence, never compose it. So an entry is a Tibetan form, a status, and its evidence. The renderings shown beside an idiom are fetched at the moment of asking from Geshe Michael's own parallel corpus, counted, and labelled Geshe Michael's. A translator's English lives in exactly one place — the payload of a proposal awaiting Geshe Michael's ruling — and is labelled as theirs wherever it appears.
 
 ## 3. What it does
 

@@ -5,7 +5,7 @@ these videos to help build out the catalog workflow." This document
 accumulates one section per session as Adam supplies the links. It is
 the companion to DCC_CATALOG_AGENT_DEMO.md (the Lon & Tom AI demo) —
 that doc is what an outside engineer built; THIS doc is how the
-authority himself catalogs, in his own words, watched at work.*
+authority himself catalogs, in Geshe Michael's own words, watched at work.*
 
 *Transcripts + metadata: `data/research/gmr_cataloging/` (yt-dlp
 auto-captions; speaker names and Tibetan terms are approximate — the
@@ -20,17 +20,17 @@ The founding session of the cataloging class. GMR frames the whole
 enterprise, shows the database live, walks one real case (Rendawa's
 sungbum), and assigns the first team job.
 
-### The stakes, in his numbers (0:00–12:00)
+### The stakes, in Geshe Michael's numbers (0:00–12:00)
 
 - The database is **38 years** of input (HP grant via David Packard
   Jr., data entry centers in Asia, second- and third-generation
   typists), **80 million words**, **~20,000 books input** — but only
   **~10,000 cataloged**. The other ~10,000 sit in an uncataloged
-  folder he has not touched in ~20 years.
+  folder Geshe Michael has not touched in ~20 years.
 - **Five-pass entry standard**: two typists type independently, two
   comparison passes, a fifth check — "it's as accurate as the wood."
   This is the provenance bar everything else is judged against.
-- He personally cataloged **every book that entered, 1987–1999**, and
+- Geshe Michael personally cataloged **every book that entered, 1987–1999**, and
   **no book has entered the catalog since 1999** (three-year retreat,
   then no time): "I can either die and that'll just disappear… the
   books that didn't make it into the Kangyur disappeared in Tibet."
@@ -39,7 +39,7 @@ sungbum), and assigns the first team job.
   Tibetan translation from India, we covered all of them"), Tibetan
   commentaries est. 300,000 of which maybe 60,000 are high quality.
 
-### The architecture he defends (6:00–9:00)
+### The architecture Geshe Michael defends (6:00–9:00)
 
 - **The database IS the file system.** "We don't use a database
   structure… we put the books into the file system of every computer…
@@ -73,8 +73,8 @@ sungbum), and assigns the first team job.
 
 ### The teaching method (11:15–13:15, 47:10–47:40)
 
-- He will not teach cataloging as a course — he tried for years and
-  it failed. Instead: **he catalogs, stream-of-consciousness, on
+- Cataloging will not be taught as a course — Geshe Michael tried for years and
+  it failed. Instead: **Geshe Michael catalogs, stream-of-consciousness, on
   screen; the class watches and gets thrown lookup tasks.** "Look
   this up. Find this for me. That way you can learn to catalog."
 - Trust is earned by volume: "You've got to do a few hundred to do it
@@ -86,16 +86,16 @@ sungbum), and assigns the first team job.
 The best workflow specimen in the session — a real uncataloged
 collection worked in front of the class:
 
-1. **Why this text**: he just translated a commentary by Rendawa
+1. **Why this text**: Geshe Michael just translated a commentary by Rendawa
    (Tsongkhapa's teacher, "the first scholar in Tibet to understand
-   Middle Way according to Nagarjuna and Chandrakirti"), wrote his
+   Middle Way according to Nagarjuna and Chandrakirti"), wrote Geshe Michael's
    biography, and judged it a gap: "If you ask me what's the first
    books to put in after your 25-year vacation — Rendawa is a good
    choice." *Identity and importance judged first, files second.*
 2. **Witness census**: two sungbums exist — a 4-volume and a
    10-volume — "and I have a feeling they are not the same works."
 3. **Witness quality read from the page image**: seeing a clean
-   computer font he says "I get scared… it's too nice. It's not a
+   computer font Geshe Michael says "I get scared… it's too nice. It's not a
    woodblock — somebody in the last 10 years typed it in. They do
    not do multiple entry." Then the proof of corruption: **the
    table of contents titles are made up** — "they misspelled all of
@@ -110,7 +110,7 @@ collection worked in front of the class:
    by geshes — "generally they're very accurate and that's what we
    want." Scans of carvings are BDRC's great contribution ("you
    cannot search a scan… somebody has to input it" — and Tibetan OCR
-   is, in his estimate, still far from the bar).
+   is, in Geshe Michael's estimate, still far from the bar).
 6. **The witness hunt is delegated, by name**: check BDRC for a
    better Rendawa witness; contact **Carola Roloff** (Buddhist nun,
    university professor in Germany, "a Rendawa expert — she will
@@ -132,7 +132,7 @@ single human registrar's act. Books cited in Mixed Nuts
 bibliographies already received numbers this way **without being in
 the database yet**: numbered ≠ cataloged ≠ input.
 
-### THE FIRST JOB he assigned (42:08–45:40, 56:17–57:25)
+### THE FIRST JOB Geshe Michael assigned (42:08–45:40, 56:17–57:25)
 
 > "Take all the bibliographies of all the Mixed Nuts books we have
 > finished — about 15 to 20 — and confirm that every one is in the
@@ -141,7 +141,7 @@ the database yet**: numbered ≠ cataloged ≠ input.
 > And they're not. I'd guess it's going to be a hundred books, and
 > they're all important."
 
-He demonstrates the check live: search the catalog number (S464) with
+Geshe Michael demonstrates the check live: search the catalog number (S464) with
 the search tool; first book found, second book **not in the current
 database**. "What if it's not? — We put it in."
 
@@ -191,7 +191,7 @@ Take everything ACI translated since ~1991 — "probably 50,000 pages
 of paragraph-by-paragraph Tibetan-English… I built it for this day" —
 clean it to be AI-grade data (old fonts etc.), so AI can hypertext
 paragraph pairs into a lookup dictionary and eventually translation.
-*This is precisely the corpus lineage our spine already consumes; his
+*This is precisely the corpus lineage our spine already consumes; Geshe Michael's
 "clean blocks of Tibetan and English" is our full_parallel_corpus.*
 
 ---
@@ -223,12 +223,12 @@ Adoptables extracted 2026-08-19; the numbers refer to the 9g roadmap.
    "needs a number" as a request, never an assignment.
 5. **Subject shelving is the end game.** GMR's catalog is subject
    shelves (thousands), and the destination tree in our dual-browser
-   pane is literally his mental model ("the database is the file
+   pane is literally Geshe Michael's mental model ("the database is the file
    system", shelves are folders). The step-5 handoff should
    eventually offer shelf suggestions from r6_work_subjects /
    sungbum_subjects — labeled suggestions, human-placed, because "a
    book on the wrong shelf is missing forever."
-6. **Trust gradient in the UI.** He grants cataloging authority only
+6. **Trust gradient in the UI.** Geshe Michael grants cataloging authority only
    after "a few hundred" supervised reps. Our approval routing
    already matches (charter: machine suggests, humans approve); the
    worksheet should record WHO proposed and WHO approved, so the
@@ -287,7 +287,7 @@ Database anatomy, future-proofing doctrine, and the ASCII catalog:
   Petersburg institute catalog alone is **141,000 entries** (plus
   8,000 at the university across the river). Aisha Scuffil is building
   the parallel **Sanskrit database** (nearly done after years).
-- **Future-proofing doctrine** (the Jean Smith / Ask Sam story: his
+- **Future-proofing doctrine** (the Jean Smith / Ask Sam story: Geshe Michael's
   database program died and took the data): ACIP's job is "a very
   primitive, very low-level, but unchangeable record"; fancy tools
   last 10–20 years and are rebuilt on top. Whole DB downloadable free,
@@ -361,7 +361,7 @@ live** (Rendawa's sungbum, vol. 1, first biography):
    has it, USE the Tohoku number; check spelling variants before
    concluding absence ("it was one of the first books we ever input
    and the monks made some mistakes"). Only then does Nick issue an
-   ACIP number from his spreadsheet (S25239 here; sequential within
+   ACIP number from Geshe Michael's spreadsheet (S25239 here; sequential within
    the spreadsheet's tail).
 7. **The mother copy is sacred**: copy the input to a "for cutting" /
    "chop" folder before any surgery. Cut markers: `XXX` at a work's
@@ -372,7 +372,7 @@ live** (Rendawa's sungbum, vol. 1, first biography):
    TITLE_AUTHOR`; BZHUGS SO (and sutra "nāma") never part of the
    title. Filed by **findability**: "the purpose of the database is
    to help people — put it where most people would look" (Rendawa,
-   not his monk's name; the cheese-grater rule). Folder =
+   not Geshe Michael's monk's name; the cheese-grater rule). Folder =
    collection/genre/person-with-dates ("Rendawa (1349-1412)").
 9. **THE CHANGE LOG**: after adding to the database, rename the
    collection folder with today's date + your initials — "so we know
@@ -471,7 +471,7 @@ text with no page number in its body does NOT get one inserted
 **folio start/end are recorded in the master spreadsheet** (the
 number register grows folio columns). **Keep the uncut volume too**:
 GMR files the whole uncut volume alongside the cuts "in case someone
-wants to look up where it was" (his own Muchen Q&A precedent: cut
+wants to look up where it was" (Geshe Michael's own Muchen Q&A precedent: cut
 into works by topic AND kept whole; "letters should also be one bag").
 Each cut work gets a FULL catalog number — never parent-number+part
 ("we treat each work as if it's worth its own attention"). Ben's
@@ -525,13 +525,13 @@ breaks cross-line search; strip it corpus-wide. Volume suffixes in
 filenames discussed (old style: capital letter; E-file era). "Take
 the title from the TEXT, not from the TBRC cataloging guy — probably
 the same, but don't trust it." Reader-request lane: a student asks
-for a missing ritual text → email GMR → he locates a witness (own
+for a missing ritual text → email GMR → Geshe Michael locates a witness (own
 copy or TBRC) → input.
 
 **Aug 11 (JLGDWuJuokM)** — Corrections policy for PUBLISHED
 translations: re-typeset every ~10 years; in between, **errata
 pages** maintained by Anatol (who also keeps reader-found
-corrections "in a sacred place he never loses" and feeds them to
+corrections "in a sacred place Geshe Michael never loses" and feeds them to
 authors' next editions). Numbers now in the S253xx range with the E
 language suffix spoken aloud as part of the name. Priority detours
 again (Dunhuang Kamalashila witnesses of the Diamond Cutter
@@ -643,7 +643,7 @@ implement or support.
 
 ## The live worksheet and register (Adam's Google sheet, 2026-08-19)
 
-Adam supplied the team's actual spreadsheet (two tabs, read via his
+Adam supplied the team's actual spreadsheet (two tabs, read via Geshe Michael's
 Drive connector; both read in full):
 
 - **Tab 1 — the cataloging worksheet**: 47 rows (S05001–S05039,

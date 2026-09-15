@@ -462,7 +462,7 @@ rather than approximated.
 - The Master Catalog harvest is in: 2,955 paired titles now feed the
   corpus, the bibliography composer fills itself in, and the Library
   shows English titles. One ruling remains --- whether the catalog's
-  English titles stand as Geshe Michael's own binding equivalents (he
+  English titles stand as Geshe Michael's own binding equivalents (Geshe Michael
   directed the cataloging) or as a labeled reference layer.
 
 - The compilation of Geshe Michael's translation standards continues:

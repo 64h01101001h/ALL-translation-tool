@@ -6,7 +6,7 @@
 `docs/TEXT_ANALYSIS_SUITE_RESEARCH.md` §3(a) said the Manuscript "already exports .docx; add w:ins/w:del runs". Verified false at HEAD: there was no OOXML writer anywhere; the Manuscript exports RTF through `textutil`. The writer is therefore built here, in `allcore`, so the Manuscript export can adopt it later (CLOSER #49).
 
 ## 1. Justification
-Geshe Michael reviews in Word. A redline he can Accept/Reject change by change, with a first paragraph that says exactly what is compared, under what rules, by whom, and that the marks are machine-computed, replaces a side-by-side HTML he cannot act on.
+Geshe Michael reviews in Word. A redline to Accept or Reject change by change, with a first paragraph that says exactly what is compared, under what rules, by whom, and that the marks are machine-computed, replaces a side-by-side HTML Geshe Michael cannot act on.
 
 ## 2. What it does
 

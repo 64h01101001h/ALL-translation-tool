@@ -69,7 +69,7 @@ data and needed validating on a fresh draw.
 Inspecting them: the overwhelming majority are correct. `bdag 'dzin` →
 `grasping for a "self`, `bdag med pa` → `what we call "no-self`,
 `dbu ma'i lta ba` → `the "view of the middle way` — these stop before the
-closing quote **deliberately**, because Geshe Michael puts commas inside his
+closing quote **deliberately**, because Geshe Michael puts commas inside the
 closing quotes (`"wisdom,"`), so a span that included the closing quote would
 drag the comma with it. That trap has been navigated on purpose in every
 batch since C01:336.

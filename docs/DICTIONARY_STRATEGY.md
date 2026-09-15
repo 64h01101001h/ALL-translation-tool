@@ -78,7 +78,7 @@ websites. Everything divides into four lanes:
 6. **Licensed crowns** — Illuminator + SCD per-seat (asked), 84000
    TM (asked), RY/Waldo/Valby via Tsadra (queued).
 7. **The Approval pipeline** upgrades any of it to human-approved —
-   and Geshe Michael's own rulings, whenever he gives them, replace
+   and Geshe Michael's own rulings, whenever they come, replace
    everything beneath.
 
 ## Never

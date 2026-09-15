@@ -52,7 +52,7 @@ always in the reference zone?*
 14. **Hopkins, {C}, {PH}, {GD}, OT, IW, TD, THL stacks** — local
     lookup convenience only; excluded from all release data.
 
-*Open question for GMR: any he would strike entirely from view?*
+*Open question for GMR: any Geshe Michael would strike entirely from view?*
 
 ## Cross-cutting questions to put before him
 - **Pronunciation:** the GMR convention is binding; THL Simplified
@@ -68,7 +68,7 @@ always in the reference zone?*
   code where they diverge — which governs display?
 
 ## Process proposed
-One conversation (or short series) with Geshe Michael; his answers
+One conversation (or short series) with Geshe Michael; Geshe Michael's answers
 recorded verbatim into this document, each tier gaining a "WHY (in
 his words)" line; the ratified version becomes STD-009 and the
 tool's behavior is audited against it.

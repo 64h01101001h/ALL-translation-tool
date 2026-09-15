@@ -128,7 +128,7 @@ pair — building tomorrow's dictionary from translator-authored
 attestations, always labeled PENDING until approved.
 
 **Research** holds Search, Lookup, Sanskrit, Convert, and Analysis.
-Search is Gofer — the tool Geshe Michael has used to search his
+Search is Gofer — the tool Geshe Michael has used to search the
 library every day for decades — rebuilt inside with the same
 algorithms and its original layout: exact terms, OR, AND, and
 NEAR-within-N-lines, over the aligned corpus, the published
