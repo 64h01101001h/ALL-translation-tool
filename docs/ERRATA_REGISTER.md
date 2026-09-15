@@ -8,14 +8,14 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**182 entries**: **134 document errata** (6 HIGH, 71 MEDIUM, 57 LOW), **24 digitisation artefacts**, 14 observations checked and closed as *not* errata, and 1 that could not be verified.
+**187 entries**: **134 document errata** (6 HIGH, 71 MEDIUM, 57 LOW), **24 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 97 |
 | English typo | 24 |
 | Digitisation artefact | 24 |
-| Our banked layer | 9 |
+| Our banked layer | 12 |
 | Formatting | 7 |
 | English factual error | 6 |
 
@@ -217,7 +217,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Defects in OUR OWN banked layer &mdash; 9
+## Defects in OUR OWN banked layer &mdash; 12
 
 *Nothing here is a defect in an ALL document. These are ours, found by checking the shipped layer back against the spine, and they are fixed by re-running pages &mdash; not by anyone at ALL. They are listed so the register is honest about who owns what.*
 
@@ -232,10 +232,13 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C01:419` | chad mtha' -> "from the extreme of thinking things have stopped" | chad mtha' -> "the extreme of thinking things have stopped" | Confirmed by the same audit, sustained by 2 of 3 lenses. The gloss is right; the leading "from" is not licensed by the compound. In "gnyis pas chad mtha' sel ba yin" the preposition is governed by the elided verb `sel ba` one word later, which the layer left u | CONFIRMED |
 | `C03:122` | 'dod pa chung ba -> "The second condition is that you keep your wants few" | 'dod pa chung ba -> "you keep your wants few" | Confirmed by the same audit and the ONLY finding refuted by none of its three lenses. Nothing inside `'dod pa chung ba` means "second" or "condition": "second" comes from the outline marker "2a/" opening the segment and the "X is that" frame from the topic par | CONFIRMED |
 | `C02:32` | grub -> "spontaneous" | drop the d=5 row; keep the d=4 compound lhun gyis grub -> "spontaneous" | Confirmed by the same audit, sustained by 2 of 3 lenses. `lhun gyis grub` is a fixed compound and the correct pair is ALREADY RECORDED at d=4; the d=5 row hands the whole word "spontaneous" to the bare verb while `lhun` and `gyis` are left unglossed. The spine | CONFIRMED |
+| `C01:180` | never transgressing | 'da' bar banked whole as "transgressing"; the mi morpheme banked with eng: null | The banked layer splits one English word across two links: s180m4 (d=6, tib 'mi') carries eng 'trans' and s180w9 (d=5, tib "'da' bar") carries eng 'gressing'. Neither half is English. The negation in this sentence is already carried by s180w8, tib 'nam yang' - | CONFIRMED |
+| `C01:170` | a spiritual practice | 'ong rgyu not banked as the bare article; the article belongs to the 'spiritual practice' span, and 'ong rgyu  | s170w7 (d=5, tib "'ong rgyu") carries eng 'a'. The segment's English reads "much less do something that's a spiritual practice"; the article there belongs to 'a spiritual practice', which is already banked at s170w6 (tib 'chos' -> 'spiritual practice'). "'ong  | CONFIRMED |
+| `C01:38` | These instructions were imparted to Ngawang Drakpa | the eng field holds Geshe Michael's English for the span and nothing else; an alignment note belongs in a note | Found by tools/alignment_invariants.py on its first run, by the check that every banked English must occur in the segment's English. The d=1 link s38S carries, inside its eng field, a bracketed editorial annotation: "[FRONT-MATTER BLEED: the corpus English con | CONFIRMED |
 
 ---
 
-## Checked and closed as NOT errata &mdash; 14
+## Checked and closed as NOT errata &mdash; 16
 
 *Recorded so a later pass does not re-raise them.*
 
@@ -247,6 +250,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C01:295` | ma rang gis kyang longs spyad ma bra ba'i rgyu nor gang yod bu'i lag tu bzhag | Hint 295 verified correct and the reading quoted in the note is verbatim in the spine. The note filed it as an uncertain reading expecting a 'ma phod'-type form, but 'bra ba' is a legitimate attested idiom, not a corrupt |
 | `C01:306` | bla ma sangs rgyas kyi go 'phang la'ang nga rang gcig pus bkod snyam pa'i lhag pa'i bsam pa shugs drag tu bsgo | Hint C01:306 is CORRECT. C01:306 wylie contains both cited phrases; its English reads 'I will by myself put them into the state of the Lama, the state of Buddhahood' - matching the note exactly. The cross-reference also  |
 | `C01:365` | ming brdas phar ma btags par dang po nas dbu mdzad rang steng nas grub grub pa zhig yod na | Hint C01:334 is WRONG; corrected to C01:365 by searching wylie LIKE '%grub grub%'. The note's dittography reading does not survive the corpus. 'grub grub pa' is attested 9 times across eight independent works in the spin |
+| `C01:412` | has any true existence | Reported by the Codex alignment campaign as incorrect negative scope at 412/s412w5, tib 'bden par ma grub pas' -> eng 'has any true existence'. Checked against the whole segment and closed as NOT an erratum: the English  |
+| `C01:422` | no object in the universe exists truly | Reported by the Codex alignment campaign as incorrect negative scope at 422/s422w2, tib 'bden par med pa' -> eng 'exists truly'. Checked against the whole segment and closed as NOT an erratum, for the same reason as C01: |
 | `C01:438` | What he meant by the expression "Look for ahead" was that we should set our sights on becoming a Buddha. | Same finding as E-033 — this record is a duplicate, drawn from log line 2769 where E-033 came from line 2768 of the same sentence. Verified identically: C01:437 reads 'Look far ahead', C01:438 reads 'Look for ahead', Wyl |
 | `C01:484` | `lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,) | Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x |
 | `C01:492` | glegs bam las nges nges 'dra ba na ... blo ngor ae 'dug mas nas bltas te mi 'dug na lta ba'i phyogs na med do, | Hint C01:492 verified - all three tokens the note names are present verbatim in this one segment. Each is a legitimate feature, not a defect. 'ae' is the standard Classical Tibetan interrogative particle; C01 contains ex |

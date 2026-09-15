@@ -1,0 +1,11 @@
+[
+ {
+  "seq": 38,
+  "kind": "LAYER_ARTEFACT",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "found": "These instructions were imparted to Ngawang Drakpa",
+  "expected": "the eng field holds Geshe Michael's English for the span and nothing else; an alignment note belongs in a note field, not in eng",
+  "evidence": "Found by tools/alignment_invariants.py on its first run, by the check that every banked English must occur in the segment's English. The d=1 link s38S carries, inside its eng field, a bracketed editorial annotation: \"[FRONT-MATTER BLEED: the corpus English continues for ~5,700 characters past this sentence - the entire foreword by Khen Rinpoche Geshe Lobsang Tharchin for the English edition, welded onto the colophon segment. The machine aligns the colophon sentence only and links NOTHING to the foreword; flagged for the corpus maintainers.]\" The same pattern stands at C01:45 s45S. The observation itself is correct and worth keeping -- the corpus segment really does have a foreword welded onto a colophon -- but eng is the field that means \"Geshe Michael's English for this span\", and any consumer reading it presents the annotation as his words. app/main.cpp reads this bank for the grammar view. Not currently in the iOS pack (0 entries). The underlying front-matter bleed in the corpus is a separate matter for the corpus maintainers, as the note itself says."
+ }
+]
