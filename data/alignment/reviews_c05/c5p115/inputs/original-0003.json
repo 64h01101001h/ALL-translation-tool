@@ -1,0 +1,1132 @@
+[
+  {
+    "seq": 343,
+    "kind": "TIBETAN_SPELLING",
+    "found": "PHYER",
+    "decision": "PROPOSE_LOW_PROBABLE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "PHYER",
+        "source_row": {
+          "id": 1725,
+          "course": "C05",
+          "seq": 343,
+          "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+          "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+          "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+        },
+        "occurrences": {
+          "acip": [
+            58
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 135,
+          "wylie": 133,
+          "english": 194
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 343,
+            "field": "acip",
+            "start": 235467,
+            "bytes": 138,
+            "sha256": "6dd744d2292cc536b0b5ce1f8cc6665c0a7acaafcb4e8e8a62714944a32bc232",
+            "original_text": ",SNGA DANG MNYAM DU SHI BA LA,\r\n,DNGOS MED LUS GZHAN SKYES PHYER RO,\r\n,DMAG LA SOGS PAR DON GCIG PHYIR,\r\n,THAMS CAD BYED PA PO BZHIN LDAN,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 343,
+            "field": "english",
+            "start": 235607,
+            "bytes": 197,
+            "sha256": "1f2f2c7255c7c1fefe7604c0b0101e4bc4072225e69f40cbeb236c6ac51ac874",
+            "original_text": "There is no actual stage for those who die\r\nBefore or together, for another body's been born.\r\nBecause their goal's the same in a war or whatever,\r\nAll possess it as much as the one who commits it.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "C05:343/C16:864 preserve PHYER in SKYES PHYER RO. The exact same quoted two-line verse at C05:372/C16:889 reads SKYES PHYIR RO with the same English causal for. Full PHYIR glossary attests for/because; exact PHYER lookup is empty. Physical C05 bytes contain PHYER, so this is a probable inherited spelling error, not a new converter/ingest failure. The repeated verse supplies internal correction evidence; publication independence is not established.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 343,
+    "kind": "ENGLISH_TYPO",
+    "found": "body's been born",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "body's been born",
+        "source_row": {
+          "id": 1725,
+          "course": "C05",
+          "seq": 343,
+          "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+          "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+          "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            75
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 135,
+          "wylie": 133,
+          "english": 194
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 343,
+            "field": "acip",
+            "start": 235467,
+            "bytes": 138,
+            "sha256": "6dd744d2292cc536b0b5ce1f8cc6665c0a7acaafcb4e8e8a62714944a32bc232",
+            "original_text": ",SNGA DANG MNYAM DU SHI BA LA,\r\n,DNGOS MED LUS GZHAN SKYES PHYER RO,\r\n,DMAG LA SOGS PAR DON GCIG PHYIR,\r\n,THAMS CAD BYED PA PO BZHIN LDAN,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 343,
+            "field": "english",
+            "start": 235607,
+            "bytes": 197,
+            "sha256": "1f2f2c7255c7c1fefe7604c0b0101e4bc4072225e69f40cbeb236c6ac51ac874",
+            "original_text": "There is no actual stage for those who die\r\nBefore or together, for another body's been born.\r\nBecause their goal's the same in a war or whatever,\r\nAll possess it as much as the one who commits it.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "The apostrophe contracts has in the verse, while goal's contracts is. Both are grammatical and physically present; keep exact wording. No positive interior word cut or unapproved negative affix is selected.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 343,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "All possess it as much as the one who commits it.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "All possess it as much as the one who commits it.",
+        "source_row": {
+          "id": 1725,
+          "course": "C05",
+          "seq": 343,
+          "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+          "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+          "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            145
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 135,
+          "wylie": 133,
+          "english": 194
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 343,
+            "field": "acip",
+            "start": 235467,
+            "bytes": 138,
+            "sha256": "6dd744d2292cc536b0b5ce1f8cc6665c0a7acaafcb4e8e8a62714944a32bc232",
+            "original_text": ",SNGA DANG MNYAM DU SHI BA LA,\r\n,DNGOS MED LUS GZHAN SKYES PHYER RO,\r\n,DMAG LA SOGS PAR DON GCIG PHYIR,\r\n,THAMS CAD BYED PA PO BZHIN LDAN,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 343,
+            "field": "english",
+            "start": 235607,
+            "bytes": 197,
+            "sha256": "1f2f2c7255c7c1fefe7604c0b0101e4bc4072225e69f40cbeb236c6ac51ac874",
+            "original_text": "There is no actual stage for those who die\r\nBefore or together, for another body's been born.\r\nBecause their goal's the same in a war or whatever,\r\nAll possess it as much as the one who commits it.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "The complete commentary346 explains common-goal responsibility. The death-timing verse is elaborated by344–345. No doctrinal mismatch is demonstrated; explanatory stage/it remains outside tight lexical claims.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 343,
+    "kind": "INGEST_ARTEFACT",
+    "found": "Before or together",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Before or together",
+        "source_row": {
+          "id": 1725,
+          "course": "C05",
+          "seq": 343,
+          "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+          "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+          "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            43
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 135,
+          "wylie": 133,
+          "english": 194
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 343,
+            "field": "acip",
+            "start": 235467,
+            "bytes": 138,
+            "sha256": "6dd744d2292cc536b0b5ce1f8cc6665c0a7acaafcb4e8e8a62714944a32bc232",
+            "original_text": ",SNGA DANG MNYAM DU SHI BA LA,\r\n,DNGOS MED LUS GZHAN SKYES PHYER RO,\r\n,DMAG LA SOGS PAR DON GCIG PHYIR,\r\n,THAMS CAD BYED PA PO BZHIN LDAN,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 343,
+            "field": "english",
+            "start": 235607,
+            "bytes": 197,
+            "sha256": "1f2f2c7255c7c1fefe7604c0b0101e4bc4072225e69f40cbeb236c6ac51ac874",
+            "original_text": "There is no actual stage for those who die\r\nBefore or together, for another body's been born.\r\nBecause their goal's the same in a war or whatever,\r\nAll possess it as much as the one who commits it.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "Initial Before, Because and All follow physical verse lineation. No cap, heading splice or truncation is shown; PHYER is already in physical source and its C16 repeat.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 343,
+    "kind": "FORMATTING",
+    "found": "war or whatever,",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "war or whatever,",
+        "source_row": {
+          "id": 1725,
+          "course": "C05",
+          "seq": 343,
+          "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+          "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+          "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            128
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 343,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 135,
+          "wylie": 133,
+          "english": 194
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 343,
+            "field": "acip",
+            "start": 235467,
+            "bytes": 138,
+            "sha256": "6dd744d2292cc536b0b5ce1f8cc6665c0a7acaafcb4e8e8a62714944a32bc232",
+            "original_text": ",SNGA DANG MNYAM DU SHI BA LA,\r\n,DNGOS MED LUS GZHAN SKYES PHYER RO,\r\n,DMAG LA SOGS PAR DON GCIG PHYIR,\r\n,THAMS CAD BYED PA PO BZHIN LDAN,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 343,
+            "field": "english",
+            "start": 235607,
+            "bytes": 197,
+            "sha256": "1f2f2c7255c7c1fefe7604c0b0101e4bc4072225e69f40cbeb236c6ac51ac874",
+            "original_text": "There is no actual stage for those who die\r\nBefore or together, for another body's been born.\r\nBecause their goal's the same in a war or whatever,\r\nAll possess it as much as the one who commits it.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "Verse punctuation and line breaks are preserved by exact ASCII extents. Enumerative or whatever is not a typographic defect or permission to invent a noun.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  }
+]

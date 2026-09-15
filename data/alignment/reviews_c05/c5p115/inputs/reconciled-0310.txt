@@ -1,0 +1,80 @@
+"""Standard current-batch canonical-stream, range, plaintext and disposition checks."""
+import hashlib,html,json,pathlib,re
+R=pathlib.Path(__file__).resolve().parents[1];B=R.parent;SEQS=[343,344,345];K=['seq','id','d','tib','eng','tib_range','eng_range']
+def read(p):return json.loads(p.read_bytes())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+source={x['seq']:x for x in read(R/'evidence/source.json')};summaries=[];ordered=[];baseline=read(R/'evidence/baseline.json');provenance=read(R/'provenance.json')
+for seq in SEQS:
+ D=R/str(seq);raw=(D/'spec.json').read_bytes();sp=read(D/'spec.json')['segments'][0]['spans'];body=(D/'body.html').read_bytes();actual=read(D/'resolved-ranges.json');assert all(set(K).issubset(x) for x in actual);rows=[{k:x[k]for k in K}for x in actual];assert rows==read(D/'intended-ranges.json');put(D/'final-ordered-tuples.json',rows);ordered+=rows
+ for tool,content in [('generator',body),('resolver',(D/'resolved-ranges.json').read_bytes())]:
+  P=R/'native'/f'{seq}-{tool}-v1';assert(P/'stdin.bin').read_bytes()==raw and(P/'stdout.bin').read_bytes()==content and(P/'stderr.bin').read_bytes()==b''and(P/'exit.txt').read_text()=='0\n';ex=read(P/'execution.json');assert ex['exit']==0
+  for n in ['stdin','stdout','stderr']:assert ex['streams'][n]==ident((P/(n+'.bin')).read_bytes())
+ for side,field in [('tib','wylie'),('eng','english')]:
+  m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S);assert m;flat=re.sub(r'<span class="nul">.*?</span>','',m[1],flags=re.S);assert html.unescape(re.sub('<[^>]+>','',flat))==source[seq][field]
+ gaps={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  cur=0;g=[]
+  for lo,hi in sorted(x[side+'_range']for x in rows if x['d']!=7 and x[side+'_range']is not None):
+   if cur<lo:g.append({'range':[cur,lo],'text':source[seq][field][cur:lo]})
+   cur=max(cur,hi)
+  if cur<len(source[seq][field]):g.append({'range':[cur,len(source[seq][field])],'text':source[seq][field][cur:]})
+  gaps[side]=g
+ put(D/'complete-unwrapped-extents.json',{'seq':seq,'range_convention':'zero-based half-open characters','source':'../evidence/source.json','material_reasons':'omissions.json','unwrapped':gaps})
+ count={'spans':len(sp),'nulls':sum(x['eng']is None for x in sp),'d5_total':sum(x['d']==5 for x in sp),'word_pairs':sum(x['d']==5 and x['eng']is not None for x in sp),'d7':sum(x['d']==7 for x in sp),'d6':sum(x['d']==6 for x in sp),'d3':sum(x['d']==3 for x in sp),'errata':len(read(D/'errata.json'))}
+ no_heads=all(x['d']not in[5,7]or x['eng']is None or x['eng'].split()[0].lower()not in['the','a','an','and','or','his','our','your','i','you']for x in sp);assert no_heads
+ proof={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'new_generator_runs':0 if seq!=344 else 1,'new_resolver_runs':0 if seq!=344 else 1,'native_mode':'REUSED_EXACT_ENGLISH_ORIGINAL'if seq!=344 else'NEW_ROOT_SELECTED_EXECUTION','stderr_bytes':0,'spec_bytes':len(raw),'spec_sha256':ident(raw)['sha256'],'body_bytes':len(body),'body_sha256':ident(body)['sha256'],'body_equals_native_stdout':True,'source_plaintexts_exact_after_markup_and_null_marker_removal':True,'canonical_ranges_equal_preselected_intent':True,'no_supplied_d5_d7_heads':no_heads,'counts':count,'native_generator_path':f'../native/{seq}-generator-v1','native_resolver_path':f'../native/{seq}-resolver-v1'};put(D/'verification.json',proof);summaries.append(proof)
+ disp=read(D/'original-dispositions.json');other=read(D/'original-other-dispositions.json');er=read(D/'errata-review.json')
+ for angle in ['english','tibetan']:
+  P=B/angle/str(seq);orig=read(P/('decisions.json'if angle=='english'else'original-decisions.json'));ors=orig['spans'if angle=='english'else'decisions'];subset=[x for x in disp if x['angle']==angle];assert [x['original']for x in subset]==ors;assert [x['index']for x in subset]==list(range(len(ors)))
+  assert[x['original']for x in other if x['angle']==angle and x['field']=='omissions']==orig['omissions']
+  for x in other:
+   if x['angle']==angle and x['field']=='spec.note':assert x['original']==read(P/'spec.json')['segments'][0]['note']
+   if x['angle']==angle and x['field']=='report.md':assert x['original']==(P/'report.md').read_text()
+  scr=read(P/('five-ground-screens.json'if angle=='tibetan'else'errata-review.json'));assert[x['original']for x in er['original_screens']if x['angle']==angle]==(scr if angle=='tibetan'else scr['category_screen']);assert[x['original']for x in er['complete_original_screen_documents']if x['angle']==angle]==[scr];assert[x['original']for x in er['original_errata_candidates']if x['angle']==angle]==read(P/'errata.json')
+ for x in rows:
+  lo,hi=x['tib_range'];assert source[seq]['wylie'][lo:hi]==x['tib']
+  if x['eng_range']is not None:lo,hi=x['eng_range'];assert source[seq]['english'][lo:hi]==x['eng']
+ lines=[f'C05:{seq} — PROVISIONAL root reconciliation; mechanical assembly by /root/reusable_closure_review.',
+ f'Source/proposal origin {provenance["source_origin_git_commit"]} through336; actual acceptance baseline {baseline["commit"]} through342 is separate.',
+ 'Root-reconciliation-decisions-v2.json provides all current judgments. The scribe previously authored the Tibetan original and makes no independent reconciliation or acceptance claim.',
+ 'Final343 and345 select complete exact English original specs. Final344 removes only w8 and its eng_order entry and corrects the singular note before its first generation.',
+ 'Both344 shi ba predicates share die and remain unbanked without nulls. Positive byung maps to explicit occurred; negative byung is elided after or not and remains unbanked.',
+ '343 ro retains the affirmative d6 punctuation-fusion null; sogs/or whatever and par/in remain separate grammatical units. Agent byed/commits is a supported strict whole-word member.',
+ '344 las/action, lam/path and dngos/actual retain supported members; mi/not is d6.345 mi byung/cannot occur remains a d3 phrase with no speculative d7 child; ma/never and byas pa/went through are flat.',
+ 'PHYER and MTSAN remain unchanged and unbanked. Two exact English LOW/PROBABLE spelling questions are human-review proposals with full counterevidence, not approved source corrections.',
+ 'All119 original spans,31 original omissions,30 category judgments and four original errata candidates remain complete exact values with explicit dispositions. Shared and discontinuous correspondences remain unbanked with reasons.',
+ 'The exact original English report remains report.md as provenance; this reconciliation-report.md states the current selection, counts, actual baseline and native scope.',
+ f"Counts: {count['spans']} spans; {count['word_pairs']} nonnull d5 pairs; {count['d5_total']} total d5; {count['d7']} d7; {count['nulls']} nulls; {count['errata']} provisional errata proposals.",
+ ('One new canonical generator and resolver each passed once with empty stderr.'if seq==344 else'Exact original English generator/resolver captures are copied unchanged, including argv, cwd, timestamps and streams; no new execution.'),
+ f'Selected evidence: ../native/{seq}-generator-v1/ and ../native/{seq}-resolver-v1/. Both streams match final spec/body/ranges exactly.',
+ 'Seven actual unique generator/resolver pairs exist: six independent originals and one new344 pair. Nine angle/segment views include two exact English-original copies. Root/reviewer generation count is zero.',
+ 'The stale344 note was corrected before generation following an independent finding. Both root decision versions, original note and actual metadata-correction record remain; this was not a failed generator run.',
+ f"Spec SHA256={proof['spec_sha256']}; body SHA256={proof['body_sha256']}. Source plaintexts reconstruct exactly and actual canonical ranges equal intended ranges.",
+ 'No new source queries, source/master edits, hgm_gloss promotion, W writes, production registration or acceptance. Independent final semantic review remains required.'];assert 10<=len(lines)<=25
+ (D/'reconciliation-report.md').write_text('\n'.join(lines)+'\n')
+ for n in ['report.md','errata.json']:assert(D/n).read_bytes()==(B/'english'/str(seq)/n).read_bytes()
+ if seq!=344:
+  for n in ['spec.json','body.html','resolved-ranges.json']:assert(D/n).read_bytes()==(B/'english'/str(seq)/n).read_bytes()
+ else:
+  orig=read(B/'english/344/spec.json');seg=orig['segments'][0];seg['spans']=[x for x in seg['spans']if x['id']!='w8'];seg['eng_order']=[x for x in seg['eng_order']if x!='w8'];seg['note']=read(R/'evidence/root-reconciliation-decisions-v2.json')['note_correction']['corrected_note'];assert orig==read(D/'spec.json')
+put(R/'resolved-spans.json',ordered);totals={k:sum(x['counts'][k]for x in summaries)for k in summaries[0]['counts']};assert[totals[x]for x in['spans','word_pairs','d5_total','d7','nulls','errata']]==[61,39,39,4,1,2]
+counts={'span_dispositions':sum(len(read(R/str(s)/'original-dispositions.json'))for s in SEQS),'omission_dispositions':sum(sum(x['field']=='omissions'for x in read(R/str(s)/'original-other-dispositions.json'))for s in SEQS),'screen_dispositions':sum(len(read(R/str(s)/'errata-review.json')['original_screens'])for s in SEQS),'original_errata_candidates':sum(len(read(R/str(s)/'errata-review.json')['original_errata_candidates'])for s in SEQS)};assert counts=={'span_dispositions':119,'omission_dispositions':31,'screen_dispositions':30,'original_errata_candidates':4}
+native=[]
+for seq in SEQS:
+ item={'seq':seq,'mode':'NEW_EXECUTION'if seq==344 else'EXACT_ENGLISH_ORIGINAL_COPY','selected':{}}
+ for tool in ['generator','resolver']:
+  P=R/'native'/f'{seq}-{tool}-v1';pins={p.name:ident(p.read_bytes())for p in sorted(P.iterdir())};assert len(pins)==5
+  item['selected'][tool]={'path':str(P.relative_to(R)),'files':pins}
+  if seq!=344:
+   origin=B/'english/native'/P.name
+   for name in pins:assert (origin/name).read_bytes()==(P/name).read_bytes()
+   item['selected'][tool]['original_path']=str(origin)
+ native.append(item)
+put(R/'native-selection.json',{'selected_capture_version':1,'selected':native,'original_pairs':6,'new_reconciler_pairs':1,'exact_reused_english_pairs':2,'total_actual_unique_pairs':7,'total_angle_segment_views':9,'root_and_reviewer_runs':0,'limits':'Copies preserve actual original argv/cwd/times/streams. Identity verification is not execution. No generator/resolver failures in this reconciliation; original histories remain frozen.'})
+manifest=read(R/'original-to-copy-manifest.json')
+for m in manifest:
+ assert ident((R/m['copy']).read_bytes())=={k:m[k]for k in['bytes','sha256']},m['copy']
+put(R/'summary.json',{'status':'READY_FOR_INDEPENDENT_REVIEW','producer':'Codex','reconciler_role':'root','mechanical_assembler':'/root/reusable_closure_review','source_origin_git_commit':provenance['source_origin_git_commit'],'source_origin_course_boundary':336,'actual_acceptance_baseline':baseline['commit'],'actual_baseline_accepted_through':342,'segments':summaries,'totals':totals,'total_spans':61,'total_word_pairs':39,'total_nulls':1,'total_d7':4,'total_errata':2,'original_dispositions':counts,'native_generators':1,'native_resolvers':1,'selected_final_native_pairs':3,'reused_native_generator_resolver_pairs':2,'total_unique_actual_native_pairs':7,'total_angle_segment_views':9,'native_generator_failures':0,'native_resolver_failures':0,'new_original_proposal_generations':0,'new_source_queries':0,'independent_review_claimed':False,'original_frozen_files_verified':205,'exact_original_copy_records_verified':len(manifest)})
+provenance['status']='PROVISIONAL_ROOT_RECONCILIATION; final native proof passed; independent review required';provenance['native_actual']='One new344 generator/resolver pair passed once plus two explicitly reused exact English343/345 original pairs; seven unique actual pairs total. Zero reconciliation native failures.';put(R/'provenance.json',provenance)
+print(json.dumps({'status':'PASS_MECHANICAL_ONLY','totals':totals,'original_dispositions':counts,'exact_original_copy_records_verified':len(manifest),'root_reconciler':'root','independent_review_claimed':False},indent=2))

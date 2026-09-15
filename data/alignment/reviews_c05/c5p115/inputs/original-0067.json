@@ -1,0 +1,10 @@
+[
+  {
+    "kind": "ACTUAL_READ_ONLY_RG_REGEX_ERROR",
+    "observed_stderr": "rg: regex parse error:\n    (?:broken|boundary|word_char|apost|isalnum|_WORD|\\[A-Za-z)\n                                                       ^\nerror: unclosed character class",
+    "cause": "Malformed exploratory engine-text search expression. A subsequent corrected rg expression read the actual WORDCH/boundary lines.",
+    "recording_limit": "Actual error was returned directly in the tool output; this is a later factual transcription, not an invented contemporaneous native capture.",
+    "generator_or_resolver_run": false,
+    "data_changed": false
+  }
+]

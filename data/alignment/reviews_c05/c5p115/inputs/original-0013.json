@@ -1,0 +1,1132 @@
+[
+  {
+    "seq": 344,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MTSAN BSNUN",
+    "decision": "PROPOSE_LOW_PROBABLE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MTSAN BSNUN",
+        "source_row": {
+          "id": 1726,
+          "course": "C05",
+          "seq": 344,
+          "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+          "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+          "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+        },
+        "occurrences": {
+          "acip": [
+            37
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 169,
+          "wylie": 169,
+          "english": 349
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 344,
+            "field": "acip",
+            "start": 235806,
+            "bytes": 172,
+            "sha256": "190b407bb21c737ad0cf603c45c6a3e237275f579fadf6dba38263790b544644",
+            "original_text": "[IV.285-8]\r\n\r\nPHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 344,
+            "field": "english",
+            "start": 235980,
+            "bytes": 353,
+            "sha256": "9e9c48f81c08d4372db968a6ce57d35b608e8846400133dc16ff393907ee9190",
+            "original_text": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow\r\nto someone else which is sure to kill him, but then this murderer himself\r\nhappens to die, either before his victim or together with him--at the same\r\ntime. Can we say then that the actual \"commission\" stage of a full path of\r\naction has occurred for such a murderer, or not?\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "C05:344/C16:865 physically preserve MTSAN BSNUN and English takes a weapon and delivers a blow. Full MTSAN entries mean night/name/features and do not attest weapon; MTSON directly attests weapon and BSNUN blow. C05:462/C16:972 also print MTSAN BSNUN in another blow passage, while C05:459–460, C16:969–970, C11:140, C12:110/C18:247 and GK examples use MTSON BSNUN. This recurring spelling is probable source error, not proven new ingest corruption or a corrected same-passage witness; no source replacement is performed.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 344,
+    "kind": "ENGLISH_TYPO",
+    "found": "together with him--at the same time",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "together with him--at the same time",
+        "source_row": {
+          "id": 1726,
+          "course": "C05",
+          "seq": 344,
+          "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+          "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+          "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            194
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 169,
+          "wylie": 169,
+          "english": 349
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 344,
+            "field": "acip",
+            "start": 235806,
+            "bytes": 172,
+            "sha256": "190b407bb21c737ad0cf603c45c6a3e237275f579fadf6dba38263790b544644",
+            "original_text": "[IV.285-8]\r\n\r\nPHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 344,
+            "field": "english",
+            "start": 235980,
+            "bytes": 353,
+            "sha256": "9e9c48f81c08d4372db968a6ce57d35b608e8846400133dc16ff393907ee9190",
+            "original_text": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow\r\nto someone else which is sure to kill him, but then this murderer himself\r\nhappens to die, either before his victim or together with him--at the same\r\ntime. Can we say then that the actual \"commission\" stage of a full path of\r\naction has occurred for such a murderer, or not?\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "The timing synonym is intentional explanatory repetition, physically present in both C05 and C16. It is not silently deleted or aligned twice.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 344,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "sure to kill him",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "sure to kill him",
+        "source_row": {
+          "id": 1726,
+          "course": "C05",
+          "seq": 344,
+          "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+          "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+          "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            101
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 169,
+          "wylie": 169,
+          "english": 349
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 344,
+            "field": "acip",
+            "start": 235806,
+            "bytes": 172,
+            "sha256": "190b407bb21c737ad0cf603c45c6a3e237275f579fadf6dba38263790b544644",
+            "original_text": "[IV.285-8]\r\n\r\nPHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 344,
+            "field": "english",
+            "start": 235980,
+            "bytes": 353,
+            "sha256": "9e9c48f81c08d4372db968a6ce57d35b608e8846400133dc16ff393907ee9190",
+            "original_text": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow\r\nto someone else which is sure to kill him, but then this murderer himself\r\nhappens to die, either before his victim or together with him--at the same\r\ntime. Can we say then that the actual \"commission\" stage of a full path of\r\naction has occurred for such a murderer, or not?\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "Tibetan certain death is recast as a blow sure to kill; causal/passive syntax explains this without asserting an independent chi/kill dictionary equivalence. Both shi ba alternatives share one die; no proposition is falsely nulled.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 344,
+    "kind": "INGEST_ARTEFACT",
+    "found": "[IV.285-8]",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "[IV.285-8]",
+        "source_row": {
+          "id": 1726,
+          "course": "C05",
+          "seq": 344,
+          "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+          "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+          "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+        },
+        "occurrences": {
+          "acip": [
+            0
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 169,
+          "wylie": 169,
+          "english": 349
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 344,
+            "field": "acip",
+            "start": 235806,
+            "bytes": 172,
+            "sha256": "190b407bb21c737ad0cf603c45c6a3e237275f579fadf6dba38263790b544644",
+            "original_text": "[IV.285-8]\r\n\r\nPHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 344,
+            "field": "english",
+            "start": 235980,
+            "bytes": 353,
+            "sha256": "9e9c48f81c08d4372db968a6ce57d35b608e8846400133dc16ff393907ee9190",
+            "original_text": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow\r\nto someone else which is sure to kill him, but then this murderer himself\r\nhappens to die, either before his victim or together with him--at the same\r\ntime. Can we say then that the actual \"commission\" stage of a full path of\r\naction has occurred for such a murderer, or not?\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "Verse-number citation is physically separated before prose and retained in source. All fields are below the cap; complete sentence and final quotation survive.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 344,
+    "kind": "FORMATTING",
+    "found": "actual \"commission\" stage",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "actual \"commission\" stage",
+        "source_row": {
+          "id": 1726,
+          "course": "C05",
+          "seq": 344,
+          "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+          "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+          "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            256
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 344,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyer"
+            ],
+            "count": 2,
+            "row_ids": [
+              1725,
+              6882
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshan bsnun"
+            ],
+            "count": 4,
+            "row_ids": [
+              1726,
+              1844,
+              6883,
+              6990
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mtshon bsnun"
+            ],
+            "count": 10,
+            "row_ids": [
+              1841,
+              1842,
+              3559,
+              4013,
+              6987,
+              6988,
+              8042,
+              27140,
+              27311,
+              27312
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "another body's been born"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "takes a weapon and delivers a blow"
+            ],
+            "count": 2,
+            "row_ids": [
+              1726,
+              6883
+            ]
+          }
+        ],
+        "complete_records": "../evidence/corpus.json complete_records, all20 full corpus objects read",
+        "lineage_limit": "C16:864–866 repeats current C05:343–345 exactly and is a reused publication family, not independent confirmation or proof of new ingest corruption. C05:372/C16:889 repeat the first verse with PHYIR. Other MTSON BSNUN passages establish lexical usage, not a corrected same-passage witness."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 169,
+          "wylie": 169,
+          "english": 349
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 344,
+            "field": "acip",
+            "start": 235806,
+            "bytes": 172,
+            "sha256": "190b407bb21c737ad0cf603c45c6a3e237275f579fadf6dba38263790b544644",
+            "original_text": "[IV.285-8]\r\n\r\nPHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 344,
+            "field": "english",
+            "start": 235980,
+            "bytes": 353,
+            "sha256": "9e9c48f81c08d4372db968a6ce57d35b608e8846400133dc16ff393907ee9190",
+            "original_text": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow\r\nto someone else which is sure to kill him, but then this murderer himself\r\nhappens to die, either before his victim or together with him--at the same\r\ntime. Can we say then that the actual \"commission\" stage of a full path of\r\naction has occurred for such a murderer, or not?\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 56,
+        "master_objects": 102,
+        "personally_read_reused_objects": 28,
+        "new_complete_master_objects_read": 74,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_records_read": 20
+      },
+      "d_defensibility": {
+        "judgment": "Quoted commission is GMR's explicit gloss of the actual-stage technical term. Preserve its nested quotation characters; no new formatting correction follows.",
+        "material": "../evidence/lexical.json complete master_objects; personally-read-object-reuse.json; complete corpus records and original-decisions.json"
+      }
+    }
+  }
+]

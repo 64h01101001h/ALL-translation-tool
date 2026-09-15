@@ -1,0 +1,26 @@
+"""Apply the root's precise pre-generation metadata correction; no semantic invention."""
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[1];B=R.parent
+def read(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+p=B/'root-reconciliation-decisions-v2.json';assert pin(p)=={'bytes':10711,'sha256':'cc5eef6c1e8730fcd0e7252da5b4602d3f948eac896c77a26436eaeee4f9bfa0'};root=read(p);change=root['note_correction'];H=R/'history/pre-generation-note';H.mkdir(parents=True,exist_ok=False)
+assert not(R/'native/344-generator-v1').exists() and not(R/'native/344-resolver-v1').exists()
+for src,name in [(R/'344/spec.json','assembled-344-spec-before-note.json'),(R/'helpers/assemble.py','executed-assemble.py.txt'),(R/'provenance.json','provenance-before-note.json'),(R/'344/original-other-dispositions.json','344-other-dispositions-before-note.json')]:
+ (H/name).write_bytes(src.read_bytes())
+spec=read(R/'344/spec.json');seg=spec['segments'][0];assert seg['note']==change['original_note'];assert [x['id']for x in seg['spans']]==root['selection']['344']['retained_original_ids'] and 'w8'not in seg['eng_order'];seg['note']=change['corrected_note'];put(R/'344/spec.json',spec)
+manifest=read(R/'original-to-copy-manifest.json')
+# Earlier copy records captured the original bytes before deliberate derived edits.
+# Keep their originals as exact immutable copies and point those records to them.
+for m in manifest:
+ if m['copy']in ['344/spec.json','helpers/run_native.py']:
+  old=Path(m['original']);dest=H/('original-English-344-spec.json'if m['copy']=='344/spec.json'else'original-native-runner.py.txt');dest.write_bytes(old.read_bytes());assert pin(dest)=={k:m[k]for k in ['bytes','sha256']};m['copy']=str(dest.relative_to(R))
+dest=R/'evidence'/p.name;dest.write_bytes(p.read_bytes());manifest.append({'original':str(p),'copy':str(dest.relative_to(R)),**pin(dest)});put(R/'original-to-copy-manifest.json',manifest)
+other=read(R/'344/original-other-dispositions.json')
+for x in other:
+ if x['field']in ['spec.note','report.md']:x['reason']='Exact original proposal provenance is retained. Current344 removes w8 and its eng_order entry and replaces the singular segment note with the precise root v2 correction before generation. The separate reconciliation report states current counts and native scope.'
+put(R/'344/original-other-dispositions.json',other)
+put(R/'pre-generation-note-correction.json',{'status':'APPLIED_BEFORE_FIRST_344_NATIVE_RUN','judgment_by':'root','mechanical_assembler':'/root/reusable_closure_review','root_decisions':{'path':'evidence/'+p.name,**pin(p)},'complete_root_correction':change,'original_note_preserved_in':'history/pre-generation-note/original-English-344-spec.json','original_root_decisions_retained':'evidence/root-reconciliation-decisions.json','new_generator_runs':0,'new_resolver_runs':0,'native_failure':False,'final_spec':pin(R/'344/spec.json')})
+prov=read(R/'provenance.json');prov['root_decisions']='evidence/'+p.name;prov['root_revision']=2;prov['pre_generation_metadata_correction']='pre-generation-note-correction.json';put(R/'provenance.json',prov)
+print(json.dumps({'status':'PASS_PRE_GENERATION_NOTE_CORRECTION','final_344_spec':pin(R/'344/spec.json'),'originals_unchanged':True,'native_runs':0}))

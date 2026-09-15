@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "import json,pathlib,hashlib,gzip,re,html\nR=pathlib.Path.cwd();B=R/'campaign-artifacts/C05-343-345';Q=B/'reconciled';S=B/'semantic-review'\ndef load(p):return json.loads(p.read_text())\ndef sha(x):return hashlib.sha256(x).hexdigest()\ndef pin(p):\n b=p.read_bytes();return {'bytes':len(b),'sha256':sha(b)}\ndef put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\\n')\n# Recompute measured counts from the complete, hash-verified original assets; do not rerun source queries.\npins=load(B/'proposal-baseline.json')['source_pins']\nfor name in ['master','corpus']:assert pin(pathlib.Path(pins[name]['path']))=={k:pins[name][k]for k in ['bytes','sha256']}\nmaster=json.loads(gzip.decompress(pathlib.Path(pins['master']['path']).read_bytes()));corpus=json.loads(gzip.decompress(pathlib.Path(pins['corpus']['path']).read_bytes()))\nindex={}\nfor collection in ['unified_entries','curated_entries','glossary_entries']:\n for i,v in enumerate(master[collection]):\n  for term in {v.get('wylie',''),*v.get('wylie_variants',[])}:index.setdefault(term,[]).append(f'{collection}:{i}')\nlexcounts=[]\nfor a in ['tibetan/evidence/lexical.json','english/evidence/lexical.json','english/evidence/supplemental-lexical.json']:\n for q in load(B/a)['queries']:\n  keys=index.get(q['term'],[]);assert set(keys)==set(q['master_keys']) and len(keys)==q['master_count'],q['term']\n  ids=[int(k.split(':')[1])+1 for k in keys if k.startswith('unified_entries:')];assert set(ids)=={r['id']for r in q['spine_rows']} and len(ids)==q['spine_count']\n  for row in q['spine_rows']:assert json.loads(row['raw'])==master['unified_entries'][row['id']-1]\n  lexcounts.append({'angle':a,'term':q['term'],'master_count':len(keys),'spine_count':len(ids)})\ncorpuscounts=[]\nfor rel in ['tibetan/evidence/corpus.json','english/evidence/corpus.json']:\n for q in load(B/rel)['queries']:\n  field=q.get('field') or re.search(r'instr\\((wylie|english|acip),',q['sql']).group(1);term=q['parameters'][0];contains='instr(' in q['sql'];exclude='C13' in q['sql']\n  ids=[i+1 for i,v in enumerate(corpus) if (not exclude or v.get('course')!='C13') and ((term in v.get(field,'')) if contains else (v.get(field)==term))]\n  assert len(ids)==q['count'] and set(ids)==set(q['row_ids']),(rel,term,ids,q['row_ids'])\n  corpuscounts.append({'source':rel,'field':field,'parameters':q['parameters'],'count':len(ids),'row_ids':ids,'operation':'instr'if contains else '='})\nput(S/'evidence/material-counts.json',{'status':'PASS','method':'Recompute original exact/substring counts over hash-verified complete master/corpus assets; no SQL or generator reruns. All queried material objects were personally read; full assets are counted, not claimed linguistically read.','lexical_queries':lexcounts,'corpus_queries':corpuscounts,'unique_full_material_objects':119,'prior_personal_full_reuse':39,'new_personal_full_reads':80})\n\nprint(json.dumps({'status':'PASS_MATERIAL_COUNTS','lexical_queries':len(lexcounts),'corpus_queries':len(corpuscounts),'new_SQL_queries':0,'new_native_generator_resolver_runs':0}))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-15T01:58:08.083394+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

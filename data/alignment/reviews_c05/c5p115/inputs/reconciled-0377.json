@@ -1,0 +1,73 @@
+{
+  "status": "PASS_EXACT_FACTUAL_CORRECTION_ONLY",
+  "requested_by": "independent semantic reviewer; authorized by root",
+  "prior_freeze": {
+    "path": "history/reviewer-provenance-correction/prior-freeze.json",
+    "bytes": 23089,
+    "sha256": "f9984b2bf91487bbc563aedeb915275f622b2874e729352c7b4bf8ad817c536a"
+  },
+  "changes": [
+    {
+      "path": "343/original-other-dispositions.json",
+      "field": "reason on four spec.note/report.md original provenance records",
+      "before": {
+        "bytes": 12860,
+        "sha256": "12db32bec5b8a00a6e17a1a62c36d749a5f8be794a92a6df2bbf9494f96593b2"
+      },
+      "after": {
+        "bytes": 13164,
+        "sha256": "dc00c5c09bfe37aa2030559db9fe98031f1f8da8d86a56b7345604ec8593a098"
+      },
+      "old": "Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes any original344 first-death, count or native-execution claim; only w8 and its eng_order entry change in final344 spec.",
+      "new": "Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes original344 first-death, count or native-execution claims; final344 removes w8 and its eng_order entry and replaces the singular segment note with the exact root v2 correction before generation."
+    },
+    {
+      "path": "345/original-other-dispositions.json",
+      "field": "reason on four spec.note/report.md original provenance records",
+      "before": {
+        "bytes": 15340,
+        "sha256": "ad46e6afd65a8076cfbdc8fc33599eed2753920e3765df1fc3c44dc87d349906"
+      },
+      "after": {
+        "bytes": 15644,
+        "sha256": "3fa50495a0730b166295643a87b1ee8e3d532a0b7cc810d0855f409fb3a79137"
+      },
+      "old": "Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes any original344 first-death, count or native-execution claim; only w8 and its eng_order entry change in final344 spec.",
+      "new": "Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes original344 first-death, count or native-execution claims; final344 removes w8 and its eng_order entry and replaces the singular segment note with the exact root v2 correction before generation."
+    },
+    {
+      "path": "344/report.md",
+      "field": "one provenance sentence",
+      "before": {
+        "bytes": 2894,
+        "sha256": "a0541f0850187caba9533b92044b348540b87967c020150e83e1d02df75a8439"
+      },
+      "after": {
+        "bytes": 2964,
+        "sha256": "36dfd14c23bf953143920888afbe321047fd3b402d827c93639ad04bbb809bdb"
+      },
+      "old": "The exact original English report remains report.md as provenance; this reconciliation-report.md states the current selection, counts, actual baseline and native scope.",
+      "new": "The exact original English344 report is preserved at ../history/pre-generation-note/original-English-344-report.md. Current report.md and reconciliation-report.md state the final19-span selection, counts, actual baseline and native scope."
+    },
+    {
+      "path": "344/reconciliation-report.md",
+      "field": "one provenance sentence",
+      "before": {
+        "bytes": 2894,
+        "sha256": "a0541f0850187caba9533b92044b348540b87967c020150e83e1d02df75a8439"
+      },
+      "after": {
+        "bytes": 2964,
+        "sha256": "36dfd14c23bf953143920888afbe321047fd3b402d827c93639ad04bbb809bdb"
+      },
+      "old": "The exact original English report remains report.md as provenance; this reconciliation-report.md states the current selection, counts, actual baseline and native scope.",
+      "new": "The exact original English344 report is preserved at ../history/pre-generation-note/original-English-344-report.md. Current report.md and reconciliation-report.md state the final19-span selection, counts, actual baseline and native scope."
+    }
+  ],
+  "unchanged_prior_frozen_files": 138,
+  "spec_body_native_changes": 0,
+  "generator_runs": 0,
+  "resolver_runs": 0,
+  "semantic_selection_changes": 0,
+  "limits": "The previous freeze and all four affected preimages remain exact history. Existing successful native captures are reused; no alignment re-execution or new acceptance claim."
+}

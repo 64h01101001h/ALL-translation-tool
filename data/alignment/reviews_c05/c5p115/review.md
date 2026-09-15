@@ -1,0 +1,9 @@
+APPROVE: C05:343–345 contains61 provisional spans,39 nonnull d5 pairs,4 d7 members and1 RO closure-fusion null. Two LOW/PROBABLE spelling questions are retained for human review; no source correction is authorized.
+
+The independent source/original assessment was banked before root choices. Final343 and345 reuse exact English native inputs and outputs. Final344 omits both shared death predicates, retains positive BYUNG/occurred against the elliptical negative alternative, and corrects the stale note before its one new native pair.345 preserves phrase-depth cannot occur and separate MA/never and BYAS PA/went through.
+
+All119 original span proposals,31 original omissions,30 category screens and4 original errata candidates are preserved. The reviewer read119 complete material master objects (39 exact prior personal reuse,80 new),20 complete corpus records,15 context records and6 physical extents. Final61 span judgments and33 omission judgments are explicit. Raw PHYER and MTSAN remain unbanked; full source/witness counterevidence and five-ground reviews are retained.
+
+Source origin remains58b6799188c8cb95f9095fea7cdc6bbf4d653894 through336. Actual acceptance baseline is1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0 through342. Semantic rules and register are unchanged; two accepted page registrations and ledger appends form the governance delta.
+
+Both factual provenance findings are independently resolved in successor reconciliation932574e666ff9353a2731c6a4abc2ad932e8beffa0ea7536df0737c3e08b13f6. Initial NEEDS_CORRECTION records, frozen preimages, original proposal failures and the reviewer copier-schema failure remain preserved. Corrected source/count/copy captures passed; all exact final spec/body/report/errata copies are bound. Seven actual unique native pairs exist (six originals plus one new344), with zero reviewer/root generator or resolver executions. Root acceptance and production remain separate.

@@ -1,0 +1,1812 @@
+{
+  "schema": "c05-independent-semantic-review-v1",
+  "verdict": "APPROVE",
+  "spec_verdict": "APPROVE",
+  "quality_verdict": "APPROVE",
+  "open_findings": [],
+  "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+  "source_origin_accepted_through": 336,
+  "later_supplied_acceptance_baseline": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+  "later_baseline_accepted_through": 342,
+  "reconciliation_freeze_sha256": "932574e666ff9353a2731c6a4abc2ad932e8beffa0ea7536df0737c3e08b13f6",
+  "total_spans": 61,
+  "total_nulls": 1,
+  "total_word_pairs": 39,
+  "total_d7": 4,
+  "total_errata": 2,
+  "segments": [
+    {
+      "seq": 343,
+      "span_count": 22,
+      "null_count": 1,
+      "word_pair_count": 14,
+      "d7_count": 1,
+      "spec_path": "reviewed-final/343/spec.json",
+      "body_path": "reviewed-final/343/body.html",
+      "spec_bytes": 3870,
+      "spec_sha256": "0197c0c516b035a8102aad63aead95c66fa139afa7071a8bce65e9414dec4b46",
+      "body_bytes": 3833,
+      "body_sha256": "5473dcfc07fd6a6c60c368891bc31c321f5620acc844439919f297071b6d9e09",
+      "generator_exit": 0,
+      "resolver_exit": 0,
+      "native_evidence": {
+        "generator": {
+          "command_and_result": "native/reconciled/343-generator-v1/execution.json",
+          "stdin": "native/reconciled/343-generator-v1/stdin.bin",
+          "stdout": "native/reconciled/343-generator-v1/stdout.bin",
+          "stderr": "native/reconciled/343-generator-v1/stderr.bin",
+          "exit": "native/reconciled/343-generator-v1/exit.txt",
+          "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+        },
+        "resolver": {
+          "command_and_result": "native/reconciled/343-resolver-v1/execution.json",
+          "stdin": "native/reconciled/343-resolver-v1/stdin.bin",
+          "stdout": "native/reconciled/343-resolver-v1/stdout.bin",
+          "stderr": "native/reconciled/343-resolver-v1/stderr.bin",
+          "exit": "native/reconciled/343-resolver-v1/exit.txt",
+          "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+        }
+      }
+    },
+    {
+      "seq": 344,
+      "span_count": 19,
+      "null_count": 0,
+      "word_pair_count": 11,
+      "d7_count": 3,
+      "spec_path": "reviewed-final/344/spec.json",
+      "body_path": "reviewed-final/344/body.html",
+      "spec_bytes": 3382,
+      "spec_sha256": "3465570ecb2f869711e523144c1c39472a8772d532e78222a0c70337f8d4c039",
+      "body_bytes": 3650,
+      "body_sha256": "722ad13a8655843cad23e6752f1ae2d608460039ad59c6856a500f2bc96c0151",
+      "generator_exit": 0,
+      "resolver_exit": 0,
+      "native_evidence": {
+        "generator": {
+          "command_and_result": "native/reconciled/344-generator-v1/execution.json",
+          "stdin": "native/reconciled/344-generator-v1/stdin.bin",
+          "stdout": "native/reconciled/344-generator-v1/stdout.bin",
+          "stderr": "native/reconciled/344-generator-v1/stderr.bin",
+          "exit": "native/reconciled/344-generator-v1/exit.txt",
+          "mode": "ONE_NEW_RECONCILER_EXECUTION"
+        },
+        "resolver": {
+          "command_and_result": "native/reconciled/344-resolver-v1/execution.json",
+          "stdin": "native/reconciled/344-resolver-v1/stdin.bin",
+          "stdout": "native/reconciled/344-resolver-v1/stdout.bin",
+          "stderr": "native/reconciled/344-resolver-v1/stderr.bin",
+          "exit": "native/reconciled/344-resolver-v1/exit.txt",
+          "mode": "ONE_NEW_RECONCILER_EXECUTION"
+        }
+      }
+    },
+    {
+      "seq": 345,
+      "span_count": 20,
+      "null_count": 0,
+      "word_pair_count": 14,
+      "d7_count": 0,
+      "spec_path": "reviewed-final/345/spec.json",
+      "body_path": "reviewed-final/345/body.html",
+      "spec_bytes": 3341,
+      "spec_sha256": "33c28ffb37ee1d3ec8fc4c3f57d8f5e70c183e2751fa548f0f55b9514f167ab7",
+      "body_bytes": 3551,
+      "body_sha256": "1939176e627910a3f6699b3fc553e58094c5e24bf86d017a2cde0e6aad52a8b2",
+      "generator_exit": 0,
+      "resolver_exit": 0,
+      "native_evidence": {
+        "generator": {
+          "command_and_result": "native/reconciled/345-generator-v1/execution.json",
+          "stdin": "native/reconciled/345-generator-v1/stdin.bin",
+          "stdout": "native/reconciled/345-generator-v1/stdout.bin",
+          "stderr": "native/reconciled/345-generator-v1/stderr.bin",
+          "exit": "native/reconciled/345-generator-v1/exit.txt",
+          "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+        },
+        "resolver": {
+          "command_and_result": "native/reconciled/345-resolver-v1/execution.json",
+          "stdin": "native/reconciled/345-resolver-v1/stdin.bin",
+          "stdout": "native/reconciled/345-resolver-v1/stdout.bin",
+          "stderr": "native/reconciled/345-resolver-v1/stderr.bin",
+          "exit": "native/reconciled/345-resolver-v1/exit.txt",
+          "mode": "EXACT_ENGLISH_ORIGINAL_REUSE"
+        }
+      }
+    }
+  ],
+  "independence": "Source-first notes preceded original reading. Independent substantive assessment d657ff842e39a97a68aca25d8cc3ce17ba2950873d3de8dad039b3ea2c7fa15f was banked before any root choice/note was read and before changed reconciliation generation. Root decisions were then compared with that precommitted assessment. Final immutable successor/native/body/range evidence was independently reviewed; root acceptance remains separate.",
+  "initial_assessment": {
+    "bytes": 10155,
+    "sha256": "d657ff842e39a97a68aca25d8cc3ce17ba2950873d3de8dad039b3ea2c7fa15f"
+  },
+  "source_reading": {
+    "original_spans": 119,
+    "original_omissions": 31,
+    "category_screens": 30,
+    "full_unique_master_objects": 119,
+    "new_full_master_objects_read": 80,
+    "exact_prior_personal_full_object_reuse": 39,
+    "full_corpus_records": 20,
+    "full_physical_extents": 6,
+    "context": "337–351;337–348 matched prior personally fully read C340–342 context objects exactly;349–351 newly read fully.",
+    "identity_proof": "Completed source-and-original-identity, material-count-validation and corrected final-evidence-copy-attempt02 captures prove exact source/original/current native identities and measured counts. No new generator/resolver execution.",
+    "material_inventory": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-343-345/semantic-review/evidence/master-read-inventory.json",
+      "bytes": 19645,
+      "sha256": "15c10bc8fad08524acf3cdbe99a450c636d172a59bb555ba3cdc8e43a0aaca86"
+    }
+  },
+  "reading_completion": "All119 original spans/31 original omissions/30 screens, six original reports and notes were personally read.119 complete master objects:39 exact prior personal reuse plus80 new full reads;20 complete corpus records and15 context records, six physical extents. Final61 spans match earlier independent seven-field judgments exactly; all33 final omissions and43 grouped original dispositions checked.200 register entries screened, complete prior register identity matched; materially relevant class readings reused, not a new full linguistic reading of200 historical records.",
+  "span_semantic_review": [
+    {
+      "seq": 343,
+      "id": "w1",
+      "d": 5,
+      "tib": "snga",
+      "eng": "Before",
+      "tib_range": [
+        0,
+        4
+      ],
+      "eng_range": [
+        43,
+        49
+      ],
+      "verdict": "APPROVE",
+      "reason": "Temporal precedence corresponds directly to the capitalized verse word Before."
+    },
+    {
+      "seq": 343,
+      "id": "p2",
+      "d": 6,
+      "tib": "dang",
+      "eng": "or",
+      "tib_range": [
+        5,
+        9
+      ],
+      "eng_range": [
+        50,
+        52
+      ],
+      "verdict": "APPROVE",
+      "reason": "DANG coordinates the two alternative death timings; or is the complete visible coordinator."
+    },
+    {
+      "seq": 343,
+      "id": "w3",
+      "d": 5,
+      "tib": "mnyam du",
+      "eng": "together",
+      "tib_range": [
+        10,
+        18
+      ],
+      "eng_range": [
+        53,
+        61
+      ],
+      "verdict": "APPROVE",
+      "reason": "The established temporal adverb MNYAM DU is together, with no need to split its internal case syllable."
+    },
+    {
+      "seq": 343,
+      "id": "w4",
+      "d": 5,
+      "tib": "shi ba",
+      "eng": "die",
+      "tib_range": [
+        19,
+        25
+      ],
+      "eng_range": [
+        39,
+        42
+      ],
+      "verdict": "APPROVE",
+      "reason": "SHI BA names death; die is its direct predicate while those who is English nominal framing."
+    },
+    {
+      "seq": 343,
+      "id": "p5",
+      "d": 6,
+      "tib": "la",
+      "eng": "for",
+      "tib_range": [
+        26,
+        28
+      ],
+      "eng_range": [
+        25,
+        28
+      ],
+      "verdict": "APPROVE",
+      "reason": "This LA marks the affected people and corresponds to for after stage, not the later causal for."
+    },
+    {
+      "seq": 343,
+      "id": "w6",
+      "d": 5,
+      "tib": "dngos",
+      "eng": "actual",
+      "tib_range": [
+        31,
+        36
+      ],
+      "eng_range": [
+        12,
+        18
+      ],
+      "verdict": "APPROVE",
+      "reason": "DNGOS supplies actual; stage explains the technical shorthand without licensing a separate source word."
+    },
+    {
+      "seq": 343,
+      "id": "w7",
+      "d": 5,
+      "tib": "med",
+      "eng": "no",
+      "tib_range": [
+        37,
+        40
+      ],
+      "eng_range": [
+        9,
+        11
+      ],
+      "verdict": "APPROVE",
+      "reason": "MED explicitly negates the existence of the stage, giving no while there is supplies the existential frame."
+    },
+    {
+      "seq": 343,
+      "id": "w8",
+      "d": 5,
+      "tib": "lus",
+      "eng": "body",
+      "tib_range": [
+        41,
+        44
+      ],
+      "eng_range": [
+        75,
+        79
+      ],
+      "verdict": "APPROVE",
+      "reason": "LUS is the body noun; the apostrophe delimits a contracted auxiliary has, so body is a complete lexical word."
+    },
+    {
+      "seq": 343,
+      "id": "w9",
+      "d": 5,
+      "tib": "gzhan",
+      "eng": "another",
+      "tib_range": [
+        45,
+        50
+      ],
+      "eng_range": [
+        67,
+        74
+      ],
+      "verdict": "APPROVE",
+      "reason": "GZHAN distinguishes the new body as another; the unrelated mined bodhisattva gloss has no authority in this passage."
+    },
+    {
+      "seq": 343,
+      "id": "w10",
+      "d": 5,
+      "tib": "skyes",
+      "eng": "born",
+      "tib_range": [
+        51,
+        56
+      ],
+      "eng_range": [
+        87,
+        91
+      ],
+      "verdict": "APPROVE",
+      "reason": "SKYES is born in the new-body explanation, excluding auxiliary been."
+    },
+    {
+      "seq": 343,
+      "id": "p11",
+      "d": 6,
+      "tib": "ro",
+      "eng": null,
+      "tib_range": [
+        63,
+        65
+      ],
+      "eng_range": null,
+      "verdict": "APPROVE",
+      "reason": "RO is a sentence-closing particle, attested with punctuation; the period after born gives its exact grammatical closure without a separate word. The fusion null is affirmative, not uncertainty."
+    },
+    {
+      "seq": 343,
+      "id": "w12",
+      "d": 5,
+      "tib": "dmag",
+      "eng": "war",
+      "tib_range": [
+        68,
+        72
+      ],
+      "eng_range": [
+        128,
+        131
+      ],
+      "verdict": "APPROVE",
+      "reason": "DMAG supplies war; the preceding article and in are not part of that noun."
+    },
+    {
+      "seq": 343,
+      "id": "p13",
+      "d": 6,
+      "tib": "sogs",
+      "eng": "or whatever",
+      "tib_range": [
+        76,
+        80
+      ],
+      "eng_range": [
+        132,
+        143
+      ],
+      "verdict": "APPROVE",
+      "reason": "SOGS contributes the full or whatever enumerative closing gesture without adding a participant or event noun."
+    },
+    {
+      "seq": 343,
+      "id": "p14",
+      "d": 6,
+      "tib": "par",
+      "eng": "in",
+      "tib_range": [
+        81,
+        84
+      ],
+      "eng_range": [
+        123,
+        125
+      ],
+      "verdict": "APPROVE",
+      "reason": "Standalone PAR supplies the locative in for the war/example circumstance; adjacent LA remains a distributed part of the enumeration."
+    },
+    {
+      "seq": 343,
+      "id": "w15",
+      "d": 5,
+      "tib": "don",
+      "eng": "goal",
+      "tib_range": [
+        85,
+        88
+      ],
+      "eng_range": [
+        107,
+        111
+      ],
+      "verdict": "APPROVE",
+      "reason": "DON is the shared goal; their and the copular contraction remain outside."
+    },
+    {
+      "seq": 343,
+      "id": "w16",
+      "d": 5,
+      "tib": "gcig",
+      "eng": "same",
+      "tib_range": [
+        89,
+        93
+      ],
+      "eng_range": [
+        118,
+        122
+      ],
+      "verdict": "APPROVE",
+      "reason": "GCIG makes the goal the same; the determiner is English framing."
+    },
+    {
+      "seq": 343,
+      "id": "p17",
+      "d": 6,
+      "tib": "phyir",
+      "eng": "Because",
+      "tib_range": [
+        94,
+        99
+      ],
+      "eng_range": [
+        93,
+        100
+      ],
+      "verdict": "APPROVE",
+      "reason": "The second, correctly spelled PHYIR gives Because introducing the common-goal explanation. It does not authorize normalizing PHYER."
+    },
+    {
+      "seq": 343,
+      "id": "w18",
+      "d": 5,
+      "tib": "thams cad",
+      "eng": "All",
+      "tib_range": [
+        102,
+        111
+      ],
+      "eng_range": [
+        145,
+        148
+      ],
+      "verdict": "APPROVE",
+      "reason": "THAMS CAD exhaustively includes the participating agents and maps to All."
+    },
+    {
+      "seq": 343,
+      "id": "w19",
+      "d": 5,
+      "tib": "byed pa po",
+      "eng": "one who commits",
+      "tib_range": [
+        112,
+        122
+      ],
+      "eng_range": [
+        175,
+        190
+      ],
+      "verdict": "APPROVE",
+      "reason": "The established agent noun BYED PA PO is one who commits; the preceding article and final object pronoun are excluded."
+    },
+    {
+      "seq": 343,
+      "id": "m20",
+      "d": 7,
+      "tib": "byed",
+      "eng": "commits",
+      "tib_range": [
+        112,
+        116
+      ],
+      "eng_range": [
+        183,
+        190
+      ],
+      "verdict": "APPROVE",
+      "reason": "BYED gives the inflected commits within the whole agent noun; both language members are strictly contained complete lexical units."
+    },
+    {
+      "seq": 343,
+      "id": "p21",
+      "d": 6,
+      "tib": "bzhin",
+      "eng": "as much as",
+      "tib_range": [
+        123,
+        128
+      ],
+      "eng_range": [
+        160,
+        170
+      ],
+      "verdict": "APPROVE",
+      "reason": "BZHIN marks comparison of the participants with the doer, expressed as as much as; it does not own either participant."
+    },
+    {
+      "seq": 343,
+      "id": "w22",
+      "d": 5,
+      "tib": "ldan",
+      "eng": "possess",
+      "tib_range": [
+        129,
+        133
+      ],
+      "eng_range": [
+        149,
+        156
+      ],
+      "verdict": "APPROVE",
+      "reason": "LDAN denotes their possession of the action, rendered possess; it remains anaphoric English object framing."
+    },
+    {
+      "seq": 344,
+      "id": "w1",
+      "d": 5,
+      "tib": "pha rol po",
+      "eng": "someone else",
+      "tib_range": [
+        11,
+        21
+      ],
+      "eng_range": [
+        79,
+        91
+      ],
+      "verdict": "APPROVE",
+      "reason": "PHA ROL PO identifies the other person receiving the blow; someone else is a defensible complete equivalent, excluding to."
+    },
+    {
+      "seq": 344,
+      "id": "w2",
+      "d": 5,
+      "tib": "nges pa",
+      "eng": "sure",
+      "tib_range": [
+        27,
+        34
+      ],
+      "eng_range": [
+        101,
+        105
+      ],
+      "verdict": "APPROVE",
+      "reason": "NGES PA qualifies the result as certain, supplying sure; the death-to-kill causative recast is not silently banked."
+    },
+    {
+      "seq": 344,
+      "id": "w3",
+      "d": 5,
+      "tib": "bsnun",
+      "eng": "blow",
+      "tib_range": [
+        44,
+        49
+      ],
+      "eng_range": [
+        71,
+        75
+      ],
+      "verdict": "APPROVE",
+      "reason": "BSNUN supplies the striking action through the noun blow in a light-verb construction; it does not own weapon."
+    },
+    {
+      "seq": 344,
+      "id": "w4",
+      "d": 5,
+      "tib": "gsod byed",
+      "eng": "murderer",
+      "tib_range": [
+        55,
+        64
+      ],
+      "eng_range": [
+        133,
+        141
+      ],
+      "verdict": "APPROVE",
+      "reason": "GSOD BYED is the agent murderer at its first explicit mention, not the later repeated anaphoric label."
+    },
+    {
+      "seq": 344,
+      "id": "w5",
+      "d": 5,
+      "tib": "de",
+      "eng": "this",
+      "tib_range": [
+        65,
+        67
+      ],
+      "eng_range": [
+        128,
+        132
+      ],
+      "verdict": "APPROVE",
+      "reason": "DE points to that same agent with this immediately before murderer; emphatic himself is not part of the demonstrative."
+    },
+    {
+      "seq": 344,
+      "id": "w6",
+      "d": 5,
+      "tib": "gsad bya",
+      "eng": "victim",
+      "tib_range": [
+        68,
+        76
+      ],
+      "eng_range": [
+        184,
+        190
+      ],
+      "verdict": "APPROVE",
+      "reason": "GSAD BYA identifies the victim in the before comparison, excluding his."
+    },
+    {
+      "seq": 344,
+      "id": "w7",
+      "d": 5,
+      "tib": "sngar",
+      "eng": "before",
+      "tib_range": [
+        79,
+        84
+      ],
+      "eng_range": [
+        173,
+        179
+      ],
+      "verdict": "APPROVE",
+      "reason": "SNGAR is the complete before adverb; its final r is not split."
+    },
+    {
+      "seq": 344,
+      "id": "p9",
+      "d": 6,
+      "tib": "dang",
+      "eng": "or",
+      "tib_range": [
+        92,
+        96
+      ],
+      "eng_range": [
+        191,
+        193
+      ],
+      "verdict": "APPROVE",
+      "reason": "DANG coordinates the two death-timing alternatives and owns the first or."
+    },
+    {
+      "seq": 344,
+      "id": "w10",
+      "d": 5,
+      "tib": "mnyam du",
+      "eng": "together",
+      "tib_range": [
+        99,
+        107
+      ],
+      "eng_range": [
+        194,
+        202
+      ],
+      "verdict": "APPROVE",
+      "reason": "MNYAM DU is together, banked once; the later at the same time repeats this adverb rather than supplying another source instance."
+    },
+    {
+      "seq": 344,
+      "id": "p11",
+      "d": 6,
+      "tib": "la",
+      "eng": "for",
+      "tib_range": [
+        115,
+        117
+      ],
+      "eng_range": [
+        320,
+        323
+      ],
+      "verdict": "APPROVE",
+      "reason": "LA marks the person for whom the stage is in question; the English for occurs after the predicate but has the same relation."
+    },
+    {
+      "seq": 344,
+      "id": "w12",
+      "d": 5,
+      "tib": "las lam",
+      "eng": "path of action",
+      "tib_range": [
+        118,
+        125
+      ],
+      "eng_range": [
+        292,
+        306
+      ],
+      "verdict": "APPROVE",
+      "reason": "LAS LAM is the established path of action compound, excluding the supplied a full."
+    },
+    {
+      "seq": 344,
+      "id": "m13",
+      "d": 7,
+      "tib": "las",
+      "eng": "action",
+      "tib_range": [
+        118,
+        121
+      ],
+      "eng_range": [
+        300,
+        306
+      ],
+      "verdict": "APPROVE",
+      "reason": "LAS supplies action strictly inside the technical parent with a distinct complete English word."
+    },
+    {
+      "seq": 344,
+      "id": "m14",
+      "d": 7,
+      "tib": "lam",
+      "eng": "path",
+      "tib_range": [
+        122,
+        125
+      ],
+      "eng_range": [
+        292,
+        296
+      ],
+      "verdict": "APPROVE",
+      "reason": "LAM supplies path strictly inside the same parent, despite reversed member order in English."
+    },
+    {
+      "seq": 344,
+      "id": "p15",
+      "d": 6,
+      "tib": "gyi",
+      "eng": "of",
+      "tib_range": [
+        126,
+        129
+      ],
+      "eng_range": [
+        282,
+        284
+      ],
+      "verdict": "APPROVE",
+      "reason": "GYI links the stage to the action path, so the correct exponent is of after stage, not the internal of in path of action."
+    },
+    {
+      "seq": 344,
+      "id": "w16",
+      "d": 5,
+      "tib": "dngos gzhi",
+      "eng": "actual \"commission\" stage",
+      "tib_range": [
+        130,
+        140
+      ],
+      "eng_range": [
+        256,
+        281
+      ],
+      "verdict": "APPROVE",
+      "reason": "DNGOS GZHI names the actual commission stage as a whole technical unit; the quoted commission gloss and stage noun are both part of the local term."
+    },
+    {
+      "seq": 344,
+      "id": "m17",
+      "d": 7,
+      "tib": "dngos",
+      "eng": "actual",
+      "tib_range": [
+        130,
+        135
+      ],
+      "eng_range": [
+        256,
+        262
+      ],
+      "verdict": "APPROVE",
+      "reason": "DNGOS supplies actual within that technical parent; no unsupported GZHI/commission split follows."
+    },
+    {
+      "seq": 344,
+      "id": "w18",
+      "d": 5,
+      "tib": "'byung",
+      "eng": "occurred",
+      "tib_range": [
+        141,
+        147
+      ],
+      "eng_range": [
+        311,
+        319
+      ],
+      "verdict": "APPROVE",
+      "reason": "The positive BYUNG alternative corresponds to explicit occurred; the repeated negative verb is elided in or not. This positive/elliptical distinction supports exclusive first occurrence here."
+    },
+    {
+      "seq": 344,
+      "id": "p19",
+      "d": 6,
+      "tib": "ngam",
+      "eng": "or",
+      "tib_range": [
+        148,
+        152
+      ],
+      "eng_range": [
+        341,
+        343
+      ],
+      "verdict": "APPROVE",
+      "reason": "NGAM is the whole question-alternative particle, giving final or rather than the earlier timing conjunction."
+    },
+    {
+      "seq": 344,
+      "id": "p20",
+      "d": 6,
+      "tib": "mi",
+      "eng": "not",
+      "tib_range": [
+        153,
+        155
+      ],
+      "eng_range": [
+        344,
+        347
+      ],
+      "verdict": "APPROVE",
+      "reason": "MI is the explicit grammatical negative in or not, hence d6; no human-person noun sense or missing predicate null is asserted."
+    },
+    {
+      "seq": 345,
+      "id": "p1",
+      "d": 6,
+      "tib": "la",
+      "eng": "for",
+      "tib_range": [
+        3,
+        5
+      ],
+      "eng_range": [
+        56,
+        59
+      ],
+      "verdict": "APPROVE",
+      "reason": "Initial LA identifies the person for whom the stage does not occur and gives for."
+    },
+    {
+      "seq": 345,
+      "id": "w2",
+      "d": 5,
+      "tib": "de",
+      "eng": "this",
+      "tib_range": [
+        6,
+        8
+      ],
+      "eng_range": [
+        45,
+        49
+      ],
+      "verdict": "APPROVE",
+      "reason": "The second DE points to the actual stage with this; it does not supply the expanded noun stage."
+    },
+    {
+      "seq": 345,
+      "id": "w3",
+      "d": 5,
+      "tib": "'byung ba",
+      "eng": "occurrence",
+      "tib_range": [
+        9,
+        18
+      ],
+      "eng_range": [
+        31,
+        41
+      ],
+      "verdict": "APPROVE",
+      "reason": "BYUNG BA is the nominal occurrence in the opening answer; the following of belongs to English nominal syntax."
+    },
+    {
+      "seq": 345,
+      "id": "w4",
+      "d": 5,
+      "tib": "med",
+      "eng": "no",
+      "tib_range": [
+        19,
+        22
+      ],
+      "eng_range": [
+        28,
+        30
+      ],
+      "verdict": "APPROVE",
+      "reason": "MED supplies the first no denying occurrence; the later repeated no actual commission is explanatory, not a second source MED."
+    },
+    {
+      "seq": 345,
+      "id": "w5",
+      "d": 5,
+      "tib": "gsad bya",
+      "eng": "victim",
+      "tib_range": [
+        27,
+        35
+      ],
+      "eng_range": [
+        129,
+        135
+      ],
+      "verdict": "APPROVE",
+      "reason": "The first GSAD BYA supplies victim in the before-death condition; later victim mentions have distinct source support."
+    },
+    {
+      "seq": 345,
+      "id": "w6",
+      "d": 5,
+      "tib": "shi",
+      "eng": "dies",
+      "tib_range": [
+        39,
+        42
+      ],
+      "eng_range": [
+        136,
+        140
+      ],
+      "verdict": "APPROVE",
+      "reason": "The first SHI supplies dies for that victim. The negative-until frame MA…BAR contributes jointly to before and must not be misclassified as missing negation."
+    },
+    {
+      "seq": 345,
+      "id": "f7",
+      "d": 3,
+      "tib": "mi 'byung",
+      "eng": "cannot occur",
+      "tib_range": [
+        50,
+        59
+      ],
+      "eng_range": [
+        105,
+        117
+      ],
+      "verdict": "APPROVE",
+      "reason": "MI BYUNG/cannot occur is a complete negative predicate phrase at d3; glossary attestation alone does not turn this ordinary negated verb into a d5 compound. No d7 child or forbidden not-inside-cannot follows."
+    },
+    {
+      "seq": 345,
+      "id": "w8",
+      "d": 5,
+      "tib": "gsad bya",
+      "eng": "victim",
+      "tib_range": [
+        62,
+        70
+      ],
+      "eng_range": [
+        211,
+        217
+      ],
+      "verdict": "APPROVE",
+      "reason": "The second GSAD BYA supplies victim in the simultaneous-death comparison."
+    },
+    {
+      "seq": 345,
+      "id": "p9",
+      "d": 6,
+      "tib": "dang",
+      "eng": "as",
+      "tib_range": [
+        71,
+        75
+      ],
+      "eng_range": [
+        204,
+        206
+      ],
+      "verdict": "APPROVE",
+      "reason": "DANG relates the two people in the same-time comparison, realized by as after time, not by an invented and."
+    },
+    {
+      "seq": 345,
+      "id": "w10",
+      "d": 5,
+      "tib": "mnyam du",
+      "eng": "at the same time",
+      "tib_range": [
+        76,
+        84
+      ],
+      "eng_range": [
+        187,
+        203
+      ],
+      "verdict": "APPROVE",
+      "reason": "MNYAM DU is the established full temporal expression at the same time; its article is licensed by the attested idiom."
+    },
+    {
+      "seq": 345,
+      "id": "w11",
+      "d": 5,
+      "tib": "shi",
+      "eng": "dies",
+      "tib_range": [
+        85,
+        88
+      ],
+      "eng_range": [
+        182,
+        186
+      ],
+      "verdict": "APPROVE",
+      "reason": "The second SHI supplies the murderer dies predicate, distinct from the victim dies in the first condition."
+    },
+    {
+      "seq": 345,
+      "id": "p12",
+      "d": 6,
+      "tib": "na",
+      "eng": "where",
+      "tib_range": [
+        89,
+        91
+      ],
+      "eng_range": [
+        163,
+        168
+      ],
+      "verdict": "APPROVE",
+      "reason": "Conditional NA introduces the second case as where; it is not an unrelated spatial where or noun."
+    },
+    {
+      "seq": 345,
+      "id": "w13",
+      "d": 5,
+      "tib": "lus",
+      "eng": "body",
+      "tib_range": [
+        92,
+        95
+      ],
+      "eng_range": [
+        227,
+        231
+      ],
+      "verdict": "APPROVE",
+      "reason": "LUS supplies body in the rebirth clause. Later the body expands DES and is not another occurrence of LUS."
+    },
+    {
+      "seq": 345,
+      "id": "w14",
+      "d": 5,
+      "tib": "gzhan",
+      "eng": "another",
+      "tib_range": [
+        96,
+        101
+      ],
+      "eng_range": [
+        219,
+        226
+      ],
+      "verdict": "APPROVE",
+      "reason": "GZHAN supplies another for that new body, without promoting unrelated mined glossary content."
+    },
+    {
+      "seq": 345,
+      "id": "w15",
+      "d": 5,
+      "tib": "skyes",
+      "eng": "born",
+      "tib_range": [
+        102,
+        107
+      ],
+      "eng_range": [
+        255,
+        259
+      ],
+      "verdict": "APPROVE",
+      "reason": "SKYES supplies born; has been and of the killer remain outside."
+    },
+    {
+      "seq": 345,
+      "id": "w16",
+      "d": 5,
+      "tib": "pha rol po",
+      "eng": "victim",
+      "tib_range": [
+        120,
+        130
+      ],
+      "eng_range": [
+        373,
+        379
+      ],
+      "verdict": "APPROVE",
+      "reason": "PHA ROL PO denotes the other person targeted by the undertaking, locally named victim; this contextual referent remains provisional rather than a new dictionary definition."
+    },
+    {
+      "seq": 345,
+      "id": "w17",
+      "d": 5,
+      "tib": "sbyor ba",
+      "eng": "undertaking",
+      "tib_range": [
+        141,
+        149
+      ],
+      "eng_range": [
+        340,
+        351
+      ],
+      "verdict": "APPROVE",
+      "reason": "SBYOR BA supplies the attested technical undertaking; stage of and this act are explanatory and anaphoric framing."
+    },
+    {
+      "seq": 345,
+      "id": "p18",
+      "d": 6,
+      "tib": "ma",
+      "eng": "never",
+      "tib_range": [
+        150,
+        152
+      ],
+      "eng_range": [
+        308,
+        313
+      ],
+      "verdict": "APPROVE",
+      "reason": "MA supplies the separate complete negative word never as a standalone grammatical particle; no negated-clause d5 parent is needed."
+    },
+    {
+      "seq": 345,
+      "id": "w19",
+      "d": 5,
+      "tib": "byas pa",
+      "eng": "went through",
+      "tib_range": [
+        153,
+        160
+      ],
+      "eng_range": [
+        314,
+        326
+      ],
+      "verdict": "APPROVE",
+      "reason": "BYAS PA supplies the directly attested lexical predicate went through. It does not absorb never or the undertaking noun."
+    },
+    {
+      "seq": 345,
+      "id": "p20",
+      "d": 6,
+      "tib": "phyir",
+      "eng": "because",
+      "tib_range": [
+        163,
+        168
+      ],
+      "eng_range": [
+        291,
+        298
+      ],
+      "verdict": "APPROVE",
+      "reason": "Final PHYIR supplies because for the explanation that the new body never undertook this killing."
+    }
+  ],
+  "omission_semantic_review": [
+    {
+      "seq": 343,
+      "index": 0,
+      "original_basis": {
+        "seq": 343,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "Raw PHYER remains unbanked; a probable spelling question is retained with exact counterevidence and no normalization.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Raw spelling is retained; a repeated exact verse at C05:372/C16:889 reads phyir. File a probable spelling question, but do not bank a false phyer headword or silently align corrected phyir."
+    },
+    {
+      "seq": 343,
+      "index": 1,
+      "original_basis": {
+        "seq": 343,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "This grouped original omission must be superseded in part: final RO has demonstrated closure fusion and PAR/in is retained. LA in the enumeration remains without a separate atom; no separate du is created.",
+      "final_disposition": "CHANGE",
+      "reconciliation_reason": "Sentence-final RO closes the born proposition at the unique English period before Because. Full RO master has punctuation and terminating-particle senses; the local boundary is affirmative closure fusion, not a corpse/taste word or uncertain absence. Preserve the exact original English cls/conj/nul fields. SOGS directly attests or whatever and owns that closing gesture alone. Standalone PAR locates the war/example situation and is locally in, at whole-syllable d6. Exact PAR master lookup is empty: this is source-grammar evidence, not glossary attestation. Whole T la sogs par/or whatever would absorb the locative contribution in the enumerator. Internal LA has no secure additional English atom and stays unbanked without null."
+    },
+    {
+      "seq": 343,
+      "index": 2,
+      "original_basis": {
+        "seq": 343,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "Supplied nominal, auxiliary, possessive, determiner and anaphoric English framing remains outside the chosen lexical heads; technical stage is understood but not assigned to an invented gzhi.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Existential/perfect support, supplied referents, articles and anaphoric objects remain outside tight source words. Apostrophe-delimited body/goal bases are complete lexical units, not forbidden interior stems."
+    },
+    {
+      "seq": 343,
+      "index": 3,
+      "original_basis": {
+        "seq": 343,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "Whole MNYAM DU remains unsplit, but BYED/commits is supported by complete member evidence and retained inside BYED PA PO. Uncertain pa/po member guesses remain omitted.",
+      "final_disposition": "CHANGE",
+      "reconciliation_reason": "Complete BYED PA PO directly attests one who commits; complete BYED glossary has commit. The inflected commits member is a whole English word strictly within the agent parent. Exclude the and it; do not invent a PO/one member. MNYAM DU remains whole, with no speculative additional children."
+    },
+    {
+      "seq": 343,
+      "index": 4,
+      "original_basis": {
+        "seq": 343,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "PHYER is preserved literally and unbanked; internal PHYIR quotation supports a tentative source question without granting corrected-word authority.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The exact source spelling has no exact lexical record. C05:372 quotes the same line with PHYIR and the same causal English; C16:864 repeats PHYER. Preserve the source question and omit this uncertain token instead of silently aligning a normalized phyir."
+    },
+    {
+      "seq": 343,
+      "index": 5,
+      "original_basis": {
+        "seq": 343,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "LA has no unique additional atom once SOGS owns or whatever and standalone PAR gives in; omit as distributed grammar, not a null.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The connective within la sogs par participates in the enumerative construction; sogs owns the visible or whatever and par the locative in. A separate English atom for la is uncertain, so no null is asserted."
+    },
+    {
+      "seq": 343,
+      "index": 6,
+      "original_basis": {
+        "seq": 343,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "Together belongs to complete MNYAM DU; no separate mnyam/du English word exists. Agent-noun remainder pa po is not arbitrarily divided into one/who.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "No further unique lexical member is established. Together is already the whole compound; the agent-noun remainder is not split into an arbitrary one/who mapping."
+    },
+    {
+      "seq": 343,
+      "index": 7,
+      "original_basis": {
+        "seq": 343,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "The existential frame, technical-stage expansion, relative/auxiliary articles, possessives and supplied objects remain verbatim outside the narrower spans.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Nominal, auxiliary, article, possessive and anaphoric framing remains unwrapped. Keeping dngos/actual narrow does not claim that the technical stage is absent from the Tibetan shorthand."
+    },
+    {
+      "seq": 344,
+      "index": 0,
+      "original_basis": {
+        "seq": 344,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "CHI is recast from die into causative kill rather than directly matched. MTSAN/weapon remains unresolved spelling-sensitive correspondence; BSNUN/blow is independently supported.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Die is recast causatively as kill, so no isolated equivalence is asserted. Raw mtshan has night/name readings and differs from weapon mtshon; spelling question is recorded separately and no weapon headword is fabricated."
+    },
+    {
+      "seq": 344,
+      "index": 1,
+      "original_basis": {
+        "seq": 344,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "Both source SHI BA predicates share the one fronted die without an exclusive occurrence anchor. Both are omitted, neither nulled.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Two source death predicates under before/together alternatives share one fronted English die. Omit both as distributed scope, not nulls or duplicate claims."
+    },
+    {
+      "seq": 344,
+      "index": 2,
+      "original_basis": {
+        "seq": 344,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "NAS and the question/report frames are distributed; second BYUNG is elided in or not. The temporal synonym is an English repetition. These omissions assert neither missing content nor a new source defect.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Question/report/converb framing is expanded or relocated, the English death-time synonym is repeated, and the negative occurrence predicate is elided after not. These are not independent missing-content exponents."
+    },
+    {
+      "seq": 344,
+      "index": 3,
+      "original_basis": {
+        "seq": 344,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "Named participants, light verbs, aspect, determination, possessive and repeated explanatory text remain outside selected lexical nouns and relations.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "English names understood participants and adds light verbs, determination, possessors, auxiliaries and repeated anaphors. Preserve all wording without wrapping it into narrower Tibetan entries."
+    },
+    {
+      "seq": 344,
+      "index": 4,
+      "original_basis": {
+        "seq": 344,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 4
+      },
+      "verdict": "APPROVE",
+      "reason": "Original blanket member omission is partly superseded: final LAS/action, LAM/path and DNGOS/actual have independent lexical support. No guessed GZHI or murderer member is added.",
+      "final_disposition": "CHANGE",
+      "reconciliation_reason": "LAS/action, LAM/path and DNGOS/actual are independently supported whole-word members strictly inside their established compounds. Curated LAS deeds does not erase complete glossary action; local source action is provisional. Keep whole actual \"commission\" stage, without speculative GZHI member. Standalone MI/not is a negative grammatical particle d6, not the noun human/d5."
+    },
+    {
+      "seq": 344,
+      "index": 5,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "Citation apparatus and bound genitives remain source-verbatim; no invented apparatus pairing or stripped suffix is authorized.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Citation and nominal/relative grammar remain exact. No fabricated English span is added for apparatus or distributed grammar."
+    },
+    {
+      "seq": 344,
+      "index": 6,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "The sure-to-die source is recast as a blow sure to kill; an isolated CHI/kill pairing would misrepresent causative structure.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The source says the other person is certain to die; English recasts the weapon/blow as sure to kill him. A direct die/kill atom would conflate intransitive death with the causative construction. The distributed relation is preserved unbanked, not nulled."
+    },
+    {
+      "seq": 344,
+      "index": 7,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "Preserve raw MTSAN and the full tentative question/counterexamples; no MTSAN/weapon head or silent MTSON correction.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Raw MTSAN means name/sign/night in the complete records, whereas MTSON has weapon and mtshon bsnun is attested. Another MTSAN BSNUN occurs metaphorically at C05:462, and C16 repeats this row exactly. These are counterevidence to claiming an isolated ingest loss. Propose a LOW/PROBABLE spelling question without normalizing or banking mtshan/weapon."
+    },
+    {
+      "seq": 344,
+      "index": 8,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "Original first-SHI-BA ownership is superseded: both death predicates remain unbanked. Positive BYUNG/occurred is retained because or not is expressly elliptical; second BYUNG is omitted. NAS stays distributed.",
+      "final_disposition": "CHANGE",
+      "reconciliation_reason": "Two SHI BA predicates under before/together share one fronted die. Exclusive first occurrence ownership is underdetermined; omit both with shared-scope explanation, not duplicate die or null either. Remove only original English344w8 from selected spec. The question explicitly gives positive has occurred and then negative or not with an elided verb. Unlike the two death alternatives sharing one fronted predicate, positive-first occurrence owns the expressed occurred. Keep original positive BYUNG pair and omit the second source BYUNG with ellipsis reason; no second null or word. NAS remains distributed in the expanded supposition."
+    },
+    {
+      "seq": 344,
+      "index": 9,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 4
+      },
+      "verdict": "APPROVE",
+      "reason": "ZHE NA is realized across initial reporting and final question frames; choosing begin or say alone is uncertain, so omit without false absence null.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Reporting/question force is distributed over both English frames. A unique begin or say alignment is less secure than the lexical body of the question, so omit the formula without a false null."
+    },
+    {
+      "seq": 344,
+      "index": 10,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 5
+      },
+      "verdict": "APPROVE",
+      "reason": "Whole DNGOS GZHI is secure; its DNGOS/actual member is direct, while assigning GZHI separately to commission or stage is not established.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The technical parent securely supplies actual commission stage. Separating gzhi as commission or stage is less certain than the direct dngos/actual member, so leave it unsplit."
+    },
+    {
+      "seq": 344,
+      "index": 11,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "omissions",
+        "index": 6
+      },
+      "verdict": "APPROVE",
+      "reason": "Expanded supposition, participant, light-verb, causative, auxiliary and repeated timing/anaphoric wording remain unwrapped; they are not defects in the source translation.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "English participants, light verbs, repeated explanatory wording and supposition/question framing remain unwrapped unless expressly assigned above. Repeated such a murderer does not receive the same sole gsod byed twice."
+    },
+    {
+      "seq": 344,
+      "index": 12,
+      "original_basis": {
+        "seq": 344,
+        "angle": "english",
+        "field": "spans",
+        "index": 7,
+        "original_id": "w8"
+      },
+      "verdict": "APPROVE",
+      "reason": "The shared before/together death predicates have no exclusive source-occurrence owner for fronted die; omit both without null.",
+      "final_disposition": "REJECT",
+      "reconciliation_reason": "Two SHI BA predicates under before/together share one fronted die. Exclusive first occurrence ownership is underdetermined; omit both with shared-scope explanation, not duplicate die or null either. Remove only original English344w8 from selected spec."
+    },
+    {
+      "seq": 345,
+      "index": 0,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "Expanded person/stage/body references and GSOD PA/this act remain contextually meaningful but without a defensible isolated lexical atom; omit as uncertainty.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Demonstratives/agentive pronoun and explicit killing are recast as expanded referential noun phrases or this act. Their content remains recoverable in context but no unique direct lexical atom is established; do not mislabel uncertainty as absence."
+    },
+    {
+      "seq": 345,
+      "index": 1,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "MA plus BAR jointly gives before the victim dies. No arbitrary assignment of before to either particle and no missing-negation null.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Negative not-yet and until jointly yield before the victim dies. The discontinuous temporal contribution is not assigned to one particle or null; victim and dies remain distinct direct words."
+    },
+    {
+      "seq": 345,
+      "index": 2,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "Connective DE/SHING and genitive contributions are distributed into explanatory English structure; sentence punctuation does not establish exclusive fusion ownership here.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Connective and explanatory structure is expanded and repeated in English. No exclusive atom ownership or punctuation-fusion claim is secure."
+    },
+    {
+      "seq": 345,
+      "index": 3,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "Determiners, supplied stage/subject names, possessors, aspect and anaphoric this act stay outside selected words, while the final victim has its own PHA ROL PO source.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Articles, participants, aspect support and relational/anaphoric naming remain outside selected words; the later victim remains a contextually explicit other person."
+    },
+    {
+      "seq": 345,
+      "index": 4,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 4
+      },
+      "verdict": "APPROVE",
+      "reason": "No forbidden fifth-affix not-inside-cannot member. Final negative predicate is d3 and takes no d7 member.",
+      "final_disposition": "CHANGE",
+      "reconciliation_reason": "Full MI BYUNG/cannot occur has lexical attestation, but entry inclusion does not establish a compound unit in this compositional negative predicate. Keep exact English d3 parent; no d7 child attached to phrase and no not-inside-cannot cut. Keep separate MA/never d6 and BYAS PA/went through d5, each direct and complete, rather than asserting a D5 MA BYAS PA compound solely from dictionary inclusion. Preserve Tibetan competing whole-parent/member analysis in exact disposition; no change to source or glossary."
+    },
+    {
+      "seq": 345,
+      "index": 5,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0
+      },
+      "verdict": "APPROVE",
+      "reason": "Only second DE/this has a direct visible atom. Other demonstrative/continuative uses are realized by explanatory noun phrases and structure, not proven absent.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "First demonstrative is expanded as such a person; the post-MED de is continuative; the later demonstrative is recast as stage without an explicit this. Keep the secure second DE/this only. The others are distributed/referential, not proven absent."
+    },
+    {
+      "seq": 345,
+      "index": 6,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1
+      },
+      "verdict": "APPROVE",
+      "reason": "Negative temporal MA…BAR yields before jointly around the victim-death proposition; omit discontinuous grammar, retaining separate victim and dies.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The negative-temporal construction ma shi bar corresponds to before the victim dies. Before does not independently mean ma or bar alone, and its semantics already includes the not-yet condition. Retain victim/dies atoms; omit the joint temporal relation without a false null or a broad clause that would absorb the English article."
+    },
+    {
+      "seq": 345,
+      "index": 7,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2
+      },
+      "verdict": "APPROVE",
+      "reason": "MI BYUNG is a d3 phrase; no d7 child can be attached and no interior not can be cut from cannot.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The negative predicate is genuinely aligned as a phrase, with no d7 children on d3. Cannot contains an inseparable modal-negative form outside the four confirmed subword conventions; no fifth convention is introduced."
+    },
+    {
+      "seq": 345,
+      "index": 8,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 3
+      },
+      "verdict": "APPROVE",
+      "reason": "SHING, agentive DES and bound genitives contribute through distributed explanatory syntax. Whole DES/body lexical equivalence and agentive-s splitting remain unsupported.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Continuation, agency and complements are distributed across the recast second-place explanation. DES is expanded as the second body; it is not split into a false separable -s or banked as a lexical body noun."
+    },
+    {
+      "seq": 345,
+      "index": 9,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 4
+      },
+      "verdict": "APPROVE",
+      "reason": "Killing is recast anaphorically as this act; the meaning survives, but isolated GSOD PA/this act would be uncertain. Omission is not an absence or source-error judgment.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "The killing action is referred to generically as this act. The anaphoric phrase is semantically intelligible but not a secure local lexical killing/act equivalence; preserve it unbanked without claiming absent content."
+    },
+    {
+      "seq": 345,
+      "index": 10,
+      "original_basis": {
+        "seq": 345,
+        "angle": "english",
+        "field": "omissions",
+        "index": 5
+      },
+      "verdict": "APPROVE",
+      "reason": "Supplied explanation, repeated subject and stage names, auxiliary and relational wording remain unwrapped rather than overcaptured into local source words.",
+      "final_disposition": "ACCEPT",
+      "reconciliation_reason": "Supplied explanation, repeated subjects and technical-stage nouns, auxiliary, article, possessive and anaphoric frames stay outside the narrow claims. This English expansion is not itself a source error."
+    },
+    {
+      "seq": 345,
+      "index": 11,
+      "original_basis": {
+        "seq": 345,
+        "angle": "tibetan",
+        "field": "decisions",
+        "index": 7,
+        "original_id": "m1"
+      },
+      "verdict": "APPROVE",
+      "reason": "BYUNG/occur cannot be a d7 child of final d3 MI BYUNG/cannot occur; the complete negative phrase preserves the meaning without claiming a compound member.",
+      "final_disposition": "REJECT",
+      "reconciliation_reason": "Full MI BYUNG/cannot occur has lexical attestation, but entry inclusion does not establish a compound unit in this compositional negative predicate. Keep exact English d3 parent; no d7 child attached to phrase and no not-inside-cannot cut. Keep separate MA/never d6 and BYAS PA/went through d5, each direct and complete, rather than asserting a D5 MA BYAS PA compound solely from dictionary inclusion. Preserve Tibetan competing whole-parent/member analysis in exact disposition; no change to source or glossary."
+    }
+  ],
+  "original_span_proposals_considered": 119,
+  "original_grouped_dispositions_reviewed": 43,
+  "original_screen_dispositions_reviewed": 30,
+  "original_errata_candidates_reviewed": 4,
+  "source_error_review": [
+    {
+      "seq": 343,
+      "found": "PHYER",
+      "five_grounds": {
+        "a": "Literal PHYER occurs in complete physical and source ACIP, faithfully phyer in wylie.",
+        "b": "C16:864 repeats the current fields exactly and does not prove independent publication. Same two-line verse quoted later at C05:372/C16:889 reads PHYIR with the same English causal for; context/apparatus differ, providing an internal same-line reading without independent-edition authority.",
+        "c": "All200 source/current register records were screened for current references and both spellings; no direct duplicate. Whole register bytes equal the previously used register SHA27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b. This identity check does not claim a new full linguistic reading of200 historical records. Previously personally read material converter, heading, cap and spill classes remain unchanged and do not explain these already-physical interior vowel spellings.",
+        "d": "PHYIR causal for/because fits syntax and repeated verse; exact PHYER lookup empty is only supporting evidence. Physical/C16 PHYER, possible nonstandard reading and nondiscriminating seven-syllable metre limit certainty, but the internal same-line alternative supports a probable spelling question. No automatic correction or phyer/for bank.",
+        "e": "Independent material-count-validation passed:118 original lexical query counts and29 original corpus query counts recomputed against hash-verified full original assets, without new SQL/exploratory searches. Corpus result IDs and counts match exactly. Source-and-original-identity independently verified15 context rows,6 physical byte extents and all205 frozen original members; no native generator/resolver rerun. Captured fields and offsets agree. Refer to evidence/material-counts.json and source-identity-results.json."
+      },
+      "verdict": "APPROVE_LOW_PROBABLE_HUMAN_QUESTION",
+      "refuted": false,
+      "suggested_severity": "LOW",
+      "suggested_confidence": "PROBABLE",
+      "original_candidates": {
+        "tibetan": {
+          "seq": 343,
+          "kind": "TIBETAN_SPELLING",
+          "found": "PHYER",
+          "expected": "PHYIR",
+          "evidence": "C05:343/C16:864 preserve PHYER in SKYES PHYER RO. The exact same quoted two-line verse at C05:372/C16:889 reads SKYES PHYIR RO with the same English causal for. Full PHYIR glossary attests for/because; exact PHYER lookup is empty. Physical C05 bytes contain PHYER, so this is a probable inherited spelling error, not a new converter/ingest failure. The repeated verse supplies internal correction evidence; publication independence is not established. Full five grounds and exact witness/source/count records: five-ground-screens.json TIBETAN_SPELLING; ../evidence/corpus.json; ../evidence/physical-verification.json; ../evidence/lexical.json. Register200 at source origin has no direct match. Raw target syllable remains unbanked; expected spelling is an editorial proposal only.",
+          "severity": "LOW",
+          "confidence": "PROBABLE"
+        },
+        "english": {
+          "seq": 343,
+          "kind": "TIBETAN_SPELLING",
+          "found": "LUS GZHAN SKYES PHYER RO",
+          "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+          "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+          "severity": "LOW",
+          "confidence": "PROBABLE"
+        }
+      },
+      "selected_candidate": {
+        "seq": 343,
+        "kind": "TIBETAN_SPELLING",
+        "found": "LUS GZHAN SKYES PHYER RO",
+        "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+        "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+        "severity": "LOW",
+        "confidence": "PROBABLE"
+      },
+      "counts_rechecked": {
+        "register": 200,
+        "current_exact_acip": 2,
+        "current_exact_wylie": 2,
+        "current_exact_english": 2,
+        "english_characters": 194,
+        "below_1500": true,
+        "phyer": 2,
+        "same_verse": 4,
+        "physical_verse_syllables": [
+          7,
+          7,
+          7,
+          7
+        ]
+      },
+      "boundary_note": "The repeated verse differs specifically PHYER/PHYIR and surrounding contextual quotation/appended apparatus; the four lines are complete. Metre does not distinguish one-syllable spellings.",
+      "scope": "LOW/PROBABLE provisional source spelling question for human review only. Raw ACIP/wylie and GMR English remain verbatim; no repair, normalized pairing, hgm_gloss promotion, independent-edition claim or confirmed ingest mechanism."
+    },
+    {
+      "seq": 344,
+      "found": "MTSAN BSNUN",
+      "five_grounds": {
+        "a": "Literal MTSAN BSNUN occurs in source and physical ACIP, with faithful mtshan bsnun.",
+        "b": "C16:865 is exact reused text; another metaphorical blow at C05:462/C16:972 also has MTSAN. Ten MTSON BSNUN records establish broader weapon-striking usage, including clear C11:140, but are not corrected witnesses to this sentence. C05:459/460 boundary distribution cannot authorize a fresh clean atom.",
+        "c": "All200 source/current register records were screened for current references and both spellings; no direct duplicate. Whole register bytes equal the previously used register SHA27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b. This identity check does not claim a new full linguistic reading of200 historical records. Previously personally read material converter, heading, cap and spill classes remain unchanged and do not explain these already-physical interior vowel spellings.",
+        "d": "MTSON weapon plus BSNUN strike/blow has direct lexical and contextual support. MTSAN name/sign/night does not fit the local explicit weapon-strike sense, and there is no affirmative master support for MTSAN BSNUN as such. Repeated MTSAN spelling may represent nonstandard wording, so this supports a LOW/PROBABLE human spelling question only; neither confirmed correction nor independent defective-publication claim. Preserve every counterexample and omit mtshan/weapon.",
+        "e": "Independent material-count-validation passed:118 original lexical query counts and29 original corpus query counts recomputed against hash-verified full original assets, without new SQL/exploratory searches. Corpus result IDs and counts match exactly. Source-and-original-identity independently verified15 context rows,6 physical byte extents and all205 frozen original members; no native generator/resolver rerun. Captured fields and offsets agree. Refer to evidence/material-counts.json and source-identity-results.json."
+      },
+      "verdict": "APPROVE_LOW_PROBABLE_HUMAN_QUESTION",
+      "refuted": false,
+      "suggested_severity": "LOW",
+      "suggested_confidence": "PROBABLE",
+      "original_candidates": {
+        "tibetan": {
+          "seq": 344,
+          "kind": "TIBETAN_SPELLING",
+          "found": "MTSAN BSNUN",
+          "expected": "MTSON BSNUN",
+          "evidence": "C05:344/C16:865 physically preserve MTSAN BSNUN and English takes a weapon and delivers a blow. Full MTSAN entries mean night/name/features and do not attest weapon; MTSON directly attests weapon and BSNUN blow. C05:462/C16:972 also print MTSAN BSNUN in another blow passage, while C05:459–460, C16:969–970, C11:140, C12:110/C18:247 and GK examples use MTSON BSNUN. This recurring spelling is probable source error, not proven new ingest corruption or a corrected same-passage witness; no source replacement is performed. Full five grounds and exact witness/source/count records: five-ground-screens.json TIBETAN_SPELLING; ../evidence/corpus.json; ../evidence/physical-verification.json; ../evidence/lexical.json. Register200 at source origin has no direct match. Raw target syllable remains unbanked; expected spelling is an editorial proposal only.",
+          "severity": "LOW",
+          "confidence": "PROBABLE"
+        },
+        "english": {
+          "seq": 344,
+          "kind": "TIBETAN_SPELLING",
+          "found": "'CHI NGES PA'I MTSAN BSNUN NAS",
+          "expected": "For human review: 'CHI NGES PA'I MTSON BSNUN NAS is the supported weapon-striking candidate. No automatic source replacement.",
+          "evidence": "ACIP344 and its physical ASCII read MTSAN; wylie mtshan is faithful. Complete mtshan records support name/sign/night and do not list weapon; mtshon records explicitly have weapon, and a complete mtshon bsnun scaffold has the Sanskrit weapon-struck sense but no HGM equivalent. The local English explicitly says takes a weapon and delivers a blow. Ten full mtshon bsnun corpus records were read: C05:459/460, C11:140, C12:110, C16:969/970, C18:247, GK:192/363/364. Different-context C11:140 explicitly pairs the construction with struck them with a weapon; C05:459 and C12:110 likewise concern weapon strikes. They support usage, not a corrected witness to this exact sentence; C05:459/460 also have their own field-boundary distribution and are not treated as clean word pairs. Counterevidence: C16:865 repeats all three344 fields exactly, including MTSAN. The same MTSAN BSNUN also occurs metaphorically at C05:462/C16:972, struck a blow to the reality body. That repeated source form makes an isolated local corruption unproved and leaves nonstandard/variant wording possible. Four exact mtshan bsnun rows and ten mtshon bsnun rows were measured; no direct344/MTSAN BSNUN register match among200 records. Full fields are below1500 and physically complete. Propose LOW/PROBABLE spelling review, not CONFIRMED and not an ingest/converter correction. Preserve mtshan unbanked and source/master unchanged.",
+          "severity": "LOW",
+          "confidence": "PROBABLE"
+        }
+      },
+      "selected_candidate": {
+        "seq": 344,
+        "kind": "TIBETAN_SPELLING",
+        "found": "'CHI NGES PA'I MTSAN BSNUN NAS",
+        "expected": "For human review: 'CHI NGES PA'I MTSON BSNUN NAS is the supported weapon-striking candidate. No automatic source replacement.",
+        "evidence": "ACIP344 and its physical ASCII read MTSAN; wylie mtshan is faithful. Complete mtshan records support name/sign/night and do not list weapon; mtshon records explicitly have weapon, and a complete mtshon bsnun scaffold has the Sanskrit weapon-struck sense but no HGM equivalent. The local English explicitly says takes a weapon and delivers a blow. Ten full mtshon bsnun corpus records were read: C05:459/460, C11:140, C12:110, C16:969/970, C18:247, GK:192/363/364. Different-context C11:140 explicitly pairs the construction with struck them with a weapon; C05:459 and C12:110 likewise concern weapon strikes. They support usage, not a corrected witness to this exact sentence; C05:459/460 also have their own field-boundary distribution and are not treated as clean word pairs. Counterevidence: C16:865 repeats all three344 fields exactly, including MTSAN. The same MTSAN BSNUN also occurs metaphorically at C05:462/C16:972, struck a blow to the reality body. That repeated source form makes an isolated local corruption unproved and leaves nonstandard/variant wording possible. Four exact mtshan bsnun rows and ten mtshon bsnun rows were measured; no direct344/MTSAN BSNUN register match among200 records. Full fields are below1500 and physically complete. Propose LOW/PROBABLE spelling review, not CONFIRMED and not an ingest/converter correction. Preserve mtshan unbanked and source/master unchanged.",
+        "severity": "LOW",
+        "confidence": "PROBABLE"
+      },
+      "counts_rechecked": {
+        "register": 200,
+        "current_exact_acip": 2,
+        "current_exact_wylie": 2,
+        "current_exact_english": 2,
+        "english_characters": 349,
+        "below_1500": true,
+        "mtshan_bsnun": 4,
+        "mtshon_bsnun": 10
+      },
+      "boundary_note": "Different-context weapon examples support language use only. C05:459/460 have their own cross-field boundary distribution; no clean local atom or corrected publication is inferred from them.",
+      "scope": "LOW/PROBABLE provisional source spelling question for human review only. Raw ACIP/wylie and GMR English remain verbatim; no repair, normalized pairing, hgm_gloss promotion, independent-edition claim or confirmed ingest mechanism."
+    }
+  ],
+  "resolved_findings": [
+    {
+      "original_finding": "findings-before-final-reconciliation.json",
+      "final_status": "RESOLVED",
+      "reason": "Final344 singular note is exact root revision2 wording; both death predicates omitted and positive BYUNG distinguished from negative ellipsis before the one changed native pair."
+    },
+    {
+      "original_finding": "findings-after-first-freeze.json",
+      "final_status": "RESOLVED",
+      "reason": "Successor freeze corrects both343/345 generic provenance reasons and344 original-report pointer. Exact first freeze and affected preimages retained; all specs/bodies/native streams unchanged."
+    }
+  ],
+  "native_history": {
+    "actual_unique_generator_executions": 7,
+    "actual_unique_resolver_executions": 7,
+    "original_pairs": 6,
+    "selected_exact_english_original_reuses": 2,
+    "new_reconciler_pairs": 1,
+    "selected_angle_segment_views": 9,
+    "reviewer_generator_runs": 0,
+    "reviewer_resolver_runs": 0,
+    "root_generator_runs": 0,
+    "native_failures": 0,
+    "note": "Seven actual executions per kind; nine selected views contain two original-copy duplicates. Pre-generation note repair and post-freeze prose repair caused no native reruns."
+  },
+  "verification": {
+    "source_identity": "source-identity-results.json",
+    "material_counts": "evidence/material-counts.json",
+    "final_identity": "final-identity-results.json",
+    "successful_review_captures": [
+      "native/source-and-original-identity",
+      "native/material-count-validation",
+      "native/final-evidence-copy-attempt02"
+    ],
+    "preserved_failed_review_capture": "native/final-evidence-copy",
+    "failure_reason": "Initial final-evidence copier assumed screen disposition source_file; current standard rows identify angle/field/index. Corrected explicit source file mapping passed without queries or native reruns.",
+    "other_history": "process-history.json"
+  },
+  "governance_delta": "governing/applicability.json",
+  "source_and_integration_limits": "Only provisional literal attestation. No source/GMR/master/hgm_gloss changes, W writes, production acceptance, publishing, paid API, account action, MAIN or iOS acceptance. Root acceptance remains separate.",
+  "distinct_final_additions_beyond_preassessment": [
+    "Exact successor freeze/native/body/range identity and completed count proof.",
+    "Two resolved provenance findings and the retained actual copier schema failure.",
+    "Two extra final omission rows explicitly reject English344w8 and Tibetan345m1; their reasons already follow the preliminary judgments."
+  ]
+}

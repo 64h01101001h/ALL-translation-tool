@@ -1,0 +1,111 @@
+{
+  "seq": 343,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1725,
+        "course": "C05",
+        "seq": 343,
+        "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+        "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+        "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete six raw ASCII source extents were read and verified; whitespace collapse exactly equals ACIP/English. Faithful digital agreement does not prove the source reading correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": "../evidence/corpus.json",
+      "finding": "Each of the three exact343 field queries returns this C05 row and C16:864; all six full source/parallel objects were read. C16 lineage independence is not proved. All20 complete focused corpus records were read, including later same-line PHYIR quotations at C05:372/C16:889 and both MTSAN/MTSON BSNUN usage sets. No external publication collation is claimed."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b6799188c8cb95f9095fea7cdc6bbf4d653894:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "additional_related_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Current exact references plus phyer/mtshan bsnun/MTSAN BSNUN screened over200 records; no duplicate. Registered converter, running-head, cap, spill and footnote classes read/reused by exact complete identity. No registered class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "PHYER has a supported PHYIR candidate from a later quotation of exactly the same root line. This is stronger than dictionary absence alone; source/C16 agreement remains counterevidence.",
+      "counterevidence": "Exact physical/C16 agreement establishes an available published/digital reading, not an independent corrected witness. Legitimate paraphrase, nonstandard source forms, and the limits of a dictionary prevent stronger source claims. No glossary or mined hgm_gloss is changed or promoted."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 135,
+        "wylie": 133,
+        "english": 194
+      },
+      "utf8_bytes": {
+        "acip": 135,
+        "wylie": 133,
+        "english": 194
+      },
+      "english_equals_1500": false,
+      "verse_syllable_counts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "finding": "Complete physical field boundaries agree; no 1500 cap, running-head or following-heading intrusion occurs in these three rows.343 capitals follow four-line verse structure.344 bracketed reference is citation apparatus, preserved without an error claim."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "PROPOSE_LOW_PROBABLE",
+      "reason": "PHYER has a supported PHYIR candidate from a later quotation of exactly the same root line. This is stronger than dictionary absence alone; source/C16 agreement remains counterevidence."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    }
+  ],
+  "proposed_errata": [
+    {
+      "seq": 343,
+      "kind": "TIBETAN_SPELLING",
+      "found": "LUS GZHAN SKYES PHYER RO",
+      "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+      "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    }
+  ],
+  "source_corrections": false
+}

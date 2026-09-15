@@ -1,0 +1,27 @@
+"""Exact independently requested factual provenance repair; no alignment changes."""
+from pathlib import Path
+import json,hashlib
+R=Path(__file__).resolve().parents[1]
+def read(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+assert pin(R/'freeze.json')=={'bytes':23089,'sha256':'f9984b2bf91487bbc563aedeb915275f622b2874e729352c7b4bf8ad817c536a'}
+H=R/'history/reviewer-provenance-correction';H.mkdir(parents=True,exist_ok=False);(H/'prior-freeze.json').write_bytes((R/'freeze.json').read_bytes());prior=read(R/'freeze.json');paths=['343/original-other-dispositions.json','345/original-other-dispositions.json','344/report.md','344/reconciliation-report.md'];changes=[]
+for rel in paths:
+ p=R/rel;assert pin(p)==prior['files'][rel];q=H/rel;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes())
+old='Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes any original344 first-death, count or native-execution claim; only w8 and its eng_order entry change in final344 spec.'
+new='Original report/note is preserved as the original proposal record. The current reconciliation-report.md explicitly supersedes original344 first-death, count or native-execution claims; final344 removes w8 and its eng_order entry and replaces the singular segment note with the exact root v2 correction before generation.'
+for seq in [343,345]:
+ p=R/str(seq)/'original-other-dispositions.json';x=read(p);n=0
+ for r in x:
+  if r['field']in ['spec.note','report.md']:assert r['reason']==old;r['reason']=new;n+=1
+ assert n==4;put(p,x);changes.append({'path':str(p.relative_to(R)),'field':'reason on four spec.note/report.md original provenance records','before':pin(H/str(p.relative_to(R))),'after':pin(p),'old':old,'new':new})
+old='The exact original English report remains report.md as provenance; this reconciliation-report.md states the current selection, counts, actual baseline and native scope.'
+new='The exact original English344 report is preserved at ../history/pre-generation-note/original-English-344-report.md. Current report.md and reconciliation-report.md state the final19-span selection, counts, actual baseline and native scope.'
+for rel in ['344/report.md','344/reconciliation-report.md']:
+ p=R/rel;t=p.read_text();assert t.count(old)==1;p.write_text(t.replace(old,new));changes.append({'path':rel,'field':'one provenance sentence','before':pin(H/rel),'after':pin(p),'old':old,'new':new})
+changed=set(paths)
+for rel,expected in prior['files'].items():
+ if rel not in changed:assert pin(R/rel)==expected,rel
+put(R/'reviewer-provenance-correction.json',{'status':'PASS_EXACT_FACTUAL_CORRECTION_ONLY','requested_by':'independent semantic reviewer; authorized by root','prior_freeze':{'path':'history/reviewer-provenance-correction/prior-freeze.json',**pin(H/'prior-freeze.json')},'changes':changes,'unchanged_prior_frozen_files':len(prior['files'])-len(paths),'spec_body_native_changes':0,'generator_runs':0,'resolver_runs':0,'semantic_selection_changes':0,'limits':'The previous freeze and all four affected preimages remain exact history. Existing successful native captures are reused; no alignment re-execution or new acceptance claim.'})
+print(json.dumps({'status':'PASS_EXACT_FACTUAL_CORRECTION_ONLY','changed_existing_files':paths,'unchanged_prior_frozen_files':len(prior['files'])-len(paths),'native_reruns':0},indent=2))

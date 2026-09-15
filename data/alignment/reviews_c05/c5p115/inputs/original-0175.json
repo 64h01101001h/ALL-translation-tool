@@ -1,0 +1,27 @@
+{
+  "status": "ACTUAL_PRE_NATIVE_ASSERTION_FAILURE",
+  "exit": 1,
+  "issues": [
+    {
+      "seq": 343,
+      "id": "p2",
+      "d": 6,
+      "tib": "dang",
+      "eng": "or",
+      "tib_range": [
+        5,
+        9
+      ],
+      "eng_range": [
+        46,
+        48
+      ],
+      "complete_local_clause_anchor": "Before or together",
+      "rationale": "Coordinator marks the two alternatives before or simultaneous death."
+    }
+  ],
+  "native_calls_at_failure": 0,
+  "scope": "All other intended ranges examined next; correction confined to data anchors before native execution.",
+  "stderr_summary": "AssertionError:343 p2 or intention matched inside Before at[46,48].",
+  "record_type": "Tool reported combined output; this preserves its factual assertion summary, not a claimed native stderr capture."
+}

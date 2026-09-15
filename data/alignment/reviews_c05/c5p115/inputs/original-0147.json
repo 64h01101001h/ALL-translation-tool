@@ -1,0 +1,560 @@
+{
+  "queries": [
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1725,
+        6882
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan"
+      ],
+      "count": 2,
+      "row_ids": [
+        1725,
+        6882
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+      ],
+      "count": 2,
+      "row_ids": [
+        1725,
+        6882
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1726,
+        6883
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na"
+      ],
+      "count": 2,
+      "row_ids": [
+        1726,
+        6883
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+      ],
+      "count": 2,
+      "row_ids": [
+        1726,
+        6883
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1727,
+        6884
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir"
+      ],
+      "count": 2,
+      "row_ids": [
+        1727,
+        6884
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question."
+      ],
+      "count": 2,
+      "row_ids": [
+        1727,
+        6884
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "skyes phyer"
+      ],
+      "count": 2,
+      "row_ids": [
+        1725,
+        6882
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "mtshan bsnun"
+      ],
+      "count": 4,
+      "row_ids": [
+        1726,
+        1844,
+        6883,
+        6990
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "mtshon bsnun"
+      ],
+      "count": 10,
+      "row_ids": [
+        1841,
+        1842,
+        3559,
+        4013,
+        6987,
+        6988,
+        8042,
+        27140,
+        27311,
+        27312
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "gsad bya ma shi bar"
+      ],
+      "count": 2,
+      "row_ids": [
+        1727,
+        6884
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "snga dang mnyam du shi"
+      ],
+      "count": 4,
+      "row_ids": [
+        1725,
+        1754,
+        6882,
+        6907
+      ]
+    }
+  ],
+  "complete_records": {
+    "1725": {
+      "spine_row": {
+        "id": 1725,
+        "course": "C05",
+        "seq": 343,
+        "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+        "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+        "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,\", \"wylie\": \"snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan\", \"english\": \"There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it.\"}"
+      },
+      "corpus_index": 1724,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+        "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+        "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+      }
+    },
+    "6882": {
+      "spine_row": {
+        "id": 6882,
+        "course": "C16",
+        "seq": 864,
+        "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+        "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+        "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,\", \"wylie\": \"snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan\", \"english\": \"There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it.\"}"
+      },
+      "corpus_index": 6881,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",SNGA DANG MNYAM DU SHI BA LA, ,DNGOS MED LUS GZHAN SKYES PHYER RO, ,DMAG LA SOGS PAR DON GCIG PHYIR, ,THAMS CAD BYED PA PO BZHIN LDAN,",
+        "wylie": "snga dang mnyam du shi ba la, ,dngos med lus gzhan skyes phyer ro, ,dmag la sogs par don gcig phyir, ,thams cad byed pa po bzhin ldan",
+        "english": "There is no actual stage for those who die Before or together, for another body's been born. Because their goal's the same in a war or whatever, All possess it as much as the one who commits it."
+      }
+    },
+    "1726": {
+      "spine_row": {
+        "id": 1726,
+        "course": "C05",
+        "seq": 344,
+        "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+        "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+        "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\"",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,\", \"wylie\": \"[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na\", \"english\": \"\\\"Suppose,\\\" one may begin, \\\"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \\\"commission\\\" stage of a full path of action has occurred for such a murderer, or not?\\\"\"}"
+      },
+      "corpus_index": 1725,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+        "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+        "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+      }
+    },
+    "6883": {
+      "spine_row": {
+        "id": 6883,
+        "course": "C16",
+        "seq": 865,
+        "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+        "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+        "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\"",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,\", \"wylie\": \"[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na\", \"english\": \"\\\"Suppose,\\\" one may begin, \\\"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \\\"commission\\\" stage of a full path of action has occurred for such a murderer, or not?\\\"\"}"
+      },
+      "corpus_index": 6882,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.285-8] PHA ROL PO 'CHI NGES PA'I MTSAN BSNUN NAS, GSOD BYED DE GSAD BYA'I SNGAR SHI BA DANG , MNYAM DU SHI BA LA LAS LAM GYI DNGOS GZHI 'BYUNG NGAM MI 'BYUNG ZHE NA,",
+        "wylie": "[iv.285-8] pha rol po 'chi nges pa'i mtshan bsnun nas, gsod byed de gsad bya'i sngar shi ba dang , mnyam du shi ba la las lam gyi dngos gzhi 'byung ngam mi 'byung zhe na",
+        "english": "\"Suppose,\" one may begin, \"that a person takes a weapon and delivers a blow to someone else which is sure to kill him, but then this murderer himself happens to die, either before his victim or together with him--at the same time. Can we say then that the actual \"commission\" stage of a full path of action has occurred for such a murderer, or not?\""
+      }
+    },
+    "1727": {
+      "spine_row": {
+        "id": 1727,
+        "course": "C05",
+        "seq": 345,
+        "acip": "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,",
+        "wylie": "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir",
+        "english": "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,\", \"wylie\": \"de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir\", \"english\": \"The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question.\"}"
+      },
+      "corpus_index": 1726,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,",
+        "wylie": "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir",
+        "english": "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question."
+      }
+    },
+    "6884": {
+      "spine_row": {
+        "id": 6884,
+        "course": "C16",
+        "seq": 866,
+        "acip": "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,",
+        "wylie": "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir",
+        "english": "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,\", \"wylie\": \"de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir\", \"english\": \"The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question.\"}"
+      },
+      "corpus_index": 6883,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,",
+        "wylie": "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir",
+        "english": "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question."
+      }
+    },
+    "1844": {
+      "spine_row": {
+        "id": 1844,
+        "course": "C05",
+        "seq": 462,
+        "acip": "[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,",
+        "wylie": "[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing",
+        "english": "One may ask, \"Which of all these immediate misdeeds is the most serious?\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \"reality body\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,\", \"wylie\": \"[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing\", \"english\": \"One may ask, \\\"Which of all these immediate misdeeds is the most serious?\\\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \\\"reality body\\\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains.\"}"
+      },
+      "corpus_index": 1843,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,",
+        "wylie": "[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing",
+        "english": "One may ask, \"Which of all these immediate misdeeds is the most serious?\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \"reality body\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains."
+      }
+    },
+    "6990": {
+      "spine_row": {
+        "id": 6990,
+        "course": "C16",
+        "seq": 972,
+        "acip": "[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,",
+        "wylie": "[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing",
+        "english": "One may ask, \"Which of all these immediate misdeeds is the most serious?\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \"reality body\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,\", \"wylie\": \"[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing\", \"english\": \"One may ask, \\\"Which of all these immediate misdeeds is the most serious?\\\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \\\"reality body\\\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains.\"}"
+      },
+      "corpus_index": 6989,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.417-18] ,'O NA, MTSAMS MED DE DAG LAS GANG LCI ZHE NA, DGE 'DUN GNYIS SU DBYE BAR BYA BA'I PHYIR RDZUN SMRA BA DE NI, MTSAMS MED PA RNAMS KYI NANG NAS, KHA NAS THO BA RAB TU CHE BAR 'DOD DE, DE BZHIN GSHEGS PA RNAMS KYI CHOS KYI SKU LA MTSAN BSNUN PA'I PHYIR DANG , DGE 'DUN BYE BA SLAR MA DUM GYI BAR DU, 'JIG RTEN NA NGES PA LA 'JUG PA DANG , 'BRAS BU THOB PA DANG , 'DOD CHAGS DANG BRAL BA DANG , ZAG PA ZAD PAR BYA BA RNAMS LA GEGS SU 'GYUR ZHING ,",
+        "wylie": "[iv.417-18] ,'o na, mtshams med de dag las gang lci zhe na, dge 'dun gnyis su dbye bar bya ba'i phyir rdzun smra ba de ni, mtshams med pa rnams kyi nang nas, kha nas tho ba rab tu che bar 'dod de, de bzhin gshegs pa rnams kyi chos kyi sku la mtshan bsnun pa'i phyir dang , dge 'dun bye ba slar ma dum gyi bar du, 'jig rten na nges pa la 'jug pa dang , 'bras bu thob pa dang , 'dod chags dang bral ba dang , zag pa zad par bya ba rnams la gegs su 'gyur zhing",
+        "english": "One may ask, \"Which of all these immediate misdeeds is the most serious?\" Lying in order to divide the community of monks into two parts is accepted as the most heinous of misdeeds among all the immediate. This is because a person has thereby struck a blow to what is known as the \"reality body\" of the One Thus Gone. And as long as the community remains unreconciled, there is a general stop in the world to certain great virtuous deeds: no one finds the true certainty, no one achieves the results, no one gains freedom from desire, and no one brings an end to all stains."
+      }
+    },
+    "1841": {
+      "spine_row": {
+        "id": 1841,
+        "course": "C05",
+        "seq": 459,
+        "acip": "[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,",
+        "wylie": "[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir",
+        "english": "Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \"intent\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \"enemy destroyer,\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,\", \"wylie\": \"[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir\", \"english\": \"Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \\\"intent\\\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \\\"enemy destroyer,\\\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer.\"}"
+      },
+      "corpus_index": 1840,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,",
+        "wylie": "[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir",
+        "english": "Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \"intent\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \"enemy destroyer,\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer."
+      }
+    },
+    "1842": {
+      "spine_row": {
+        "id": 1842,
+        "course": "C05",
+        "seq": 460,
+        "acip": "DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,",
+        "wylie": "de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do",
+        "english": "One may pose the following question: \"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 108 Severity of Immediate Misdeeds",
+        "raw": "{\"course\": \"C05\", \"acip\": \"DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,\", \"wylie\": \"de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do\", \"english\": \"One may pose the following question: \\\"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\\\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 108 Severity of Immediate Misdeeds\"}"
+      },
+      "corpus_index": 1841,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,",
+        "wylie": "de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do",
+        "english": "One may pose the following question: \"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 108 Severity of Immediate Misdeeds"
+      }
+    },
+    "3559": {
+      "spine_row": {
+        "id": 3559,
+        "course": "C11",
+        "seq": 140,
+        "acip": ",BZHI PA NI, SKYES BU DPA' BA LA LA RANG LA GZHAN GYIS MTSON BSNUN PA'I BDAG GI KHRAG MTHONG NA DPA' BRTAN LHAG PAR SKYE BAR 'GYUR BA YOD LA, BRDAR MA LA LA GZHAN GYI KHRAG MTHONG NA YANG BOG CING BRGYAL BAR 'GYUR BA YANG YOD PAS DE NI PHYI ROL GYI DNGOS PO GCIG MTHU CHE CUNG NGU GYUR PA DANG , LUS LA SRA RNYI SOGS KYI KHYAD PAR MA YIN GYI SEMS KYI NGANG BRTAN PA DANG BRDAR MA'I TSUL LAS GYUR PA YIN PAS SDUG BSNGAL DANG LEN GYI BZOD PA BSGOM PA LA 'BAD PAR BYA'O,",
+        "wylie": "bzhi pa ni, skyes bu dpa' ba la la rang la gzhan gyis mtshon bsnun pa'i bdag gi khrag mthong na dpa' brtan lhag par skye bar 'gyur ba yod la, brdar ma la la gzhan gyi khrag mthong na yang bog cing brgyal bar 'gyur ba yang yod pas de ni phyi rol gyi dngos po gcig mthu che cung ngu gyur pa dang , lus la sra rnyi sogs kyi khyad par ma yin gyi sems kyi ngang brtan pa dang brdar ma'i tshul las gyur pa yin pas sdug bsngal dang len gyi bzod pa bsgom pa la 'bad par bya'o",
+        "english": "Here is the fourth point, where an example is presented to show how, once you have accustomed yourself to it, patience can be made very powerful. There are some kinds of people, warriors, who when they catch sight of their own blood after another person has struck them with a weapon are incited, and rise to a higher level of ferocity in the battle. There are also some other types, cowards, who when they see even someone else's blood faint and fall unconscious. These reactions are not something which depends upon any distinction such as the relative force of the external blow, or the amount of resilience to the blow exhibited by the body. Rather all of this derives from something in the mind, either steadfastness or cowardice. Therefore we should exert ourselves in learning to practice the kind of patience where we can take suffering upon ourselves gladly.",
+        "raw": "{\"course\": \"C11\", \"acip\": \",BZHI PA NI, SKYES BU DPA' BA LA LA RANG LA GZHAN GYIS MTSON BSNUN PA'I BDAG GI KHRAG MTHONG NA DPA' BRTAN LHAG PAR SKYE BAR 'GYUR BA YOD LA, BRDAR MA LA LA GZHAN GYI KHRAG MTHONG NA YANG BOG CING BRGYAL BAR 'GYUR BA YANG YOD PAS DE NI PHYI ROL GYI DNGOS PO GCIG MTHU CHE CUNG NGU GYUR PA DANG , LUS LA SRA RNYI SOGS KYI KHYAD PAR MA YIN GYI SEMS KYI NGANG BRTAN PA DANG BRDAR MA'I TSUL LAS GYUR PA YIN PAS SDUG BSNGAL DANG LEN GYI BZOD PA BSGOM PA LA 'BAD PAR BYA'O,\", \"wylie\": \"bzhi pa ni, skyes bu dpa' ba la la rang la gzhan gyis mtshon bsnun pa'i bdag gi khrag mthong na dpa' brtan lhag par skye bar 'gyur ba yod la, brdar ma la la gzhan gyi khrag mthong na yang bog cing brgyal bar 'gyur ba yang yod pas de ni phyi rol gyi dngos po gcig mthu che cung ngu gyur pa dang , lus la sra rnyi sogs kyi khyad par ma yin gyi sems kyi ngang brtan pa dang brdar ma'i tshul las gyur pa yin pas sdug bsngal dang len gyi bzod pa bsgom pa la 'bad par bya'o\", \"english\": \"Here is the fourth point, where an example is presented to show how, once you have accustomed yourself to it, patience can be made very powerful. There are some kinds of people, warriors, who when they catch sight of their own blood after another person has struck them with a weapon are incited, and rise to a higher level of ferocity in the battle. There are also some other types, cowards, who when they see even someone else's blood faint and fall unconscious. These reactions are not something which depends upon any distinction such as the relative force of the external blow, or the amount of resilience to the blow exhibited by the body. Rather all of this derives from something in the mind, either steadfastness or cowardice. Therefore we should exert ourselves in learning to practice the kind of patience where we can take suffering upon ourselves gladly.\"}"
+      },
+      "corpus_index": 3558,
+      "corpus_record": {
+        "course": "C11",
+        "acip": ",BZHI PA NI, SKYES BU DPA' BA LA LA RANG LA GZHAN GYIS MTSON BSNUN PA'I BDAG GI KHRAG MTHONG NA DPA' BRTAN LHAG PAR SKYE BAR 'GYUR BA YOD LA, BRDAR MA LA LA GZHAN GYI KHRAG MTHONG NA YANG BOG CING BRGYAL BAR 'GYUR BA YANG YOD PAS DE NI PHYI ROL GYI DNGOS PO GCIG MTHU CHE CUNG NGU GYUR PA DANG , LUS LA SRA RNYI SOGS KYI KHYAD PAR MA YIN GYI SEMS KYI NGANG BRTAN PA DANG BRDAR MA'I TSUL LAS GYUR PA YIN PAS SDUG BSNGAL DANG LEN GYI BZOD PA BSGOM PA LA 'BAD PAR BYA'O,",
+        "wylie": "bzhi pa ni, skyes bu dpa' ba la la rang la gzhan gyis mtshon bsnun pa'i bdag gi khrag mthong na dpa' brtan lhag par skye bar 'gyur ba yod la, brdar ma la la gzhan gyi khrag mthong na yang bog cing brgyal bar 'gyur ba yang yod pas de ni phyi rol gyi dngos po gcig mthu che cung ngu gyur pa dang , lus la sra rnyi sogs kyi khyad par ma yin gyi sems kyi ngang brtan pa dang brdar ma'i tshul las gyur pa yin pas sdug bsngal dang len gyi bzod pa bsgom pa la 'bad par bya'o",
+        "english": "Here is the fourth point, where an example is presented to show how, once you have accustomed yourself to it, patience can be made very powerful. There are some kinds of people, warriors, who when they catch sight of their own blood after another person has struck them with a weapon are incited, and rise to a higher level of ferocity in the battle. There are also some other types, cowards, who when they see even someone else's blood faint and fall unconscious. These reactions are not something which depends upon any distinction such as the relative force of the external blow, or the amount of resilience to the blow exhibited by the body. Rather all of this derives from something in the mind, either steadfastness or cowardice. Therefore we should exert ourselves in learning to practice the kind of patience where we can take suffering upon ourselves gladly."
+      }
+    },
+    "4013": {
+      "spine_row": {
+        "id": 4013,
+        "course": "C12",
+        "seq": 110,
+        "acip": "BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,",
+        "wylie": "bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no",
+        "english": "Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them.",
+        "raw": "{\"course\": \"C12\", \"acip\": \"BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,\", \"wylie\": \"bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no\", \"english\": \"Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them.\"}"
+      },
+      "corpus_index": 4012,
+      "corpus_record": {
+        "course": "C12",
+        "acip": "BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,",
+        "wylie": "bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no",
+        "english": "Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them."
+      }
+    },
+    "6987": {
+      "spine_row": {
+        "id": 6987,
+        "course": "C16",
+        "seq": 969,
+        "acip": "[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,",
+        "wylie": "[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir",
+        "english": "Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \"intent\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \"enemy destroyer,\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,\", \"wylie\": \"[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir\", \"english\": \"Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \\\"intent\\\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \\\"enemy destroyer,\\\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer.\"}"
+      },
+      "corpus_index": 6986,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.413-6] ,DE BZHIN GSHEGS PA LA NGAN SEMS KYIS KHRAG 'BYIN PA 'ANG SANGS RGYAS DKRONG PAR 'DOD NAS MTSON BSNUN NA 'GYUR GYI, SANGS RGYAS LA MTSON BRDEG PAR SEMS PA TZAM GYIS BSNUN PA LA NI MA YIN TE, SROG GCOD PA'I BSAM PA MED PA'I PHYIR,",
+        "wylie": "[iv.413-6] ,de bzhin gshegs pa la ngan sems kyis khrag 'byin pa 'ang sangs rgyas dkrong par 'dod nas mtshon bsnun na 'gyur gyi, sangs rgyas la mtshon brdeg par sems pa tsam gyis bsnun pa la ni ma yin te, srog gcod pa'i bsam pa med pa'i phyir",
+        "english": "Let's next consider the immediate misdeed of striking and drawing blood, with evil intent, from the One Thus Gone. It's considered the immediate misdeed when a person uses his weapon with the intent to kill the Buddha, but it is not considered this type of misdeed when a person uses his weapon simply with a mind to strike the Buddha. This is because such a person lacks the \"intent\" stage for an act of taking life. Suppose for a similar example that someone uses a weapon against a person who has yet to reach the stage of \"enemy destroyer,\" and then at some point after the attack the victim does attain this level. Suppose further that our new enemy destroyer then dies as a result of wounds incurred in the original attack. It is not considered the immediate misdeed with such a person, for his attacker did not undertake the action against someone who was an enemy destroyer."
+      }
+    },
+    "6988": {
+      "spine_row": {
+        "id": 6988,
+        "course": "C16",
+        "seq": 970,
+        "acip": "DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,",
+        "wylie": "de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do",
+        "english": "One may pose the following question: \"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 56 Severity of Immediate Misdeeds",
+        "raw": "{\"course\": \"C16\", \"acip\": \"DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,\", \"wylie\": \"de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do\", \"english\": \"One may pose the following question: \\\"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\\\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 56 Severity of Immediate Misdeeds\"}"
+      },
+      "corpus_index": 6987,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "DE BZHIN DU DGRA BCOM PA MA THOB PA LA MTSON BSNUN PA'I 'OG TU DGRA BCOM PA THOB PAR GYUR NAS, BSNUN PA DES DGRA BCOM PA DKRONGS PA LA'ANG MTSAMS MED PAR 'GYUR BA MIN TE, DES RTEN DE LA SBYOR BAS BYAS PA'I PHYIR, YANG CI MTSAMS MED KYI SPYOR BA BYAS NAS, DE MA SPANGS PAR 'DOD CHAGS DANG DANG BRAL BA DANG , 'BRAS BU THOB PAR 'GYUR RAM ZHE NA, MTSAMS MED PA'I SBYOR BA BYAS PA LA NI, BSAM PA SHIN TU 'GAL BAS 'DOD CHAGS DANG BRAL BA DANG 'BRAS BU THOB PA MI SRID DO,",
+        "wylie": "de bzhin du dgra bcom pa ma thob pa la mtshon bsnun pa'i 'og tu dgra bcom pa thob par gyur nas, bsnun pa des dgra bcom pa dkrongs pa la'ang mtshams med par 'gyur ba min te, des rten de la sbyor bas byas pa'i phyir, yang ci mtshams med kyi spyor ba byas nas, de ma spangs par 'dod chags dang dang bral ba dang , 'bras bu thob par 'gyur ram zhe na, mtshams med pa'i sbyor ba byas pa la ni, bsam pa shin tu 'gal bas 'dod chags dang bral ba dang 'bras bu thob pa mi srid do",
+        "english": "One may pose the following question: \"Suppose a person undertakes to commit an immediate misdeed. Is it possible for such a person--without abandoning this course of action--to achieve the state where he is free of desire, or to gain one of the results?\" The answer is that it is impossible for one who has undertaken an immediate misdeed to gain either the level where he is freed from desire or one of the results. The two states of mind are completely contradictory. 56 Severity of Immediate Misdeeds"
+      }
+    },
+    "8042": {
+      "spine_row": {
+        "id": 8042,
+        "course": "C18",
+        "seq": 247,
+        "acip": "BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,",
+        "wylie": "bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no",
+        "english": "Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them.",
+        "raw": "{\"course\": \"C18\", \"acip\": \"BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,\", \"wylie\": \"bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no\", \"english\": \"Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them.\"}"
+      },
+      "corpus_index": 8041,
+      "corpus_record": {
+        "course": "C18",
+        "acip": "BZHI PA NI, RANG BZHIN MED PA SGYU MA DANG 'DRA NA SEMS CAN BSAD PA SOGS LA SDIG PA 'BYUNG BAR BSHAD PA DANG 'GAL LO ZHE NA, SGYU MA'I SKYES BU BSAD PA SOGS LA YANG MIR 'DU SHES TE GSOD 'DOD KYIS MTSON BSNUN PA SOGS BYAS NA SBYOR BA'I SDIG PA YOD LA SROG GCOD DNGOS GZHI'I SDIG PA MED DE DE LA SEMS MED PA'I PHYIR NA'O, , MI LA SOGS PA SGYU MA'I SEMS DANG LDAN PA'I SEMS CAN LA PHAN BTAGS PAS BSOD NAMS DANG NI GNOD PA BYAS PAS SDIG PA 'BYUNG BA YIN NO,",
+        "wylie": "bzhi pa ni, rang bzhin med pa sgyu ma dang 'dra na sems can bsad pa sogs la sdig pa 'byung bar bshad pa dang 'gal lo zhe na, sgyu ma'i skyes bu bsad pa sogs la yang mir 'du shes te gsod 'dod kyis mtshon bsnun pa sogs byas na sbyor ba'i sdig pa yod la srog gcod dngos gzhi'i sdig pa med de de la sems med pa'i phyir na'o, , mi la sogs pa sgyu ma'i sems dang ldan pa'i sems can la phan btags pas bsod nams dang ni gnod pa byas pas sdig pa 'byung ba yin no",
+        "english": "Here is the fourth point, [a refutation of the idea that there would be no distinction between good deeds and bad deeds]. One might return with yet another objection: When you say that living beings have no nature of their own, and that they are like an illusion, don't you contradict the explanation that a person who kills such a being collects a bad deed? Remember though that, even if you attempt to kill or do any such act towards a being who turns out to be only an illusion created by some magic, you still strike with your weapon or whatever desiring to kill them, and conceiving of them as an actual human being. And then you still collect the bad deed of undertaking to kill someone, even though--since it had no mind--there is no bad deed in the sense of the actual event. Suppose on the other hand that you act towards a human or the like, those beings who do possess a mind which is itself an illusory one. It is then the case that there do occur meritorious deeds when you do something to help them, and bad deeds when you do something to hurt them."
+      }
+    },
+    "27140": {
+      "spine_row": {
+        "id": 27140,
+        "course": "GK",
+        "seq": 192,
+        "acip": "'DOD NA, DE 'DRA'I LUS KYI CHA LA MTSON BSNUN PAS KYANG GANG ZAG DE LA SDUG BSNGAL MI BSKYED PAR THAL, DE SHES PAS MA ZIN PA'I PHYIR,",
+        "wylie": "'dod na, de 'dra'i lus kyi cha la mtshon bsnun pas kyang gang zag de la sdug bsngal mi bskyed par thal, de shes pas ma zin pa'i phyir",
+        "english": "Well then yes—I agree: there are sections of the body that have no awareness at all. So, are you saying that—when we cut just such a part of the body with a bladed weapon—the person doesn't feel any pain at all? Why do you say that? Because, according to you, that part of the body has no awareness at all.",
+        "raw": "{\"course\": \"GK\", \"acip\": \"'DOD NA, DE 'DRA'I LUS KYI CHA LA MTSON BSNUN PAS KYANG GANG ZAG DE LA SDUG BSNGAL MI BSKYED PAR THAL, DE SHES PAS MA ZIN PA'I PHYIR,\", \"wylie\": \"'dod na, de 'dra'i lus kyi cha la mtshon bsnun pas kyang gang zag de la sdug bsngal mi bskyed par thal, de shes pas ma zin pa'i phyir\", \"english\": \"Well then yes—I agree: there are sections of the body that have no awareness at all. So, are you saying that—when we cut just such a part of the body with a bladed weapon—the person doesn't feel any pain at all? Why do you say that? Because, according to you, that part of the body has no awareness at all.\"}"
+      },
+      "corpus_index": 27139,
+      "corpus_record": {
+        "course": "GK",
+        "acip": "'DOD NA, DE 'DRA'I LUS KYI CHA LA MTSON BSNUN PAS KYANG GANG ZAG DE LA SDUG BSNGAL MI BSKYED PAR THAL, DE SHES PAS MA ZIN PA'I PHYIR,",
+        "wylie": "'dod na, de 'dra'i lus kyi cha la mtshon bsnun pas kyang gang zag de la sdug bsngal mi bskyed par thal, de shes pas ma zin pa'i phyir",
+        "english": "Well then yes—I agree: there are sections of the body that have no awareness at all. So, are you saying that—when we cut just such a part of the body with a bladed weapon—the person doesn't feel any pain at all? Why do you say that? Because, according to you, that part of the body has no awareness at all."
+      }
+    },
+    "27311": {
+      "spine_row": {
+        "id": 27311,
+        "course": "GK",
+        "seq": 363,
+        "acip": "[E43] DPER NA GNYID 'THUG PO LOG PA'I GANG ZAG GI LUS LA MTSON BSNUN PA LTA BU'I TSE 'JUG SHES MED KYANG LUS THAMS CAD LA KHYAB PA'I RNAM SHES YOD PA'I STOBS KYIS GNYID SAD CING LUS TSOR SKYE BA BZHIN YIN PA'I PHYIR,",
+        "wylie": "[e43] dper na gnyid 'thug po log pa'i gang zag gi lus la mtshon bsnun pa lta bu'i tshe 'jug shes med kyang lus thams cad la khyab pa'i rnam shes yod pa'i stobs kyis gnyid sad cing lus tshor skye ba bzhin yin pa'i phyir",
+        "english": "Take, for example, the case of a person who is in a deep sleep.  If you poke at their body with a sharp object, it wakes them up, and triggers a physical sensation; because—even though there is no state of consciousness here which is the type which engages in its specific object—nonetheless there is present a kind of consciousness which extends throughout the body, and which facilitates those reactions.",
+        "raw": "{\"course\": \"GK\", \"acip\": \"[E43] DPER NA GNYID 'THUG PO LOG PA'I GANG ZAG GI LUS LA MTSON BSNUN PA LTA BU'I TSE 'JUG SHES MED KYANG LUS THAMS CAD LA KHYAB PA'I RNAM SHES YOD PA'I STOBS KYIS GNYID SAD CING LUS TSOR SKYE BA BZHIN YIN PA'I PHYIR,\", \"wylie\": \"[e43] dper na gnyid 'thug po log pa'i gang zag gi lus la mtshon bsnun pa lta bu'i tshe 'jug shes med kyang lus thams cad la khyab pa'i rnam shes yod pa'i stobs kyis gnyid sad cing lus tshor skye ba bzhin yin pa'i phyir\", \"english\": \"Take, for example, the case of a person who is in a deep sleep.  If you poke at their body with a sharp object, it wakes them up, and triggers a physical sensation; because—even though there is no state of consciousness here which is the type which engages in its specific object—nonetheless there is present a kind of consciousness which extends throughout the body, and which facilitates those reactions.\"}"
+      },
+      "corpus_index": 27310,
+      "corpus_record": {
+        "course": "GK",
+        "acip": "[E43] DPER NA GNYID 'THUG PO LOG PA'I GANG ZAG GI LUS LA MTSON BSNUN PA LTA BU'I TSE 'JUG SHES MED KYANG LUS THAMS CAD LA KHYAB PA'I RNAM SHES YOD PA'I STOBS KYIS GNYID SAD CING LUS TSOR SKYE BA BZHIN YIN PA'I PHYIR,",
+        "wylie": "[e43] dper na gnyid 'thug po log pa'i gang zag gi lus la mtshon bsnun pa lta bu'i tshe 'jug shes med kyang lus thams cad la khyab pa'i rnam shes yod pa'i stobs kyis gnyid sad cing lus tshor skye ba bzhin yin pa'i phyir",
+        "english": "Take, for example, the case of a person who is in a deep sleep.  If you poke at their body with a sharp object, it wakes them up, and triggers a physical sensation; because—even though there is no state of consciousness here which is the type which engages in its specific object—nonetheless there is present a kind of consciousness which extends throughout the body, and which facilitates those reactions."
+      }
+    },
+    "27312": {
+      "spine_row": {
+        "id": 27312,
+        "course": "GK",
+        "seq": 364,
+        "acip": "[E44] GZHAN DU NA RO LA MTSON BA SNUN {%MTSON BSNUN} PAS KYANG LUS TSOR SKYE BAR THAL BA'I PHYIR RO,,",
+        "wylie": "[e44] gzhan du na ro la mtshon ba snun {%mtshon bsnun} pas kyang lus tshor skye bar thal ba'i phyir ro",
+        "english": "If this were not the case, then a physical sensation would have to be triggered even in a dead body, when you poked it with a sharp object. Seventh argument: How could certain types of deep meditation even exist?",
+        "raw": "{\"course\": \"GK\", \"acip\": \"[E44] GZHAN DU NA RO LA MTSON BA SNUN {%MTSON BSNUN} PAS KYANG LUS TSOR SKYE BAR THAL BA'I PHYIR RO,,\", \"wylie\": \"[e44] gzhan du na ro la mtshon ba snun {%mtshon bsnun} pas kyang lus tshor skye bar thal ba'i phyir ro\", \"english\": \"If this were not the case, then a physical sensation would have to be triggered even in a dead body, when you poked it with a sharp object. Seventh argument: How could certain types of deep meditation even exist?\"}"
+      },
+      "corpus_index": 27311,
+      "corpus_record": {
+        "course": "GK",
+        "acip": "[E44] GZHAN DU NA RO LA MTSON BA SNUN {%MTSON BSNUN} PAS KYANG LUS TSOR SKYE BAR THAL BA'I PHYIR RO,,",
+        "wylie": "[e44] gzhan du na ro la mtshon ba snun {%mtshon bsnun} pas kyang lus tshor skye bar thal ba'i phyir ro",
+        "english": "If this were not the case, then a physical sensation would have to be triggered even in a dead body, when you poked it with a sharp object. Seventh argument: How could certain types of deep meditation even exist?"
+      }
+    },
+    "1754": {
+      "spine_row": {
+        "id": 1754,
+        "course": "C05",
+        "seq": 372,
+        "acip": "MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,",
+        "wylie": "mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o",
+        "english": "The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. *********",
+        "raw": "{\"course\": \"C05\", \"acip\": \"MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,\", \"wylie\": \"mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o\", \"english\": \"The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. *********\"}"
+      },
+      "corpus_index": 1753,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,",
+        "wylie": "mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o",
+        "english": "The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. *********"
+      }
+    },
+    "6907": {
+      "spine_row": {
+        "id": 6907,
+        "course": "C16",
+        "seq": 889,
+        "acip": "MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,",
+        "wylie": "mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o",
+        "english": "The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. 42 The Motivation for Negative Karma",
+        "raw": "{\"course\": \"C16\", \"acip\": \"MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,\", \"wylie\": \"mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o\", \"english\": \"The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. 42 The Motivation for Negative Karma\"}"
+      },
+      "corpus_index": 6906,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,",
+        "wylie": "mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o",
+        "english": "The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. 42 The Motivation for Negative Karma"
+      }
+    }
+  }
+}

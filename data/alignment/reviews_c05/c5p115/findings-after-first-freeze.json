@@ -1,0 +1,16 @@
+[
+  {
+    "status": "NEEDS_CORRECTION",
+    "kind": "STALE_FINAL_PROVENANCE_STATEMENTS",
+    "reconciliation_freeze_sha256": "f9984b2bf91487bbc563aedeb915275f622b2874e729352c7b4bf8ad817c536a",
+    "affected": [
+      "343/original-other-dispositions.json",
+      "345/original-other-dispositions.json",
+      "344/report.md",
+      "344/reconciliation-report.md"
+    ],
+    "reason": "343/345 generic original note/report dispositions still claim only w8 and eng_order changed in344, though final singular note changed.344 current reports incorrectly claim original report remains report.md, but original now lives at history/pre-generation-note/original-English-344-report.md. Correct only factual provenance statements and preserve exact preimages. No span/source/body/native correction is required.",
+    "semantic_selection_supported": true,
+    "resolution": null
+  }
+]

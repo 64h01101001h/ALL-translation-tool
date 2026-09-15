@@ -1,0 +1,210 @@
+{
+  "status": "ROOT_RECONCILIATION_DECISIONS_READY_FOR_MECHANICAL_ASSEMBLY",
+  "utc": "2026-09-15T01:59:38.833525+00:00",
+  "root_is_reconciler": true,
+  "independent_preassessment": {
+    "bytes": 10155,
+    "sha256": "d657ff842e39a97a68aca25d8cc3ce17ba2950873d3de8dad039b3ea2c7fa15f"
+  },
+  "source_origin": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+  "actual_baseline": "1b6fff7fea2b2d7a842275b90c9c0b9e6563fcd0",
+  "segments": [
+    343,
+    344,
+    345
+  ],
+  "counts": {
+    "spans": 61,
+    "nulls": 1,
+    "nonnull_d5": 39,
+    "total_d5": 39,
+    "d7": 4
+  },
+  "errata_count": 2,
+  "selection": {
+    "343": {
+      "base": "english",
+      "retained_original_ids": [
+        "w1",
+        "p2",
+        "w3",
+        "w4",
+        "p5",
+        "w6",
+        "w7",
+        "w8",
+        "w9",
+        "w10",
+        "p11",
+        "w12",
+        "p13",
+        "p14",
+        "w15",
+        "w16",
+        "p17",
+        "w18",
+        "w19",
+        "m20",
+        "p21",
+        "w22"
+      ],
+      "omitted_original_ids": [],
+      "spec_policy": "exact original bytes",
+      "native_policy": "reuse exact existing English v1 capture pair"
+    },
+    "344": {
+      "base": "english",
+      "retained_original_ids": [
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "w7",
+        "p9",
+        "w10",
+        "p11",
+        "w12",
+        "m13",
+        "m14",
+        "p15",
+        "w16",
+        "m17",
+        "w18",
+        "p19",
+        "p20"
+      ],
+      "omitted_original_ids": [
+        "w8"
+      ],
+      "spec_policy": "Remove w8 from spans and eng_order; replace singular segment note with exact corrected_note below. All other fields/values/order unchanged.",
+      "native_policy": "one new generator and resolver after these settled choices"
+    },
+    "345": {
+      "base": "english",
+      "retained_original_ids": [
+        "p1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "f7",
+        "w8",
+        "p9",
+        "w10",
+        "w11",
+        "p12",
+        "w13",
+        "w14",
+        "w15",
+        "w16",
+        "w17",
+        "p18",
+        "w19",
+        "p20"
+      ],
+      "omitted_original_ids": [],
+      "spec_policy": "exact original bytes",
+      "native_policy": "reuse exact existing English v1 capture pair"
+    }
+  },
+  "rulings": [
+    {
+      "topic": "343_ro",
+      "decision": "ACCEPT_ENGLISH_RO_FUSION_NULL",
+      "reason": "Sentence-final RO closes the born proposition at the unique English period before Because. Full RO master has punctuation and terminating-particle senses; the local boundary is affirmative closure fusion, not a corpse/taste word or uncertain absence. Preserve the exact original English cls/conj/nul fields."
+    },
+    {
+      "topic": "343_enumeration",
+      "decision": "ENGLISH_SOGS_PLUS_PAR",
+      "reason": "SOGS directly attests or whatever and owns that closing gesture alone. Standalone PAR locates the war/example situation and is locally in, at whole-syllable d6. Exact PAR master lookup is empty: this is source-grammar evidence, not glossary attestation. Whole T la sogs par/or whatever would absorb the locative contribution in the enumerator. Internal LA has no secure additional English atom and stays unbanked without null."
+    },
+    {
+      "topic": "343_agent_member",
+      "decision": "ACCEPT_ENGLISH_BYED_COMMITS",
+      "reason": "Complete BYED PA PO directly attests one who commits; complete BYED glossary has commit. The inflected commits member is a whole English word strictly within the agent parent. Exclude the and it; do not invent a PO/one member."
+    },
+    {
+      "topic": "344_shared_death",
+      "decision": "OMIT_ENGLISH_W8_AND_BOTH_SOURCE_DEATH_PREDICATES",
+      "reason": "Two SHI BA predicates under before/together share one fronted die. Exclusive first occurrence ownership is underdetermined; omit both with shared-scope explanation, not duplicate die or null either. Remove only original English344w8 from selected spec."
+    },
+    {
+      "topic": "344_occurrence_question",
+      "decision": "KEEP_POSITIVE_BYUNG_OCCURRED",
+      "reason": "The question explicitly gives positive has occurred and then negative or not with an elided verb. Unlike the two death alternatives sharing one fronted predicate, positive-first occurrence owns the expressed occurred. Keep original positive BYUNG pair and omit the second source BYUNG with ellipsis reason; no second null or word."
+    },
+    {
+      "topic": "344_members_and_negative",
+      "decision": "KEEP_ENGLISH_DEPTHS",
+      "reason": "LAS/action, LAM/path and DNGOS/actual are independently supported whole-word members strictly inside their established compounds. Curated LAS deeds does not erase complete glossary action; local source action is provisional. Keep whole actual \"commission\" stage, without speculative GZHI member. Standalone MI/not is a negative grammatical particle d6, not the noun human/d5."
+    },
+    {
+      "topic": "345_negative_units",
+      "decision": "KEEP_ENGLISH_PHRASE_AND_FLAT_WORDS",
+      "reason": "Full MI BYUNG/cannot occur has lexical attestation, but entry inclusion does not establish a compound unit in this compositional negative predicate. Keep exact English d3 parent; no d7 child attached to phrase and no not-inside-cannot cut. Keep separate MA/never d6 and BYAS PA/went through d5, each direct and complete, rather than asserting a D5 MA BYAS PA compound solely from dictionary inclusion. Preserve Tibetan competing whole-parent/member analysis in exact disposition; no change to source or glossary."
+    },
+    {
+      "topic": "345_other_omissions",
+      "decision": "KEEP_ORIGINAL_UNCERTAIN_ANAPHORA_AND_TEMPORAL_SCOPE",
+      "reason": "MA...BAR jointly yields before with SHI/dies and remains unbanked as discontinuous temporal contribution, not absent negation. DES/body and GSOD PA/this act are anaphoric recasts without unique lexical ownership. Three distinct victims, two deaths and sole LUS/body retain their original local ranges."
+    },
+    {
+      "topic": "source_questions",
+      "decision": "KEEP_TWO_ENGLISH_LOW_PROBABLE_QUESTIONS",
+      "reason": "Retain exact original English343/344 errata objects as tentative human spelling questions, not replacements. PHYER has an internal same-verse PHYIR comparison at372/889 plus exact physical/C16 counterevidence. MTSAN BSNUN has MTSON weapon-strike lexical/different-context support, but repeated MTSAN and no corrected same-passage witness. Confidence remains PROBABLE/severityLOW. Raw suspect syllables remain unbanked; no new source/spine/master/head allowance. All four original candidate records and every counterargument preserved; English chosen for explicit human-review wording and measured limitations."
+    },
+    {
+      "topic": "other_spans",
+      "decision": "KEEP_EXACT_ENGLISH_ORIGINALS",
+      "reason": "All other selected English original span objects/ranges/rationales remain exact after root source/material reading and independent preassessment. No source-authority claims from arbitrary cursor position, glossary alone or mined heads. Preserve original reports as original provenance; separate current root reconciliation report makes acceptance-baseline and count changes clear."
+    }
+  ],
+  "original_omissions": 31,
+  "original_spans": 119,
+  "original_screens": 30,
+  "original_errata_candidates": 4,
+  "root_reading": {
+    "source": {
+      "bytes": 1271,
+      "sha256": "d77d60a5404e6777652116b92ebe00db2c20cb172043fb225f7fcd3bceed582a"
+    },
+    "originals": {
+      "bytes": 1171,
+      "sha256": "77d1819285e12cb6cd662c029277c2d59cdf4b863246d1994ab60f140617a847"
+    },
+    "material": {
+      "bytes": 1551,
+      "sha256": "7c713a2fe8c996b8a4cce1b363d882ef91e023f28fd4e9457cc2bdd3743a2315"
+    },
+    "screens": {
+      "bytes": 2366,
+      "sha256": "359d3e66809b117194c6d9e996ded57cb885c26e95358bfcc7726674ae7e20f6"
+    }
+  },
+  "native_execution_plan": {
+    "selected_capture_version": 1,
+    "original_pairs": 6,
+    "new_reconciler_pairs": 1,
+    "exact_reused_english_pairs": 2,
+    "total_actual_unique_pairs": 7,
+    "root_and_reviewer_runs": 0,
+    "limits": "Reuse original argv/cwd/times/streams truthfully, no fake execution. Expected9 selected angle/segment views contain7unique executions. Native originals remain intact; changed344 requires actual new pair only."
+  },
+  "limits": "Mechanical assembly only; exact independent final review and root semantic acceptance required before production. Preserve all originals/disagreements, no W writes.",
+  "revision": 2,
+  "supersedes_before_generation": {
+    "bytes": 8542,
+    "sha256": "4a7d59f7c4ddd77921b888ed2186ba8a3c47b3880222f441eddfac4bef64fdeb"
+  },
+  "note_correction": {
+    "seq": 344,
+    "field": "segments[0].note",
+    "original_note": "PROVISIONAL machine alignment by Codex, independent English-first proposal. First shi ba owns the single die shared across before/together; first byung owns occurred shared across or not. Repeated predicates stay omitted without nulls. MTSAN is preserved and unbanked with a LOW/PROBABLE spelling question, while bsnun/blow is independently glossary-attested. Other-person, murderer and victim nouns remain distinct. Actual commission stage and path of action retain only secure members. Question/report framing and the causative recast of chi are omitted conservatively; no source/master correction.",
+    "corrected_note": "PROVISIONAL machine alignment by Codex, root reconciliation of independent originals. Both shi ba predicates share one fronted English die across before/together and remain unbanked because exclusive occurrence ownership is unresolved; neither receives a null. The positive byung owns explicitly expressed occurred; the second byung is elided in or not and remains unbanked without an absence claim. MTSAN is preserved and unbanked with a LOW/PROBABLE spelling question, while bsnun/blow is independently glossary-attested. Other-person, murderer and victim nouns remain distinct. Actual commission stage and path of action retain only secure members. Question/report framing and the causative recast of chi are omitted conservatively; no source/master correction.",
+    "reason": "Independent reviewer caught stale original first-death ownership note before generation. Root had inspected nonexistent plural notes rather than singular note; record exact schema correction without altering originals. Native344 has not been authorized until this correction.",
+    "scope": "Pre-generation semantic metadata correction; same61 selected spans and one planned344 native pair.343345 remain exact original specs/body/ranges."
+  }
+}

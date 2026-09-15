@@ -1,0 +1,103 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(343,'death before the victim and shared action',[
+ ('snga','Before',5,'Before or together','Temporal before, preserving the verse-initial capital. Glossary before; source order differs from English.'),
+ ('dang','or',6,'or together','Coordinator marks the two alternatives before or simultaneous death.'),
+ ('mnyam du','together',5,'Before or together','Established adverbial compound with exact glossary together; no internal member is needed.'),
+ ('shi ba','die',5,'those who die','Exact glossary die; those who is nominal framing and stays outside.'),
+ ('la','for',6,'for those who die','Whole case particle marks the people for whom no actual stage occurs; distinct from the causal for after together.'),
+ ('dngos','actual',5,'no actual stage','Actual is directly attested. Stage makes the root shorthand explicit and remains outside the narrower adjective claim.'),
+ ('med','no',5,'There is no actual stage','Negative existential owns no; the English there is frame remains unwrapped.'),
+ ('lus','body',5,"another body's been born",'Exact body noun before the contraction apostrophe; do not absorb the auxiliary has.'),
+ ('gzhan','another',5,"another body's been born",'Other/another identifies the newly born body. The unrelated Sunlight auto-aligned a bodhisattva gloss is rejected without modifying it.'),
+ ('skyes','born',5,"another body's been born",'Exact glossary born; auxiliary been remains outside.'),
+ ('ro',None,6,'','Sentence-final declarative RO closes the proposition that another body has been born. English marks exactly this closure with the period after born and begins the next reason with Because. Its grammatical closure is fused into that punctuation; there is no separate lexical exponent. This is not the noun corpse or taste.'),
+ ('dmag','war',5,'in a war or whatever','Exact glossary war; a remains outside.'),
+ ('sogs','or whatever',6,'war or whatever','Exact glossary enumerative closing gesture; no following goal or participant words are absorbed.'),
+ ('par','in',6,'in a war or whatever','Standalone PAR locates the common purpose in war or the like; English in precedes the whole example phrase.'),
+ ('don','goal',5,"their goal's the same",'Exact glossary goal, excluding their and the copular contraction.'),
+ ('gcig','same',5,"their goal's the same",'The common goal is one/the same; exact glossary same. Exclude the.'),
+ ('phyir','Because',6,"Because their goal's",'Second, correctly spelled PHYIR introduces the shared-goal reason, not the earlier for associated with raw PHYER.'),
+ ('thams cad','All',5,'All possess it','Exact all compound, with verse-initial capital preserved.'),
+ ('byed pa po','one who commits',5,'the one who commits it','Whole agent noun has exact glossary one who commits. Exclude the and the supplied object it.'),
+ ('byed','commits',7,'the one who commits it','Secure verbal member: glossary commit with local singular inflection. Strictly inside the agent-noun parent.'),
+ ('bzhin','as much as',6,'it as much as the one','Comparative particle relates all participants to the actual doer, recast as as much as. The mined let\'s say gloss is unrelated and not promoted.'),
+ ('ldan','possess',5,'All possess it','Exact glossary possess. The anaphoric English object it stays outside.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Before/together and the two distinct reasons are separated. Raw PHYER is preserved and unbanked, with a LOW/PROBABLE spelling question supported by the later PHYIR quotation at C05:372 and counterbalanced by identical C16:864. RO is a punctuation-fusion null with cls=conj at the period after born. The agent noun owns one who commits with a secure byed/commits member; its article and object remain outside. No hgm_gloss promotion or source correction.',
+ [{'tib':'phyer','english':'for after together','reason':'The exact source spelling has no exact lexical record. C05:372 quotes the same line with PHYIR and the same causal English; C16:864 repeats PHYER. Preserve the source question and omit this uncertain token instead of silently aligning a normalized phyir.'},
+ {'tib':'la before sogs','reason':'The connective within la sogs par participates in the enumerative construction; sogs owns the visible or whatever and par the locative in. A separate English atom for la is uncertain, so no null is asserted.'},
+ {'tib':'mnyam and du as children of mnyam du; pa po as a child of byed pa po','reason':'No further unique lexical member is established. Together is already the whole compound; the agent-noun remainder is not split into an arbitrary one/who mapping.'},
+ {'english':"There is; stage; those who; auxiliary 's and been; their; copular 's; the; a; it after possess; the before one; final it",'reason':'Nominal, auxiliary, article, possessive and anaphoric framing remains unwrapped. Keeping dngos/actual narrow does not claim that the technical stage is absent from the Tibetan shorthand.'}])
+
+build(344,'a murderer dying before or with the victim',[
+ ('pha rol po','someone else',5,'to someone else which','Established other-person compound is rendered someone else, excluding to and which.'),
+ ('nges pa','sure',5,'which is sure to kill','Exact glossary sure. Is and the recast killing complement stay outside.'),
+ ('bsnun','blow',5,'delivers a blow','Exact glossary blow supplies the lexical striking content; delivers a is the English light-verb frame. Do not let bsnun absorb weapon from the questionable preceding MTSAN.'),
+ ('gsod byed','murderer',5,'this murderer himself','Exact glossary murderer; this first English occurrence identifies the agent after the blow.'),
+ ('de','this',5,'this murderer himself','Demonstrative this belongs to the first murderer mention, not the repeated such a murderer at the question end.'),
+ ('gsad bya','victim',5,'before his victim','Exact glossary victim, excluding supplied his.'),
+ ('sngar','before',5,'before his victim','Temporal before, distinct from the root verse Before in343.'),
+ ('shi ba','die',5,'happens to die','First death predicate owns the sole English die, shared by the before/together alternatives. Happens to remains outside.'),
+ ('dang','or',6,'victim or together','Alternatives coordinator owns the first or, not the question-final or not.'),
+ ('mnyam du','together',5,'victim or together','Whole adverbial compound owns together. The following at the same time is an explanatory repetition and is not banked a second time.'),
+ ('la','for',6,'for such a murderer','Case relation concerns the murderer for whom actual commission might occur; English moves it to the question end.'),
+ ('las lam','path of action',5,'a full path of action','Established action-path compound; exclude a full.'),
+ ('las','action',7,'a full path of action','Action is the secure karma member inside the compound.'),
+ ('lam','path',7,'a full path of action','Path is the secure member, within the same parent.'),
+ ('gyi','of',6,'stage of a full path','Genitive links actual commission stage with its path of action. It owns the of after stage, not the of inside path of action.'),
+ ('dngos gzhi','actual "commission" stage',5,'the actual "commission" stage','Established technical stage compound. Both actual commission and main stage are glossary-attested; this local rendering combines them. Internal quotation marks are preserved; the preceding the remains outside.'),
+ ('dngos','actual',7,'the actual "commission" stage','Secure actual modifier inside the technical-stage parent. No arbitrary gzhi/commission member is inferred.'),
+ ("'byung",'occurred',5,'action has occurred','First arising verb owns occurred, excluding has. The repeated negative alternative shares this predicate in English.'),
+ ('ngam','or',6,'murderer, or not','Whole interrogative alternative particle owns the final or, distinct from dang/or earlier.'),
+ ('mi','not',6,'murderer, or not','Explicit negative particle in the final alternative. The omitted repeated arising verb is not falsely declared absent.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. First shi ba owns the single die shared across before/together; first byung owns occurred shared across or not. Repeated predicates stay omitted without nulls. MTSAN is preserved and unbanked with a LOW/PROBABLE spelling question, while bsnun/blow is independently glossary-attested. Other-person, murderer and victim nouns remain distinct. Actual commission stage and path of action retain only secure members. Question/report framing and the causative recast of chi are omitted conservatively; no source/master correction.',
+ [{'tib':"[iv.285-8]; bound genitives after nges pa and gsad bya",'reason':'Citation and nominal/relative grammar remain exact. No fabricated English span is added for apparatus or distributed grammar.'},
+ {'tib':"'chi",'english':'kill him','reason':'The source says the other person is certain to die; English recasts the weapon/blow as sure to kill him. A direct die/kill atom would conflate intransitive death with the causative construction. The distributed relation is preserved unbanked, not nulled.'},
+ {'tib':'mtshan','english':'weapon','reason':'Raw MTSAN means name/sign/night in the complete records, whereas MTSON has weapon and mtshon bsnun is attested. Another MTSAN BSNUN occurs metaphorically at C05:462, and C16 repeats this row exactly. These are counterevidence to claiming an isolated ingest loss. Propose a LOW/PROBABLE spelling question without normalizing or banking mtshan/weapon.'},
+ {'tib':'nas; second shi ba; second byung','reason':'Continuative NAS is distributed in the expanded supposition; the two death predicates share die and the positive/negative arising predicates share occurred. Bank each English verb once at the first source occurrence, omitting repeated predicates without asserting absent meaning.'},
+ {'tib':'zhe na','english':'one may begin / Can we say then','reason':'Reporting/question force is distributed over both English frames. A unique begin or say alignment is less secure than the lexical body of the question, so omit the formula without a false null.'},
+ {'tib':'gzhi as a child of dngos gzhi','reason':'The technical parent securely supplies actual commission stage. Separating gzhi as commission or stage is less certain than the direct dngos/actual member, so leave it unsplit.'},
+ {'english':'Suppose; one may; that a person takes a; delivers a; to; which is; to kill him; but then; himself; happens to; either; his; with him--at the same time; Can we say then that the; a full; has; such a murderer','reason':'English participants, light verbs, repeated explanatory wording and supposition/question framing remain unwrapped unless expressly assigned above. Repeated such a murderer does not receive the same sole gsod byed twice.'}])
+
+build(345,'why no actual stage occurs',[
+ ('la','for',6,'for such a person','First case marker relates non-occurrence to the previously mentioned murderer; supplied such a person remains outside.'),
+ ('de','this',5,'of this stage','Second DE is the demonstrative for the actual stage, narrowly this, excluding the repeated noun stage.'),
+ ("'byung ba",'occurrence',5,'no occurrence of this stage','Nominal arising is occurrence here, distinct from the following cannot occur predicate.'),
+ ('med','no',5,'there is no occurrence','Negative existential supplies the first no. The later There is no actual commission is an explanatory repetition, not a second target.'),
+ ('gsad bya','victim',5,'before the victim dies','First victim compound belongs to the first-place reason, excluding the.'),
+ ('shi','dies',5,'before the victim dies','First death verb concerns the victim; exact glossary dies.'),
+ ("mi 'byung",'cannot occur',3,'the stage cannot occur','The full negative arising predicate has exact glossary cannot occur. Phrase depth preserves the predicate including its modal-negation fusion; no unsupported not subword is taken from cannot.'),
+ ('gsad bya','victim',5,'as his victim','Second victim compound belongs to simultaneous death, excluding his.'),
+ ('dang','as',6,'as his victim','Comparative/co-occurrence relation with the victim is recast as as after at the same time; no separate with is invented.'),
+ ('mnyam du','at the same time',5,'dies at the same time','Whole established adverb has this exact complete glossary rendering. Internal the is integral to that temporal idiom; no external participant is absorbed.'),
+ ('shi','dies',5,'the murderer dies','Second death verb concerns the murderer, distinct from the earlier victim dies.'),
+ ('na','where',6,'where the murderer dies','Conditional case setting is rendered where in the second-place reason; the source condition is not treated as a location noun.'),
+ ('lus','body',5,'another body of the killer','Sole lexical body noun owns the first English body in the new-body proposition.'),
+ ('gzhan','another',5,'another body of the killer','Another modifies the newly born body. The unrelated mined a bodhisattva gloss remains rejected and unchanged.'),
+ ('skyes','born',5,'has been born','Exact birth predicate; has been is auxiliary framing.'),
+ ('pha rol po','victim',5,'the victim in question','Other-person compound is contextually the victim targeted by the killing undertaking. Bank victim only; the in-question deictic expansion stays outside.'),
+ ('sbyor ba','undertaking',5,'stage of undertaking this act','Exact glossary undertaking, excluding the expanded stage of and the anaphoric act description.'),
+ ('ma','never',6,'body never went through','Whole negative particle owns never, exactly glossary-attested in this past-action context.'),
+ ('byas pa','went through',5,'body never went through','Exact glossary went through for performing the undertaking; do not absorb the body or the stage object.'),
+ ('phyir','because',6,'commission because the body','Final causal particle introduces the reason that the new body never undertook the act. It owns the sole because, after the repeated commission summary.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Distinguish two victim/death occurrences and a final other-person/victim reference. Mi byung/cannot occur is the genuine negative predicate at d3, avoiding any unsupported not-inside-cannot convention. Ma and bar around the first shi contribute jointly to before and remain unbanked; there is no invented absent-negation null. Mnyam du owns the attested temporal idiom at the same time. Body and stage anaphors are not forced onto repeated English nouns; exact source and GMR English are preserved.',
+ [{'tib':'first de; de after med; de before mi byung','reason':'First demonstrative is expanded as such a person; the post-MED de is continuative; the later demonstrative is recast as stage without an explicit this. Keep the secure second DE/this only. The others are distributed/referential, not proven absent.'},
+ {'tib':'ma and bar around first shi','english':'before','reason':'The negative-temporal construction ma shi bar corresponds to before the victim dies. Before does not independently mean ma or bar alone, and its semantics already includes the not-yet condition. Retain victim/dies atoms; omit the joint temporal relation without a false null or a broad clause that would absorb the English article.'},
+ {'tib':'mi and byung inside mi byung','reason':'The negative predicate is genuinely aligned as a phrase, with no d7 children on d3. Cannot contains an inseparable modal-negative form outside the four confirmed subword conventions; no fifth convention is introduced.'},
+ {'tib':'shing; des; bound genitives','reason':'Continuation, agency and complements are distributed across the recast second-place explanation. DES is expanded as the second body; it is not split into a false separable -s or banked as a lexical body noun.'},
+ {'tib':'gsod pa','english':'this act','reason':'The killing action is referred to generically as this act. The anaphoric phrase is semantically intelligible but not a secure local lexical killing/act equivalence; preserve it unbanked without claiming absent content.'},
+ {'english':'The answer is that; there is; of; stage after this; such a person; In the first place; the stage; the; in the second place; the murderer; his; of the killer; has been; There is no actual commission; the second body; the stage of; this act; towards; the; in question','reason':'Supplied explanation, repeated subjects and technical-stage nouns, auxiliary, article, possessive and anaphoric frames stay outside the narrow claims. This English expansion is not itself a source error.'}])

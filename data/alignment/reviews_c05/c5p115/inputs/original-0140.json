@@ -1,0 +1,96 @@
+{
+  "seq": 345,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1727,
+        "course": "C05",
+        "seq": 345,
+        "acip": "DE LA DE 'BYUNG BA MED DE, GSAD BYA MA SHI BAR DE MI 'BYUNG , GSAD BYA DANG MNYAM DU SHI NA LUS GZHAN SKYES SHING , DES PHA ROL PO GSOD PA'I SBYOR BA MA BYAS PA'I PHYIR,",
+        "wylie": "de la de 'byung ba med de, gsad bya ma shi bar de mi 'byung , gsad bya dang mnyam du shi na lus gzhan skyes shing , des pha rol po gsod pa'i sbyor ba ma byas pa'i phyir",
+        "english": "The answer is that there is no occurrence of this stage for such a person. In the first place, the stage cannot occur before the victim dies; in the second place, where the murderer dies at the same time as his victim, another body of the killer has been born. There is no actual commission because the body never went through the stage of undertaking this act towards the victim in question."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete six raw ASCII source extents were read and verified; whitespace collapse exactly equals ACIP/English. Faithful digital agreement does not prove the source reading correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": "../evidence/corpus.json",
+      "finding": "Each of the three exact345 field queries returns this C05 row and C16:866; all six full source/parallel objects were read. C16 lineage independence is not proved. All20 complete focused corpus records were read, including later same-line PHYIR quotations at C05:372/C16:889 and both MTSAN/MTSON BSNUN usage sets. No external publication collation is claimed."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b6799188c8cb95f9095fea7cdc6bbf4d653894:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "additional_related_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Current exact references plus phyer/mtshan bsnun/MTSAN BSNUN screened over200 records; no duplicate. Registered converter, running-head, cap, spill and footnote classes read/reused by exact complete identity. No registered class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The anaphoric body/stage expansions, before for the negative-temporal construction, and cannot occur for mi byung are coherent local paraphrases. Uncertain lexical boundaries remain omissions rather than source-error claims.",
+      "counterevidence": "Exact physical/C16 agreement establishes an available published/digital reading, not an independent corrected witness. Legitimate paraphrase, nonstandard source forms, and the limits of a dictionary prevent stronger source claims. No glossary or mined hgm_gloss is changed or promoted."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 169,
+        "wylie": 168,
+        "english": 392
+      },
+      "utf8_bytes": {
+        "acip": 169,
+        "wylie": 168,
+        "english": 392
+      },
+      "english_equals_1500": false,
+      "verse_syllable_counts": null,
+      "finding": "Complete physical field boundaries agree; no 1500 cap, running-head or following-heading intrusion occurs in these three rows.343 capitals follow four-line verse structure.344 bracketed reference is citation apparatus, preserved without an error claim."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The anaphoric body/stage expansions, before for the negative-temporal construction, and cannot occur for mi byung are coherent local paraphrases. Uncertain lexical boundaries remain omissions rather than source-error claims."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new defect in this category; punctuation, auxiliaries, anaphors and supplied explanatory frames are preserved. No source correction."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}
