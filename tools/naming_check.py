@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Geshe Michael is named, not pronouned -- and only where he is the referent.
+"""Geshe Michael is named, not pronouned -- and only where Geshe Michael is the referent.
 
 Adam's ruling, 2026-09-15: "no more referring to Geshe Michael's translations
 as 'his words' or anything similar. this is the rule everywhere throughout this
@@ -61,6 +61,19 @@ def scan(root):
     code("app/main.cpp", "//")
     code("app/*.inc", "//")
     code("ios/**/*.swift", "//")
+
+    # tools/ prints messages a human reads when a gate fails, and carries
+    # docstrings that explain the rules. Same standard, narrower test: both the
+    # name and the pronoun must be on the line, because a lone "he" in a
+    # tools/ docstring is usually a worked example about somebody else.
+    for p in sorted(glob.glob(os.path.join(root, "tools/*.py"))):
+        for i, line in enumerate(io.open(p, encoding="utf-8",
+                                         errors="replace"), start=1):
+            s = line.rstrip("\n")
+            if s.lstrip().startswith("#"):
+                continue
+            if NAMES.search(s) and PRON.search(s):
+                hits.append((os.path.relpath(p, root), i, s.strip()))
 
     for p in sorted(glob.glob(os.path.join(root, "docs/**/*.md"),
                               recursive=True)):

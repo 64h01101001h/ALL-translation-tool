@@ -492,7 +492,7 @@ def main():
                 f"({m.group(1)}) with no text colour beside it — on a "
                 f"theme-independent ground the ink must be fixed too, or "
                 f"Night mode inherits light text onto a light plaque "
-                f"(incident: his English vanished on the GMR plaque)")
+                f"(incident: Geshe Michael's English vanished on the GMR plaque)")
 
     for x in notes:
         print("  note:", x)
