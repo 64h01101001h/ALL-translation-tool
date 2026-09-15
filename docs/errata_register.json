@@ -2182,5 +2182,65 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-183",
+  "course": "C01",
+  "segment": "C01:180",
+  "kind": "LAYER_ARTEFACT",
+  "found": "never transgressing",
+  "expected": "'da' bar banked whole as \"transgressing\"; the mi morpheme banked with eng: null",
+  "evidence": "The banked layer splits one English word across two links: s180m4 (d=6, tib 'mi') carries eng 'trans' and s180w9 (d=5, tib \"'da' bar\") carries eng 'gressing'. Neither half is English. The negation in this sentence is already carried by s180w8, tib 'nam yang' -> 'never', so the mi morpheme has no exponent of its own left in the English; ALIGNMENT_LAYER_SPEC rule 5 says a morpheme with no exponent takes eng: null rather than a share of a neighbouring word. Reported to Adam by the Codex alignment campaign as one of four inherited C01 mappings blocking iOS pack acceptance (id 180/s180w9, 'da/gressing'), and verified here against the spine: the segment's English reads \"means never transgressing the pledge you have made to yourself\". This one instance is shipping: the phone's vocabulary card for \"'da' bar\" currently shows aligned_eng \"gressing\".",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-184",
+  "course": "C01",
+  "segment": "C01:170",
+  "kind": "LAYER_ARTEFACT",
+  "found": "a spiritual practice",
+  "expected": "'ong rgyu not banked as the bare article; the article belongs to the 'spiritual practice' span, and 'ong rgyu takes eng: null or the 'something that's' span",
+  "evidence": "s170w7 (d=5, tib \"'ong rgyu\") carries eng 'a'. The segment's English reads \"much less do something that's a spiritual practice\"; the article there belongs to 'a spiritual practice', which is already banked at s170w6 (tib 'chos' -> 'spiritual practice'). \"'ong rgyu\" means that which will come or come about, and a bare English article is not an exponent of it. Reported by the Codex alignment campaign as 170/s170w7 (\"'ong rgyu/a\"); verified here against the spine.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-185",
+  "course": "C01",
+  "segment": "C01:412",
+  "kind": "NOT_AN_ERRATUM",
+  "found": "has any true existence",
+  "expected": "no change — the alignment is defensible",
+  "evidence": "Reported by the Codex alignment campaign as incorrect negative scope at 412/s412w5, tib 'bden par ma grub pas' -> eng 'has any true existence'. Checked against the whole segment and closed as NOT an erratum: the English reads \"no particular object you can choose has any true existence\", and the negation is carried on the subject by s412w3 (tib 'chos gang dang gang' -> 'no particular object you can choose'). Inside a \"no X has any Y\" construction the remainder is correctly rendered without a second negative. English idiom moves the negation to the determiner; the Tibetan negates the predicate. That is a difference in where the negative is expressed, not a dropped negation.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-186",
+  "course": "C01",
+  "segment": "C01:422",
+  "kind": "NOT_AN_ERRATUM",
+  "found": "no object in the universe exists truly",
+  "expected": "no change — the alignment is defensible",
+  "evidence": "Reported by the Codex alignment campaign as incorrect negative scope at 422/s422w2, tib 'bden par med pa' -> eng 'exists truly'. Checked against the whole segment and closed as NOT an erratum, for the same reason as C01:412: the English reads \"no object in the universe exists truly\", and s422w1 (tib 'chos thams cad' -> 'no object in the universe') carries the negation on the subject. The med pa span supplies the predicate the determiner negates.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-187",
+  "course": "C01",
+  "segment": "C01:38",
+  "kind": "LAYER_ARTEFACT",
+  "found": "These instructions were imparted to Ngawang Drakpa",
+  "expected": "the eng field holds Geshe Michael's English for the span and nothing else; an alignment note belongs in a note field, not in eng",
+  "evidence": "Found by tools/alignment_invariants.py on its first run, by the check that every banked English must occur in the segment's English. The d=1 link s38S carries, inside its eng field, a bracketed editorial annotation: \"[FRONT-MATTER BLEED: the corpus English continues for ~5,700 characters past this sentence - the entire foreword by Khen Rinpoche Geshe Lobsang Tharchin for the English edition, welded onto the colophon segment. The machine aligns the colophon sentence only and links NOTHING to the foreword; flagged for the corpus maintainers.]\" The same pattern stands at C01:45 s45S. The observation itself is correct and worth keeping -- the corpus segment really does have a foreword welded onto a colophon -- but eng is the field that means \"Geshe Michael's English for this span\", and any consumer reading it presents the annotation as his words. app/main.cpp reads this bank for the grammar view. Not currently in the iOS pack (0 entries). The underlying front-matter bleed in the corpus is a separate matter for the corpus maintainers, as the note itself says.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

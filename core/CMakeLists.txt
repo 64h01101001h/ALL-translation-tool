@@ -646,6 +646,16 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_supplied_span_head.py)
 
+  # Invariants over the banked alignment layer — the questions a string
+  # comparison can settle, kept apart from the questions that need a reader.
+  # --strict fails on the EXACT checks only; the advisory ones are a review
+  # list, not a gate. It found its first defect on its first run: an editorial
+  # annotation stored inside the eng field, which is the field that means
+  # "Geshe Michael's English for this span" (E-187).
+  add_test(NAME alignment_invariants
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/alignment_invariants.py --strict)
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still
