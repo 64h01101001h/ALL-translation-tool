@@ -1,0 +1,1192 @@
+[
+  {
+    "seq": 357,
+    "kind": "TIBETAN_SPELLING",
+    "found": "NYON MONGS CAN GYI SEMS",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "NYON MONGS CAN GYI SEMS",
+        "source_row": {
+          "id": 1739,
+          "course": "C05",
+          "seq": 357,
+          "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+          "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+          "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+        },
+        "occurrences": {
+          "acip": [
+            35
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "byis pa'i tha snyad brgyad"
+            ],
+            "count": 1,
+            "row_ids": [
+              1737
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "'phags pa'i tha snyad brgyad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1738,
+              36669
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs can kun kyal pa nyid"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Meaningless, really every afflicted"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue Nor non-virtue"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9349
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kha gsag glu dang zlos gar"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+        "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+        "register_identity": {
+          "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:355",
+          "c05:356",
+          "c05:357",
+          "meaningless, really every afflicted",
+          "78 six",
+          "gnyis pa ni"
+        ],
+        "matches": [
+          {
+            "item_id": "E-040",
+            "course": "C01",
+            "segment": "C01:484",
+            "kind": "NOT_AN_ERRATUM",
+            "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+            "expected": "",
+            "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+        "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 354,
+          "wylie": 355,
+          "english": 420
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 357,
+            "field": "acip",
+            "start": 243930,
+            "bytes": 365,
+            "sha256": "669b9ee4b952707fddd8c5b5fa2a663b0ea45cd1915bdca2a4df5b6e2bf89fe3",
+            "original_text": ",PHRA MA PHA ROL DBYE BA'I PHYIR,\r\n,NYON MONGS CAN GYI SEMS KYI \r\nTSIG,TSIG RTZUB PO NI MI SNYAN PA,\r\n,NYON MONGS CAN KUN KYAL PA NYID,\r\n,GZHAN NI DE LAS GZHAN NYON MONGS,\r\n,KHA GSAG GLU DANG ZLOS GAR BZHIN,\r\n,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI,\r\n,LOG PAS GZHAN GYI NOR LA CHAGS,\r\n,GNOD SEMS SEMS CAN LA SDANG BA,\r\n,DGE DANG MI DGE MED LTA BA,\r\n,LOG PAR LTA BA YIN",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 357,
+            "field": "english",
+            "start": 244300,
+            "bytes": 430,
+            "sha256": "f612f32cb3f522342486e1f7b6b332bb1e82c5750ed75dcc0be3af770fc8ee77",
+            "original_text": "Divisive speech, the words of a mentally\r\nAfflicted state meant to split up others.\r\nHarsh speech is that which is unpleasant;\r\nMeaningless, really every afflicted.\r\nOthers, every other afflicted type like\r\nFlattery for gain, a song, a show.\r\nLike too wrong commentaries. Coveting\r\nWrong desire for another's wealth.\r\nHarmful intent, hating a living being;\r\nMistaken view, the idea that neither virtue\r\nNor non-virtue even exists.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 89,
+        "material_master_objects": 171,
+        "personally_read_reused_objects": 99,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 7
+      },
+      "d_defensibility": {
+        "judgment": "Current physical GYI and exact C16:875 GYI agree. TCS02:74 prints GYE in its partially matching verse, which is a different witness form and does not license changing current GYI. Inflected LOG PAS is also retained whole despite zero exact master matches; base LOG PA wrong and local case grammar support the current word without splitting final agentive-s.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 357,
+    "kind": "ENGLISH_TYPO",
+    "found": "Meaningless, really every afflicted.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Meaningless, really every afflicted.",
+        "source_row": {
+          "id": 1739,
+          "course": "C05",
+          "seq": 357,
+          "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+          "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+          "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            125
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "byis pa'i tha snyad brgyad"
+            ],
+            "count": 1,
+            "row_ids": [
+              1737
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "'phags pa'i tha snyad brgyad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1738,
+              36669
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs can kun kyal pa nyid"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Meaningless, really every afflicted"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue Nor non-virtue"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9349
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kha gsag glu dang zlos gar"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+        "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+        "register_identity": {
+          "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:355",
+          "c05:356",
+          "c05:357",
+          "meaningless, really every afflicted",
+          "78 six",
+          "gnyis pa ni"
+        ],
+        "matches": [
+          {
+            "item_id": "E-040",
+            "course": "C01",
+            "segment": "C01:484",
+            "kind": "NOT_AN_ERRATUM",
+            "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+            "expected": "",
+            "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+        "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 354,
+          "wylie": 355,
+          "english": 420
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 357,
+            "field": "acip",
+            "start": 243930,
+            "bytes": 365,
+            "sha256": "669b9ee4b952707fddd8c5b5fa2a663b0ea45cd1915bdca2a4df5b6e2bf89fe3",
+            "original_text": ",PHRA MA PHA ROL DBYE BA'I PHYIR,\r\n,NYON MONGS CAN GYI SEMS KYI \r\nTSIG,TSIG RTZUB PO NI MI SNYAN PA,\r\n,NYON MONGS CAN KUN KYAL PA NYID,\r\n,GZHAN NI DE LAS GZHAN NYON MONGS,\r\n,KHA GSAG GLU DANG ZLOS GAR BZHIN,\r\n,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI,\r\n,LOG PAS GZHAN GYI NOR LA CHAGS,\r\n,GNOD SEMS SEMS CAN LA SDANG BA,\r\n,DGE DANG MI DGE MED LTA BA,\r\n,LOG PAR LTA BA YIN",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 357,
+            "field": "english",
+            "start": 244300,
+            "bytes": 430,
+            "sha256": "f612f32cb3f522342486e1f7b6b332bb1e82c5750ed75dcc0be3af770fc8ee77",
+            "original_text": "Divisive speech, the words of a mentally\r\nAfflicted state meant to split up others.\r\nHarsh speech is that which is unpleasant;\r\nMeaningless, really every afflicted.\r\nOthers, every other afflicted type like\r\nFlattery for gain, a song, a show.\r\nLike too wrong commentaries. Coveting\r\nWrong desire for another's wealth.\r\nHarmful intent, hating a living being;\r\nMistaken view, the idea that neither virtue\r\nNor non-virtue even exists.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 89,
+        "material_master_objects": 171,
+        "personally_read_reused_objects": 99,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 7
+      },
+      "d_defensibility": {
+        "judgment": "This compressed verse definition is repeated in the exact C16 field and TCS02:74 English. The complete following commentary explains every afflicted form of speech, and NYID is emphatic. Speech and copular framing are elliptical in the verse, so prose-style incompleteness is not sufficient evidence for a typo. Likewise Coveting Wrong spans printed verse lineation, not a required inserted verb.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 357,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "neither virtue Nor non-virtue even exists",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "neither virtue Nor non-virtue even exists",
+        "source_row": {
+          "id": 1739,
+          "course": "C05",
+          "seq": 357,
+          "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+          "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+          "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            378
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "byis pa'i tha snyad brgyad"
+            ],
+            "count": 1,
+            "row_ids": [
+              1737
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "'phags pa'i tha snyad brgyad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1738,
+              36669
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs can kun kyal pa nyid"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Meaningless, really every afflicted"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue Nor non-virtue"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9349
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kha gsag glu dang zlos gar"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+        "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+        "register_identity": {
+          "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:355",
+          "c05:356",
+          "c05:357",
+          "meaningless, really every afflicted",
+          "78 six",
+          "gnyis pa ni"
+        ],
+        "matches": [
+          {
+            "item_id": "E-040",
+            "course": "C01",
+            "segment": "C01:484",
+            "kind": "NOT_AN_ERRATUM",
+            "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+            "expected": "",
+            "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+        "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 354,
+          "wylie": 355,
+          "english": 420
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 357,
+            "field": "acip",
+            "start": 243930,
+            "bytes": 365,
+            "sha256": "669b9ee4b952707fddd8c5b5fa2a663b0ea45cd1915bdca2a4df5b6e2bf89fe3",
+            "original_text": ",PHRA MA PHA ROL DBYE BA'I PHYIR,\r\n,NYON MONGS CAN GYI SEMS KYI \r\nTSIG,TSIG RTZUB PO NI MI SNYAN PA,\r\n,NYON MONGS CAN KUN KYAL PA NYID,\r\n,GZHAN NI DE LAS GZHAN NYON MONGS,\r\n,KHA GSAG GLU DANG ZLOS GAR BZHIN,\r\n,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI,\r\n,LOG PAS GZHAN GYI NOR LA CHAGS,\r\n,GNOD SEMS SEMS CAN LA SDANG BA,\r\n,DGE DANG MI DGE MED LTA BA,\r\n,LOG PAR LTA BA YIN",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 357,
+            "field": "english",
+            "start": 244300,
+            "bytes": 430,
+            "sha256": "f612f32cb3f522342486e1f7b6b332bb1e82c5750ed75dcc0be3af770fc8ee77",
+            "original_text": "Divisive speech, the words of a mentally\r\nAfflicted state meant to split up others.\r\nHarsh speech is that which is unpleasant;\r\nMeaningless, really every afflicted.\r\nOthers, every other afflicted type like\r\nFlattery for gain, a song, a show.\r\nLike too wrong commentaries. Coveting\r\nWrong desire for another's wealth.\r\nHarmful intent, hating a living being;\r\nMistaken view, the idea that neither virtue\r\nNor non-virtue even exists.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 89,
+        "material_master_objects": 171,
+        "personally_read_reused_objects": 99,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 7
+      },
+      "d_defensibility": {
+        "judgment": "MED negates existence over both virtue categories; the printed neither/Nor/exists construction preserves that scope. It is not positive existence or a claim that one category alone is denied. Complete masters and TCS02:75 context support the mental-action definition. Keep the distributed predicate unbanked rather than manufacturing a narrow false word pair.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 357,
+    "kind": "INGEST_ARTEFACT",
+    "found": "Mistaken view, the idea",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Mistaken view, the idea",
+        "source_row": {
+          "id": 1739,
+          "course": "C05",
+          "seq": 357,
+          "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+          "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+          "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            349
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "byis pa'i tha snyad brgyad"
+            ],
+            "count": 1,
+            "row_ids": [
+              1737
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "'phags pa'i tha snyad brgyad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1738,
+              36669
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs can kun kyal pa nyid"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Meaningless, really every afflicted"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue Nor non-virtue"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9349
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kha gsag glu dang zlos gar"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+        "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+        "register_identity": {
+          "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:355",
+          "c05:356",
+          "c05:357",
+          "meaningless, really every afflicted",
+          "78 six",
+          "gnyis pa ni"
+        ],
+        "matches": [
+          {
+            "item_id": "E-040",
+            "course": "C01",
+            "segment": "C01:484",
+            "kind": "NOT_AN_ERRATUM",
+            "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+            "expected": "",
+            "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+        "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 354,
+          "wylie": 355,
+          "english": 420
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 357,
+            "field": "acip",
+            "start": 243930,
+            "bytes": 365,
+            "sha256": "669b9ee4b952707fddd8c5b5fa2a663b0ea45cd1915bdca2a4df5b6e2bf89fe3",
+            "original_text": ",PHRA MA PHA ROL DBYE BA'I PHYIR,\r\n,NYON MONGS CAN GYI SEMS KYI \r\nTSIG,TSIG RTZUB PO NI MI SNYAN PA,\r\n,NYON MONGS CAN KUN KYAL PA NYID,\r\n,GZHAN NI DE LAS GZHAN NYON MONGS,\r\n,KHA GSAG GLU DANG ZLOS GAR BZHIN,\r\n,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI,\r\n,LOG PAS GZHAN GYI NOR LA CHAGS,\r\n,GNOD SEMS SEMS CAN LA SDANG BA,\r\n,DGE DANG MI DGE MED LTA BA,\r\n,LOG PAR LTA BA YIN",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 357,
+            "field": "english",
+            "start": 244300,
+            "bytes": 430,
+            "sha256": "f612f32cb3f522342486e1f7b6b332bb1e82c5750ed75dcc0be3af770fc8ee77",
+            "original_text": "Divisive speech, the words of a mentally\r\nAfflicted state meant to split up others.\r\nHarsh speech is that which is unpleasant;\r\nMeaningless, really every afflicted.\r\nOthers, every other afflicted type like\r\nFlattery for gain, a song, a show.\r\nLike too wrong commentaries. Coveting\r\nWrong desire for another's wealth.\r\nHarmful intent, hating a living being;\r\nMistaken view, the idea that neither virtue\r\nNor non-virtue even exists.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 89,
+        "material_master_objects": 171,
+        "personally_read_reused_objects": 99,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 7
+      },
+      "d_defensibility": {
+        "judgment": "All eleven Tibetan verse lines and complete English definitions occur in the six captured extents and exact C16:875 parallel, below the field cap. TCS02:74/75 split the verse and their English spills into following commentary, so those objects are contextual comparanda rather than clean one-row alignments or corrected current-source witnesses. No present clipping or new heading glue is found.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 357,
+    "kind": "FORMATTING",
+    "found": "Coveting Wrong",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Coveting Wrong",
+        "source_row": {
+          "id": 1739,
+          "course": "C05",
+          "seq": 357,
+          "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+          "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+          "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            266
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 357,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+            ],
+            "count": 2,
+            "row_ids": [
+              1739,
+              6893
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "byis pa'i tha snyad brgyad"
+            ],
+            "count": 1,
+            "row_ids": [
+              1737
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "'phags pa'i tha snyad brgyad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1738,
+              36669
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs can kun kyal pa nyid"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "Meaningless, really every afflicted"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue Nor non-virtue"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9349
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kha gsag glu dang zlos gar"
+            ],
+            "count": 3,
+            "row_ids": [
+              1739,
+              6893,
+              9348
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+        "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+        "register_identity": {
+          "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:355",
+          "c05:356",
+          "c05:357",
+          "meaningless, really every afflicted",
+          "78 six",
+          "gnyis pa ni"
+        ],
+        "matches": [
+          {
+            "item_id": "E-040",
+            "course": "C01",
+            "segment": "C01:484",
+            "kind": "NOT_AN_ERRATUM",
+            "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+            "expected": "",
+            "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+            "severity": "LOW",
+            "confidence": "CONFIRMED",
+            "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+          }
+        ],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+        "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 354,
+          "wylie": 355,
+          "english": 420
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 357,
+            "field": "acip",
+            "start": 243930,
+            "bytes": 365,
+            "sha256": "669b9ee4b952707fddd8c5b5fa2a663b0ea45cd1915bdca2a4df5b6e2bf89fe3",
+            "original_text": ",PHRA MA PHA ROL DBYE BA'I PHYIR,\r\n,NYON MONGS CAN GYI SEMS KYI \r\nTSIG,TSIG RTZUB PO NI MI SNYAN PA,\r\n,NYON MONGS CAN KUN KYAL PA NYID,\r\n,GZHAN NI DE LAS GZHAN NYON MONGS,\r\n,KHA GSAG GLU DANG ZLOS GAR BZHIN,\r\n,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI,\r\n,LOG PAS GZHAN GYI NOR LA CHAGS,\r\n,GNOD SEMS SEMS CAN LA SDANG BA,\r\n,DGE DANG MI DGE MED LTA BA,\r\n,LOG PAR LTA BA YIN",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 357,
+            "field": "english",
+            "start": 244300,
+            "bytes": 430,
+            "sha256": "f612f32cb3f522342486e1f7b6b332bb1e82c5750ed75dcc0be3af770fc8ee77",
+            "original_text": "Divisive speech, the words of a mentally\r\nAfflicted state meant to split up others.\r\nHarsh speech is that which is unpleasant;\r\nMeaningless, really every afflicted.\r\nOthers, every other afflicted type like\r\nFlattery for gain, a song, a show.\r\nLike too wrong commentaries. Coveting\r\nWrong desire for another's wealth.\r\nHarmful intent, hating a living being;\r\nMistaken view, the idea that neither virtue\r\nNor non-virtue even exists.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 89,
+        "material_master_objects": 171,
+        "personally_read_reused_objects": 99,
+        "complete_new_master_objects_read": 72,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 7
+      },
+      "d_defensibility": {
+        "judgment": "Capital Afflicted, Flattery, Like, Wrong and Nor occur at flattened verse-line starts. Physical lineation explains their case without normalization. Printed non-virtue is hyphenated, allowing its complete virtue member; it does not authorize an interior non subword. The full unpleasant phrase stays whole with no pleasant interior span.",
+        "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

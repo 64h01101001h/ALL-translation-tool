@@ -1,0 +1,63 @@
+{
+  "source_first": {
+    "path": "independent-source-first-notes.json",
+    "bytes": 10961,
+    "sha256": "9fc590d4137aa1b479378a3b58104941ba6037bd748bc41e3d0674445639224a"
+  },
+  "precommitted_assessment": {
+    "path": "independent-pre-reconciliation-assessment.json",
+    "bytes": 13370,
+    "sha256": "66e8fca099133ef2c859afbae078c7de3a4e923c41124c6650c700c40eb6b879"
+  },
+  "original_failures": {
+    "shared_proposal_origin": "Original clean-tracked-state guard failed exit1 before output write, then attempt02 passed after F closure. Both standard native captures remain exact. No original source query was rerun by this reviewer.",
+    "tibetan_setup": {
+      "status": "ACTUAL_SETUP_ASSERTION_FAILURE_CORRECTED_BEFORE_QUERIES_OR_GENERATION",
+      "actual_exit": 1,
+      "actual_stdout": "",
+      "actual_stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 17, in <module>\nAssertionError\n",
+      "failing_expression": "assert (T/'evidence/proposal-origin-attempt02-caller/stdout.bin').read_bytes()==(B/'proposal-baseline.json').read_bytes()",
+      "cause": "The proposal-origin caller emits metadata pinning the baseline file, not the baseline bytes. The original baseline capture interface differs; the wrong equality assertion was local setup logic.",
+      "correction": "Read actual stdout metadata and verify its bytes, sha256, commit and selected_segments against the exact supplied baseline. Both original caller exits remain correctly preserved.",
+      "method_limit": "Inline setup source was not separately saved contemporaneously; this record preserves the actual failing expression and tool-returned streams/exit, not a claimed complete frozen method snapshot.",
+      "effects": "Read-only Git-governance captures and private copies were already written. No source/master/W change, lexical query, author run, generator or resolver had occurred."
+    },
+    "native_originals": "Six original generator/resolver pairs each passed once; zero original alignment-engine failures or reviewer reruns. Pre-native rationale spelling corrections were preserved in original evidence."
+  },
+  "reviewer_history": [
+    "English356 large original display truncated; missing middle rows subsequently fully read.",
+    "Read-only tibetan/355/errata-review.json lookup failed FileNotFoundError,exit1; actual file five-ground-screens.json located and fully read.",
+    "First full Tibetan355 screen display truncated; all15 screens then read using complete-object equality deduplication.",
+    "First preliminary-package inline Python had a SyntaxError at rec=[,exit1 before execution or any target write. Corrected bounded writes use new targets; no original or native capture changed.",
+    "The first combined stable display was truncated. All21 changed final rationales, all non-ACCEPT original dispositions, all20 final omission reasons, both later spec notes and the source-question disposition were then read fully in bounded output. Original unchanged reasons were verified by exact full-object identity."
+  ],
+  "root_history": [
+    "Six full notes were read; subsequent unrelated absent G/root-reconciliation-choices.json read failed exit1. Correct filename located read-only; no writes/native changes.",
+    "First inline root choices script had a quote SyntaxError before execution or writes; this corrected new write is the first choices artifact."
+  ],
+  "reconciliation_history": "Root selected after independent preassessment; all three changed specs each got one successful canonical generator/resolver pair. Nine actual unique pairs across six originals and three changed outputs; no copied selected pair. Original author acted only as mechanical scribe.",
+  "semantic_findings_history": [
+    {
+      "id": "H-RATIONALE-01",
+      "status": "RESOLVED",
+      "origin": "english/357/decisions.json p15",
+      "problem": "Prose359 is cited for NYID/really; actual explanation is360 and359 is harsh speech.",
+      "required_final_action": "Preserve original; adopted reason cite360 or complete TCS02:74. No source/native change.",
+      "original_status": "NEEDS_CORRECTION",
+      "resolution": "The exact immutable adopted rationale and preserved preimage were independently read; the final tuple still matches the precommitted selection.",
+      "correction_evidence": "inputs/reconciled-0278.json"
+    },
+    {
+      "id": "H-RATIONALE-02",
+      "status": "RESOLVED",
+      "origin": "tibetan/355/original-decisions.json w14 and inherited356w8 wording",
+      "problem": "No claimed HGM expressions gloss is misleading:complete glossary_entries:2830 literally includes expressions, alongside different curated-priority senses.",
+      "required_final_action": "Preserve original; adopted reason distinguish linked glossary from curated senses accurately.",
+      "original_status": "NEEDS_CORRECTION",
+      "resolution": "The exact immutable adopted rationale and preserved preimage were independently read; the final tuple still matches the precommitted selection.",
+      "correction_evidence": "inputs/reconciled-0278.json"
+    }
+  ],
+  "reviewer_proof_history": "Three actual existing identity/copy methods passed exit0/empty stderr, without SQL, generation or resolving. The following package validator verifies current final records and completed captures; this file does not preclaim its own later result.",
+  "capture_limitation": "The original Tibetan setup failure record explicitly lacks a contemporaneously saved full inline script. Reviewer read-path and syntax failures are retained from actual tool outcomes and are not mislabeled native alignment failures."
+}

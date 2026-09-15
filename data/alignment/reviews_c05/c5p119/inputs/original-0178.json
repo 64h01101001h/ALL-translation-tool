@@ -1,0 +1,452 @@
+{
+  "queries": [
+    {
+      "term": "kun",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "kun",
+        "kun"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 18,
+          "wylie": "kun",
+          "tibetan": "ཀུན",
+          "tibetan_source": null,
+          "acip": "KUN",
+          "pronunciation": "kun",
+          "pronunciation_source": null,
+          "sanskrit": "{C,MSA}sarva; {MSA}akhila; {MSA} kṛtsna; {MSA}samagra; {TN}mātra; {LC}anekadhā; {LC}ava!!; {LC}ā!!; {LC}ānanda; {LC}ārāma; {LC}nikhila; {LC}pari!!; {LC}parikalpita; {LC}vi!!; {LC}viśuddhimārga; {LC}sam!!; {LC}sammoha; {LC}sakala; {LC}samanta; {LC}samasta; {LC}sarvajana; {LC}<angBkt>saṃskṛte samastapadam</angBkt>; {LC}bandhumadhye&pi tiṣṭhatā; {LC}<angBkt>saṃskṛte bahuvacanam</angBkt>; {LC}aśeṣa; {LC}api; {LC}kārtsnya; {LC}parikalpita vi!!; {LC}viṣvak; {LC}samudaya; {LC}sarvataḥ; {LC}sarvaśaḥ; {LC}sarvi; {LC}jagadānandabīja; {LC}sarvadikṣu; {LC}svasthāsvasthaiḥ; {LC}te&pi; {LC}anutkliṣṭa",
+          "hopkins_english": "all; complete; entire; whole; total; entirety; thorough",
+          "hgm_gloss": "[\"all\", \"every\", \"the reaches\", \"any single ... there is\", \"any\", \"every ... every\", \"entire\", \"everything\", \"at all\", \"all ... ever\", \"side\", \"every one\", \"vast\", \"truth of its origin\", \"all the various\", \"every way\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 2769,
+          "raw": "{\"tibetan\": \"ཀུན\", \"wylie\": \"kun\", \"wylie_variants\": [\"kun\"], \"tenses\": null, \"sanskrit\": \"{C,MSA}sarva; {MSA}akhila; {MSA} kṛtsna; {MSA}samagra; {TN}mātra; {LC}anekadhā; {LC}ava!!; {LC}ā!!; {LC}ānanda; {LC}ārāma; {LC}nikhila; {LC}pari!!; {LC}parikalpita; {LC}vi!!; {LC}viśuddhimārga; {LC}sam!!; {LC}sammoha; {LC}sakala; {LC}samanta; {LC}samasta; {LC}sarvajana; {LC}<angBkt>saṃskṛte samastapadam</angBkt>; {LC}bandhumadhye&pi tiṣṭhatā; {LC}<angBkt>saṃskṛte bahuvacanam</angBkt>; {LC}aśeṣa; {LC}api; {LC}kārtsnya; {LC}parikalpita vi!!; {LC}viṣvak; {LC}samudaya; {LC}sarvataḥ; {LC}sarvaśaḥ; {LC}sarvi; {LC}jagadānandabīja; {LC}sarvadikṣu; {LC}svasthāsvasthaiḥ; {LC}te&pi; {LC}anutkliṣṭa\", \"hopkins_english\": \"all; complete; entire; whole; total; entirety; thorough\", \"hgm_gloss\": [\"all\", \"every\", \"the reaches\", \"any single ... there is\", \"any\", \"every ... every\", \"entire\", \"everything\", \"at all\", \"all ... ever\", \"side\", \"every one\", \"vast\", \"truth of its origin\", \"all the various\", \"every way\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"kun\", \"acip\": \"KUN\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08KhenRinpocheLongLife\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 2769}, \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:17",
+        "glossary_entries:11"
+      ]
+    },
+    {
+      "term": "gnod",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "gnod",
+        "gnod"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 10384,
+          "wylie": "gnod",
+          "tibetan": "གནོད",
+          "tibetan_source": null,
+          "acip": "GNOD",
+          "pronunciation": "nu",
+          "pronunciation_source": null,
+          "sanskrit": "{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya",
+          "hopkins_english": "verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits",
+          "hgm_gloss": "[\"hurt\", \"produces a deleterious effect\", \"produces a harmful effect\", \"harm\", \"disprove\", \"inhibit\", \"disproved\", \"stopped\", \"affected\", \"impaired\", \"disproven\", \"pain\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 696,
+          "raw": "{\"tibetan\": \"གནོད\", \"wylie\": \"gnod\", \"wylie_variants\": [\"gnod\"], \"tenses\": null, \"sanskrit\": \"{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya\", \"hopkins_english\": \"verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits\", \"hgm_gloss\": [\"hurt\", \"produces a deleterious effect\", \"produces a harmful effect\", \"harm\", \"disprove\", \"inhibit\", \"disproved\", \"stopped\", \"affected\", \"impaired\", \"disproven\", \"pain\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nu\", \"acip\": \"GNOD\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 696}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:10383",
+        "glossary_entries:4213"
+      ]
+    },
+    {
+      "term": "log par",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "log par",
+        "log par"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 19667,
+          "wylie": "log par",
+          "tibetan": "ལོག་པར",
+          "tibetan_source": null,
+          "acip": "LOG PAR",
+          "pronunciation": "lokpar",
+          "pronunciation_source": null,
+          "sanskrit": "{C}mithyā; {C}vitatha",
+          "hopkins_english": "wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)",
+          "hgm_gloss": "[\"totally blind\", \"wrong\", \"mistaken\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P6\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS04Initiation\", \"TCS05\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 204,
+          "raw": "{\"tibetan\": \"ལོག་པར\", \"wylie\": \"log par\", \"wylie_variants\": [\"log par\"], \"tenses\": null, \"sanskrit\": \"{C}mithyā; {C}vitatha\", \"hopkins_english\": \"wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)\", \"hgm_gloss\": [\"totally blind\", \"wrong\", \"mistaken\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"lokpar\", \"acip\": \"LOG PAR\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P6\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS04Initiation\", \"TCS05\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18LamaChupa\"], \"n_segments\": 204}, \"hopkins_realigned\": \"uma-v26\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:19666",
+        "glossary_entries:7280"
+      ]
+    }
+  ],
+  "master_objects": {
+    "unified_entries:17": {
+      "collection": "unified_entries",
+      "index": 17,
+      "entry": {
+        "tibetan": "ཀུན",
+        "wylie": "kun",
+        "wylie_variants": [
+          "kun"
+        ],
+        "tenses": null,
+        "sanskrit": "{C,MSA}sarva; {MSA}akhila; {MSA} kṛtsna; {MSA}samagra; {TN}mātra; {LC}anekadhā; {LC}ava!!; {LC}ā!!; {LC}ānanda; {LC}ārāma; {LC}nikhila; {LC}pari!!; {LC}parikalpita; {LC}vi!!; {LC}viśuddhimārga; {LC}sam!!; {LC}sammoha; {LC}sakala; {LC}samanta; {LC}samasta; {LC}sarvajana; {LC}<angBkt>saṃskṛte samastapadam</angBkt>; {LC}bandhumadhye&pi tiṣṭhatā; {LC}<angBkt>saṃskṛte bahuvacanam</angBkt>; {LC}aśeṣa; {LC}api; {LC}kārtsnya; {LC}parikalpita vi!!; {LC}viṣvak; {LC}samudaya; {LC}sarvataḥ; {LC}sarvaśaḥ; {LC}sarvi; {LC}jagadānandabīja; {LC}sarvadikṣu; {LC}svasthāsvasthaiḥ; {LC}te&pi; {LC}anutkliṣṭa",
+        "hopkins_english": "all; complete; entire; whole; total; entirety; thorough",
+        "hgm_gloss": [
+          "all",
+          "every",
+          "the reaches",
+          "any single ... there is",
+          "any",
+          "every ... every",
+          "entire",
+          "everything",
+          "at all",
+          "all ... ever",
+          "side",
+          "every one",
+          "vast",
+          "truth of its origin",
+          "all the various",
+          "every way"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "kun",
+        "acip": "KUN",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P10",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "P8",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08KhenRinpocheLongLife",
+            "TCS08PabongkaSadhana",
+            "TCS08SourceOfAllMyGood",
+            "TCS08ThousandAngels",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 2769
+        },
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:11": {
+      "collection": "glossary_entries",
+      "index": 11,
+      "entry": {
+        "acip": "KUN",
+        "wylie": "kun",
+        "tibetan": "ཀུན",
+        "hgm_glosses": [
+          "all",
+          "every",
+          "the reaches",
+          "any single ... there is",
+          "any",
+          "every ... every",
+          "entire",
+          "everything",
+          "at all",
+          "all ... ever",
+          "side",
+          "every one",
+          "vast",
+          "truth of its origin",
+          "all the various",
+          "every way"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:10383": {
+      "collection": "unified_entries",
+      "index": 10383,
+      "entry": {
+        "tibetan": "གནོད",
+        "wylie": "gnod",
+        "wylie_variants": [
+          "gnod"
+        ],
+        "tenses": null,
+        "sanskrit": "{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya",
+        "hopkins_english": "verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits",
+        "hgm_gloss": [
+          "hurt",
+          "produces a deleterious effect",
+          "produces a harmful effect",
+          "harm",
+          "disprove",
+          "inhibit",
+          "disproved",
+          "stopped",
+          "affected",
+          "impaired",
+          "disproven",
+          "pain"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "nu",
+        "acip": "GNOD",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P3",
+            "P5",
+            "P6",
+            "P7",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS02",
+            "TCS03",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 696
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:4213": {
+      "collection": "glossary_entries",
+      "index": 4213,
+      "entry": {
+        "acip": "GNOD",
+        "wylie": "gnod",
+        "tibetan": "གནོད",
+        "hgm_glosses": [
+          "hurt",
+          "produces a deleterious effect",
+          "produces a harmful effect",
+          "harm",
+          "disprove",
+          "inhibit",
+          "disproved",
+          "stopped",
+          "affected",
+          "impaired",
+          "disproven",
+          "pain"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:19666": {
+      "collection": "unified_entries",
+      "index": 19666,
+      "entry": {
+        "tibetan": "ལོག་པར",
+        "wylie": "log par",
+        "wylie_variants": [
+          "log par"
+        ],
+        "tenses": null,
+        "sanskrit": "{C}mithyā; {C}vitatha",
+        "hopkins_english": "wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)",
+        "hgm_gloss": [
+          "totally blind",
+          "wrong",
+          "mistaken"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "lokpar",
+        "acip": "LOG PAR",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C05",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DTE",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P6",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS02",
+            "TCS04Initiation",
+            "TCS05",
+            "TCS10",
+            "TCS13",
+            "TCS15",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 204
+        },
+        "hopkins_realigned": "uma-v26"
+      }
+    },
+    "glossary_entries:7280": {
+      "collection": "glossary_entries",
+      "index": 7280,
+      "entry": {
+        "acip": "LOG PAR",
+        "wylie": "log par",
+        "tibetan": "ལོག་པར",
+        "hgm_glosses": [
+          "totally blind",
+          "wrong",
+          "mistaken"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    }
+  }
+}

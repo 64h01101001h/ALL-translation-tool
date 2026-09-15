@@ -1,0 +1,11 @@
+{
+  "status": "ACTUAL_SETUP_ASSERTION_FAILURE_CORRECTED_BEFORE_QUERIES_OR_GENERATION",
+  "actual_exit": 1,
+  "actual_stdout": "",
+  "actual_stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 17, in <module>\nAssertionError\n",
+  "failing_expression": "assert (T/'evidence/proposal-origin-attempt02-caller/stdout.bin').read_bytes()==(B/'proposal-baseline.json').read_bytes()",
+  "cause": "The proposal-origin caller emits metadata pinning the baseline file, not the baseline bytes. The original baseline capture interface differs; the wrong equality assertion was local setup logic.",
+  "correction": "Read actual stdout metadata and verify its bytes, sha256, commit and selected_segments against the exact supplied baseline. Both original caller exits remain correctly preserved.",
+  "method_limit": "Inline setup source was not separately saved contemporaneously; this record preserves the actual failing expression and tool-returned streams/exit, not a claimed complete frozen method snapshot.",
+  "effects": "Read-only Git-governance captures and private copies were already written. No source/master/W change, lexical query, author run, generator or resolver had occurred."
+}

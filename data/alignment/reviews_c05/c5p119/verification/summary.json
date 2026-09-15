@@ -1,0 +1,3570 @@
+{
+  "status": "PASS",
+  "utc": "2026-09-15T05:43:10.824782+00:00",
+  "page": 119,
+  "segments": [
+    355,
+    356,
+    357
+  ],
+  "semantic_review": {
+    "schema": "c05-independent-semantic-review-v1",
+    "verdict": "APPROVE",
+    "spec_verdict": "APPROVE",
+    "quality_verdict": "APPROVE",
+    "open_findings": [],
+    "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+    "source_origin_accepted_through": 351,
+    "later_supplied_acceptance_baseline": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+    "later_baseline_accepted_through": 354,
+    "reconciliation_freeze_sha256": "c1b51ef460e5b16db0cd4a284141706473a8d71318d9d5a7eb21f0be231cd813",
+    "total_spans": 117,
+    "total_nulls": 1,
+    "total_word_pairs": 71,
+    "total_d7": 7,
+    "total_errata": 0,
+    "segments": [
+      {
+        "seq": 355,
+        "span_count": 25,
+        "null_count": 0,
+        "word_pair_count": 15,
+        "d7_count": 0,
+        "spec_path": "reviewed-final/355/spec.json",
+        "body_path": "reviewed-final/355/body.html",
+        "spec_bytes": 3972,
+        "spec_sha256": "a2673292f14a666bbe58a841f60fd5c6865823de2b66ae2c32f4d3b9a8ee6c2b",
+        "body_bytes": 4157,
+        "body_sha256": "5faf5d563fe747546389c90d5d7d537ebf27fbf1968f27d763a04eb83ffd0d9b",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/355-generator-v1/execution.json",
+            "stdin": "native/reconciled/355-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/355-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/355-generator-v1/stderr.bin",
+            "exit": "native/reconciled/355-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/355-resolver-v1/execution.json",
+            "stdin": "native/reconciled/355-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/355-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/355-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/355-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "span_count": 48,
+        "null_count": 1,
+        "word_pair_count": 28,
+        "d7_count": 0,
+        "spec_path": "reviewed-final/356/spec.json",
+        "body_path": "reviewed-final/356/body.html",
+        "spec_bytes": 7336,
+        "spec_sha256": "947ac0ec34c3ca83347d53cac492db39564bb09833c3b246232c0a3ac580035f",
+        "body_bytes": 7377,
+        "body_sha256": "2a35a0739d4ca0873172eb484b3affe00e188abc4ef56cfaadaf9786b3ae9d3b",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/356-generator-v1/execution.json",
+            "stdin": "native/reconciled/356-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/356-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/356-generator-v1/stderr.bin",
+            "exit": "native/reconciled/356-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/356-resolver-v1/execution.json",
+            "stdin": "native/reconciled/356-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/356-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/356-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/356-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "span_count": 44,
+        "null_count": 0,
+        "word_pair_count": 28,
+        "d7_count": 7,
+        "spec_path": "reviewed-final/357/spec.json",
+        "body_path": "reviewed-final/357/body.html",
+        "spec_bytes": 6517,
+        "spec_sha256": "e0919cac313d3652819b9a87b2a6f105ceb305c2ad36a2417e2104b9e520334d",
+        "body_bytes": 6246,
+        "body_sha256": "03c9fbacf7ba2224fc75068b18d94640a8695a4fcdb659d4735866307cf5c845",
+        "generator_exit": 0,
+        "resolver_exit": 0,
+        "native_evidence": {
+          "generator": {
+            "command_and_result": "native/reconciled/357-generator-v1/execution.json",
+            "stdin": "native/reconciled/357-generator-v1/stdin.bin",
+            "stdout": "native/reconciled/357-generator-v1/stdout.bin",
+            "stderr": "native/reconciled/357-generator-v1/stderr.bin",
+            "exit": "native/reconciled/357-generator-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          },
+          "resolver": {
+            "command_and_result": "native/reconciled/357-resolver-v1/execution.json",
+            "stdin": "native/reconciled/357-resolver-v1/stdin.bin",
+            "stdout": "native/reconciled/357-resolver-v1/stdout.bin",
+            "stderr": "native/reconciled/357-resolver-v1/stderr.bin",
+            "exit": "native/reconciled/357-resolver-v1/exit.txt",
+            "mode": "NEW_RECONCILIATION_EXECUTION_REVIEWED_BY_CAPTURE_IDENTITY"
+          }
+        }
+      }
+    ],
+    "independence": "Own source-first notes preceded either original. Both frozen originals and complete material were independently reviewed and the12 recommendations banked before root choices or changed generation. Exact final root reconciliation was subsequently read and matched to that precommit. Actual354 baseline is separately bound; no root acceptance or production is claimed.",
+    "initial_assessment": {
+      "path": "independent-pre-reconciliation-assessment.json",
+      "bytes": 13370,
+      "sha256": "66e8fca099133ef2c859afbae078c7de3a4e923c41124c6650c700c40eb6b879"
+    },
+    "source_reading": {
+      "original_spans": 225,
+      "original_omissions": 20,
+      "original_notes_and_reports": 12,
+      "category_screens": 30,
+      "master_unique_complete_objects": 189,
+      "master_prior_same_reviewer_full_reuse": 107,
+      "master_fully_read_here": 82,
+      "focused_complete_corpus_objects": 7,
+      "corpus_fully_read_here": 7,
+      "context_complete_objects": 15,
+      "context_exact_prior_reuse": 12,
+      "new_context_full_reads": 3,
+      "physical_extents": 6,
+      "native_original_pairs_verified": 6,
+      "new_generator_resolver_or_query_runs": 0,
+      "reading_receipts": [
+        "evidence/complete-material-reading.json",
+        "source-identity-results.json",
+        "governing/current-baseline-delta-reading.json"
+      ]
+    },
+    "reading_completion": {
+      "immutable_final": "evidence/immutable-final-reading.json",
+      "stable_assembled": "evidence/stable-assembled-reading.json",
+      "final_identity": "final-identity-results.json",
+      "all_original_dispositions_and32_grouped_values_exact": true,
+      "all30_screens_and6_complete_ground_documents_exact": true,
+      "full_source_question_retained": true
+    },
+    "span_semantic_review": [
+      {
+        "seq": 355,
+        "id": "w1",
+        "d": 5,
+        "tib": "mdo",
+        "eng": "sutra",
+        "tib_range": [
+          26,
+          29
+        ],
+        "eng_range": [
+          4,
+          9
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete MDO glossary directly attests sutra. LAS quotation-source grammar does not separately establish the expanded makes mention verb; no356 GSUNGS is borrowed.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w2",
+        "d": 5,
+        "tib": "mthong ba",
+        "eng": "see",
+        "tib_range": [
+          35,
+          44
+        ],
+        "eng_range": [
+          249,
+          252
+        ],
+        "verdict": "APPROVE",
+        "reason": "First MTHONG BA is the true seeing being denied in the first group, not either quoted see or the final negative experience. Its complete glossary directly supports see.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w2"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w3",
+        "d": 5,
+        "tib": "thos pa",
+        "eng": "hear",
+        "tib_range": [
+          52,
+          59
+        ],
+        "eng_range": [
+          254,
+          258
+        ],
+        "verdict": "APPROVE",
+        "reason": "The explicit first four-kind list supplies this first hear. The later negative four-kind list is abbreviated in Tibetan and does not supply a second THOS PA.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w3"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w4",
+        "d": 5,
+        "tib": "rnam par shes pa",
+        "eng": "know",
+        "tib_range": [
+          67,
+          83
+        ],
+        "eng_range": [
+          260,
+          264
+        ],
+        "verdict": "APPROVE",
+        "reason": "The full cognitive verb supplies the first know among actual experiences. The later know is an expansion of SOGS and stays unbanked as a separate word.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w4"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p10",
+        "d": 6,
+        "tib": "dang",
+        "eng": "or",
+        "tib_range": [
+          84,
+          88
+        ],
+        "eng_range": [
+          266,
+          268
+        ],
+        "verdict": "APPROVE",
+        "reason": "The third explicit DANG closes the actual positive four-item list at know, or sense. This unique or is its contextual coordinator. Earlier DANG forms become comma punctuation. The middle abbreviated negative list has no additional hear/know/sense source words.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H01"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w5",
+        "d": 5,
+        "tib": "rtogs pa",
+        "eng": "sense",
+        "tib_range": [
+          90,
+          98
+        ],
+        "eng_range": [
+          269,
+          274
+        ],
+        "verdict": "APPROVE",
+        "reason": "The explicit first sensory list supplies this sense, supported by the complete RTOGS PA glossary and surrounding fourfold explanation.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w5"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w6",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          99,
+          103
+        ],
+        "eng_range": [
+          190,
+          194
+        ],
+        "verdict": "APPROVE",
+        "reason": "First source BZHI counts the actual four kinds being contradicted. It owns about four different, not the earlier four types of false statements.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w6"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p1",
+        "d": 6,
+        "tib": "la",
+        "eng": "about",
+        "tib_range": [
+          104,
+          106
+        ],
+        "eng_range": [
+          184,
+          189
+        ],
+        "verdict": "APPROVE",
+        "reason": "This LA makes the actual experience list the object of the false statements, rendered the first about. It is not either supplied where.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p1"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p2",
+        "d": 6,
+        "tib": "ma",
+        "eng": "n't",
+        "tib_range": [
+          108,
+          110
+        ],
+        "eng_range": [
+          162,
+          165
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w7",
+        "d": 5,
+        "tib": "mthong",
+        "eng": "see",
+        "tib_range": [
+          111,
+          117
+        ],
+        "eng_range": [
+          166,
+          169
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p3",
+        "d": 6,
+        "tib": "zhes",
+        "eng": "say",
+        "tib_range": [
+          118,
+          122
+        ],
+        "eng_range": [
+          152,
+          155
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first quotative ZHES introduces the stated denial and is rendered say. This is local quotation grammar at depth6; the mined three principal paths gloss is unrelated and not treated as an attestation of say.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p3"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p4",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "and so on",
+        "tib_range": [
+          123,
+          127
+        ],
+        "eng_range": [
+          174,
+          183
+        ],
+        "verdict": "APPROVE",
+        "reason": "First enumerative SOGS owns the complete first and so on following the quoted denial. Do not split this formula into supplied conjunction fragments.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p4"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w8",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          128,
+          132
+        ],
+        "eng_range": [
+          131,
+          135
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second source BZHI counts the first four false statements and owns the numbered1) four types. This differs from the first source count of actual experiences.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w8"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p5",
+        "d": 6,
+        "tib": "dang",
+        "eng": "and",
+        "tib_range": [
+          133,
+          137
+        ],
+        "eng_range": [
+          276,
+          279
+        ],
+        "verdict": "APPROVE",
+        "reason": "The DANG connecting the two contrasting sets owns the explicit and before item2. Final source DANG instead leads into the next segment and is not this coordinator.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p5"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p6",
+        "d": 6,
+        "tib": "ma",
+        "eng": "n't",
+        "tib_range": [
+          140,
+          142
+        ],
+        "eng_range": [
+          395,
+          398
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w9",
+        "d": 5,
+        "tib": "mthong",
+        "eng": "see",
+        "tib_range": [
+          143,
+          149
+        ],
+        "eng_range": [
+          399,
+          402
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w10",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          160,
+          164
+        ],
+        "eng_range": [
+          347,
+          351
+        ],
+        "verdict": "APPROVE",
+        "reason": "Third source BZHI counts the second set of actual non-experiences, rendered another four kinds. The abbreviated other senses are not invented source words.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w10"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p7",
+        "d": 6,
+        "tib": "la",
+        "eng": "about",
+        "tib_range": [
+          165,
+          167
+        ],
+        "eng_range": [
+          333,
+          338
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second LA owns the second about, linking the second quoted assertion to its four contrary actual conditions.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p7"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w11",
+        "d": 5,
+        "tib": "mthong",
+        "eng": "see",
+        "tib_range": [
+          169,
+          175
+        ],
+        "eng_range": [
+          315,
+          318
+        ],
+        "verdict": "APPROVE",
+        "reason": "Last source MTHONG is the positive quoted assertion made contrary to the second actual negative condition. Its exact English quote is distinct from did see outside quotes.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w11"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p8",
+        "d": 6,
+        "tib": "zhes",
+        "eng": "say",
+        "tib_range": [
+          176,
+          180
+        ],
+        "eng_range": [
+          304,
+          307
+        ],
+        "verdict": "APPROVE",
+        "reason": "Last ZHES introduces the second quoted assertion and owns its say. The middle ZHES merely labels the actual negative examples and has no additional printed say.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p8"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "p9",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "and so on",
+        "tib_range": [
+          181,
+          185
+        ],
+        "eng_range": [
+          323,
+          332
+        ],
+        "verdict": "APPROVE",
+        "reason": "Last SOGS owns the second and so on following the positive quote. Its whole enumerative formula is depth6.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p9"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w12",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          186,
+          190
+        ],
+        "eng_range": [
+          283,
+          287
+        ],
+        "verdict": "APPROVE",
+        "reason": "Fourth source BZHI counts the second group of false assertions and owns item2) four types. All four counts have explicit roles and separate ranges.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w12"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w13",
+        "d": 5,
+        "tib": "byis pa",
+        "eng": "child",
+        "tib_range": [
+          195,
+          202
+        ],
+        "eng_range": [
+          55,
+          60
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete glossary directly attests child, including a non-arya sense. The bracketed selflessness explanation is editorial expansion, not additional source words.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w13"
+          }
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w14",
+        "d": 5,
+        "tib": "tha snyad",
+        "eng": "expressions",
+        "tib_range": [
+          205,
+          214
+        ],
+        "eng_range": [
+          38,
+          49
+        ],
+        "verdict": "APPROVE",
+        "reason": "The exact local noun is expressions. Complete linked glossary2830 literally lists expressions; curated conventional/figurative and kun rdzob deceptive-expression senses are distinct contextual evidence. Current list of statements selects the verbal-expression sense. This corrects the original evidence claim without changing the tuple.",
+        "reason_provenance": {
+          "kind": "OWN_INDEPENDENT_FINDING_RESOLUTION",
+          "finding": "H-RATIONALE-02"
+        }
+      },
+      {
+        "seq": 355,
+        "id": "w15",
+        "d": 5,
+        "tib": "brgyad",
+        "eng": "eight",
+        "tib_range": [
+          215,
+          221
+        ],
+        "eng_range": [
+          32,
+          37
+        ],
+        "verdict": "APPROVE",
+        "reason": "The explicit eight totals the two four-statement groups. The single source count owns the heading eight, without taking any bracketed explanation.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 355,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w15"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w1",
+        "d": 5,
+        "tib": "mthong ba",
+        "eng": "see",
+        "tib_range": [
+          0,
+          9
+        ],
+        "eng_range": [
+          128,
+          131
+        ],
+        "verdict": "APPROVE",
+        "reason": "First source MTHONG BA denotes true actual seeing in the realized-person set. It owns the first unquoted really did see, not the earlier quoted assertion.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p1",
+        "d": 6,
+        "tib": "la",
+        "eng": "about",
+        "tib_range": [
+          10,
+          12
+        ],
+        "eng_range": [
+          100,
+          105
+        ],
+        "verdict": "APPROVE",
+        "reason": "First LA links the true assertion to its actual experience and owns the first about.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p1"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w2",
+        "d": 5,
+        "tib": "mthong",
+        "eng": "see",
+        "tib_range": [
+          13,
+          19
+        ],
+        "eng_range": [
+          92,
+          95
+        ],
+        "verdict": "APPROVE",
+        "reason": "First bare MTHONG supplies the quoted true assertion. Keep it distinct from the preceding Tibetan actual seeing and later sensory labels.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w2"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p2",
+        "d": 6,
+        "tib": "zhes",
+        "eng": "say",
+        "tib_range": [
+          20,
+          24
+        ],
+        "eng_range": [
+          81,
+          84
+        ],
+        "verdict": "APPROVE",
+        "reason": "The quotative is recast as the first say before the true quote. Its source grammatical function supports the depth6 correspondence; the mined glossary title does not.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p2"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p3",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "and so on",
+        "tib_range": [
+          25,
+          29
+        ],
+        "eng_range": [
+          132,
+          141
+        ],
+        "verdict": "APPROVE",
+        "reason": "First SOGS expands the first positive example into its other sensory cases, rendered the first and so on after the actual condition.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p3"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w3",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          30,
+          34
+        ],
+        "eng_range": [
+          66,
+          70
+        ],
+        "verdict": "APPROVE",
+        "reason": "First BZHI counts the four positive true assertions. It owns the first four following realized person, not basic four or the repeated eight summary.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w3"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p4",
+        "d": 6,
+        "tib": "ma",
+        "eng": "n't",
+        "tib_range": [
+          42,
+          44
+        ],
+        "eng_range": [
+          207,
+          210
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w4",
+        "d": 5,
+        "tib": "mthong ba",
+        "eng": "see",
+        "tib_range": [
+          45,
+          54
+        ],
+        "eng_range": [
+          211,
+          214
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p5",
+        "d": 6,
+        "tib": "la",
+        "eng": "about",
+        "tib_range": [
+          55,
+          57
+        ],
+        "eng_range": [
+          180,
+          185
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second LA owns the second about, connecting the negative true assertion to its matching actual condition.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p5"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p6",
+        "d": 6,
+        "tib": "ma",
+        "eng": "n't",
+        "tib_range": [
+          58,
+          60
+        ],
+        "eng_range": [
+          168,
+          171
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w5",
+        "d": 5,
+        "tib": "mthong",
+        "eng": "see",
+        "tib_range": [
+          61,
+          67
+        ],
+        "eng_range": [
+          172,
+          175
+        ],
+        "verdict": "APPROVE",
+        "reason": "All four negative occurrences have secure distinct scope:355 quoted denial then actual negative;356 actual negative then quoted denial. Rule8 expressly permits n't with subword:true. MA owns that negative contraction and the explicit verb owns see; did, subjects and objects stay outside. English whole negative phrases are defensible alternative granularity, not false translations. Flat pairs are directly supported here; they do not assert positive seeing despite the shared negative context.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H02"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p7",
+        "d": 6,
+        "tib": "zhes",
+        "eng": "say",
+        "tib_range": [
+          68,
+          72
+        ],
+        "eng_range": [
+          158,
+          161
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second quotative ZHES owns the second say introducing the negative true claim. No new lexical say attestation is invented.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p7"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p8",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "and such",
+        "tib_range": [
+          73,
+          77
+        ],
+        "eng_range": [
+          215,
+          223
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second SOGS supplies the whole and such formula that completes the matching negative sensory cases.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p8"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w6",
+        "d": 5,
+        "tib": "bzhi",
+        "eng": "four",
+        "tib_range": [
+          78,
+          82
+        ],
+        "eng_range": [
+          143,
+          147
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second BZHI counts the four negative true assertions, rendered four after the semicolon.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w6"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w7",
+        "d": 5,
+        "tib": "'phags pa",
+        "eng": "realized person",
+        "tib_range": [
+          87,
+          96
+        ],
+        "eng_range": [
+          48,
+          63
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete PHAGS PA glossary directly attests realized person. Exclude a and the bound possessive relation.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w7"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w8",
+        "d": 5,
+        "tib": "tha snyad",
+        "eng": "expressions",
+        "tib_range": [
+          99,
+          108
+        ],
+        "eng_range": [
+          31,
+          42
+        ],
+        "verdict": "APPROVE",
+        "reason": "The exact local noun is expressions. Complete linked glossary2830 literally lists expressions; curated conventional/figurative and kun rdzob deceptive-expression senses are distinct contextual evidence. Current list of statements selects the verbal-expression sense. This corrects the original evidence claim without changing the tuple.",
+        "reason_provenance": {
+          "kind": "OWN_INDEPENDENT_FINDING_RESOLUTION",
+          "finding": "H-RATIONALE-02"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w9",
+        "d": 5,
+        "tib": "brgyad",
+        "eng": "eight",
+        "tib_range": [
+          109,
+          115
+        ],
+        "eng_range": [
+          25,
+          30
+        ],
+        "verdict": "APPROVE",
+        "reason": "The one explicit BRGYAD belongs to the realized-person heading. English regarding these two sets of eight repeats prior context and does not receive this same count twice.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w9"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w10",
+        "d": 5,
+        "tib": "gsungs",
+        "eng": "mentions",
+        "tib_range": [
+          116,
+          122
+        ],
+        "eng_range": [
+          11,
+          19
+        ],
+        "verdict": "APPROVE",
+        "reason": "GSUNGS directly attests mentions. This current source speech verb supplies the opening English predicate; Sutra is an inherited subject, not a new current MDO.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w10"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w11",
+        "d": 5,
+        "tib": "mthong ba",
+        "eng": "seen",
+        "tib_range": [
+          127,
+          136
+        ],
+        "eng_range": [
+          351,
+          355
+        ],
+        "verdict": "APPROVE",
+        "reason": "The next explicit MTHONG BA is the term being asked about, rendered seen in the first quoted something expression. Exclude something and quotation marks.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w11"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w12",
+        "d": 5,
+        "tib": "thos pa",
+        "eng": "heard",
+        "tib_range": [
+          142,
+          149
+        ],
+        "eng_range": [
+          369,
+          374
+        ],
+        "verdict": "APPROVE",
+        "reason": "This THOS PA is the second quoted term in the question, not the final heard in the answer.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w12"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p9",
+        "d": 6,
+        "tib": "sogs",
+        "eng": "and so on",
+        "tib_range": [
+          150,
+          154
+        ],
+        "eng_range": [
+          377,
+          386
+        ],
+        "verdict": "APPROVE",
+        "reason": "Third SOGS owns the whole and so on after the two quoted question terms. The intervening DANG is rendered by their list punctuation and remains unbanked.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p9"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w13",
+        "d": 5,
+        "tib": "bzhi po",
+        "eng": "four",
+        "tib_range": [
+          155,
+          162
+        ],
+        "eng_range": [
+          317,
+          321
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete nominalized number BZHI PO supplies basic four, excluding basic and the article. Its mined one may ask gloss is mislocalized; the numeral reference and exact question structure support four, not an invented ask pair.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w13"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "f1",
+        "d": 3,
+        "tib": "gang yin",
+        "eng": "what it is",
+        "tib_range": [
+          163,
+          171
+        ],
+        "eng_range": [
+          323,
+          333
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete interrogative/copular construction asks the identity of the four experiences. Its complete glossary literally lists what it is. The printed323–333 span gives this narrow interrogative without borrowing one may, detailed description, to be or something. Those expansions do not make the narrow question absent.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H03"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "f2",
+        "d": 3,
+        "tib": "zhe na",
+        "eng": "ask",
+        "tib_range": [
+          172,
+          178
+        ],
+        "eng_range": [
+          268,
+          271
+        ],
+        "verdict": "APPROVE",
+        "reason": "The contiguous quotative plus conditional forms the if-it-is-asked construction, rendered by tight ask. Phrase depth accurately retains its two-part syntax; the whole construction need not be labeled a single standalone particle. Unrelated mined correct perception and supplied one may are not promoted.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H04"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w14",
+        "d": 5,
+        "tib": "mig",
+        "eng": "eye",
+        "tib_range": [
+          180,
+          183
+        ],
+        "eng_range": [
+          438,
+          441
+        ],
+        "verdict": "APPROVE",
+        "reason": "MIG owns the eye in the first consciousness phrase, not a missing generic sensory faculty.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w14"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p10",
+        "d": 6,
+        "tib": "gi",
+        "eng": "of",
+        "tib_range": [
+          184,
+          186
+        ],
+        "eng_range": [
+          431,
+          433
+        ],
+        "verdict": "APPROVE",
+        "reason": "Explicit GI follows MIG and owns the local of before the eye. It is distinct from the bound genitive on RNA BA and later KYI on YID.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p10"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w15",
+        "d": 5,
+        "tib": "rnam par shes pa",
+        "eng": "consciousness",
+        "tib_range": [
+          187,
+          203
+        ],
+        "eng_range": [
+          417,
+          430
+        ],
+        "verdict": "APPROVE",
+        "reason": "First answer RNAM PAR SHES PA is the eye-consciousness noun. It is not the later known term despite the identical source string.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w15"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w16",
+        "d": 5,
+        "tib": "rna ba",
+        "eng": "ear",
+        "tib_range": [
+          211,
+          217
+        ],
+        "eng_range": [
+          464,
+          467
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete RNA BA directly attests ear; the bound genitive is not split off as a new particle.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w16"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w17",
+        "d": 5,
+        "tib": "rnam par shes pa",
+        "eng": "consciousness",
+        "tib_range": [
+          220,
+          236
+        ],
+        "eng_range": [
+          443,
+          456
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second answer cognition expression owns ear consciousness, with its independent source occurrence.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w17"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w18",
+        "d": 5,
+        "tib": "yid",
+        "eng": "thought",
+        "tib_range": [
+          244,
+          247
+        ],
+        "eng_range": [
+          490,
+          497
+        ],
+        "verdict": "APPROVE",
+        "reason": "YID directly attests thought in the mental-faculty consciousness phrase, excluding the article.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w18"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p11",
+        "d": 6,
+        "tib": "kyi",
+        "eng": "of",
+        "tib_range": [
+          248,
+          251
+        ],
+        "eng_range": [
+          483,
+          485
+        ],
+        "verdict": "APPROVE",
+        "reason": "Here KYI immediately links YID with its own explicit consciousness phrase and has a local unique of counterpart. This differs from the shared single genitive across the earlier354 verse.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p11"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w19",
+        "d": 5,
+        "tib": "rnam par shes pa",
+        "eng": "consciousness",
+        "tib_range": [
+          252,
+          268
+        ],
+        "eng_range": [
+          469,
+          482
+        ],
+        "verdict": "APPROVE",
+        "reason": "Third answer cognition expression owns thought consciousness. The later extra consciousness after three kinds is a supplied noun for the remaining senses.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w19"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p12",
+        "d": 6,
+        "tib": "dang",
+        "eng": "and",
+        "tib_range": [
+          269,
+          273
+        ],
+        "eng_range": [
+          499,
+          502
+        ],
+        "verdict": "APPROVE",
+        "reason": "The last DANG in the consciousness list owns the explicit and before the remaining three; the two preceding list DANG forms only have comma punctuation and are omitted.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p12"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w20",
+        "d": 5,
+        "tib": "sna",
+        "eng": "nose",
+        "tib_range": [
+          276,
+          279
+        ],
+        "eng_range": [
+          555,
+          559
+        ],
+        "verdict": "APPROVE",
+        "reason": "SNA directly attests nose in the parenthetic remaining-three list. The prose source explicitly names it; this is not a borrowed354 exponent.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w20"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w21",
+        "d": 5,
+        "tib": "lce",
+        "eng": "tongue",
+        "tib_range": [
+          280,
+          283
+        ],
+        "eng_range": [
+          561,
+          567
+        ],
+        "verdict": "APPROVE",
+        "reason": "LCE directly attests tongue, preserving its own position in the remaining-three list.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w21"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w22",
+        "d": 5,
+        "tib": "lus",
+        "eng": "body",
+        "tib_range": [
+          284,
+          287
+        ],
+        "eng_range": [
+          573,
+          577
+        ],
+        "verdict": "APPROVE",
+        "reason": "LUS directly attests body, not the body of an unrelated physical entity. Supplied and has no separate current source DANG between these three nouns.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w22"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w23",
+        "d": 5,
+        "tib": "gsum",
+        "eng": "three",
+        "tib_range": [
+          288,
+          292
+        ],
+        "eng_range": [
+          516,
+          521
+        ],
+        "verdict": "APPROVE",
+        "reason": "GSUM supplies the three remaining senses. Other, kinds and the repeated consciousness noun remain outside.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w23"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p13",
+        "d": 6,
+        "tib": "gyis",
+        "eng": "by",
+        "tib_range": [
+          293,
+          297
+        ],
+        "eng_range": [
+          503,
+          505
+        ],
+        "verdict": "APPROVE",
+        "reason": "The instrumental follows the named remaining three; second by503–505 introduces the corresponding other-three group. First by unfolds shared instrumental scope over the earlier consciousnesses and stays unbanked. The local number and group establish defensible unique ownership for the second by.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H05"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w24",
+        "d": 5,
+        "tib": "nyams su myong ba",
+        "eng": "experienced",
+        "tib_range": [
+          298,
+          315
+        ],
+        "eng_range": [
+          402,
+          413
+        ],
+        "verdict": "APPROVE",
+        "reason": "The full experiential verb with BA directly attests experienced. No narrower word is forced inside the single English lexical word.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w24"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "f3",
+        "d": 3,
+        "tib": "gang yin pa de",
+        "eng": "That which is",
+        "tib_range": [
+          316,
+          330
+        ],
+        "eng_range": [
+          388,
+          401
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete relative-correlative/copular frame has exact glossary that which is. It is retained as a whole phrase at depth3, with capital That verbatim.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "f3"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "f4",
+        "d": 3,
+        "tib": "rim pa bzhin du",
+        "eng": "respectively",
+        "tib_range": [
+          332,
+          347
+        ],
+        "eng_range": [
+          590,
+          602
+        ],
+        "verdict": "APPROVE",
+        "reason": "The noun RIM PA plus overt comparative/adverbial BZHIN DU expresses according to order. Both the shorter noun and full formula list respectively; that proves usage without making the whole productive construction a lexical compound. Whole phrase depth keeps the ordering relation and avoids arbitrary tail omission or d7 children.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H06"
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w25",
+        "d": 5,
+        "tib": "mthong ba",
+        "eng": "seen",
+        "tib_range": [
+          348,
+          357
+        ],
+        "eng_range": [
+          611,
+          615
+        ],
+        "verdict": "APPROVE",
+        "reason": "The final MTHONG BA labels the visual category in the answer, distinct from the quote and earlier actual experiences.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w25"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w26",
+        "d": 5,
+        "tib": "thos pa",
+        "eng": "heard",
+        "tib_range": [
+          365,
+          372
+        ],
+        "eng_range": [
+          625,
+          630
+        ],
+        "verdict": "APPROVE",
+        "reason": "The final THOS PA labels the auditory category in the answer; it is not the earlier quoted question term.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w26"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w27",
+        "d": 5,
+        "tib": "rnam par shes pa",
+        "eng": "known",
+        "tib_range": [
+          380,
+          396
+        ],
+        "eng_range": [
+          640,
+          645
+        ],
+        "verdict": "APPROVE",
+        "reason": "Last cognition expression is the verbal known category in the final fourfold sequence, not any earlier noun consciousness.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w27"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p14",
+        "d": 6,
+        "tib": "dang",
+        "eng": "and",
+        "tib_range": [
+          397,
+          401
+        ],
+        "eng_range": [
+          647,
+          650
+        ],
+        "verdict": "APPROVE",
+        "reason": "The last explicit DANG joins known and sensed and owns and. Additional also remains unwrapped.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p14"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "w28",
+        "d": 5,
+        "tib": "rtogs pa",
+        "eng": "sensed",
+        "tib_range": [
+          404,
+          412
+        ],
+        "eng_range": [
+          664,
+          670
+        ],
+        "verdict": "APPROVE",
+        "reason": "RTOGS PA is the fourth category, sensed, supported by the glossary and the explicit nose/tongue/body explanation.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w28"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "f5",
+        "d": 3,
+        "tib": "yin par bshad",
+        "eng": "represents",
+        "tib_range": [
+          413,
+          426
+        ],
+        "eng_range": [
+          579,
+          589
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete contiguous is-described-as classification predicate is recast as represents. Unlike the discontinuous earlier354 YIN TE and BSHAD, this full current construction can be selected together without crossing the ordering phrase. No exclusive BSHAD/represents word pair is claimed.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 356,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "f5"
+          }
+        }
+      },
+      {
+        "seq": 356,
+        "id": "p44",
+        "d": 6,
+        "tib": "do",
+        "eng": null,
+        "tib_range": [
+          427,
+          429
+        ],
+        "eng_range": null,
+        "verdict": "APPROVE",
+        "reason": "Terminal DO closes the declarative classification. The physical period after sensed realizes that function before the separate We turn next sentence and page78/title. This is affirmative fusion with no separate English word, not unresolved ownership or absence of meaning.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H07"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w1",
+        "d": 5,
+        "tib": "phra ma",
+        "eng": "Divisive speech",
+        "tib_range": [
+          0,
+          7
+        ],
+        "eng_range": [
+          0,
+          15
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete technical compound directly attests divisive speech. No PHRA/divisive member is invented without independently established member evidence.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w1"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w2",
+        "d": 5,
+        "tib": "pha rol",
+        "eng": "others",
+        "tib_range": [
+          8,
+          15
+        ],
+        "eng_range": [
+          75,
+          81
+        ],
+        "verdict": "APPROVE",
+        "reason": "PHA ROL directly attests others, the targets of division in the first definition. It is not the later capital Others naming a different interpretive group.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w2"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w3",
+        "d": 5,
+        "tib": "dbye ba",
+        "eng": "split up",
+        "tib_range": [
+          16,
+          23
+        ],
+        "eng_range": [
+          66,
+          74
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete DBYE BA glossary directly attests split up. The bound genitive ending is outside this verb.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w3"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p1",
+        "d": 6,
+        "tib": "phyir",
+        "eng": "meant to",
+        "tib_range": [
+          26,
+          31
+        ],
+        "eng_range": [
+          57,
+          65
+        ],
+        "verdict": "APPROVE",
+        "reason": "Purpose PHYIR owns meant to as grammatical purpose, with direct is meant to/for/to glossary candidates. There is no extra source meant verb.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p1"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "f5",
+        "d": 3,
+        "tib": "nyon mongs can gyi sems",
+        "eng": "mentally Afflicted state",
+        "tib_range": [
+          34,
+          57
+        ],
+        "eng_range": [
+          32,
+          56
+        ],
+        "verdict": "APPROVE",
+        "reason": "SEMS contributes mind/state-of-mind while the adjective qualifies it through explicit GYI. English distributes mental meaning across mentally and state. The NYON MONGS CAN glossary also lists mentally afflicted state, counterevidence to exclusive SEMS/state ownership. The complete noun phrase is secure and excludes the article. The tighter Afflicted component is plausible; the phrase resolves uncertain internal ownership without a general SEMS/state dictionary claim.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H08"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p2",
+        "d": 6,
+        "tib": "kyi",
+        "eng": "of",
+        "tib_range": [
+          58,
+          61
+        ],
+        "eng_range": [
+          27,
+          29
+        ],
+        "verdict": "APPROVE",
+        "reason": "This KYI after SEMS owns the explicit of linking words to the mental state. The earlier GYI inside the afflicted-state description has no second of here.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p2"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w6",
+        "d": 5,
+        "tib": "tshig",
+        "eng": "words",
+        "tib_range": [
+          62,
+          67
+        ],
+        "eng_range": [
+          21,
+          26
+        ],
+        "verdict": "APPROVE",
+        "reason": "The independent TSHIG after the mental-state phrase supplies words. It is distinct from the next TSHIG within harsh speech.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w6"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w7",
+        "d": 5,
+        "tib": "tshig rtsub po",
+        "eng": "Harsh speech",
+        "tib_range": [
+          68,
+          82
+        ],
+        "eng_range": [
+          83,
+          95
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete technical compound directly attests harsh speech; exclude the English copular support.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w7"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m1",
+        "d": 7,
+        "tib": "tshig",
+        "eng": "speech",
+        "tib_range": [
+          68,
+          73
+        ],
+        "eng_range": [
+          89,
+          95
+        ],
+        "verdict": "APPROVE",
+        "reason": "Speech is the unique full English member of the harsh-speech parent, owned by its explicit TSHIG; this is not the preceding independent words noun.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m1"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m2",
+        "d": 7,
+        "tib": "rtsub po",
+        "eng": "Harsh",
+        "tib_range": [
+          74,
+          82
+        ],
+        "eng_range": [
+          83,
+          88
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete RTSUB PO glossary directly attests harsh. Its full capital English word is uniquely inside the parent; no interior English stem is cut.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m2"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "f1",
+        "d": 3,
+        "tib": "mi snyan pa",
+        "eng": "unpleasant",
+        "tib_range": [
+          86,
+          97
+        ],
+        "eng_range": [
+          113,
+          123
+        ],
+        "verdict": "APPROVE",
+        "reason": "Exact unpleasant glossary usage supports the complete negated adjective. Listing alone does not demonstrate a lexical compound rather than productive MI plus SNYAN PA. Phrase depth preserves the negative meaning. No positive pleasant inside unhyphenated unpleasant is permitted and no invented un split is added.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H09"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w8",
+        "d": 5,
+        "tib": "nyon mongs can",
+        "eng": "afflicted",
+        "tib_range": [
+          100,
+          114
+        ],
+        "eng_range": [
+          151,
+          160
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second full afflicted expression belongs to the definition of meaningless speech and owns the second, lowercase afflicted.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w8"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w9",
+        "d": 5,
+        "tib": "kun",
+        "eng": "every",
+        "tib_range": [
+          115,
+          118
+        ],
+        "eng_range": [
+          145,
+          150
+        ],
+        "verdict": "APPROVE",
+        "reason": "The explicit totalizer KUN supplies the first every in this universal definition. The later every other is an English restatement, not a second KUN.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w9"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w10",
+        "d": 5,
+        "tib": "kyal pa",
+        "eng": "Meaningless",
+        "tib_range": [
+          119,
+          126
+        ],
+        "eng_range": [
+          125,
+          136
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete KYAL PA glossary directly attests meaningless. The technical speech noun is elliptical in the verse, so no source speech token or false English addition is fabricated.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w10"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p3",
+        "d": 6,
+        "tib": "nyid",
+        "eng": "really",
+        "tib_range": [
+          127,
+          131
+        ],
+        "eng_range": [
+          138,
+          144
+        ],
+        "verdict": "APPROVE",
+        "reason": "NYID contributes emphatic force, rendered really in the current definition. Reference eva and glossary precisely/real support the function; full360 and TCS02:74 prose explicitly repeat the emphasis.359 instead explains harsh speech. Keep the contextual particle correspondence without claiming literal really is a glossary entry.",
+        "reason_provenance": {
+          "kind": "OWN_INDEPENDENT_FINDING_RESOLUTION",
+          "finding": "H-RATIONALE-01"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w11",
+        "d": 5,
+        "tib": "gzhan",
+        "eng": "Others",
+        "tib_range": [
+          134,
+          139
+        ],
+        "eng_range": [
+          162,
+          168
+        ],
+        "verdict": "APPROVE",
+        "reason": "First GZHAN names other interpreters, rendered capital Others. It does not refer to the people divided by speech earlier in the verse.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w11"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w12",
+        "d": 5,
+        "tib": "gzhan",
+        "eng": "other",
+        "tib_range": [
+          150,
+          155
+        ],
+        "eng_range": [
+          176,
+          181
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second GZHAN contrasts kinds of afflicted speech, rendered tight other. DE LAS supplies the comparison with the earlier kinds but is not given the same word twice; every and type stay unbanked.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w12"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w13",
+        "d": 5,
+        "tib": "nyon mongs",
+        "eng": "afflicted",
+        "tib_range": [
+          156,
+          166
+        ],
+        "eng_range": [
+          182,
+          191
+        ],
+        "verdict": "APPROVE",
+        "reason": "The bare afflicted expression has a direct afflicted glossary sense and owns the third such English word, within the alternative definition.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w13"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w14",
+        "d": 5,
+        "tib": "kha gsag",
+        "eng": "Flattery for gain",
+        "tib_range": [
+          169,
+          177
+        ],
+        "eng_range": [
+          202,
+          219
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete KHA GSAG directly attests flattery for gain. This is a lexical compound, not separate fabricated mouth/gain members.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w14"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w15",
+        "d": 5,
+        "tib": "glu",
+        "eng": "song",
+        "tib_range": [
+          178,
+          181
+        ],
+        "eng_range": [
+          223,
+          227
+        ],
+        "verdict": "APPROVE",
+        "reason": "GLU directly attests song, excluding the article.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w15"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w16",
+        "d": 5,
+        "tib": "zlos gar",
+        "eng": "show",
+        "tib_range": [
+          187,
+          195
+        ],
+        "eng_range": [
+          231,
+          235
+        ],
+        "verdict": "APPROVE",
+        "reason": "ZLOS GAR directly attests show. The preceding source DANG corresponds to list punctuation here, not a word taken from the final negative coordination.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w16"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p4",
+        "d": 6,
+        "tib": "bzhin",
+        "eng": "like",
+        "tib_range": [
+          196,
+          201
+        ],
+        "eng_range": [
+          197,
+          201
+        ],
+        "verdict": "APPROVE",
+        "reason": "First BZHIN supplies the lowercase like governing the flattery/song/show examples. Its reference like/as is relevant; the mined let’s say is not required as an English restoration.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p4"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w17",
+        "d": 5,
+        "tib": "bstan bcos",
+        "eng": "commentaries",
+        "tib_range": [
+          204,
+          214
+        ],
+        "eng_range": [
+          252,
+          264
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete technical noun directly attests commentaries. It is not a newly supplied source commentary title.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w17"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w18",
+        "d": 5,
+        "tib": "ngan",
+        "eng": "wrong",
+        "tib_range": [
+          215,
+          219
+        ],
+        "eng_range": [
+          246,
+          251
+        ],
+        "verdict": "APPROVE",
+        "reason": "NGAN directly attests wrong for the commentaries, distinct from the following capital Wrong describing desire.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w18"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p5",
+        "d": 6,
+        "tib": "bzhin",
+        "eng": "Like",
+        "tib_range": [
+          220,
+          225
+        ],
+        "eng_range": [
+          237,
+          241
+        ],
+        "verdict": "APPROVE",
+        "reason": "Second BZHIN owns capital Like in the additional commentary example. Too remains an English additive without a separate source word.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p5"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w19",
+        "d": 5,
+        "tib": "brnab sems",
+        "eng": "Coveting",
+        "tib_range": [
+          226,
+          236
+        ],
+        "eng_range": [
+          266,
+          274
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete BRNAB SEMS directly attests coveting, the next mental action. Its component mind is not separately present inside the single English word.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w19"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w20",
+        "d": 5,
+        "tib": "log pas",
+        "eng": "Wrong",
+        "tib_range": [
+          242,
+          249
+        ],
+        "eng_range": [
+          275,
+          280
+        ],
+        "verdict": "APPROVE",
+        "reason": "The inflected complete LOG PAS qualifies desire, rendered Wrong. Raw LOG PAS has no exact master entry; base LOG PA directly attests wrong and the local case-inflected form is retained whole, never splitting final -s.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w20"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w21",
+        "d": 5,
+        "tib": "gzhan",
+        "eng": "another",
+        "tib_range": [
+          250,
+          255
+        ],
+        "eng_range": [
+          292,
+          299
+        ],
+        "verdict": "APPROVE",
+        "reason": "This GZHAN is the possessor of wealth, rendered apostrophe-delimited another. It is distinct from the two earlier GZHAN occurrences; possessive apostrophe-s remains outside.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w21"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w22",
+        "d": 5,
+        "tib": "nor",
+        "eng": "wealth",
+        "tib_range": [
+          260,
+          263
+        ],
+        "eng_range": [
+          302,
+          308
+        ],
+        "verdict": "APPROVE",
+        "reason": "NOR directly attests wealth in the coveting definition. The mistake sense from the previous lying definition does not apply.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w22"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p6",
+        "d": 6,
+        "tib": "la",
+        "eng": "for",
+        "tib_range": [
+          264,
+          266
+        ],
+        "eng_range": [
+          288,
+          291
+        ],
+        "verdict": "APPROVE",
+        "reason": "LA links desire to its object and owns for. The preceding GYI belongs to the possessor relationship and is not assigned this same for.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "p6"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w23",
+        "d": 5,
+        "tib": "chags",
+        "eng": "desire",
+        "tib_range": [
+          267,
+          272
+        ],
+        "eng_range": [
+          281,
+          287
+        ],
+        "verdict": "APPROVE",
+        "reason": "CHAGS directly attests desire, qualified by Wrong. Its other material formation/become senses do not fit this clause.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w23"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w24",
+        "d": 5,
+        "tib": "gnod sems",
+        "eng": "Harmful intent",
+        "tib_range": [
+          275,
+          284
+        ],
+        "eng_range": [
+          310,
+          324
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete GNOD SEMS directly attests harmful intent. The English phrase names the mental action, not its following target.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w24"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m3",
+        "d": 7,
+        "tib": "gnod",
+        "eng": "Harmful",
+        "tib_range": [
+          275,
+          279
+        ],
+        "eng_range": [
+          310,
+          317
+        ],
+        "verdict": "APPROVE",
+        "reason": "The harm component supplies the full adjectival Harmful inside the established compound. Base GNOD directly attests harm/hurt; no prohibited interior harm cut is used.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m3"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m4",
+        "d": 7,
+        "tib": "sems",
+        "eng": "intent",
+        "tib_range": [
+          280,
+          284
+        ],
+        "eng_range": [
+          318,
+          324
+        ],
+        "verdict": "APPROVE",
+        "reason": "SEMS directly attests intent, unique inside this parent. It is not the earlier SEMS/state or the later SEMS CAN/living being.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m4"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w25",
+        "d": 5,
+        "tib": "sems can",
+        "eng": "living being",
+        "tib_range": [
+          285,
+          293
+        ],
+        "eng_range": [
+          335,
+          347
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete SEMS CAN directly attests living being. No invented mind/living or CAN/being decomposition is forced from the mind-having etymology.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w25"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w26",
+        "d": 5,
+        "tib": "sdang ba",
+        "eng": "hating",
+        "tib_range": [
+          297,
+          305
+        ],
+        "eng_range": [
+          326,
+          332
+        ],
+        "verdict": "APPROVE",
+        "reason": "SDANG BA directly attests hating. The dative LA marks its object but has no separate printed preposition before living being.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w26"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w27",
+        "d": 5,
+        "tib": "dge",
+        "eng": "virtue",
+        "tib_range": [
+          308,
+          311
+        ],
+        "eng_range": [
+          386,
+          392
+        ],
+        "verdict": "APPROVE",
+        "reason": "Bare DGE directly attests the first virtue. It is distinct from the DGE component of the later negative compound.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w27"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "p7",
+        "d": 6,
+        "tib": "dang",
+        "eng": "Nor",
+        "tib_range": [
+          312,
+          316
+        ],
+        "eng_range": [
+          393,
+          396
+        ],
+        "verdict": "APPROVE",
+        "reason": "DANG coordinates the two virtue categories. Under negative existence its local coordinator is Nor; DANG is not being credited with independent negation. MED scopes over neither virtue Nor non-virtue even exists and is omitted as distributed content, never paired to affirmative exists or given an uncertain null.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H10"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w28",
+        "d": 5,
+        "tib": "mi dge",
+        "eng": "non-virtue",
+        "tib_range": [
+          317,
+          323
+        ],
+        "eng_range": [
+          397,
+          407
+        ],
+        "verdict": "APPROVE",
+        "reason": "Complete MI DGE directly attests non-virtue, preserving its printed hyphen and whole negative lexical category.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w28"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m5",
+        "d": 7,
+        "tib": "dge",
+        "eng": "virtue",
+        "tib_range": [
+          320,
+          323
+        ],
+        "eng_range": [
+          401,
+          407
+        ],
+        "verdict": "APPROVE",
+        "reason": "This negative ethical category is an established lexical compound. Printed English hyphen delimits the complete, independently attested virtue member, unique inside its parent. Earlier free DGE owns the earlier virtue. This is not a fifth subword exception; MI/non and positive pleasant remain unbanked.",
+        "reason_provenance": {
+          "kind": "OWN_PRECOMMITTED_REASON",
+          "recommendation": "H11"
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w29",
+        "d": 5,
+        "tib": "lta ba",
+        "eng": "idea",
+        "tib_range": [
+          328,
+          334
+        ],
+        "eng_range": [
+          368,
+          372
+        ],
+        "verdict": "APPROVE",
+        "reason": "The first LTA BA is the held view, locally recast as idea before its content clause. The master attests view rather than literal idea; this contextual nominal correspondence remains provisional and is distinct from the final technical mistaken-view compound.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w29"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "w30",
+        "d": 5,
+        "tib": "log par lta ba",
+        "eng": "Mistaken view",
+        "tib_range": [
+          337,
+          351
+        ],
+        "eng_range": [
+          349,
+          362
+        ],
+        "verdict": "APPROVE",
+        "reason": "The complete technical compound directly attests mistaken view. It identifies the category whose separate LTA BA/idea content precedes it in Tibetan.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "w30"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m6",
+        "d": 7,
+        "tib": "log par",
+        "eng": "Mistaken",
+        "tib_range": [
+          337,
+          344
+        ],
+        "eng_range": [
+          349,
+          357
+        ],
+        "verdict": "APPROVE",
+        "reason": "Whole LOG PAR directly attests mistaken and is a unique member inside the technical parent. No English mis- affix is cut.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m6"
+          }
+        }
+      },
+      {
+        "seq": 357,
+        "id": "m7",
+        "d": 7,
+        "tib": "lta ba",
+        "eng": "view",
+        "tib_range": [
+          345,
+          351
+        ],
+        "eng_range": [
+          358,
+          362
+        ],
+        "verdict": "APPROVE",
+        "reason": "Whole LTA BA directly attests view inside this parent. Its earlier independent source occurrence owns idea, not this same English view.",
+        "reason_provenance": {
+          "kind": "EXACT_ORIGINAL_RATIONALE_INDEPENDENTLY_ASSESSED",
+          "original_basis": {
+            "seq": 357,
+            "angle": "tibetan",
+            "field": "decisions",
+            "id": "m7"
+          }
+        }
+      }
+    ],
+    "original_omission_review": [
+      {
+        "seq": 355,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 355,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "[iv.297-300]; gnyis pa ni; las after mdo; final dang",
+          "reason": "Citation/outline, quotation-source attribution and the final cross-segment conjunction have no additional narrow exponent. English Now/makes mention is discourse/expanded speech framing; GSUNGS belongs to356 and is not borrowed."
+        },
+        "independent_reason": "The citation and second-outline heading are apparatus; Now does not securely isolate the ordinal. MDO LAS attribution shares the reporting construction across the row boundary; current LAS does not own makes mention and final DANG is not the earlier and. Omit with uncertainty, not null.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 355,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 355,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "first sensory-list dang forms; middle zhes sogs; ste; bound genitive after byis pa",
+          "reason": "The first sensory list unfolds comma/or coordination. Middle ZHES SOGS labels abbreviated negative actual cases and is expanded to hear, know, or sense without individual source words. STE definition framing and the child possessive relation remain distributed; no speculative punctuation null."
+        },
+        "independent_reason": "Retain omission of the first two punctuated DANG forms, middle ZHES SOGS sensory expansion, STE framing and bound child genitive. Narrow this original grouped omission: the third sensory-list DANG has a unique printed or and is selected.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 355,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 355,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "english": "[one who has yet to see selflessness directly]; subjects I/you/things; did support; it; really; kinds/types; different; another; numbering; which consist of; articles and possessive/relative framing",
+          "reason": "The selflessness clause is bracketed explanation, and other listed wording expands the repeated case structure. Actual MA owns only each authorized n't; affirmative did and explanatory participants remain outside the selected words."
+        },
+        "independent_reason": "The bracketed selflessness explanation, participants, auxiliaries and list paraphrase are English expansions. Four actual/quoted seeing occurrences remain independently anchored; only the explicit MA negative contraction and seeing verb are selected in each negative case. No extra hear/know/sense source tokens exist in the abbreviated second list.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 355,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "[iv.297-300]; gnyis pa ni; las",
+          "english": "Now; makes mention of",
+          "reason": "The bracket is textual apparatus. GNYIS PA names the second outline point; although its glossary includes next, the English Now is a transition and no secure lexical ordinal alignment is claimed. LAS participates in the sutra-reference construction whose reporting verb is in356; no independent LAS/mention verb or absence null is invented."
+        },
+        "independent_reason": "Agree with the uncertainty distinction: second-outline GNYIS PA is not confidently Now, and LAS is attribution rather than the English reporting verb. The bracketed citation is source apparatus, not alignment text.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 355,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "first and second dang; middle zhes sogs; ste; final dang; bound genitive after byis pa",
+          "reason": "The first two list coordinators are expressed by punctuation. The middle quotative/shorthand unfolds into the unquoted negative hear/know/sense list; STE supports a reordered classification frame, and final DANG continues to the realized-person set in356. These do not supply unique within-row word alignments; no null claim is made."
+        },
+        "independent_reason": "The two early DANG forms are list punctuation; middle shorthand expands actual negative senses; STE and final cross-row DANG are distributed. The local third DANG/or remains selected and must not be swept into this omission.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 355,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "english": "the; of a; [one who has yet to see selflessness directly]; which consist of; 1); 2); types; where you; I; it; different kinds of things--things that you really; did; another; final hear, know, or sense",
+          "reason": "Articles, subjects, objects, explanatory definition and numbered expansion stay outside the narrow claims. Repeated actual/quoted experiences are not paired merely by matching words. The second experience list is compressed into source SOGS and does not provide separate THOS/RTOGS tokens."
+        },
+        "independent_reason": "Keep supplied articles, participants, explanatory child gloss, numbering and expanded final sensory list unwrapped. The accepted negative splits leave did outside without treating actual negation as absent.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 356,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "early dang/ste; bound genitive on phags pa; na after gsungs; list dang after the quoted seen term and first two consciousnesses; bound genitive after rna ba",
+          "reason": "The two truth-case groups, question transition and sensory lists distribute conjunction, genitive and conditional support through punctuation and prose. Only explicitly selected local GI/KYI/of and DANG/and are banked; no extra of or punctuation-fusion null is forced."
+        },
+        "independent_reason": "Early coordination/apposition/conditional framing and bound genitives are distributed. The separately printed GI and KYI have specific of counterparts and the final list DANG owns and; those accepted local particles are not covered by this omission.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 356,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "english": "Sutra also; Regarding these two sets of eight; one may; for a more detailed description of; basic; to be; something; articles/subjects/auxiliaries; really; other; kinds of consciousness; those of; and before body; first by",
+          "reason": "Sutra is inherited from355 and the repeated eight summarizes earlier context. Explicit current GSUNGS/mentions and the chosen question/relative phrases remain selected, while expanded framing and the extra fourth consciousness noun are unbanked. The local second by owns GYIS."
+        },
+        "independent_reason": "Inherited Sutra and repeated eight are context restatement. Detailed description, basic, something, extra consciousness and first by are expanded English. Keep the narrow complete GANG YIN question and local second GYIS/by selected.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 356,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "tib": "remaining final list dang forms; final do; internal members of all depth3 phrases",
+          "reason": "The final list is coordinated largely with commas; final DO closes the statement at the English sensed period without a separate lexical word, left unbanked here. No d7 members hang from the grammatical phrases and no lone BSHAD/represents is claimed."
+        },
+        "independent_reason": "Retain omission of comma-coordinators and speculative internal members of d3 constructions. Revise the grouped DO omission: its sentence-closing function has affirmative period-fusion evidence and is selected as a null; it is not an uncertain omitted word.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 356,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "english": "We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues",
+          "reason": "The physical source shows a following transition and page/title after the completed explanation. This known apparatus class has no matching current Tibetan heading and is retained exact without refiling."
+        },
+        "independent_reason": "The exact physical transition, page78 and following title occur after the completed classification and have no current Tibetan heading. Preserve all bytes outside body correspondences. Specification covers heading glue, but do not claim each of the seven prior class examples independently witnesses this precise subtype.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "first dang between truthful sets; ste; na; question dang; gang yin",
+          "reason": "The truthful-set coordinator and apposition are recast through punctuation/title order. NA introduces the reported premise, and GANG YIN the explanatory question, but the English Regarding/what it is to be wording distributes these functions; no arbitrary phrase expansion or absence null is claimed."
+        },
+        "independent_reason": "Retain distributed early DANG/STE/NA/question-list coordinator. Revise GANG YIN omission: the complete interrogative owns exactly what it is; detailed-description and to be remain outside. This is a supported narrow phrase rather than an arbitrary expansion.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "first and second consciousness-list dang; attached genitives; gyis; first and second answer-list dang",
+          "reason": "Some conjunctions are punctuated commas and attached genitives are not detached. One instrumental GYIS scopes the coordinated faculties while English repeats by; neither by is selected arbitrarily. Only the final explicit and in each relevant group is banked."
+        },
+        "independent_reason": "Retain punctuated conjunctions and attached-genitive omissions. Revise both-by omission: second by is locally introduced by the remaining-three group directly bearing GYIS; first by is repeated broader scope and remains unbanked.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 356,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "english": "Sutra also; the; a; I did; I; it; things you really; Regarding these two sets of eight; one may; for a more detailed description of; basic; what it is to be; something; the other; kinds of consciousness; those of; and before body; what is; also; We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues",
+          "reason": "Resumed source context, participants, articles, explanatory expansion and subsequent-section apparatus remain outside the exact narrow mappings. The terminal source DO null closes the preceding classification only and does not swallow the following transition or heading."
+        },
+        "independent_reason": "Keep participants, articles, resumed Sutra/eight, supplemental consciousness, question elaboration and following apparatus unwrapped. Narrow what it is to be: what it is now has the complete GANG YIN counterpart, while to be remains supplied. DO closure stays limited to the period after sensed.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "seq": 357,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 0,
+          "tib": "bound genitive after dbye ba; gyi before sems; topic ni forms; de las; dang between glu and zlos gar; gyi after the wealth possessor; la before sdang ba; final yin",
+          "reason": "Purpose, mental-state attribution, alternative-school comparison, example-list punctuation, possessive/object relations and final classification distribute their English support. Selected PHYIR/meant to, KYI/of and LA/for do not license extra arbitrary words or nulls."
+        },
+        "independent_reason": "Most topics, bound relations, comparison and copular framing have distributed English realization; no uncertain null is needed. Earlier GYI now lies inside the accepted complete afflicted-mind phrase rather than a separate particle. Explicit outside KYI/of, PHYIR/meant to and object LA/for remain selected.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "seq": 357,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 1,
+          "tib": "med",
+          "english": "neither; even exists",
+          "reason": "MED is the negative-existence predicate, unfolded as neither...Nor...even exists. The whole content is discontinuous around already selected virtue categories; neither an exclusive partial negator nor false positive MED/exists is banked. DANG/Nor represents local coordination under that shared negation."
+        },
+        "independent_reason": "MED supplies one existential denial over both virtue categories, unfolded over neither/Nor/exists. Keep MED unbanked with full scope. DANG/Nor is retained only as the local coordinator under that denial; it does not absorb or erase MED.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "seq": 357,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 2,
+          "english": "the; a; mentally; is that which is; second every; type; too; possessive apostrophe-s; the idea that articles/complement framing; even exists",
+          "reason": "These articles, mental qualification, copular/relative support and expanded alternative-definition/negative-existence framing stay exact outside the chosen words. LTA BA owns only the contextual head idea, not the whole complement clause."
+        },
+        "independent_reason": "Articles, copular framing, second every/type, too and existential support stay unwrapped. Revise mentally omission: the complete afflicted-mind noun phrase now includes mentally Afflicted state. LTA BA owns only idea in its content frame.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "tibetan",
+        "field": "omissions",
+        "index": 3,
+        "original": {
+          "seq": 357,
+          "angle": "TIBETAN-FIRST",
+          "field": "omissions",
+          "index": 3,
+          "tib": "members of phra ma, kha gsag, brnab sems and sems can; mi in mi dge; snyan pa inside mi snyan pa",
+          "reason": "No speculative member is forced into an English word or etymological paraphrase. Only complete, uniquely anchored harsh-speech, harmful-intent, hyphenated virtue and mistaken-view members are proposed. No unauthorized non, pleasant, harm or mis interior subword cut."
+        },
+        "independent_reason": "No separately attested English members justify cuts inside divisive, flattery, coveting or living being. MI/non is not an authorized fifth form, and pleasant inside unpleasant is forbidden. The seven retained members each have a proper d5 parent and full English word or hyphen-delimited member.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "english",
+        "field": "omissions",
+        "index": 0,
+        "original": {
+          "tib": "ni occurrences; bound genitives; de las; dang between glu/zlos gar; gyi after wealth owner; la after sems can; final yin",
+          "reason": "Topic/copular relations, bound grammar, comparison with earlier speech types and list punctuation are distributed in the terse English verse. No separate exponent or affirmative absence is sufficiently localized for a new null."
+        },
+        "independent_reason": "Topics, comparison to earlier kinds, list punctuation, possession/object relations and final copular support remain distributed rather than proven absent. The whole first afflicted-state phrase includes its internal GYI; outside KYI/of remains a separate secure particle.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "english",
+        "field": "omissions",
+        "index": 1,
+        "original": {
+          "tib": "dang between dge/mi dge; med",
+          "english": "neither; Nor; even exists",
+          "reason": "One source MED negates existence for both coordinated terms, while English distributes denial across neither/Nor and the positive verb exists. Do not map MED to exists or arbitrarily assign the shared negative pieces. DANG/Nor alone would conceal that shared negative contribution."
+        },
+        "independent_reason": "Revise the joint omission only for DANG/Nor: local coordination is identifiable under MED negation. MED still scopes over neither virtue Nor non-virtue even exists and has no secure isolated atom. This explicit scope note prevents the concealment feared in the original rationale.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      },
+      {
+        "seq": 357,
+        "angle": "english",
+        "field": "omissions",
+        "index": 2,
+        "original": {
+          "english": "the; a; is that which is; second every; type; too; possessive clitic; even; that",
+          "reason": "Articles, relative/copular framing, explanatory type/quantifier reinforcement and the existential denial frame remain outside the narrow lexical claims. The second every has no separate KUN source occurrence."
+        },
+        "independent_reason": "The additional articles/relative words, second every/type, additive too and existential framing lack separate local source words. Keep them exact and unwrapped; first KUN/every and NYID/really retain their own roles.",
+        "status": "FINAL_BINDING_VERIFIED",
+        "verdict": "APPROVE"
+      }
+    ],
+    "additional_final_omissions": [],
+    "resolved_findings": [
+      {
+        "id": "H-RATIONALE-01",
+        "status": "RESOLVED",
+        "origin": "english/357/decisions.json p15",
+        "problem": "Prose359 is cited for NYID/really; actual explanation is360 and359 is harsh speech.",
+        "required_final_action": "Preserve original; adopted reason cite360 or complete TCS02:74. No source/native change.",
+        "original_status": "NEEDS_CORRECTION",
+        "resolution": "The exact immutable adopted rationale and preserved preimage were independently read; the final tuple still matches the precommitted selection.",
+        "correction_evidence": "inputs/reconciled-0278.json"
+      },
+      {
+        "id": "H-RATIONALE-02",
+        "status": "RESOLVED",
+        "origin": "tibetan/355/original-decisions.json w14 and inherited356w8 wording",
+        "problem": "No claimed HGM expressions gloss is misleading:complete glossary_entries:2830 literally includes expressions, alongside different curated-priority senses.",
+        "required_final_action": "Preserve original; adopted reason distinguish linked glossary from curated senses accurately.",
+        "original_status": "NEEDS_CORRECTION",
+        "resolution": "The exact immutable adopted rationale and preserved preimage were independently read; the final tuple still matches the precommitted selection.",
+        "correction_evidence": "inputs/reconciled-0278.json"
+      }
+    ],
+    "source_error_review": "errata-independent-review.json",
+    "final_source_questions": "One original357 LOW/UNCERTAIN final-fragment question remains visible and unfiled; full TCS02:75 continuation is counterevidence. Zero new errata. The six/eight-line TSIG split retains every syllable and source apparatus remains verbatim.",
+    "native_history": {
+      "original_pairs": 6,
+      "new_reconciler_pairs": 3,
+      "exact_english_reused_pairs": 0,
+      "actual_unique_pairs": 9,
+      "selected_angle_segment_views": 9,
+      "reviewer_generator_runs": 0,
+      "reviewer_resolver_runs": 0,
+      "source_queries_run_here": 0
+    },
+    "manifest": "original-to-copy-manifest.json",
+    "process_history": "process-history.json",
+    "reviewer_limits": "PROVISIONAL alignment only, never hgm_gloss. No W/source/master/main writes, SQL/native engine reruns, paid API or publishing. Root semantic acceptance, landing, registration and closure remain separate.",
+    "utc": "2026-09-15T05:37:57.435692+00:00"
+  },
+  "fidelity_tests": {
+    "passed": 17,
+    "failed": 0,
+    "execution": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "../campaign-artifacts/integration/course-csv-depth-fix/cmake-build",
+        "-R",
+        "^(constitution|gen_alignment_page|alignment_gate_coverage|alignment_builder|dictionary_exports|no_broken_words|no_split_syllables|no_phonetics_in_layer|no_degenerate_members|no_supplied_span_head|layer_matches_spine|evidence_matches_spine|errata_quotes_hold|view_matches_layer|generated_docs_in_sync|builder_sees_every_span|errata_name_their_witnesses)$",
+        "--output-on-failure"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-15T05:40:56.687649+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-15T05:41:07.737496+00:00",
+      "wall_seconds": 11.049256917089224,
+      "exit": 0,
+      "stdout_bytes": 2166,
+      "stderr_bytes": 0,
+      "stdout_sha256": "769ceabcb285f16b5b73287d4df875c1574d345971c25f9dd34ed00c42654531",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "retention": {
+    "baseline_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+    "page": "c5p119",
+    "segments": [
+      355,
+      356,
+      357
+    ],
+    "prior_links_retained": 47625,
+    "added_links": 120,
+    "added_by_segment": {
+      "355": 26,
+      "356": 49,
+      "357": 45
+    },
+    "reviewed_analyst_spans": 117,
+    "full_links": 47745,
+    "null_exponents": 11987,
+    "evidence_headwords": 7217,
+    "evidence_pairs": 16031,
+    "prior_notes_trees_evidence_and_acip_retained": true,
+    "prior_csv_rows_retained": 23271,
+    "current_csv_rows": 23312,
+    "prior_csv_content_and_references_retained": true,
+    "csv_acip_enrichments_from_newly_banked_source": [],
+    "source_hashes_unchanged": true,
+    "review_tuples_and_source_ranges_match": true,
+    "navigation_targets_exist": true,
+    "rendering_verified": false
+  },
+  "course_csv": {
+    "baseline_commit": "f614639348a03fa30cc53db1b27c6b2034df43cb",
+    "prior_course_depth_groups_retained": 24946,
+    "current_course_depth_groups": 24993,
+    "all_depths_counts_and_metadata_match_main_csv_refs": true,
+    "encoding": "UTF-8 BOM, CRLF",
+    "course_csv_sha256": "c85946a4d29a5174a74eda8c19cf8a328ce9e9e4db68e16943475988e4d02da9"
+  },
+  "reproduction_outputs": [
+    {
+      "path": "data/alignment/alignment_full_v1.json",
+      "bytes": 10413375,
+      "sha256": "808dee6b5e506fc995578482a23b2a35251eacbb8948384de9ed0194a1eb2a43",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "data/alignment/alignment_evidence_v1.json",
+      "bytes": 2275079,
+      "sha256": "3bc6529d3cecad76af139cab1d3de19b5df266ea1047f0d45d0e03a5d27d62f4",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.html",
+      "bytes": 2290344,
+      "sha256": "6b02348e0b32b53dbd2c8dd9f773ad3192cdf7b6661b51cd85a9b7ed05ecea74",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary.csv",
+      "bytes": 16807222,
+      "sha256": "8e0c684330fa03af8f96d1cdbdcaadfc2cb3ef94ab5970a7cd1bfad4fb447a66",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_reverse.csv",
+      "bytes": 5430817,
+      "sha256": "52b676760b73cbddb113c60d1d538872866a66570b057a85834b9256e83cd152",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_by_course.csv",
+      "bytes": 5353576,
+      "sha256": "c85946a4d29a5174a74eda8c19cf8a328ce9e9e4db68e16943475988e4d02da9",
+      "complete_bytes_equal": true
+    },
+    {
+      "path": "docs/geshe_michael_roach_dictionary_changes.csv",
+      "bytes": 8117,
+      "sha256": "ba3dbad47392da5135116397c7cf730f4dcbf7a03e2017303168f29a99215875",
+      "complete_bytes_equal": true
+    }
+  ],
+  "archive": {
+    "file": "native-evidence.tar.gz",
+    "members": 171,
+    "bytes": 185134,
+    "sha256": "8936cca529bad4b3d4f4e591a6fc971e3e6dd2e098284c4b6eb7a6213b1e19bd"
+  },
+  "external_reproduction_inputs": "/Volumes/Oct2024(8TB)/Codex-ACI-Alignment-20260915-01a09398/compact-reproduction-through357",
+  "seed_retention": "Actual incoming CSV seed is retained externally and byte-bound to baseline Git CSV; not redundantly copied into this archive.",
+  "integration_limits": "Isolated desktop-consumable outputs only. MAIN remains OPEN_NO_APPLICATION. Private phone pack FAILED_UNACCEPTED for four inherited C01 mappings; no install. Installed through171 unchanged. External evidence drive required.",
+  "later_proofs": "Staging/whitespace/commit/checkpoint evidence follows separately; it is not claimed to be an input to its own earlier archive."
+}

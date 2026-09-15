@@ -1,0 +1,122 @@
+{
+  "seq": 356,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1738,
+        "course": "C05",
+        "seq": 356,
+        "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+        "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+        "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete source ACIP/Wylie/GMR fields and context349–363 read or exactly reused from my personal complete readings. All six physical source extents read and whitespace-collapse identity verified; digital agreement proves the reading, not an independent publication or correction."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 1,
+          "row_ids": [
+            1738
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 1,
+          "row_ids": [
+            1738
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1738
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "All three exact fields match only current356. A full SVN object also contains the eight higher expressions in another discussion; it is not a parallel copy of this sentence. Complete local354 gives the same experience ordering."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "0e7bced24593f1980576bad8710e0d1364218b9a:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete existing converter, running-head, cap, spill and footnote/folio class records are byte-identical to my prior full reading. The complete register identity is unchanged at202 entries; no current-segment match or newly filed class."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition.",
+      "counterevidence": "Master glossary/curated/auto-aligned tiers remain distinct; notably the mined ZHES gloss is unrelated and not promoted. Same-source repetitions do not establish independent publication accuracy. Context explains compressed wording but cannot manufacture a separate exponent for each source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 430,
+        "wylie": 429,
+        "english": 762
+      },
+      "utf8_bytes": {
+        "acip": 430,
+        "wylie": 429,
+        "english": 762
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "EXISTING_CLASS_NO_NEW_FILING",
+      "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "EXISTING_CLASS_NO_NEW_FILING",
+      "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

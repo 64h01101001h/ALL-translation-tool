@@ -1,0 +1,13 @@
+C05:357 — PROVISIONAL root reconciliation; mechanical assembly by /root/reusable_closure_review.
+Source/proposal origin 0e7bced24593f1980576bad8710e0d1364218b9a through351/register202; actual baseline f614639348a03fa30cc53db1b27c6b2034df43cb through354/register204 is separately bound.
+Root-reconciliation-decisions.json supplies all15 current rulings after the independent preassessment. The scribe authored the Tibetan original and makes no independent reconciliation or acceptance claim.
+Final357 replaces T w4/w5 with English f5, the whole mentally Afflicted state phrase. Unpleasant stays d3; seven full d7 members include the hyphen-delimited virtue. DANG/Nor remains local coordination under shared MED denial, which stays unbanked. Adopted NYID/really evidence cites360/TCS02:74, not359.
+All225 original spans,20 original omissions,30 category judgments and one LOW/UNCERTAIN unfiled English source question remain complete objects with explicit dispositions and full source grounds.
+The final357 fragment is witnessed by TCS02:75; the original TCS02 stops statement is retained only as provenance and corrected in the adopted scope. Neither TCS02 part supplies a corrected edition. Registered examples remain distinct: E120 is factual sickness omission, not a heading case.
+Counts: 44 spans; 28 nonnull d5 pairs; 28 total d5; 7 d7; 0 nulls; zero errata additions.
+One new canonical generator and resolver each passed once with empty stderr for this changed segment. No original native run was repeated.
+Spec 6517 bytes SHA256 e0919cac313d3652819b9a87b2a6f105ceb305c2ad36a2417e2104b9e520334d; body 6246 bytes SHA256 03c9fbacf7ba2224fc75068b18d94640a8695a4fcdb659d4735866307cf5c845. Both source plaintexts reconstruct exactly and canonical ranges equal intent.
+Selected evidence: ../native/357-generator-v1/ and ../native/357-resolver-v1/. Nine actual unique pairs exist: six original and three changed pairs; nine angle/segment views contain no copied selected pair.
+Current report.md and singular spec.note describe root choices. Both original report/note values remain in original-other-dispositions.json and exact copies under ../evidence/original-reports/ and ../evidence/original-specs/. Adopted evidence corrections preserve the original erroneous reasons.
+The shared proposal-origin exit1/attempt02 exit0 records and Tibetan setup assertion failure are preserved separately from the successful native runs. All213 original frozen members, every suffix, remain pinned at their immutable roots. Root choices retain their own earlier process-history statements.
+No source/master edits, hgm_gloss promotion, W writes, production registration or acceptance. Independent final semantic review remains required.

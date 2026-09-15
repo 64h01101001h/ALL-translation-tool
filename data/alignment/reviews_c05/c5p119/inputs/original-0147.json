@@ -1,0 +1,147 @@
+{
+  "seq": 357,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1739,
+        "course": "C05",
+        "seq": 357,
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete source ACIP/Wylie/GMR fields and context349–363 read or exactly reused from my personal complete readings. All six physical source extents read and whitespace-collapse identity verified; digital agreement proves the reading, not an independent publication or correction."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1739,
+            6893
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1739,
+            6893
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1739,
+            6893
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "C16:875 (spine6893) repeats all three complete fields exactly. TCS02:74 (spine9348) quotes only the speech portion through the wrong-commentary example and then explains it; its GYE differs from current GYI. It does not witness the unquoted coveting/harmful-intent/mistaken-view continuation. All six focused complete corpus objects were read, including SVN metadata."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "0e7bced24593f1980576bad8710e0d1364218b9a:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete existing converter, running-head, cap, spill and footnote/folio class records are byte-identical to my prior full reading. The complete register identity is unchanged at202 entries; no current-segment match or newly filed class."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The compressed root verse names six branch nonvirtues. Complete lexical entries support KYAL PA/Meaningless, KUN/every, the negative adjective MI SNYAN PA/unpleasant and whole LOG PAR LTA BA/Mistaken view. Context359–362 explains the elliptical speech definitions and shared existential denial. Neither the abbreviated every afflicted nor verse capitalization warrants silently inserting a noun or normalizing the source.",
+      "counterevidence": "Master glossary/curated/auto-aligned tiers remain distinct; notably the mined ZHES gloss is unrelated and not promoted. Same-source repetitions do not establish independent publication accuracy. Context explains compressed wording but cannot manufacture a separate exponent for each source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 354,
+        "wylie": 355,
+        "english": 420
+      },
+      "utf8_bytes": {
+        "acip": 354,
+        "wylie": 355,
+        "english": 420
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        7,
+        5
+      ],
+      "finding": "Physical line wraps split the second Tibetan verse line after KYI and place its TSIG beside the next TSIG after a comma. Comma-delimited verse units remain recoverable: ten seven-syllable units and a final five-syllable LOG PAR LTA BA YIN. The short final fragment is preserved; meter alone supplies no missing words. English capitals Afflicted/Wrong/Nor reflect visible line starts."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The compressed root verse names six branch nonvirtues. Complete lexical entries support KYAL PA/Meaningless, KUN/every, the negative adjective MI SNYAN PA/unpleasant and whole LOG PAR LTA BA/Mistaken view. Context359–362 explains the elliptical speech definitions and shared existential denial. Neither the abbreviated every afflicted nor verse capitalization warrants silently inserting a noun or normalizing the source."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The compressed root verse names six branch nonvirtues. Complete lexical entries support KYAL PA/Meaningless, KUN/every, the negative adjective MI SNYAN PA/unpleasant and whole LOG PAR LTA BA/Mistaken view. Context359–362 explains the elliptical speech definitions and shared existential denial. Neither the abbreviated every afflicted nor verse capitalization warrants silently inserting a noun or normalizing the source."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The compressed root verse names six branch nonvirtues. Complete lexical entries support KYAL PA/Meaningless, KUN/every, the negative adjective MI SNYAN PA/unpleasant and whole LOG PAR LTA BA/Mistaken view. Context359–362 explains the elliptical speech definitions and shared existential denial. Neither the abbreviated every afflicted nor verse capitalization warrants silently inserting a noun or normalizing the source."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Physical line wraps split the second Tibetan verse line after KYI and place its TSIG beside the next TSIG after a comma. Comma-delimited verse units remain recoverable: ten seven-syllable units and a final five-syllable LOG PAR LTA BA YIN. The short final fragment is preserved; meter alone supplies no missing words. English capitals Afflicted/Wrong/Nor reflect visible line starts."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Physical line wraps split the second Tibetan verse line after KYI and place its TSIG beside the next TSIG after a comma. Comma-delimited verse units remain recoverable: ten seven-syllable units and a final five-syllable LOG PAR LTA BA YIN. The short final fragment is preserved; meter alone supplies no missing words. English capitals Afflicted/Wrong/Nor reflect visible line starts."
+    }
+  ],
+  "source_questions": [
+    {
+      "kind": "FORMATTING",
+      "severity": "LOW",
+      "confidence": "UNCERTAIN",
+      "found": "LOG PAR LTA BA YIN",
+      "proposed_correction": null,
+      "decision": "UNFILED_NO_SOURCE_CORRECTION",
+      "reason": "The final comma-delimited fragment has five written syllables while the preceding ten units have seven. Its predicate is intelligible and C16 repeats the entire source; TCS02 stops before this fragment. No independent corrected witness or recoverable missing wording supports a restoration."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

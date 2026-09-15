@@ -1,0 +1,2612 @@
+{
+  "seq": 356,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 356,
+        "kind": "TIBETAN_SPELLING",
+        "found": "BZHI PO GANG YIN ZHE NA",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "BZHI PO GANG YIN ZHE NA",
+            "source_row": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "occurrences": {
+              "acip": [
+                155
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "byis pa'i tha snyad brgyad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1737
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'phags pa'i tha snyad brgyad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1738,
+                  36669
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs can kun kyal pa nyid"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Meaningless, really every afflicted"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue Nor non-virtue"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9349
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kha gsag glu dang zlos gar"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+            "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+            "register_identity": {
+              "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:355",
+              "c05:356",
+              "c05:357",
+              "meaningless, really every afflicted",
+              "78 six",
+              "gnyis pa ni"
+            ],
+            "matches": [
+              {
+                "item_id": "E-040",
+                "course": "C01",
+                "segment": "C01:484",
+                "kind": "NOT_AN_ERRATUM",
+                "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                "expected": "",
+                "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                "severity": "LOW",
+                "confidence": "CONFIRMED",
+                "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+            "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 356,
+                "field": "acip",
+                "start": 242719,
+                "bytes": 432,
+                "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 356,
+                "field": "english",
+                "start": 243153,
+                "bytes": 773,
+                "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 89,
+            "material_master_objects": 171,
+            "personally_read_reused_objects": 99,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 7
+          },
+          "d_defensibility": {
+            "judgment": "BZHI PO is the fourfold number inside an explicit question. Mined BZHI PO/one may ask and ZHE NA/correct perception glosses are mislocalized lexical evidence, not grounds to change this Tibetan. Complete numeral, interrogative and quotation references support the current forms. The same phrase directly asks which four experiences are intended.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 356,
+        "kind": "ENGLISH_TYPO",
+        "found": "consciousness of the thought",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "consciousness of the thought",
+            "source_row": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                469
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "byis pa'i tha snyad brgyad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1737
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'phags pa'i tha snyad brgyad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1738,
+                  36669
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs can kun kyal pa nyid"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Meaningless, really every afflicted"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue Nor non-virtue"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9349
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kha gsag glu dang zlos gar"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+            "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+            "register_identity": {
+              "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:355",
+              "c05:356",
+              "c05:357",
+              "meaningless, really every afflicted",
+              "78 six",
+              "gnyis pa ni"
+            ],
+            "matches": [
+              {
+                "item_id": "E-040",
+                "course": "C01",
+                "segment": "C01:484",
+                "kind": "NOT_AN_ERRATUM",
+                "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                "expected": "",
+                "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                "severity": "LOW",
+                "confidence": "CONFIRMED",
+                "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+            "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 356,
+                "field": "acip",
+                "start": 242719,
+                "bytes": 432,
+                "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 356,
+                "field": "english",
+                "start": 243153,
+                "bytes": 773,
+                "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 89,
+            "material_master_objects": 171,
+            "personally_read_reused_objects": 99,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 7
+          },
+          "d_defensibility": {
+            "judgment": "This exact mental-faculty wording is printed beside eye/ear and the other three senses. YID directly supports thought; the repeated consciousness noun after three is an English expansion. The wording is intelligible, and neither that expansion nor the definite article establishes an English typo.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 356,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "represents respectively",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "represents respectively",
+            "source_row": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                579
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "byis pa'i tha snyad brgyad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1737
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'phags pa'i tha snyad brgyad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1738,
+                  36669
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs can kun kyal pa nyid"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Meaningless, really every afflicted"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue Nor non-virtue"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9349
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kha gsag glu dang zlos gar"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+            "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+            "register_identity": {
+              "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:355",
+              "c05:356",
+              "c05:357",
+              "meaningless, really every afflicted",
+              "78 six",
+              "gnyis pa ni"
+            ],
+            "matches": [
+              {
+                "item_id": "E-040",
+                "course": "C01",
+                "segment": "C01:484",
+                "kind": "NOT_AN_ERRATUM",
+                "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                "expected": "",
+                "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                "severity": "LOW",
+                "confidence": "CONFIRMED",
+                "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+            "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 356,
+                "field": "acip",
+                "start": 242719,
+                "bytes": 432,
+                "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 356,
+                "field": "english",
+                "start": 243153,
+                "bytes": 773,
+                "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 89,
+            "material_master_objects": 171,
+            "personally_read_reused_objects": 99,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 7
+          },
+          "d_defensibility": {
+            "judgment": "The source orders eye, ear, thought consciousness and nose/tongue/body experience, then seen/heard/known/sensed. The relative-correlative and complete ordering construction support the stated correspondence. The two four-case true-statement sets likewise total eight. No reversal or numerical contradiction is present; shared grammar stays sparse instead of inventing repeated Tibetan exponents.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 356,
+        "kind": "INGEST_ARTEFACT",
+        "found": "We turn next to a description of the six",
+        "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+        "five_grounds": {
+          "a_quote": {
+            "found": "We turn next to a description of the six",
+            "source_row": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                672
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "byis pa'i tha snyad brgyad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1737
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'phags pa'i tha snyad brgyad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1738,
+                  36669
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs can kun kyal pa nyid"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Meaningless, really every afflicted"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue Nor non-virtue"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9349
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kha gsag glu dang zlos gar"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+            "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+            "register_identity": {
+              "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:355",
+              "c05:356",
+              "c05:357",
+              "meaningless, really every afflicted",
+              "78 six",
+              "gnyis pa ni"
+            ],
+            "matches": [
+              {
+                "item_id": "E-040",
+                "course": "C01",
+                "segment": "C01:484",
+                "kind": "NOT_AN_ERRATUM",
+                "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                "expected": "",
+                "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                "severity": "LOW",
+                "confidence": "CONFIRMED",
+                "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+            "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 356,
+                "field": "acip",
+                "start": 242719,
+                "bytes": 432,
+                "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 356,
+                "field": "english",
+                "start": 243153,
+                "bytes": 773,
+                "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 89,
+            "material_master_objects": 171,
+            "personally_read_reused_objects": 99,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 7
+          },
+          "d_defensibility": {
+            "judgment": "The complete physical English appends a following transition, page78 and Six Branch Non-Virtues heading after the sensed sentence. The current Tibetan ends its explanation with BSHAD DO and has no corresponding heading. This is the already known following-section/folio/row-boundary class, preserved unwrapped without duplicate errata or borrowed Tibetan heading words.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 356,
+        "kind": "FORMATTING",
+        "found": "78 Six \"Branch\" Non-Virtues",
+        "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+        "five_grounds": {
+          "a_quote": {
+            "found": "78 Six \"Branch\" Non-Virtues",
+            "source_row": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                735
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 356,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "byis pa'i tha snyad brgyad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1737
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'phags pa'i tha snyad brgyad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1738,
+                  36669
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs can kun kyal pa nyid"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "Meaningless, really every afflicted"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue Nor non-virtue"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9349
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kha gsag glu dang zlos gar"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1739,
+                  6893,
+                  9348
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+            "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+            "register_identity": {
+              "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:355",
+              "c05:356",
+              "c05:357",
+              "meaningless, really every afflicted",
+              "78 six",
+              "gnyis pa ni"
+            ],
+            "matches": [
+              {
+                "item_id": "E-040",
+                "course": "C01",
+                "segment": "C01:484",
+                "kind": "NOT_AN_ERRATUM",
+                "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                "expected": "",
+                "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                "severity": "LOW",
+                "confidence": "CONFIRMED",
+                "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+              }
+            ],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+            "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 356,
+                "field": "acip",
+                "start": 242719,
+                "bytes": 432,
+                "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 356,
+                "field": "english",
+                "start": 243153,
+                "bytes": 773,
+                "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 89,
+            "material_master_objects": 171,
+            "personally_read_reused_objects": 99,
+            "complete_new_master_objects_read": 72,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 7
+          },
+          "d_defensibility": {
+            "judgment": "The page number, title capitalization, quotation marks and hyphens are printed following-section apparatus. Preserve them exactly. The earlier quote punctuation and semicolon maintain the positive/negative true-assertion contrast; no fifth subword exception or article-bearing lexical compound is introduced.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "EXISTING_CLASS_NO_NEW_FILING",
+        "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "EXISTING_CLASS_NO_NEW_FILING",
+        "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM_WITH_ROOT_SCOPE",
+      "reason": "Exact physical text retained. TCS02:75 does witness final LOG PAR LTA BA YIN beyond74 speech portion, strengthening counterevidence to restoration; neither is a corrected edition. Six/eight-line TSIG split retains all syllables. Preserve capitals, verse, ordinal, brackets and headings. Seven prior register examples are not all heading cases: E120 is factual sickness omission. Preserve full five grounds/counterevidence; no demonstrated error from weak counts.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 356,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 356,
+          "kind": "TIBETAN_SPELLING",
+          "found": "BZHI PO GANG YIN ZHE NA",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "BZHI PO GANG YIN ZHE NA",
+              "source_row": {
+                "id": 1738,
+                "course": "C05",
+                "seq": 356,
+                "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+                "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+              },
+              "occurrences": {
+                "acip": [
+                  155
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "byis pa'i tha snyad brgyad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1737
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'phags pa'i tha snyad brgyad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1738,
+                    36669
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs can kun kyal pa nyid"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Meaningless, really every afflicted"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue Nor non-virtue"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9349
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kha gsag glu dang zlos gar"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+              "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "register_identity": {
+                "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:355",
+                "c05:356",
+                "c05:357",
+                "meaningless, really every afflicted",
+                "78 six",
+                "gnyis pa ni"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-040",
+                  "course": "C01",
+                  "segment": "C01:484",
+                  "kind": "NOT_AN_ERRATUM",
+                  "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                  "expected": "",
+                  "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                  "severity": "LOW",
+                  "confidence": "CONFIRMED",
+                  "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+              "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 430,
+                "wylie": 429,
+                "english": 762
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 356,
+                  "field": "acip",
+                  "start": 242719,
+                  "bytes": 432,
+                  "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                  "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 356,
+                  "field": "english",
+                  "start": 243153,
+                  "bytes": 773,
+                  "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                  "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 89,
+              "material_master_objects": 171,
+              "personally_read_reused_objects": 99,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 7
+            },
+            "d_defensibility": {
+              "judgment": "BZHI PO is the fourfold number inside an explicit question. Mined BZHI PO/one may ask and ZHE NA/correct perception glosses are mislocalized lexical evidence, not grounds to change this Tibetan. Complete numeral, interrogative and quotation references support the current forms. The same phrase directly asks which four experiences are intended.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 356,
+          "kind": "ENGLISH_TYPO",
+          "found": "consciousness of the thought",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "consciousness of the thought",
+              "source_row": {
+                "id": 1738,
+                "course": "C05",
+                "seq": 356,
+                "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+                "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  469
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "byis pa'i tha snyad brgyad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1737
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'phags pa'i tha snyad brgyad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1738,
+                    36669
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs can kun kyal pa nyid"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Meaningless, really every afflicted"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue Nor non-virtue"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9349
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kha gsag glu dang zlos gar"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+              "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "register_identity": {
+                "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:355",
+                "c05:356",
+                "c05:357",
+                "meaningless, really every afflicted",
+                "78 six",
+                "gnyis pa ni"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-040",
+                  "course": "C01",
+                  "segment": "C01:484",
+                  "kind": "NOT_AN_ERRATUM",
+                  "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                  "expected": "",
+                  "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                  "severity": "LOW",
+                  "confidence": "CONFIRMED",
+                  "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+              "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 430,
+                "wylie": 429,
+                "english": 762
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 356,
+                  "field": "acip",
+                  "start": 242719,
+                  "bytes": 432,
+                  "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                  "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 356,
+                  "field": "english",
+                  "start": 243153,
+                  "bytes": 773,
+                  "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                  "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 89,
+              "material_master_objects": 171,
+              "personally_read_reused_objects": 99,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 7
+            },
+            "d_defensibility": {
+              "judgment": "This exact mental-faculty wording is printed beside eye/ear and the other three senses. YID directly supports thought; the repeated consciousness noun after three is an English expansion. The wording is intelligible, and neither that expansion nor the definite article establishes an English typo.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 356,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "represents respectively",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "represents respectively",
+              "source_row": {
+                "id": 1738,
+                "course": "C05",
+                "seq": 356,
+                "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+                "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  579
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "byis pa'i tha snyad brgyad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1737
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'phags pa'i tha snyad brgyad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1738,
+                    36669
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs can kun kyal pa nyid"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Meaningless, really every afflicted"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue Nor non-virtue"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9349
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kha gsag glu dang zlos gar"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+              "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "register_identity": {
+                "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:355",
+                "c05:356",
+                "c05:357",
+                "meaningless, really every afflicted",
+                "78 six",
+                "gnyis pa ni"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-040",
+                  "course": "C01",
+                  "segment": "C01:484",
+                  "kind": "NOT_AN_ERRATUM",
+                  "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                  "expected": "",
+                  "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                  "severity": "LOW",
+                  "confidence": "CONFIRMED",
+                  "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+              "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 430,
+                "wylie": 429,
+                "english": 762
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 356,
+                  "field": "acip",
+                  "start": 242719,
+                  "bytes": 432,
+                  "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                  "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 356,
+                  "field": "english",
+                  "start": 243153,
+                  "bytes": 773,
+                  "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                  "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 89,
+              "material_master_objects": 171,
+              "personally_read_reused_objects": 99,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 7
+            },
+            "d_defensibility": {
+              "judgment": "The source orders eye, ear, thought consciousness and nose/tongue/body experience, then seen/heard/known/sensed. The relative-correlative and complete ordering construction support the stated correspondence. The two four-case true-statement sets likewise total eight. No reversal or numerical contradiction is present; shared grammar stays sparse instead of inventing repeated Tibetan exponents.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 356,
+          "kind": "INGEST_ARTEFACT",
+          "found": "We turn next to a description of the six",
+          "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+          "five_grounds": {
+            "a_quote": {
+              "found": "We turn next to a description of the six",
+              "source_row": {
+                "id": 1738,
+                "course": "C05",
+                "seq": 356,
+                "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+                "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  672
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "byis pa'i tha snyad brgyad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1737
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'phags pa'i tha snyad brgyad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1738,
+                    36669
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs can kun kyal pa nyid"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Meaningless, really every afflicted"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue Nor non-virtue"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9349
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kha gsag glu dang zlos gar"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+              "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "register_identity": {
+                "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:355",
+                "c05:356",
+                "c05:357",
+                "meaningless, really every afflicted",
+                "78 six",
+                "gnyis pa ni"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-040",
+                  "course": "C01",
+                  "segment": "C01:484",
+                  "kind": "NOT_AN_ERRATUM",
+                  "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                  "expected": "",
+                  "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                  "severity": "LOW",
+                  "confidence": "CONFIRMED",
+                  "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+              "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 430,
+                "wylie": 429,
+                "english": 762
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 356,
+                  "field": "acip",
+                  "start": 242719,
+                  "bytes": 432,
+                  "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                  "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 356,
+                  "field": "english",
+                  "start": 243153,
+                  "bytes": 773,
+                  "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                  "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 89,
+              "material_master_objects": 171,
+              "personally_read_reused_objects": 99,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 7
+            },
+            "d_defensibility": {
+              "judgment": "The complete physical English appends a following transition, page78 and Six Branch Non-Virtues heading after the sensed sentence. The current Tibetan ends its explanation with BSHAD DO and has no corresponding heading. This is the already known following-section/folio/row-boundary class, preserved unwrapped without duplicate errata or borrowed Tibetan heading words.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 356,
+          "kind": "FORMATTING",
+          "found": "78 Six \"Branch\" Non-Virtues",
+          "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+          "five_grounds": {
+            "a_quote": {
+              "found": "78 Six \"Branch\" Non-Virtues",
+              "source_row": {
+                "id": 1738,
+                "course": "C05",
+                "seq": 356,
+                "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+                "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  735
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 356,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1738
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "byis pa'i tha snyad brgyad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1737
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'phags pa'i tha snyad brgyad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1738,
+                    36669
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs can kun kyal pa nyid"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "Meaningless, really every afflicted"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue Nor non-virtue"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9349
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kha gsag glu dang zlos gar"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1739,
+                    6893,
+                    9348
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all7 complete records fully read",
+              "lineage_limit": "C05:357 and C16:875 repeat the complete three fields exactly; duplicate publication-family text is not an independent corrected edition. TCS02:74 and75 divide this Tibetan verse while their English spills into the following commentary. TCS02:74 has GYE versus current GYI and a separate following-prose typo; neither variation establishes a current-source correction. SVN:209 discusses the eight higher expressions in a different passage. No exact extra witness was returned for355 or356."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+              "register_identity": {
+                "original_git_commit": "0e7bced24593f1980576bad8710e0d1364218b9a",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:355",
+                "c05:356",
+                "c05:357",
+                "meaningless, really every afflicted",
+                "78 six",
+                "gnyis pa ni"
+              ],
+              "matches": [
+                {
+                  "item_id": "E-040",
+                  "course": "C01",
+                  "segment": "C01:484",
+                  "kind": "NOT_AN_ERRATUM",
+                  "found": "`lam gtso'i zin bris gsang ba'i lde mig ni   (ACIP: `LAM GTZO'I ZIN BRIS GSANG BA'I LDE MIG NI,)",
+                  "expected": "",
+                  "evidence": "Hint C01:484 verified - the backtick is present, verbatim, at the head of both the ACIP and the Wylie. But it is not stray. The same leading backtick opens 111 segments across at least 15 courses (C09 x23, C13 x19, C18 x12, C17 x9, C08 x7, C07 x6, C01 x2, and more), and in every sampled case it introduces a new text, chapter, or titled section: C02:27 '`, , gnyis pa rang gi lugs la' = 'Here is the second section'; C06:24 '`, na mo ma{u2} o ShA ya' = 'I bow down to Manjughosha'; C09:142 '`, gnyis pa ni' under the heading 'the colophon'. Here it opens the Gungtang appendix, and the English confirms a fresh text begins: 'Here is a \"Secret Key to the Three Principal Paths\"'.",
+                  "severity": "LOW",
+                  "confidence": "CONFIRMED",
+                  "note": "This is a structural marker in the ACIP e-text, functioning as a section/text-opening delimiter, not digitisation damage. The campaign was right to keep it verbatim and it should stay. Recommend the register carry it as a resolved non-issue so the same character is not re-flagged on later courses - C09 alone will raise it 23 more times. The trailing 'Layer: 3,747 headwords / 7,014 pairs' in the note is campaign bookkeeping and carries no claim about the text."
+                }
+              ],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "The sole search match E-040 concerns C01:484 and a structural backtick, found via its historical GNYIS PA NI example; it is not a current355-357 finding.",
+              "later_baseline_delta": "Acceptance through354 was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 430,
+                "wylie": 429,
+                "english": 762
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 356,
+                  "field": "acip",
+                  "start": 242719,
+                  "bytes": 432,
+                  "sha256": "14a4e2e4ed149a3f601db4b113084980f1f745f235ded128d6b4830bc8de6340",
+                  "original_text": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI \r\nRNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 356,
+                  "field": "english",
+                  "start": 243153,
+                  "bytes": 773,
+                  "sha256": "4751944a12c376431973a403b81d4683508d78dd4e51f934520c17cd35ea57cd",
+                  "original_text": "Sutra also mentions the \"eight expressions of a realized person\"--four where\r\nyou say \"I did see it\" about things you really did see and so on; four where\r\nyou say \"I didn't see it\" about things you really didn't see and such.\r\nRegarding these two sets of eight, one may ask for a more detailed description\r\nof the basic four: what it is to be \"something seen,\" \"something heard,\" and so\r\non. That which is experienced by consciousness of the eye, consciousness of\r\nthe ear, consciousness of the thought, and by the other three kinds of\r\nconsciousness (those of nose, tongue, and body) represents respectively what\r\nis seen, what is heard, what is known, and also what is sensed.\r\nWe turn next to a description of the six \"branch\" non-virtues.\r\n78\r\nSix \"Branch\" Non-Virtues",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 89,
+              "material_master_objects": 171,
+              "personally_read_reused_objects": 99,
+              "complete_new_master_objects_read": 72,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 7
+            },
+            "d_defensibility": {
+              "judgment": "The page number, title capitalization, quotation marks and hyphens are printed following-section apparatus. Preserve them exactly. The earlier quote punctuation and semicolon maintain the positive/negative true-assertion contrast; no fifth subword exception or article-bearing lexical compound is introduced.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 356,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 356,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1738,
+              "course": "C05",
+              "seq": 356,
+              "acip": "MTHONG BA LA MTHONG ZHES SOGS BZHI DANG , MA MTHONG BA LA MA MTHONG ZHES SOGS BZHI STE 'PHAGS PA'I THA SNYAD BRGYAD GSUNGS NA, MTHONG BA DANG THOS PA SOGS BZHI PO GANG YIN ZHE NA, MIG GI RNAM PAR SHES PA DANG , RNA BA'I RNAM PAR SHES PA DANG , YID KYI RNAM PAR SHES PA DANG , SNA LCE LUS GSUM GYIS NYAMS SU MYONG BA GANG YIN PA DE, RIM PA BZHIN DU MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG , RTOGS PA YIN PAR BSHAD DO,",
+              "wylie": "mthong ba la mthong zhes sogs bzhi dang , ma mthong ba la ma mthong zhes sogs bzhi ste 'phags pa'i tha snyad brgyad gsungs na, mthong ba dang thos pa sogs bzhi po gang yin zhe na, mig gi rnam par shes pa dang , rna ba'i rnam par shes pa dang , yid kyi rnam par shes pa dang , sna lce lus gsum gyis nyams su myong ba gang yin pa de, rim pa bzhin du mthong ba dang , thos pa dang , rnam par shes pa dang , rtogs pa yin par bshad do",
+              "english": "Sutra also mentions the \"eight expressions of a realized person\"--four where you say \"I did see it\" about things you really did see and so on; four where you say \"I didn't see it\" about things you really didn't see and such. Regarding these two sets of eight, one may ask for a more detailed description of the basic four: what it is to be \"something seen,\" \"something heard,\" and so on. That which is experienced by consciousness of the eye, consciousness of the ear, consciousness of the thought, and by the other three kinds of consciousness (those of nose, tongue, and body) represents respectively what is seen, what is heard, what is known, and also what is sensed. We turn next to a description of the six \"branch\" non-virtues. 78 Six \"Branch\" Non-Virtues"
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "Complete source ACIP/Wylie/GMR fields and context349–363 read or exactly reused from my personal complete readings. All six physical source extents read and whitespace-collapse identity verified; digital agreement proves the reading, not an independent publication or correction."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              },
+              {
+                "field": "english",
+                "count": 1,
+                "row_ids": [
+                  1738
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-manifest.json"
+            ],
+            "finding": "All three exact fields match only current356. A full SVN object also contains the eight higher expressions in another discussion; it is not a parallel copy of this sentence. Complete local354 gives the same experience ordering."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "0e7bced24593f1980576bad8710e0d1364218b9a:docs/errata_register.json",
+            "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+            "register_count": 202,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "Seven complete existing converter, running-head, cap, spill and footnote/folio class records are byte-identical to my prior full reading. The complete register identity is unchanged at202 entries; no current-segment match or newly filed class."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition.",
+            "counterevidence": "Master glossary/curated/auto-aligned tiers remain distinct; notably the mined ZHES gloss is unrelated and not promoted. Same-source repetitions do not establish independent publication accuracy. Context explains compressed wording but cannot manufacture a separate exponent for each source word."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "utf8_bytes": {
+              "acip": 430,
+              "wylie": 429,
+              "english": 762
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Positive and negative truthful statements are followed by the basic-four question and its six-faculty explanation. Known and sensed follow the local354 order; three explicit consciousness nouns are distinct from the final known expression. Shared GYIS/by and expanded question framing stay omitted. The final DO terminates the definition before the English next-section transition."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "EXISTING_CLASS_NO_NEW_FILING",
+            "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "EXISTING_CLASS_NO_NEW_FILING",
+            "reason": "The physical English explicitly ends the classification at sensed., then supplies We turn next to a description of the six \"branch\" non-virtues., the standalone78, and Six \"Branch\" Non-Virtues. The following-heading/folio class is preserved unbanked, not newly filed. No1500-character boundary occurs."
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

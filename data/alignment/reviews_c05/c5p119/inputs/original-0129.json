@@ -1,0 +1,122 @@
+{
+  "seq": 355,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1737,
+        "course": "C05",
+        "seq": 355,
+        "acip": "[IV.297-300] GNYIS PA NI, MDO LAS, MTHONG BA DANG , THOS PA DANG , RNAM PAR SHES PA DANG, RTOGS PA BZHI LA, MA MTHONG ZHES SOGS BZHI DANG , MA MTHONG ZHES SOGS BZHI LA, MTHONG ZHES SOGS BZHI STE BYIS PA'I THA SNYAD BRGYAD DANG ,",
+        "wylie": "[iv.297-300] gnyis pa ni, mdo las, mthong ba dang , thos pa dang , rnam par shes pa dang, rtogs pa bzhi la, ma mthong zhes sogs bzhi dang , ma mthong zhes sogs bzhi la, mthong zhes sogs bzhi ste byis pa'i tha snyad brgyad dang",
+        "english": "Now sutra makes mention of the \"eight expressions of a child\" [one who has yet to see selflessness directly], which consist of: 1) four types where you say \"I didn't see it\" and so on about four different kinds of things--things that you really did see, hear, know, or sense; and 2) four types where you say \"I did see it\" and so on about another four kinds of things--things that you really didn't see, hear, know, or sense."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete source ACIP/Wylie/GMR fields and context349–363 read or exactly reused from my personal complete readings. All six physical source extents read and whitespace-collapse identity verified; digital agreement proves the reading, not an independent publication or correction."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 1,
+          "row_ids": [
+            1737
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 1,
+          "row_ids": [
+            1737
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1737
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "All three exact fields and the child-eight phrase match only current355 in the non-C13 queries. The complete local356 contrasts truthful realized-person expressions. Neither establishes an independent corrected witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "0e7bced24593f1980576bad8710e0d1364218b9a:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "Seven complete existing converter, running-head, cap, spill and footnote/folio class records are byte-identical to my prior full reading. The complete register identity is unchanged at202 entries; no current-segment match or newly filed class."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The two sets each contain four statement types, with positive actual experience opposed to a quoted denial, then negative actual experience opposed to a quoted affirmation. Four separate BZHI tokens are present. The bracketed child definition is explanatory English, and GNYIS PA/Now is a translation-scope uncertainty rather than evidence of a typo.",
+      "counterevidence": "Master glossary/curated/auto-aligned tiers remain distinct; notably the mined ZHES gloss is unrelated and not promoted. Same-source repetitions do not establish independent publication accuracy. Context explains compressed wording but cannot manufacture a separate exponent for each source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 228,
+        "wylie": 226,
+        "english": 425
+      },
+      "utf8_bytes": {
+        "acip": 228,
+        "wylie": 226,
+        "english": 425
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical source retains [IV.297-300], numbered English items1/2, quoted assertions and the bracketed child explanation. These are source apparatus and translation formatting. No field reaches1500 characters and both numbered cases are physically complete."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The two sets each contain four statement types, with positive actual experience opposed to a quoted denial, then negative actual experience opposed to a quoted affirmation. Four separate BZHI tokens are present. The bracketed child definition is explanatory English, and GNYIS PA/Now is a translation-scope uncertainty rather than evidence of a typo."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The two sets each contain four statement types, with positive actual experience opposed to a quoted denial, then negative actual experience opposed to a quoted affirmation. Four separate BZHI tokens are present. The bracketed child definition is explanatory English, and GNYIS PA/Now is a translation-scope uncertainty rather than evidence of a typo."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The two sets each contain four statement types, with positive actual experience opposed to a quoted denial, then negative actual experience opposed to a quoted affirmation. Four separate BZHI tokens are present. The bracketed child definition is explanatory English, and GNYIS PA/Now is a translation-scope uncertainty rather than evidence of a typo."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The physical source retains [IV.297-300], numbered English items1/2, quoted assertions and the bracketed child explanation. These are source apparatus and translation formatting. No field reaches1500 characters and both numbered cases are physically complete."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The physical source retains [IV.297-300], numbered English items1/2, quoted assertions and the bracketed child explanation. These are source apparatus and translation formatting. No field reaches1500 characters and both numbered cases are physically complete."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}
