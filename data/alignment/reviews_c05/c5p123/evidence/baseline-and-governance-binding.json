@@ -1,0 +1,140 @@
+{
+  "status": "BOUND_ACTUAL_THROUGH366",
+  "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+  "acceptance_baseline": {
+    "commit": "ddfc2e56beb3245e821c351be7cfe087c782cb78",
+    "course_boundary": 366,
+    "full_links": 47932,
+    "null_exponents": 11991,
+    "evidence_headwords": 7228,
+    "evidence_pairs": 16069,
+    "sha256": {
+      "data/hgm_dictionary_v27_2.json.gz": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "data/full_parallel_corpus_v32.json.gz": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "data/alignment/alignment_full_v1.json": "3bf5e4ad8226051aac855c68d9fe272eea2e53ac02d49e10ed23f15687a7f4e2",
+      "data/alignment/alignment_evidence_v1.json": "72539c87792ad48d3bcb54cff2a3a5d7e02d0cbb4d348da4439d3d4b8bc18771",
+      "docs/geshe_michael_roach_dictionary.html": "4f35caef2529a4636e3d928203c94abe6211e09a0545daed4b18586074ce4dd5",
+      "docs/geshe_michael_roach_dictionary.csv": "8d4c083d246ccecb36b631b177757aad2c02f9bda27409a7be5bb09135c4ab11",
+      "docs/geshe_michael_roach_dictionary_reverse.csv": "491b7affaffbe80aac6ea93ec695271057dcb048c46217eb4c608bdf8fa6b242",
+      "docs/geshe_michael_roach_dictionary_by_course.csv": "613548bcce51fe93a45737afde24be80b946d8f07cf34ebf8482eb3c29218e4b",
+      "docs/geshe_michael_roach_dictionary_changes.csv": "00c3b53fde1cba23482df03452007175f58a712bff1b8859d9683560f71c078b"
+    },
+    "required_reference_paths_readable": 8,
+    "source_snapshot_matches_spine": true,
+    "source_snapshot_fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ]
+  },
+  "governing_delta": {
+    "AGENTS.md": {
+      "source_origin": {
+        "bytes": 11061,
+        "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+      },
+      "actual_baseline": {
+        "bytes": 11061,
+        "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+      },
+      "changed": false
+    },
+    "docs/ALIGNMENT_LAYER_SPEC.md": {
+      "source_origin": {
+        "bytes": 12007,
+        "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+      },
+      "actual_baseline": {
+        "bytes": 12007,
+        "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+      },
+      "changed": false
+    },
+    "docs/alignment_briefs/PROPOSE_BRIEF.md": {
+      "source_origin": {
+        "bytes": 8093,
+        "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+      },
+      "actual_baseline": {
+        "bytes": 8093,
+        "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+      },
+      "changed": false
+    },
+    "data/alignment/C05_CAMPAIGN.md": {
+      "source_origin": {
+        "bytes": 302704,
+        "sha256": "8cbac7c898ba4589ca3d9e9a230035cf03262d97ffd3a0f8446f696ccce8a7f1"
+      },
+      "actual_baseline": {
+        "bytes": 308509,
+        "sha256": "65cf49dfc89dcb49b2eb4ce41ca1683b95bd663e54d9b0d9decc3562d57d15ba"
+      },
+      "changed": true
+    },
+    "tools/gen_alignment_page.py": {
+      "source_origin": {
+        "bytes": 21175,
+        "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+      },
+      "actual_baseline": {
+        "bytes": 21175,
+        "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+      },
+      "changed": false
+    },
+    "tools/build_alignment_layer.py": {
+      "source_origin": {
+        "bytes": 40472,
+        "sha256": "8894f4b363b4d919c9ddc553e67d5dc2a55522a16cab42e0271078c5dba07906"
+      },
+      "actual_baseline": {
+        "bytes": 40503,
+        "sha256": "cfcbd603772cca4719606f419b7e5a3cc1a9d718ec2d468819aaaa065c228d00"
+      },
+      "changed": true
+    },
+    "docs/errata_register.json": {
+      "source_origin": {
+        "bytes": 284047,
+        "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+      },
+      "actual_baseline": {
+        "bytes": 284047,
+        "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+      },
+      "changed": false
+    },
+    "data/alignment/span_head_allow.json": {
+      "source_origin": {
+        "bytes": 14558,
+        "sha256": "38d9750d98bc3bc8add12b188675abec31502fd7b498572e5450ac8c050a94e9"
+      },
+      "actual_baseline": {
+        "bytes": 14558,
+        "sha256": "38d9750d98bc3bc8add12b188675abec31502fd7b498572e5450ac8c050a94e9"
+      },
+      "changed": false
+    },
+    "docs/alignment_briefs/RECONCILE_BRIEF.md": {
+      "source_origin": {
+        "bytes": 9261,
+        "sha256": "cde68b89f533d219aa829e3a86f8e662079696608619588d19e4fc4a35697a2d"
+      },
+      "actual_baseline": {
+        "bytes": 9261,
+        "sha256": "cde68b89f533d219aa829e3a86f8e662079696608619588d19e4fc4a35697a2d"
+      },
+      "changed": false
+    }
+  },
+  "diff": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/semantic-review/evidence/origin-to-through366-governance.diff.txt",
+    "bytes": 8715,
+    "sha256": "ff44385660bf6c68d9fbfdf61480a7424805b607a3c441e645f139800001082d"
+  },
+  "scope": "Read complete actual K ledger addition and page122 registration delta; semantic rules, generator, register204 and allowance unchanged. Original pending statements remain historical. Initial read-only diff selected two incorrect docs paths and was empty; retained as initial-incomplete-path-governance-empty.diff.txt. Corrected actual paths from immutable origin receipt; no source/native rerun."
+}

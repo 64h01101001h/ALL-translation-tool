@@ -1,0 +1,224 @@
+{
+  "schema": "c05-independent-pre-reconciliation-assessment-v1",
+  "status": "PRECOMMITTED_BEFORE_ROOT_CHOICES_AND_CHANGED_GENERATION",
+  "utc": "2026-09-15T09:08:39.595736+00:00",
+  "reviewer": "c05_325_327_skeptic",
+  "source_first_notes": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/semantic-review/independent-source-first-notes.json",
+    "bytes": 17381,
+    "sha256": "6a5f7c9f51e3d50b1472acf9170ac9a057b06085e24fd1c15397b9ec21228014"
+  },
+  "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+  "source_origin_through": 363,
+  "acceptance_baseline": {
+    "commit": "ddfc2e56beb3245e821c351be7cfe087c782cb78",
+    "course_boundary": 366,
+    "full_links": 47932,
+    "null_exponents": 11991,
+    "evidence_headwords": 7228,
+    "evidence_pairs": 16069,
+    "sha256": {
+      "data/hgm_dictionary_v27_2.json.gz": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253",
+      "data/full_parallel_corpus_v32.json.gz": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8",
+      "data/alignment/alignment_full_v1.json": "3bf5e4ad8226051aac855c68d9fe272eea2e53ac02d49e10ed23f15687a7f4e2",
+      "data/alignment/alignment_evidence_v1.json": "72539c87792ad48d3bcb54cff2a3a5d7e02d0cbb4d348da4439d3d4b8bc18771",
+      "docs/geshe_michael_roach_dictionary.html": "4f35caef2529a4636e3d928203c94abe6211e09a0545daed4b18586074ce4dd5",
+      "docs/geshe_michael_roach_dictionary.csv": "8d4c083d246ccecb36b631b177757aad2c02f9bda27409a7be5bb09135c4ab11",
+      "docs/geshe_michael_roach_dictionary_reverse.csv": "491b7affaffbe80aac6ea93ec695271057dcb048c46217eb4c608bdf8fa6b242",
+      "docs/geshe_michael_roach_dictionary_by_course.csv": "613548bcce51fe93a45737afde24be80b946d8f07cf34ebf8482eb3c29218e4b",
+      "docs/geshe_michael_roach_dictionary_changes.csv": "00c3b53fde1cba23482df03452007175f58a712bff1b8859d9683560f71c078b"
+    },
+    "required_reference_paths_readable": 8,
+    "source_snapshot_matches_spine": true,
+    "source_snapshot_fields": [
+      "id",
+      "course",
+      "seq",
+      "acip",
+      "wylie",
+      "english"
+    ]
+  },
+  "acceptance_baseline_pin": {
+    "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/baseline.json",
+    "bytes": 1456,
+    "sha256": "4b2204e06e7e2f2ebbbb3381fd971683e151e557c7898cb213fca2669f666d0c"
+  },
+  "acceptance_baseline_limit": "Actual captured through366 DOCS/HEAD ddfc2e56...; its DATA commit ffbce5b... is separately labeled. Original then-pending statements retained as history.",
+  "original_freezes": {
+    "tibetan": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/tibetan/freeze.json",
+      "bytes": 22721,
+      "sha256": "fb4d9bcd97324bdf349f73152f40b6ce8ca97137bbb5b0a562437c1ecf0b572b"
+    },
+    "english": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/english/freeze.json",
+      "bytes": 22545,
+      "sha256": "f1c1b48f8863f2c4efe14d23d124ee7e7b24d8b5624dc0cb62987b6ec54c5525"
+    }
+  },
+  "reading_completed": {
+    "status": "COMPLETE_SUBSTANTIVE_ORIGINAL_READING",
+    "utc": "2026-09-15T09:06:37.282098+00:00",
+    "original_span_rows": 175,
+    "original_omission_rows": 19,
+    "notes": 6,
+    "reports": 6,
+    "category_screens": 30,
+    "english_five_ground_objects": 15,
+    "tibetan_unique_five_ground_objects": 37,
+    "master_objects": 179,
+    "own_exact_prior_master_reuse": 86,
+    "master_full_reads_here": 93,
+    "complete_corpus_wrappers_read": 9,
+    "full_source_rows": 3,
+    "context_rows": 15,
+    "context_own_exact_prior_reuse": 12,
+    "context_new_full_readings": 3,
+    "physical_extents": 6,
+    "complete_material_register_records": [
+      "E-025",
+      "E-028",
+      "E-029",
+      "E-045",
+      "E-089",
+      "E-142",
+      "E-143"
+    ],
+    "original_files_verified": 272,
+    "original_source_questions": 0,
+    "root_choices_read": false,
+    "new_source_queries": 0,
+    "new_generator_or_resolver_runs": 0,
+    "full_native_and_original_source_identity_receipt": "pending bounded existing-method capture, no engine reruns"
+  },
+  "recommended_selection": {
+    "basis": "English base, replace367w6 with Tibetan367f1; omit369p24, replace369f27 with Tibetan369p2/w23; add Tibetan369w24 and adapted369w11 at d6. All exact tuple/range choices are in preliminary-selected-originals.json; changed IDs merely prevent collisions.",
+    "per_segment": {
+      "367": 25,
+      "368": 28,
+      "369": 35
+    },
+    "spans": 88,
+    "nonnull_d5": 61,
+    "d7": 1,
+    "nulls": 2,
+    "errata": 0,
+    "exact_selection": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-367-369/semantic-review/preliminary-selected-originals.json",
+      "bytes": 30809,
+      "sha256": "49ae2fb0747597b398162cbcb5e081764536679a89a8da7e2f71b0adea0a17b9"
+    }
+  },
+  "recommendations": [
+    {
+      "id": "L01",
+      "seq": 367,
+      "recommendation": "Use Tibetan f1 DANG LDAN PA/with at d3 in place of English w6 d5.",
+      "independent_reason": "DANG plus the possessive participle expresses the full endowed-with relation. With realizes this compositional construction; source PA remains inside. Treat the construction as a phrase rather than minting a lexical noun/compound solely from its glossary inclusion.",
+      "counterevidence_and_limit": "Complete unified8120/glossary3165 literally list with and support the semantic relation; this is a depth judgment, not a claim that the gloss is missing. LDAN PA by itself also lists with, so no invented split member is required."
+    },
+    {
+      "id": "L02",
+      "seq": 367,
+      "recommendation": "Retain English p14 YOD/there is and p17 MED PA/not at d6.",
+      "independent_reason": "These are the affirmative and negative existential predicates in the undertaking/completion contrast. Their copular function favors d6 over the Tibetan d5 alternatives. The second negative keeps its full PA and shared wrong-deed ellipsis.",
+      "counterevidence_and_limit": "There is no extra source SDIG PA for English one; neither that anaphor nor supplied of belongs inside the predicate. Both complete lexical records support the readings."
+    },
+    {
+      "id": "L03",
+      "seq": 367,
+      "recommendation": "Retain English p18 LA/to plus w19 DGONGS/referring; omit NAS.",
+      "independent_reason": "The referential object relation is locally to and the attested DGONGS verb is referring. These two tight exponents are separable in this clause. NAS relates the explanation to the citation and has no isolated English word selected.",
+      "counterevidence_and_limit": "The Tibetan whole DGONGS NAS/referring phrase is plausible contextual reference syntax. Exact DGONGS NAS lacks HGM while base DGONGS and glossary970 explicitly have referring to; prefer the tighter secure pieces without claiming the full phrase is nonsense."
+    },
+    {
+      "id": "L04",
+      "seq": 367,
+      "recommendation": "Keep the complete title with only SA/Levels d7, and terminal SO affirmative null.",
+      "independent_reason": "SA is a full source member and Levels a complete English word unique inside the attested title. RNAL BYOR SPYOD PA is a larger conventional title constituent; local ownership of Practitioners by a shorter member is uncertain. Complete SO closes the final English period.",
+      "counterevidence_and_limit": "RNAL BYOR literally lists practitioners, but the whole RNAL BYOR SPYOD PA record is yogic practice/Yogacara with no such HGM; do not treat unassigned title material as proof of absence. SO null is punctuation fusion, not uncertainty."
+    },
+    {
+      "id": "L05",
+      "seq": 368,
+      "recommendation": "Use English f11/f13/f14 whole negative phrases at d3, not six Tibetan d5 noun/copula atoms.",
+      "independent_reason": "The second-case complement and third-case object/complement are three different negative nominal or predicative constructions. Whole English something/other-than phrases express their respective composed sense. MIN PAR and MIN PA stay intact with the correct SEMS CAN occurrence.",
+      "counterevidence_and_limit": "MIN PA has negative-copula evidence; exact MIN PAR has LC vinā and no HGM. Other than is contextual negated-category syntax, not a new literal HGM other head. Phrase depth is warranted even though a narrower negative predicate is linguistically conceivable."
+    },
+    {
+      "id": "L06",
+      "seq": 368,
+      "recommendation": "Keep English p7 LTA BU/say at d6, and all repeated positive nouns/verbs at their exact ranges.",
+      "independent_reason": "Say is the introductory example gesture, not a speaking verb. First and fourth positive predicative DU own their separate as being/as; four conceive verbs and six source SEMS CAN occurrences belong to their own cases.",
+      "counterevidence_and_limit": "Second-case English living-object repetition and fourth-case this same thing resume prior source objects. Do not duplicate a source noun or assign the final positive living-being predicate to the nonliving anaphor."
+    },
+    {
+      "id": "L07",
+      "seq": 368,
+      "recommendation": "Keep complete MA KHRUL BA/unmistaken and final KHRUL BA'O/mistaken, plus the exact first/third and second/fourth evaluation.",
+      "independent_reason": "The two accuracy properties have distinct polarity. Preserve the final bound ending within the complete source form and do not mine mistaken inside unhyphenated unmistaken. The repeated recap BZHI remains unbanked.",
+      "counterevidence_and_limit": "BZHI PA fourth is supported by ordinal syntax and reference fourth/four; unified16525 auto-mines third and fourth and is not a literal glossary fourth. Neither dictionary inclusion nor the recap permits duplicate numeral ownership."
+    },
+    {
+      "id": "L08",
+      "seq": 369,
+      "recommendation": "Retain English tight SNYAM/think and SNYAM PA/think, first DGOS/must, and SBYOR BA/undertake.",
+      "independent_reason": "The thought verbs and necessity verb own the tight content words. Reflexive to yourself and auxiliary be are explanatory English support. SBYOR BA directly supplies undertake; BRTSAMS PA beginning is incorporated without a separately printed start. Prefer this tight attested verb over the broader undertake the deed construction.",
+      "counterevidence_and_limit": "Think to yourself and must be are real full glossary alternatives, not invented translations. BRTSAMS PA also literally lists deed in HTG2016: Tibetan f2's claim that this equivalent is mined needs correction. Local beginning-verb syntax, not lack of glossary evidence, warrants leaving deed unbanked."
+    },
+    {
+      "id": "L09",
+      "seq": 369,
+      "recommendation": "Retain local LHAS BYIN/John and MCHOD SBYIN/Joe once each; preserve all three kill occurrences.",
+      "independent_reason": "The intended John and misidentified Joe have unambiguous narrative roles; Tibetan names each occur once, while English repeats them. First BSAD is contemplated killing, second BSAD actual mistaken killing, final GSOD general intention.",
+      "counterevidence_and_limit": "LHAS BYIN glossary Devadatta and MCHOD SBYIN mined John do not override the exact local substitution. Earlier C05:350/C16:871 corroborate the roles; TCS02:72 English commentary has Devadatta/Yajana but is not a complete Tibetan prose parallel or independent correction authority."
+    },
+    {
+      "id": "L10",
+      "seq": 369,
+      "recommendation": "Add complete MED PAS/there is no at d6; keep SDIG unbanked.",
+      "independent_reason": "The overt negative-existence predicate supplies there is no in the actual-stage denial, even though the source wrong-deed qualifier is recast. Preserve causal PAS as a whole form, without isolating -s or extending to the separate inference so we can see.",
+      "counterevidence_and_limit": "English omission appropriately flags the SDIG/stage recasting; that uncertainty does not erase the clear negative predicate. Tibetan w11 supports the correspondence but d6 is appropriate for the copular predicate rather than d5. No absence null or new factual erratum follows."
+    },
+    {
+      "id": "L11",
+      "seq": 369,
+      "recommendation": "Omit English p24 NA/If as uncertain local ownership.",
+      "independent_reason": "The general-motivation condition contains one source NA after YOD but two English if positions: outer If on the other hand and inner if you think. The source condition is distributed over the expanded formulation, so an exclusive outer-If atom is not established.",
+      "counterevidence_and_limit": "NA is genuinely conditional and the broad clause is clear. This is uncertainty between duplicate English exponents, not an absent particle and not an English duplication error."
+    },
+    {
+      "id": "L12",
+      "seq": 369,
+      "recommendation": "Prefer Tibetan MI/not d6 plus DGOS/need d5 over English f27 whole MI DGOS/need not d3.",
+      "independent_reason": "Both full source words have overt, separate English words and a clear local relation: MI negates need, not the internal MA of unmistaken. The flat form preserves both negative scopes without adding the supplied be complete.",
+      "counterevidence_and_limit": "The whole MI DGOS/need not construction is directly supported and remains a defensible alternative; the flat division is preferable here because both exact exponents are secure. No invented dictionary unit or subword splitting is involved."
+    },
+    {
+      "id": "L13",
+      "seq": 369,
+      "recommendation": "Add Tibetan TSHUL/point d5, retain full English SHES PAR BYA'O/should understand d3, and omit CI RIGS PAR.",
+      "independent_reason": "Point refers to the manner/principle just described and is a defensible contextual nominal correspondence. The final knowing obligation retains its bound ending. CI RIGS PAR concerns suitable applicability and cannot own complete from the previous sentence.",
+      "counterevidence_and_limit": "TSHUL has method/way/principle reference material, not literal HGM point. CI RIGS PAR's complete you should understand is auto-mined across the sentence boundary. The full obligatory knowing construction prevents assigning a supplied You to a source word."
+    },
+    {
+      "id": "L14",
+      "seq": 369,
+      "recommendation": "Retain English terminal SO punctuation-fusion null and exact actual- commission; file no new erratum.",
+      "independent_reason": "SO closes the general-motivation sentence at the period following complete; it does not supply complete. The physical actual- CRLF commission collapses to the stored spaced hyphen. Existing E-025/E-028/E-029/E-045 describe this source pattern; E-089 forbids silently repairing it in a quoted span.",
+      "counterevidence_and_limit": "The current369 row is not itself registered and no independently corrected edition was found. This is a documented instance of the known mechanical pattern, not additional confirmed correction authority. Preserve the source and both original screens."
+    }
+  ],
+  "findings": [
+    {
+      "id": "L-BRTSAMS-GLOSSARY-PROVENANCE",
+      "status": "NEEDS_CORRECTION",
+      "location": "tibetan/369/original-decisions.json:f2.rationale",
+      "found": "splitting it as an independent deed solely from a mined equivalent",
+      "correct_basis": "Complete unified_entries:15161 and glossary_entries:5953 list deed with glossary/HTG2016 provenance. A rejection can rely on contextual beginning-verb syntax and tighter SBYOR BA/undertake, not on a false mined classification.",
+      "required_action": "Preserve the original text; correct adopted rationale/report if this evidence claim is carried into reconciliation. No source/spec-native change required solely for this prose correction."
+    }
+  ],
+  "scope_limits": "Provisional source correspondence only. No final reconciliation read or preapproved; actual immutable final review remains required. No source/master/W/hgm_gloss edits or native/query reruns. Existing original successful captures will be verified, not re-executed."
+}

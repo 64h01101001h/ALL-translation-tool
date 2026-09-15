@@ -1,0 +1,162 @@
+{
+  "seq": 368,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1750,
+        "course": "C05",
+        "seq": 368,
+        "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+        "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+        "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1750,
+            6903
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1750,
+            6903
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1750,
+            6903
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:885 repeats all three complete fields. Preceding366 places conception within the thinking component; following369 explains why unmistaken conception is required for a specific intended target. The four cases are positive/negative object recognition crossed with positive/negative conception. No same-corpus duplicate establishes an independent edition."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-hyphen-screen.json"
+      ],
+      "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "Four distinct conception verbs and their positive/negative object predicates are kept separate. MIN PA means is not and the complete MIN PAR scaffold has no HGM gloss; the composed negative noun/predicate phrases therefore stay whole at d3, with explicit compositional rationale rather than invented glossary attestation. MA KHRUL BA directly supports unmistaken; final KHRUL BA'O retains its bound ending. The recap four and repeated English object/this-same-thing wording remain unbanked.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 309,
+        "wylie": 307,
+        "english": 480
+      },
+      "utf8_bytes": {
+        "acip": 309,
+        "wylie": 307,
+        "english": 480
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "Both full extents preserve four conception cases and the complete concluding classification. All fields are below1500 characters. Semicolons separate cases and the final adjective includes its bound Tibetan sentence ending. The repeated Tibetan four and English anaphoric repetitions are discourse compression, not proof of a lost line or field cap."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The repeated SEMS CAN, MIN PA/PAR and conception forms are complete and agree with physical/C16 text. Inflected PAR and final BA'O are preserved, without proposing normalization.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The lengthy four-case enumeration is complete and grammatical. Repeated living being words are required by the contrasting cases; no duplicate word is diagnosed as a typo.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The first and third cases preserve the object's positive/negative status and the second/fourth reverse it, matching the stated unmistaken/mistaken classification. Repeated objects and the recap numeral constrain alignment rather than establishing a false proposition.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Both physical extents include all four cases and both concluding pairs. No truncation, spill or source-specific missing text is demonstrated.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Semicolons and the explicit final list and are retained exactly. No artificial verse structure or independent null for omitted list markers is imposed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,2798 @@
+{
+  "seq": 367,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 367,
+        "kind": "TIBETAN_SPELLING",
+        "found": "srog gcod",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "srog gcod",
+            "source_row": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [
+                6
+              ],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 367,
+                "field": "acip",
+                "start": 248987,
+                "bytes": 229,
+                "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 367,
+                "field": "english",
+                "start": 249218,
+                "bytes": 278,
+                "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The killing technical term, independent SROG/life and SROG CHAGS/living being have distinct source occurrences. Exact physical ACIP and C16:884 text agree. The full title has literal standalone glossary support despite its alternate unified-key grouping; neither sparse compound members nor missing DGONGS NAS HGM establishes a spelling error.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The killing technical term, independent SROG/life and SROG CHAGS/living being have distinct source occurrences. Exact physical ACIP and C16:884 text agree. The full title has literal standalone glossary support despite its alternate unified-key grouping; neither sparse compound members nor missing DGONGS NAS HGM establishes a spelling error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 367,
+        "kind": "ENGLISH_TYPO",
+        "found": "another living being",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "another living being",
+            "source_row": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                108
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 367,
+                "field": "acip",
+                "start": 248987,
+                "bytes": 229,
+                "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 367,
+                "field": "english",
+                "start": 249218,
+                "bytes": 278,
+                "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The quotation and explanation are complete in physical English/C16:884. Another names a being other than the actor, while the explanation discusses self-killing; no pronoun or quotation typo is established.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The quotation and explanation are complete in physical English/C16:884. Another names a being other than the actor, while the explanation discusses self-killing; no pronoun or quotation typo is established.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 367,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "there is a wrong deed of undertaking, but not one of completion",
+        "decision": "NO_NEW_ERRATUM_SPARSE_SCOPE",
+        "five_grounds": {
+          "a_quote": {
+            "found": "there is a wrong deed of undertaking, but not one of completion",
+            "source_row": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                211
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 367,
+                "field": "acip",
+                "start": 248987,
+                "bytes": 229,
+                "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 367,
+                "field": "english",
+                "start": 249218,
+                "bytes": 278,
+                "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The source asserts undertaking wrong but excludes completion for killing oneself. English one resumes wrong deed, and the citation interpretation is fronted. These are distributed/elliptic correspondences, not proof of missing teaching or grounds to reuse wrong deed on another source token.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The source asserts undertaking wrong but excludes completion for killing oneself. English one resumes wrong deed, and the citation interpretation is fronted. These are distributed/elliptic correspondences, not proof of missing teaching or grounds to reuse wrong deed on another source token.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 367,
+        "kind": "INGEST_ARTEFACT",
+        "found": "of completion.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "of completion.",
+            "source_row": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                261
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 367,
+                "field": "acip",
+                "start": 248987,
+                "bytes": 229,
+                "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 367,
+                "field": "english",
+                "start": 249218,
+                "bytes": 278,
+                "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The two physical extents contain the complete Tibetan statement and English interpretation, below the field cap. C16:884 repeats the text. No appended heading or missing completion predicate is shown.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The two physical extents contain the complete Tibetan statement and English interpretation, below the field cap. C16:884 repeats the text. No appended heading or missing completion predicate is shown.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 367,
+        "kind": "FORMATTING",
+        "found": "\"another living being,\"",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "\"another living being,\"",
+            "source_row": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                107
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 367,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 367,
+                "field": "acip",
+                "start": 248987,
+                "bytes": 229,
+                "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 367,
+                "field": "english",
+                "start": 249218,
+                "bytes": 278,
+                "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "Quoted wording, comma placement and final period are preserved byte-for-byte after the documented line collapse. Only complete terminal SO is proposed as affirmative punctuation fusion; uncertain topic/citation support is not falsely nulled.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Quoted wording, comma placement and final period are preserved byte-for-byte after the documented line collapse. Only complete terminal SO is proposed as affirmative punctuation fusion; uncertain topic/citation support is not falsely nulled.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Complete ACIP/Wylie and physical/C16 wording agree. The full title and reflexive construction have lexical support; no source-specific malformed Tibetan form is established.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Complete ACIP/Wylie and physical/C16 wording agree. The full title and reflexive construction have lexical support; no source-specific malformed Tibetan form is established.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The quoted book wording and undertaking/completion contrast are grammatical and physically present. No mistyped token or independent corrected wording was found.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The quoted book wording and undertaking/completion contrast are grammatical and physically present. No mistyped token or independent corrected wording was found.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The contrast distinguishes undertaking from completion when the agent kills himself. The English explanatory restriction is supported by the source reference construction; its expanded framing is omitted from narrow spans without asserting a translation error.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The contrast distinguishes undertaking from completion when the agent kills himself. The English explanatory restriction is supported by the source reference construction; its expanded framing is omitted from narrow spans without asserting a translation error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The complete physical paragraph and all three C16 text fields agree. No cap, spill, running head or lost clause is demonstrated.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The complete physical paragraph and all three C16 text fields agree. No cap, spill, running head or lost clause is demonstrated.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The colon, quotation marks, comma and final period are preserved. The SO null is alignment punctuation fusion only, not a source-format correction.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The colon, quotation marks, comma and final period are preserved. The SO null is alignment punctuation fusion only, not a source-format correction.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 367,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 367,
+          "kind": "TIBETAN_SPELLING",
+          "found": "srog gcod",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "srog gcod",
+              "source_row": {
+                "id": 1749,
+                "course": "C05",
+                "seq": 367,
+                "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+                "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [
+                  6
+                ],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 227,
+                "wylie": 225,
+                "english": 275
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 367,
+                  "field": "acip",
+                  "start": 248987,
+                  "bytes": 229,
+                  "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                  "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 367,
+                  "field": "english",
+                  "start": 249218,
+                  "bytes": 278,
+                  "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                  "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The killing technical term, independent SROG/life and SROG CHAGS/living being have distinct source occurrences. Exact physical ACIP and C16:884 text agree. The full title has literal standalone glossary support despite its alternate unified-key grouping; neither sparse compound members nor missing DGONGS NAS HGM establishes a spelling error.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 367,
+          "kind": "ENGLISH_TYPO",
+          "found": "another living being",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "another living being",
+              "source_row": {
+                "id": 1749,
+                "course": "C05",
+                "seq": 367,
+                "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+                "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  108
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 227,
+                "wylie": 225,
+                "english": 275
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 367,
+                  "field": "acip",
+                  "start": 248987,
+                  "bytes": 229,
+                  "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                  "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 367,
+                  "field": "english",
+                  "start": 249218,
+                  "bytes": 278,
+                  "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                  "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The quotation and explanation are complete in physical English/C16:884. Another names a being other than the actor, while the explanation discusses self-killing; no pronoun or quotation typo is established.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 367,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "there is a wrong deed of undertaking, but not one of completion",
+          "decision": "NO_NEW_ERRATUM_SPARSE_SCOPE",
+          "five_grounds": {
+            "a_quote": {
+              "found": "there is a wrong deed of undertaking, but not one of completion",
+              "source_row": {
+                "id": 1749,
+                "course": "C05",
+                "seq": 367,
+                "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+                "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  211
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 227,
+                "wylie": 225,
+                "english": 275
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 367,
+                  "field": "acip",
+                  "start": 248987,
+                  "bytes": 229,
+                  "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                  "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 367,
+                  "field": "english",
+                  "start": 249218,
+                  "bytes": 278,
+                  "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                  "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The source asserts undertaking wrong but excludes completion for killing oneself. English one resumes wrong deed, and the citation interpretation is fronted. These are distributed/elliptic correspondences, not proof of missing teaching or grounds to reuse wrong deed on another source token.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 367,
+          "kind": "INGEST_ARTEFACT",
+          "found": "of completion.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "of completion.",
+              "source_row": {
+                "id": 1749,
+                "course": "C05",
+                "seq": 367,
+                "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+                "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  261
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 227,
+                "wylie": 225,
+                "english": 275
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 367,
+                  "field": "acip",
+                  "start": 248987,
+                  "bytes": 229,
+                  "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                  "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 367,
+                  "field": "english",
+                  "start": 249218,
+                  "bytes": 278,
+                  "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                  "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The two physical extents contain the complete Tibetan statement and English interpretation, below the field cap. C16:884 repeats the text. No appended heading or missing completion predicate is shown.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 367,
+          "kind": "FORMATTING",
+          "found": "\"another living being,\"",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "\"another living being,\"",
+              "source_row": {
+                "id": 1749,
+                "course": "C05",
+                "seq": 367,
+                "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+                "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  107
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 367,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 227,
+                "wylie": 225,
+                "english": 275
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 367,
+                  "field": "acip",
+                  "start": 248987,
+                  "bytes": 229,
+                  "sha256": "55b60582c28c7eac126741d47e5870893869447a1d33172d7d47707c2b87c85e",
+                  "original_text": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS \r\nRNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 367,
+                  "field": "english",
+                  "start": 249218,
+                  "bytes": 278,
+                  "sha256": "2ad35c17a3107cfdfcb61e27473554374dbafba6b072b556a7aadd1fe7fc2a2b",
+                  "original_text": "Now the object for killing is a sentient being: anything with life. The Levels of\r\nPractitioners does state \"another living being,\" but is only referring to the fact\r\nthat, when the murderer is murdering himself, there is a wrong deed of\r\nundertaking, but not one of completion.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "Quoted wording, comma placement and final period are preserved byte-for-byte after the documented line collapse. Only complete terminal SO is proposed as affirmative punctuation fusion; uncertain topic/citation support is not falsely nulled.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 367,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 367,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1749,
+              "course": "C05",
+              "seq": 367,
+              "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+              "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+              "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:884 repeats all three complete text fields, while id/course/seq differ. The physical C05 paragraph and preceding366 preserve the distinction between undertaking and completion. This is a same-corpus textual parallel, not an independently collated publication or corrected witness."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-hyphen-screen.json"
+            ],
+            "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The object is a sentient being with life. Killing oneself supplies an undertaking wrong deed but lacks completion; the cited another living being explains that condition. The complete title has direct glossary Levels of Practitioners while its unified synonym gives the actual level. Title submembers beyond SA/Levels remain uncertain. DGONGS has literal referring-to evidence; DGONGS NAS alone awaits HGM. Quote framing, restriction and anaphoric grammar remain unbanked.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "utf8_bytes": {
+              "acip": 227,
+              "wylie": 225,
+              "english": 275
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "The complete physical paragraph ends with completion and retains the book quotation. All fields are below1500 characters. Tibetan wraps before the title; the English wraps within prose clauses. The final SO closes the complete statement at the English final period; no metre or missing verse is inferred."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Complete ACIP/Wylie and physical/C16 wording agree. The full title and reflexive construction have lexical support; no source-specific malformed Tibetan form is established.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The quoted book wording and undertaking/completion contrast are grammatical and physically present. No mistyped token or independent corrected wording was found.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The contrast distinguishes undertaking from completion when the agent kills himself. The English explanatory restriction is supported by the source reference construction; its expanded framing is omitted from narrow spans without asserting a translation error.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The complete physical paragraph and all three C16 text fields agree. No cap, spill, running head or lost clause is demonstrated.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The colon, quotation marks, comma and final period are preserved. The SO null is alignment punctuation fusion only, not a source-format correction.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

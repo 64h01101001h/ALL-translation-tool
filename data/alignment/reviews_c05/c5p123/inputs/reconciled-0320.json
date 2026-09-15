@@ -1,0 +1,2798 @@
+{
+  "seq": 369,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 369,
+        "kind": "TIBETAN_SPELLING",
+        "found": "lhas byin",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "lhas byin",
+            "source_row": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [
+                39
+              ],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 369,
+                "field": "acip",
+                "start": 250301,
+                "bytes": 379,
+                "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 369,
+                "field": "english",
+                "start": 250682,
+                "bytes": 643,
+                "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "LHAS BYIN has Devadatta glossary evidence and MCHOD SBYIN Yajñadatta reference evidence; the latter mined John gloss conflicts with the local Joe and is explicitly rejected as a mapping authority. Physical/C16 prose matches; earlier C05:350 LHA SBYIN is a distinct captured spelling, not a license to edit current LHAS.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "LHAS BYIN has Devadatta glossary evidence and MCHOD SBYIN Yajñadatta reference evidence; the latter mined John gloss conflicts with the local Joe and is explicitly rejected as a mapping authority. Physical/C16 prose matches; earlier C05:350 LHA SBYIN is a distinct captured spelling, not a license to edit current LHAS.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 369,
+        "kind": "ENGLISH_TYPO",
+        "found": "actual- commission",
+        "decision": "NO_NEW_ERRATUM_KNOWN_SOURCE_PATTERN",
+        "five_grounds": {
+          "a_quote": {
+            "found": "actual- commission",
+            "source_row": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                230
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 369,
+                "field": "acip",
+                "start": 250301,
+                "bytes": 379,
+                "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 369,
+                "field": "english",
+                "start": 250682,
+                "bytes": 643,
+                "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "Physical English contains actual- followed by CRLF then commission, yielding exactly the current hyphen-space. Earlier350 contains both spaced and closed spellings; TCS02:72 English commentary has closed actual-commission. This supports a probable source linebreak-spacing issue of the already recorded E025/E028/E029/E045 pattern, not a new independent edition correction or exact existing369 entry. Preserve source and quotation; do not file the same broad class again.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Physical English contains actual- followed by CRLF then commission, yielding exactly the current hyphen-space. Earlier350 contains both spaced and closed spellings; TCS02:72 English commentary has closed actual-commission. This supports a probable source linebreak-spacing issue of the already recorded E025/E028/E029/E045 pattern, not a new independent edition correction or exact existing369 entry. Preserve source and quotation; do not file the same broad class again.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 369,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "unmistaken need not be complete",
+        "decision": "NO_NEW_ERRATUM_SPARSE_SCOPE",
+        "five_grounds": {
+          "a_quote": {
+            "found": "unmistaken need not be complete",
+            "source_row": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                530
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 369,
+                "field": "acip",
+                "start": 250301,
+                "bytes": 379,
+                "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 369,
+                "field": "english",
+                "start": 250682,
+                "bytes": 643,
+                "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "Specific-target motivation requires an unmistaken conception; general anyone motivation does not require that detail. MI negates DGOS need, distinct from MA inside unmistaken. Be complete belongs to this recap, not the later CI RIGS PAR despite its misleading mined complete you should understand gloss. English John/Joe are local substitutions, supported by the compared narrative and kept provisional.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Specific-target motivation requires an unmistaken conception; general anyone motivation does not require that detail. MI negates DGOS need, distinct from MA inside unmistaken. Be complete belongs to this recap, not the later CI RIGS PAR despite its misleading mined complete you should understand gloss. English John/Joe are local substitutions, supported by the compared narrative and kept provisional.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 369,
+        "kind": "INGEST_ARTEFACT",
+        "found": "You should understand that this point applies to the other nine as well.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "You should understand that this point applies to the other nine as well.",
+            "source_row": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                563
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 369,
+                "field": "acip",
+                "start": 250301,
+                "bytes": 379,
+                "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 369,
+                "field": "english",
+                "start": 250682,
+                "bytes": 643,
+                "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "Both full physical extents include the general-motivation condition and complete other-nine conclusion; the English field is below the cap. Same C16 prose and related TCS02 English commentary support the full argument, without claiming the latter Tibetan verse is an exact prose witness.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both full physical extents include the general-motivation condition and complete other-nine conclusion; the English field is below the cap. Same C16 prose and related TCS02 English commentary support the full argument, without claiming the latter Tibetan verse is an exact prose witness.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 369,
+        "kind": "FORMATTING",
+        "found": "\"I'll kill anyone I happen to meet,\"",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "\"I'll kill anyone I happen to meet,\"",
+            "source_row": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                445
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 369,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 369,
+                "field": "acip",
+                "start": 250301,
+                "bytes": 379,
+                "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 369,
+                "field": "english",
+                "start": 250682,
+                "bytes": 643,
+                "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "Quoted intentions, apostrophe, comma, hyphen-space and sentence punctuation remain verbatim. The physical hyphen-linebreak is retained, not silently repaired. Terminal SO and bound apostrophe-o are left unbanked where no unique punctuation mapping is selected; no false absence null is inferred.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "CHANGE_ALIGNMENT_SCOPE_NO_ERRATUM",
+      "reason": "Each SO closes its specific completed proposition and has affirmative punctuation fusion, without owning complete. Physical actual- CRLF commission collapses by the established whitespace convention to stored actual- commission. Existing register entries describe this pattern; current369 is not itself a filed defect and no corrected edition is claimed. The selected SO punctuation null and full final bound obligation ending replace the original unbanked terminal scope; original punctuation and source text remain unchanged.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "BRTZAMS converts to attested BRTSAMS PA, and complete thought/necessity expressions agree with the physical source and C16. The two Tibetan names are retained without source correction.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "BRTZAMS converts to attested BRTSAMS PA, and complete thought/necessity expressions agree with the physical source and C16. The two Tibetan names are retained without source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "John/Joe consistently distinguish intended and mistaken victims in this illustrative example. The spaced actual- commission comes from a physical line break in the already registered hyphen family, not a new mistyped-word finding.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "John/Joe consistently distinguish intended and mistaken victims in this illustrative example. The spaced actual- commission comes from a physical line break in the already registered hyphen family, not a new mistyped-word finding.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Illustrative name substitution and the actual-stage recasting have coherent contextual roles. The source wrong-deed and English stage wording differ in explicit scope, so those uncertain components remain unbanked; no independently established factual correction is claimed.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "CHANGE_ALIGNMENT_SCOPE_NO_ERRATUM",
+      "reason": "The negative-existence predicate has a secure local English exponent although SDIG and actual-stage wording are recast. Retain the full causal PAS with its final-s; the later inference so we can see is outside. Keep SDIG unbanked and do not create an absence null or factual correction. The SDIG qualification remains unbanked; MED PAS is now included at d6. This alignment choice establishes no source factual correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+        "reason": "Actual- commission is an observed instance of the E-025/E-045 source hyphen-break family, with exact physical line-break evidence. Preserve it verbatim and do not file another class entry; E-089 distinguishes prohibited silent page repair.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Actual- commission is an observed instance of the E-025/E-045 source hyphen-break family, with exact physical line-break evidence. Preserve it verbatim and do not file another class entry; E-089 distinguishes prohibited silent page repair.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+        "reason": "Physical actual-/commission wrapping collapses into the existing stored spaced compound. Quotes, sentence boundaries and the closing as well remain exact; no formatting repair is applied.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Physical actual-/commission wrapping collapses into the existing stored spaced compound. Quotes, sentence boundaries and the closing as well remain exact; no formatting repair is applied.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 369,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 369,
+          "kind": "TIBETAN_SPELLING",
+          "found": "lhas byin",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "lhas byin",
+              "source_row": {
+                "id": 1751,
+                "course": "C05",
+                "seq": 369,
+                "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+                "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [
+                  39
+                ],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 379,
+                "wylie": 378,
+                "english": 635
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 369,
+                  "field": "acip",
+                  "start": 250301,
+                  "bytes": 379,
+                  "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                  "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 369,
+                  "field": "english",
+                  "start": 250682,
+                  "bytes": 643,
+                  "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                  "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "LHAS BYIN has Devadatta glossary evidence and MCHOD SBYIN Yajñadatta reference evidence; the latter mined John gloss conflicts with the local Joe and is explicitly rejected as a mapping authority. Physical/C16 prose matches; earlier C05:350 LHA SBYIN is a distinct captured spelling, not a license to edit current LHAS.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 369,
+          "kind": "ENGLISH_TYPO",
+          "found": "actual- commission",
+          "decision": "NO_NEW_ERRATUM_KNOWN_SOURCE_PATTERN",
+          "five_grounds": {
+            "a_quote": {
+              "found": "actual- commission",
+              "source_row": {
+                "id": 1751,
+                "course": "C05",
+                "seq": 369,
+                "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+                "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  230
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 379,
+                "wylie": 378,
+                "english": 635
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 369,
+                  "field": "acip",
+                  "start": 250301,
+                  "bytes": 379,
+                  "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                  "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 369,
+                  "field": "english",
+                  "start": 250682,
+                  "bytes": 643,
+                  "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                  "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "Physical English contains actual- followed by CRLF then commission, yielding exactly the current hyphen-space. Earlier350 contains both spaced and closed spellings; TCS02:72 English commentary has closed actual-commission. This supports a probable source linebreak-spacing issue of the already recorded E025/E028/E029/E045 pattern, not a new independent edition correction or exact existing369 entry. Preserve source and quotation; do not file the same broad class again.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 369,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "unmistaken need not be complete",
+          "decision": "NO_NEW_ERRATUM_SPARSE_SCOPE",
+          "five_grounds": {
+            "a_quote": {
+              "found": "unmistaken need not be complete",
+              "source_row": {
+                "id": 1751,
+                "course": "C05",
+                "seq": 369,
+                "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+                "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  530
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 379,
+                "wylie": 378,
+                "english": 635
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 369,
+                  "field": "acip",
+                  "start": 250301,
+                  "bytes": 379,
+                  "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                  "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 369,
+                  "field": "english",
+                  "start": 250682,
+                  "bytes": 643,
+                  "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                  "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "Specific-target motivation requires an unmistaken conception; general anyone motivation does not require that detail. MI negates DGOS need, distinct from MA inside unmistaken. Be complete belongs to this recap, not the later CI RIGS PAR despite its misleading mined complete you should understand gloss. English John/Joe are local substitutions, supported by the compared narrative and kept provisional.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 369,
+          "kind": "INGEST_ARTEFACT",
+          "found": "You should understand that this point applies to the other nine as well.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "You should understand that this point applies to the other nine as well.",
+              "source_row": {
+                "id": 1751,
+                "course": "C05",
+                "seq": 369,
+                "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+                "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  563
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 379,
+                "wylie": 378,
+                "english": 635
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 369,
+                  "field": "acip",
+                  "start": 250301,
+                  "bytes": 379,
+                  "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                  "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 369,
+                  "field": "english",
+                  "start": 250682,
+                  "bytes": 643,
+                  "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                  "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "Both full physical extents include the general-motivation condition and complete other-nine conclusion; the English field is below the cap. Same C16 prose and related TCS02 English commentary support the full argument, without claiming the latter Tibetan verse is an exact prose witness.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 369,
+          "kind": "FORMATTING",
+          "found": "\"I'll kill anyone I happen to meet,\"",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "\"I'll kill anyone I happen to meet,\"",
+              "source_row": {
+                "id": 1751,
+                "course": "C05",
+                "seq": 369,
+                "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+                "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  445
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 369,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 379,
+                "wylie": 378,
+                "english": 635
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 369,
+                  "field": "acip",
+                  "start": 250301,
+                  "bytes": 379,
+                  "sha256": "c55ca6a6ff9464687c649d66cb34494790aa69fe5f0f1b80babc9bfa0ac4061f",
+                  "original_text": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 369,
+                  "field": "english",
+                  "start": 250682,
+                  "bytes": 643,
+                  "sha256": "9d7afbd59cb86e4f1c02872c3b513b52a09c43cfd4d532175b1cc8711bb15878",
+                  "original_text": "This is a particular feature of the motivation. Suppose, for example, that you\r\nthink to yourself, \"I only want to kill John,\" and undertake the deed. Then you\r\nmistake Joe for John, and kill Joe. In this sort of case, there is no \"actual-\r\ncommission\" stage; so we can see that, for this stage, the conception you have\r\nmust be unmistaken. If on the other hand you undertake the deed with some\r\ngeneral kind of motivation, if you think to yourself, \"I'll kill anyone I happen\r\nto meet,\" then this detail of the conception having to be unmistaken need not\r\nbe complete. You should understand that this point applies to the other nine\r\nas well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "Quoted intentions, apostrophe, comma, hyphen-space and sentence punctuation remain verbatim. The physical hyphen-linebreak is retained, not silently repaired. Terminal SO and bound apostrophe-o are left unbanked where no unique punctuation mapping is selected; no false absence null is inferred.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 369,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 369,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1751,
+              "course": "C05",
+              "seq": 369,
+              "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+              "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+              "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:886 repeats all three complete fields, including John/Joe and the spaced actual- commission. Preceding368 supplies the first/third unmistaken versus second/fourth mistaken distinction; following370 states bad thought/motivation and371–372 define undertaking and conclusion. These full records provide context, not a corrected publication."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-hyphen-screen.json"
+            ],
+            "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The stated intended victim LHAS BYIN corresponds locally to John, and MCHOD SBYIN corresponds to mistaken Joe. These are contextual illustrative substitutions: the former glossary says Devadatta and the latter auto-mined John candidate is not adopted. Repeated English names cannot reuse the same source occurrence. The source denies the wrong deed of actual commission, recast in English as no actual-commission stage; this technical compression leaves SDIG/MED PAS unbanked and does not establish a source correction. MI DGOS need not and SHES PAR BYA'O should understand have direct support; CI RIGS PAR mined complete you should understand is rejected.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "utf8_bytes": {
+              "acip": 379,
+              "wylie": 378,
+              "english": 635
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "The physical English prints actual- at one line end and commission at the next. ASCII whitespace collapse produces the exact stored actual- commission, matching the complete glossary string and C16:886. E-025/E-045 describe this existing source-side hyphen-break family; E-089 warns against silent page repair. The whole paragraph ends as well and all fields are below1500 characters. No new class is filed or source text changed."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "BRTZAMS converts to attested BRTSAMS PA, and complete thought/necessity expressions agree with the physical source and C16. The two Tibetan names are retained without source correction.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "John/Joe consistently distinguish intended and mistaken victims in this illustrative example. The spaced actual- commission comes from a physical line break in the already registered hyphen family, not a new mistyped-word finding.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Illustrative name substitution and the actual-stage recasting have coherent contextual roles. The source wrong-deed and English stage wording differ in explicit scope, so those uncertain components remain unbanked; no independently established factual correction is claimed.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+            "reason": "Actual- commission is an observed instance of the E-025/E-045 source hyphen-break family, with exact physical line-break evidence. Preserve it verbatim and do not file another class entry; E-089 distinguishes prohibited silent page repair.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+            "reason": "Physical actual-/commission wrapping collapses into the existing stored spaced compound. Quotes, sentence boundaries and the closing as well remain exact; no formatting repair is applied.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

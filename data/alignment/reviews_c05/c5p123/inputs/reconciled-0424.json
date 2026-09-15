@@ -1,0 +1,9 @@
+{
+  "status": "PRESERVED_PRE_EXECUTION_FAILURE",
+  "tool_chunk": "bc1949",
+  "exit_code": 1,
+  "stderr": "IndentationError: unexpected indent at generated assemble.py line71, if adapt",
+  "cause": "Literal adaptation insertion used three spaces inside the two-space selected-item loop.",
+  "scope": "The in-memory candidate failed compile before its write. Only the empty reconciled/helpers directory was created; no assembler, spec, body, native process or W mutation occurred. The lost in-memory candidate is not represented as an existing preimage.",
+  "correction": "Use two-space block indentation matching the existing loop, inspect compile result before executing."
+}

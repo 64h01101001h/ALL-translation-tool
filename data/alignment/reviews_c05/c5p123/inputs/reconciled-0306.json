@@ -1,0 +1,2798 @@
+{
+  "seq": 368,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 368,
+        "kind": "TIBETAN_SPELLING",
+        "found": "sems can min pa la sems can min par",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "sems can min pa la sems can min par",
+            "source_row": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [
+                130
+              ],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 368,
+                "field": "acip",
+                "start": 249500,
+                "bytes": 309,
+                "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 368,
+                "field": "english",
+                "start": 249811,
+                "bytes": 486,
+                "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The object uses full MIN PA while its conceived-as predicate uses MIN PAR; the earlier negative complement also uses MIN PAR. These inflectional and repeated distinctions are printed in the physical source/C16:885. Missing exact MIN PAR HGM is not a correction warrant.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The object uses full MIN PA while its conceived-as predicate uses MIN PAR; the earlier negative complement also uses MIN PAR. These inflectional and repeated distinctions are printed in the physical source/C16:885. Missing exact MIN PAR HGM is not a correction warrant.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 368,
+        "kind": "ENGLISH_TYPO",
+        "found": "this same thing as a living being",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "this same thing as a living being",
+            "source_row": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                349
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 368,
+                "field": "acip",
+                "start": 249500,
+                "bytes": 309,
+                "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 368,
+                "field": "english",
+                "start": 249811,
+                "bytes": 486,
+                "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "This same thing resumes the preceding nonliving object, while the final source SEMS CAN is the positive living complement. The exact full physical/C16 English agrees. Do not change the anaphor or assign that positive source noun to this same thing.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "This same thing resumes the preceding nonliving object, while the final source SEMS CAN is the positive living complement. The exact full physical/C16 English agrees. Do not change the anaphor or assign that positive source noun to this same thing.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 368,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "The first and third types of conception here are unmistaken; the second and fourth are mistaken.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "The first and third types of conception here are unmistaken; the second and fourth are mistaken.",
+            "source_row": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                384
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 368,
+                "field": "acip",
+                "start": 249500,
+                "bytes": 309,
+                "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 368,
+                "field": "english",
+                "start": 249811,
+                "bytes": 486,
+                "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The four cases comprise living-as-living, living-as-other, other-as-other and other-as-living. The source first/third and second/fourth evaluation matches the English. Negative-copula other-than correspondences are contextual grammar and stay with their proper object/complement; the whole MA KHRUL BA adjective keeps its negative scope.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The four cases comprise living-as-living, living-as-other, other-as-other and other-as-living. The source first/third and second/fourth evaluation matches the English. Negative-copula other-than correspondences are contextual grammar and stay with their proper object/complement; the whole MA KHRUL BA adjective keeps its negative scope.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 368,
+        "kind": "INGEST_ARTEFACT",
+        "found": "The part of the thinking has three components of its own.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "The part of the thinking has three components of its own.",
+            "source_row": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 368,
+                "field": "acip",
+                "start": 249500,
+                "bytes": 309,
+                "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 368,
+                "field": "english",
+                "start": 249811,
+                "bytes": 486,
+                "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The three-component introduction and complete four-case evaluation are present in both physical extents and C16:885, below the cap. Repeated source BZHI and explicit English object restatements reflect exposition, not demonstrated ingest loss.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The three-component introduction and complete four-case evaluation are present in both physical extents and C16:885, below the cap. Repeated source BZHI and explicit English object restatements reflect exposition, not demonstrated ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 368,
+        "kind": "FORMATTING",
+        "found": "unmistaken;",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "unmistaken;",
+            "source_row": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                433
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 368,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "de la srog gcod kyi gzhi"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1749,
+                  6902
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "bsam pa la gsum las, 'du shes"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lhas byin kho na bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin du nor nas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual- commission"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "actual-commission"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1732,
+                  6889,
+                  9346
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "'du shes ma 'khrul ba"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1751,
+                  6904
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:367",
+              "c05:368",
+              "c05:369",
+              "actual- commission",
+              "actual-commission",
+              "lhas byin",
+              "mchod sbyin",
+              "hyphen"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+            "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 368,
+                "field": "acip",
+                "start": 249500,
+                "bytes": 309,
+                "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 368,
+                "field": "english",
+                "start": 249811,
+                "bytes": 486,
+                "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 88,
+            "material_master_objects": 160,
+            "personally_read_reused_objects": 89,
+            "complete_new_master_objects_read": 71,
+            "new_corpus_queries": 8,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 9
+          },
+          "d_defensibility": {
+            "judgment": "The semicolons separate the four descriptions and later the two accuracy groups. Retain the punctuation and unhyphenated whole adjective. The permitted negative-affix convention is not needed; no positive interior mistaken subword or fifth exception is proposed.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The semicolons separate the four descriptions and later the two accuracy groups. Retain the punctuation and unhyphenated whole adjective. The permitted negative-affix convention is not needed; no positive interior mistaken subword or fifth exception is proposed.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The repeated SEMS CAN, MIN PA/PAR and conception forms are complete and agree with physical/C16 text. Inflected PAR and final BA'O are preserved, without proposing normalization.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The repeated SEMS CAN, MIN PA/PAR and conception forms are complete and agree with physical/C16 text. Inflected PAR and final BA'O are preserved, without proposing normalization.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The lengthy four-case enumeration is complete and grammatical. Repeated living being words are required by the contrasting cases; no duplicate word is diagnosed as a typo.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The lengthy four-case enumeration is complete and grammatical. Repeated living being words are required by the contrasting cases; no duplicate word is diagnosed as a typo.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The first and third cases preserve the object's positive/negative status and the second/fourth reverse it, matching the stated unmistaken/mistaken classification. Repeated objects and the recap numeral constrain alignment rather than establishing a false proposition.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The first and third cases preserve the object's positive/negative status and the second/fourth reverse it, matching the stated unmistaken/mistaken classification. Repeated objects and the recap numeral constrain alignment rather than establishing a false proposition.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Both physical extents include all four cases and both concluding pairs. No truncation, spill or source-specific missing text is demonstrated.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both physical extents include all four cases and both concluding pairs. No truncation, spill or source-specific missing text is demonstrated.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Semicolons and the explicit final list and are retained exactly. No artificial verse structure or independent null for omitted list markers is imposed.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Semicolons and the explicit final list and are retained exactly. No artificial verse structure or independent null for omitted list markers is imposed.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 368,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 368,
+          "kind": "TIBETAN_SPELLING",
+          "found": "sems can min pa la sems can min par",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "sems can min pa la sems can min par",
+              "source_row": {
+                "id": 1750,
+                "course": "C05",
+                "seq": 368,
+                "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+                "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [
+                  130
+                ],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 309,
+                "wylie": 307,
+                "english": 480
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 368,
+                  "field": "acip",
+                  "start": 249500,
+                  "bytes": 309,
+                  "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                  "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 368,
+                  "field": "english",
+                  "start": 249811,
+                  "bytes": 486,
+                  "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                  "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The object uses full MIN PA while its conceived-as predicate uses MIN PAR; the earlier negative complement also uses MIN PAR. These inflectional and repeated distinctions are printed in the physical source/C16:885. Missing exact MIN PAR HGM is not a correction warrant.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 368,
+          "kind": "ENGLISH_TYPO",
+          "found": "this same thing as a living being",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "this same thing as a living being",
+              "source_row": {
+                "id": 1750,
+                "course": "C05",
+                "seq": 368,
+                "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+                "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  349
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 309,
+                "wylie": 307,
+                "english": 480
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 368,
+                  "field": "acip",
+                  "start": 249500,
+                  "bytes": 309,
+                  "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                  "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 368,
+                  "field": "english",
+                  "start": 249811,
+                  "bytes": 486,
+                  "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                  "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "This same thing resumes the preceding nonliving object, while the final source SEMS CAN is the positive living complement. The exact full physical/C16 English agrees. Do not change the anaphor or assign that positive source noun to this same thing.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 368,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "The first and third types of conception here are unmistaken; the second and fourth are mistaken.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "The first and third types of conception here are unmistaken; the second and fourth are mistaken.",
+              "source_row": {
+                "id": 1750,
+                "course": "C05",
+                "seq": 368,
+                "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+                "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  384
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 309,
+                "wylie": 307,
+                "english": 480
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 368,
+                  "field": "acip",
+                  "start": 249500,
+                  "bytes": 309,
+                  "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                  "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 368,
+                  "field": "english",
+                  "start": 249811,
+                  "bytes": 486,
+                  "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                  "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The four cases comprise living-as-living, living-as-other, other-as-other and other-as-living. The source first/third and second/fourth evaluation matches the English. Negative-copula other-than correspondences are contextual grammar and stay with their proper object/complement; the whole MA KHRUL BA adjective keeps its negative scope.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 368,
+          "kind": "INGEST_ARTEFACT",
+          "found": "The part of the thinking has three components of its own.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "The part of the thinking has three components of its own.",
+              "source_row": {
+                "id": 1750,
+                "course": "C05",
+                "seq": 368,
+                "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+                "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 309,
+                "wylie": 307,
+                "english": 480
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 368,
+                  "field": "acip",
+                  "start": 249500,
+                  "bytes": 309,
+                  "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                  "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 368,
+                  "field": "english",
+                  "start": 249811,
+                  "bytes": 486,
+                  "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                  "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The three-component introduction and complete four-case evaluation are present in both physical extents and C16:885, below the cap. Repeated source BZHI and explicit English object restatements reflect exposition, not demonstrated ingest loss.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 368,
+          "kind": "FORMATTING",
+          "found": "unmistaken;",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "unmistaken;",
+              "source_row": {
+                "id": 1750,
+                "course": "C05",
+                "seq": 368,
+                "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+                "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  433
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 368,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "de la srog gcod kyi gzhi"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rnal 'byor spyod pa'i sa las srog chags pha rol po"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1749,
+                    6902
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "bsam pa la gsum las, 'du shes"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1750,
+                    6903
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lhas byin kho na bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin du nor nas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual- commission"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "actual-commission"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1732,
+                    6889,
+                    9346
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "'du shes ma 'khrul ba"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1751,
+                    6904
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all nine complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:884-886 repeat367-369 complete text fields. C05:350/C16:871 illustrate the earlier intended John/mistaken Joe act. TCS02:72 English commentary uses Devadatta/Yajana and closed actual-commission; its Tibetan root verse is not a full Tibetan parallel to this prose. Text identity is not proof of independent publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:367",
+                "c05:368",
+                "c05:369",
+                "actual- commission",
+                "actual-commission",
+                "lhas byin",
+                "mchod sbyin",
+                "hyphen"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches, all seven complete objects read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "known_pattern": "E025/E028/E029/E045 contain source hyphen-plus-linebreak spacing examples; E089 warns against silent repair while quoting. E142/E143 were broad search hits, not current same-defect matches. No exact current367-369 row entry was found.",
+              "later_baseline_delta": "Actual through366 acceptance is not available at original packaging; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 309,
+                "wylie": 307,
+                "english": 480
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 368,
+                  "field": "acip",
+                  "start": 249500,
+                  "bytes": 309,
+                  "sha256": "07cc67f5fabcb7acb0bbaf455bed0217cc6a4afaf16d27e6b8e2ad2df5e5b6c6",
+                  "original_text": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 368,
+                  "field": "english",
+                  "start": 249811,
+                  "bytes": 486,
+                  "sha256": "f1288b85edbbc37796af1b1c02535cc60d4b8f5215451df4fa554de76c2e9b61",
+                  "original_text": "The part of the thinking has three components of its own. Conception can be\r\nof four different types: to conceive of the object, say a living being, as being a\r\nliving being; to conceive of a living being as something other than a living\r\nbeing; to conceive of something other than a living being as being other than\r\na living being, and to conceive of this same thing as a living being. The first\r\nand third types of conception here are unmistaken; the second and fourth are\r\nmistaken.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 88,
+              "material_master_objects": 160,
+              "personally_read_reused_objects": 89,
+              "complete_new_master_objects_read": 71,
+              "new_corpus_queries": 8,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 9
+            },
+            "d_defensibility": {
+              "judgment": "The semicolons separate the four descriptions and later the two accuracy groups. Retain the punctuation and unhyphenated whole adjective. The permitted negative-affix convention is not needed; no positive interior mistaken subword or fifth exception is proposed.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 368,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 368,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1750,
+              "course": "C05",
+              "seq": 368,
+              "acip": "BSAM PA LA GSUM LAS, 'DU SHES NI BZHI STE, GZHI SEMS CAN LTA BU LA SEMS CAN DU 'DU SHES PA DANG SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN MIN PA LA SEMS CAN MIN PAR 'DU SHES PA DANG SEMS CAN DU 'DU SHES PA BZHI STE, 'DU SHES DANG PO DANG GSUM PA NI MA 'KHRUL BA DANG , GNYIS PA DANG BZHI PA NI 'KHRUL BA'O, ,",
+              "wylie": "bsam pa la gsum las, 'du shes ni bzhi ste, gzhi sems can lta bu la sems can du 'du shes pa dang sems can min par 'du shes pa dang sems can min pa la sems can min par 'du shes pa dang sems can du 'du shes pa bzhi ste, 'du shes dang po dang gsum pa ni ma 'khrul ba dang , gnyis pa dang bzhi pa ni 'khrul ba'o,",
+              "english": "The part of the thinking has three components of its own. Conception can be of four different types: to conceive of the object, say a living being, as being a living being; to conceive of a living being as something other than a living being; to conceive of something other than a living being as being other than a living being, and to conceive of this same thing as a living being. The first and third types of conception here are unmistaken; the second and fourth are mistaken."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1750,
+                  6903
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:885 repeats all three complete fields. Preceding366 places conception within the thinking component; following369 explains why unmistaken conception is required for a specific intended target. The four cases are positive/negative object recognition crossed with positive/negative conception. No same-corpus duplicate establishes an independent edition."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-hyphen-screen.json"
+            ],
+            "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "Four distinct conception verbs and their positive/negative object predicates are kept separate. MIN PA means is not and the complete MIN PAR scaffold has no HGM gloss; the composed negative noun/predicate phrases therefore stay whole at d3, with explicit compositional rationale rather than invented glossary attestation. MA KHRUL BA directly supports unmistaken; final KHRUL BA'O retains its bound ending. The recap four and repeated English object/this-same-thing wording remain unbanked.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "utf8_bytes": {
+              "acip": 309,
+              "wylie": 307,
+              "english": 480
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "Both full extents preserve four conception cases and the complete concluding classification. All fields are below1500 characters. Semicolons separate cases and the final adjective includes its bound Tibetan sentence ending. The repeated Tibetan four and English anaphoric repetitions are discourse compression, not proof of a lost line or field cap."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The repeated SEMS CAN, MIN PA/PAR and conception forms are complete and agree with physical/C16 text. Inflected PAR and final BA'O are preserved, without proposing normalization.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The lengthy four-case enumeration is complete and grammatical. Repeated living being words are required by the contrasting cases; no duplicate word is diagnosed as a typo.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The first and third cases preserve the object's positive/negative status and the second/fourth reverse it, matching the stated unmistaken/mistaken classification. Repeated objects and the recap numeral constrain alignment rather than establishing a false proposition.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Both physical extents include all four cases and both concluding pairs. No truncation, spill or source-specific missing text is demonstrated.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Semicolons and the explicit final list and are retained exactly. No artificial verse structure or independent null for omitted list markers is imposed.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,162 @@
+{
+  "seq": 369,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1751,
+        "course": "C05",
+        "seq": 369,
+        "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+        "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+        "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1751,
+            6904
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1751,
+            6904
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1751,
+            6904
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:886 repeats all three complete fields, including John/Joe and the spaced actual- commission. Preceding368 supplies the first/third unmistaken versus second/fourth mistaken distinction; following370 states bad thought/motivation and371–372 define undertaking and conclusion. These full records provide context, not a corrected publication."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-hyphen-screen.json"
+      ],
+      "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The stated intended victim LHAS BYIN corresponds locally to John, and MCHOD SBYIN corresponds to mistaken Joe. These are contextual illustrative substitutions: the former glossary says Devadatta and the latter auto-mined John candidate is not adopted. Repeated English names cannot reuse the same source occurrence. The source denies the wrong deed of actual commission, recast in English as no actual-commission stage; this technical compression leaves SDIG/MED PAS unbanked and does not establish a source correction. MI DGOS need not and SHES PAR BYA'O should understand have direct support; CI RIGS PAR mined complete you should understand is rejected.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 379,
+        "wylie": 378,
+        "english": 635
+      },
+      "utf8_bytes": {
+        "acip": 379,
+        "wylie": 378,
+        "english": 635
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical English prints actual- at one line end and commission at the next. ASCII whitespace collapse produces the exact stored actual- commission, matching the complete glossary string and C16:886. E-025/E-045 describe this existing source-side hyphen-break family; E-089 warns against silent page repair. The whole paragraph ends as well and all fields are below1500 characters. No new class is filed or source text changed."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "BRTZAMS converts to attested BRTSAMS PA, and complete thought/necessity expressions agree with the physical source and C16. The two Tibetan names are retained without source correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "John/Joe consistently distinguish intended and mistaken victims in this illustrative example. The spaced actual- commission comes from a physical line break in the already registered hyphen family, not a new mistyped-word finding.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Illustrative name substitution and the actual-stage recasting have coherent contextual roles. The source wrong-deed and English stage wording differ in explicit scope, so those uncertain components remain unbanked; no independently established factual correction is claimed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+      "reason": "Actual- commission is an observed instance of the E-025/E-045 source hyphen-break family, with exact physical line-break evidence. Preserve it verbatim and do not file another class entry; E-089 distinguishes prohibited silent page repair.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+      "reason": "Physical actual-/commission wrapping collapses into the existing stored spaced compound. Quotes, sentence boundaries and the closing as well remain exact; no formatting repair is applied.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

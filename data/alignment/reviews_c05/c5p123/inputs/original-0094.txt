@@ -1,0 +1,11 @@
+--- campaign-artifacts/C05-364-366/tibetan/helpers/run_native.py
++++ campaign-artifacts/C05-367-369/tibetan/helpers/run_native.py
+@@ -2,7 +2,7 @@
+ from pathlib import Path
+ A=Path(__file__).resolve().parents[1]
+ def sh(b):return hashlib.sha256(b).hexdigest()
+-for seq in [364,365,366]:
++for seq in [367,368,369]:
+  spec=(A/str(seq)/'spec.json').read_bytes()
+  for name in ['generator','resolver']:
+   p=A/'native'/f'{seq}-{name}-v1';p.mkdir(parents=True,exist_ok=False);(p/'stdin.bin').write_bytes(spec);argv=[sys.executable,'-B',str(A/'helpers/native_adapter.py'),name];start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic();c=subprocess.run(argv,cwd=A,input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});elapsed=time.monotonic()-t

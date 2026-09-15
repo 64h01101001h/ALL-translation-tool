@@ -1,0 +1,162 @@
+{
+  "seq": 367,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1749,
+        "course": "C05",
+        "seq": 367,
+        "acip": "DE LA SROG GCOD KYI GZHI NI, SROG DANG LDAN PA'I SEMS CAN TE, DE YANG GSOD PA PO RANG NYID GSOD NA SBYOR BA'I SDIG PA YOD KYI, MTHAR THUG MED PA LA DGONGS NAS RNAL 'BYOR SPYOD PA'I SA LAS SROG CHAGS PHA ROL PO ZHES GSUNGS SO, ,",
+        "wylie": "de la srog gcod kyi gzhi ni, srog dang ldan pa'i sems can te, de yang gsod pa po rang nyid gsod na sbyor ba'i sdig pa yod kyi, mthar thug med pa la dgongs nas rnal 'byor spyod pa'i sa las srog chags pha rol po zhes gsungs so,",
+        "english": "Now the object for killing is a sentient being: anything with life. The Levels of Practitioners does state \"another living being,\" but is only referring to the fact that, when the murderer is murdering himself, there is a wrong deed of undertaking, but not one of completion."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Reuse the successful source-preparation-caller and later successful proposal-origin-caller. Both standard captures are preserved; no source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1749,
+            6902
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1749,
+            6902
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1749,
+            6902
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:884 repeats all three complete text fields, while id/course/seq differ. The physical C05 paragraph and preceding366 preserve the distinction between undertaking and completion. This is a same-corpus textual parallel, not an independently collated publication or corrected witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-hyphen-screen.json"
+      ],
+      "finding": "The unchanged204-entry origin register has no367–369 record. Seven complete class records reuse exact prior personal reading; three additional complete E-025/E-045/E-089 records were read for the actual spaced-hyphen observation. Registered classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The object is a sentient being with life. Killing oneself supplies an undertaking wrong deed but lacks completion; the cited another living being explains that condition. The complete title has direct glossary Levels of Practitioners while its unified synonym gives the actual level. Title submembers beyond SA/Levels remain uncertain. DGONGS has literal referring-to evidence; DGONGS NAS alone awaits HGM. Quote framing, restriction and anaphoric grammar remain unbanked.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Same-corpus identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 227,
+        "wylie": 225,
+        "english": 275
+      },
+      "utf8_bytes": {
+        "acip": 227,
+        "wylie": 225,
+        "english": 275
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The complete physical paragraph ends with completion and retains the book quotation. All fields are below1500 characters. Tibetan wraps before the title; the English wraps within prose clauses. The final SO closes the complete statement at the English final period; no metre or missing verse is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Complete ACIP/Wylie and physical/C16 wording agree. The full title and reflexive construction have lexical support; no source-specific malformed Tibetan form is established.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The quoted book wording and undertaking/completion contrast are grammatical and physically present. No mistyped token or independent corrected wording was found.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The contrast distinguishes undertaking from completion when the agent kills himself. The English explanatory restriction is supported by the source reference construction; its expanded framing is omitted from narrow spans without asserting a translation error.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The complete physical paragraph and all three C16 text fields agree. No cap, spill, running head or lost clause is demonstrated.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The colon, quotation marks, comma and final period are preserved. The SO null is alignment punctuation fusion only, not a source-format correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}
