@@ -1,0 +1,2609 @@
+{
+  "seq": 363,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 363,
+        "kind": "TIBETAN_SPELLING",
+        "found": "GSUM LAM BDUN NI LAS KYANG YIN",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "GSUM LAM BDUN NI LAS KYANG YIN",
+            "source_row": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "occurrences": {
+              "acip": [
+                9
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la, ,gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "In them, Three are paths, seven deeds as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 363,
+                "field": "acip",
+                "start": 247113,
+                "bytes": 41,
+                "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 363,
+                "field": "english",
+                "start": 247156,
+                "bytes": 47,
+                "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The seven-syllable verse line agrees in both physical ACIP and complete C16 fields. LAS is deeds in this numerical predicate, not a misplaced case particle. No source correction is inferred from compressed verse predication.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The seven-syllable verse line agrees in both physical ACIP and complete C16 fields. LAS is deeds in this numerical predicate, not a misplaced case particle. No source correction is inferred from compressed verse predication.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 363,
+        "kind": "ENGLISH_TYPO",
+        "found": "In them, Three",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "In them, Three",
+            "source_row": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la, ,gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "In them, Three are paths, seven deeds as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 363,
+                "field": "acip",
+                "start": 247113,
+                "bytes": 41,
+                "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 363,
+                "field": "english",
+                "start": 247156,
+                "bytes": 47,
+                "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Physical English places In them, on an introductory line and Three are paths on the verse line. Their flattened adjacency and capital Three preserve that layout; neither capitalization nor omitted second are is established as a typo.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Physical English places In them, on an introductory line and Three are paths on the verse line. Their flattened adjacency and capital Three preserve that layout; neither capitalization nor omitted second are is established as a typo.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 363,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "Three are paths, seven deeds as well.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Three are paths, seven deeds as well.",
+            "source_row": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                9
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la, ,gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "In them, Three are paths, seven deeds as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 363,
+                "field": "acip",
+                "start": 247113,
+                "bytes": 41,
+                "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 363,
+                "field": "english",
+                "start": 247156,
+                "bytes": 47,
+                "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The complete following commentary distinguishes the three mental actions as paths and the seven bodily/verbal actions as both deeds and paths. The terse verse states the additive deed status of seven through KYANG, with shared/elliptical predication. It does not say that the three are deeds or deny path status to seven.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The complete following commentary distinguishes the three mental actions as paths and the seven bodily/verbal actions as both deeds and paths. The terse verse states the additive deed status of seven through KYANG, with shared/elliptical predication. It does not say that the three are deeds or deny path status to seven.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 363,
+        "kind": "INGEST_ARTEFACT",
+        "found": "In them,",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "In them,",
+            "source_row": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la, ,gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "In them, Three are paths, seven deeds as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 363,
+                "field": "acip",
+                "start": 247113,
+                "bytes": 41,
+                "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 363,
+                "field": "english",
+                "start": 247156,
+                "bytes": 47,
+                "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The introductory DI LA and English In them, are printed as corresponding lead-ins before the verse, unlike the preceding row362 folio/title apparatus. Both complete extents and C16 fields agree below the field cap; no clipped verse or missing continuation is invented.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The introductory DI LA and English In them, are printed as corresponding lead-ins before the verse, unlike the preceding row362 folio/title apparatus. Both complete extents and C16 fields agree below the field cap; no clipped verse or missing continuation is invented.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 363,
+        "kind": "FORMATTING",
+        "found": "paths, seven",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "paths, seven",
+            "source_row": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                19
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'di la, ,gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 363,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "In them, Three are paths, seven deeds as well."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 363,
+                "field": "acip",
+                "start": 247113,
+                "bytes": 41,
+                "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 363,
+                "field": "english",
+                "start": 247156,
+                "bytes": 47,
+                "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The comma separates parallel numerical predicates. English supplies are after Three and elides it after seven, whereas source NI topicalizes seven and final YIN concludes predication. Leave narrow copula ownership unresolved rather than changing punctuation, duplicating are or claiming an absence null.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The comma separates parallel numerical predicates. English supplies are after Three and elides it after seven, whereas source NI topicalizes seven and final YIN concludes predication. Leave narrow copula ownership unresolved rather than changing punctuation, duplicating are or claiming an absence null.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The seven-syllable verse and two-syllable introduction agree with physical ACIP and C16:881; no missing syllable or malformed word is observed.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The seven-syllable verse and two-syllable introduction agree with physical ACIP and C16:881; no missing syllable or malformed word is observed.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "In them, and the capitalized Three follow physical lineation. The compressed seven deeds as well clause is grammatical ellipsis, not a demonstrated omitted-word typo.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "In them, and the capitalized Three follow physical lineation. The compressed seven deeds as well clause is grammatical ellipsis, not a demonstrated omitted-word typo.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Neighboring364 explicitly explains the three/seven distinction and why seven are deeds as well. No contradiction is established by the sparse verse.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Neighboring364 explicitly explains the three/seven distinction and why seven are deeds as well. No contradiction is established by the sparse verse.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Both short complete physical extents match the source. The introduction and verse share a row without a running-head or cap defect.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both short complete physical extents match the source. The introduction and verse share a row without a running-head or cap defect.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The comma and mid-row capital preserve the introduction/verse line break. There is no new heading or folio to file.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The comma and mid-row capital preserve the introduction/verse line break. There is no new heading or folio to file.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 363,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 363,
+          "kind": "TIBETAN_SPELLING",
+          "found": "GSUM LAM BDUN NI LAS KYANG YIN",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "GSUM LAM BDUN NI LAS KYANG YIN",
+              "source_row": {
+                "id": 1745,
+                "course": "C05",
+                "seq": 363,
+                "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+                "english": "In them, Three are paths, seven deeds as well."
+              },
+              "occurrences": {
+                "acip": [
+                  9
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la, ,gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "In them, Three are paths, seven deeds as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 40,
+                "wylie": 39,
+                "english": 46
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 363,
+                  "field": "acip",
+                  "start": 247113,
+                  "bytes": 41,
+                  "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                  "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 363,
+                  "field": "english",
+                  "start": 247156,
+                  "bytes": 47,
+                  "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                  "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The seven-syllable verse line agrees in both physical ACIP and complete C16 fields. LAS is deeds in this numerical predicate, not a misplaced case particle. No source correction is inferred from compressed verse predication.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 363,
+          "kind": "ENGLISH_TYPO",
+          "found": "In them, Three",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "In them, Three",
+              "source_row": {
+                "id": 1745,
+                "course": "C05",
+                "seq": 363,
+                "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+                "english": "In them, Three are paths, seven deeds as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la, ,gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "In them, Three are paths, seven deeds as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 40,
+                "wylie": 39,
+                "english": 46
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 363,
+                  "field": "acip",
+                  "start": 247113,
+                  "bytes": 41,
+                  "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                  "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 363,
+                  "field": "english",
+                  "start": 247156,
+                  "bytes": 47,
+                  "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                  "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "Physical English places In them, on an introductory line and Three are paths on the verse line. Their flattened adjacency and capital Three preserve that layout; neither capitalization nor omitted second are is established as a typo.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 363,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "Three are paths, seven deeds as well.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Three are paths, seven deeds as well.",
+              "source_row": {
+                "id": 1745,
+                "course": "C05",
+                "seq": 363,
+                "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+                "english": "In them, Three are paths, seven deeds as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  9
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la, ,gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "In them, Three are paths, seven deeds as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 40,
+                "wylie": 39,
+                "english": 46
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 363,
+                  "field": "acip",
+                  "start": 247113,
+                  "bytes": 41,
+                  "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                  "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 363,
+                  "field": "english",
+                  "start": 247156,
+                  "bytes": 47,
+                  "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                  "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The complete following commentary distinguishes the three mental actions as paths and the seven bodily/verbal actions as both deeds and paths. The terse verse states the additive deed status of seven through KYANG, with shared/elliptical predication. It does not say that the three are deeds or deny path status to seven.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 363,
+          "kind": "INGEST_ARTEFACT",
+          "found": "In them,",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "In them,",
+              "source_row": {
+                "id": 1745,
+                "course": "C05",
+                "seq": 363,
+                "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+                "english": "In them, Three are paths, seven deeds as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la, ,gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "In them, Three are paths, seven deeds as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 40,
+                "wylie": 39,
+                "english": 46
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 363,
+                  "field": "acip",
+                  "start": 247113,
+                  "bytes": 41,
+                  "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                  "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 363,
+                  "field": "english",
+                  "start": 247156,
+                  "bytes": 47,
+                  "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                  "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The introductory DI LA and English In them, are printed as corresponding lead-ins before the verse, unlike the preceding row362 folio/title apparatus. Both complete extents and C16 fields agree below the field cap; no clipped verse or missing continuation is invented.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 363,
+          "kind": "FORMATTING",
+          "found": "paths, seven",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "paths, seven",
+              "source_row": {
+                "id": 1745,
+                "course": "C05",
+                "seq": 363,
+                "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+                "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+                "english": "In them, Three are paths, seven deeds as well."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  19
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'di la, ,gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 363,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "In them, Three are paths, seven deeds as well."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 40,
+                "wylie": 39,
+                "english": 46
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 363,
+                  "field": "acip",
+                  "start": 247113,
+                  "bytes": 41,
+                  "sha256": "2150365c6c07c4739c4ee1557a5fbaf0f383b721f16601e42ab29da71dfc05a6",
+                  "original_text": "'DI LA,\r\n,GSUM LAM BDUN NI LAS KYANG YIN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 363,
+                  "field": "english",
+                  "start": 247156,
+                  "bytes": 47,
+                  "sha256": "07baf3fe951ee16febb24e4d28f1e0be54754efd5cd665793ff56f6f35663341",
+                  "original_text": "In them,\r\nThree are paths, seven deeds as well.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The comma separates parallel numerical predicates. English supplies are after Three and elides it after seven, whereas source NI topicalizes seven and final YIN concludes predication. Leave narrow copula ownership unresolved rather than changing punctuation, duplicating are or claiming an absence null.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 363,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 363,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1745,
+              "course": "C05",
+              "seq": 363,
+              "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+              "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+              "english": "In them, Three are paths, seven deeds as well."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Original source/preparation capture is reused by exact identity; its actual overlapping origin timing is preserved. No source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:881 repeats all three complete fields. The following364 explains three mental actions as paths, and seven bodily/verbal actions as both actions and paths. The full explanation supports the compressed verse without supplying additional words to this row."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "The unchanged204-entry origin register has no361–363 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The two groups are three mental paths and seven bodily/verbal deeds which are also paths. LAS is the deed noun, KYANG is additive, and the introductory demonstrative refers to the preceding ten. Final YIN is overt in the seven-deeds predicate while English prints are only in Three are paths; this is a compressed copula/ellipsis correspondence, not evidence that the verse is false or incomplete.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Recorded C16 identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "utf8_bytes": {
+              "acip": 40,
+              "wylie": 39,
+              "english": 46
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": {
+              "introduction": 2,
+              "verse": 7
+            },
+            "finding": "The physical source places the introduction separately from GSUM LAM BDUN NI LAS KYANG YIN. The verse line has seven written syllables; the introductory DI LA has two. English also separates In them, from Three are paths, seven deeds as well. Capitalization reflects lineation. No missing syllable, cap or new heading is inferred."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The seven-syllable verse and two-syllable introduction agree with physical ACIP and C16:881; no missing syllable or malformed word is observed.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "In them, and the capitalized Three follow physical lineation. The compressed seven deeds as well clause is grammatical ellipsis, not a demonstrated omitted-word typo.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Neighboring364 explicitly explains the three/seven distinction and why seven are deeds as well. No contradiction is established by the sparse verse.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Both short complete physical extents match the source. The introduction and verse share a row without a running-head or cap defect.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The comma and mid-row capital preserve the introduction/verse line break. There is no new heading or folio to file.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

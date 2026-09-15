@@ -1,0 +1,81 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update(({'cls':'conj','nul':why} if d==6 else {'nul':why}) if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(361,'stories at a performance and wrong commentary',[
+ ('zlos gar mkhan','performer',5,'by some performer','The complete agent compound names the performer. MKHAN is not an independent English person word here, and no member is invented inside performer.'),
+ ('zlos gar','show',5,'at a show','The second ZLOS GAR is the independent performance noun, distinct from the same syllables inside the preceding performer compound.'),
+ ('byed pa','put on',5,'show put on','The performance verb is rendered by the complete phrasal verb put on. Its subject is the performer, not the monk who tells stories. Exclude by some and the bound relative ending.'),
+ ('su','at',6,'others at a show','Standalone SU supplies the locative/occasion relation at the show. The related GNAS SKABS circumstance noun remains unbanked; neither SU nor GNAS SKABS is assigned the opening general cases frame.'),
+ ('gzhan','others',5,'entertain others','These are the audience whom the stories entertain, not the performer or the monk inherited from360.'),
+ ('mgu ba','entertain',5,'to entertain others','The please/gladden sense is realized as entertain in this storytelling context. Exclude its purpose marker to, which is separately supplied by PHYIR.'),
+ ('phyir','to',6,'to entertain others','The purpose particle owns the exact to before entertain. It is not the on belonging to put on, or the by before either performer or non-Buddhist.'),
+ ('gtam rgyud','stories',5,'told stories','The complete narrative/accounts compound supplies stories, without fabricating separate GTAM or RGYUD exponents.'),
+ ('smra ba','told',5,'monk told stories','Speaking/telling verb owns told in the monk clause. It is distinct from BYED PA, the performer putting on the show.'),
+ ('dang','or',6,', or too where','The conjunction joins alternative examples and is rendered or. Too and where remain outside this narrow connector.'),
+ ('phyi rol ba','non-Buddhist',5,'by a non-Buddhist','Whole established outsider-category noun is rendered non-Buddhist. No independent Buddhist or negative-prefix member is claimed.'),
+ ('bstan bcos','commentary',5,'wrong commentary','The textual-work noun supplies commentary. Written by is English relational expansion of its attribution, not part of this noun.'),
+ ('ngan pa','wrong',5,'some wrong commentary','The bad/wrong evaluative word qualifies this commentary; it does not refer to the later362 wrong desire.'),
+ ("'don pa",'reciting',5,'began reciting','The full recitation verb owns reciting. Began is left outside, and CHAGS NAS is not falsely mapped to that single onset verb.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Distinguish the performer putting on a show from the monk telling stories. The commentary attribution and desire/onset wording remain partly unbanked. All GMR wording and source forms are verbatim; no source correction or hgm_gloss promotion.',
+[{'tib':'gnas skabs','reason':'The circumstance/time noun participates in the at-a-show setting, while the opening cases is the broader continuing-example frame. Neither a secure independent noun nor a single complete local counterpart is established. SU alone records the overt at relation; this omission is not an absence null.'},
+ {'tib':'la chags nas','reason':'Tibetan attachment/desire toward the wrong commentary is recast in English as where he began reciting. CHAGS has desire/become senses, but began by itself does not securely own the entire object-directed motive or this sequence. Leave the relation, motive and linkage unbanked; no false CHAGS/began or NAS/where atom.'},
+ {'tib':'bzhin no; bound relative/genitive endings','reason':'The final exemplifying formula is distributed into Still other cases would be and the closing punctuation. Its literal like/as and closure do not have a separately secure contiguous exponent here. Bound attribution grammar is also not assigned written by. No uncertainty is converted into a null.'},
+ {'english':'Still other cases would be where the monk; a; by some; too where he began; some; written by a','reason':'Continuing-example framing, inherited monk, determiners, passive attribution and onset wording stay outside the defensible lexical spans. The complete preceding360 supplies context but does not authorize copying its DGE SLONG into this row.'}])
+build(362,'coveting harmful intent and mistaken view',[
+ ('brnab sems','Coveting',5,'Coveting consists','Established mental-action compound; no invented BRNAB/SEMS members inside the single English word.'),
+ ('log pa','wrong',5,'a wrong (','This first evaluative word is the initial wrong in the desire definition, not the final mistaken-view compound.'),
+ ('ste','that is',6,'(that is,','Explanatory continuative STE introduces the clarification of wrong as improper. Exclude parentheses, comma and an.'),
+ ('mi rigs pas','improper',5,'an improper)','The complete negative evaluative expression includes the source agentive/adverbial S. Do not cut PAS into PA plus a detached S or fabricate an im/proper member.'),
+ ('gzhan gyi',"another's",3,"for another's wealth",'The whole genitive phrase owns the complete possessive another\'s. This avoids breaking the English possessive into an unlicensed suffix or assigning the GYI relation to an unrelated of.'),
+ ('nor','wealth',5,"another's wealth",'The wealth sense is required by the coveting object. This NOR is not the error sense used in the preceding speech definitions.'),
+ ('la','for',6,'desire for another','First LA marks the object of desire, rendered for before another\'s wealth. The later LA attached to a living being has no equivalent separate for.'),
+ ('chags','desire',5,'improper) desire','The attachment/desire verb supplies the first English desire, modified by wrong/improper. It is distinct from the later two English repetitions in the harmful-intent definition.'),
+ ('nas','leads to',6,'which leads to a wish','The sequential/causal linker joins this desire to the wish to possess. Leads to supplies that relation; the supplied relative which and determiner a remain outside.'),
+ ('bdag gir','his own',5,'make it his own','The complete ownership expression is rendered his own, with the possessor referring to the preceding one. Its mine/sense-of-ownership lexical evidence supports the possessive content; the object it remains outside.'),
+ ('byed','make',5,'one make it','This first independent BYED gives make in making the wealth his own. Do not copy it onto the later hurt clause or onto a supplied auxiliary.'),
+ ("'dod pa",'wish',5,'to a wish that','First wishing verb owns wish in the coveting sentence, preserving the attached declarative ending outside the complete PA syllable.'),
+ ('gnod sems','Harmful intent',5,'Harmful intent is','Established mental-action compound, with two unique strictly tighter members below.'),
+ ('gnod','Harmful',7,'Harmful intent is','Harmful member belongs to the category title, not to the later hurt verb.'),
+ ('sems','intent',7,'Harmful intent is','Intent member belongs within the category compound. No independent mind word is invented in the English.'),
+ ('sems can','living being',5,'hurt another living being','The complete sentient-being expression supplies living being. Another and the later him are English participants outside this noun.'),
+ ('sdang ba','hating',5,'attitude of hating him','The hatred verb owns hating. Although the full glossary also has attitude of hating, the narrower claim keeps the adjacent RNAM PAR aspect construction from being silently absorbed.'),
+ ('gnod pa','hurt',5,'desire to hurt another','Complete lexical records independently support hurt. The following BYED is not separately assigned another English action or the infinitive to.'),
+ ("'dod pa",'desire',5,'Harmful intent is the desire','Second Tibetan wishing verb owns the first desire within the harmful-intent definition. The later a desire which comes is English repetition of the same referent and remains unbanked.'),
+ ('dge ba','virtue',5,'neither virtue nor','The first positive virtue is separate from the later occurrence inside non-virtue.'),
+ ('dang','nor',6,'virtue nor non-virtue','The coordinator is rendered nor under the shared MED PAR negative scope. This does not assign DANG the negation or existence predicate itself.'),
+ ('mi dge ba','non-virtue',5,'nor non-virtue','Whole established negative virtue compound preserves the printed hyphen. No unsupported non negative-affix span is added.'),
+ ('dge ba','virtue',7,'nor non-virtue','Unique positive lexical member inside the whole non-virtue parent. The printed hyphen gives a complete English word boundary; no subword flag or detached negative affix is needed.'),
+ ('lta ba','idea',5,'is the idea that','This first LTA BA is the belief/idea of denying virtue and non-virtue. It is separate from the following named mistaken-view compound.'),
+ ('log par lta ba','mistaken view',5,'And mistaken view is','Complete doctrinal category compound owns the exact lowercase title in this sentence, not either Path of Action heading occurrence.'),
+ ('log par','mistaken',7,'And mistaken view is','Wrong/mistaken member is unique inside the category title. Preserve the complete PAR syllable.'),
+ ('lta ba','view',7,'And mistaken view is','View member lies inside the category title and differs from the preceding LTA BA/idea.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep the first desire, wish and harmful-intent desire distinct; the repeated later desire stays unbanked. Shared MED PAR is distributed across neither/nor/exists and is omitted, not nulled. The full transition, folio79 and following Path of Action heading remain verbatim and unwrapped under the existing formatting class.',
+[{'tib':'ni occurrences; bound genitive and declarative endings','reason':'The topic/definition and bound grammar is distributed among consists of, is, anaphoric possession and sentence closure. No isolated topic or ending is asserted absent.'},
+ {'tib':"la after sems can; rnam par zhugs pas; byed after gnod pa",'reason':'The living-being object relation is recast into hurt another living being and hating him; there is no secure separate LA/to. RNAM PAR ZHUGS PAS contributes entering or being engaged in a hatred mode, while English uses comes from the attitude of; neither comes nor attitude securely belongs to a single atom. The second BYED forms the harm-doing construction and has no independent remaining verb beyond GNOD PA/hurt. Omit these uncertain/distributed pieces rather than false nulls.'},
+ {'tib':'med par','reason':'The negative existence predicate governs both virtue and non-virtue, while English distributes it through neither, nor and exists. Neither alone drops existence and full neither...exists would swallow two separately aligned nouns. No single contiguous faithful atom is banked; the uncertainty is not absence.'},
+ {'english':'consists of a; an; which; a; that one; it; is the; to; another; a desire which comes from the attitude of; him; And; is the; that; neither; even exists','reason':'Supplied definition frames, articles, relative pronouns, object/subject references, auxiliaries and duplicated desire remain unwrapped. NAS/leads to and STE/that is own only their actual connectors. The shared negative-existential phrase remains unbanked as explained above.'},
+ {'english':'Next we discuss the literal meaning of the expression "a path of action." 79 Explanation of the Expression "Path of Action"','reason':'Complete GMR transition and following heading/folio have no Tibetan counterpart in this row. Physical lineation and the C16:880 parallel with folio40 identify an existing heading/folio class, not a new filed erratum; preserve the entire source text without creating invented Tibetan spans.'}])
+build(363,'three paths and seven deeds',[
+ ("'di",'them',5,'In them,','Demonstrative refers anaphorically to the ten actions just discussed; English them supplies that referent. It is not a new participant.'),
+ ('la','In',6,'In them,','Standalone locative LA supplies In in the introductory frame. Preserve the capitalized source English.'),
+ ('gsum','Three',5,'Three are paths','The number names the three mental actions, whose path status is explained in364. It is not an absent outline ordinal.'),
+ ('lam','paths',5,'are paths,','The path noun supplies paths in the first predicate. Its plural is ordinary English inflection; no separate plural null is fabricated.'),
+ ('bdun','seven',5,', seven deeds', 'The number names the seven physical/verbal actions in the second clause. Neighboring364 confirms this referent, without adding that prose here.'),
+ ('las','deeds',5,'seven deeds','Here LAS is the action/deed noun, not an ablative particle. The complete curated record and following explanation establish that lexical sense.'),
+ ('kyang','as well',6,'deeds as well','The additive particle says those seven are deeds as well as paths. The complete local additive phrase is as well, with no supplied verb included.')
+],
+'PROVISIONAL machine alignment by Codex, independent English-first proposal. The introductory In them remains separate from the seven-syllable verse. LAS is the deed noun; KYANG/as well preserves the additive distinction. NI and the shared/elliptical YIN copula remain unbanked. Exact GMR wording is unchanged.',
+[{'tib':'ni; yin','reason':'NI marks the second number/topic, and final YIN explicitly closes the seven-deeds predication. English has are after Three and ellipsis after seven. Assigning that sole are to final YIN would choose between shared scope and translated ellipsis without a secure local atom. Neither topic punctuation nor the copula is treated as an absence null.'},
+ {'english':'are','reason':'The sole explicit copula belongs textually to Three are paths, while the source final YIN follows seven deeds as well. The full verse meaning is coherent, but this compressed correspondence stays unbanked pending independent judgment.'}])

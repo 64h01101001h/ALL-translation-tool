@@ -1,0 +1,159 @@
+{
+  "seq": 362,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1744,
+        "course": "C05",
+        "seq": 362,
+        "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+        "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+        "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Original source/preparation capture is reused by exact identity; its actual overlapping origin timing is preserved. No source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1744,
+            6898
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1744,
+            6898
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1744
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:880 repeats the complete ACIP and Wylie. Its English repeats the definitions and transition but has folio40 where C05 has79; the heading words are identical. This is an exact Tibetan parallel with a course-specific English folio difference, not a second exact English match. The original physical C05 extent includes79 and the heading on separate lines."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no361–363 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The two Tibetan wishing verbs occur in separate definitions: wish in coveting and desire in harmful intent. English repeats the latter as a desire which comes; no second Tibetan claim is invented. MI RIGS PAS is kept intact, and GZHAN GYI owns the whole English possessive. RNAM PAR ZHUGS PAS has entering/engaging-in-an-aspect sense, but the recast attitude/comes-from wording is not safely split. MED PAR governs both virtue and non-virtue and is distributed across neither/nor/exists. The complete words and established category compounds are coherent; no source spelling repair is justified.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Recorded C16 identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 230,
+        "wylie": 228,
+        "english": 443
+      },
+      "utf8_bytes": {
+        "acip": 230,
+        "wylie": 228,
+        "english": 443
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields remain below1500 characters. Physical English presents the complete definitions, then Next we discuss the literal meaning of the expression \"a path of action.\", then79 and the following heading. That heading/folio material is an existing registered formatting class, not a new finding. The transition and heading stay verbatim and unwrapped."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "MI RIGS PAS and ZHUGS PAS retain their complete source S. Tibetan, physical ACIP and C16:880 agree; no corrected spelling witness is present.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The wrong/improper clarification and three definitions read coherently. Repeated desire is explanatory repetition, and folio79 is physically present, not a typo inferred from C16 folio40.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The categories, possessive wish, harmful desire and negative view fit their source and context. Compression in attitude/comes-from and shared negative-existence grammar constrains alignment; it does not establish a source-specific factual correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The physical extent includes the full transition,79 and heading; the existing following-heading/folio class covers that attachment. No1500 cap or unproved missing prose is filed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Following Explanation of the Expression \"Path of Action\" and folio79 are preserved exactly and left unwrapped. The registered class is noted rather than filed again.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,13 @@
+C05:363 — PROVISIONAL root reconciliation; mechanical assembly by /root/c05_325_327_reconciliation.
+Source/proposal origin e4da4c94f59f4af61de90fde63127890130c5902 through357; actual baseline 03e450907145d79efc76d0657a4da514a55d2e6c through360 is separately bound. Both registers have204 unchanged entries.
+The pinned root-reconciliation-decisions.json supplies all13 rulings and49 exact selections after independent preassessment. The scribe authored the English original and has no independent reconciliation or acceptance role.
+Keep the entire English original spec/note/body/ranges and native pair. DI/them and LA/In stay flat; them is a contextual realization rather than a literal glossary quote. NI and YIN/are remain unbanked under shared/elliptical scope.
+All96 original spans,21 original omissions,30 category screens,6 notes and6 reports remain complete original values with explicit dispositions. Both complete361 source questions and all five-ground documents are preserved; no errata addition or source correction.
+Adopt actual glossary/HTG2016 provenance for GNAS SKABS SU/cases and MI RIGS PA/improper). Original contrary rationale/formatting-ground wording stays quoted provenance. Source, master and hgm_gloss bytes remain unchanged.
+Counts: 7 spans; 5 nonnull d5 pairs; 5 total d5; 0 d7; 0 nulls; zero errata additions.
+363 reuses the exact successful English pair without a run; changed361 and362 each passed one new generator/resolver pair with empty stderr. No original process was repeated.
+Spec 1368 bytes SHA256 240594f924e4f1083adb2c99d40ed21ae9ffc0585595c794d4194f2d31bda27a; body 1475 bytes SHA256 51eeeea3906173b436a5d6b602644072b8d2b13e452836489d6fbf28aeff17cc. Both source plaintexts reconstruct exactly and canonical ranges equal intent.
+Selected evidence: ../native/363-generator-v1/ and ../native/363-resolver-v1/. Eight actual unique pairs exist: six original plus two changed pairs; nine angle/segment views include one copied363 pair.
+All49 full-word intentions and five strict members passed before the changed native runs. The sole NO null retains cls=conj and its full nul explanation. No subword flags, detached inflections or manufactured participants.
+All234 original frozen members and both freezes were verified without suffix filtering. Both original to-inside-stories corrections, exact preimages, Tibetan optional-path histories and overlapping successful source/origin timings remain preserved. No assembly/native/packaging failure occurred.
+Root pending-selection and locked assembly-preparation preimages remain exact history. No W writes, source queries, registration, production or semantic acceptance; final independent review is required.

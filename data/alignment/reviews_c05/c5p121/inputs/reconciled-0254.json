@@ -1,0 +1,2900 @@
+{
+  "seq": 361,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 361,
+        "kind": "TIBETAN_SPELLING",
+        "found": "ZLOS GAR MKHAN",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "ZLOS GAR MKHAN",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [
+                0
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The complete performer noun and repeated show phrase are attested and agree with both physical ACIP and C16:879. ACIP TZ forms are preserved through the existing converter. No lexical absence, case inflection or performer/show repetition justifies changing the source.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The complete performer noun and repeated show phrase are attested and agree with both physical ACIP and C16:879. ACIP TZ forms are preserved through the existing converter. No lexical absence, case inflection or performer/show repetition justifies changing the source.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 361,
+        "kind": "ENGLISH_TYPO",
+        "found": "or too where",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "or too where",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                111
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Too supplies the additive second example in the complete sentence, with DANG connecting alternatives. The physical text and exact C16 English agree. It is not an infinitival to typo or evidence that where should be deleted.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Too supplies the additive second example in the complete sentence, with DANG connecting alternatives. The physical text and exact C16 English agree. It is not an infinitival to typo or evidence that where should be deleted.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 361,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "began reciting",
+        "decision": "LOW_UNCERTAIN_UNFILED_QUESTION",
+        "five_grounds": {
+          "a_quote": {
+            "found": "began reciting",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                127
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Tibetan LA CHAGS NAS expresses attachment/desire toward the wrong commentary, while current English began reciting has no explicit desire word. That qualification could be compressed under the preceding afflicted-speech context, and no independently corrected English edition was found: C16 duplicates this wording. Preserve the possible lost-condition question as LOW/UNCERTAIN and leave CHAGS/began unbanked. There is no defensible exact correction or registry proposal from these witnesses alone.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_LOW_UNCERTAIN_UNFILED_QUESTION",
+      "reason": "CHAGS in this object-directed construction expresses attachment; dictionary become evidence does not justify began reciting. The earlier afflicted-speech discussion could license compression, and duplicate C16 wording is not an independent correction. Preserve LOW/UNCERTAIN with no exact proposed correction or registered erratum.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 361,
+        "kind": "INGEST_ARTEFACT",
+        "found": "non-Buddhist.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "non-Buddhist.",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                177
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Both full physical extents contain the completed examples and sentence close below the field cap; current and C16 complete fields agree. The following definitions start in362, with no current heading/following row glued into361. The missing explicit desire word is already in physical English, not established as ingest loss.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Both full physical extents contain the completed examples and sentence close below the field cap; current and C16 complete fields agree. The following definitions start in362, with no current heading/following row glued into361. The missing explicit desire word is already in physical English, not established as ingest loss.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 361,
+        "kind": "FORMATTING",
+        "found": "Still other cases",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Still other cases",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "The opening resumes the examples in360, where the monk was introduced. Paragraph and line whitespace collapse exactly to the captured field. The terminal NO is proposed only as punctuation fusion at the printed final period; source wording, punctuation and the non-Buddhist hyphen remain exact.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The opening resumes the examples in360, where the monk was introduced. Paragraph and line whitespace collapse exactly to the captured field. The terminal NO is proposed only as punctuation fusion at the printed final period; source wording, punctuation and the non-Buddhist hyphen remain exact.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "All complete Tibetan forms match the physical ACIP and C16:879; there is no malformed form or supported alternate spelling.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "All complete Tibetan forms match the physical ACIP and C16:879; there is no malformed form or supported alternate spelling.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The performer/show and story/recitation wording is grammatical; no source-specific mistyped word or corrected witness was found.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The performer/show and story/recitation wording is grammatical; no source-specific mistyped word or corrected witness was found.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "LA CHAGS NAS has attachment/desire content not explicit in began reciting. This is an acknowledged translation-scope question, not a proven factual contradiction or a justified repair; identical C16 wording does not independently settle it.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_LOW_UNCERTAIN_UNFILED_QUESTION",
+      "reason": "CHAGS in this object-directed construction expresses attachment; dictionary become evidence does not justify began reciting. The earlier afflicted-speech discussion could license compression, and duplicate C16 wording is not an independent correction. Preserve LOW/UNCERTAIN with no exact proposed correction or registered erratum.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The short complete fields match physical extents. Continued examples across360–361 and the omitted motive atom do not prove lost source text or an ingestion mechanism.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The short complete fields match physical extents. Continued examples across360–361 and the omitted motive atom do not prove lost source text or an ingestion mechanism.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Physical line wraps and Tibetan opening/closing commas are preserved. No new registered-class event needs filing.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Physical line wraps and Tibetan opening/closing commas are preserved. No new registered-class event needs filing.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 361,
+          "kind": "TIBETAN_SPELLING",
+          "found": "ZLOS GAR MKHAN",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "ZLOS GAR MKHAN",
+              "source_row": {
+                "id": 1743,
+                "course": "C05",
+                "seq": 361,
+                "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+                "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+              },
+              "occurrences": {
+                "acip": [
+                  0
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 161,
+                "wylie": 160,
+                "english": 190
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 361,
+                  "field": "acip",
+                  "start": 246064,
+                  "bytes": 161,
+                  "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                  "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 361,
+                  "field": "english",
+                  "start": 246227,
+                  "bytes": 192,
+                  "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                  "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The complete performer noun and repeated show phrase are attested and agree with both physical ACIP and C16:879. ACIP TZ forms are preserved through the existing converter. No lexical absence, case inflection or performer/show repetition justifies changing the source.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 361,
+          "kind": "ENGLISH_TYPO",
+          "found": "or too where",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "or too where",
+              "source_row": {
+                "id": 1743,
+                "course": "C05",
+                "seq": 361,
+                "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+                "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  111
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 161,
+                "wylie": 160,
+                "english": 190
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 361,
+                  "field": "acip",
+                  "start": 246064,
+                  "bytes": 161,
+                  "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                  "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 361,
+                  "field": "english",
+                  "start": 246227,
+                  "bytes": 192,
+                  "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                  "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "Too supplies the additive second example in the complete sentence, with DANG connecting alternatives. The physical text and exact C16 English agree. It is not an infinitival to typo or evidence that where should be deleted.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 361,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "began reciting",
+          "decision": "LOW_UNCERTAIN_UNFILED_QUESTION",
+          "five_grounds": {
+            "a_quote": {
+              "found": "began reciting",
+              "source_row": {
+                "id": 1743,
+                "course": "C05",
+                "seq": 361,
+                "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+                "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  127
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 161,
+                "wylie": 160,
+                "english": 190
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 361,
+                  "field": "acip",
+                  "start": 246064,
+                  "bytes": 161,
+                  "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                  "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 361,
+                  "field": "english",
+                  "start": 246227,
+                  "bytes": 192,
+                  "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                  "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "Tibetan LA CHAGS NAS expresses attachment/desire toward the wrong commentary, while current English began reciting has no explicit desire word. That qualification could be compressed under the preceding afflicted-speech context, and no independently corrected English edition was found: C16 duplicates this wording. Preserve the possible lost-condition question as LOW/UNCERTAIN and leave CHAGS/began unbanked. There is no defensible exact correction or registry proposal from these witnesses alone.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 361,
+          "kind": "INGEST_ARTEFACT",
+          "found": "non-Buddhist.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "non-Buddhist.",
+              "source_row": {
+                "id": 1743,
+                "course": "C05",
+                "seq": 361,
+                "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+                "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  177
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 161,
+                "wylie": 160,
+                "english": 190
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 361,
+                  "field": "acip",
+                  "start": 246064,
+                  "bytes": 161,
+                  "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                  "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 361,
+                  "field": "english",
+                  "start": 246227,
+                  "bytes": 192,
+                  "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                  "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "Both full physical extents contain the completed examples and sentence close below the field cap; current and C16 complete fields agree. The following definitions start in362, with no current heading/following row glued into361. The missing explicit desire word is already in physical English, not established as ingest loss.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 361,
+          "kind": "FORMATTING",
+          "found": "Still other cases",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Still other cases",
+              "source_row": {
+                "id": 1743,
+                "course": "C05",
+                "seq": 361,
+                "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+                "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 361,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "zlos gar mkhan zlos gar byed"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "phyi rol ba'i bstan bcos ngan pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1743,
+                    6897
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "brnab sems ni log pa ste mi rigs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sdang ba'i rnam par zhugs pas"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1744,
+                    6898
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "gsum lam bdun ni las kyang yin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1745,
+                    6899
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "neither virtue nor non-virtue even exists"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1744,
+                    6898,
+                    9349
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+              "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "register_identity": {
+                "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:361",
+                "c05:362",
+                "c05:363",
+                "79 explanation",
+                "zlos gar mkhan",
+                "rnam par zhugs pas"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+              "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 161,
+                "wylie": 160,
+                "english": 190
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 361,
+                  "field": "acip",
+                  "start": 246064,
+                  "bytes": 161,
+                  "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                  "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 361,
+                  "field": "english",
+                  "start": 246227,
+                  "bytes": 192,
+                  "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                  "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 64,
+              "material_master_objects": 126,
+              "personally_read_reused_objects": 86,
+              "complete_new_master_objects_read": 40,
+              "direct_capture_objects": 122,
+              "supplemental_exact_prior_member_objects": 4,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read_or_exact_reused": 7,
+              "new_complete_corpus_objects_read": 6,
+              "exact_prior_complete_corpus_readings_reused": 1
+            },
+            "d_defensibility": {
+              "judgment": "The opening resumes the examples in360, where the monk was introduced. Paragraph and line whitespace collapse exactly to the captured field. The terminal NO is proposed only as punctuation fusion at the printed final period; source wording, punctuation and the non-Buddhist hyphen remain exact.",
+              "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 361,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All complete current source fields and six physical extents were read and verified. Original source/preparation capture is reused by exact identity; its actual overlapping origin timing is preserved. No source query is rerun."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "C16:879 repeats all three complete source fields. The preceding360 begins the example list with flattery and singing;361 continues with stories at a performance and recitation of a wrong commentary. Exact repetition is not an independently collated publication or corrected witness."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "direct_current_segment_matches": [],
+            "evidence": "../evidence/register-material-reuse.json",
+            "finding": "The unchanged204-entry origin register has no361–363 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "ZLOS GAR MKHAN/performer and the second ZLOS GAR/show are distinct. BYED PA refers to the performer putting on the show; SMRA BA to the monk telling stories. MGU BA has please/gladden senses and fits entertain. The final LA CHAGS NAS literally retains attachment/desire toward the commentary, whereas English says began reciting; this compression is acknowledged and left unbanked, not converted into a false began atom or silently corrected. The shared exemplifying formula is likewise distributed.",
+            "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Recorded C16 identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "utf8_bytes": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "All fields are short prose below1500 characters. The complete physical English wraps after at a and wrong, ending non-Buddhist. The source continues examples from360 and closes its own recitation example. No verse metre, cap, running head or newly glued heading applies."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "All complete Tibetan forms match the physical ACIP and C16:879; there is no malformed form or supported alternate spelling.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The performer/show and story/recitation wording is grammatical; no source-specific mistyped word or corrected witness was found.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "LA CHAGS NAS has attachment/desire content not explicit in began reciting. This is an acknowledged translation-scope question, not a proven factual contradiction or a justified repair; identical C16 wording does not independently settle it.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The short complete fields match physical extents. Continued examples across360–361 and the omitted motive atom do not prove lost source text or an ingestion mechanism.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Physical line wraps and Tibetan opening/closing commas are preserved. No new registered-class event needs filing.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [
+          {
+            "topic": "attachment versus onset wording",
+            "source": "la chags nas",
+            "english": "began reciting",
+            "assessment": "UNCERTAIN_SOURCE_QUESTION; no erratum proposed",
+            "reason": "Attachment to the commentary is explicit in Tibetan and not explicit in the English onset phrase. Full C16 repetition preserves the same choice; without an independently corrected witness or a clear contradiction, retain the translation exactly and omit uncertain atomization."
+          }
+        ],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [
+    {
+      "seq": 361,
+      "angle": "tibetan",
+      "field": "source_questions",
+      "index": 0,
+      "original": {
+        "seq": 361,
+        "angle": "TIBETAN-FIRST",
+        "field": "source_questions",
+        "index": 0,
+        "status": "UNFILED",
+        "severity": "LOW",
+        "confidence": "UNCERTAIN",
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "began reciting",
+        "tibetan_found": "LA CHAGS NAS",
+        "correction": null,
+        "rationale": "Tibetan LA CHAGS NAS expresses attachment/desire toward the wrong commentary, while current English began reciting has no explicit desire word. That qualification could be compressed under the preceding afflicted-speech context, and no independently corrected English edition was found: C16 duplicates this wording. Preserve the possible lost-condition question as LOW/UNCERTAIN and leave CHAGS/began unbanked. There is no defensible exact correction or registry proposal from these witnesses alone.",
+        "five_grounds": {
+          "a_quote": {
+            "found": "began reciting",
+            "source_row": {
+              "id": 1743,
+              "course": "C05",
+              "seq": 361,
+              "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+              "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+              "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                127
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 361,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "zlos gar mkhan zlos gar byed"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "phyi rol ba'i bstan bcos ngan pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1743,
+                  6897
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "brnab sems ni log pa ste mi rigs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sdang ba'i rnam par zhugs pas"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1744,
+                  6898
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "gsum lam bdun ni las kyang yin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1745,
+                  6899
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "neither virtue nor non-virtue even exists"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1744,
+                  6898,
+                  9349
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+            "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+            "register_identity": {
+              "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:361",
+              "c05:362",
+              "c05:363",
+              "79 explanation",
+              "zlos gar mkhan",
+              "rnam par zhugs pas"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+            "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 161,
+              "wylie": 160,
+              "english": 190
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 361,
+                "field": "acip",
+                "start": 246064,
+                "bytes": 161,
+                "sha256": "65243a0c76f444ff8152aedf4a712bc3af6b20fe4128a53b553414ab423cff22",
+                "original_text": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 361,
+                "field": "english",
+                "start": 246227,
+                "bytes": 192,
+                "sha256": "15da4f83ac101bd3eba189bd6ca72785842efe46a0c581b312303335b63273a7",
+                "original_text": "Still other cases would be where the monk told stories to entertain others at a\r\nshow put on by some performer, or too where he began reciting some wrong\r\ncommentary written by a non-Buddhist.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 64,
+            "material_master_objects": 126,
+            "personally_read_reused_objects": 86,
+            "complete_new_master_objects_read": 40,
+            "direct_capture_objects": 122,
+            "supplemental_exact_prior_member_objects": 4,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read_or_exact_reused": 7,
+            "new_complete_corpus_objects_read": 6,
+            "exact_prior_complete_corpus_readings_reused": 1
+          },
+          "d_defensibility": {
+            "judgment": "Tibetan LA CHAGS NAS expresses attachment/desire toward the wrong commentary, while current English began reciting has no explicit desire word. That qualification could be compressed under the preceding afflicted-speech context, and no independently corrected English edition was found: C16 duplicates this wording. Preserve the possible lost-condition question as LOW/UNCERTAIN and leave CHAGS/began unbanked. There is no defensible exact correction or registry proposal from these witnesses alone.",
+            "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+          }
+        },
+        "bank_ready": false
+      },
+      "disposition": "RETAIN_LOW_UNCERTAIN_UNFILED_NO_CORRECTION",
+      "reason": "CHAGS in this object-directed construction expresses attachment; dictionary become evidence does not justify began reciting. The earlier afflicted-speech discussion could license compression, and duplicate C16 wording is not an independent correction. Preserve LOW/UNCERTAIN with no exact proposed correction or registered erratum.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 361,
+      "angle": "english",
+      "field": "source_questions",
+      "index": 0,
+      "original": {
+        "topic": "attachment versus onset wording",
+        "source": "la chags nas",
+        "english": "began reciting",
+        "assessment": "UNCERTAIN_SOURCE_QUESTION; no erratum proposed",
+        "reason": "Attachment to the commentary is explicit in Tibetan and not explicit in the English onset phrase. Full C16 repetition preserves the same choice; without an independently corrected witness or a clear contradiction, retain the translation exactly and omit uncertain atomization."
+      },
+      "disposition": "RETAIN_LOW_UNCERTAIN_UNFILED_NO_CORRECTION",
+      "reason": "CHAGS in this object-directed construction expresses attachment; dictionary become evidence does not justify began reciting. The earlier afflicted-speech discussion could license compression, and duplicate C16 wording is not an independent correction. Preserve LOW/UNCERTAIN with no exact proposed correction or registered erratum.",
+      "judgment_by": "root"
+    }
+  ],
+  "final_source_questions": [
+    {
+      "status": "UNFILED",
+      "severity": "LOW",
+      "confidence": "UNCERTAIN",
+      "tibetan": "LA CHAGS NAS",
+      "english": "began reciting",
+      "correction": null,
+      "reason": "CHAGS in this object-directed construction expresses attachment; dictionary become evidence does not justify began reciting. The earlier afflicted-speech discussion could license compression, and duplicate C16 wording is not an independent correction. Preserve LOW/UNCERTAIN with no exact proposed correction or registered erratum.",
+      "original_bases": [
+        {
+          "seq": 361,
+          "angle": "tibetan",
+          "field": "source_questions",
+          "index": 0
+        },
+        {
+          "seq": 361,
+          "angle": "english",
+          "field": "source_questions",
+          "index": 0
+        }
+      ]
+    }
+  ],
+  "final_errata": [],
+  "source_corrections": false
+}

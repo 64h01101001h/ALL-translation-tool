@@ -1,0 +1,1132 @@
+[
+  {
+    "seq": 362,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MI RIGS PAS",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MI RIGS PAS",
+        "source_row": {
+          "id": 1744,
+          "course": "C05",
+          "seq": 362,
+          "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+          "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+          "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+        },
+        "occurrences": {
+          "acip": [
+            26
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+            ],
+            "count": 1,
+            "row_ids": [
+              1744
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "zlos gar mkhan zlos gar byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyi rol ba'i bstan bcos ngan pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sdang ba'i rnam par zhugs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gsum lam bdun ni las kyang yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1745,
+              6899
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue nor non-virtue even exists"
+            ],
+            "count": 3,
+            "row_ids": [
+              1744,
+              6898,
+              9349
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:361",
+          "c05:362",
+          "c05:363",
+          "79 explanation",
+          "zlos gar mkhan",
+          "rnam par zhugs pas"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+        "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 230,
+          "wylie": 228,
+          "english": 443
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 362,
+            "field": "acip",
+            "start": 246423,
+            "bytes": 230,
+            "sha256": "dab000d0ffcc34149ebd72ed1e8e62170c88f9975e4c7721498f903c2f700915",
+            "original_text": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 362,
+            "field": "english",
+            "start": 246655,
+            "bytes": 451,
+            "sha256": "0b9cb46e183ffecdd6c6ea8330d24a0567df153a3e674aee0acd1dcd2088b7b5",
+            "original_text": "Coveting consists of a wrong (that is, an improper) desire for another's\r\nwealth, which leads to a wish that one make it his own. Harmful intent is the\r\ndesire to hurt another living being, a desire which comes from the attitude of\r\nhating him. And mistaken view is the idea that neither virtue nor non-virtue\r\neven exists.\r\nNext we discuss the literal meaning of the expression \"a path of action.\"\r\n79\r\nExplanation of the Expression\r\n\"Path of Action\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 64,
+        "material_master_objects": 126,
+        "personally_read_reused_objects": 86,
+        "complete_new_master_objects_read": 40,
+        "direct_capture_objects": 122,
+        "supplemental_exact_prior_member_objects": 4,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The inflected negative phrase is supported by base MI RIGS PA improper and RIGS PA proper/reference, although exact MI RIGS PAS returns zero. RNAM PAR ZHUGS PAS likewise has zero exact entry and component null-gloss records; those absences do not prove a spelling error. All current physical and C16 Tibetan agrees, so retain complete inflections without splitting final-s.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 362,
+    "kind": "ENGLISH_TYPO",
+    "found": "neither virtue nor non-virtue even exists",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "neither virtue nor non-virtue even exists",
+        "source_row": {
+          "id": 1744,
+          "course": "C05",
+          "seq": 362,
+          "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+          "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+          "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            277
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+            ],
+            "count": 1,
+            "row_ids": [
+              1744
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "zlos gar mkhan zlos gar byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyi rol ba'i bstan bcos ngan pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sdang ba'i rnam par zhugs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gsum lam bdun ni las kyang yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1745,
+              6899
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue nor non-virtue even exists"
+            ],
+            "count": 3,
+            "row_ids": [
+              1744,
+              6898,
+              9349
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:361",
+          "c05:362",
+          "c05:363",
+          "79 explanation",
+          "zlos gar mkhan",
+          "rnam par zhugs pas"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+        "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 230,
+          "wylie": 228,
+          "english": 443
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 362,
+            "field": "acip",
+            "start": 246423,
+            "bytes": 230,
+            "sha256": "dab000d0ffcc34149ebd72ed1e8e62170c88f9975e4c7721498f903c2f700915",
+            "original_text": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 362,
+            "field": "english",
+            "start": 246655,
+            "bytes": 451,
+            "sha256": "0b9cb46e183ffecdd6c6ea8330d24a0567df153a3e674aee0acd1dcd2088b7b5",
+            "original_text": "Coveting consists of a wrong (that is, an improper) desire for another's\r\nwealth, which leads to a wish that one make it his own. Harmful intent is the\r\ndesire to hurt another living being, a desire which comes from the attitude of\r\nhating him. And mistaken view is the idea that neither virtue nor non-virtue\r\neven exists.\r\nNext we discuss the literal meaning of the expression \"a path of action.\"\r\n79\r\nExplanation of the Expression\r\n\"Path of Action\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 64,
+        "material_master_objects": 126,
+        "personally_read_reused_objects": 86,
+        "complete_new_master_objects_read": 40,
+        "direct_capture_objects": 122,
+        "supplemental_exact_prior_member_objects": 4,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The neither/nor negative construction is grammatical and expresses the denial of both objects. Its exact phrase has three corpus hits including the related TCS02 commentary. The singular exists and hyphenated non-virtue are preserved, not normalized or turned into a fifth interior-stem exception.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 362,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "a desire which comes from the attitude of hating him",
+    "decision": "NO_NEW_ERRATUM_UNCERTAIN_NARROW_MAPPING",
+    "five_grounds": {
+      "a_quote": {
+        "found": "a desire which comes from the attitude of hating him",
+        "source_row": {
+          "id": 1744,
+          "course": "C05",
+          "seq": 362,
+          "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+          "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+          "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            188
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+            ],
+            "count": 1,
+            "row_ids": [
+              1744
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "zlos gar mkhan zlos gar byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyi rol ba'i bstan bcos ngan pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sdang ba'i rnam par zhugs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gsum lam bdun ni las kyang yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1745,
+              6899
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue nor non-virtue even exists"
+            ],
+            "count": 3,
+            "row_ids": [
+              1744,
+              6898,
+              9349
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:361",
+          "c05:362",
+          "c05:363",
+          "79 explanation",
+          "zlos gar mkhan",
+          "rnam par zhugs pas"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+        "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 230,
+          "wylie": 228,
+          "english": 443
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 362,
+            "field": "acip",
+            "start": 246423,
+            "bytes": 230,
+            "sha256": "dab000d0ffcc34149ebd72ed1e8e62170c88f9975e4c7721498f903c2f700915",
+            "original_text": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 362,
+            "field": "english",
+            "start": 246655,
+            "bytes": 451,
+            "sha256": "0b9cb46e183ffecdd6c6ea8330d24a0567df153a3e674aee0acd1dcd2088b7b5",
+            "original_text": "Coveting consists of a wrong (that is, an improper) desire for another's\r\nwealth, which leads to a wish that one make it his own. Harmful intent is the\r\ndesire to hurt another living being, a desire which comes from the attitude of\r\nhating him. And mistaken view is the idea that neither virtue nor non-virtue\r\neven exists.\r\nNext we discuss the literal meaning of the expression \"a path of action.\"\r\n79\r\nExplanation of the Expression\r\n\"Path of Action\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 64,
+        "material_master_objects": 126,
+        "personally_read_reused_objects": 86,
+        "complete_new_master_objects_read": 40,
+        "direct_capture_objects": 122,
+        "supplemental_exact_prior_member_objects": 4,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The harmful-intent definition retains desire to hurt arising with hatred. SDANG BA directly lists both hating and attitude of hating, while RNAM PAR ZHUGS PAS has no full exact entry and the captured RNAM PAR ZHUGS/ZHUGS PAS objects await HGM. Tight hating is proposed with the broader glossary counterevidence explicit; uncertain ownership of attitude/comes from is an alignment limit, not an established factual translation error.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 362,
+    "kind": "INGEST_ARTEFACT",
+    "found": "79 Explanation of the Expression",
+    "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+    "five_grounds": {
+      "a_quote": {
+        "found": "79 Explanation of the Expression",
+        "source_row": {
+          "id": 1744,
+          "course": "C05",
+          "seq": 362,
+          "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+          "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+          "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            394
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+            ],
+            "count": 1,
+            "row_ids": [
+              1744
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "zlos gar mkhan zlos gar byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyi rol ba'i bstan bcos ngan pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sdang ba'i rnam par zhugs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gsum lam bdun ni las kyang yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1745,
+              6899
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue nor non-virtue even exists"
+            ],
+            "count": 3,
+            "row_ids": [
+              1744,
+              6898,
+              9349
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:361",
+          "c05:362",
+          "c05:363",
+          "79 explanation",
+          "zlos gar mkhan",
+          "rnam par zhugs pas"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+        "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 230,
+          "wylie": 228,
+          "english": 443
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 362,
+            "field": "acip",
+            "start": 246423,
+            "bytes": 230,
+            "sha256": "dab000d0ffcc34149ebd72ed1e8e62170c88f9975e4c7721498f903c2f700915",
+            "original_text": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 362,
+            "field": "english",
+            "start": 246655,
+            "bytes": 451,
+            "sha256": "0b9cb46e183ffecdd6c6ea8330d24a0567df153a3e674aee0acd1dcd2088b7b5",
+            "original_text": "Coveting consists of a wrong (that is, an improper) desire for another's\r\nwealth, which leads to a wish that one make it his own. Harmful intent is the\r\ndesire to hurt another living being, a desire which comes from the attitude of\r\nhating him. And mistaken view is the idea that neither virtue nor non-virtue\r\neven exists.\r\nNext we discuss the literal meaning of the expression \"a path of action.\"\r\n79\r\nExplanation of the Expression\r\n\"Path of Action\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 64,
+        "material_master_objects": 126,
+        "personally_read_reused_objects": 86,
+        "complete_new_master_objects_read": 40,
+        "direct_capture_objects": 122,
+        "supplemental_exact_prior_member_objects": 4,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "Physical English appends the transition, folio79 and following section title after the full mistaken-view definition. C16:880 repeats the same body with folio40; the English complete-field exact query therefore has one current hit while Tibetan has two. This is retained heading/folio apparatus of an existing class, left unwrapped without a duplicate registry addition or invented current-body exponent.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 362,
+    "kind": "FORMATTING",
+    "found": "wrong (that is, an improper)",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "wrong (that is, an improper)",
+        "source_row": {
+          "id": 1744,
+          "course": "C05",
+          "seq": 362,
+          "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+          "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+          "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            23
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 362,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+            ],
+            "count": 1,
+            "row_ids": [
+              1744
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "zlos gar mkhan zlos gar byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "phyi rol ba'i bstan bcos ngan pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1743,
+              6897
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "brnab sems ni log pa ste mi rigs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "sdang ba'i rnam par zhugs pas"
+            ],
+            "count": 2,
+            "row_ids": [
+              1744,
+              6898
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "gsum lam bdun ni las kyang yin"
+            ],
+            "count": 2,
+            "row_ids": [
+              1745,
+              6899
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "neither virtue nor non-virtue even exists"
+            ],
+            "count": 3,
+            "row_ids": [
+              1744,
+              6898,
+              9349
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; six new complete records read and one exact own prior complete reading reused",
+        "lineage_limit": "C16:879/881 repeat361/363 all three complete fields. C16:880 repeats362 Tibetan; English differs in the appended folio40 versus current79. TCS02:75 has related commentary with a preceding verse Tibetan, not a clean current-row parallel or an independent corrected edition."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+        "register_identity": {
+          "original_git_commit": "e4da4c94f59f4af61de90fde63127890130c5902",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:361",
+          "c05:362",
+          "c05:363",
+          "79 explanation",
+          "zlos gar mkhan",
+          "rnam par zhugs pas"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "scope": "No direct current-source matches. Existing heading/folio and formatting classes are context for classification, not proof that every registered entry belongs to those classes.",
+        "later_baseline_delta": "Actual through360 acceptance was not available at original packaging; no future receipt or register delta is invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 230,
+          "wylie": 228,
+          "english": 443
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 362,
+            "field": "acip",
+            "start": 246423,
+            "bytes": 230,
+            "sha256": "dab000d0ffcc34149ebd72ed1e8e62170c88f9975e4c7721498f903c2f700915",
+            "original_text": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 362,
+            "field": "english",
+            "start": 246655,
+            "bytes": 451,
+            "sha256": "0b9cb46e183ffecdd6c6ea8330d24a0567df153a3e674aee0acd1dcd2088b7b5",
+            "original_text": "Coveting consists of a wrong (that is, an improper) desire for another's\r\nwealth, which leads to a wish that one make it his own. Harmful intent is the\r\ndesire to hurt another living being, a desire which comes from the attitude of\r\nhating him. And mistaken view is the idea that neither virtue nor non-virtue\r\neven exists.\r\nNext we discuss the literal meaning of the expression \"a path of action.\"\r\n79\r\nExplanation of the Expression\r\n\"Path of Action\"",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 64,
+        "material_master_objects": 126,
+        "personally_read_reused_objects": 86,
+        "complete_new_master_objects_read": 40,
+        "direct_capture_objects": 122,
+        "supplemental_exact_prior_member_objects": 4,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read_or_exact_reused": 7,
+        "new_complete_corpus_objects_read": 6,
+        "exact_prior_complete_corpus_readings_reused": 1
+      },
+      "d_defensibility": {
+        "judgment": "The parenthetical explicitly restates wrong as improper. The source closing parenthesis is real punctuation; MI RIGS PA glossary improper) is a separate mined-string artifact and does not license including punctuation in the word. Preserve current parenthetical punctuation, two non-virtue components and quoted titles exactly.",
+        "material": "../evidence/lexical.json and lexical-supplement.json complete objects with exact personally-read identity reuse; corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

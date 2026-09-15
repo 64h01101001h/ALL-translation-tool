@@ -1,0 +1,163 @@
+{
+  "seq": 363,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1745,
+        "course": "C05",
+        "seq": 363,
+        "acip": "'DI LA, ,GSUM LAM BDUN NI LAS KYANG YIN,",
+        "wylie": "'di la, ,gsum lam bdun ni las kyang yin",
+        "english": "In them, Three are paths, seven deeds as well."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Original source/preparation capture is reused by exact identity; its actual overlapping origin timing is preserved. No source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1745,
+            6899
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1745,
+            6899
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1745,
+            6899
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:881 repeats all three complete fields. The following364 explains three mental actions as paths, and seven bodily/verbal actions as both actions and paths. The full explanation supports the compressed verse without supplying additional words to this row."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no361–363 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The two groups are three mental paths and seven bodily/verbal deeds which are also paths. LAS is the deed noun, KYANG is additive, and the introductory demonstrative refers to the preceding ten. Final YIN is overt in the seven-deeds predicate while English prints are only in Three are paths; this is a compressed copula/ellipsis correspondence, not evidence that the verse is false or incomplete.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Recorded C16 identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 40,
+        "wylie": 39,
+        "english": 46
+      },
+      "utf8_bytes": {
+        "acip": 40,
+        "wylie": 39,
+        "english": 46
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": {
+        "introduction": 2,
+        "verse": 7
+      },
+      "finding": "The physical source places the introduction separately from GSUM LAM BDUN NI LAS KYANG YIN. The verse line has seven written syllables; the introductory DI LA has two. English also separates In them, from Three are paths, seven deeds as well. Capitalization reflects lineation. No missing syllable, cap or new heading is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The seven-syllable verse and two-syllable introduction agree with physical ACIP and C16:881; no missing syllable or malformed word is observed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "In them, and the capitalized Three follow physical lineation. The compressed seven deeds as well clause is grammatical ellipsis, not a demonstrated omitted-word typo.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Neighboring364 explicitly explains the three/seven distinction and why seven are deeds as well. No contradiction is established by the sparse verse.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Both short complete physical extents match the source. The introduction and verse share a row without a running-head or cap defect.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The comma and mid-row capital preserve the introduction/verse line break. There is no new heading or folio to file.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

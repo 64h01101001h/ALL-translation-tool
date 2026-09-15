@@ -1,0 +1,18 @@
+{
+  "scope": "Reconstructed from actual tool responses after execution; not contemporaneous native recorder output. No proposal files, native engines or W were changed by either lookup.",
+  "failures": [
+    {
+      "command": "rg -n null/eng/nul/cls against prior author, native adapter and guessed evidence/governance/gen.py.txt",
+      "exit": 2,
+      "stderr": "rg: campaign-artifacts/C05-361-363/tibetan/evidence/governance/gen.py.txt: No such file or directory (os error 2)",
+      "resolution": "Actual copied inventory identifies tools/gen_alignment_page.py.txt."
+    },
+    {
+      "command": "rg -n Rule8/Rule9/subword/hyphen/negative against guessed docs/PROPOSE_BRIEF.md and docs/ACI_ALIGNMENT_SPEC.md",
+      "exit": 2,
+      "stderr": "Both guessed paths absent (os error 2).",
+      "resolution": "Actual rg --files inventory followed by successful read of docs/alignment_briefs/PROPOSE_BRIEF.md and docs/ALIGNMENT_LAYER_SPEC.md."
+    }
+  ],
+  "display_limit": "One redundant repeat display of already fully read/reused objects was truncated; no new-object complete-reading claim relies on that display."
+}

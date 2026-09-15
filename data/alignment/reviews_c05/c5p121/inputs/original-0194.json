@@ -1,0 +1,501 @@
+{
+  "queries": [
+    {
+      "term": "gnod",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "gnod",
+        "gnod"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 10384,
+          "wylie": "gnod",
+          "tibetan": "གནོད",
+          "tibetan_source": null,
+          "acip": "GNOD",
+          "pronunciation": "nu",
+          "pronunciation_source": null,
+          "sanskrit": "{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya",
+          "hopkins_english": "verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits",
+          "hgm_gloss": "[\"hurt\", \"produces a deleterious effect\", \"produces a harmful effect\", \"harm\", \"disprove\", \"inhibit\", \"disproved\", \"stopped\", \"affected\", \"impaired\", \"disproven\", \"pain\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 696,
+          "raw": "{\"tibetan\": \"གནོད\", \"wylie\": \"gnod\", \"wylie_variants\": [\"gnod\"], \"tenses\": null, \"sanskrit\": \"{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya\", \"hopkins_english\": \"verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits\", \"hgm_gloss\": [\"hurt\", \"produces a deleterious effect\", \"produces a harmful effect\", \"harm\", \"disprove\", \"inhibit\", \"disproved\", \"stopped\", \"affected\", \"impaired\", \"disproven\", \"pain\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"nu\", \"acip\": \"GNOD\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P3\", \"P5\", \"P6\", \"P7\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS03\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08PabongkaSadhana\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 696}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:10383",
+        "glossary_entries:4213"
+      ]
+    },
+    {
+      "term": "sems",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "sems",
+        "sems"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 20504,
+          "wylie": "sems",
+          "tibetan": "སེམས",
+          "tibetan_source": null,
+          "acip": "SEMS",
+          "pronunciation": "sem",
+          "pronunciation_source": null,
+          "sanskrit": "bsam/ sems/ bsams/ soms/; {LCh,MV,MSA,C}citta; {C} cittatā; {C,MSA,MV}cetas; {MSA}cetanā; {MSA} cetasika; {MSA}caitasika; {C,MSA}manas; {C} manyate (=samanupaśyati); {C}matī; {MSA} (anv √īkṣ): anvīkṣati; {MSA}(... snyam sems so = (√vṛt): iti vartate); cittam; saṃtāna; citta; {LC}adhimuktika; {LC}ātman; {LC}āśaṃsā; {LC}hitāśaṃsā; {LC}āśaya; {LC}parārthāśaya; {LC}maivaṃ tasya... bhūd... iti; {LC}sa māṃ statītyasambhavaḥ; {LC}cittakalāpa; {LC}apratihatacittatā; {LC}samacittatā; {LC}citti; {LC}mati; {LC}manoratha; {LC}manyati; {LC}manyana; {LC}manyase; {LC}tat kiṃ manyase; {LC}mānasa; {LC}sattva; {LC}bodhisattva; {LC}samanvāhara-apekṣasva; {LC}hṛd; {LC}hṛdaya; {LC}acintayat; {LC}ajñāsīt; {LC}amanyata; {LC}amanyanta; {LC}ūha; {LC}cintana; {LC}cintā; {LC}!!cintin; {LC}ceṣṭā; {LC}tarkayāmi; {LC}dhyāna; {LC}dhyāyat; {LC}dhyāyati; {LC}dhyeya; {LC}pratipatti; {LC}svārthabuddhi; {LC}menire; {LC}mene",
+          "hopkins_english": "verb: think [in the sense of have an opinion]; contemplate; noun: mind; consciousness; thought; continuum; {PH}mind; aspiration; intention; {C}attitude of mind; state of thought; state of mind; heart; inclination to; mind; mental activity; fancies (himself for); thinks of; minds about; thinks about; thinks with regard to; minds; puts his mind to; sets above; feel conceited; cares about; mindf",
+          "hgm_gloss": "[\"wish\", \"mind\", \"think\", \"minds\", \"the wish\", \"the wish for enlightenment\", \"feelings\", \"intent\", \"thoughts\", \"opinion\", \"intention\", \"mental\", \"our minds\", \"motivation\", \"motivations\", \"mind ... mind\", \"state of mind\", \"talk\", \"mind-only\", \"states of mind\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": "bsam/ sems/ bsams/ soms",
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 5525,
+          "raw": "{\"tibetan\": \"སེམས\", \"wylie\": \"sems\", \"wylie_variants\": [\"sems\"], \"tenses\": \"bsam/ sems/ bsams/ soms\", \"sanskrit\": \"bsam/ sems/ bsams/ soms/; {LCh,MV,MSA,C}citta; {C} cittatā; {C,MSA,MV}cetas; {MSA}cetanā; {MSA} cetasika; {MSA}caitasika; {C,MSA}manas; {C} manyate (=samanupaśyati); {C}matī; {MSA} (anv √īkṣ): anvīkṣati; {MSA}(... snyam sems so = (√vṛt): iti vartate); cittam; saṃtāna; citta; {LC}adhimuktika; {LC}ātman; {LC}āśaṃsā; {LC}hitāśaṃsā; {LC}āśaya; {LC}parārthāśaya; {LC}maivaṃ tasya... bhūd... iti; {LC}sa māṃ statītyasambhavaḥ; {LC}cittakalāpa; {LC}apratihatacittatā; {LC}samacittatā; {LC}citti; {LC}mati; {LC}manoratha; {LC}manyati; {LC}manyana; {LC}manyase; {LC}tat kiṃ manyase; {LC}mānasa; {LC}sattva; {LC}bodhisattva; {LC}samanvāhara-apekṣasva; {LC}hṛd; {LC}hṛdaya; {LC}acintayat; {LC}ajñāsīt; {LC}amanyata; {LC}amanyanta; {LC}ūha; {LC}cintana; {LC}cintā; {LC}!!cintin; {LC}ceṣṭā; {LC}tarkayāmi; {LC}dhyāna; {LC}dhyāyat; {LC}dhyāyati; {LC}dhyeya; {LC}pratipatti; {LC}svārthabuddhi; {LC}menire; {LC}mene\", \"hopkins_english\": \"verb: think [in the sense of have an opinion]; contemplate; noun: mind; consciousness; thought; continuum; {PH}mind; aspiration; intention; {C}attitude of mind; state of thought; state of mind; heart; inclination to; mind; mental activity; fancies (himself for); thinks of; minds about; thinks about; thinks with regard to; minds; puts his mind to; sets above; feel conceited; cares about; mindf\", \"hgm_gloss\": [\"wish\", \"mind\", \"think\", \"minds\", \"the wish\", \"the wish for enlightenment\", \"feelings\", \"intent\", \"thoughts\", \"opinion\", \"intention\", \"mental\", \"our minds\", \"motivation\", \"motivations\", \"mind ... mind\", \"state of mind\", \"talk\", \"mind-only\", \"states of mind\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"sem\", \"acip\": \"SEMS\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"MBL\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08SourceOfAllMyGood\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 5525}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:20503",
+        "glossary_entries:7564"
+      ]
+    },
+    {
+      "term": "log par",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "log par",
+        "log par"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 19667,
+          "wylie": "log par",
+          "tibetan": "ལོག་པར",
+          "tibetan_source": null,
+          "acip": "LOG PAR",
+          "pronunciation": "lokpar",
+          "pronunciation_source": null,
+          "sanskrit": "{C}mithyā; {C}vitatha",
+          "hopkins_english": "wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)",
+          "hgm_gloss": "[\"totally blind\", \"wrong\", \"mistaken\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P6\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS04Initiation\", \"TCS05\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 204,
+          "raw": "{\"tibetan\": \"ལོག་པར\", \"wylie\": \"log par\", \"wylie_variants\": [\"log par\"], \"tenses\": null, \"sanskrit\": \"{C}mithyā; {C}vitatha\", \"hopkins_english\": \"wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)\", \"hgm_gloss\": [\"totally blind\", \"wrong\", \"mistaken\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"lokpar\", \"acip\": \"LOG PAR\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DTE\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P6\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS02\", \"TCS04Initiation\", \"TCS05\", \"TCS10\", \"TCS13\", \"TCS15\", \"TCS16Reading\", \"TCS17\", \"TCS18LamaChupa\"], \"n_segments\": 204}, \"hopkins_realigned\": \"uma-v26\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:19666",
+        "glossary_entries:7280"
+      ]
+    }
+  ],
+  "master_objects": {
+    "unified_entries:10383": {
+      "collection": "unified_entries",
+      "index": 10383,
+      "entry": {
+        "tibetan": "གནོད",
+        "wylie": "gnod",
+        "wylie_variants": [
+          "gnod"
+        ],
+        "tenses": null,
+        "sanskrit": "{MSA}akāra; {MSA}upaghāta; {MSA} upatāpin; {MSA}upadrava; {MSA}upa √hṛ (or apa √kṛ?); {MSA}vighāta; {MSA}vyasana; {MSA} saṃbādha; {LC}apakāra; {LC}duḥkha; {LC}svaduḥkha; {LC}duṣṭa; {LC}bādhate; {LC}bādhā; {LC}bādhyate; {LC}bādhyante; {LC}vyathā; {LC}vyāpanna; {LC}vyāpāda; {LC}nindyamāna; {LC}apacāra; {LC}apathya; {LC}aparādha; {LC}apāya; {LC}ahita; {LC}āmaya; {LC}udyama; {LC}upaghātaka; {LC}!!ghna; {LC}keśaghna; {LC}dṛgghna; {LC}dūṣita; {LC}doṣa; {LC}nikāra; {LC}parābhava; {LC}pṛthuparābhavavat; {LC}paribhava; {LC}pīḍita; {LC}vyāpad; {LC}!!hā.; {LC}vraṇahā; {LC}acakṣuṣya; {LC}ahṛdya",
+        "hopkins_english": "verb: to harm; injure7 noun: harm; injury; damage; vessel{BJ 63.7}; {PH}yakṣa; harmful spirits",
+        "hgm_gloss": [
+          "hurt",
+          "produces a deleterious effect",
+          "produces a harmful effect",
+          "harm",
+          "disprove",
+          "inhibit",
+          "disproved",
+          "stopped",
+          "affected",
+          "impaired",
+          "disproven",
+          "pain"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "nu",
+        "acip": "GNOD",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P3",
+            "P5",
+            "P6",
+            "P7",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS02",
+            "TCS03",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08PabongkaSadhana",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 696
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:4213": {
+      "collection": "glossary_entries",
+      "index": 4213,
+      "entry": {
+        "acip": "GNOD",
+        "wylie": "gnod",
+        "tibetan": "གནོད",
+        "hgm_glosses": [
+          "hurt",
+          "produces a deleterious effect",
+          "produces a harmful effect",
+          "harm",
+          "disprove",
+          "inhibit",
+          "disproved",
+          "stopped",
+          "affected",
+          "impaired",
+          "disproven",
+          "pain"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:20503": {
+      "collection": "unified_entries",
+      "index": 20503,
+      "entry": {
+        "tibetan": "སེམས",
+        "wylie": "sems",
+        "wylie_variants": [
+          "sems"
+        ],
+        "tenses": "bsam/ sems/ bsams/ soms",
+        "sanskrit": "bsam/ sems/ bsams/ soms/; {LCh,MV,MSA,C}citta; {C} cittatā; {C,MSA,MV}cetas; {MSA}cetanā; {MSA} cetasika; {MSA}caitasika; {C,MSA}manas; {C} manyate (=samanupaśyati); {C}matī; {MSA} (anv √īkṣ): anvīkṣati; {MSA}(... snyam sems so = (√vṛt): iti vartate); cittam; saṃtāna; citta; {LC}adhimuktika; {LC}ātman; {LC}āśaṃsā; {LC}hitāśaṃsā; {LC}āśaya; {LC}parārthāśaya; {LC}maivaṃ tasya... bhūd... iti; {LC}sa māṃ statītyasambhavaḥ; {LC}cittakalāpa; {LC}apratihatacittatā; {LC}samacittatā; {LC}citti; {LC}mati; {LC}manoratha; {LC}manyati; {LC}manyana; {LC}manyase; {LC}tat kiṃ manyase; {LC}mānasa; {LC}sattva; {LC}bodhisattva; {LC}samanvāhara-apekṣasva; {LC}hṛd; {LC}hṛdaya; {LC}acintayat; {LC}ajñāsīt; {LC}amanyata; {LC}amanyanta; {LC}ūha; {LC}cintana; {LC}cintā; {LC}!!cintin; {LC}ceṣṭā; {LC}tarkayāmi; {LC}dhyāna; {LC}dhyāyat; {LC}dhyāyati; {LC}dhyeya; {LC}pratipatti; {LC}svārthabuddhi; {LC}menire; {LC}mene",
+        "hopkins_english": "verb: think [in the sense of have an opinion]; contemplate; noun: mind; consciousness; thought; continuum; {PH}mind; aspiration; intention; {C}attitude of mind; state of thought; state of mind; heart; inclination to; mind; mental activity; fancies (himself for); thinks of; minds about; thinks about; thinks with regard to; minds; puts his mind to; sets above; feel conceited; cares about; mindf",
+        "hgm_gloss": [
+          "wish",
+          "mind",
+          "think",
+          "minds",
+          "the wish",
+          "the wish for enlightenment",
+          "feelings",
+          "intent",
+          "thoughts",
+          "opinion",
+          "intention",
+          "mental",
+          "our minds",
+          "motivation",
+          "motivations",
+          "mind ... mind",
+          "state of mind",
+          "talk",
+          "mind-only",
+          "states of mind"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "sem",
+        "acip": "SEMS",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "MBL",
+            "P1",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "P8",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaSadhana",
+            "TCS08NaropaTrials1_12",
+            "TCS08PabongkaSadhana",
+            "TCS08SourceOfAllMyGood",
+            "TCS08ThousandAngels",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 5525
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:7564": {
+      "collection": "glossary_entries",
+      "index": 7564,
+      "entry": {
+        "acip": "SEMS",
+        "wylie": "sems",
+        "tibetan": "སེམས",
+        "hgm_glosses": [
+          "wish",
+          "mind",
+          "think",
+          "minds",
+          "the wish",
+          "the wish for enlightenment",
+          "feelings",
+          "intent",
+          "thoughts",
+          "opinion",
+          "intention",
+          "mental",
+          "our minds",
+          "motivation",
+          "motivations",
+          "mind ... mind",
+          "state of mind",
+          "talk",
+          "mind-only",
+          "states of mind"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:19666": {
+      "collection": "unified_entries",
+      "index": 19666,
+      "entry": {
+        "tibetan": "ལོག་པར",
+        "wylie": "log par",
+        "wylie_variants": [
+          "log par"
+        ],
+        "tenses": null,
+        "sanskrit": "{C}mithyā; {C}vitatha",
+        "hopkins_english": "wrong; wrongly; mistaken; mistakenly; {C}errant; incorrect; false(ly)",
+        "hgm_gloss": [
+          "totally blind",
+          "wrong",
+          "mistaken"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "lokpar",
+        "acip": "LOG PAR",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C05",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DTE",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P6",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS02",
+            "TCS04Initiation",
+            "TCS05",
+            "TCS10",
+            "TCS13",
+            "TCS15",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 204
+        },
+        "hopkins_realigned": "uma-v26"
+      }
+    },
+    "glossary_entries:7280": {
+      "collection": "glossary_entries",
+      "index": 7280,
+      "entry": {
+        "acip": "LOG PAR",
+        "wylie": "log par",
+        "tibetan": "ལོག་པར",
+        "hgm_glosses": [
+          "totally blind",
+          "wrong",
+          "mistaken"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    }
+  },
+  "exact_prior_personally_read_keys": [
+    "unified_entries:10383",
+    "glossary_entries:4213",
+    "unified_entries:20503",
+    "glossary_entries:7564",
+    "unified_entries:19666",
+    "glossary_entries:7280"
+  ],
+  "reused_queries": [
+    {
+      "term": "gnod",
+      "prior_evidence": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-355-357/english/evidence/supplemental-lexical.json",
+        "bytes": 20840,
+        "sha256": "fa5ee106df362e5ab0ceb67b8be241f97949e2f3fd2d4aabfb413e3a346d4da3"
+      },
+      "query_object_sha256": "63e026bcfbe16dbff513046869b5c7142c533f70f943b08309e62a666225924b"
+    },
+    {
+      "term": "sems",
+      "prior_evidence": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-358-360/english/evidence/lexical.json",
+        "bytes": 372510,
+        "sha256": "030a3d247e64002803ad7a5dc79ec9eefa4d4a224e67407a1e2a7dbac6b72627"
+      },
+      "query_object_sha256": "d1fa4d88434b719f4948ec261801de5634ccbcd5c701eb28cc484bde477f343f"
+    },
+    {
+      "term": "log par",
+      "prior_evidence": {
+        "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-355-357/english/evidence/supplemental-lexical.json",
+        "bytes": 20840,
+        "sha256": "fa5ee106df362e5ab0ceb67b8be241f97949e2f3fd2d4aabfb413e3a346d4da3"
+      },
+      "query_object_sha256": "bb12e295f86900a2f6f23b9ac89073bcaf8815828b856537166edebda5b2c0d8"
+    }
+  ],
+  "new_executed_terms": [],
+  "scope": "Three additional member-level queries and their full objects are exact prior personal English readings, reused without executing new queries."
+}

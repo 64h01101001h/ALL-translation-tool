@@ -1,0 +1,168 @@
+{
+  "seq": 361,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1743,
+        "course": "C05",
+        "seq": 361,
+        "acip": "ZLOS GAR MKHAN ZLOS GAR BYED PA'I GNAS SKABS SU, , GZHAN MGU BA'I PHYIR GTAM RGYUD SMRA BA DANG , PHYI ROL BA'I BSTAN BCOS NGAN PA LA CHAGS NAS 'DON PA BZHIN NO,",
+        "wylie": "zlos gar mkhan zlos gar byed pa'i gnas skabs su, , gzhan mgu ba'i phyir gtam rgyud smra ba dang , phyi rol ba'i bstan bcos ngan pa la chags nas 'don pa bzhin no",
+        "english": "Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All complete current source fields and six physical extents were read and verified. Original source/preparation capture is reused by exact identity; its actual overlapping origin timing is preserved. No source query is rerun."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1743,
+            6897
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1743,
+            6897
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1743,
+            6897
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "C16:879 repeats all three complete source fields. The preceding360 begins the example list with flattery and singing;361 continues with stories at a performance and recitation of a wrong commentary. Exact repetition is not an independently collated publication or corrected witness."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "e4da4c94f59f4af61de90fde63127890130c5902:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-reuse.json",
+      "finding": "The unchanged204-entry origin register has no361–363 record. Seven complete class records were personally read previously and are exactly identical now. Converter, running-head, cap, spill, following-heading and footnote/folio classes were considered; no class is refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "ZLOS GAR MKHAN/performer and the second ZLOS GAR/show are distinct. BYED PA refers to the performer putting on the show; SMRA BA to the monk telling stories. MGU BA has please/gladden senses and fits entertain. The final LA CHAGS NAS literally retains attachment/desire toward the commentary, whereas English says began reciting; this compression is acknowledged and left unbanked, not converted into a false began atom or silently corrected. The shared exemplifying formula is likewise distributed.",
+      "counterevidence": "Complete glossary/curated/scaffold/auto-aligned evidence remains distinguished. Recorded C16 identity is not independent publication or correction proof. Translation expansion, compression or distributed grammar can justify omission without a source erratum. No source/master or hgm_gloss field changes."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 161,
+        "wylie": 160,
+        "english": 190
+      },
+      "utf8_bytes": {
+        "acip": 161,
+        "wylie": 160,
+        "english": 190
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are short prose below1500 characters. The complete physical English wraps after at a and wrong, ending non-Buddhist. The source continues examples from360 and closes its own recitation example. No verse metre, cap, running head or newly glued heading applies."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "All complete Tibetan forms match the physical ACIP and C16:879; there is no malformed form or supported alternate spelling.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The performer/show and story/recitation wording is grammatical; no source-specific mistyped word or corrected witness was found.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "LA CHAGS NAS has attachment/desire content not explicit in began reciting. This is an acknowledged translation-scope question, not a proven factual contradiction or a justified repair; identical C16 wording does not independently settle it.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The short complete fields match physical extents. Continued examples across360–361 and the omitted motive atom do not prove lost source text or an ingestion mechanism.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Physical line wraps and Tibetan opening/closing commas are preserved. No new registered-class event needs filing.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [
+    {
+      "topic": "attachment versus onset wording",
+      "source": "la chags nas",
+      "english": "began reciting",
+      "assessment": "UNCERTAIN_SOURCE_QUESTION; no erratum proposed",
+      "reason": "Attachment to the commentary is explicit in Tibetan and not explicit in the English onset phrase. Full C16 repetition preserves the same choice; without an independently corrected witness or a clear contradiction, retain the translation exactly and omit uncertain atomization."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

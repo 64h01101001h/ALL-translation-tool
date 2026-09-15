@@ -1,0 +1,117 @@
+{
+  "scope": "Original source/origin captures reused exactly; neither rerun. Source preparation yielded while the origin capture ran; origin finished before the source recorder completed. Both completed successfully before this independent dispatch. Source pins were verified unchanged by the evidence helper. Actual environment/timing and streams remain in the original records.",
+  "captures": {
+    "source-preparation-caller": {
+      "argv": [
+        "python3",
+        "-B",
+        "../campaign-artifacts/capture_future_source_batch.py",
+        "361",
+        "363",
+        "../campaign-artifacts/C05-361-363/exploratory-terms.json"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-15T05:52:58.575792+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-15T05:53:00.823646+00:00",
+      "wall_seconds": 2.2471723747439682,
+      "exit": 0,
+      "stdout_bytes": 360,
+      "stderr_bytes": 0,
+      "stdout_sha256": "292ba997bdd482f346588f6e99a1c097ed5a4d70c45e2197196ac261495c9dd1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "proposal-origin-caller": {
+      "argv": [
+        "python3",
+        "-B",
+        "../campaign-artifacts/capture_proposal_origin.py",
+        "361"
+      ],
+      "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree",
+      "started_at": "2026-09-15T05:52:59.794193+00:00",
+      "environment_overrides": {
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "GIT_OPTIONAL_LOCKS": "0"
+      },
+      "inherited_environment": true,
+      "stdin_bytes": 0,
+      "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+      "finished_at": "2026-09-15T05:53:00.473947+00:00",
+      "wall_seconds": 0.6792946672067046,
+      "exit": 0,
+      "stdout_bytes": 358,
+      "stderr_bytes": 0,
+      "stdout_sha256": "046c5cc9f363d4f03080eec84e4eb9afe97fedeec68ba981a31ddc4f6fa5a8d1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "files": {
+    "source-preparation-caller/command.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/command.json",
+      "bytes": 597,
+      "sha256": "b80c02d749b3d4352ca73d2badf021219b0e6d45c201a48bc3faaeaa7c0cf9f1"
+    },
+    "source-preparation-caller/execution.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/execution.json",
+      "bytes": 919,
+      "sha256": "d795bf72189cba5225266f73942f91a6f8e5c922da4ba5ea68b319db201fa743"
+    },
+    "source-preparation-caller/exit.txt": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "source-preparation-caller/stderr.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-preparation-caller/stdin.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source-preparation-caller/stdout.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/source-preparation-caller/stdout.bin",
+      "bytes": 360,
+      "sha256": "292ba997bdd482f346588f6e99a1c097ed5a4d70c45e2197196ac261495c9dd1"
+    },
+    "proposal-origin-caller/command.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/command.json",
+      "bytes": 518,
+      "sha256": "c2ac0b5c96e6e631a8e23658ceb20cd5a0f1a2a19362a363f74287f8199bb55e"
+    },
+    "proposal-origin-caller/execution.json": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/execution.json",
+      "bytes": 840,
+      "sha256": "db69882d199b47275d5716d027f2f302a81bb081bb0db9012a6e0df920e6b42a"
+    },
+    "proposal-origin-caller/exit.txt": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/exit.txt",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "proposal-origin-caller/stderr.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "proposal-origin-caller/stdin.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/stdin.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "proposal-origin-caller/stdout.bin": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-361-363/proposal-origin-caller/stdout.bin",
+      "bytes": 358,
+      "sha256": "046c5cc9f363d4f03080eec84e4eb9afe97fedeec68ba981a31ddc4f6fa5a8d1"
+    }
+  }
+}
