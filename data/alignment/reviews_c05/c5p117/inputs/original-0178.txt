@@ -1,0 +1,52 @@
+import json,hashlib,sqlite3,gzip,subprocess
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];B=A.parent;W=A.parents[2]/'campaign-worktree'
+def put(name,x):(A/'evidence'/name).write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def sha(b):return hashlib.sha256(b).hexdigest()
+base=json.loads((B/'proposal-baseline.json').read_text());put('proposal-baseline.json',base)
+for name,p in base['source_pins'].items():
+ b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256']
+refs=[]
+for name,p in base['governing_git_pins'].items():
+ b=subprocess.check_output(['git','show',base['commit']+':'+name],cwd=W);assert len(b)==p['bytes']and sha(b)==p['sha256'];refs.append({'git_object':base['commit']+':'+name,**p})
+ if name=='docs/errata_register.json':reg=json.loads(b)
+ if name=='data/alignment/C05_CAMPAIGN.md':shape=b.decode().split('## Gates')[0]
+put('governance.json',{'original_git_objects':refs,'course_shape':shape,'consumed':'Same exact AGENTS/spec/brief/protocol/governance already read in this continuing independent role; immutable objects independently hash-verified for this batch.'})
+protocol=(B.parent/'proposal-protocol.md').read_bytes();(A/'evidence/proposal-protocol.md').write_bytes(protocol)
+db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row
+source=json.loads((B/'source.json').read_text());context=json.loads((B/'context.json').read_text());sql='SELECT id,course,seq,acip,wylie,english FROM corpus_segments WHERE course=? AND seq=?'
+for row in context:assert dict(db.execute(sql,(row['course'],row['seq'])).fetchone())==row
+assert all(r in context for r in source);put('source-context.json',context)
+put('source-verification.json',{'status':'PASS','sql':sql,'parameters':[[r['course'],r['seq']]for r in context],'sqlite_uri_mode':'ro','selected_source_rows':3,'context_rows':15,'no_packaging_query_repeats':True})
+m=json.load(gzip.open(base['source_pins']['master']['path'],'rt'));corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+terms=['dang po', 'ni', 'mi dge ba', 'mi', 'dge ba', 'bcu', 'so so', 'ngo bo', 'gang', 'zhe na', 'srog gcod pa', 'srog', 'gcod pa', 'bsams bzhin', 'du', 'ma nor bar', 'ma', 'nor', 'gzhan', 'bsad pa', 'zhes pas', 'bsams', 'shi ba', 'la', 'nyes pa', 'med', 'bstan', 'lha sbyin', 'lta bu', 'gsod pa', 'sbyor ba', 'byas', 'nas', 'mchod sbyin', 'dang', 'kyang', 'las lam', 'las', 'lam', 'gyi', 'dngos gzhi', 'dngos', 'gzhi', "'byung", 'rang', 'to', 'ma byin par len pa', 'mthu', 'dbang cha', "'jab bu", "'jab bus", 'tshor bar', 'tshor', 'ma tshor bar', 'bdag gir', 'byed pa', 'par', 'bgrod', 'bya ba', 'min', "'gro bar", "'dod pa", 'sgo nas', "'dod pas", 'log par g-yem pa', 'g-yem par', "'gyur ba", 'rnam pa', 'bzhi', 'yod', 'de']
+objects={};lex=[]
+for term in terms:
+ sql='SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id';rows=[dict(r)for r in db.execute(sql,(term,term))];keys=[]
+ for coll in ['unified_entries','curated_entries','glossary_entries']:
+  for i,e in enumerate(m[coll]):
+   if e.get('wylie')==term or term in(e.get('wylie_variants')or[]):
+    key=f'{coll}:{i}';objects[key]={'collection':coll,'index':i,'entry':e};keys.append(key)
+ lex.append({'term':term,'sql':sql,'parameters':[term,term],'spine_count':len(rows),'spine_rows':rows,'master_count':len(keys),'master_keys':keys})
+put('lexical.json',{'queries':lex,'master_objects':objects})
+queries=[];records={}
+for row in source:
+ for f in ['acip','wylie','english']:queries.append((f,'=',row[f]))
+for f,p in [('wylie','mchod sbyin'),('wylie','lha sbyin lta bu'),('wylie','ma tshor bar') ]:queries.append((f,'instr',p))
+qs=[]
+for f,op,p in queries:
+ sql='SELECT * FROM corpus_segments WHERE '+(f+'=?'if op=='='else'instr('+f+',?)>0')+" AND course!='C13' ORDER BY course,seq";rows=[dict(r)for r in db.execute(sql,(p,))]
+ for r in rows:assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+ expected=[i+1 for i,r in enumerate(corpus)if r['course']!='C13' and (r[f]==p if op=='='else p in r[f])];assert set(expected)=={r['id']for r in rows}
+ qs.append({'field':f,'op':op,'sql':sql,'parameters':[p],'count':len(rows),'row_ids':[r['id']for r in rows]})
+put('corpus.json',{'queries':qs,'complete_records':records})
+physical=Path(base['source_pins']['physical']['path']).read_bytes();prep=json.loads((B/'root-preparation-proof.json').read_text());byseq={r['seq']:r for r in source};ext=[]
+for x in prep['physical_extents']:
+ b=physical[x['start']:x['start']+x['bytes']];assert sha(b)==x['sha256'] and b.decode('ascii')==x['original_text'];import re
+ assert re.sub(rb'\s+',b' ',b).strip().decode('ascii')==byseq[x['seq']][x['field']]
+ ext.append(x)
+put('physical-extents.json',{'physical_pin':base['source_pins']['physical'],'original_preparation_pin':{'path':str(B/'root-preparation-proof.json'),'sha256':sha((B/'root-preparation-proof.json').read_bytes())},'extents':ext,'method':'Read and verify six raw ASCII byte extents; whitespace collapse exactly equals the three ACIP/English fields. No whole-file encoding claim.'})
+
+direct=[r for r in reg if any(t in json.dumps(r).lower()for t in ['c05:349','c05:350','c05:351'])]
+put('register.json',{'original_git_object':base['commit']+':docs/errata_register.json','sha256':base['governing_git_pins']['docs/errata_register.json']['sha256'],'count':len(reg),'search_terms':['C05:349','C05:350','C05:351'],'direct_matches':direct,'classes_checked':['E-044 converter escapes','E-071 running head','E-107 cap','E-111 spill','following-heading','footnote/folio fusion']})
+print(json.dumps({'source':'PASS','lexical_queries':len(lex),'unique_master_objects':len(objects),'corpus_queries':len(qs),'unique_corpus_rows':len(records),'physical_complete_fields':6,'lexical_counts':[[x['term'],x['master_count']]for x in lex],'corpus_counts':[[x['parameters'][0][:65],x['count']]for x in qs]},ensure_ascii=False,indent=2))

@@ -1,0 +1,1138 @@
+[
+  {
+    "seq": 350,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MCHOD SBYIN",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MCHOD SBYIN",
+        "source_row": {
+          "id": 1732,
+          "course": "C05",
+          "seq": 350,
+          "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+          "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+          "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+        },
+        "occurrences": {
+          "acip": [
+            72,
+            97
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 241,
+          "wylie": 240,
+          "english": 395
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 350,
+            "field": "acip",
+            "start": 239012,
+            "bytes": 241,
+            "sha256": "70cf29384858fe3ddbc1bcce1764b070c2a32541c9fa8fb071f318f08375505c",
+            "original_text": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 350,
+            "field": "english",
+            "start": 239255,
+            "bytes": 400,
+            "sha256": "ced3182450ecafed467551ef37c5f484d4a43c11a8819801a6fca0b3547f9de7",
+            "original_text": "The words \"without a mistake\" are meant to indicate that no \"actual-\r\ncommission\" stage of an act occurs in a case of mistaken identity; for example,\r\nin a case where you undertake to kill John but instead kill Joe because you\r\nhave mistaken him for John. The word \"another,\" finally, is meant to indicate\r\nthat no \"actual-commission\" stage occurs either in an instance where one takes\r\nhis own life.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The proper names belong to the intended-victim/mistaken-victim example. Exact LHA SBYIN has no master entry; MCHOD SBYIN has reference Yajñadatta and a misleading auto-mined John. Local English John/Joe is consistent with the later369 explanation, while TCS02:72 uses Devadatta/Yajana in its spilling English. These are localized renderings and mixed evidence tiers, not sufficient grounds for a Tibetan spelling correction.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 350,
+    "kind": "ENGLISH_TYPO",
+    "found": "actual- commission",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "actual- commission",
+        "source_row": {
+          "id": 1732,
+          "course": "C05",
+          "seq": 350,
+          "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+          "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+          "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            61
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 241,
+          "wylie": 240,
+          "english": 395
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 350,
+            "field": "acip",
+            "start": 239012,
+            "bytes": 241,
+            "sha256": "70cf29384858fe3ddbc1bcce1764b070c2a32541c9fa8fb071f318f08375505c",
+            "original_text": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 350,
+            "field": "english",
+            "start": 239255,
+            "bytes": 400,
+            "sha256": "ced3182450ecafed467551ef37c5f484d4a43c11a8819801a6fca0b3547f9de7",
+            "original_text": "The words \"without a mistake\" are meant to indicate that no \"actual-\r\ncommission\" stage of an act occurs in a case of mistaken identity; for example,\r\nin a case where you undertake to kill John but instead kill Joe because you\r\nhave mistaken him for John. The word \"another,\" finally, is meant to indicate\r\nthat no \"actual-commission\" stage occurs either in an instance where one takes\r\nhis own life.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The physical English breaks after actual- and resumes commission on the next line, while the later actual-commission remains on one line. Source flattening preserves an intervening space in the first occurrence. Retain both exact strings and record the layout limit; do not silently repair or file the authorial technical term as a new typo.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 350,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "kill John but instead kill Joe",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "kill John but instead kill Joe",
+        "source_row": {
+          "id": 1732,
+          "course": "C05",
+          "seq": 350,
+          "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+          "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+          "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            182
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 241,
+          "wylie": 240,
+          "english": 395
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 350,
+            "field": "acip",
+            "start": 239012,
+            "bytes": 241,
+            "sha256": "70cf29384858fe3ddbc1bcce1764b070c2a32541c9fa8fb071f318f08375505c",
+            "original_text": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 350,
+            "field": "english",
+            "start": 239255,
+            "bytes": 400,
+            "sha256": "ced3182450ecafed467551ef37c5f484d4a43c11a8819801a6fca0b3547f9de7",
+            "original_text": "The words \"without a mistake\" are meant to indicate that no \"actual-\r\ncommission\" stage of an act occurs in a case of mistaken identity; for example,\r\nin a case where you undertake to kill John but instead kill Joe because you\r\nhave mistaken him for John. The word \"another,\" finally, is meant to indicate\r\nthat no \"actual-commission\" stage occurs either in an instance where one takes\r\nhis own life.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The first named source person is the intended victim and the repeated MCHOD SBYIN is the mistaken and killed victim. GMR localizes them as John and Joe. Full later369 likewise distinguishes them. The mined MCHOD SBYIN/John conflicts with this passage and is not authoritative evidence of a factual English error.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 350,
+    "kind": "INGEST_ARTEFACT",
+    "found": "takes his own life.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "takes his own life.",
+        "source_row": {
+          "id": 1732,
+          "course": "C05",
+          "seq": 350,
+          "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+          "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+          "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            376
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 241,
+          "wylie": 240,
+          "english": 395
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 350,
+            "field": "acip",
+            "start": 239012,
+            "bytes": 241,
+            "sha256": "70cf29384858fe3ddbc1bcce1764b070c2a32541c9fa8fb071f318f08375505c",
+            "original_text": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 350,
+            "field": "english",
+            "start": 239255,
+            "bytes": 400,
+            "sha256": "ced3182450ecafed467551ef37c5f484d4a43c11a8819801a6fca0b3547f9de7",
+            "original_text": "The words \"without a mistake\" are meant to indicate that no \"actual-\r\ncommission\" stage of an act occurs in a case of mistaken identity; for example,\r\nin a case where you undertake to kill John but instead kill Joe because you\r\nhave mistaken him for John. The word \"another,\" finally, is meant to indicate\r\nthat no \"actual-commission\" stage occurs either in an instance where one takes\r\nhis own life.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "Both explanatory clauses are fully present in the physical extent and exact C16 repeat, below the field cap. The self-killing paraphrase is a translation expansion, not a missing kill token to restore.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 350,
+    "kind": "FORMATTING",
+    "found": "\"actual-commission\"",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "\"actual-commission\"",
+        "source_row": {
+          "id": 1732,
+          "course": "C05",
+          "seq": 350,
+          "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+          "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+          "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            311
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 350,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 241,
+          "wylie": 240,
+          "english": 395
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 350,
+            "field": "acip",
+            "start": 239012,
+            "bytes": 241,
+            "sha256": "70cf29384858fe3ddbc1bcce1764b070c2a32541c9fa8fb071f318f08375505c",
+            "original_text": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 350,
+            "field": "english",
+            "start": 239255,
+            "bytes": 400,
+            "sha256": "ced3182450ecafed467551ef37c5f484d4a43c11a8819801a6fca0b3547f9de7",
+            "original_text": "The words \"without a mistake\" are meant to indicate that no \"actual-\r\ncommission\" stage of an act occurs in a case of mistaken identity; for example,\r\nin a case where you undertake to kill John but instead kill Joe because you\r\nhave mistaken him for John. The word \"another,\" finally, is meant to indicate\r\nthat no \"actual-commission\" stage occurs either in an instance where one takes\r\nhis own life.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "Both technical expressions are quoted in the physical prose. The first has the preserved line-break space and the second does not. Members use their own parent ranges; quotes and explanatory stage remain outside the tight compound.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

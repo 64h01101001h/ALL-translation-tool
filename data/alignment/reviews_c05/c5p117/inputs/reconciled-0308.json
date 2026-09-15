@@ -1,0 +1,85 @@
+{
+  "utc": "2026-09-15T03:38:43.321957+00:00",
+  "status": "ROOT_COMPLETE_CORPUS_READING_VERIFIED",
+  "full_unique_corpus_records": 8,
+  "new_complete_wrappers_read": 7,
+  "prior_personal_complete_reuse": 1,
+  "records": [
+    {
+      "id": 6888,
+      "seq": 870,
+      "course": "C16",
+      "corpus_index": 6887
+    },
+    {
+      "id": 6889,
+      "seq": 871,
+      "course": "C16",
+      "corpus_index": 6888
+    },
+    {
+      "id": 6890,
+      "seq": 872,
+      "course": "C16",
+      "corpus_index": 6889
+    },
+    {
+      "id": 1751,
+      "seq": 369,
+      "course": "C05",
+      "corpus_index": 1750
+    },
+    {
+      "id": 4107,
+      "seq": 204,
+      "course": "C12",
+      "corpus_index": 4106
+    },
+    {
+      "id": 28517,
+      "seq": 1198,
+      "course": "ILL",
+      "corpus_index": 28516
+    },
+    {
+      "id": 193,
+      "seq": 193,
+      "course": "C01",
+      "corpus_index": 192
+    },
+    {
+      "id": 9346,
+      "seq": 72,
+      "course": "TCS02",
+      "corpus_index": 9345
+    }
+  ],
+  "sources": {
+    "english/evidence/corpus.json": {
+      "bytes": 123620,
+      "sha256": "0667ffba0693115d7d7a7c2d3b32bd1c155709d5581f5faa486f6db8b31b4bdf"
+    },
+    "tibetan/evidence/corpus.json": {
+      "bytes": 57425,
+      "sha256": "1f125ad732758da104410c9b4d8aa8d1753ba27fd02ad33373cff8de5dab3dc2"
+    }
+  },
+  "prior_TCS02_72_reuse": {
+    "id": 9346,
+    "original_material": {
+      "bytes": 72384,
+      "sha256": "9c73c5eaad81773ba538fd6acc8bee9f3e774dfd97c5bfe9bc5e2f01b74af40c"
+    },
+    "root_prior_reading": {
+      "bytes": 1708,
+      "sha256": "d28d34c14ff7baeb7a6c40464d6178b3a12811c3cc69cb62740fcc11b7fe1d8e"
+    },
+    "full_object_equality": true
+  },
+  "current_corpus": {
+    "bytes": 8965675,
+    "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+  },
+  "reading_method": "Three completeC16 neutral wrappers read earlier; four complete C05:369,C12:204,ILL:1198,C01:193 wrapper/record objects read in bounded output after parsed-raw/record/full-field equality. TCS02:72 exact prior full reading reused. Every selected complete record matches actual pinned corpus. C16 duplicate variants not selected here are not additional reading claims.",
+  "limits": "ILL John is contrasting usage, not evidence that local Joe is wrong. C12 names are general examples, not a killing episode. TCS02 English exceeds its short Tibetan verse extent and is not a clean aligned prose witness. No independent publication inference, source correction or newSQL/native."
+}

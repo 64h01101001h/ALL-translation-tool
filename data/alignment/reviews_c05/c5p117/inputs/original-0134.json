@@ -1,0 +1,139 @@
+{
+  "seq": 350,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1732,
+        "course": "C05",
+        "seq": 350,
+        "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+        "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+        "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete ACIP, Wylie and exact GMR English read with context343–357. Six full physical source extents read and whitespace-collapse verified. Digital/physical agreement establishes the available reading, not universal correctness."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/material-corpus-reading-selection.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1732,
+            6889
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1732,
+            6889
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1732,
+            6889
+          ]
+        }
+      ],
+      "finding": "The complete current segment and its C16 counterpart match all three source fields. Six complete source/C16 records and six additional material records were fully read. The C16 duplicate is the same reading reused, not an independently collated publication. Full context includes the continuation at352; no outside publication was inspected."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b8846b0affaac576ace5b0789a45df1e462a53:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-format-search.json"
+      ],
+      "finding": "Direct current references screened with no prior segment entry. Seven unchanged complete converter, running-head, cap, spill and footnote class records reused by exact personal reading identity. Ten complete additional register search records fully read; E-025/E-028/E-029/E-045 establish the source hyphen-space family and E-089 separately forbids silent layer repair. Note that family without another filing."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "LHA SBYIN is the intended John and the second MCHOD SBYIN is the actual Joe in this exact mistaken-identity example. The full MCHOD SBYIN master has an auto-aligned john gloss from other contexts; C05:369/C16:886 and C12:204 support the present role distinction, while ILL:1198 uses MCHOD SBYIN for John. This variability is counterevidence to a universal fixed English-name correction. The first actual- commission contains a preserved physical hyphen/line-break space; the later actual-commission in the same field does not. This is the already recorded source hyphen-space family, not an authorial factual error.",
+      "counterevidence": "Exact repeated source readings may share an ancestor and cannot establish publication independence. Master HGM tiers can be auto-aligned or incomplete, so local syntax and full passages govern; no mined gloss is promoted. A standard alternative wording alone does not prove the exact source wrong."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 241,
+        "wylie": 240,
+        "english": 395
+      },
+      "utf8_bytes": {
+        "acip": 241,
+        "wylie": 240,
+        "english": 395
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The complete physical English has actual- followed by CRLF then commission. Whitespace collapse yields the exact stored actual- commission. Preserve both differently spaced occurrences. All fields are below1500 characters; no clipping or hidden missing text is inferred."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "LHA SBYIN is the intended John and the second MCHOD SBYIN is the actual Joe in this exact mistaken-identity example. The full MCHOD SBYIN master has an auto-aligned john gloss from other contexts; C05:369/C16:886 and C12:204 support the present role distinction, while ILL:1198 uses MCHOD SBYIN for John. This variability is counterevidence to a universal fixed English-name correction. The first actual- commission contains a preserved physical hyphen/line-break space; the later actual-commission in the same field does not. This is the already recorded source hyphen-space family, not an authorial factual error."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "REGISTERED_CLASS_NOT_REFILED",
+      "reason": "The first actual- commission preserves a physical hyphenated line break; existing E-025/E-028/E-029/E-045 cover that source family. E-089 warns against silent layer repair. Keep the exact space and note the established family."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "REGISTERED_CLASS_NOT_REFILED",
+      "reason": "The first actual- commission preserves a physical hyphenated line break; existing E-025/E-028/E-029/E-045 cover that source family. E-089 warns against silent layer repair. Keep the exact space and note the established family."
+    }
+  ],
+  "source_questions": [
+    {
+      "found": "\"actual- commission\" stage",
+      "kind": "INGEST_ARTEFACT",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "decision": "NOTE_EXISTING_CLASS; no new filing",
+      "evidence": "Complete physical English shows actual-\r\ncommission; same-row later actual-commission and prior register family support the line-wrap-space mechanism. C16 repeats the full field, so it is no independent corrected witness. Preserve exact source and alignment parent wording.",
+      "counterevidence": "No printed edition independently inspected; the underlying digital wrap and course duplicate are not independent publication witnesses. The registered family makes another segment filing unnecessary here."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

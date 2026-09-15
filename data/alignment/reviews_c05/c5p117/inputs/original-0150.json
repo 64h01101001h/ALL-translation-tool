@@ -1,0 +1,958 @@
+{
+  "queries": [
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1731,
+        6888
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+      ],
+      "count": 2,
+      "row_ids": [
+        1731,
+        6888
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      ],
+      "count": 2,
+      "row_ids": [
+        1731,
+        6888
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1732,
+        6889
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to"
+      ],
+      "count": 2,
+      "row_ids": [
+        1732,
+        6889
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+      ],
+      "count": 2,
+      "row_ids": [
+        1732,
+        6889
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1733,
+        6890
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+      ],
+      "count": 2,
+      "row_ids": [
+        1733,
+        6890
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      ],
+      "count": 2,
+      "row_ids": [
+        1733,
+        6890
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "mchod sbyin"
+      ],
+      "count": 36,
+      "row_ids": [
+        24811,
+        24817,
+        24818,
+        24820,
+        25011,
+        25024,
+        25042,
+        25059,
+        25060,
+        25061,
+        25062,
+        25063,
+        25065,
+        25080,
+        25081,
+        25086,
+        25098,
+        1732,
+        1751,
+        4107,
+        5432,
+        6889,
+        6904,
+        8107,
+        26217,
+        23610,
+        23637,
+        28517,
+        28518,
+        22079,
+        9402,
+        9767,
+        14973,
+        16392,
+        16404,
+        41461
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "lha sbyin lta bu"
+      ],
+      "count": 2,
+      "row_ids": [
+        1732,
+        6889
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "ma tshor bar"
+      ],
+      "count": 4,
+      "row_ids": [
+        193,
+        1733,
+        6107,
+        6890
+      ]
+    }
+  ],
+  "complete_records": {
+    "1731": {
+      "spine_row": {
+        "id": 1731,
+        "course": "C05",
+        "seq": 349,
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,\", \"wylie\": \"[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan\", \"english\": \"\\\"What,\\\" one may ask, \\\"is the basic nature of each of the ten non-virtues?\\\" The taking of life is defined as killing another being purposely, and without a mistake. The word \\\"purposely\\\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.\"}"
+      },
+      "corpus_index": 1730,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      }
+    },
+    "6888": {
+      "spine_row": {
+        "id": 6888,
+        "course": "C16",
+        "seq": 870,
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,\", \"wylie\": \"[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan\", \"english\": \"\\\"What,\\\" one may ask, \\\"is the basic nature of each of the ten non-virtues?\\\" The taking of life is defined as killing another being purposely, and without a mistake. The word \\\"purposely\\\" is meant to indicate that there is no problem like where the being in question has died but there was no intent.\"}"
+      },
+      "corpus_index": 6887,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      }
+    },
+    "1732": {
+      "spine_row": {
+        "id": 1732,
+        "course": "C05",
+        "seq": 350,
+        "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+        "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+        "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,\", \"wylie\": \"ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to\", \"english\": \"The words \\\"without a mistake\\\" are meant to indicate that no \\\"actual- commission\\\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \\\"another,\\\" finally, is meant to indicate that no \\\"actual-commission\\\" stage occurs either in an instance where one takes his own life.\"}"
+      },
+      "corpus_index": 1731,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+        "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+        "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+      }
+    },
+    "6889": {
+      "spine_row": {
+        "id": 6889,
+        "course": "C16",
+        "seq": 871,
+        "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+        "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+        "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,\", \"wylie\": \"ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to\", \"english\": \"The words \\\"without a mistake\\\" are meant to indicate that no \\\"actual- commission\\\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \\\"another,\\\" finally, is meant to indicate that no \\\"actual-commission\\\" stage occurs either in an instance where one takes his own life.\"}"
+      },
+      "corpus_index": 6888,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "MA NOR BAR ZHES PAS LHA SBYIN LTA BU GSOD PA'I SBYOR BA BYAS NAS, GZHAN MCHOD SBYIN DANG NOR NAS MCHOD SBYIN BSAD KYANG LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN, GZHAN ZHES PAS RANG BSAD PA LA LAS LAM GYI DNGOS GZHI MI 'BYUNG BAR BSTAN TO,",
+        "wylie": "ma nor bar zhes pas lha sbyin lta bu gsod pa'i sbyor ba byas nas, gzhan mchod sbyin dang nor nas mchod sbyin bsad kyang las lam gyi dngos gzhi mi 'byung bar bstan, gzhan zhes pas rang bsad pa la las lam gyi dngos gzhi mi 'byung bar bstan to",
+        "english": "The words \"without a mistake\" are meant to indicate that no \"actual- commission\" stage of an act occurs in a case of mistaken identity; for example, in a case where you undertake to kill John but instead kill Joe because you have mistaken him for John. The word \"another,\" finally, is meant to indicate that no \"actual-commission\" stage occurs either in an instance where one takes his own life."
+      }
+    },
+    "1733": {
+      "spine_row": {
+        "id": 1733,
+        "course": "C05",
+        "seq": 351,
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,\", \"wylie\": \"ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de\", \"english\": \"Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.\"}"
+      },
+      "corpus_index": 1732,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      }
+    },
+    "6890": {
+      "spine_row": {
+        "id": 6890,
+        "course": "C16",
+        "seq": 872,
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,\", \"wylie\": \"ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de\", \"english\": \"Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity.\"}"
+      },
+      "corpus_index": 6889,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      }
+    },
+    "24811": {
+      "spine_row": {
+        "id": 24811,
+        "course": "AK",
+        "seq": 17,
+        "acip": "MCHOD SBYIN DE BTZUGS PAS BU TSA DANG, SKYE BO GZHAN LA PHAN PAR 'DOD PA RNAMS DANG, 'JIGS PAS NYEN PA RNAMS KYI LUGS SU GYUR CING SEMS CAN GSOD PAR 'GYUR BA STE,",
+        "wylie": "mchod sbyin de btsugs pas bu tsha dang, skye bo gzhan la phan par 'dod pa rnams dang, 'jigs pas nyen pa rnams kyi lugs su gyur cing sems can gsod par 'gyur ba ste",
+        "english": "Sacrificing animals because you believe that it is a way to help your descendants, or other people—or else to protect these people from harm. Sacrificing animals for ancestors",
+        "raw": "{\"course\": \"AK\", \"acip\": \"MCHOD SBYIN DE BTZUGS PAS BU TSA DANG, SKYE BO GZHAN LA PHAN PAR 'DOD PA RNAMS DANG, 'JIGS PAS NYEN PA RNAMS KYI LUGS SU GYUR CING SEMS CAN GSOD PAR 'GYUR BA STE,\", \"wylie\": \"mchod sbyin de btsugs pas bu tsha dang, skye bo gzhan la phan par 'dod pa rnams dang, 'jigs pas nyen pa rnams kyi lugs su gyur cing sems can gsod par 'gyur ba ste\", \"english\": \"Sacrificing animals because you believe that it is a way to help your descendants, or other people—or else to protect these people from harm. Sacrificing animals for ancestors\"}"
+      },
+      "corpus_index": 24810,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "MCHOD SBYIN DE BTZUGS PAS BU TSA DANG, SKYE BO GZHAN LA PHAN PAR 'DOD PA RNAMS DANG, 'JIGS PAS NYEN PA RNAMS KYI LUGS SU GYUR CING SEMS CAN GSOD PAR 'GYUR BA STE,",
+        "wylie": "mchod sbyin de btsugs pas bu tsha dang, skye bo gzhan la phan par 'dod pa rnams dang, 'jigs pas nyen pa rnams kyi lugs su gyur cing sems can gsod par 'gyur ba ste",
+        "english": "Sacrificing animals because you believe that it is a way to help your descendants, or other people—or else to protect these people from harm. Sacrificing animals for ancestors"
+      }
+    },
+    "24817": {
+      "spine_row": {
+        "id": 24817,
+        "course": "AK",
+        "seq": 23,
+        "acip": "RTEN BTZUGS TA {%TE} LO TE LO DUS KYI MCHOD SBYIN BYAS NAS, DES DER PHYUGS MANG PO DAG KYANG BSAD, TSE 'PHO KAR YANG BUL {%BU LA} BOS TE SMRAS PA,",
+        "wylie": "rten btsugs ta {%te} lo te lo dus kyi mchod sbyin byas nas, des der phyugs mang po dag kyang bsad, tshe 'pho kar yang bul {%bu la} bos te smras pa",
+        "english": "“The merchant had set up a special altar, and once every year he had animals sacrificed upon it—and in the course of these sacrifices they killed many cows.  On his deathbed, the man summoned his son and told him the following.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"RTEN BTZUGS TA {%TE} LO TE LO DUS KYI MCHOD SBYIN BYAS NAS, DES DER PHYUGS MANG PO DAG KYANG BSAD, TSE 'PHO KAR YANG BUL {%BU LA} BOS TE SMRAS PA,\", \"wylie\": \"rten btsugs ta {%te} lo te lo dus kyi mchod sbyin byas nas, des der phyugs mang po dag kyang bsad, tshe 'pho kar yang bul {%bu la} bos te smras pa\", \"english\": \"“The merchant had set up a special altar, and once every year he had animals sacrificed upon it—and in the course of these sacrifices they killed many cows.  On his deathbed, the man summoned his son and told him the following.\"}"
+      },
+      "corpus_index": 24816,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "RTEN BTZUGS TA {%TE} LO TE LO DUS KYI MCHOD SBYIN BYAS NAS, DES DER PHYUGS MANG PO DAG KYANG BSAD, TSE 'PHO KAR YANG BUL {%BU LA} BOS TE SMRAS PA,",
+        "wylie": "rten btsugs ta {%te} lo te lo dus kyi mchod sbyin byas nas, des der phyugs mang po dag kyang bsad, tshe 'pho kar yang bul {%bu la} bos te smras pa",
+        "english": "“The merchant had set up a special altar, and once every year he had animals sacrificed upon it—and in the course of these sacrifices they killed many cows.  On his deathbed, the man summoned his son and told him the following."
+      }
+    },
+    "24818": {
+      "spine_row": {
+        "id": 24818,
+        "course": "AK",
+        "seq": 24,
+        "acip": "BU KHYOD NGA LA BYAMS ZHA {%ZHE} NA, PHYUGS KYI MCHOD SBYIN LO DUS SU BYA BA 'DI NGA TSE 'PHOS NAS KYANG RTAG PAR GYIS SHIG CES BSGO NAS, BUS KYANG DE LTAR BGYI'O ZHES TE DE BZHIN DU MNYAN TO,,",
+        "wylie": "bu khyod nga la byams zha {%zhe} na, phyugs kyi mchod sbyin lo dus su bya ba 'di nga tshe 'phos nas kyang rtag par gyis shig ces bsgo nas, bus kyang de ltar bgyi'o zhes te de bzhin du mnyan to",
+        "english": "“'If you love me, my son, then I ask you to always continue these annual sacrifices, after I am gone.'  The son responded to these directions by saying, 'Of course Father, I'll do exactly as you say.'",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BU KHYOD NGA LA BYAMS ZHA {%ZHE} NA, PHYUGS KYI MCHOD SBYIN LO DUS SU BYA BA 'DI NGA TSE 'PHOS NAS KYANG RTAG PAR GYIS SHIG CES BSGO NAS, BUS KYANG DE LTAR BGYI'O ZHES TE DE BZHIN DU MNYAN TO,,\", \"wylie\": \"bu khyod nga la byams zha {%zhe} na, phyugs kyi mchod sbyin lo dus su bya ba 'di nga tshe 'phos nas kyang rtag par gyis shig ces bsgo nas, bus kyang de ltar bgyi'o zhes te de bzhin du mnyan to\", \"english\": \"“'If you love me, my son, then I ask you to always continue these annual sacrifices, after I am gone.'  The son responded to these directions by saying, 'Of course Father, I'll do exactly as you say.'\"}"
+      },
+      "corpus_index": 24817,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BU KHYOD NGA LA BYAMS ZHA {%ZHE} NA, PHYUGS KYI MCHOD SBYIN LO DUS SU BYA BA 'DI NGA TSE 'PHOS NAS KYANG RTAG PAR GYIS SHIG CES BSGO NAS, BUS KYANG DE LTAR BGYI'O ZHES TE DE BZHIN DU MNYAN TO,,",
+        "wylie": "bu khyod nga la byams zha {%zhe} na, phyugs kyi mchod sbyin lo dus su bya ba 'di nga tshe 'phos nas kyang rtag par gyis shig ces bsgo nas, bus kyang de ltar bgyi'o zhes te de bzhin du mnyan to",
+        "english": "“'If you love me, my son, then I ask you to always continue these annual sacrifices, after I am gone.'  The son responded to these directions by saying, 'Of course Father, I'll do exactly as you say.'"
+      }
+    },
+    "24820": {
+      "spine_row": {
+        "id": 24820,
+        "course": "AK",
+        "seq": 26,
+        "acip": "RTEN KYANG KHYOD BDAG GIS BTZUGS, MCHOD SBYIN YANG KHYOD BDAG GIS BYAS, PHYUGS MANG POR YANG KHYOD BDAG GIS BSAD NA,",
+        "wylie": "rten kyang khyod bdag gis btsugs, mchod sbyin yang khyod bdag gis byas, phyugs mang por yang khyod bdag gis bsad na",
+        "english": "Who set up the altar?  You did it yourself. Who made the sacrifices?  You did them yourself. Who killed so many cows?  You did, yourself.”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"RTEN KYANG KHYOD BDAG GIS BTZUGS, MCHOD SBYIN YANG KHYOD BDAG GIS BYAS, PHYUGS MANG POR YANG KHYOD BDAG GIS BSAD NA,\", \"wylie\": \"rten kyang khyod bdag gis btsugs, mchod sbyin yang khyod bdag gis byas, phyugs mang por yang khyod bdag gis bsad na\", \"english\": \"Who set up the altar?  You did it yourself. Who made the sacrifices?  You did them yourself. Who killed so many cows?  You did, yourself.”\"}"
+      },
+      "corpus_index": 24819,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "RTEN KYANG KHYOD BDAG GIS BTZUGS, MCHOD SBYIN YANG KHYOD BDAG GIS BYAS, PHYUGS MANG POR YANG KHYOD BDAG GIS BSAD NA,",
+        "wylie": "rten kyang khyod bdag gis btsugs, mchod sbyin yang khyod bdag gis byas, phyugs mang por yang khyod bdag gis bsad na",
+        "english": "Who set up the altar?  You did it yourself. Who made the sacrifices?  You did them yourself. Who killed so many cows?  You did, yourself.”"
+      }
+    },
+    "25011": {
+      "spine_row": {
+        "id": 25011,
+        "course": "AK",
+        "seq": 217,
+        "acip": "GRONG KHYER GCIG CIG NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA ZHIG YOD PA GROGS LNGA BRGYA TZAM GYIS BSKOR TE,",
+        "wylie": "grong khyer gcig cig na ded dpon gyi bu byams pa mchod sbyin zhes bya ba zhig yod pa grogs lnga brgya tsam gyis bskor te",
+        "english": "And there was a young man, living in a certain town, whose name was Maitra Yajna.  He was part of a group of 500 youths, who were all friends.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"GRONG KHYER GCIG CIG NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA ZHIG YOD PA GROGS LNGA BRGYA TZAM GYIS BSKOR TE,\", \"wylie\": \"grong khyer gcig cig na ded dpon gyi bu byams pa mchod sbyin zhes bya ba zhig yod pa grogs lnga brgya tsam gyis bskor te\", \"english\": \"And there was a young man, living in a certain town, whose name was Maitra Yajna.  He was part of a group of 500 youths, who were all friends.\"}"
+      },
+      "corpus_index": 25010,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "GRONG KHYER GCIG CIG NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA ZHIG YOD PA GROGS LNGA BRGYA TZAM GYIS BSKOR TE,",
+        "wylie": "grong khyer gcig cig na ded dpon gyi bu byams pa mchod sbyin zhes bya ba zhig yod pa grogs lnga brgya tsam gyis bskor te",
+        "english": "And there was a young man, living in a certain town, whose name was Maitra Yajna.  He was part of a group of 500 youths, who were all friends."
+      }
+    },
+    "25024": {
+      "spine_row": {
+        "id": 25024,
+        "course": "AK",
+        "seq": 230,
+        "acip": "BYAMS PA MCHOD SBYIN NI ZANGS KYI RAL CHEN KHA SKYA 'DAR GYIS BCAD PA ZHIG LA, 'JU 'JU NAS RGYA MTSO MTHAR PHYIN TE 'PHYAN CING SONG SONG NA,",
+        "wylie": "byams pa mchod sbyin ni zangs kyi ral chen kha skya 'dar gyis bcad pa zhig la, 'ju 'ju nas rgya mtsho mthar phyin te 'phyan cing song song na",
+        "english": "Maitra though clung to a board that had broken off from the great copper keel, and the currents carried him to the very ends of the sea.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN NI ZANGS KYI RAL CHEN KHA SKYA 'DAR GYIS BCAD PA ZHIG LA, 'JU 'JU NAS RGYA MTSO MTHAR PHYIN TE 'PHYAN CING SONG SONG NA,\", \"wylie\": \"byams pa mchod sbyin ni zangs kyi ral chen kha skya 'dar gyis bcad pa zhig la, 'ju 'ju nas rgya mtsho mthar phyin te 'phyan cing song song na\", \"english\": \"Maitra though clung to a board that had broken off from the great copper keel, and the currents carried him to the very ends of the sea.\"}"
+      },
+      "corpus_index": 25023,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN NI ZANGS KYI RAL CHEN KHA SKYA 'DAR GYIS BCAD PA ZHIG LA, 'JU 'JU NAS RGYA MTSO MTHAR PHYIN TE 'PHYAN CING SONG SONG NA,",
+        "wylie": "byams pa mchod sbyin ni zangs kyi ral chen kha skya 'dar gyis bcad pa zhig la, 'ju 'ju nas rgya mtsho mthar phyin te 'phyan cing song song na",
+        "english": "Maitra though clung to a board that had broken off from the great copper keel, and the currents carried him to the very ends of the sea."
+      }
+    },
+    "25042": {
+      "spine_row": {
+        "id": 25042,
+        "course": "AK",
+        "seq": 248,
+        "acip": "BYAMS PA MCHOD SBYIN GYIS, KHYOD KYIS SDIG PA'I LAS CI ZHIG BYAS ZHES SMRAS SO,,",
+        "wylie": "byams pa mchod sbyin gyis, khyod kyis sdig pa'i las ci zhig byas zhes smras so",
+        "english": "Maitra asked him, “What evil deed did you do, that this should be happening to you?”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN GYIS, KHYOD KYIS SDIG PA'I LAS CI ZHIG BYAS ZHES SMRAS SO,,\", \"wylie\": \"byams pa mchod sbyin gyis, khyod kyis sdig pa'i las ci zhig byas zhes smras so\", \"english\": \"Maitra asked him, “What evil deed did you do, that this should be happening to you?”\"}"
+      },
+      "corpus_index": 25041,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN GYIS, KHYOD KYIS SDIG PA'I LAS CI ZHIG BYAS ZHES SMRAS SO,,",
+        "wylie": "byams pa mchod sbyin gyis, khyod kyis sdig pa'i las ci zhig byas zhes smras so",
+        "english": "Maitra asked him, “What evil deed did you do, that this should be happening to you?”"
+      }
+    },
+    "25059": {
+      "spine_row": {
+        "id": 25059,
+        "course": "AK",
+        "seq": 265,
+        "acip": "BYAMS PA MCHOD SBYIN GYIS BSAMS PA, BDAG GIS KYANG SNGON LAS DE KHO NA DANG 'DRA BAR BYAS KYI, BDAG GI LAS RNAM PAR SMIN PA'ANG NYE BAR GNAS PAR GYUR PA LTA'O SNYAM PA DANG,",
+        "wylie": "byams pa mchod sbyin gyis bsams pa, bdag gis kyang sngon las de kho na dang 'dra bar byas kyi, bdag gi las rnam par smin pa'ang nye bar gnas par gyur pa lta'o snyam pa dang",
+        "english": "And Maitra thought to himself, “I too, before, committed the very same deeds that this man did; and it seems as though that karma is about to ripen on me.”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN GYIS BSAMS PA, BDAG GIS KYANG SNGON LAS DE KHO NA DANG 'DRA BAR BYAS KYI, BDAG GI LAS RNAM PAR SMIN PA'ANG NYE BAR GNAS PAR GYUR PA LTA'O SNYAM PA DANG,\", \"wylie\": \"byams pa mchod sbyin gyis bsams pa, bdag gis kyang sngon las de kho na dang 'dra bar byas kyi, bdag gi las rnam par smin pa'ang nye bar gnas par gyur pa lta'o snyam pa dang\", \"english\": \"And Maitra thought to himself, “I too, before, committed the very same deeds that this man did; and it seems as though that karma is about to ripen on me.”\"}"
+      },
+      "corpus_index": 25058,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN GYIS BSAMS PA, BDAG GIS KYANG SNGON LAS DE KHO NA DANG 'DRA BAR BYAS KYI, BDAG GI LAS RNAM PAR SMIN PA'ANG NYE BAR GNAS PAR GYUR PA LTA'O SNYAM PA DANG,",
+        "wylie": "byams pa mchod sbyin gyis bsams pa, bdag gis kyang sngon las de kho na dang 'dra bar byas kyi, bdag gi las rnam par smin pa'ang nye bar gnas par gyur pa lta'o snyam pa dang",
+        "english": "And Maitra thought to himself, “I too, before, committed the very same deeds that this man did; and it seems as though that karma is about to ripen on me.”"
+      }
+    },
+    "25060": {
+      "spine_row": {
+        "id": 25060,
+        "course": "AK",
+        "seq": 266,
+        "acip": "SEMS CAN DMYAL BA'I MI DES, BYAMS PA MCHOD SBYIN, KHYOD GANG NAS 'ONGS ZHES SMRAS PA DANG,",
+        "wylie": "sems can dmyal ba'i mi des, byams pa mchod sbyin, khyod gang nas 'ongs zhes smras pa dang",
+        "english": "The hellbeing asked Maitra, “Where have you come from?”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"SEMS CAN DMYAL BA'I MI DES, BYAMS PA MCHOD SBYIN, KHYOD GANG NAS 'ONGS ZHES SMRAS PA DANG,\", \"wylie\": \"sems can dmyal ba'i mi des, byams pa mchod sbyin, khyod gang nas 'ongs zhes smras pa dang\", \"english\": \"The hellbeing asked Maitra, “Where have you come from?”\"}"
+      },
+      "corpus_index": 25059,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "SEMS CAN DMYAL BA'I MI DES, BYAMS PA MCHOD SBYIN, KHYOD GANG NAS 'ONGS ZHES SMRAS PA DANG,",
+        "wylie": "sems can dmyal ba'i mi des, byams pa mchod sbyin, khyod gang nas 'ongs zhes smras pa dang",
+        "english": "The hellbeing asked Maitra, “Where have you come from?”"
+      }
+    },
+    "25061": {
+      "spine_row": {
+        "id": 25061,
+        "course": "AK",
+        "seq": 267,
+        "acip": "BYAMS PA MCHOD SBYIN GYIS SMRAS PA, 'DZAM BU'I GLING NA GRONG KHYER TA MA LI PA TI ZHES BYA BA ZHIG YOD DE, BDAG NI DE NAS 'ONGS TE, BDAG GIS KYANG LAS DE DAG THAMS CAD BYAS SO,,",
+        "wylie": "byams pa mchod sbyin gyis smras pa, 'dzam bu'i gling na grong khyer ta ma li pa ti zhes bya ba zhig yod de, bdag ni de nas 'ongs te, bdag gis kyang las de dag thams cad byas so",
+        "english": "And Maitra replied, “I am from the land of Jambu, from a city known as Tamali Pati.  That's where I started, and I have done every one of the things that you did.”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN GYIS SMRAS PA, 'DZAM BU'I GLING NA GRONG KHYER TA MA LI PA TI ZHES BYA BA ZHIG YOD DE, BDAG NI DE NAS 'ONGS TE, BDAG GIS KYANG LAS DE DAG THAMS CAD BYAS SO,,\", \"wylie\": \"byams pa mchod sbyin gyis smras pa, 'dzam bu'i gling na grong khyer ta ma li pa ti zhes bya ba zhig yod de, bdag ni de nas 'ongs te, bdag gis kyang las de dag thams cad byas so\", \"english\": \"And Maitra replied, “I am from the land of Jambu, from a city known as Tamali Pati.  That's where I started, and I have done every one of the things that you did.”\"}"
+      },
+      "corpus_index": 25060,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN GYIS SMRAS PA, 'DZAM BU'I GLING NA GRONG KHYER TA MA LI PA TI ZHES BYA BA ZHIG YOD DE, BDAG NI DE NAS 'ONGS TE, BDAG GIS KYANG LAS DE DAG THAMS CAD BYAS SO,,",
+        "wylie": "byams pa mchod sbyin gyis smras pa, 'dzam bu'i gling na grong khyer ta ma li pa ti zhes bya ba zhig yod de, bdag ni de nas 'ongs te, bdag gis kyang las de dag thams cad byas so",
+        "english": "And Maitra replied, “I am from the land of Jambu, from a city known as Tamali Pati.  That's where I started, and I have done every one of the things that you did.”"
+      }
+    },
+    "25062": {
+      "spine_row": {
+        "id": 25062,
+        "course": "AK",
+        "seq": 268,
+        "acip": "SEMS CAN DMYAL BA PA'I MI DES SMRAS PA, DE BDEN PA LTA STE, BDAG GIS KYANG BAR SNANG LAS SGRA THOS NAS, KHYOD KYI LAS KYI RNAM PAR SMIN PA ZAD DE, DED DPON GYI BU THAMS {%BYAMS} PA MCHOD SBYIN ZHES BYA BA LAS DE DANG 'DRA BAR BYAS PA ZHIG 'ONG NGO ZHES THOS SO,,",
+        "wylie": "sems can dmyal ba pa'i mi des smras pa, de bden pa lta ste, bdag gis kyang bar snang las sgra thos nas, khyod kyi las kyi rnam par smin pa zad de, ded dpon gyi bu thams {%byams} pa mchod sbyin zhes bya ba las de dang 'dra bar byas pa zhig 'ong ngo zhes thos so",
+        "english": "And the hellbeing said “Yes, it seems that you speak the truth—for just today I heard a voice from the sky, telling me 'Your karma now is reaching its end, for another son of a ship captain, whose name is Maitra Yajna, is about to arrive; and he has done the very same things as you.'”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"SEMS CAN DMYAL BA PA'I MI DES SMRAS PA, DE BDEN PA LTA STE, BDAG GIS KYANG BAR SNANG LAS SGRA THOS NAS, KHYOD KYI LAS KYI RNAM PAR SMIN PA ZAD DE, DED DPON GYI BU THAMS {%BYAMS} PA MCHOD SBYIN ZHES BYA BA LAS DE DANG 'DRA BAR BYAS PA ZHIG 'ONG NGO ZHES THOS SO,,\", \"wylie\": \"sems can dmyal ba pa'i mi des smras pa, de bden pa lta ste, bdag gis kyang bar snang las sgra thos nas, khyod kyi las kyi rnam par smin pa zad de, ded dpon gyi bu thams {%byams} pa mchod sbyin zhes bya ba las de dang 'dra bar byas pa zhig 'ong ngo zhes thos so\", \"english\": \"And the hellbeing said “Yes, it seems that you speak the truth—for just today I heard a voice from the sky, telling me 'Your karma now is reaching its end, for another son of a ship captain, whose name is Maitra Yajna, is about to arrive; and he has done the very same things as you.'”\"}"
+      },
+      "corpus_index": 25061,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "SEMS CAN DMYAL BA PA'I MI DES SMRAS PA, DE BDEN PA LTA STE, BDAG GIS KYANG BAR SNANG LAS SGRA THOS NAS, KHYOD KYI LAS KYI RNAM PAR SMIN PA ZAD DE, DED DPON GYI BU THAMS {%BYAMS} PA MCHOD SBYIN ZHES BYA BA LAS DE DANG 'DRA BAR BYAS PA ZHIG 'ONG NGO ZHES THOS SO,,",
+        "wylie": "sems can dmyal ba pa'i mi des smras pa, de bden pa lta ste, bdag gis kyang bar snang las sgra thos nas, khyod kyi las kyi rnam par smin pa zad de, ded dpon gyi bu thams {%byams} pa mchod sbyin zhes bya ba las de dang 'dra bar byas pa zhig 'ong ngo zhes thos so",
+        "english": "And the hellbeing said “Yes, it seems that you speak the truth—for just today I heard a voice from the sky, telling me 'Your karma now is reaching its end, for another son of a ship captain, whose name is Maitra Yajna, is about to arrive; and he has done the very same things as you.'”"
+      }
+    },
+    "25063": {
+      "spine_row": {
+        "id": 25063,
+        "course": "AK",
+        "seq": 269,
+        "acip": "BYAMS PA MCHOD SBYIN GYIS ZAS SU CI ZA ZHES SMRAS PA DANG,",
+        "wylie": "byams pa mchod sbyin gyis zas su ci za zhes smras pa dang",
+        "english": "Maitra asked him, “How do you survive?  What do you eat?”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN GYIS ZAS SU CI ZA ZHES SMRAS PA DANG,\", \"wylie\": \"byams pa mchod sbyin gyis zas su ci za zhes smras pa dang\", \"english\": \"Maitra asked him, “How do you survive?  What do you eat?”\"}"
+      },
+      "corpus_index": 25062,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN GYIS ZAS SU CI ZA ZHES SMRAS PA DANG,",
+        "wylie": "byams pa mchod sbyin gyis zas su ci za zhes smras pa dang",
+        "english": "Maitra asked him, “How do you survive?  What do you eat?”"
+      }
+    },
+    "25065": {
+      "spine_row": {
+        "id": 25065,
+        "course": "AK",
+        "seq": 271,
+        "acip": "BYAMS PA MCHOD SBYIN 'JIGS SHING MI DGA' BAS, MA'I DON DU SMON LAM BTAB STE, 'DI SKAD CES SMRAS SO,,",
+        "wylie": "byams pa mchod sbyin 'jigs shing mi dga' bas, ma'i don du smon lam btab ste, 'di skad ces smras so",
+        "english": "Maitra Yajna was terrified, and overcome with sadness.  And then—for his mother—he made this prayer:",
+        "raw": "{\"course\": \"AK\", \"acip\": \"BYAMS PA MCHOD SBYIN 'JIGS SHING MI DGA' BAS, MA'I DON DU SMON LAM BTAB STE, 'DI SKAD CES SMRAS SO,,\", \"wylie\": \"byams pa mchod sbyin 'jigs shing mi dga' bas, ma'i don du smon lam btab ste, 'di skad ces smras so\", \"english\": \"Maitra Yajna was terrified, and overcome with sadness.  And then—for his mother—he made this prayer:\"}"
+      },
+      "corpus_index": 25064,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "BYAMS PA MCHOD SBYIN 'JIGS SHING MI DGA' BAS, MA'I DON DU SMON LAM BTAB STE, 'DI SKAD CES SMRAS SO,,",
+        "wylie": "byams pa mchod sbyin 'jigs shing mi dga' bas, ma'i don du smon lam btab ste, 'di skad ces smras so",
+        "english": "Maitra Yajna was terrified, and overcome with sadness.  And then—for his mother—he made this prayer:"
+      }
+    },
+    "25080": {
+      "spine_row": {
+        "id": 25080,
+        "course": "AK",
+        "seq": 286,
+        "acip": "DGE SLONG DAG ,DE'I TSE DE'I DUS NA DAD DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA DE GZHAN ZHIG YIN PAR SEMS NA DE NI DE LTAR MI LTA STE,",
+        "wylie": "dge slong dag ,de'i tshe de'i dus na dad dpon gyi bu byams pa mchod sbyin zhes bya ba de gzhan zhig yin par sems na de ni de ltar mi lta ste",
+        "english": "O monks, you may be thinking to yourselves that the one who was the son of the ship captain in those days—Maitra Yajna—was some person that you don't know.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"DGE SLONG DAG ,DE'I TSE DE'I DUS NA DAD DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA DE GZHAN ZHIG YIN PAR SEMS NA DE NI DE LTAR MI LTA STE,\", \"wylie\": \"dge slong dag ,de'i tshe de'i dus na dad dpon gyi bu byams pa mchod sbyin zhes bya ba de gzhan zhig yin par sems na de ni de ltar mi lta ste\", \"english\": \"O monks, you may be thinking to yourselves that the one who was the son of the ship captain in those days—Maitra Yajna—was some person that you don't know.\"}"
+      },
+      "corpus_index": 25079,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "DGE SLONG DAG ,DE'I TSE DE'I DUS NA DAD DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BA DE GZHAN ZHIG YIN PAR SEMS NA DE NI DE LTAR MI LTA STE,",
+        "wylie": "dge slong dag ,de'i tshe de'i dus na dad dpon gyi bu byams pa mchod sbyin zhes bya ba de gzhan zhig yin par sems na de ni de ltar mi lta ste",
+        "english": "O monks, you may be thinking to yourselves that the one who was the son of the ship captain in those days—Maitra Yajna—was some person that you don't know."
+      }
+    },
+    "25081": {
+      "spine_row": {
+        "id": 25081,
+        "course": "AK",
+        "seq": 287,
+        "acip": "NGA NYID DE'I TSE DE'I DUS NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BAR GYUR TO,,",
+        "wylie": "nga nyid de'i tshe de'i dus na ded dpon gyi bu byams pa mchod sbyin zhes bya bar gyur to",
+        "english": "But I say to you, it was me.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"NGA NYID DE'I TSE DE'I DUS NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BAR GYUR TO,,\", \"wylie\": \"nga nyid de'i tshe de'i dus na ded dpon gyi bu byams pa mchod sbyin zhes bya bar gyur to\", \"english\": \"But I say to you, it was me.\"}"
+      },
+      "corpus_index": 25080,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "NGA NYID DE'I TSE DE'I DUS NA DED DPON GYI BU BYAMS PA MCHOD SBYIN ZHES BYA BAR GYUR TO,,",
+        "wylie": "nga nyid de'i tshe de'i dus na ded dpon gyi bu byams pa mchod sbyin zhes bya bar gyur to",
+        "english": "But I say to you, it was me."
+      }
+    },
+    "25086": {
+      "spine_row": {
+        "id": 25086,
+        "course": "AK",
+        "seq": 292,
+        "acip": "DPER NA, BYAMS PA MCHOD SBYIN YUL GZHAN DU SONG NAS TSE DE NYID LA NYI TSE BA'I MTHO RIS DANG, NYI TSE BA'I SEMS CAN DMYAL BA MYONG BAR GYUR PA LTA BU STE,",
+        "wylie": "dper na, byams pa mchod sbyin yul gzhan du song nas tshe de nyid la nyi tshe ba'i mtho ris dang, nyi tshe ba'i sems can dmyal ba myong bar gyur pa lta bu ste",
+        "english": "Think for example of someone like this youth, Maitra Yajna, who in that very same life travelled to another land, and experienced there a heaven on earth, and a hell on earth.",
+        "raw": "{\"course\": \"AK\", \"acip\": \"DPER NA, BYAMS PA MCHOD SBYIN YUL GZHAN DU SONG NAS TSE DE NYID LA NYI TSE BA'I MTHO RIS DANG, NYI TSE BA'I SEMS CAN DMYAL BA MYONG BAR GYUR PA LTA BU STE,\", \"wylie\": \"dper na, byams pa mchod sbyin yul gzhan du song nas tshe de nyid la nyi tshe ba'i mtho ris dang, nyi tshe ba'i sems can dmyal ba myong bar gyur pa lta bu ste\", \"english\": \"Think for example of someone like this youth, Maitra Yajna, who in that very same life travelled to another land, and experienced there a heaven on earth, and a hell on earth.\"}"
+      },
+      "corpus_index": 25085,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "DPER NA, BYAMS PA MCHOD SBYIN YUL GZHAN DU SONG NAS TSE DE NYID LA NYI TSE BA'I MTHO RIS DANG, NYI TSE BA'I SEMS CAN DMYAL BA MYONG BAR GYUR PA LTA BU STE,",
+        "wylie": "dper na, byams pa mchod sbyin yul gzhan du song nas tshe de nyid la nyi tshe ba'i mtho ris dang, nyi tshe ba'i sems can dmyal ba myong bar gyur pa lta bu ste",
+        "english": "Think for example of someone like this youth, Maitra Yajna, who in that very same life travelled to another land, and experienced there a heaven on earth, and a hell on earth."
+      }
+    },
+    "25098": {
+      "spine_row": {
+        "id": 25098,
+        "course": "AK",
+        "seq": 304,
+        "acip": "PHA MA LA RIM GRO BYAS NA, DED DPON GYI BU BYAMS PA MCHOD SBYIN GYIS MA'I NGAG MNYAN TE LAN BZHI PHYIR LOG PAS GRONG KHYER CHEN PO BZHIR NYI TSE BA'I MTHO RIS MYONG BAR GYUR PA DE DE'I THAR PA'I SA BON DU GYUR PA LTAR, TSE 'DI LA 'BRAS BU RNAM PAR SMIN PAR 'GYUR RO ZHES GSUNGS PA LTA BU'O,,",
+        "wylie": "pha ma la rim gro byas na, ded dpon gyi bu byams pa mchod sbyin gyis ma'i ngag mnyan te lan bzhi phyir log pas grong khyer chen po bzhir nyi tshe ba'i mtho ris myong bar gyur pa de de'i thar pa'i sa bon du gyur pa ltar, tshe 'di la 'bras bu rnam par smin par 'gyur ro zhes gsungs pa lta bu'o",
+        "english": "Then he pronounced, “If you honor your father and mother, you'll have the same experience as that son of a ship captain—the one whose name was Maitra Yajna.  He obeyed his mother four different times, and turned back from his intended course of action.  Because of this, he enjoyed a heaven on earth in four great cities; and his good behavior with his mother also planted a seed in him to reach, later, the state of freedom.”",
+        "raw": "{\"course\": \"AK\", \"acip\": \"PHA MA LA RIM GRO BYAS NA, DED DPON GYI BU BYAMS PA MCHOD SBYIN GYIS MA'I NGAG MNYAN TE LAN BZHI PHYIR LOG PAS GRONG KHYER CHEN PO BZHIR NYI TSE BA'I MTHO RIS MYONG BAR GYUR PA DE DE'I THAR PA'I SA BON DU GYUR PA LTAR, TSE 'DI LA 'BRAS BU RNAM PAR SMIN PAR 'GYUR RO ZHES GSUNGS PA LTA BU'O,,\", \"wylie\": \"pha ma la rim gro byas na, ded dpon gyi bu byams pa mchod sbyin gyis ma'i ngag mnyan te lan bzhi phyir log pas grong khyer chen po bzhir nyi tshe ba'i mtho ris myong bar gyur pa de de'i thar pa'i sa bon du gyur pa ltar, tshe 'di la 'bras bu rnam par smin par 'gyur ro zhes gsungs pa lta bu'o\", \"english\": \"Then he pronounced, “If you honor your father and mother, you'll have the same experience as that son of a ship captain—the one whose name was Maitra Yajna.  He obeyed his mother four different times, and turned back from his intended course of action.  Because of this, he enjoyed a heaven on earth in four great cities; and his good behavior with his mother also planted a seed in him to reach, later, the state of freedom.”\"}"
+      },
+      "corpus_index": 25097,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "PHA MA LA RIM GRO BYAS NA, DED DPON GYI BU BYAMS PA MCHOD SBYIN GYIS MA'I NGAG MNYAN TE LAN BZHI PHYIR LOG PAS GRONG KHYER CHEN PO BZHIR NYI TSE BA'I MTHO RIS MYONG BAR GYUR PA DE DE'I THAR PA'I SA BON DU GYUR PA LTAR, TSE 'DI LA 'BRAS BU RNAM PAR SMIN PAR 'GYUR RO ZHES GSUNGS PA LTA BU'O,,",
+        "wylie": "pha ma la rim gro byas na, ded dpon gyi bu byams pa mchod sbyin gyis ma'i ngag mnyan te lan bzhi phyir log pas grong khyer chen po bzhir nyi tshe ba'i mtho ris myong bar gyur pa de de'i thar pa'i sa bon du gyur pa ltar, tshe 'di la 'bras bu rnam par smin par 'gyur ro zhes gsungs pa lta bu'o",
+        "english": "Then he pronounced, “If you honor your father and mother, you'll have the same experience as that son of a ship captain—the one whose name was Maitra Yajna.  He obeyed his mother four different times, and turned back from his intended course of action.  Because of this, he enjoyed a heaven on earth in four great cities; and his good behavior with his mother also planted a seed in him to reach, later, the state of freedom.”"
+      }
+    },
+    "1751": {
+      "spine_row": {
+        "id": 1751,
+        "course": "C05",
+        "seq": 369,
+        "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+        "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+        "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,\", \"wylie\": \"'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,\", \"english\": \"This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \\\"I only want to kill John,\\\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \\\"actual- commission\\\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \\\"I'll kill anyone I happen to meet,\\\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well.\"}"
+      },
+      "corpus_index": 1750,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+        "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+        "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+      }
+    },
+    "4107": {
+      "spine_row": {
+        "id": 4107,
+        "course": "C12",
+        "seq": 204,
+        "acip": ",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,",
+        "wylie": "'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o",
+        "english": "Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \"John\" or a \"Joe\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \"person,\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Twenty-Four Karma and its Consequences, Despite No Self",
+        "raw": "{\"course\": \"C12\", \"acip\": \",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,\", \"wylie\": \"'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o\", \"english\": \"Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \\\"John\\\" or a \\\"Joe\\\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \\\"person,\\\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Twenty-Four Karma and its Consequences, Despite No Self\"}"
+      },
+      "corpus_index": 4106,
+      "corpus_record": {
+        "course": "C12",
+        "acip": ",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,",
+        "wylie": "'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o",
+        "english": "Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \"John\" or a \"Joe\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \"person,\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Twenty-Four Karma and its Consequences, Despite No Self"
+      }
+    },
+    "5432": {
+      "spine_row": {
+        "id": 5432,
+        "course": "C14",
+        "seq": 169,
+        "acip": ",'DOD PA CHE LA 'BYOR PAS 'PHONGS PA'I TSE, ,SBYIN DANG DKON MCHOG MCHOD PA MA BGYIS PAS, ,LAS NGAN MTSON CHA RANG LA 'KHOR BA YIN, ,DA NI MCHOD SBYIN DAG LA BRTZON PAR BYA,",
+        "wylie": "'dod pa che la 'byor pas 'phongs pa'i tshe, ,sbyin dang dkon mchog mchod pa ma bgyis pas, ,las ngan mtshon cha rang la 'khor ba yin, ,da ni mchod sbyin dag la brtson par bya",
+        "english": "When my want for things is great, But I've nothing to pay for them, It's because the wheel of knives Has turned on me again: The karma of failing to give to others, And offer to the Jewels. From now on then I'll work hard To make offerings, and to give.",
+        "raw": "{\"course\": \"C14\", \"acip\": \",'DOD PA CHE LA 'BYOR PAS 'PHONGS PA'I TSE, ,SBYIN DANG DKON MCHOG MCHOD PA MA BGYIS PAS, ,LAS NGAN MTSON CHA RANG LA 'KHOR BA YIN, ,DA NI MCHOD SBYIN DAG LA BRTZON PAR BYA,\", \"wylie\": \"'dod pa che la 'byor pas 'phongs pa'i tshe, ,sbyin dang dkon mchog mchod pa ma bgyis pas, ,las ngan mtshon cha rang la 'khor ba yin, ,da ni mchod sbyin dag la brtson par bya\", \"english\": \"When my want for things is great, But I've nothing to pay for them, It's because the wheel of knives Has turned on me again: The karma of failing to give to others, And offer to the Jewels. From now on then I'll work hard To make offerings, and to give.\"}"
+      },
+      "corpus_index": 5431,
+      "corpus_record": {
+        "course": "C14",
+        "acip": ",'DOD PA CHE LA 'BYOR PAS 'PHONGS PA'I TSE, ,SBYIN DANG DKON MCHOG MCHOD PA MA BGYIS PAS, ,LAS NGAN MTSON CHA RANG LA 'KHOR BA YIN, ,DA NI MCHOD SBYIN DAG LA BRTZON PAR BYA,",
+        "wylie": "'dod pa che la 'byor pas 'phongs pa'i tshe, ,sbyin dang dkon mchog mchod pa ma bgyis pas, ,las ngan mtshon cha rang la 'khor ba yin, ,da ni mchod sbyin dag la brtson par bya",
+        "english": "When my want for things is great, But I've nothing to pay for them, It's because the wheel of knives Has turned on me again: The karma of failing to give to others, And offer to the Jewels. From now on then I'll work hard To make offerings, and to give."
+      }
+    },
+    "6904": {
+      "spine_row": {
+        "id": 6904,
+        "course": "C16",
+        "seq": 886,
+        "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+        "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+        "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,\", \"wylie\": \"'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,\", \"english\": \"This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \\\"I only want to kill John,\\\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \\\"actual- commission\\\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \\\"I'll kill anyone I happen to meet,\\\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well.\"}"
+      },
+      "corpus_index": 6903,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "'DI LA KUN SLONG BYE BRAG CAN DPER NA, LHAS BYIN KHO NA BSAD SNYAM NAS SBYOR BA BRTZAMS PA NA MCHOD SBYIN DU NOR NAS BSAD NA, DNGOS GZHI'I SDIG MED PAS DE LTA BU LA 'DU SHES MA 'KHRUL BA DGOS SHING , SBYOR BA'I DUS SU GANG BYUNG YANG GSOD SNYAM PA KUN SLONG SPYI LA ZHUGS PA YOD NA 'DU SHES MA 'KHRUL BA MI DGOS SO, , TSUL 'DI NI LHAG MA DGU LA YANG CI RIGS PAR SHES PAR BYA'O, ,",
+        "wylie": "'di la kun slong bye brag can dper na, lhas byin kho na bsad snyam nas sbyor ba brtsams pa na mchod sbyin du nor nas bsad na, dngos gzhi'i sdig med pas de lta bu la 'du shes ma 'khrul ba dgos shing , sbyor ba'i dus su gang byung yang gsod snyam pa kun slong spyi la zhugs pa yod na 'du shes ma 'khrul ba mi dgos so, , tshul 'di ni lhag ma dgu la yang ci rigs par shes par bya'o,",
+        "english": "This is a particular feature of the motivation. Suppose, for example, that you think to yourself, \"I only want to kill John,\" and undertake the deed. Then you mistake Joe for John, and kill Joe. In this sort of case, there is no \"actual- commission\" stage; so we can see that, for this stage, the conception you have must be unmistaken. If on the other hand you undertake the deed with some general kind of motivation, if you think to yourself, \"I'll kill anyone I happen to meet,\" then this detail of the conception having to be unmistaken need not be complete. You should understand that this point applies to the other nine as well."
+      }
+    },
+    "8107": {
+      "spine_row": {
+        "id": 8107,
+        "course": "C18",
+        "seq": 312,
+        "acip": ",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,",
+        "wylie": "'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o",
+        "english": "Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \"John\" or a \"Joe\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \"person,\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Eighteen Karma and its Consequences, Despite No Self",
+        "raw": "{\"course\": \"C18\", \"acip\": \",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,\", \"wylie\": \"'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o\", \"english\": \"Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \\\"John\\\" or a \\\"Joe\\\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \\\"person,\\\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Eighteen Karma and its Consequences, Despite No Self\"}"
+      },
+      "corpus_index": 8106,
+      "corpus_record": {
+        "course": "C18",
+        "acip": ",'O NA GANG ZAG CUNG ZAD KYANG GZHAG TU MED PAR 'GYUR RO ZHE NA KHYOD LA LHA SBYIN DANG MCHOD SBYIN SOGS MA DPYAD PAR 'JUG PA 'DIS MI CHOG GAM GANG ZAG CES PA'I THA SNYAD 'JUG PA'I GZHI GANG ZAG RANG GI MTSAN NYID KYIS GRUB PA GCIG 'DOD NA NI RTAG CHAD KYI MTHAR LTUNG BAR 'GYUR BAS DE RDUL TZAM YANG MED YANG MED PAR SHES PAR BYA'O,",
+        "wylie": "'o na gang zag cung zad kyang gzhag tu med par 'gyur ro zhe na khyod la lha sbyin dang mchod sbyin sogs ma dpyad par 'jug pa 'dis mi chog gam gang zag ces pa'i tha snyad 'jug pa'i gzhi gang zag rang gi mtshan nyid kyis grub pa gcig 'dod na ni rtag chad kyi mthar ltung bar 'gyur bas de rdul tsam yang med yang med par shes par bya'o",
+        "english": "Someone may make the following objection: If that's the case, then we could never find any person at all! Are you saying then that it's not all right to talk about a \"John\" or a \"Joe\" or anything of the like without going into some analysis about their nature? Suppose you do accept the existence of a person who was the object referred to by the term \"person,\" and who also existed by definition. It's important for you to understand that you would then be falling into either the extreme of believing that all things are unchanging, or that they have discontinued completely. As such, there is not a single atom of any such person at all. Contemplation Eighteen Karma and its Consequences, Despite No Self"
+      }
+    },
+    "26217": {
+      "spine_row": {
+        "id": 26217,
+        "course": "DTE",
+        "seq": 533,
+        "acip": "SHES PAR GYUR PA'I LDOG PA RIGS GCIG PA BZHAG TU YOD DE, LHAS SBYIN GYI MIG SHES DANG, MCHOD SBYIN GYI MIG SHES GNYIS DE YIN PA'I PHYIR,",
+        "wylie": "shes par gyur pa'i ldog pa rigs gcig pa bzhag tu yod de, lhas sbyin gyi mig shes dang, mchod sbyin gyi mig shes gnyis de yin pa'i phyir",
+        "english": "We can give examples of positive entities which are the same in being the reverse of what they are, in a certain way, not—and which are a kind of awareness.  For we can point to the two of the visual awareness that John has, and the visual awareness that Jane has.",
+        "raw": "{\"course\": \"DTE\", \"acip\": \"SHES PAR GYUR PA'I LDOG PA RIGS GCIG PA BZHAG TU YOD DE, LHAS SBYIN GYI MIG SHES DANG, MCHOD SBYIN GYI MIG SHES GNYIS DE YIN PA'I PHYIR,\", \"wylie\": \"shes par gyur pa'i ldog pa rigs gcig pa bzhag tu yod de, lhas sbyin gyi mig shes dang, mchod sbyin gyi mig shes gnyis de yin pa'i phyir\", \"english\": \"We can give examples of positive entities which are the same in being the reverse of what they are, in a certain way, not—and which are a kind of awareness.  For we can point to the two of the visual awareness that John has, and the visual awareness that Jane has.\"}"
+      },
+      "corpus_index": 26216,
+      "corpus_record": {
+        "course": "DTE",
+        "acip": "SHES PAR GYUR PA'I LDOG PA RIGS GCIG PA BZHAG TU YOD DE, LHAS SBYIN GYI MIG SHES DANG, MCHOD SBYIN GYI MIG SHES GNYIS DE YIN PA'I PHYIR,",
+        "wylie": "shes par gyur pa'i ldog pa rigs gcig pa bzhag tu yod de, lhas sbyin gyi mig shes dang, mchod sbyin gyi mig shes gnyis de yin pa'i phyir",
+        "english": "We can give examples of positive entities which are the same in being the reverse of what they are, in a certain way, not—and which are a kind of awareness.  For we can point to the two of the visual awareness that John has, and the visual awareness that Jane has."
+      }
+    },
+    "23610": {
+      "spine_row": {
+        "id": 23610,
+        "course": "GIE",
+        "seq": 98,
+        "acip": "PHYAG GI {%PHYUGS KYI} MCHOD SBYIN KYANG BYED LA, BUD MED DANG 'PHRAD PA'I KHAMS KYI 'DZAG PA DE LAM GYI MCHOG YIN PAR RLOM ZHING, KHAMS 'BAB PA'I DUS KYI RTOG PA RAGS PA LOG PA'I SNANG BA STONG SANG NGE BA DE LAM GYI GTZO BOR 'DZIN PA DANG DE 'DRA'I BDE STONG HANG HANG PO DE THAR PAR 'DOD DO ZHES BSHAD,",
+        "wylie": "phyag gi {%phyugs kyi} mchod sbyin kyang byed la, bud med dang 'phrad pa'i khams kyi 'dzag pa de lam gyi mchog yin par rlom zhing, khams 'bab pa'i dus kyi rtog pa rags pa log pa'i snang ba stong sang nge ba de lam gyi gtso bor 'dzin pa dang de 'dra'i bde stong hang hang po de thar par 'dod do zhes bshad",
+        "english": "Followers of this system also sacrifice domestic animals, and entertain the delusion that intimacy with a woman, and ejaculating semen, is somehow the highest path there is.  They say that—as the semen moves—all gross conceptions are stopped; and this then leads to the appearance of sheer emptiness.  They consider this to be their principal path, and believe that this overwhelming sensation of bliss and emptiness is liberation itself.",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"PHYAG GI {%PHYUGS KYI} MCHOD SBYIN KYANG BYED LA, BUD MED DANG 'PHRAD PA'I KHAMS KYI 'DZAG PA DE LAM GYI MCHOG YIN PAR RLOM ZHING, KHAMS 'BAB PA'I DUS KYI RTOG PA RAGS PA LOG PA'I SNANG BA STONG SANG NGE BA DE LAM GYI GTZO BOR 'DZIN PA DANG DE 'DRA'I BDE STONG HANG HANG PO DE THAR PAR 'DOD DO ZHES BSHAD,\", \"wylie\": \"phyag gi {%phyugs kyi} mchod sbyin kyang byed la, bud med dang 'phrad pa'i khams kyi 'dzag pa de lam gyi mchog yin par rlom zhing, khams 'bab pa'i dus kyi rtog pa rags pa log pa'i snang ba stong sang nge ba de lam gyi gtso bor 'dzin pa dang de 'dra'i bde stong hang hang po de thar par 'dod do zhes bshad\", \"english\": \"Followers of this system also sacrifice domestic animals, and entertain the delusion that intimacy with a woman, and ejaculating semen, is somehow the highest path there is.  They say that—as the semen moves—all gross conceptions are stopped; and this then leads to the appearance of sheer emptiness.  They consider this to be their principal path, and believe that this overwhelming sensation of bliss and emptiness is liberation itself.\"}"
+      },
+      "corpus_index": 23609,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "PHYAG GI {%PHYUGS KYI} MCHOD SBYIN KYANG BYED LA, BUD MED DANG 'PHRAD PA'I KHAMS KYI 'DZAG PA DE LAM GYI MCHOG YIN PAR RLOM ZHING, KHAMS 'BAB PA'I DUS KYI RTOG PA RAGS PA LOG PA'I SNANG BA STONG SANG NGE BA DE LAM GYI GTZO BOR 'DZIN PA DANG DE 'DRA'I BDE STONG HANG HANG PO DE THAR PAR 'DOD DO ZHES BSHAD,",
+        "wylie": "phyag gi {%phyugs kyi} mchod sbyin kyang byed la, bud med dang 'phrad pa'i khams kyi 'dzag pa de lam gyi mchog yin par rlom zhing, khams 'bab pa'i dus kyi rtog pa rags pa log pa'i snang ba stong sang nge ba de lam gyi gtso bor 'dzin pa dang de 'dra'i bde stong hang hang po de thar par 'dod do zhes bshad",
+        "english": "Followers of this system also sacrifice domestic animals, and entertain the delusion that intimacy with a woman, and ejaculating semen, is somehow the highest path there is.  They say that—as the semen moves—all gross conceptions are stopped; and this then leads to the appearance of sheer emptiness.  They consider this to be their principal path, and believe that this overwhelming sensation of bliss and emptiness is liberation itself."
+      }
+    },
+    "23637": {
+      "spine_row": {
+        "id": 23637,
+        "course": "GIE",
+        "seq": 125,
+        "acip": "NGAN SONG LAS THAR BA ZHIG THAR PAR 'DOD CING, DE'I CHED DU ME LNGA BSTEN PA DANG, SBYIN SREG KYANG BYED DE RTA'I MCHOD SBYIN NI SNGAR BSHAD PA DANG 'DRA BAR GSUNGS,",
+        "wylie": "ngan song las thar ba zhig thar par 'dod cing, de'i ched du me lnga bsten pa dang, sbyin sreg kyang byed de rta'i mchod sbyin ni sngar bshad pa dang 'dra bar gsungs",
+        "english": "They believe that “freedom” refers to escape from the lower realms; and to achieve it, they follow a practice called the Five Fires.  They also perform fire ceremonies in which the bodies of horses are offered, in a way similar to those discussed earlier.",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"NGAN SONG LAS THAR BA ZHIG THAR PAR 'DOD CING, DE'I CHED DU ME LNGA BSTEN PA DANG, SBYIN SREG KYANG BYED DE RTA'I MCHOD SBYIN NI SNGAR BSHAD PA DANG 'DRA BAR GSUNGS,\", \"wylie\": \"ngan song las thar ba zhig thar par 'dod cing, de'i ched du me lnga bsten pa dang, sbyin sreg kyang byed de rta'i mchod sbyin ni sngar bshad pa dang 'dra bar gsungs\", \"english\": \"They believe that “freedom” refers to escape from the lower realms; and to achieve it, they follow a practice called the Five Fires.  They also perform fire ceremonies in which the bodies of horses are offered, in a way similar to those discussed earlier.\"}"
+      },
+      "corpus_index": 23636,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "NGAN SONG LAS THAR BA ZHIG THAR PAR 'DOD CING, DE'I CHED DU ME LNGA BSTEN PA DANG, SBYIN SREG KYANG BYED DE RTA'I MCHOD SBYIN NI SNGAR BSHAD PA DANG 'DRA BAR GSUNGS,",
+        "wylie": "ngan song las thar ba zhig thar par 'dod cing, de'i ched du me lnga bsten pa dang, sbyin sreg kyang byed de rta'i mchod sbyin ni sngar bshad pa dang 'dra bar gsungs",
+        "english": "They believe that “freedom” refers to escape from the lower realms; and to achieve it, they follow a practice called the Five Fires.  They also perform fire ceremonies in which the bodies of horses are offered, in a way similar to those discussed earlier."
+      }
+    },
+    "28517": {
+      "spine_row": {
+        "id": 28517,
+        "course": "ILL",
+        "seq": 1198,
+        "acip": "GNYIS PA NI, MCHOD SBYIN TSON PO NYIN PAR MI ZA BA ZHES PA LTA BU STE DON GYIS BSTAN PA'O,,",
+        "wylie": "gnyis pa ni, mchod sbyin tshon po nyin par mi za ba zhes pa lta bu ste don gyis bstan pa'o",
+        "english": "The second type can be illustrated by a statement such as, “That chubby fellow, John, never eats during the day”—intimating that something else is the case.",
+        "raw": "{\"course\": \"ILL\", \"acip\": \"GNYIS PA NI, MCHOD SBYIN TSON PO NYIN PAR MI ZA BA ZHES PA LTA BU STE DON GYIS BSTAN PA'O,,\", \"wylie\": \"gnyis pa ni, mchod sbyin tshon po nyin par mi za ba zhes pa lta bu ste don gyis bstan pa'o\", \"english\": \"The second type can be illustrated by a statement such as, “That chubby fellow, John, never eats during the day”—intimating that something else is the case.\"}"
+      },
+      "corpus_index": 28516,
+      "corpus_record": {
+        "course": "ILL",
+        "acip": "GNYIS PA NI, MCHOD SBYIN TSON PO NYIN PAR MI ZA BA ZHES PA LTA BU STE DON GYIS BSTAN PA'O,,",
+        "wylie": "gnyis pa ni, mchod sbyin tshon po nyin par mi za ba zhes pa lta bu ste don gyis bstan pa'o",
+        "english": "The second type can be illustrated by a statement such as, “That chubby fellow, John, never eats during the day”—intimating that something else is the case."
+      }
+    },
+    "28518": {
+      "spine_row": {
+        "id": 28518,
+        "course": "ILL",
+        "seq": 1199,
+        "acip": "DE GNYIS NI DNGOS SHUGS LA 'PHANGS PA RE RE BA YIN LA, GNYIS KA LDAN PA NI MCHOD SBYIN TSON PO NYIN PAR MI ZA BA RID PA MIN PA YOD CES PA LTA BU'O,,",
+        "wylie": "de gnyis ni dngos shugs la 'phangs pa re re ba yin la, gnyis ka ldan pa ni mchod sbyin tshon po nyin par mi za ba rid pa min pa yod ces pa lta bu'o",
+        "english": "These two are, respectively, examples of direct implication and implication by intimation. A case which is both of these at the same time would be a statement such as, “That chubby fellow, John, never eats during the day—and he is certainly not skinny!”",
+        "raw": "{\"course\": \"ILL\", \"acip\": \"DE GNYIS NI DNGOS SHUGS LA 'PHANGS PA RE RE BA YIN LA, GNYIS KA LDAN PA NI MCHOD SBYIN TSON PO NYIN PAR MI ZA BA RID PA MIN PA YOD CES PA LTA BU'O,,\", \"wylie\": \"de gnyis ni dngos shugs la 'phangs pa re re ba yin la, gnyis ka ldan pa ni mchod sbyin tshon po nyin par mi za ba rid pa min pa yod ces pa lta bu'o\", \"english\": \"These two are, respectively, examples of direct implication and implication by intimation. A case which is both of these at the same time would be a statement such as, “That chubby fellow, John, never eats during the day—and he is certainly not skinny!”\"}"
+      },
+      "corpus_index": 28517,
+      "corpus_record": {
+        "course": "ILL",
+        "acip": "DE GNYIS NI DNGOS SHUGS LA 'PHANGS PA RE RE BA YIN LA, GNYIS KA LDAN PA NI MCHOD SBYIN TSON PO NYIN PAR MI ZA BA RID PA MIN PA YOD CES PA LTA BU'O,,",
+        "wylie": "de gnyis ni dngos shugs la 'phangs pa re re ba yin la, gnyis ka ldan pa ni mchod sbyin tshon po nyin par mi za ba rid pa min pa yod ces pa lta bu'o",
+        "english": "These two are, respectively, examples of direct implication and implication by intimation. A case which is both of these at the same time would be a statement such as, “That chubby fellow, John, never eats during the day—and he is certainly not skinny!”"
+      }
+    },
+    "22079": {
+      "spine_row": {
+        "id": 22079,
+        "course": "Sunlight",
+        "seq": 333,
+        "acip": "GZHAN GYI DON SNGAR BSHAD ZIN CING, 'BRI BA LA NI DA 'BRI 'BYUNG BA LTAR NA DON GZHAN LA 'BRI BA DANG, DA 'BRI 'BYUNG BA LTAR NA YI GER 'BRI BA DANG SBYOR TE, 'ON KYANG DBU MTHA' LAS, YI GE 'BRI MCHOD SBYIN PA DANG, ,ZHES 'BYUNG BA LTAR NA PHYI MA'O,,",
+        "wylie": "gzhan gyi don sngar bshad zin cing, 'bri ba la ni da 'bri 'byung ba ltar na don gzhan la 'bri ba dang, da 'bri 'byung ba ltar na yi ger 'bri ba dang sbyor te, 'on kyang dbu mtha' las, yi ge 'bri mchod sbyin pa dang, ,zhes 'byung ba ltar na phyi ma'o",
+        "english": "The meaning of the rest of the section here we've gone through earlier on. The Tibetan word driwa can have two different meanings: one to re-direct a person to something other; and one to write down in words. But the reference here [as it comes later, referring to the good karma of writing out the sutra] is to the latter—as Middle and the Extremes mentions, \"The good deeds of writing it down in words, offering it, giving it…\"[102]",
+        "raw": "{\"course\": \"Sunlight\", \"acip\": \"GZHAN GYI DON SNGAR BSHAD ZIN CING, 'BRI BA LA NI DA 'BRI 'BYUNG BA LTAR NA DON GZHAN LA 'BRI BA DANG, DA 'BRI 'BYUNG BA LTAR NA YI GER 'BRI BA DANG SBYOR TE, 'ON KYANG DBU MTHA' LAS, YI GE 'BRI MCHOD SBYIN PA DANG, ,ZHES 'BYUNG BA LTAR NA PHYI MA'O,,\", \"wylie\": \"gzhan gyi don sngar bshad zin cing, 'bri ba la ni da 'bri 'byung ba ltar na don gzhan la 'bri ba dang, da 'bri 'byung ba ltar na yi ger 'bri ba dang sbyor te, 'on kyang dbu mtha' las, yi ge 'bri mchod sbyin pa dang, ,zhes 'byung ba ltar na phyi ma'o\", \"english\": \"The meaning of the rest of the section here we've gone through earlier on. The Tibetan word driwa can have two different meanings: one to re-direct a person to something other; and one to write down in words. But the reference here [as it comes later, referring to the good karma of writing out the sutra] is to the latter—as Middle and the Extremes mentions, \\\"The good deeds of writing it down in words, offering it, giving it…\\\"[102]\"}"
+      },
+      "corpus_index": 22078,
+      "corpus_record": {
+        "course": "Sunlight",
+        "acip": "GZHAN GYI DON SNGAR BSHAD ZIN CING, 'BRI BA LA NI DA 'BRI 'BYUNG BA LTAR NA DON GZHAN LA 'BRI BA DANG, DA 'BRI 'BYUNG BA LTAR NA YI GER 'BRI BA DANG SBYOR TE, 'ON KYANG DBU MTHA' LAS, YI GE 'BRI MCHOD SBYIN PA DANG, ,ZHES 'BYUNG BA LTAR NA PHYI MA'O,,",
+        "wylie": "gzhan gyi don sngar bshad zin cing, 'bri ba la ni da 'bri 'byung ba ltar na don gzhan la 'bri ba dang, da 'bri 'byung ba ltar na yi ger 'bri ba dang sbyor te, 'on kyang dbu mtha' las, yi ge 'bri mchod sbyin pa dang, ,zhes 'byung ba ltar na phyi ma'o",
+        "english": "The meaning of the rest of the section here we've gone through earlier on. The Tibetan word driwa can have two different meanings: one to re-direct a person to something other; and one to write down in words. But the reference here [as it comes later, referring to the good karma of writing out the sutra] is to the latter—as Middle and the Extremes mentions, \"The good deeds of writing it down in words, offering it, giving it…\"[102]"
+      }
+    },
+    "9402": {
+      "spine_row": {
+        "id": 9402,
+        "course": "TCS02",
+        "seq": 128,
+        "acip": ",DPAL PHUN TSOGS 'BYOR NA MCHOD SBYIN GYIS, ,TSOGS GSOG GO DBUL POR GYUR KYANG SLA, ,CHUD ZOS DOGS SER SNA'I SDUG BSNGAL MED, ,AA LA LA 'BYOR RGUD SEMS LA SNYOMS, ,NOR SGRUB KUN JI LTAR DGYES DGYES MDZOD,",
+        "wylie": "dpal phun tshogs 'byor na mchod sbyin gyis, ,tshogs gsog go dbul por gyur kyang sla, ,chud zos dogs ser sna'i sdug bsngal med, ,aa la la 'byor rgud sems la snyoms, ,nor sgrub kun ji ltar dgyes dgyes mdzod",
+        "english": "It's good To have lots of money and things, Because then You can make more offerings, and do charity; And then Be quite as happy, when you're poor again, Because then You're freed from that special pain Of refusing To share what you have with others, And the worry That you'll one day lose what you have. A-la-la! Because then it's all the same if you're rich or poor! So go ahead, Do all the rituals for wealth that you want!",
+        "raw": "{\"course\": \"TCS02\", \"acip\": \",DPAL PHUN TSOGS 'BYOR NA MCHOD SBYIN GYIS, ,TSOGS GSOG GO DBUL POR GYUR KYANG SLA, ,CHUD ZOS DOGS SER SNA'I SDUG BSNGAL MED, ,AA LA LA 'BYOR RGUD SEMS LA SNYOMS, ,NOR SGRUB KUN JI LTAR DGYES DGYES MDZOD,\", \"wylie\": \"dpal phun tshogs 'byor na mchod sbyin gyis, ,tshogs gsog go dbul por gyur kyang sla, ,chud zos dogs ser sna'i sdug bsngal med, ,aa la la 'byor rgud sems la snyoms, ,nor sgrub kun ji ltar dgyes dgyes mdzod\", \"english\": \"It's good To have lots of money and things, Because then You can make more offerings, and do charity; And then Be quite as happy, when you're poor again, Because then You're freed from that special pain Of refusing To share what you have with others, And the worry That you'll one day lose what you have. A-la-la! Because then it's all the same if you're rich or poor! So go ahead, Do all the rituals for wealth that you want!\"}"
+      },
+      "corpus_index": 9401,
+      "corpus_record": {
+        "course": "TCS02",
+        "acip": ",DPAL PHUN TSOGS 'BYOR NA MCHOD SBYIN GYIS, ,TSOGS GSOG GO DBUL POR GYUR KYANG SLA, ,CHUD ZOS DOGS SER SNA'I SDUG BSNGAL MED, ,AA LA LA 'BYOR RGUD SEMS LA SNYOMS, ,NOR SGRUB KUN JI LTAR DGYES DGYES MDZOD,",
+        "wylie": "dpal phun tshogs 'byor na mchod sbyin gyis, ,tshogs gsog go dbul por gyur kyang sla, ,chud zos dogs ser sna'i sdug bsngal med, ,aa la la 'byor rgud sems la snyoms, ,nor sgrub kun ji ltar dgyes dgyes mdzod",
+        "english": "It's good To have lots of money and things, Because then You can make more offerings, and do charity; And then Be quite as happy, when you're poor again, Because then You're freed from that special pain Of refusing To share what you have with others, And the worry That you'll one day lose what you have. A-la-la! Because then it's all the same if you're rich or poor! So go ahead, Do all the rituals for wealth that you want!"
+      }
+    },
+    "9767": {
+      "spine_row": {
+        "id": 9767,
+        "course": "TCS03",
+        "seq": 155,
+        "acip": ",'JIG RTEN 'DI YI BDE SKYID SGRUB DANG , ,GRUB RNAMS BRTAN DANG RGYAS PA'I DON DU, ,BZLAS BRJOD RIM GRO MCHOD SBYIN LA SOGS, ,BRTZON PA CHEN POS LEGS PAR BSGRUBS KYANG ,",
+        "wylie": "'jig rten 'di yi bde skyid sgrub dang , ,grub rnams brtan dang rgyas pa'i don du, ,bzlas brjod rim gro mchod sbyin la sogs, ,brtson pa chen pos legs par bsgrubs kyang",
+        "english": "Oh you've put your heart into it; You've read the prayers for the families, Paid your respects, made your offerings, And you got what you wanted: Some kind of pleasure, here in the world-- Consolidating, investing, multiplying All the money you made.",
+        "raw": "{\"course\": \"TCS03\", \"acip\": \",'JIG RTEN 'DI YI BDE SKYID SGRUB DANG , ,GRUB RNAMS BRTAN DANG RGYAS PA'I DON DU, ,BZLAS BRJOD RIM GRO MCHOD SBYIN LA SOGS, ,BRTZON PA CHEN POS LEGS PAR BSGRUBS KYANG ,\", \"wylie\": \"'jig rten 'di yi bde skyid sgrub dang , ,grub rnams brtan dang rgyas pa'i don du, ,bzlas brjod rim gro mchod sbyin la sogs, ,brtson pa chen pos legs par bsgrubs kyang\", \"english\": \"Oh you've put your heart into it; You've read the prayers for the families, Paid your respects, made your offerings, And you got what you wanted: Some kind of pleasure, here in the world-- Consolidating, investing, multiplying All the money you made.\"}"
+      },
+      "corpus_index": 9766,
+      "corpus_record": {
+        "course": "TCS03",
+        "acip": ",'JIG RTEN 'DI YI BDE SKYID SGRUB DANG , ,GRUB RNAMS BRTAN DANG RGYAS PA'I DON DU, ,BZLAS BRJOD RIM GRO MCHOD SBYIN LA SOGS, ,BRTZON PA CHEN POS LEGS PAR BSGRUBS KYANG ,",
+        "wylie": "'jig rten 'di yi bde skyid sgrub dang , ,grub rnams brtan dang rgyas pa'i don du, ,bzlas brjod rim gro mchod sbyin la sogs, ,brtson pa chen pos legs par bsgrubs kyang",
+        "english": "Oh you've put your heart into it; You've read the prayers for the families, Paid your respects, made your offerings, And you got what you wanted: Some kind of pleasure, here in the world-- Consolidating, investing, multiplying All the money you made."
+      }
+    },
+    "14973": {
+      "spine_row": {
+        "id": 14973,
+        "course": "TCS10",
+        "seq": 174,
+        "acip": "MGRON GZHAN RNAMS LA LHA MO THOD PA THOGS BA DPAG MED LAG BDE BA'I TSUL DU SPROS TE, SNGON RANG LUS DKOR SOGS KYIS TSUR GSOS, DA RES PHAR MCHOD SBYIN TSOGS GSOG GIS DON CHEN PO BYA SNYAM DU,",
+        "wylie": "mgron gzhan rnams la lha mo thod pa thogs ba dpag med lag bde ba'i tshul du spros te, sngon rang lus dkor sogs kyis tshur gsos, da res phar mchod sbyin tshogs gsog gis don chen po bya snyam du",
+        "english": "Now to the other guests I send forth an inconceivable number of Angels of Offering, bearing cups of skulls, like stewards in a monastery assembly who rush in to present the traditional meal.  \"In all the days before,\" I think to myself, \"I brought all the food and other necessities provided to me by the monastery, and presented them to my body to maintain it.  Today I am going to take this same body and go present it, as an offering to the higher guests, and a gift to the lower ones.  Today I will finally use it to collect some merit; today at last I will get some great meaning out of it.\"",
+        "raw": "{\"course\": \"TCS10\", \"acip\": \"MGRON GZHAN RNAMS LA LHA MO THOD PA THOGS BA DPAG MED LAG BDE BA'I TSUL DU SPROS TE, SNGON RANG LUS DKOR SOGS KYIS TSUR GSOS, DA RES PHAR MCHOD SBYIN TSOGS GSOG GIS DON CHEN PO BYA SNYAM DU,\", \"wylie\": \"mgron gzhan rnams la lha mo thod pa thogs ba dpag med lag bde ba'i tshul du spros te, sngon rang lus dkor sogs kyis tshur gsos, da res phar mchod sbyin tshogs gsog gis don chen po bya snyam du\", \"english\": \"Now to the other guests I send forth an inconceivable number of Angels of Offering, bearing cups of skulls, like stewards in a monastery assembly who rush in to present the traditional meal.  \\\"In all the days before,\\\" I think to myself, \\\"I brought all the food and other necessities provided to me by the monastery, and presented them to my body to maintain it.  Today I am going to take this same body and go present it, as an offering to the higher guests, and a gift to the lower ones.  Today I will finally use it to collect some merit; today at last I will get some great meaning out of it.\\\"\"}"
+      },
+      "corpus_index": 14972,
+      "corpus_record": {
+        "course": "TCS10",
+        "acip": "MGRON GZHAN RNAMS LA LHA MO THOD PA THOGS BA DPAG MED LAG BDE BA'I TSUL DU SPROS TE, SNGON RANG LUS DKOR SOGS KYIS TSUR GSOS, DA RES PHAR MCHOD SBYIN TSOGS GSOG GIS DON CHEN PO BYA SNYAM DU,",
+        "wylie": "mgron gzhan rnams la lha mo thod pa thogs ba dpag med lag bde ba'i tshul du spros te, sngon rang lus dkor sogs kyis tshur gsos, da res phar mchod sbyin tshogs gsog gis don chen po bya snyam du",
+        "english": "Now to the other guests I send forth an inconceivable number of Angels of Offering, bearing cups of skulls, like stewards in a monastery assembly who rush in to present the traditional meal.  \"In all the days before,\" I think to myself, \"I brought all the food and other necessities provided to me by the monastery, and presented them to my body to maintain it.  Today I am going to take this same body and go present it, as an offering to the higher guests, and a gift to the lower ones.  Today I will finally use it to collect some merit; today at last I will get some great meaning out of it.\""
+      }
+    },
+    "16392": {
+      "spine_row": {
+        "id": 16392,
+        "course": "TCS12",
+        "seq": 310,
+        "acip": "RANG GI THUGS KA'I Bm YIG LAS 'OD ZER 'PHROS PAS BSNYEN SGRUB ZAB MO BYED PA LA BAR DU GCOD PA'I BGEGS KYI TSOGS RNAMS MCHOD SBYIN GYI GTOR MA 'DI'I MGRON DU",
+        "wylie": "rang gi thugs ka'i bM yig las 'od zer 'phros pas bsnyen sgrub zab mo byed pa la bar du gcod pa'i bgegs kyi tshogs rnams mchod sbyin gyi gtor ma 'di'i mgron du",
+        "english": "From the letter vam At my holy heart Fly out rays of light. They invite as guests To partake of the torma of offering Entire crowds of obstructing spirits Whose only aim is to disrupt This profound act that I'm about to do, This sacred act of retreat.",
+        "raw": "{\"course\": \"TCS12\", \"acip\": \"RANG GI THUGS KA'I Bm YIG LAS 'OD ZER 'PHROS PAS BSNYEN SGRUB ZAB MO BYED PA LA BAR DU GCOD PA'I BGEGS KYI TSOGS RNAMS MCHOD SBYIN GYI GTOR MA 'DI'I MGRON DU\", \"wylie\": \"rang gi thugs ka'i bM yig las 'od zer 'phros pas bsnyen sgrub zab mo byed pa la bar du gcod pa'i bgegs kyi tshogs rnams mchod sbyin gyi gtor ma 'di'i mgron du\", \"english\": \"From the letter vam At my holy heart Fly out rays of light. They invite as guests To partake of the torma of offering Entire crowds of obstructing spirits Whose only aim is to disrupt This profound act that I'm about to do, This sacred act of retreat.\"}"
+      },
+      "corpus_index": 16391,
+      "corpus_record": {
+        "course": "TCS12",
+        "acip": "RANG GI THUGS KA'I Bm YIG LAS 'OD ZER 'PHROS PAS BSNYEN SGRUB ZAB MO BYED PA LA BAR DU GCOD PA'I BGEGS KYI TSOGS RNAMS MCHOD SBYIN GYI GTOR MA 'DI'I MGRON DU",
+        "wylie": "rang gi thugs ka'i bM yig las 'od zer 'phros pas bsnyen sgrub zab mo byed pa la bar du gcod pa'i bgegs kyi tshogs rnams mchod sbyin gyi gtor ma 'di'i mgron du",
+        "english": "From the letter vam At my holy heart Fly out rays of light. They invite as guests To partake of the torma of offering Entire crowds of obstructing spirits Whose only aim is to disrupt This profound act that I'm about to do, This sacred act of retreat."
+      }
+    },
+    "16404": {
+      "spine_row": {
+        "id": 16404,
+        "course": "TCS12",
+        "seq": 322,
+        "acip": "BAR DU GCOD PAR BRTZOM PA'I BGEGS KYI TSOGS GANG YIN PA THAMS CAD MCHOD SBYIN GYI GTOR MA NAM MKHA' MDZOD DU SPEL BA 'DIS TSIM PAR GYIS LA",
+        "wylie": "bar du gcod par brtsom pa'i bgegs kyi tshogs gang yin pa thams cad mchod sbyin gyi gtor ma nam mkha' mdzod du spel ba 'dis tshim par gyis la",
+        "english": "And each and every one of you Who would even think Of disturbing my retreat, You crowd of obstructing spirits; You are all going to be happily satisfied With this cake that I Have offered you here As a gift; this magical Pocket of the sky That overflows with Whatever a person could want.",
+        "raw": "{\"course\": \"TCS12\", \"acip\": \"BAR DU GCOD PAR BRTZOM PA'I BGEGS KYI TSOGS GANG YIN PA THAMS CAD MCHOD SBYIN GYI GTOR MA NAM MKHA' MDZOD DU SPEL BA 'DIS TSIM PAR GYIS LA\", \"wylie\": \"bar du gcod par brtsom pa'i bgegs kyi tshogs gang yin pa thams cad mchod sbyin gyi gtor ma nam mkha' mdzod du spel ba 'dis tshim par gyis la\", \"english\": \"And each and every one of you Who would even think Of disturbing my retreat, You crowd of obstructing spirits; You are all going to be happily satisfied With this cake that I Have offered you here As a gift; this magical Pocket of the sky That overflows with Whatever a person could want.\"}"
+      },
+      "corpus_index": 16403,
+      "corpus_record": {
+        "course": "TCS12",
+        "acip": "BAR DU GCOD PAR BRTZOM PA'I BGEGS KYI TSOGS GANG YIN PA THAMS CAD MCHOD SBYIN GYI GTOR MA NAM MKHA' MDZOD DU SPEL BA 'DIS TSIM PAR GYIS LA",
+        "wylie": "bar du gcod par brtsom pa'i bgegs kyi tshogs gang yin pa thams cad mchod sbyin gyi gtor ma nam mkha' mdzod du spel ba 'dis tshim par gyis la",
+        "english": "And each and every one of you Who would even think Of disturbing my retreat, You crowd of obstructing spirits; You are all going to be happily satisfied With this cake that I Have offered you here As a gift; this magical Pocket of the sky That overflows with Whatever a person could want."
+      }
+    },
+    "41461": {
+      "spine_row": {
+        "id": 41461,
+        "course": "TITLS",
+        "seq": 2790,
+        "acip": "DPAL DUS KYI 'KHOR LO'I SBYIN SREG 'OD SNYE LTAR 'BUL BA'I NGAG 'DON 'KHRIGS CHAGS SU BKOD PA 'PHRUL GYI MCHOD SBYIN",
+        "wylie": "dpal dus kyi 'khor lo'i sbyin sreg 'od snye ltar 'bul ba'i ngag 'don 'khrigs chags su bkod pa 'phrul gyi mchod sbyin",
+        "english": "The Miraculous Gift of Offering--A Continuous Text of Recitation for Making the Offering of Fire as though it were presentedon the Tips of Rays of Light, in the Secret Teaching of the Glorious Wheel of Time (Kalachakra)_RJE BTZUN BLO BZANG RTA DBYANGS (1867-1937)",
+        "raw": "{\"acip\": \"DPAL DUS KYI 'KHOR LO'I SBYIN SREG 'OD SNYE LTAR 'BUL BA'I NGAG 'DON 'KHRIGS CHAGS SU BKOD PA 'PHRUL GYI MCHOD SBYIN\", \"wylie\": \"dpal dus kyi 'khor lo'i sbyin sreg 'od snye ltar 'bul ba'i ngag 'don 'khrigs chags su bkod pa 'phrul gyi mchod sbyin\", \"english\": \"The Miraculous Gift of Offering--A Continuous Text of Recitation for Making the Offering of Fire as though it were presentedon the Tips of Rays of Light, in the Secret Teaching of the Glorious Wheel of Time (Kalachakra)_RJE BTZUN BLO BZANG RTA DBYANGS (1867-1937)\", \"course\": \"TITLS\", \"source_wave\": \"sungbum-catalog-2026-08\", \"catalog_no\": \"S12248\", \"catalog_source\": \"༠༠ Sungbum Catalog.xlsx\", \"subject_bo\": \"རྒྱུད།/དུས་འཁོར།/སྦྱིན་སྲེག\"}"
+      },
+      "corpus_index": 41460,
+      "corpus_record": {
+        "acip": "DPAL DUS KYI 'KHOR LO'I SBYIN SREG 'OD SNYE LTAR 'BUL BA'I NGAG 'DON 'KHRIGS CHAGS SU BKOD PA 'PHRUL GYI MCHOD SBYIN",
+        "wylie": "dpal dus kyi 'khor lo'i sbyin sreg 'od snye ltar 'bul ba'i ngag 'don 'khrigs chags su bkod pa 'phrul gyi mchod sbyin",
+        "english": "The Miraculous Gift of Offering--A Continuous Text of Recitation for Making the Offering of Fire as though it were presentedon the Tips of Rays of Light, in the Secret Teaching of the Glorious Wheel of Time (Kalachakra)_RJE BTZUN BLO BZANG RTA DBYANGS (1867-1937)",
+        "course": "TITLS",
+        "source_wave": "sungbum-catalog-2026-08",
+        "catalog_no": "S12248",
+        "catalog_source": "༠༠ Sungbum Catalog.xlsx",
+        "subject_bo": "རྒྱུད།/དུས་འཁོར།/སྦྱིན་སྲེག"
+      }
+    },
+    "193": {
+      "spine_row": {
+        "id": 193,
+        "course": "C01",
+        "seq": 193,
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102",
+        "raw": "{\"acip\": \",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,\", \"wylie\": \"nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin\", \"english\": \"He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102\", \"course\": \"C01\"}"
+      },
+      "corpus_index": 192,
+      "corpus_record": {
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102",
+        "course": "C01"
+      }
+    },
+    "6107": {
+      "spine_row": {
+        "id": 6107,
+        "course": "C16",
+        "seq": 89,
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34",
+        "raw": "{\"course\": \"C16\", \"acip\": \",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,\", \"wylie\": \"nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin\", \"english\": \"Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34\"}"
+      },
+      "corpus_index": 6106,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34"
+      }
+    }
+  }
+}

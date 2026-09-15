@@ -1,0 +1,129 @@
+{
+  "seq": 351,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1733,
+        "course": "C05",
+        "seq": 351,
+        "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+        "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+        "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete ACIP, Wylie and exact GMR English read with context343–357. Six full physical source extents read and whitespace-collapse verified. Digital/physical agreement establishes the available reading, not universal correctness."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/material-corpus-reading-selection.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1733,
+            6890
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1733,
+            6890
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1733,
+            6890
+          ]
+        }
+      ],
+      "finding": "The complete current segment and its C16 counterpart match all three source fields. Six complete source/C16 records and six additional material records were fully read. The C16 duplicate is the same reading reused, not an independently collated publication. Full context includes the continuation at352; no outside publication was inspected."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b8846b0affaac576ace5b0789a45df1e462a53:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-format-search.json"
+      ],
+      "finding": "Direct current references screened with no prior segment entry. Seven unchanged complete converter, running-head, cap, spill and footnote class records reused by exact personal reading identity. Ten complete additional register search records fully read; E-025/E-028/E-029/E-045 establish the source hyphen-space family and E-089 separately forbids silent layer repair. Note that family without another filing."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "MTHU is the normal force wording here, unlike earlier raw GTHU348. Neither form is silently substituted. The final Tibetan four-types/becoming/desire structure is distributed into English352 and explanatory sexual wording; do not force it onto kinds of sex or assert complete untranslated absence. MA TSOR BAR faithfully appears as ma tshor bar and licenses the complete negative-awareness phrase undetected; this does not justify a spelling correction.",
+      "counterevidence": "Exact repeated source readings may share an ancestor and cannot establish publication independence. Master HGM tiers can be auto-aligned or incomplete, so local syntax and full passages govern; no mined gloss is promoted. A standard alternative wording alone does not prove the exact source wrong."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 261,
+        "wylie": 260,
+        "english": 270
+      },
+      "utf8_bytes": {
+        "acip": 261,
+        "wylie": 260,
+        "english": 270
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are below1500 characters and physically complete. Full neighboring English352 begins This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: and continues the sexual-misconduct explanation. This is visible field distribution, not proof of missing physical text or a new ingestion defect."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "MTHU is the normal force wording here, unlike earlier raw GTHU348. Neither form is silently substituted. The final Tibetan four-types/becoming/desire structure is distributed into English352 and explanatory sexual wording; do not force it onto kinds of sex or assert complete untranslated absence. MA TSOR BAR faithfully appears as ma tshor bar and licenses the complete negative-awareness phrase undetected; this does not justify a spelling correction."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "All fields are below1500 characters and physically complete. Full neighboring English352 begins This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: and continues the sexual-misconduct explanation. This is visible field distribution, not proof of missing physical text or a new ingestion defect."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "All fields are below1500 characters and physically complete. Full neighboring English352 begins This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: and continues the sexual-misconduct explanation. This is visible field distribution, not proof of missing physical text or a new ingestion defect."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

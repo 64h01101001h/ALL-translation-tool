@@ -1,0 +1,127 @@
+{
+  "origin": "58b8846b0affaac576ace5b0789a45df1e462a53",
+  "query": "hyphen|line.?break|line.?wrap|wrap.?join|dehyphen across complete records",
+  "count": 10,
+  "records": [
+    {
+      "item_id": "E-025",
+      "course": "C01",
+      "segment": "C01:355",
+      "kind": "INGEST_ARTEFACT",
+      "found": "in the cause-and- effect interpretation accepted by all the schools",
+      "expected": "in the cause-and-effect interpretation accepted by all the schools",
+      "evidence": "Hint C01:334 is WRONG - that segment is the 'Suppose you analyze, see the no-self of things' verse and contains no such string. Corrected to C01:355 by searching english LIKE '%cause-and- effect%', which returns exactly two hits corpus-wide: C01:355 and C03:274 ('Practicing with the Seven-Step, Cause-and- Effect Method'). A hyphen followed by a space mid-compound is the signature of a hyphenated line break preserved at digitisation.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Cosmetic and mechanical, not authorial. C03:274 is a second instance of the identical artefact and should be fixed in the same pass. A corpus-wide sweep for the pattern 'hyphen + space' inside compounds would likely surface more."
+    },
+    {
+      "item_id": "E-028",
+      "course": "C01",
+      "segment": "C01:379",
+      "kind": "INGEST_ARTEFACT",
+      "found": "And the oh-so- vivid, self-standing \"me\" that this state of mind clings to",
+      "expected": "And the oh-so-vivid, self-standing \"me\" that this state of mind clings to",
+      "evidence": "Hint C01:334 is WRONG; corrected to C01:379 by searching english LIKE '%oh-so- vivid%' (single hit). Same hyphen-plus-space line-break signature as E-025. Comparison confirms the intended form: 'oh-so-deep' and 'oh-so-high' appear correctly closed up at C03:346, C16:413 and P1:35.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Cosmetic. The note's accompanying Tibetan citation was checked and is accurate - C01:379 wylie reads 'de 'dzin mkhan gyi blo de bden 'dzin lhan skyes sam, 'jig lta lhan skyes yin', matching the glosses 'inborn grasping to a self' and 'inborn destructible view' and the footnote 163 marker. No erratum in that part of the note."
+    },
+    {
+      "item_id": "E-029",
+      "course": "C01",
+      "segment": "C01:380",
+      "kind": "INGEST_ARTEFACT",
+      "found": "The non- existence of this is what we call \"no-self.\"164",
+      "expected": "The non-existence of this is what we call \"no-self.\"",
+      "evidence": "Segment hint 334 was wrong (C01:334 is the 'Suppose you analyze' verse); located by searching english LIKE '%non- existence%', which returns exactly C01:380 and its parallel C16:199. The prose note's own framing ('hyphen-space artifact #3') is corroborated: C01 alone carries at least 16 instances of the same word-internal 'x- y' pattern where a hyphen should join, e.g. seq 56 'single- pointed', 72 'all- knowingness', 265 'self- made victors', 310 'loving- kindness', 355 'cause-and- effect', 379 'oh-so- vivid', 496 'loving- kindness'. A systematic pattern of hyphen-plus-space at what were line breaks is digitisation damage, not authorial.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Cosmetic but systematic. Worth fixing as a class (a single sweep for word-internal '- ') rather than one entry at a time; the identical defect is in C16:199, which is the same passage reused in another course. Filed by the log under 'ENGLISH TYPO QUEUE #22', but it is not a typing slip."
+    },
+    {
+      "item_id": "E-045",
+      "course": "C03",
+      "segment": "C03:144",
+      "kind": "INGEST_ARTEFACT",
+      "found": "In the Levels of Listeners, five different reasons are given for sitting in a cross- legged position on a platform or seat of the kind allowed by Lord Buddha, and covered with comfortable straw or grass.",
+      "expected": "cross-legged",
+      "evidence": "The seg_hint of 1 is wrong; the note's own parenthetical (144) is right and verifies exactly. The unspaced form \"cross-legged\" occurs 11 times elsewhere in the corpus, so the spaced form is the anomaly, not the house style. The note's claimed family members also verify: \"even- mindedness\" at C01:489 and \"self- nature\" at C03:53 (and 27 further segments).",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Cosmetic, and characteristic of hyphenation surviving a scan's line break. NOTE FOR THE EDITOR: the same segment's sibling C03:149 has the identical \"cross- legged\" and should be fixed in the same pass — the prose note missed it. A global sweep for \"[a-z]- [a-z]\" would close this whole family at once."
+    },
+    {
+      "item_id": "E-051",
+      "course": "C03",
+      "segment": "C03:48",
+      "kind": "INGEST_ARTEFACT",
+      "found": "gang rnams phyogs bcu'i 'jig rten sgron ma dag,byang chub rim par sangs rgyas ma chags brnyes (ACIP: ...SGRON MA DAG,BYANG CHUB RIM PAR...)",
+      "expected": "...sgron ma dag, ,byang chub rim par... — a verse-line break, punctuated as the other three breaks in the same segment are",
+      "evidence": "The identical segment punctuates its other verse-line breaks with a space: \"...ma chags brnyes, ,mgon po de dag...\" and \"...thams cad la, ,'khor lo bla na med pa...\". Only the first break, after 'sgron ma dag', is run together. The English confirms a line boundary there: 'Lamps who light / Each of the worlds ... / Those who have taken / Each of the steps'. The prose note's quotation \"dag,byang\" is accurate.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "Cosmetic to a human reader but it fuses two syllables into one token for search and segmentation, so 'dag' and 'byang' are both unfindable at this line. The exact repair (space only, versus the ', ,' shad pair used elsewhere in the segment) is inferred from the three parallel breaks and should be confirmed against the printed source. The same defect class recurs nearby at C03:163 ('dag,dben', 'shog,g-yeng') and C03:164 ('cig,dpe', 'gi,yi ge'), and at C03:212 ('dgos;bdun pa'), which an editor may want to sweep together. The 'Saviors' and 'bskul crosses L4 to L3' remarks in the same log line are alignment observations, not source defects."
+    },
+    {
+      "item_id": "E-089",
+      "course": "C01/C02",
+      "segment": "class entry (29 fields)",
+      "kind": "LAYER_ARTEFACT",
+      "found": "single-pointed concentration  ·  zhog, lam gyi rim pa  ·  grasping \"self\",",
+      "expected": "single- pointed concentration  ·  zhog,lam gyi rim pa  ·  grasping \"self,\"",
+      "evidence": "Found by checking all 42,648 banked fields against the spine (tools/test_layer_matches_spine.py, new 2026-08-28). 29 fields in the legacy C01 (23) and C02 (6) pages differ from the source ONLY in punctuation, hyphenation or spacing - the analyst silently repaired a hyphenated line break, inserted a missing space after a comma, or moved a comma out of a closing quote while quoting. Text is present and correct in every case; nothing is fabricated. Distinct from E-025, which records the SOURCE-side hyphen break: this records our page quietly fixing it instead of preserving it.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "A Rule 1 (verbatim) breach, not a Rule 10 (falsehood) breach. Fixed by re-running the affected legacy pages, not by editing anything at ALL. Ceilinged at 29 by the new gate so the class cannot spread; C03's current pipeline has zero."
+    },
+    {
+      "item_id": "E-142",
+      "course": "C04",
+      "segment": "C04:29",
+      "kind": "TIBETAN_SPELLING",
+      "found": "yid ches rjes dpg-yid ches pa'i",
+      "expected": "yid ches rjes dpag, yid ches pa'i",
+      "evidence": "ACIP reads 'YID CHES RJES DPG-YID CHES PA'I' (source). 'dpg' is not a Tibetan syllable; the heading term is rjes dpag (inference), attested across the corpus (C18:560 'yid ches kyi rjes dpag', C13:822). The hyphen fusing the heading to the definition is layout. 'dpg' occurs only in this row (twice) and clone C16:518. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — (a) verbatim in wylie and acip ('YID CHES RJES DPG-YID CHES PA'I') — source error. (b) no independent witness has 'dpg'; 'rjes dpag' attested C18:560, C18:563, C13:822, DTE:955/958. Witnesses: none found for 'dpg' except clone C16:518. C18:560 'rjes dpag la dbye na gsum yod de, dngos stobs kyi rjes dpag dang, grags pa'i rjes dpag dang, yid ches kyi rjes dpag'; C13:822 'yid ches kyi rjes dpag tshad ma bskyed byed'.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-143",
+      "course": "C04",
+      "segment": "C04:29",
+      "kind": "TIBETAN_SPELLING",
+      "found": "grags pa'i rjes dpggrags pa'i rtags yang dag",
+      "expected": "grags pa'i rjes dpag, grags pa'i rtags yang dag",
+      "evidence": "ACIP reads \"GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG\" (source). Second occurrence of the dpg-for-dpag spelling, here with the heading 'grags pa'i rjes dpag' run into the definition with no separator (the first heading at least has a hyphen). Term attested C18:562 'grags pa'i rjes dpag', C13:823. SKEPTIC PASS 2026-09-04 (Fable 5.1): refuted=false — (a) verbatim in wylie and acip (\"GRAGS PA'I RJES DPGGRAGS PA'I RTAGS YANG DAG\") — source error, second occurrence of DPG, with no separator between heading and definition. (b) no independent witness; 'grags pa'i rjes dpag' at C18:560, C18:562, C13:823, DTE:955/957. Witnesses: none found for 'dpggrags' except clone C16:518. C18:562 'grags pa'i rjes dpag bzhag tu yod de, ri bong can zla ba zhes brjod pa'i sgras brjod rung du rtogs pa'i rjes dpag'; C13:823 'grags pa'i rjes dpag tshad ma bskyed byed'.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-177",
+      "course": "C05",
+      "segment": "C05:142",
+      "kind": "FORMATTING",
+      "found": "MNYAM PAR BZHAG,GLANG CHEN MNAL",
+      "expected": "MNYAM PAR BZHAG, GLANG CHEN MNAL",
+      "evidence": "ACIP (source of record) omits the space after the shad-comma between the second and third verse lines; the wylie inherits it as 'bzhag,glang'. Every other line break in the same verse has ', '. No parallel witness: the verse (wylie like '%glang chen gshegs na%', english like '%Even as he stays, the elephant%') occurs only at C05:142 in all 42,199 rows; C16 does not carry this row. Not in any registered class ({SHl} drop, fused footnote, folio splice, glued heading). SKEPTIC PASS 2026-09-05 (Fable 5.1): refuted=false — verbatim in ACIP and wylie; only occurrence (no witness); comma-without-space is not the general convention (271 vs 29,996 spaced rows) and the verse's other breaks are spaced; same class as E-037/E-038 (per-segment INGEST_ARTEFACT); cross-reference class fix.",
+      "severity": "LOW",
+      "confidence": "CONFIRMED",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    },
+    {
+      "item_id": "E-185",
+      "course": "C05",
+      "segment": "C05:180",
+      "kind": "TIBETAN_SPELLING",
+      "found": "MYON MONGS PA",
+      "expected": "NYON MONGS PA",
+      "evidence": "ACIP C05:180 contains MYON MONGS PA verbatim and its Wylie agrees, myon mongs pa. The preceding root C05:179 has NYON MONGS and English Mental affliction; the commentary 180 translates the same first condition as mental affliction. The live glossary-tier entry nyon mongs pa attests mental affliction, and an exact myon mongs pa entry is absent. A targeted query excluding the unscanned C13 returns exactly two myon mongs rows, C05:180 and C16:759; the latter matches all three source fields byte for byte and is the same source re-ingested. The corrected prose search nyon mongs pa dang rab has zero non-C13 spine rows. Local digital text witnesses were read and hashed independently at folio marker @124B: SE5525M and SE05525M (SHA256 933d04e506d356a0deb8da05996778e1ef58a313255df981d45d224834c8f913) both read 'ZHEN, MYON MONGS PA'; the distinct SL05525N file (SHA256 12aca4d3a071d600b704761aa82568b7a09175cef62d25e2d3caf9d6b25c179f) reads 'ZHEN, NYON MONGS PA'. All are local digital copies titled DAM PA'I CHOS MNGON PA'I MDZOD KYI RNAM PAR BSHAD PA THAR LAM GSAL BYED, attributed to Rgyal ba Dge 'dun grub, under the campaign-worktree library/sungbum/Sungbum collection; exact paths, original line breaks and full passage quotes are preserved in data/alignment/reviews_c05/c5p60/commentary-local-witnesses.json. The two SE filenames are identical bytes and not two independent witnesses. SL is a distinct digital reading, but publication independence has not been established and no manuscript or blockprint was inspected. The source spelling is therefore a LOW/PROBABLE editorial candidate, not a proven correction; the corpus remains untouched. The current errata register has no C05:178–180/MYON duplicate, and this is not a registered converter, heading, folio, footnote, row-spill or English-cap class.",
+      "severity": "LOW",
+      "confidence": "PROBABLE",
+      "note": "filed from the alignment batch, spine-verified on merge"
+    }
+  ]
+}

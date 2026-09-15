@@ -1,0 +1,1137 @@
+[
+  {
+    "seq": 351,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MA NOR PAR",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MA NOR PAR",
+        "source_row": {
+          "id": 1733,
+          "course": "C05",
+          "seq": 351,
+          "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+          "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+          "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+        },
+        "occurrences": {
+          "acip": [
+            141
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 261,
+          "wylie": 260,
+          "english": 270
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 351,
+            "field": "acip",
+            "start": 239659,
+            "bytes": 261,
+            "sha256": "4a7a4838914c709238ee4ed7032b1791fd98b24cfa5880380145fc387a49560d",
+            "original_text": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 351,
+            "field": "english",
+            "start": 239922,
+            "bytes": 273,
+            "sha256": "f32d08eece27281c00f1a859d1926617a50e68d4e483e65c96efe5e4f02b8cf4",
+            "original_text": "Stealing is to take possession of another's wealth, purposely and without a\r\nmistake, whether it be by means of superior force or by stealth--undetected.\r\nSexual misconduct is engaging in kinds of sex which are improper to\r\nperform, purposely and with no mistaken identity.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The second adverb uses PAR while the first uses BAR. Both are present in the physical source and exact C16 repeat. This source-form question is LOW/UNCERTAIN and unfiled: no reviewed alternative edition or corpus-wide orthographic comparison has been established here, and the whole MA NOR BAR mined gloss is itself mislocalized. Preserve the source and the tight MA/NOR words; do not silently normalize the ending or claim a confirmed/probable correction. ACIP TSOR converts normally to Wylie TSHOR and is not a separate spelling finding.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 351,
+    "kind": "ENGLISH_TYPO",
+    "found": "stealth--undetected",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "stealth--undetected",
+        "source_row": {
+          "id": 1733,
+          "course": "C05",
+          "seq": 351,
+          "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+          "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+          "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            132
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 261,
+          "wylie": 260,
+          "english": 270
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 351,
+            "field": "acip",
+            "start": 239659,
+            "bytes": 261,
+            "sha256": "4a7a4838914c709238ee4ed7032b1791fd98b24cfa5880380145fc387a49560d",
+            "original_text": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 351,
+            "field": "english",
+            "start": 239922,
+            "bytes": 273,
+            "sha256": "f32d08eece27281c00f1a859d1926617a50e68d4e483e65c96efe5e4f02b8cf4",
+            "original_text": "Stealing is to take possession of another's wealth, purposely and without a\r\nmistake, whether it be by means of superior force or by stealth--undetected.\r\nSexual misconduct is engaging in kinds of sex which are improper to\r\nperform, purposely and with no mistaken identity.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The printed double hyphen introduces an explanatory undetected. It matches the complete negative perception phrase; no positive detected stem or punctuation repair is needed.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 351,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "improper to perform",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "improper to perform",
+        "source_row": {
+          "id": 1733,
+          "course": "C05",
+          "seq": 351,
+          "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+          "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+          "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            209
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 261,
+          "wylie": 260,
+          "english": 270
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 351,
+            "field": "acip",
+            "start": 239659,
+            "bytes": 261,
+            "sha256": "4a7a4838914c709238ee4ed7032b1791fd98b24cfa5880380145fc387a49560d",
+            "original_text": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 351,
+            "field": "english",
+            "start": 239922,
+            "bytes": 273,
+            "sha256": "f32d08eece27281c00f1a859d1926617a50e68d4e483e65c96efe5e4f02b8cf4",
+            "original_text": "Stealing is to take possession of another's wealth, purposely and without a\r\nmistake, whether it be by means of superior force or by stealth--undetected.\r\nSexual misconduct is engaging in kinds of sex which are improper to\r\nperform, purposely and with no mistaken identity.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The Tibetan negative permission and verbal-going construction is rendered improper to perform. Only the approved im negative-affix convention is used; positive proper is not claimed as a separate word. The final Tibetan four-types continuation is represented in the next English352, which says four different types; this distribution is not established doctrinal error or a reason to invent a missing exponent in351.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 351,
+    "kind": "INGEST_ARTEFACT",
+    "found": "mistaken identity.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "mistaken identity.",
+        "source_row": {
+          "id": 1733,
+          "course": "C05",
+          "seq": 351,
+          "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+          "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+          "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            252
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 261,
+          "wylie": 260,
+          "english": 270
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 351,
+            "field": "acip",
+            "start": 239659,
+            "bytes": 261,
+            "sha256": "4a7a4838914c709238ee4ed7032b1791fd98b24cfa5880380145fc387a49560d",
+            "original_text": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 351,
+            "field": "english",
+            "start": 239922,
+            "bytes": 273,
+            "sha256": "f32d08eece27281c00f1a859d1926617a50e68d4e483e65c96efe5e4f02b8cf4",
+            "original_text": "Stealing is to take possession of another's wealth, purposely and without a\r\nmistake, whether it be by means of superior force or by stealth--undetected.\r\nSexual misconduct is engaging in kinds of sex which are improper to\r\nperform, purposely and with no mistaken identity.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The complete physical English ends with this sentence; it is below the cap and matches C16 exactly. Final Tibetan four-types wording belongs to the continuous exposition and is rendered next row, so retain the segmentation limit without alleging an unverified ingest loss.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 351,
+    "kind": "FORMATTING",
+    "found": "another's wealth",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "another's wealth",
+        "source_row": {
+          "id": 1733,
+          "course": "C05",
+          "seq": 351,
+          "acip": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+          "wylie": "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de",
+          "english": "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            34
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "ma byin par len pa ni bsams bzhin du ma nor bar gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o, , bsams bzhin du ma nor par bgrod par bya ba min par, 'gro bar 'dod pa'i sgo nas 'dod pas log par g-yem par 'gyur ba rnam pa bzhi yod de"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 351,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "Stealing is to take possession of another's wealth, purposely and without a mistake, whether it be by means of superior force or by stealth--undetected. Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity."
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "lha sbyin lta bu gsod"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mchod sbyin bsad"
+            ],
+            "count": 2,
+            "row_ids": [
+              1732,
+              6889
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kill John"
+            ],
+            "count": 4,
+            "row_ids": [
+              1732,
+              1751,
+              6889,
+              6904
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "ma tshor bar"
+            ],
+            "count": 4,
+            "row_ids": [
+              193,
+              1733,
+              6107,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "mthu dbang cha"
+            ],
+            "count": 2,
+            "row_ids": [
+              1733,
+              6890
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "superior force"
+            ],
+            "count": 3,
+            "row_ids": [
+              1733,
+              6890,
+              9346
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+        "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+        "register_identity": {
+          "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 280652,
+          "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+        },
+        "count": 202,
+        "search_terms": [
+          "c05:349",
+          "c05:350",
+          "c05:351",
+          "john",
+          "joe",
+          "actual- commission",
+          "mthu dbang cha"
+        ],
+        "matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ],
+        "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 261,
+          "wylie": 260,
+          "english": 270
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 351,
+            "field": "acip",
+            "start": 239659,
+            "bytes": 261,
+            "sha256": "4a7a4838914c709238ee4ed7032b1791fd98b24cfa5880380145fc387a49560d",
+            "original_text": ",MA BYIN PAR LEN PA NI BSAMS BZHIN DU MA NOR BAR GZHAN GYI NOR MTHU DBANG CHA DANG 'JAB BUS MA TSOR BAR BDAG GIR BYED PA'O, , BSAMS BZHIN DU MA NOR PAR BGROD PAR BYA BA MIN PAR, 'GRO BAR 'DOD PA'I SGO NAS 'DOD PAS LOG PAR G-YEM PAR 'GYUR BA RNAM PA BZHI YOD DE,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 351,
+            "field": "english",
+            "start": 239922,
+            "bytes": 273,
+            "sha256": "f32d08eece27281c00f1a859d1926617a50e68d4e483e65c96efe5e4f02b8cf4",
+            "original_text": "Stealing is to take possession of another's wealth, purposely and without a\r\nmistake, whether it be by means of superior force or by stealth--undetected.\r\nSexual misconduct is engaging in kinds of sex which are improper to\r\nperform, purposely and with no mistaken identity.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "lexical_queries": 71,
+        "material_master_objects": 121,
+        "personally_read_reused_objects": 79,
+        "complete_new_master_objects_read": 42,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_objects_read": 11
+      },
+      "d_defensibility": {
+        "judgment": "The apostrophe marks the possessive; the lexical another is delimited by it. The source genitive remains unbanked rather than inventing an unauthorized possessive subword. No physical heading or list marker has been absorbed into this row.",
+        "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+      }
+    }
+  }
+]

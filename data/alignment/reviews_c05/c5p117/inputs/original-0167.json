@@ -1,0 +1,12 @@
+{
+  "native_failures": 0,
+  "read_only_lookup_failures": [
+    {
+      "operation": "sed -n 1,240p campaign-artifacts/C05-346-348/english/helpers/package.py",
+      "exit": 1,
+      "stderr_or_combined_error": "sed: campaign-artifacts/C05-346-348/english/helpers/package.py: No such file or directory",
+      "resolution": "rg located existing package_freeze.py; it was fully read before adaptation. No native process or source mutation occurred."
+    }
+  ],
+  "display_history": "One earlier new-master display was truncated around RANG; the affected complete unified/glossary objects were fully reprinted before drafting. No additional source query or native run was needed."
+}

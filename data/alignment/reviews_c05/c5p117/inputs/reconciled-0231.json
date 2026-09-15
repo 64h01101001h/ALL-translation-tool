@@ -1,0 +1,2539 @@
+{
+  "seq": 349,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 349,
+        "kind": "TIBETAN_SPELLING",
+        "found": "BSAMS PAR",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "BSAMS PAR",
+            "source_row": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "occurrences": {
+              "acip": [
+                158
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lha sbyin lta bu gsod"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kill John"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "ma tshor bar"
+                ],
+                "count": 4,
+                "row_ids": [
+                  193,
+                  1733,
+                  6107,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dbang cha"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1733,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "superior force"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1733,
+                  6890,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+            "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+            "register_identity": {
+              "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:349",
+              "c05:350",
+              "c05:351",
+              "john",
+              "joe",
+              "actual- commission",
+              "mthu dbang cha"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 349,
+                "field": "acip",
+                "start": 238503,
+                "bytes": 203,
+                "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 349,
+                "field": "english",
+                "start": 238708,
+                "bytes": 300,
+                "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 71,
+            "material_master_objects": 121,
+            "personally_read_reused_objects": 79,
+            "complete_new_master_objects_read": 42,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 11
+          },
+          "d_defensibility": {
+            "judgment": "The intent explanation has BSAMS PAR, whose complete BSAMS PA glossary attests intent; it is retained inflected rather than normalized to BSAMS BZHIN. Complete physical and C16 fields agree. No source spelling correction is established.",
+            "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 349,
+        "kind": "ENGLISH_TYPO",
+        "found": "no problem like where",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "no problem like where",
+            "source_row": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                220
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lha sbyin lta bu gsod"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kill John"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "ma tshor bar"
+                ],
+                "count": 4,
+                "row_ids": [
+                  193,
+                  1733,
+                  6107,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dbang cha"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1733,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "superior force"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1733,
+                  6890,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+            "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+            "register_identity": {
+              "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:349",
+              "c05:350",
+              "c05:351",
+              "john",
+              "joe",
+              "actual- commission",
+              "mthu dbang cha"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 349,
+                "field": "acip",
+                "start": 238503,
+                "bytes": 203,
+                "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 349,
+                "field": "english",
+                "start": 238708,
+                "bytes": 300,
+                "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 71,
+            "material_master_objects": 121,
+            "personally_read_reused_objects": 79,
+            "complete_new_master_objects_read": 42,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 11
+          },
+          "d_defensibility": {
+            "judgment": "This conversational explanation is syntactically informal but intelligible as the case where a being dies without intent. The complete phrase is printed and repeated; neither informality nor expansion alone establishes a typo.",
+            "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 349,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "there was no intent",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "there was no intent",
+            "source_row": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                277
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lha sbyin lta bu gsod"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kill John"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "ma tshor bar"
+                ],
+                "count": 4,
+                "row_ids": [
+                  193,
+                  1733,
+                  6107,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dbang cha"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1733,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "superior force"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1733,
+                  6890,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+            "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+            "register_identity": {
+              "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:349",
+              "c05:350",
+              "c05:351",
+              "john",
+              "joe",
+              "actual- commission",
+              "mthu dbang cha"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 349,
+                "field": "acip",
+                "start": 238503,
+                "bytes": 203,
+                "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 349,
+                "field": "english",
+                "start": 238708,
+                "bytes": 300,
+                "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 71,
+            "material_master_objects": 121,
+            "personally_read_reused_objects": 79,
+            "complete_new_master_objects_read": 42,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 11
+          },
+          "d_defensibility": {
+            "judgment": "The source distinguishes deliberate killing from death without thought/intent. English intentionally expands the explanation and retains both negative conditions; no factual reversal or invented omitted intent is established.",
+            "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 349,
+        "kind": "INGEST_ARTEFACT",
+        "found": "[IV.289-96]",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "[IV.289-96]",
+            "source_row": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "occurrences": {
+              "acip": [
+                0
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lha sbyin lta bu gsod"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kill John"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "ma tshor bar"
+                ],
+                "count": 4,
+                "row_ids": [
+                  193,
+                  1733,
+                  6107,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dbang cha"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1733,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "superior force"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1733,
+                  6890,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+            "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+            "register_identity": {
+              "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:349",
+              "c05:350",
+              "c05:351",
+              "john",
+              "joe",
+              "actual- commission",
+              "mthu dbang cha"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 349,
+                "field": "acip",
+                "start": 238503,
+                "bytes": 203,
+                "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 349,
+                "field": "english",
+                "start": 238708,
+                "bytes": 300,
+                "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 71,
+            "material_master_objects": 121,
+            "personally_read_reused_objects": 79,
+            "complete_new_master_objects_read": 42,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 11
+          },
+          "d_defensibility": {
+            "judgment": "The citation and complete Tibetan definition, followed by the full English question and explanation, agree with the six physical extents and exact C16 fields. No cap, heading glue or row loss is found in this segment.",
+            "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 349,
+        "kind": "FORMATTING",
+        "found": "The word \"purposely\"",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "The word \"purposely\"",
+            "source_row": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                164
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 349,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "lha sbyin lta bu gsod"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mchod sbyin bsad"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1732,
+                  6889
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kill John"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1732,
+                  1751,
+                  6889,
+                  6904
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "ma tshor bar"
+                ],
+                "count": 4,
+                "row_ids": [
+                  193,
+                  1733,
+                  6107,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mthu dbang cha"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1733,
+                  6890
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "superior force"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1733,
+                  6890,
+                  9346
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+            "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+            "register_identity": {
+              "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:349",
+              "c05:350",
+              "c05:351",
+              "john",
+              "joe",
+              "actual- commission",
+              "mthu dbang cha"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 349,
+                "field": "acip",
+                "start": 238503,
+                "bytes": 203,
+                "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 349,
+                "field": "english",
+                "start": 238708,
+                "bytes": 300,
+                "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 71,
+            "material_master_objects": 121,
+            "personally_read_reused_objects": 79,
+            "complete_new_master_objects_read": 42,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 11
+          },
+          "d_defensibility": {
+            "judgment": "Quotes mark the repeated term being explained and distinguish its English occurrence from the first purposely. GMR punctuation remains exact; no normalization or extra lexical word correspondence.",
+            "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "The verse-range citation is apparatus preceding prose explanation. The English intention contrast recasts MA BSAMS PAR as no intent and adds explanatory framing. These are translation structure, not a demonstrated typo or factual contradiction; preserve all wording."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; root files no new source correction.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 349,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 349,
+          "kind": "TIBETAN_SPELLING",
+          "found": "BSAMS PAR",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "BSAMS PAR",
+              "source_row": {
+                "id": 1731,
+                "course": "C05",
+                "seq": 349,
+                "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+                "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+              },
+              "occurrences": {
+                "acip": [
+                  158
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lha sbyin lta bu gsod"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kill John"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "ma tshor bar"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    193,
+                    1733,
+                    6107,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dbang cha"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1733,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "superior force"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1733,
+                    6890,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+              "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "register_identity": {
+                "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:349",
+                "c05:350",
+                "c05:351",
+                "john",
+                "joe",
+                "actual- commission",
+                "mthu dbang cha"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 200,
+                "wylie": 199,
+                "english": 297
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 349,
+                  "field": "acip",
+                  "start": 238503,
+                  "bytes": 203,
+                  "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                  "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 349,
+                  "field": "english",
+                  "start": 238708,
+                  "bytes": 300,
+                  "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                  "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 71,
+              "material_master_objects": 121,
+              "personally_read_reused_objects": 79,
+              "complete_new_master_objects_read": 42,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 11
+            },
+            "d_defensibility": {
+              "judgment": "The intent explanation has BSAMS PAR, whose complete BSAMS PA glossary attests intent; it is retained inflected rather than normalized to BSAMS BZHIN. Complete physical and C16 fields agree. No source spelling correction is established.",
+              "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 349,
+          "kind": "ENGLISH_TYPO",
+          "found": "no problem like where",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "no problem like where",
+              "source_row": {
+                "id": 1731,
+                "course": "C05",
+                "seq": 349,
+                "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+                "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  220
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lha sbyin lta bu gsod"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kill John"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "ma tshor bar"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    193,
+                    1733,
+                    6107,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dbang cha"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1733,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "superior force"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1733,
+                    6890,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+              "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "register_identity": {
+                "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:349",
+                "c05:350",
+                "c05:351",
+                "john",
+                "joe",
+                "actual- commission",
+                "mthu dbang cha"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 200,
+                "wylie": 199,
+                "english": 297
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 349,
+                  "field": "acip",
+                  "start": 238503,
+                  "bytes": 203,
+                  "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                  "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 349,
+                  "field": "english",
+                  "start": 238708,
+                  "bytes": 300,
+                  "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                  "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 71,
+              "material_master_objects": 121,
+              "personally_read_reused_objects": 79,
+              "complete_new_master_objects_read": 42,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 11
+            },
+            "d_defensibility": {
+              "judgment": "This conversational explanation is syntactically informal but intelligible as the case where a being dies without intent. The complete phrase is printed and repeated; neither informality nor expansion alone establishes a typo.",
+              "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 349,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "there was no intent",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "there was no intent",
+              "source_row": {
+                "id": 1731,
+                "course": "C05",
+                "seq": 349,
+                "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+                "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  277
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lha sbyin lta bu gsod"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kill John"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "ma tshor bar"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    193,
+                    1733,
+                    6107,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dbang cha"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1733,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "superior force"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1733,
+                    6890,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+              "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "register_identity": {
+                "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:349",
+                "c05:350",
+                "c05:351",
+                "john",
+                "joe",
+                "actual- commission",
+                "mthu dbang cha"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 200,
+                "wylie": 199,
+                "english": 297
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 349,
+                  "field": "acip",
+                  "start": 238503,
+                  "bytes": 203,
+                  "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                  "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 349,
+                  "field": "english",
+                  "start": 238708,
+                  "bytes": 300,
+                  "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                  "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 71,
+              "material_master_objects": 121,
+              "personally_read_reused_objects": 79,
+              "complete_new_master_objects_read": 42,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 11
+            },
+            "d_defensibility": {
+              "judgment": "The source distinguishes deliberate killing from death without thought/intent. English intentionally expands the explanation and retains both negative conditions; no factual reversal or invented omitted intent is established.",
+              "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 349,
+          "kind": "INGEST_ARTEFACT",
+          "found": "[IV.289-96]",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "[IV.289-96]",
+              "source_row": {
+                "id": 1731,
+                "course": "C05",
+                "seq": 349,
+                "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+                "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+              },
+              "occurrences": {
+                "acip": [
+                  0
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lha sbyin lta bu gsod"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kill John"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "ma tshor bar"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    193,
+                    1733,
+                    6107,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dbang cha"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1733,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "superior force"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1733,
+                    6890,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+              "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "register_identity": {
+                "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:349",
+                "c05:350",
+                "c05:351",
+                "john",
+                "joe",
+                "actual- commission",
+                "mthu dbang cha"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 200,
+                "wylie": 199,
+                "english": 297
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 349,
+                  "field": "acip",
+                  "start": 238503,
+                  "bytes": 203,
+                  "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                  "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 349,
+                  "field": "english",
+                  "start": 238708,
+                  "bytes": 300,
+                  "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                  "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 71,
+              "material_master_objects": 121,
+              "personally_read_reused_objects": 79,
+              "complete_new_master_objects_read": 42,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 11
+            },
+            "d_defensibility": {
+              "judgment": "The citation and complete Tibetan definition, followed by the full English question and explanation, agree with the six physical extents and exact C16 fields. No cap, heading glue or row loss is found in this segment.",
+              "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 349,
+          "kind": "FORMATTING",
+          "found": "The word \"purposely\"",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "The word \"purposely\"",
+              "source_row": {
+                "id": 1731,
+                "course": "C05",
+                "seq": 349,
+                "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+                "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  164
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 349,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1731,
+                    6888
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "lha sbyin lta bu gsod"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mchod sbyin bsad"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1732,
+                    6889
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kill John"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1732,
+                    1751,
+                    6889,
+                    6904
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "ma tshor bar"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    193,
+                    1733,
+                    6107,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mthu dbang cha"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1733,
+                    6890
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "superior force"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1733,
+                    6890,
+                    9346
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all11 complete objects read",
+              "lineage_limit": "C16:870–872 exactly repeats all three fields of349–351 in the same publication family; no independent collation is claimed. C05:369/C16:886 repeats the John/Joe example in later prose. C01:193/C16:89 has negative perception/know wording in a distinct poem. TCS02:72 contains the corresponding extended English definitions with Devadatta/Yajana, but its Tibetan row covers only the preceding four verse lines; it is not a clean word-aligned witness for these prose definitions."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+              "register_identity": {
+                "original_git_commit": "58b8846b0affaac576ace5b0789a45df1e462a53",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:349",
+                "c05:350",
+                "c05:351",
+                "john",
+                "joe",
+                "actual- commission",
+                "mthu dbang cha"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "../evidence/register-baseline-delta.json; register202 byte-identical from source origin345 to actual acceptance baseline348"
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 200,
+                "wylie": 199,
+                "english": 297
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 349,
+                  "field": "acip",
+                  "start": 238503,
+                  "bytes": 203,
+                  "sha256": "8ca0cc30b4e588660dd22f7c0652ea320e3aeac274f134fb7529137b35578c80",
+                  "original_text": "[IV.289-96]\r\n\r\n,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 349,
+                  "field": "english",
+                  "start": 238708,
+                  "bytes": 300,
+                  "sha256": "bdcf49b73204f84f3397cedbda136f2aa3b3365928e3926dc231c6dd813dccbd",
+                  "original_text": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The\r\ntaking of life is defined as killing another being purposely, and without a\r\nmistake. The word \"purposely\" is meant to indicate that there is no problem\r\nlike where the being in question has died but there was no intent.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 71,
+              "material_master_objects": 121,
+              "personally_read_reused_objects": 79,
+              "complete_new_master_objects_read": 42,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 11
+            },
+            "d_defensibility": {
+              "judgment": "Quotes mark the repeated term being explained and distinguish its English occurrence from the first purposely. GMR punctuation remains exact; no normalization or extra lexical word correspondence.",
+              "material": "../evidence/lexical.json full master objects; exact personally-read reuse; ../evidence/corpus.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 349,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 349,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1731,
+              "course": "C05",
+              "seq": 349,
+              "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+              "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+              "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "Complete ACIP, Wylie and exact GMR English read with context343–357. Six full physical source extents read and whitespace-collapse verified. Digital/physical agreement establishes the available reading, not universal correctness."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/material-corpus-reading-selection.json",
+              "../evidence/original-context-manifest.json"
+            ],
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1731,
+                  6888
+                ]
+              }
+            ],
+            "finding": "The complete current segment and its C16 counterpart match all three source fields. Six complete source/C16 records and six additional material records were fully read. The C16 duplicate is the same reading reused, not an independently collated publication. Full context includes the continuation at352; no outside publication was inspected."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "58b8846b0affaac576ace5b0789a45df1e462a53:docs/errata_register.json",
+            "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+            "register_count": 202,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-format-search.json"
+            ],
+            "finding": "Direct current references screened with no prior segment entry. Seven unchanged complete converter, running-head, cap, spill and footnote class records reused by exact personal reading identity. Ten complete additional register search records fully read; E-025/E-028/E-029/E-045 establish the source hyphen-space family and E-089 separately forbids silent layer repair. Note that family without another filing."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The verse-range citation is apparatus preceding prose explanation. The English intention contrast recasts MA BSAMS PAR as no intent and adds explanatory framing. These are translation structure, not a demonstrated typo or factual contradiction; preserve all wording.",
+            "counterevidence": "Exact repeated source readings may share an ancestor and cannot establish publication independence. Master HGM tiers can be auto-aligned or incomplete, so local syntax and full passages govern; no mined gloss is promoted. A standard alternative wording alone does not prove the exact source wrong."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "utf8_bytes": {
+              "acip": 200,
+              "wylie": 199,
+              "english": 297
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "All fields are physically complete and below1500 characters. This is prose even though prefaced by a root-verse reference; no syllable-metre test applies."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "The verse-range citation is apparatus preceding prose explanation. The English intention contrast recasts MA BSAMS PAR as no intent and adds explanatory framing. These are translation structure, not a demonstrated typo or factual contradiction; preserve all wording."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

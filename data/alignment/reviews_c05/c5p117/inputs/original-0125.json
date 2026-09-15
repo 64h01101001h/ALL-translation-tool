@@ -1,0 +1,129 @@
+{
+  "seq": 349,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1731,
+        "course": "C05",
+        "seq": 349,
+        "acip": "[IV.289-96] ,DANG PO NI, MI DGE BA BCU SO SO'I NGO BO GANG ZHE NA, SROG GCOD PA NI BSAMS BZHIN DU MA NOR BAR NI GZHAN BSAD PA'O, , BSAMS BZHIN DU ZHES PAS MA BSAMS PAR SHI BA LA NYES PA MED PAR BSTAN,",
+        "wylie": "[iv.289-96] ,dang po ni, mi dge ba bcu so so'i ngo bo gang zhe na, srog gcod pa ni bsams bzhin du ma nor bar ni gzhan bsad pa'o, , bsams bzhin du zhes pas ma bsams par shi ba la nyes pa med par bstan",
+        "english": "\"What,\" one may ask, \"is the basic nature of each of the ten non-virtues?\" The taking of life is defined as killing another being purposely, and without a mistake. The word \"purposely\" is meant to indicate that there is no problem like where the being in question has died but there was no intent."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete ACIP, Wylie and exact GMR English read with context343–357. Six full physical source extents read and whitespace-collapse verified. Digital/physical agreement establishes the available reading, not universal correctness."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/material-corpus-reading-selection.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1731,
+            6888
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1731,
+            6888
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1731,
+            6888
+          ]
+        }
+      ],
+      "finding": "The complete current segment and its C16 counterpart match all three source fields. Six complete source/C16 records and six additional material records were fully read. The C16 duplicate is the same reading reused, not an independently collated publication. Full context includes the continuation at352; no outside publication was inspected."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b8846b0affaac576ace5b0789a45df1e462a53:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-format-search.json"
+      ],
+      "finding": "Direct current references screened with no prior segment entry. Seven unchanged complete converter, running-head, cap, spill and footnote class records reused by exact personal reading identity. Ten complete additional register search records fully read; E-025/E-028/E-029/E-045 establish the source hyphen-space family and E-089 separately forbids silent layer repair. Note that family without another filing."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The verse-range citation is apparatus preceding prose explanation. The English intention contrast recasts MA BSAMS PAR as no intent and adds explanatory framing. These are translation structure, not a demonstrated typo or factual contradiction; preserve all wording.",
+      "counterevidence": "Exact repeated source readings may share an ancestor and cannot establish publication independence. Master HGM tiers can be auto-aligned or incomplete, so local syntax and full passages govern; no mined gloss is promoted. A standard alternative wording alone does not prove the exact source wrong."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 200,
+        "wylie": 199,
+        "english": 297
+      },
+      "utf8_bytes": {
+        "acip": 200,
+        "wylie": 199,
+        "english": 297
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are physically complete and below1500 characters. This is prose even though prefaced by a root-verse reference; no syllable-metre test applies."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The verse-range citation is apparatus preceding prose explanation. The English intention contrast recasts MA BSAMS PAR as no intent and adds explanatory framing. These are translation structure, not a demonstrated typo or factual contradiction; preserve all wording."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source error; retain exact GMR spelling, punctuation and explanatory wording."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

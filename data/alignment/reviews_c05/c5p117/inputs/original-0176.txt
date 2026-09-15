@@ -1,0 +1,98 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(349,'intention in the definition of taking life',[
+ ('mi dge ba','non-virtues',5,'ten non-virtues','Established non-virtue compound, with exact English plural and hyphen. Exclude the preceding ten and article.'),
+ ('dge ba','virtues',7,'ten non-virtues','Secure positive lexical member at the hyphen-delimited virtues component. It is a complete English word component, not an interior positive cut or a new subword convention.'),
+ ('bcu','ten',5,'ten non-virtues','Exact number ten, distinct from the whole non-virtue noun.'),
+ ('so so','each',5,'each of the ten','Established distributive compound has each; exclude of the.'),
+ ('ngo bo','basic nature',5,'basic nature of each','Exact glossary basic nature; the preceding the remains outside.'),
+ ('gang','What',5,'What,','Interrogative pronoun owns the opening What, excluding quote/comma punctuation.'),
+ ('zhe na','ask',3,'ask,','Whole reporting-question formula owns the explicit ask. One may remains outside, so the phrase does not absorb the supplied speaker or modal.'),
+ ('srog gcod pa','taking of life',5,'taking of life is','Established taking-life compound; exclude The and the definitional copula.'),
+ ('srog','life',7,'taking of life is','Secure life member inside the taking-life parent. No isolated gcod/taking claim is made.'),
+ ('bsams bzhin','purposely',5,'being purposely','First intentionality compound belongs to the definition, before without a mistake. Exact glossary purposely.'),
+ ('ma','without',6,'without a mistake','Explicit negation in the no-error condition owns without. The article a is excluded.'),
+ ('nor','mistake',5,'without a mistake','Error sense of NOR is directly attested; not the wealth sense used in351.'),
+ ('gzhan','another',5,'another being purposely','Other/another modifies the killed being. Exclude being and reject the unrelated mined a bodhisattva sense without changing it.'),
+ ('bsad pa','killing',5,'killing another being','Exact glossary killing, with source BSAD retained.'),
+ ('bsams bzhin','purposely',5,'The word "purposely"','Second intentionality compound is the quoted word under explanation, not the earlier definition occurrence.'),
+ ('ma bsams par','no intent',3,'no intent','The complete negative-intention construction is recast as no intent. Phrase depth avoids assigning intent to BSAMS merely because the English uses a nominal paraphrase. Exclude there was.'),
+ ('shi ba','died',5,'has died but','Death predicate owns died; has and the expanded being description remain outside.'),
+ ('la','where',6,'where the being','Case-setting particle concerns the situation of unintended death; English renders the case as where. This is not a geographic-location noun.'),
+ ('nyes pa','problem',5,'no problem like','Exact glossary problem for the absence of wrongdoing in this case, excluding like.'),
+ ('med','no',5,'no problem like','Negative existential belongs to no problem, not the later no intent governed by MA.'),
+ ('bstan','indicate',5,'indicate that there','Exact glossary indicate. Is meant to and that remain outside the verb claim.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Separate the two purposely occurrences and the problem/intent negations. Ma bsams par/no intent is the genuine negative-intention phrase; no misleading thought/intent atom is banked. Zhe na owns only ask. Supplied definition/report frames and the introductory ordinal remain omitted. Exact GMR/source text is preserved with no hgm_gloss promotion or correction.',
+ [{'tib':'[iv.289-96]; dang po ni; other ni; du; bar; bound genitives and declarative o','reason':'Citation apparatus, the first-section outline and topic/adverbial grammar are not independently expressed by a unique English atom. The expanded first definition does not prove the ordinal absent in meaning; omit without a null.'},
+ {'tib':'zhes pas; gcod pa as a member','reason':'The metalinguistic formula is recast as The word ... is meant to indicate; word and meant are framing without a secure individual formula atom. Taking life is idiomatic at the compound level; taking alone does not retain killing content.'},
+ {'english':'one may; is the; of; the; The; is defined as; being; and; a; The word; is meant to; that there is; like; the being in question has; but there was','reason':'Participants, articles, copulas, explanatory wording and the nominal-intention recast stay outside the stated narrow claims. There is no source correction or new null.'}])
+build(350,'mistaken identity and taking ones own life',[
+ ('ma','without',6,'without a mistake','The quoted definition starts with the explicit negative without; do not assign either later no to this source particle.'),
+ ('nor','mistake',5,'without a mistake','First error token is the noun in the quoted phrase; distinguish the later mistaken predicate.'),
+ ('lha sbyin','John',5,'kill John but','The intended victim is John in this local example. Exact source LHA SBYIN is retained; C12:204 uses the same spelling with the John/Joe example, and later C05:369 uses LHAS BYIN for the intended John. This is a local proper-name rendering, not a normalized lexical entry.'),
+ ('lta bu','for example',6,'for example,','Exemplifying expression has exact glossary for example. It introduces the hypothetical named victim/case and is a grammatical example marker.'),
+ ('gsod pa','kill',5,'to kill John','First killing predicate belongs to the intended victim John, excluding to.'),
+ ('sbyor ba','undertake',5,'undertake to kill','The established undertaking term explicitly has undertake. The following BYAS is the source light verb and is not assigned this same English verb again.'),
+ ('nor','mistaken',5,'have mistaken him','Second error token is the actual misidentification predicate. The earlier English mistaken identity summarizes the case and is not banked as a second exponent.'),
+ ('nas','because',6,'because you have','NAS after mistaken identity connects that error with killing Joe. Its local causal-continuative function is rendered because, supported by the glossary since/which causes range; exclude you have.'),
+ ('mchod sbyin','Joe',5,'kill Joe because','Second MCHOD SBYIN is the person actually killed and owns the explicit Joe in kill Joe. The first name is distributed into mistaken him. The mined john gloss conflicts with this local example and is not promoted; C05:369 confirms the same intended-John/actual-Joe roles.'),
+ ('bsad','kill',5,'kill Joe because','Second killing verb belongs to the actual victim Joe, distinct from the earlier intended kill John.'),
+ ('las lam','act',5,'an act occurs','The full action-path term is abbreviated as act in this definition of its actual stage. Exclude an; there is no separately expressed path member.'),
+ ('gyi','of',6,'stage of an act','Genitive connects the actual stage to the act. It owns of after stage, not any word within a compound.'),
+ ('dngos gzhi','"actual- commission" stage',5,'"actual- commission" stage','Established technical actual-commission stage compound. Preserve the exact hyphen-space and quotes inherited from the physical line wrap. No normalization or article capture.'),
+ ('dngos','actual',7,'"actual- commission" stage','Secure actual member before the hyphen inside the first technical-stage parent. No arbitrary gzhi/commission member.'),
+ ('mi','no',6,'no "actual- commission"','The negative particle governing occurrence is recast as no before the stage noun; this is the first no-stage claim.'),
+ ("'byung",'occurs',5,'act occurs in','First occurrence verb belongs to the mistaken-identity case. Exclude the case framing.'),
+ ('bstan','indicate',5,'to indicate that no "actual- commission"','First indicating verb explains the quoted without a mistake wording. Distinguish the second explanation of another.'),
+ ('gzhan','another',5,'The word "another,"','Second GZHAN is the quoted definition word under explanation. The earlier GZHAN qualifying the unintended victim remains distributed, not mapped to this quote.'),
+ ('rang bsad pa','takes his own life',3,'takes his own life','Complete reflexive-killing predicate is rendered by the idiom takes his own life. Whole phrase preserves killing and reflexivity together; no false bsad/takes atom or d7 under this d3 phrase is added.'),
+ ('la','where',6,'where one takes','Case-setting LA concerns the instance of taking ones own life. English where marks that situation; one remains outside.'),
+ ('dngos gzhi','"actual-commission" stage',5,'"actual-commission" stage','Second technical-stage compound has the unspaced hyphen spelling. Preserve its distinct exact surface form and exclude the preceding no.'),
+ ('dngos','actual',7,'"actual-commission" stage','Secure actual member in the second parent, strictly inside its own English range.'),
+ ('mi','no',6,'no "actual-commission"','Second negative particle belongs to the self-killing case, not the earlier mistaken-identity case.'),
+ ("'byung",'occurs',5,'stage occurs either','Second occurrence verb belongs to the self-killing case. Exclude either and the following case frame.'),
+ ('bstan','indicate',5,'to indicate that no "actual-commission"','Second indicating verb explains another in the definition; exclude is meant to.'),
+ ('to',None,6,'','Terminal TO is the terminating particle after the final indication statement. Its complete glossary explicitly gives a period. English closes that same explanation with the final period after life; declarative closure is fused into that punctuation, with no separate lexical exponent. It is not either English infinitive to before indicate.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep intended John and actual Joe distinct; MCHOD SBYIN is not forced onto the unrelated mined john gloss. Separate the two actual-stage/no/occurs/indicate groups and preserve their different literal hyphen spacing. The full self-killing idiom is a d3 phrase. Terminal TO is a d6 punctuation-fusion null with cls=conj; no lexical infinitive-to mapping is implied. Source/GMR wording is exact and no source/master change is made.',
+ [{'tib':'bar; zhes pas at both quotations; byas; first nas; first gzhan; first mchod sbyin; dang; kyang','reason':'Quotation and light-verb/continuation grammar are expanded in English. The first Joe reference is resumed as him in the mistaken-identity predicate; the final John repeats the intended victim. The concessive KYANG around actual killing does not uniquely own the earlier but instead contrast. Leave these distributed atoms unbanked without nulls.'},
+ {'tib':'second las lam and its gyi; final bar; internal members of rang bsad pa','reason':'The second English stage reference omits an explicit act/path complement and relies on the prior technical context. This does not prove absent meaning. The self-killing idiom is a genuine phrase and has no d7 children; its separate takes/life components are not literal kill-word equivalences.'},
+ {'english':'The words; a; are meant to; that; an; in a case of mistaken identity; in a case where you; to; but instead; you have; him for John; The word; finally; is meant to; that; either in an instance; one','reason':'Expanded examples, repeated name/anaphor references, articles, auxiliaries and discourse framing remain unwrapped unless explicitly assigned. The original hyphen-space is retained as physical line-wrap formatting, not silently repaired.'}])
+build(351,'stealing and sexual misconduct',[
+ ('ma byin par len pa','Stealing',5,'Stealing is','Established stealing compound with exact glossary stealing. Its internal negative and taking elements are lexicalized, not separately nulled.'),
+ ('bsams bzhin','purposely',5,"wealth, purposely",'First intentionality compound belongs to the stealing definition. Exact glossary purposely, distinct from the later sexual-conduct condition.'),
+ ('ma','without',6,'without a mistake','First error negation owns without; exclude a.'),
+ ('nor','mistake',5,'without a mistake','First NOR is the mistake sense in the stealing definition, distinct from wealth and the later mistaken adjective.'),
+ ('gzhan','another',5,"another's wealth",'Other/another identifies the owner of the property. The possessive clitic remains outside; the unrelated mined a bodhisattva sense is not promoted.'),
+ ('nor','wealth',5,"another's wealth",'Second NOR is the wealth sense, exactly glossary-attested.'),
+ ('mthu','force',5,'superior force or','Power/force noun owns force. The additional source DBANG CHA contributes coercive power but does not license a secure isolated superior atom.'),
+ ('dang','or',6,' or by stealth','Coordinator joins force and stealth. The anchor begins at the actual coordinator, avoiding the letters or inside force.'),
+ ("'jab bus",'stealth',5,'stealth--undetected','Whole inflected stealth word; agentive s stays attached and is not a separate source token.'),
+ ('ma tshor bar','undetected',3,'undetected','Complete non-detection expression is rendered undetected. The negative phrase is kept whole, with no positive detected interior cut or invented null. Complete TSHOR evidence and C01:193/C16:89 support the noticing/knowing sense.'),
+ ('bdag gir','possession',5,'take possession of','Established ownership expression has exact glossary possession. Exclude the following object relation of.'),
+ ('byed pa','take',5,'take possession of','Action verb has exact glossary take and supplies the light verb in take possession. Exclude is to.'),
+ ('bsams bzhin','purposely',5,'perform, purposely','Second intentionality compound belongs to sexual misconduct. It does not reuse the first purposely target.'),
+ ('ma','no',6,'with no mistaken identity','Second error negation owns no. With is the English condition frame and remains outside.'),
+ ('nor','mistaken',5,'no mistaken identity','Third NOR is the error sense with adjectival English inflection. Identity is contextual specification and stays outside this narrow claim.'),
+ ('bgrod par bya ba min par','improper to perform',3,'improper to perform','The complete negative eligibility/action expression is recast as improper to perform. This genuine phrase preserves negation plus what is to be done; it does not invent a bgrod/proper atom.'),
+ ("'gro bar",'engaging',5,'engaging in kinds','Whole inflected going/engaging verb belongs to the sexual-act definition. The unrelated mined misery gloss is rejected without modification.'),
+ ('log par g-yem par','Sexual misconduct',5,'Sexual misconduct is','Established sexual-misconduct compound in its exact inflected PAR form. Exclude the following is; no synthetic source PA is substituted.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Separate both purposely conditions and all three NOR senses. Keep negative non-detection and improper-to-perform constructions as genuine phrases, without illegal positive interior cuts. Desire/sex and superior-power wording remain conservatively sparse. The final four-types statement is expressed in the next English segment352 and stays unbanked here, not falsely nulled. Exact GMR/source text and provisional status remain unchanged.',
+ [{'tib':'ni; du; bar/par around condition words; gyi; bound agentive s and declarative o','reason':'Topic, adverbial, possessive and declarative grammar is distributed across the English definitions. Preserve inflected source words intact. No fifth subword convention or absent-meaning null is introduced.'},
+ {'tib':'dbang cha','english':'superior','reason':'Complete DBANG/CHA records support power and part/aspect, but do not independently isolate superior in this local coercive-force expression. Keep MTHU/force and leave this modifier relation uncertain.'},
+ {'tib':"'dod pa'i sgo nas; 'dod pas; 'gyur ba",'reason':'Desire, means and becoming are compressed into the English definition of engaging in kinds of sex. Neither desire/sex nor becoming/the copula is individually secured by the local recast. These remain unbanked, with no claim that their meaning is absent.'},
+ {'tib':'rnam pa bzhi yod de','reason':'The explicit four-types tail is rendered at the start of English352, which begins This sexual misconduct is of four different types. English351 kinds of sex occurs within the engagement definition and is not a safe replacement for that fourfold enumeration. Cross-segment distribution is preserved without a false null or a source correction.'},
+ {'english':"is to; of; possessive 's; and; a; whether it be by means of; superior; by; is; in kinds of sex which are; and with; identity",'reason':'Articles, copulas, condition frames, possession/instrumental relations and explanatory words stay outside the stated claims. Adjacent translation distribution does not establish a new ingest defect.'}])

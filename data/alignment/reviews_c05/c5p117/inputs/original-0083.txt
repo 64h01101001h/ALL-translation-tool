@@ -1,0 +1,106 @@
+"""Independent Tibetan-first literal choices using the existing exact-anchor author format."""
+from pathlib import Path
+import json
+T=Path(__file__).resolve().parents[1];base=json.loads((T/'evidence/proposal-baseline.json').read_bytes());source={x['seq']:x for x in json.loads((T/'evidence/source.json').read_bytes())}
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+data={349:[
+('w1',5,'mi dge ba','non-virtues','ten non-virtues','The established nonvirtue term directly attests this complete hyphenated noun; preserve GMR spelling.'),
+('m1',7,'dge ba','virtues','','The complete virtues member is delimited by the printed hyphen and strictly inside non-virtues. DGE BA has curated goodness, with virtue in the separate reference tier; local lexical composition supports this provisional member. No non prefix or fifth negative-affix exception is claimed.'),
+('w2',5,'bcu','ten','the ten non-virtues','BCU supplies ten; ignore the overlong glossary gloss the ten non-virtues.'),
+('w3',5,'so so','each','of each of','The distributive whole term directly supplies each, excluding both supplied of connectors.'),
+('w4',5,'ngo bo','basic nature','the basic nature','The full NGO BO glossary attests basic nature; this is the lexical head, not the surrounding question.'),
+('w5',5,'gang','What','"What,"','The interrogative pronoun GANG directly attests what; preserve capitalization and leave question framing separate.'),
+('w6',5,'srog gcod pa','taking of life','The taking of life','The technical taking-life compound supplies the complete noun phrase, excluding the article.'),
+('m2',7,'srog','life','','SROG/life is an independently supported complete word strictly within both parent ranges. No unsupported GCOD PA/taking member is added.'),
+('w7',5,'bsams bzhin du','purposely','being purposely,','The complete conventional adverb includes its DU manner ending; BSAMS BZHIN directly attests purposely. This first occurrence qualifies the actual killing.'),
+('p1',6,'ma','without','and without a mistake','Standalone privative MA supplies without; NOR is separately the error noun. The mined whole MA NOR BAR gloss purposely and without is not followed.'),
+('w8',5,'nor','mistake','a mistake. The word','NOR directly attests mistake. Article and BAR manner grammar remain outside this word.'),
+('w9',5,'gzhan','another','killing another being','The modifier GZHAN directly supplies another; understood being remains unwrapped.'),
+('w10',5,'bsad pa','killing','defined as killing','Whole BSAD PA directly attests killing. Preserve this spelling, distinct from GSAD in the preceding verse.'),
+('w11',5,'bsams bzhin du','purposely','word "purposely"','The second complete adverb is the explicitly quoted term being explained, with its own source and English occurrence.'),
+('p2',6,'ma','no','was no intent','This MA negates intent, not the earlier no problem, which belongs to MED.'),
+('w12',5,'bsams par','intent','no intent.','The inflected thought/intention form maps the explicit intent noun in this explanation. Full BSAMS PA attests intent; keep the actual PAR ending rather than cutting it off.'),
+('w13',5,'shi ba','died','has died but','SHI BA directly supplies died. The subject and auxiliary are explanatory English.'),
+('w14',5,'nyes pa','problem','no problem like','NYES PA directly attests problem here; do not substitute the stronger offense gloss for GMR wording.'),
+('w15',5,'med','no','there is no problem','MED is the negative existential, rendered no in there is no problem. It is a word at depth5, distinct from the separate MA particle denying intent.'),
+('w16',5,'bstan','indicate','to indicate that','BSTAN directly attests indicate; the quotation and is meant to frame remain unwrapped.')],
+350:[
+('p1',6,'ma','without','"without a mistake"','Standalone MA supplies without in the quoted condition. No English negative stem is invented.'),
+('w1',5,'nor','mistake','without a mistake','NOR is the noun mistake, distinct from the later verbal mistaken.'),
+('w2',5,'lha sbyin','John','kill John but','The intended victim LHA SBYIN is localized as the first John in the explicit example. There is no exact LHA SBYIN master entry; local source syntax plus the later369 example supports the name correspondence provisionally. The second English John is an explanatory repetition, not a second source name.'),
+('p2',6,'lta bu','for example','for example, in','The whole exemplifying formula LTA BU owns for example. Do not include the following case framing.'),
+('w3',5,'gsod pa','kill','to kill John','GSOD PA is the intended killing, selecting the first of the two kill occurrences.'),
+('w4',5,'sbyor ba','undertake','you undertake to','SBYOR BA directly attests undertake and is the preparation term here. BYAS is support in the same predicate, not a second claimant on undertake.'),
+('w5',5,'nor','mistaken','have mistaken him','This later NOR is the mistaken-identity verb, directly attested as mistaken; it is separate from the initial mistake noun.'),
+('w6',5,'mchod sbyin','Joe','kill Joe because','The second MCHOD SBYIN is the explicit killed object, localized as Joe. The first occurrence participates in the mistake clause and is pronominally recast; it is unbanked. The full master auto-mined John gloss conflicts with this local object and is not followed; reference Yajñadatta and later369 provide context, not a replacement for GMR Joe.'),
+('w7',5,'bsad','kill','instead kill Joe','BSAD is the actual killing of Joe, distinct from GSOD PA/kill John; preserve the source tense/spelling with GMR present kill.'),
+('w8',5,'las lam','act','of an act occurs','The first technical action-path term is rendered act in this prose. Whole LAS LAM remains a provisional local correspondence; no degenerate LAS/act member is possible.'),
+('w9',5,'dngos gzhi','actual- commission','"actual- commission"','The whole technical main-stage term directly attests actual- commission. Keep the exact physical line-wrap-derived space after the hyphen; leave the explanatory stage outside this tight attested expression.'),
+('m1',7,'dngos','actual','','The whole actual member ends at the printed hyphen and is strictly inside the technical compound. The unrelated mined GZHI/give it a name gloss supplies no commission member.'),
+('p3',6,'mi','no','that no "actual- commission"','Standalone MI negates the first occurrence predicate and owns the first no.'),
+('w10',5,"'byung",'occurs','act occurs in','The first explicit BYUNG occurrence supplies occurs; this is the mistaken-identity case.'),
+('w11',5,'bstan','indicate','meant to indicate that no "actual- commission"','The first BSTAN governs the quoted without-a-mistake explanation and the first indicate.'),
+('w12',5,'gzhan','another','word "another,"','The quoted GZHAN explicitly supplies another in the second explanation.'),
+('w13',5,'rang','own','his own life','RANG supplies own in the self-killing paraphrase. His is supplied possession framing; the killing word has no separate lexical kill exponent here.'),
+('p4',6,'la','in','in an instance','Standalone LA marks this instance of self-killing, rendered in. It is not assigned to the earlier mistaken-identity case.'),
+('w14',5,'dngos gzhi','actual-commission','"actual-commission"','The second technical compound maps the second quoted actual-commission, whose printed hyphen has no intervening space. Stage remains explanatory as in the first occurrence.'),
+('m2',7,'dngos','actual','','Second explicit actual member is unique and strict inside its second compound. No cross-occurrence range or ungrounded GZHI/commission member.'),
+('p5',6,'mi','no','that no "actual-commission"','Second MI owns the second no in the self-killing explanation.'),
+('w15',5,"'byung",'occurs','stage occurs either','Second explicit occurrence verb owns the second occurs; the additional either is not assigned to the earlier KYANG.'),
+('w16',5,'bstan','indicate','meant to indicate that no "actual-commission"','Second BSTAN owns second indicate. Final closure TO and expanded explanatory framing remain unwrapped.')],
+351:[
+('w1',5,'ma byin par len pa','Stealing','Stealing is to','The established theft term directly attests Stealing. Its internal negative and taking components do not have separate English members.'),
+('w2',5,'bsams bzhin du','purposely','wealth, purposely','The first conventional adverb qualifies the theft definition; keep its DU ending and distinguish the second sexual-act occurrence.'),
+('p1',6,'ma','without','and without a mistake','First MA is the privative without in the theft clause.'),
+('w3',5,'nor','mistake','a mistake, whether','First error-sense NOR supplies mistake, distinct from the later wealth noun and final mistaken verb.'),
+('w4',5,'gzhan','another',"of another's wealth",'GZHAN supplies the complete apostrophe-delimited lexical another. The bound genitive is not cut into a nonauthorized English subword.'),
+('w5',5,'nor','wealth',"another's wealth,",'Second NOR is the directly attested wealth sense, not the mistake sense in the adverb.'),
+('w6',5,'mthu','force','superior force or','MTHU contributes power/force locally in superior force. HGM attests strength/power, while force is a separate reference comparandum; the full local clause supports a provisional force mapping without relabeling that reference as HGM.'),
+('p2',6,'dang','or','force or by','DANG coordinates alternative means here as or, rather than mechanically and.'),
+('w7',5,"'jab bus",'stealth','by stealth--undetected','The complete inflected JAB BUS maps stealth, with JAB BU directly attested. Its agentive-s remains inseparable; no fabricated separate by member.'),
+('f1',3,'ma tshor bar','undetected','stealth--undetected','The complete negative perception phrase corresponds to undetected. TSHOR has an empty HGM scaffold, with reference perception and complete C01:193/C16:89 negative-know usage; this is contextual phrase evidence only. Keep the phrase whole and do not cut a positive detected stem or falsely fill the glossary.'),
+('w8',5,'bdag gir byed pa','take possession','to take possession of','The established possession idiom is the taking-possession predicate. Its complete master entry awaits HGM; the whole local351 and earlier348 corpus definitions support only a provisional correspondence.'),
+('m1',7,'bdag gir','possession','','BDAG GIR directly attests possession; the member is unique, whole and strictly inside the idiom. No inferred BYED PA/take child is added.'),
+('w9',5,'bsams bzhin du','purposely','perform, purposely','Second conventional adverb supplies the second purposely in the sexual-act definition.'),
+('p3',6,'ma','no','with no mistaken identity','Second negative MA supplies no in the mistaken-identity condition.'),
+('w10',5,'nor','mistaken','no mistaken identity','Final NOR directly attests mistaken. Identity and with are expanded context/manner framing and remain outside the tight word.'),
+('w11',5,'bgrod par bya ba','perform','improper to perform','The complete lexical expression BGROD PAR BYA BA has HGM perform, with modal-going references separately recorded. It owns perform, not a fabricated positive proper stem; the negative permission is carried by the following MIN.'),
+('p4',6,'min','im','are improper to','MIN owns only the negative im prefix in improper under the explicitly allowed im convention. The rest of proper is not split off as a positive lexical pair; keep the following PAR whole and unbanked.'),
+('w12',5,"'gro bar",'engaging','is engaging in','The inflected going/engaging verb is verbal here. Its unrelated mined misery gloss is rejected for this context; going reference comparanda and the full local clause support the provisional engaging match.'),
+('w13',5,'log par g-yem par','Sexual misconduct','Sexual misconduct is','The complete inflected technical term supplies Sexual misconduct. Desire/manner contributions in the surrounding construction remain distributed rather than falsely lexicalized as sex.')]
+}
+notes={349:'Question and quoted-definition framing remain unwrapped. The two purposely, two negations no, and different NOR senses have explicit local ownership. Flat MA/without and NOR/mistake use their directly attested values; the unrelated mined whole adverb is not followed.',350:'The two killings, indicate/occurs/no predicates and two differently printed actual-commission compounds have exact distinct ranges. John/Joe are local provisional name correspondences with the conflicting mined MCHOD SBYIN/John recorded. First MCHOD SBYIN and extra English John remain unbanked as anaphoric/repeated framing; no silent line-wrap normalization.',351:'Keep undetected as the whole negative-perception phrase; only MIN/im uses the approved negative-affix convention, with no positive proper/detected stem. Superior force and the desire/sexual-act frame retain uncertain remainder. Final four-types wording is rendered in the next English segment, so no cross-segment mapping or false absence null is invented.'}
+omissions={349:[
+{'tib':'dang po ni; zhe na; the other ni; zhes pas','reason':'Outline/question/topic and metalinguistic quotation framing are recast into the expanded question and definition prose. Do not invent a first or own a supplied word/is meant solely from the quotative.'},
+{'tib':"so so'i genitive; bar after first nor; final 'o; la after shi ba; par after med",'reason':'Bound genitive, manner, case and closure contributions are distributed over articles, of, as, like where, copulas and punctuation. None has a secure exclusive independent exponent.'},
+{'english':'one may ask; is the; of; The; is defined as; being; and; a; The word; is meant to; that there is; like where the being in question has; but there was','reason':'GMR supplied or expanded this framing around the selected lexical words. It stays verbatim and unwrapped; no uncertain null or extra content head is used.'},
+{'tib':'mi within mi dge ba; gcod pa within srog gcod pa','reason':'Only the secure complete DGE BA/virtues and SROG/life members are selected. Non is not one of the four authorized negative subwords; idiomatic GCOD PA/taking has no independently secure member here.'}],
+350:[
+{'tib':'both zhes pas; byas nas; first gzhan; first mchod sbyin dang; nas after nor; kyang','reason':'Quotation/support-verb, sequence, concession and mistaken-identity relations are expanded and reordered across the example. First MCHOD SBYIN is pronominally recast as the other victim, so it gets no arbitrary exclusive him/John pair. KYANG is not reassigned to the later either. Local names remain distinct from the misleading mined John gloss.'},
+{'tib':'rang ... bsad pa; second las lam; both gyi; final to','reason':'Self-killing is paraphrased as one takes his own life; RANG/own is secure, while BSAD PA has no separate kill word and remains unbanked. Second LAS LAM is implicit in the repeated technical-stage discussion, not a second explicit act exponent; no mistaken-absence null or invented act is banked. Genitives and closure remain distributed.'},
+{'english':'The words; a; are meant to; that; stage; of an; in a case of mistaken identity; in a case where you; to; but instead; because you have; him for John; The word; finally; is meant to; either; an instance where one takes his; life','reason':'Expanded metalinguistic, stage, identity, causal and self-killing framing stays unwrapped around exact chosen words. The second English John has no additional named source occurrence and is not forced into a duplicate.'},
+{'tib':'gzhi inside each dngos gzhi; las/lam inside first las lam','reason':'DNGOS/actual is supported, but commission is not a secure lexical GZHI equivalent. LAS/act would repeat the entire parent English and LAM has no distinct path exponent; no invalid narrower members.'}],
+351:[
+{'tib':'ni; bound gyi; the bar/par manner endings; final closures','reason':'Topic/copular, possessive and manner syntax is distributed across is/to/of/apostrophe/with/punctuation. No agentive-s is separated and no new positive or possessive subword rule is introduced.'},
+{'tib':'dbang cha','english':'superior','reason':'The complete power/status construction supports the superior-force sense, but no exact DBANG CHA master entry was found and exclusive DBANG CHA/superior ownership is not sufficiently established. MTHU/force is retained provisionally; the uncertain remainder is not nulled.'},
+{'tib':"'dod pa'i sgo nas 'dod pas; 'gyur ba",'english':'kinds of sex; is','reason':'Desire, manner and becoming jointly frame the sexual act, recast as a definition with engaging in kinds of sex. No isolated DOD PA/sex, SGO NAS/in, or GYUR BA/is pair is secure enough to bank; the glossary formula and mined senses are not proof of atomic ownership.'},
+{'tib':'rnam pa bzhi yod de','reason':'The explicit four-types continuation has no separate English exponent in351, but the next English352 explains Four types of sexual misconduct. This is a cross-segment rendering distribution, not an invitation to insert four into351 or to assert uncertain semantic absence with nulls.'},
+{'english':'is to; of; possessive apostrophe-s; and; a; whether it be by means of; superior; by; is; in kinds of sex which are; proper within improper; to; and with; identity','reason':'Articles, copulas, means, possessive/relative framing and distributed semantic remainder stay verbatim and unwrapped. MIN owns only permitted negative im; proper is not made into an interior positive span.'},
+{'tib':'components of ma byin par len pa and log par g-yem par; byed pa inside the possession idiom; internal ma/tshor of the depth3 negative phrase','reason':'Whole idioms are secure; invented theft-negation, sexual desire/sex, take/support-verb and positive detected members are avoided. Only directly attested complete BDAG GIR/possession is selected inside its depth5 parent.'}]
+}
+for seq,items in data.items():
+ D=T/str(seq);D.mkdir(exist_ok=True);sp=[];rr=[];ds=[];cursor=0;parent=None
+ for sid,d,t,e,anchor,why in items:
+  if d==7:
+   assert parent;ps,pr=parent;assert ps['tib'].count(t)==1 and ps['eng'].count(e)==1;a=pr['tib_range'][0]+ps['tib'].index(t);b=pr['eng_range'][0]+ps['eng'].index(e)
+  else:
+   a=source[seq]['wylie'].index(t,cursor);cursor=a+len(t);assert source[seq]['english'].count(anchor)==1 and anchor.count(e)==1,(seq,sid,anchor);b=source[seq]['english'].index(anchor)+anchor.index(e)
+  tr=[a,a+len(t)];er=[b,b+len(e)];assert source[seq]['wylie'][slice(*tr)]==t and source[seq]['english'][slice(*er)]==e
+  x={'id':sid,'d':d,'tib':t,'eng':e}
+  if seq==351 and sid=='p4':x['subword']=True
+  r={'seq':seq,'id':sid,'d':d,'tib':t,'eng':e,'tib_range':tr,'eng_range':er};sp.append(x);rr.append(r);ds.append({'seq':seq,'angle':'TIBETAN-FIRST','original_span_id':sid,'original_span':x,'intended_ranges':{'tib_range':tr,'eng_range':er},'rationale':why})
+  if d==5:parent=(x,r)
+  elif d!=7:parent=None
+ note='Codex independent TIBETAN-FIRST PROVISIONAL proposal. '+notes[seq]+' Source origin '+base['commit']+' through345; later actual acceptance baseline is separately recorded, never substituted for this origin.'
+ spec={'course':'C05','segments':[{'seq':seq,'title':{349:'intent and the definition of killing',350:'mistaken identity and killing oneself',351:'stealing and sexual misconduct'}[seq],'spans':sp,'eng_order':[x['id']for x in sorted([x for x in rr if x['d']!=7],key=lambda x:x['eng_range'][0])],'note':note}]};put(D/'spec.json',spec);put(D/'intended-ranges.json',rr);put(D/'original-decisions.json',{'producer':'Codex Tibetan-first proposer','status':'PROVISIONAL','source_origin_git_commit':base['commit'],'decisions':ds,'omissions':[{'seq':seq,'angle':'TIBETAN-FIRST','field':'omissions','index':i,**x}for i,x in enumerate(omissions[seq])]});put(D/'errata.json',[])
+print('AUTHORED',[(seq,len(x))for seq,x in data.items()])
