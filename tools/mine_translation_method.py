@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Find where Geshe Michael teaches TRANSLATION METHOD, in his own classes.
+"""Find where Geshe Michael teaches TRANSLATION METHOD, in Geshe Michael's own classes.
 
 Backlog #32. He has taught the craft for decades in passing — how to
 render a term, when a word shifts register, what to do with Sanskrit,
