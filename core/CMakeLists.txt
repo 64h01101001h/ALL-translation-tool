@@ -656,6 +656,21 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/alignment_invariants.py --strict)
 
+  # Adam's naming ruling needs a gate or it decays the next time either of us
+  # writes a string. The first attempt at the rule was a blanket regex; it
+  # named Geshe Michael where Preston, Whitney, Milarepa, the user and six test
+  # fixtures were meant, and had to be reverted wholesale. So this gate does
+  # not rewrite anything -- it flags each line where a pronoun sits beside the
+  # name and makes a human rule on the referent, then remembers the ruling by
+  # the sentence's content hash. Quoted transcript, table rows and code
+  # comments are out of scope by construction: that is where the wrong-referent
+  # risk lives. It caught its first real miss immediately -- table_compare.inc,
+  # a file the hand sweep had simply not opened.
+  add_test(NAME naming_check
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/naming_check.py
+                   ${CMAKE_SOURCE_DIR})
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still

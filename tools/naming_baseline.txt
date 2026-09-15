@@ -1,0 +1,29 @@
+# Lines where a pronoun sits beside Geshe Michael's name and a human has ruled
+# on the referent. Keyed by content, not line number: edit the sentence and it
+# comes back for a fresh ruling. Regenerate with:
+#     python3 tools/naming_check.py . --write-baseline
+# Every entry below was read in context on 2026-09-15 and ruled NOT Geshe
+# Michael. Nothing is baselined to make the gate quiet.
+
+# Test fixtures. These strings are DATA the tests feed to a parser -- a term
+# snippet, a long-line builder, two draft-pane probes. Naming Geshe Michael
+# inside them would put a false attribution in a test.
+b4fd2c0e26e8fe89  app/main.cpp:6781  tm.snippet = "he says the word";
+2e71b9df4fa6ee97  app/main.cpp:27145  while (longLine.size() < 400) longLine += "the words he wrote ";
+b0c803446bbdbdc1  app/main.cpp:34501  draft_->setPlainText("within his mental stream");
+32a6b4ca9abfb917  app/main.cpp:34533  draft_->setPlainText("he saw it");
+
+# Apparatus and punctuation fixtures. The first exercises citation parsing, the
+# second exercises quote/semicolon handling. Both need the pronoun to be a
+# pronoun.
+a1df246168ee30b6  app/main.cpp:50903  "He used valid perception -- see pages 12-14, "
+b39da0a65fe5311b  app/main.cpp:50927  "He said “yes”. She said “no;” twice – or more. "
+
+# "the user has a green receipt for text he never saw" -- that "he" is the
+# user, in a sentence that happens to mention GMR's approval queue downstream.
+ef37634675dcae53  docs/DRAFT_WORKSPACE_AUDIT_2026-09-11.md:123  **What the user sees.** With "Sanskrit work — full can
+
+# Quoted example utterances: the guide is listing the things translators SAY
+# when invoking Geshe Michael to win a point ("*He liked it*"). Rewriting the
+# examples would misrepresent how the sentence is actually spoken.
+d165e8da9e7569f4  docs/distribution/TRANSLATOR_ONE_ON_ONE_GUIDE.md:1539  - **Invoking Geshe Michael to win a point.** *H
