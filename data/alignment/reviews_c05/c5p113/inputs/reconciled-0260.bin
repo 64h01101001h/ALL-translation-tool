@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/reconciled/helpers/assemble.py", line 48, in <module>
+    rows=load(D/'resolved-ranges.json');assert all(list(x)==K for x in rows);assert rows==load(D/'intended-ranges.json');assert rows==[{k:x[k]for k in K}for x in e['spans']]
+                                               ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,86 @@
+"""Current literal proposal data using the prior compact author/spec/range format."""
+from pathlib import Path
+import json,re
+T=Path(__file__).resolve().parents[1];base=json.loads((T/'evidence/proposal-baseline.json').read_bytes());source={r['seq']:r for r in json.loads((T/'evidence/source.json').read_bytes())}
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+# English occurrence indices are zero-based, case-sensitive, and selected from complete local clauses.
+# Top-level Tibetan order is selected deliberately forward; members are limited to the preceding d5 parent.
+data={337:[
+('w1',5,"'dod pas log par g-yem pa",'sexual misconduct',0,'The complete raw technical compound has exact HTG2016 sexual misconduct, including the unresolved-looking g-yem orthography and ewts-warning; preserve it whole. Another and the non-virtues of are explanatory framing, not extra members.'),
+('w2',5,'brnab sems','coveting',0,'Whole coveting compound is the second act in this three-act group; exact HTG2016 coveting.'),
+('w3',5,'ma byin len','stealing',0,'This prose source actually has LEN, with exact stealing glossary support. It does not authorize correction of the distinct earlier verse LAN.'),
+('w4',5,'gsum','three',0,'The numeral counts sexual misconduct, coveting and stealing; it is the initial English three after Another, not a count of the poisons.'),
+('w5',5,"'dod chags",'desire',0,'The completing root of these three acts is desire. The complete HGM record supports desire; no repeated sexual-desire member is inferred from the first compound.'),
+('p1',6,'kyis','by',0,'Whole agentive kyis is the first English by before desire; no attached s is split.'),
+('w6',5,'rdzogs','completion',0,'The completion root is nominally recast as completion in the first resultative-causative clause. HGM rdzogs has finishing/finish; the phrase rdzogs par byed has no HGM gloss and is not treated as an independent lexical attestation.'),
+('p2',6,'par','to',0,'Resultative par introduces the achieved state in rdzogs par byed; the first English to links brought to completion. This grammatical mapping is grounded in this clause, not a missing standalone par dictionary entry.'),
+('w7',5,'byed','brought',0,'First causative byed is the first brought; the complete HGM byed record includes brought. Passive are remains outside this lexical atom.'),
+('w8',5,'log par lta ba','Mistaken views',0,'Full established technical wrong-view compound owns sentence-initial Mistaken views, with exact capitalization and glossary support.'),
+('m1',7,'log par','Mistaken',0,'Strictly tighter first parent member: log par has HGM mistaken. This is inside the first wrong-view compound, not the initial sexual-misconduct compound.'),
+('m2',7,'lta ba','views',0,'The curated lta ba view and glossary views support the unique views member inside this parent. The curated correct-view qualification is a separate context, not a contradiction or replacement here.'),
+('w9',5,'gti mug','ignorance',0,'The completing root of mistaken views is ignorance. The HTG2016 record says ignorance/ignorant, not ignorance of things; an and of things remain supplied wording outside the atom.'),
+('p3',6,'gis','by',1,'Whole gis owns the second by, before an ignorance of things; it cannot take the earlier desire-clause by.'),
+('w10',5,'rdzogs','completion',1,'Second completion is the state of the mistaken views, not the first trio; retain the distinct source and English occurrence.'),
+('p4',6,'par','to',1,'Second resultative par owns the to in the mistaken-view completion clause, distinct from the first to.'),
+('w11',5,'byed','brought',1,'Second causative byed owns the second brought, in the mistaken-view clause; no passive auxiliary is assigned.'),
+('f1',3,'cher rmongs pa','deep-seated lack of understanding',0,'Keep this complete intensity-plus-ignorance phrase at d3. rmongs pa explicitly has lack of understanding; cher has intense degree/on a gross level, not an exact deep-seated gloss. The complete local clause and its C16 duplicate support the phrase recast, while an independent cher/deep-seated dictionary atom would overstate evidence.'),
+('p5',6,'las','from',0,'Ablative las names the source of mistaken views, rendered from before the deep-seated lack. Curated las/deeds is the noun sense, while the separate glossary from and local syntax support this particle.'),
+('w12',5,'log lta','mistaken views',0,'The reduced wrong-view compound is repeated in the reason clause, with lowercase mistaken views. This is a second source term, not reuse of the earlier parent.'),
+('m3',7,'log','mistaken',0,'The unique tighter log member has exact HGM mistaken and modifies views inside this second technical parent. No unsupported view stem child is added.'),
+('w13',5,"'byung ba",'spring',0,'The complete verb form has exact HTG2016 spring. It asserts the arising of mistaken views from ignorance, not completion of the acts; bound genitive i remains outside.'),
+('p6',6,'phyir','for',0,'Final causal phyir introduces the explanatory reason rendered for. It scopes the entire mistaken-views-spring clause; the prior de is not separately assigned the same English connective.')],
+338:[
+('w1',5,'lhag ma','rest',0,'The nominal remainder is rest inside quotation marks, an established HGM term. Supplied The and explanatory which refers to remain outside.'),
+('w2',5,'rdzun','lying',0,'First remaining speech act is lying, explicitly attested for rdzun.'),
+('w3',5,'phra ma','divisive speech',0,'Whole technical compound has exact HGM divisive speech; phra and ma are not assigned speculative English children.'),
+('w4',5,'ngag kyal','meaningless talk',0,'Whole technical speech act has exact HGM meaningless talk; distinguish it from phra ma/divisive speech.'),
+('m1',7,'ngag','talk',0,'Unique speech member ngag has exact HGM talk and is strictly inside the meaningless-talk parent.'),
+('m2',7,'kyal','meaningless',0,'Unique adjective member kyal has exact HGM meaningless, also strictly inside the parent; both children share the actual whole compound.'),
+('w5',5,'gsum','three',0,'First gsum counts lying, divisive speech and meaningless talk, realized before their list. It is not the later three mental poisons.'),
+('w6',5,'dug gsum','three poisons of the mind',0,'Established technical compound is explicitly glossed three poisons and the three mental poisons of liking, disliking or ignorance. The complete concept licenses of the mind here; supplied all is excluded. This larger scope is an explicit review target, not an inferred standalone dug/mind equivalent.'),
+('m3',7,'dug','poisons',0,'Unique toxin member has exact HGM poisons and stays within the technical parent; no mind child is manufactured.'),
+('m4',7,'gsum','three',0,'This parent-internal numeral is the second gsum and counts the completing mental poisons. Its range is scoped to the second English three in the compound.'),
+('p1',6,'gyis','by',0,'Whole agentive gyis owns first by, before all three poisons of the mind.'),
+('w7',5,'rdzogs','completed',0,'The first completion root is a completed state under doctrinal acceptance; completed is distinct from second-sentence completion.'),
+('p2',6,'par','as',0,'Complement-marking par relates the completed state to acceptance: accepted as being completed. Being is a supplied passive auxiliary; this is not the later resultative to.'),
+('w8',5,"'dod",'accepted',0,'Here dod is doctrinal acceptance, not desire. Its full HGM record includes accepted; source order is reversed by eng_order.'),
+('w9',5,"'dod chags",'desire',0,'First second-sentence desire motivates the example action; keep it separate from the later root completing that action.'),
+('p3',6,'kyis','by',1,'First kyis owns the second English by in motivated by desire; the general poisons by is already owned by gyis.'),
+('w10',5,'kun nas bslangs pa','motivated',0,'Whole exact raw compound has HTG2016 motivated. It is not decomposed into everyone/from/raised or conflated with the second completion stage.'),
+('w11',5,"'dod chags",'desire',1,'Second desire is the completing root at sentence end, distinct from the motivating desire.'),
+('p4',6,'kyis','by',2,'Second kyis owns the third by, before the sentence-final desire.'),
+('w12',5,'rdzogs','completion',0,'Second completion root is nominally rendered completion. The supplied possessor their stays unwrapped and is not hidden inside a phrase span.'),
+('p5',6,'par','to',1,'Resultative par owns the second English to, after brought; first to belongs to explanatory refers to. Their is not included.'),
+('w13',5,'byed pa','brought',0,'Whole verb form has HGM brought and expresses the causative completion of the example. Would be is supplied English auxiliary framing.'),
+('w14',5,'lta bu','example',0,'The exemplar expression has HGM example. Bank its clear noun exponent once; for one and resumptive Such actions remain unwrapped rather than splitting the one Tibetan exemplar into several claims.')],
+339:[
+('w1',5,'gzhi','objects',0,'The subject names the objects of the four groups of non-virtue, explained individually in source context340–342. The master has only a medium-confidence auto-mined give it a name gloss; that is not a reliable gloss of this occurrence and is not silently changed. This provisional objects correspondence is directly licensed by the complete local verse and following commentary.'),
+('w2',5,'sems can','living beings',0,'Whole established sentient-being compound has exact HGM living beings. Sems/mind is not independently assigned living, and can is not assigned beings.'),
+('w3',5,'longs spyod','enjoyments',0,'The established enjoyments noun names the second class of objects. Do not split its constituent syllables into a degenerate English member.'),
+('w4',5,'ming','Names',0,'First ming names the third class jointly with forms. Preserve the capital N caused by English verse-line/sentence presentation.'),
+('p1',6,'dang','and',0,'This is the SECOND Tibetan dang, directly joining ming and gzugs; it owns the first English and between Names and forms. The earlier list dang remains omitted, not shifted to this conjunction.'),
+('w5',5,'gzugs','forms',0,'The second half of the third class is forms; exact HGM forms, not physical-form expansion.'),
+('w6',5,'ming','names',0,'Second ming names the fourth class and owns the later lowercase names after then of, not the first capitalized Names.'),
+('w7',5,'yin','consist of',0,'The verse-final copula supplies the shared listing predicate rendered consist of near the English beginning. HGM yin explicitly includes consist of; the complete verse has no competing copula. This long-distance shared predicate is an explicit first review target; terminal no is not assigned as well.')]
+}
+notes={337:'The two completion clauses keep separate source/English occurrences. Whole cher rmongs pa/deep-seated lack of understanding is a d3 phrase recast; do not treat cher/deep-seated as independently attested. gti mug owns only ignorance; of things stays unwrapped. Raw g-yem and LEN remain exact. C16:862 duplicates all three text fields; no independent publication or corrected witness is inferred.',338:'The first gsum counts speech acts; the compound dug gsum names the three mental poisons with transparent poisons/three children. Supplied all is outside. Motivation and completion have separate desire/by occurrences. First par is complement as, second par is resultative to; their stays unwrapped. One lta bu is represented once by example, not again by Such actions. Trailing74 and The Objects of Non-Virtue are existing heading/folio apparatus, not newly filed. C16:863 has the same prose but a different trailing37 Some Ethical Questions heading.',339:'The two ming occurrences retain Names/names and their distinct classes. The second dang alone maps Names and forms; the first list connector and topic particles remain uncertain unbanked material rather than false nulls. Final yin maps the shared consist of predicate on exact HGM support and the complete verse. The following commentary340–342 clarifies the four object groups. gzhi objects is a local provisional attestation, not promotion or rewriting of its unrelated auto-mined master gloss.'}
+omissions={337:[{'tib':'ni; de; bound genitive i','reason':'No additional confident lexical atom is selected. The causal relation is already assigned once to final phyir; de is not duplicated or falsely nulled.'},{'english':'Another; the non-virtues of; and; are; an; of things; a','reason':'Expanded framing, list conjunction, passive auxiliaries, articles and explanatory ignorance object remain unwrapped. No extra Tibetan is invented.'},{'tib':'internal parts of sexual-misconduct, coveting, stealing and ignorance compounds; lta inside log lta','reason':'No additional strictly tighter independently secure member is selected. Whole compounds and the explicitly supported log member suffice; no null replaces uncertainty.'}],338:[{'tib':'de; terminal o','reason':'The connective and terminal grammatical material have no securely localized extra exponent; omitted without a null claim.'},{'english':'The; which refers to the; of; and; are; being; all; Such actions; for one; would be; their','reason':'Supplied explanation, list conjunction, quantifier, passive framing and participant/possessor wording stay outside the atoms. lta bu is banked once as example; duplicating it over Such actions would overclaim.'},{'english':'74 The Objects of Non-Virtue','reason':'Physical folio and following-heading lines are folded into this source English. Existing registered class; leave unpaired without refiling.'}],339:[{'tib':'first dang after longs spyod','english':'period after enjoyments and expanded final and then of ... as well','reason':'The list coordination is redistributed across punctuation and a later connective. Its precise separate English realization is uncertain, so omit rather than asserting lexical absence with null.'},{'tib':'both ni; no','english':'then; of; as well','reason':'Topic transitions and closure are recast into expanded enumeration. The lexical bank already assigns final yin to the shared consist of; no extra atomic ni/then or no/as well is securely established.'},{'english':'The; and then of; as well','reason':'Remaining article and expanded serial-list framing are unwrapped. Preserve both actual names occurrences without allocating them to these added words.'}]}
+for seq,items in data.items():
+ D=T/str(seq);D.mkdir(exist_ok=True);sp=[];intended=[];dec=[];cursor=0;parent=None
+ for sid,d,t,e,ordinal,why in items:
+  if d==7:
+   assert parent is not None
+   pt,pe=parent;assert pt['tib'].count(t)==1 and pt['eng'].count(e)==1
+   a=pe['tib_range'][0]+pt['tib'].index(t);b=pe['eng_range'][0]+pt['eng'].index(e)
+  else:
+   a=source[seq]['wylie'].index(t,cursor);cursor=a+len(t)
+   matches=[m.start() for m in re.finditer(re.escape(e),source[seq]['english'])];b=matches[ordinal]
+  tr=[a,a+len(t)];er=[b,b+len(e)];assert source[seq]['wylie'][slice(*tr)]==t and source[seq]['english'][slice(*er)]==e
+  x=dict(id=sid,d=d,tib=t,eng=e);r=dict(seq=seq,**x,tib_range=tr,eng_range=er);sp.append(x);intended.append(r);dec.append(dict(seq=seq,angle='TIBETAN-FIRST',original_span_id=sid,original_span=x,intended_ranges=dict(tib_range=tr,eng_range=er),rationale=why))
+  if d==5:parent=(x,r)
+  elif d!=7:parent=None
+ note='Codex Tibetan-first PROVISIONAL machine proposal; no hgm_gloss change. '+notes[seq]+' Source origin '+base['commit']+' through333. Actual acceptance baseline awaits verified336 and is not claimed by this proposal.'
+ spec=dict(course='C05',segments=[dict(seq=seq,title={337:'desire and ignorance complete acts',338:'completion of remaining speech acts',339:'objects of the four groups'}[seq],spans=sp,eng_order=[r['id']for r in sorted(intended,key=lambda x:x['eng_range'][0])if r['d']!=7],note=note)])
+ put(D/'spec.json',spec);put(D/'intended-ranges.json',intended);put(D/'original-decisions.json',dict(producer='Codex Tibetan-first proposer',status='PROVISIONAL',source_origin_git_commit=base['commit'],decisions=dec,omissions=[dict(seq=seq,angle='TIBETAN-FIRST',field='omissions',index=i,**r)for i,r in enumerate(omissions[seq])]))
+ put(D/'errata.json',[])
+print('AUTHORED',[(seq,len(items))for seq,items in data.items()])

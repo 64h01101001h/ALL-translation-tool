@@ -1,0 +1,608 @@
+{
+  "status": "PASS_SOURCE_AND_ORIGINAL_IDENTITY_ONLY",
+  "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+  "source_origin_boundary": 333,
+  "acceptance_baseline_consumed": null,
+  "source_pins": {
+    "spine": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/build/hgm_spine_v27_2.db",
+      "bytes": 249167872,
+      "sha256": "5e69b42905428f10b20462e57cd0f07a4e5aa0568aa6cdd5c619456c4ce9c6dc"
+    },
+    "master": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/hgm_dictionary_v27_2.json.gz",
+      "bytes": 13393560,
+      "sha256": "3a99603cd9428f0d04e67c7d2790cc093f272162e7bf6278906a4b635f962253"
+    },
+    "corpus": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-worktree/data/full_parallel_corpus_v32.json.gz",
+      "bytes": 8965675,
+      "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+    },
+    "source": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/source.json",
+      "bytes": 1767,
+      "sha256": "6a278e61921678922b196e862bb028d21cde6710f836815625b239e4bf14bd3b"
+    },
+    "context": {
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/context.json",
+      "bytes": 11791,
+      "sha256": "9451de2f4a19494a26d7d25f1b2583436720721abf73ef3b37e20715b524de96"
+    },
+    "physical": {
+      "path": "/Users/adamderickandrade/Desktop/HGM DICTIONARY - TRANSLATION APP/To DO/Formal Courses/ACI Readings In Roman ASCII/C05ReadingASCII.txt",
+      "bytes": 329826,
+      "sha256": "5db16c3a4f28314f6359dcdb371b6488250cdff5048bbd6d345813204333a9fb"
+    }
+  },
+  "proposal_freezes": [
+    {
+      "angle": "tibetan",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/freeze.json",
+      "bytes": 16244,
+      "sha256": "000adde71c4fabe544a0c37fe15dc983b1406d00bda39054fa97a99fcd326812",
+      "verified_files": 104
+    },
+    {
+      "angle": "english",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/freeze.json",
+      "bytes": 15889,
+      "sha256": "8190b1e855c78dfd7ecd3ec13f7380423873dc7081d3570a92f976be95dd7a2f",
+      "verified_files": 89
+    }
+  ],
+  "master_complete_objects_equal_original": 108,
+  "complete_corpus_objects_equal_original": 5,
+  "material_corpus_ids_read_in_full": [
+    1719,
+    1720,
+    1721,
+    6880,
+    6881
+  ],
+  "context_rows_equal_source": 15,
+  "physical_extents_equal_original": 6,
+  "native_original_successes_reused": [
+    {
+      "angle": "tibetan",
+      "seq": 337,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/337-generator-v1",
+      "input_bytes": 3804,
+      "input_sha256": "3040f79526bb75b5ec3e8526fe8697106e8c2abc36b072a0984652b65c88f0da",
+      "output_bytes": 3756,
+      "output_sha256": "5031c2acd8fb726ddbb25bdc7448c0bbf1a9a6fe2f8da99bd972700d5429defc",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 337,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/337-resolver-v1",
+      "input_bytes": 3804,
+      "input_sha256": "3040f79526bb75b5ec3e8526fe8697106e8c2abc36b072a0984652b65c88f0da",
+      "output_bytes": 4376,
+      "output_sha256": "617147b3902efc4549f1ac4c75c2fc7871053ca6cc26bc96e0cf4312409505c4",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 338,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/338-generator-v1",
+      "input_bytes": 3899,
+      "input_sha256": "aa77ef884d0edb30de341a0795f36fd73046e3d31ddf25774da1afc462657bfe",
+      "output_bytes": 3924,
+      "output_sha256": "1451c56c167e0ff3c4ba89773b1a7d33600c7f8c98b5fd08889d141248c437b9",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 338,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/338-resolver-v1",
+      "input_bytes": 3899,
+      "input_sha256": "aa77ef884d0edb30de341a0795f36fd73046e3d31ddf25774da1afc462657bfe",
+      "output_bytes": 4311,
+      "output_sha256": "104b8ccda54303a1c289495f12f4a41746d20945841df5f1902d2f511fcf44f1",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 339,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/339-generator-v1",
+      "input_bytes": 1937,
+      "input_sha256": "453d6c539fed30b1d318b3dc411975cf5b1490618fb6cbce311d2fc659886684",
+      "output_bytes": 2054,
+      "output_sha256": "752b3fba69d8a142c901494f34f73b8b2e5263e1af65630240b6f2bba95d0a7f",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "tibetan",
+      "seq": 339,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/native/339-resolver-v1",
+      "input_bytes": 1937,
+      "input_sha256": "453d6c539fed30b1d318b3dc411975cf5b1490618fb6cbce311d2fc659886684",
+      "output_bytes": 1476,
+      "output_sha256": "a0421a63250f8c5c74830740fd85a669220c103fec621f4d36ef41b8d0e7657d",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/helpers/native_adapter.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 337,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/337-generator-v1",
+      "input_bytes": 3901,
+      "input_sha256": "09b92cf4b68aee0571905c74e3d126b0211b377cea90a35b7cea2fabc8c6cd20",
+      "output_bytes": 3864,
+      "output_sha256": "b018659362817d686bffd2e49194947bc190b160ce95fdf615a1c9695ca7d170",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 337,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/337-resolver-v1",
+      "input_bytes": 3901,
+      "input_sha256": "09b92cf4b68aee0571905c74e3d126b0211b377cea90a35b7cea2fabc8c6cd20",
+      "output_bytes": 4554,
+      "output_sha256": "c84e2a905e5e843e188903a451bdee69ce7e25bebefaa8cec01407652a9d019a",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 338,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/338-generator-v1",
+      "input_bytes": 3748,
+      "input_sha256": "964cafc8d7e7d8c646e3bfb3d5a30fa5e227717f81f8db256a20346a93e770c7",
+      "output_bytes": 3786,
+      "output_sha256": "4a3e8d43132ae695edbfab31b47db92484e4a4446c4a96f80ee3e46bfd0c4594",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 338,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/338-resolver-v1",
+      "input_bytes": 3748,
+      "input_sha256": "964cafc8d7e7d8c646e3bfb3d5a30fa5e227717f81f8db256a20346a93e770c7",
+      "output_bytes": 4308,
+      "output_sha256": "4574e51a8ad106cc97cad7e498bab6cc7078da5bec27fb722c37b21c4d99db78",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 339,
+      "kind": "generator",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/339-generator-v1",
+      "input_bytes": 1832,
+      "input_sha256": "5b1833f5404a276ab902bb3badcb7992fb875f9cb3b6bbf86a804da977deb600",
+      "output_bytes": 1949,
+      "output_sha256": "1181b649a61fcf9578d7723d7bff4279d16d9f46ec89e86863d233bcbcc5f009",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "generator"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    },
+    {
+      "angle": "english",
+      "seq": 339,
+      "kind": "resolver",
+      "path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/native/339-resolver-v1",
+      "input_bytes": 1832,
+      "input_sha256": "5b1833f5404a276ab902bb3badcb7992fb875f9cb3b6bbf86a804da977deb600",
+      "output_bytes": 1476,
+      "output_sha256": "11c9ef2e48ca7dbac78d1b38fa44f09c069fe7c248a50c083db3875cff1d6a59",
+      "exit": 0,
+      "stderr_bytes": 0,
+      "argv": [
+        "/opt/homebrew/opt/python@3.14/bin/python3.14",
+        "-B",
+        "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/helpers/canonical.py",
+        "resolver"
+      ],
+      "reuse": "exact original input and output identity; no execution"
+    }
+  ],
+  "native_generations_run_here": 0,
+  "native_resolvers_run_here": 0,
+  "governance_pins": [
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "AGENTS.md",
+      "bytes": 11061,
+      "sha256": "f2ca43b37638c8b86c7b6c47fe3811382239549e1aad721d152493f035907bca"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "docs/ALIGNMENT_LAYER_SPEC.md",
+      "bytes": 12007,
+      "sha256": "9beb77df0d3e4243a727bacf13682e8429d07721d57457252d15286acfe78cc4"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "docs/alignment_briefs/PROPOSE_BRIEF.md",
+      "bytes": 8093,
+      "sha256": "7879afa8f549f91d13133d18fb45f84d916abef215d010dd85c801bd2b0319b7"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "data/alignment/C05_CAMPAIGN.md",
+      "bytes": 245984,
+      "sha256": "de0917e2549d6e47b48424a064be0816bcd346bac3d219a7b12d8989e9890fa9"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "tools/gen_alignment_page.py",
+      "bytes": 21175,
+      "sha256": "7c1c22345e18949e1aa34bb99115c32903527643b5a2c171e1a88f06d2a4cb8e"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "tools/build_alignment_layer.py",
+      "bytes": 40162,
+      "sha256": "fc370e451c1495e17d663f1fb61e29da5b0e1c933a531b400f94a2953c2d9d38"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "docs/errata_register.json",
+      "bytes": 275782,
+      "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+    },
+    {
+      "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+      "repository_relative_path": "data/alignment/span_head_allow.json",
+      "bytes": 14558,
+      "sha256": "38d9750d98bc3bc8add12b188675abec31502fd7b498572e5450ac8c050a94e9"
+    }
+  ],
+  "prior_complete_master_read_reuse": [
+    {
+      "identity": "unified_entries:25478",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7283",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:19666",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7280",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:6820",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "curated_entries:3",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:2682",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:19676",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7282",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:11092",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:4372",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:13822",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:5363",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:21223",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7806",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:16032",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:6264",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:16040",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:6267",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:57268",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/tibetan/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:12828",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:4954",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:12836",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:4961",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:6445",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:2586",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:1791",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:744",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:19340",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "curated_entries:10",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7121",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:21616",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:7973",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:1933",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:799",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:9625",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:3866",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:10207",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:4124",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:8106",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:3143",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "unified_entries:16035",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    },
+    {
+      "identity": "glossary_entries:6265",
+      "prior_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/tibetan/evidence/lexical.json",
+      "current_full_record_path": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-337-339/english/evidence/lexical.json",
+      "complete_record_equality": true
+    }
+  ],
+  "reading_scope_note": "65 new full master objects and43 exact prior personally read objects; all5 complete material corpus objects and all15 context rows. All109 original spans,19 omission records,30 category screens,six reports and their notes read. One direct native command-path lookup failure is preserved separately. No original generator or resolver rerun."
+}

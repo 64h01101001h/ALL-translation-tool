@@ -1,0 +1,672 @@
+[
+  {
+    "seq": 339,
+    "kind": "TIBETAN_SPELLING",
+    "found": "MING DANG GZUGS",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "MING DANG GZUGS",
+        "source_row": {
+          "id": 1721,
+          "course": "C05",
+          "seq": 339,
+          "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+          "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+          "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+        },
+        "occurrences": {
+          "acip": [
+            38
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/1721",
+        "witness_course": "C05",
+        "witness_seq": 339,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "external_parallel": false,
+        "lineage_limit": "All three exact queries return only this source record. The targeted object-verse queries also return this row only; no external exact witness was found. Following complete context340–342 explains the four object groups."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 69,
+          "wylie": 67,
+          "english": 93
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 339,
+            "field": "acip",
+            "start": 233759,
+            "bytes": 70,
+            "sha256": "d66371b6f4c1f06a7e96febbd2487f8945b9056ddd1cb7ed040e374eb30ce772",
+            "original_text": ",GZHI NI SEMS CAN LONGS SPYOD DANG ,\r\n,MING DANG GZUGS NI MING YIN NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 339,
+            "field": "english",
+            "start": 233831,
+            "bytes": 94,
+            "sha256": "6757781f65a59d62bc9ccb7e0fcf889d9a79a215c2c167532d808bfdbaf7d1c7",
+            "original_text": "The objects consist of living beings, enjoyments.\r\nNames and forms, and then of names as well.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Names and forms is the third object class; repeated final MING is the fourth, confirmed by complete context340–342. No accidental duplicate or proposed Tibetan deletion.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 339,
+    "kind": "ENGLISH_TYPO",
+    "found": "Names and forms, and then of names as well.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Names and forms, and then of names as well.",
+        "source_row": {
+          "id": 1721,
+          "course": "C05",
+          "seq": 339,
+          "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+          "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+          "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            50
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/1721",
+        "witness_course": "C05",
+        "witness_seq": 339,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "external_parallel": false,
+        "lineage_limit": "All three exact queries return only this source record. The targeted object-verse queries also return this row only; no external exact witness was found. Following complete context340–342 explains the four object groups."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 69,
+          "wylie": 67,
+          "english": 93
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 339,
+            "field": "acip",
+            "start": 233759,
+            "bytes": 70,
+            "sha256": "d66371b6f4c1f06a7e96febbd2487f8945b9056ddd1cb7ed040e374eb30ce772",
+            "original_text": ",GZHI NI SEMS CAN LONGS SPYOD DANG ,\r\n,MING DANG GZUGS NI MING YIN NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 339,
+            "field": "english",
+            "start": 233831,
+            "bytes": 94,
+            "sha256": "6757781f65a59d62bc9ccb7e0fcf889d9a79a215c2c167532d808bfdbaf7d1c7",
+            "original_text": "The objects consist of living beings, enjoyments.\r\nNames and forms, and then of names as well.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "The capital Names starts the second physical verse line. Repeated names represents two distinct object classes, not a demonstrated typo.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 339,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "consist of",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "consist of",
+        "source_row": {
+          "id": 1721,
+          "course": "C05",
+          "seq": 339,
+          "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+          "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+          "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            12
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/1721",
+        "witness_course": "C05",
+        "witness_seq": 339,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "external_parallel": false,
+        "lineage_limit": "All three exact queries return only this source record. The targeted object-verse queries also return this row only; no external exact witness was found. Following complete context340–342 explains the four object groups."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 69,
+          "wylie": 67,
+          "english": 93
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 339,
+            "field": "acip",
+            "start": 233759,
+            "bytes": 70,
+            "sha256": "d66371b6f4c1f06a7e96febbd2487f8945b9056ddd1cb7ed040e374eb30ce772",
+            "original_text": ",GZHI NI SEMS CAN LONGS SPYOD DANG ,\r\n,MING DANG GZUGS NI MING YIN NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 339,
+            "field": "english",
+            "start": 233831,
+            "bytes": 94,
+            "sha256": "6757781f65a59d62bc9ccb7e0fcf889d9a79a215c2c167532d808bfdbaf7d1c7",
+            "original_text": "The objects consist of living beings, enjoyments.\r\nNames and forms, and then of names as well.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "The final yin is the shared copula with an explicit HGM consist of entry. The verse and following explanation support four object groups. Its relocation is a provisional alignment question, not a factual error.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 339,
+    "kind": "INGEST_ARTEFACT",
+    "found": "The objects consist of living beings, enjoyments.",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "The objects consist of living beings, enjoyments.",
+        "source_row": {
+          "id": 1721,
+          "course": "C05",
+          "seq": 339,
+          "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+          "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+          "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            0
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/1721",
+        "witness_course": "C05",
+        "witness_seq": 339,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "external_parallel": false,
+        "lineage_limit": "All three exact queries return only this source record. The targeted object-verse queries also return this row only; no external exact witness was found. Following complete context340–342 explains the four object groups."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 69,
+          "wylie": 67,
+          "english": 93
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 339,
+            "field": "acip",
+            "start": 233759,
+            "bytes": 70,
+            "sha256": "d66371b6f4c1f06a7e96febbd2487f8945b9056ddd1cb7ed040e374eb30ce772",
+            "original_text": ",GZHI NI SEMS CAN LONGS SPYOD DANG ,\r\n,MING DANG GZUGS NI MING YIN NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 339,
+            "field": "english",
+            "start": 233831,
+            "bytes": 94,
+            "sha256": "6757781f65a59d62bc9ccb7e0fcf889d9a79a215c2c167532d808bfdbaf7d1c7",
+            "original_text": "The objects consist of living beings, enjoyments.\r\nNames and forms, and then of names as well.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "All physical verse lines match the folded source. Exact full-field searches found only this record; no cap, truncation or spill is shown.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 339,
+    "kind": "FORMATTING",
+    "found": "Names",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Names",
+        "source_row": {
+          "id": 1721,
+          "course": "C05",
+          "seq": 339,
+          "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+          "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+          "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            50
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 339,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+            ],
+            "count": 1,
+            "row_ids": [
+              1721
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/1721",
+        "witness_course": "C05",
+        "witness_seq": 339,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "external_parallel": false,
+        "lineage_limit": "All three exact queries return only this source record. The targeted object-verse queries also return this row only; no external exact witness was found. Following complete context340–342 explains the four object groups."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 69,
+          "wylie": 67,
+          "english": 93
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 339,
+            "field": "acip",
+            "start": 233759,
+            "bytes": 70,
+            "sha256": "d66371b6f4c1f06a7e96febbd2487f8945b9056ddd1cb7ed040e374eb30ce772",
+            "original_text": ",GZHI NI SEMS CAN LONGS SPYOD DANG ,\r\n,MING DANG GZUGS NI MING YIN NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 339,
+            "field": "english",
+            "start": 233831,
+            "bytes": 94,
+            "sha256": "6757781f65a59d62bc9ccb7e0fcf889d9a79a215c2c167532d808bfdbaf7d1c7",
+            "original_text": "The objects consist of living beings, enjoyments.\r\nNames and forms, and then of names as well.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Preserve the line-initial capital N. Flattened verse lineation is recorded by the physical extent; no new defect is inferred from capitalization.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  }
+]

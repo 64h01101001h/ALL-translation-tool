@@ -1,0 +1,40 @@
+[
+  {
+    "name": "339 partial Tibetan verse",
+    "sql": "SELECT * FROM corpus_segments WHERE wylie LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%sems can longs spyod dang%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 1721,
+        "course": "C05",
+        "seq": 339,
+        "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+        "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+        "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,\", \"wylie\": \"gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no\", \"english\": \"The objects consist of living beings, enjoyments. Names and forms, and then of names as well.\"}"
+      }
+    ]
+  },
+  {
+    "name": "339 full English verse without exact-field framing",
+    "sql": "SELECT * FROM corpus_segments WHERE english LIKE ? ORDER BY course,seq",
+    "parameters": [
+      "%Names and forms, and then of names as well%"
+    ],
+    "count": 1,
+    "rows": [
+      {
+        "id": 1721,
+        "course": "C05",
+        "seq": 339,
+        "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+        "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+        "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,\", \"wylie\": \"gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no\", \"english\": \"The objects consist of living beings, enjoyments. Names and forms, and then of names as well.\"}"
+      }
+    ]
+  }
+]

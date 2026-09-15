@@ -1,0 +1,255 @@
+{
+  "queries": [
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 337,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1719,
+        6880
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 337,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+      ],
+      "count": 2,
+      "row_ids": [
+        1719,
+        6880
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 337,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+      ],
+      "count": 2,
+      "row_ids": [
+        1719,
+        6880
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 338,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1720,
+        6881
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 338,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1720,
+        6881
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 338,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+      ],
+      "count": 1,
+      "row_ids": [
+        1720
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 339,
+      "field": "acip",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+      "parameters": [
+        ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,"
+      ],
+      "count": 1,
+      "row_ids": [
+        1721
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 339,
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+      "parameters": [
+        "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no"
+      ],
+      "count": 1,
+      "row_ids": [
+        1721
+      ]
+    },
+    {
+      "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+      "seq": 339,
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+      "parameters": [
+        "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+      ],
+      "count": 1,
+      "row_ids": [
+        1721
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "cher rmongs pa"
+      ],
+      "count": 2,
+      "row_ids": [
+        1719,
+        6880
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "gzhi ni sems can longs spyod"
+      ],
+      "count": 1,
+      "row_ids": [
+        1721
+      ]
+    },
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "english",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "Names and forms, and then of names"
+      ],
+      "count": 1,
+      "row_ids": [
+        1721
+      ]
+    }
+  ],
+  "complete_records": {
+    "1719": {
+      "spine_row": {
+        "id": 1719,
+        "course": "C05",
+        "seq": 337,
+        "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+        "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+        "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,\", \"wylie\": \"'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir\", \"english\": \"Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding.\"}"
+      },
+      "corpus_index": 1718,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+        "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+        "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+      }
+    },
+    "6880": {
+      "spine_row": {
+        "id": 6880,
+        "course": "C16",
+        "seq": 862,
+        "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+        "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+        "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,\", \"wylie\": \"'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir\", \"english\": \"Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding.\"}"
+      },
+      "corpus_index": 6879,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+        "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+        "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+      }
+    },
+    "1720": {
+      "spine_row": {
+        "id": 1720,
+        "course": "C05",
+        "seq": 338,
+        "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+        "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+        "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue",
+        "raw": "{\"course\": \"C05\", \"acip\": \"LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,\", \"wylie\": \"lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,\", \"english\": \"The \\\"rest\\\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue\"}"
+      },
+      "corpus_index": 1719,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+        "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+        "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+      }
+    },
+    "6881": {
+      "spine_row": {
+        "id": 6881,
+        "course": "C16",
+        "seq": 863,
+        "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+        "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+        "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 37 Some Ethical Questions",
+        "raw": "{\"course\": \"C16\", \"acip\": \"LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,\", \"wylie\": \"lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,\", \"english\": \"The \\\"rest\\\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 37 Some Ethical Questions\"}"
+      },
+      "corpus_index": 6880,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+        "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+        "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 37 Some Ethical Questions"
+      }
+    },
+    "1721": {
+      "spine_row": {
+        "id": 1721,
+        "course": "C05",
+        "seq": 339,
+        "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+        "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+        "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,\", \"wylie\": \"gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no\", \"english\": \"The objects consist of living beings, enjoyments. Names and forms, and then of names as well.\"}"
+      },
+      "corpus_index": 1720,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+        "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+        "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+      }
+    }
+  }
+}

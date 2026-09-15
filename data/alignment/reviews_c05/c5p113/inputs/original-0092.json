@@ -1,0 +1,98 @@
+{
+  "seq": 338,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical witness",
+      "source_record": {
+        "id": 1720,
+        "course": "C05",
+        "seq": 338,
+        "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+        "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+        "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+      },
+      "physical_evidence": "../evidence/physical-extents.json",
+      "finding": "Complete ACIP and English ASCII extents match after whitespace collapse; complete Wylie and English are unchanged from the spine. Physical agreement proves the available digital source reading, not publication independence."
+    },
+    {
+      "ground": 2,
+      "name": "complete parallel records and search scope",
+      "evidence": "../evidence/corpus.json",
+      "finding": "C16:863 repeats the complete ACIP/Wylie and complete translation prose. Its following heading is 37 Some Ethical Questions instead of 74 The Objects of Non-Virtue; English whole-field query therefore returns1, Tibetan queries2. No independently published witness was obtained."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and known classes",
+      "original_git_object": "2366cbeab00a4b89ea77947ed9c50e148e180d1d:docs/errata_register.json",
+      "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5",
+      "register_count": 199,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register.json",
+        "../evidence/register-material-classes.json",
+        "../evidence/governing/docs/errata_register.json"
+      ],
+      "finding": "All199 records screened for current-segment references; no direct match. Registered converter, running-head, cap, spill and fused-footnote classes were read. Following-heading handling is explicit in the governing brief/spec. No registered class refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "The appended numbered heading is established apparatus and remains exact/unwrapped. Its presence is confirmed by the physical source and the differing heading after identical C16 prose; do not file the registered class again.",
+      "counterevidence": "Shared text may preserve an upstream error, and the absence of a corrected independent witness cannot by itself disprove one. Here no sufficiently supported new defect remains after the local language/context and apparatus checks; uncertain correspondences remain omissions."
+    },
+    {
+      "ground": 5,
+      "name": "measured lengths and limits",
+      "characters": {
+        "acip": 152,
+        "wylie": 150,
+        "english": 280
+      },
+      "utf8_bytes": {
+        "acip": 152,
+        "wylie": 150,
+        "english": 280
+      },
+      "english_equals_1500": false,
+      "finding": "English is below1500 characters and has the complete physical-field ending; no evidence of the registered cap or a stranded final Tibetan syllable. These measurements do not establish semantic correspondence."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Exact ACIP/Wylie and material lexical forms have no supported new spelling defect; variants and bound endings are preserved."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The appended numbered heading is established apparatus and remains exact/unwrapped. Its presence is confirmed by the physical source and the differing heading after identical C16 prose; do not file the registered class again."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No independently supported factual discrepancy. Interpretive metaphor, lexical paraphrase and discourse expansion are handled by narrow spans or omissions."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "REGISTERED_CLASS_ONLY",
+      "reason": "The appended numbered heading is established apparatus and remains exact/unwrapped. Its presence is confirmed by the physical source and the differing heading after identical C16 prose; do not file the registered class again."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "REGISTERED_CLASS_ONLY",
+      "reason": "The appended numbered heading is established apparatus and remains exact/unwrapped. Its presence is confirmed by the physical source and the differing heading after identical C16 prose; do not file the registered class again."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

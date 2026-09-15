@@ -1,0 +1,83 @@
+{
+  "status": "ROOT_RECONCILIATION_DECISIONS_PENDING_INDEPENDENT_REVIEW",
+  "utc": "2026-09-15T00:40:17.352846+00:00",
+  "reconciler": "root",
+  "original_freezes": {
+    "tibetan": {
+      "bytes": 16244,
+      "sha256": "000adde71c4fabe544a0c37fe15dc983b1406d00bda39054fa97a99fcd326812"
+    },
+    "english": {
+      "bytes": 15889,
+      "sha256": "8190b1e855c78dfd7ecd3ec13f7380423873dc7081d3570a92f976be95dd7a2f"
+    }
+  },
+  "source_origin": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+  "actual_acceptance_baseline": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+  "base": "english",
+  "final_selection": "Adopt all55 exact English original spans/specs unchanged, with their exact ranges and native outputs. Root is selecting these after full comparison with all54 Tibetan originals; selection does not replace independent review.",
+  "counts": {
+    "spans": 55,
+    "nonnull_d5": 35,
+    "d7": 8,
+    "nulls": 0,
+    "errata": 0
+  },
+  "semantic_rulings": [
+    {
+      "seq": 337,
+      "tibetan_id": "f1",
+      "english_id": "w18",
+      "decision": "CHANGE",
+      "reason": "Retain the complete attested negative nominal rmongs pa/lack of understanding at d5. Cher expresses intensity, while deep-seated adds a rootedness metaphor. A whole phrase may be a defensible translation, but it does not resolve the uncertain allocation for this bank; omit cher/deep-seated with that reason instead of using a larger span to conceal uncertainty. This is not a source-error assertion."
+    },
+    {
+      "seq": 337,
+      "english_id": "m22",
+      "decision": "ACCEPT_EXTRA_MEMBER",
+      "reason": "Full unified and glossary lta records explicitly attest views. Inside the second log lta/mistaken views parent, lta/views has unique strictly-contained ranges, distinct from the first lta ba/views. The Tibetan omission is narrowed accordingly."
+    },
+    {
+      "seq": 338,
+      "tibetan_id": "w6",
+      "english_id": "w8",
+      "decision": "TIGHTEN",
+      "reason": "The established dug gsum term has exact three poisons and three mental poisons evidence. The mental referent is clear, but of the mind is explanatory English expansion; retain the tight three poisons parent and its dug/poisons and gsum/three members. Leave all/of the mind outside without asserting a source defect."
+    },
+    {
+      "seq": 339,
+      "english_id": "w8",
+      "tibetan_id": "w7",
+      "decision": "ACCEPT_SHARED_PREDICATE",
+      "reason": "Final yin is the single copula for the four object categories, fronted as consist of in English. Full yin glossary expressly includes consist of and complete context340–342 confirms the categories. Both actual ming occurrences and only the second dang are mapped. First dang, both ni, no and expanded list framing remain distributed/uncertain, not falsely nulled."
+    }
+  ],
+  "remaining_spans": "All other common original pairs are accepted on their exact source/English ranges and source-specific original rationales. Repeated causal/resultative predicates and desire/agentive occurrences remain distinct. Whole sexual-misconduct, stealing, coveting, motivation and living-being terms are not speculatively split. ngag/talk and kyal/meaningless have complete direct HGM evidence; lta bu/example is the attested exemplifying lexical unit at d5. gzhi/objects is a direct local provisional correspondence, with unrelated auto-mined give it a name excluded from authority.",
+  "omission_rulings": [
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "omissions",
+      "index": 2,
+      "decision": "CHANGE",
+      "reason": "Retain the listed uncertain technical-compound internal omissions except lta inside log lta: that source member is now banked from English m22 on direct full HGM evidence."
+    },
+    {
+      "seq": 338,
+      "angle": "tibetan",
+      "field": "omissions",
+      "index": 1,
+      "decision": "CHANGE",
+      "reason": "Retain listed supplied framing. Clarify listed of refers to the framing before lying; also leave of the mind unwrapped because the selected dug gsum parent is three poisons only. Preserve full original record and explain the scope change."
+    }
+  ],
+  "other_omissions": "Retain all10 English and remaining7 Tibetan omission records as historical dispositions with source-specific reasons. No new null. The rejected broader cher phrase and broader mental-poisons parent remain preserved in original files/dispositions.",
+  "errata_ruling": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+  "reading_receipts": [
+    "root-preliminary-reading.json",
+    "root-preliminary-reading-addendum.json",
+    "root-english-stable-input-reading.json"
+  ],
+  "native_reuse": "Final55 spans/specs exactly equal English originals, so mechanically reuse those exact native input/output captures and identify reuse explicitly. Do not claim3 new reconciler generations/resolvers. Preserve English-origin spec notes as source provenance; root selection/reconciliation is stated in separate reconciled records.",
+  "limits": "Root reconciliation only. Independent skeptic must review the exact assembled immutable result before root acceptance. No production or hgm_gloss change."
+}

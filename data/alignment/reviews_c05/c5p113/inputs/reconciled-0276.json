@@ -1,0 +1,7 @@
+{
+  "actual_failure": "assembly-attempt02-native exit1: assert all(list(x)==K for x in rows)",
+  "scope": "Raw actual English resolver emits exactly the seven required fields, but its original key order is id,d,tib,eng,seq,tib_range,eng_range. English separately exports resolved-spans.json with ordered seq-first keys. No semantic data differs.",
+  "correction": "Keep actual resolver output bytes unchanged. Require exact seven-key set and project their values in contract order for final ordered tuples, as the prior Z packaging method does. Compare the projected objects to frozen English intended decision fields and its existing ordered resolved-spans export.",
+  "method_snapshot": "assemble.py.txt",
+  "new_generator_or_resolver_runs": 0
+}

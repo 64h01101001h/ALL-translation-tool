@@ -1,0 +1,38 @@
+{
+  "status": "PASS_DIRECT_READ_ONLY_SOURCE_IDENTITY",
+  "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+  "acceptance_baseline": "PENDING_ACTUAL_THROUGH336",
+  "sql": "select id,course,seq,acip,wylie,english from corpus_segments where course=? and seq between ? and ? order by seq",
+  "params": [
+    "C05",
+    337,
+    339
+  ],
+  "source_rows": [
+    {
+      "id": 1719,
+      "course": "C05",
+      "seq": 337,
+      "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+      "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+      "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+    },
+    {
+      "id": 1720,
+      "course": "C05",
+      "seq": 338,
+      "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+      "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+      "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+    },
+    {
+      "id": 1721,
+      "course": "C05",
+      "seq": 339,
+      "acip": ",GZHI NI SEMS CAN LONGS SPYOD DANG , ,MING DANG GZUGS NI MING YIN NO,",
+      "wylie": "gzhi ni sems can longs spyod dang , ,ming dang gzugs ni ming yin no",
+      "english": "The objects consist of living beings, enjoyments. Names and forms, and then of names as well."
+    }
+  ],
+  "no_generator_runs": true
+}

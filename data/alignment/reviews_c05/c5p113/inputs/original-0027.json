@@ -1,0 +1,682 @@
+[
+  {
+    "seq": 338,
+    "kind": "TIBETAN_SPELLING",
+    "found": "NGAG KYAL",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "NGAG KYAL",
+        "source_row": {
+          "id": 1720,
+          "course": "C05",
+          "seq": 338,
+          "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+          "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+          "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+        },
+        "occurrences": {
+          "acip": [
+            22
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+            ],
+            "count": 1,
+            "row_ids": [
+              1720
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6881",
+        "witness_course": "C16",
+        "witness_seq": 863,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "external_parallel": true,
+        "lineage_limit": "C16:863 Tibetan fields and main prose agree; the trailing folio37 and Some Ethical Questions heading differ from folio74 and The Objects of Non-Virtue. Whole-English query correctly returns one."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 152,
+          "wylie": 150,
+          "english": 280
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 338,
+            "field": "acip",
+            "start": 233316,
+            "bytes": 152,
+            "sha256": "4f3f8e64316235d67ff841f29e1940d0af8887669bd2ac376dc70117c1e85f43",
+            "original_text": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 338,
+            "field": "english",
+            "start": 233470,
+            "bytes": 285,
+            "sha256": "d8b8162f58d41756030e5043517aa6db6e05f3af5c2997e4dba2ec1b355d2974",
+            "original_text": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless\r\ntalk--are accepted as being completed by all three poisons of the mind. Such\r\nactions motivated by desire, for one example, would be brought to their\r\ncompletion by desire.\r\n74\r\nThe Objects of Non-Virtue",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Exact complete HGM compound and both transparent member records support the raw term. No spelling correction or speculative phonetic replacement.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 338,
+    "kind": "ENGLISH_TYPO",
+    "found": "Such actions motivated by desire",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Such actions motivated by desire",
+        "source_row": {
+          "id": 1720,
+          "course": "C05",
+          "seq": 338,
+          "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+          "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+          "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            153
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+            ],
+            "count": 1,
+            "row_ids": [
+              1720
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6881",
+        "witness_course": "C16",
+        "witness_seq": 863,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "external_parallel": true,
+        "lineage_limit": "C16:863 Tibetan fields and main prose agree; the trailing folio37 and Some Ethical Questions heading differ from folio74 and The Objects of Non-Virtue. Whole-English query correctly returns one."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 152,
+          "wylie": 150,
+          "english": 280
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 338,
+            "field": "acip",
+            "start": 233316,
+            "bytes": 152,
+            "sha256": "4f3f8e64316235d67ff841f29e1940d0af8887669bd2ac376dc70117c1e85f43",
+            "original_text": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 338,
+            "field": "english",
+            "start": 233470,
+            "bytes": 285,
+            "sha256": "d8b8162f58d41756030e5043517aa6db6e05f3af5c2997e4dba2ec1b355d2974",
+            "original_text": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless\r\ntalk--are accepted as being completed by all three poisons of the mind. Such\r\nactions motivated by desire, for one example, would be brought to their\r\ncompletion by desire.\r\n74\r\nThe Objects of Non-Virtue",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "This is coherent example framing; a supplied subject phrase does not establish a typo or justify manufacturing Tibetan words for it.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 338,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "all three poisons of the mind",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "all three poisons of the mind",
+        "source_row": {
+          "id": 1720,
+          "course": "C05",
+          "seq": 338,
+          "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+          "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+          "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            122
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+            ],
+            "count": 1,
+            "row_ids": [
+              1720
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6881",
+        "witness_course": "C16",
+        "witness_seq": 863,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "external_parallel": true,
+        "lineage_limit": "C16:863 Tibetan fields and main prose agree; the trailing folio37 and Some Ethical Questions heading differ from folio74 and The Objects of Non-Virtue. Whole-English query correctly returns one."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 152,
+          "wylie": 150,
+          "english": 280
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 338,
+            "field": "acip",
+            "start": 233316,
+            "bytes": 152,
+            "sha256": "4f3f8e64316235d67ff841f29e1940d0af8887669bd2ac376dc70117c1e85f43",
+            "original_text": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 338,
+            "field": "english",
+            "start": 233470,
+            "bytes": 285,
+            "sha256": "d8b8162f58d41756030e5043517aa6db6e05f3af5c2997e4dba2ec1b355d2974",
+            "original_text": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless\r\ntalk--are accepted as being completed by all three poisons of the mind. Such\r\nactions motivated by desire, for one example, would be brought to their\r\ncompletion by desire.\r\n74\r\nThe Objects of Non-Virtue",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Dug gsum has a complete HGM three mental poisons gloss as well as three poisons. The initial gsum counts the three speech acts, while the second counts mental roots. No factual conflict; supplied all remains outside the bank.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 338,
+    "kind": "INGEST_ARTEFACT",
+    "found": "74 The Objects of Non-Virtue",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "74 The Objects of Non-Virtue",
+        "source_row": {
+          "id": 1720,
+          "course": "C05",
+          "seq": 338,
+          "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+          "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+          "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            252
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+            ],
+            "count": 1,
+            "row_ids": [
+              1720
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6881",
+        "witness_course": "C16",
+        "witness_seq": 863,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "external_parallel": true,
+        "lineage_limit": "C16:863 Tibetan fields and main prose agree; the trailing folio37 and Some Ethical Questions heading differ from folio74 and The Objects of Non-Virtue. Whole-English query correctly returns one."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 152,
+          "wylie": 150,
+          "english": 280
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 338,
+            "field": "acip",
+            "start": 233316,
+            "bytes": 152,
+            "sha256": "4f3f8e64316235d67ff841f29e1940d0af8887669bd2ac376dc70117c1e85f43",
+            "original_text": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 338,
+            "field": "english",
+            "start": 233470,
+            "bytes": 285,
+            "sha256": "d8b8162f58d41756030e5043517aa6db6e05f3af5c2997e4dba2ec1b355d2974",
+            "original_text": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless\r\ntalk--are accepted as being completed by all three poisons of the mind. Such\r\nactions motivated by desire, for one example, would be brought to their\r\ncompletion by desire.\r\n74\r\nThe Objects of Non-Virtue",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Existing following-heading/folio class. Physical source separates folio74 and the next heading; the English source folds them into this row. Preserve bytes and leave unpaired, without refiling.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 338,
+    "kind": "FORMATTING",
+    "found": "74 The Objects of Non-Virtue",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "74 The Objects of Non-Virtue",
+        "source_row": {
+          "id": 1720,
+          "course": "C05",
+          "seq": 338,
+          "acip": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+          "wylie": "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,",
+          "english": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            252
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "lhag ma rdzun phra ma ngag kyal gsum dug gsum gyis rdzogs par 'dod de, 'dod chags kyis kun nas bslangs pa 'dod chags kyis rdzogs par byed pa lta bu'o,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1720,
+              6881
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 338,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless talk--are accepted as being completed by all three poisons of the mind. Such actions motivated by desire, for one example, would be brought to their completion by desire. 74 The Objects of Non-Virtue"
+            ],
+            "count": 1,
+            "row_ids": [
+              1720
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6881",
+        "witness_course": "C16",
+        "witness_seq": 863,
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "external_parallel": true,
+        "lineage_limit": "C16:863 Tibetan fields and main prose agree; the trailing folio37 and Some Ethical Questions heading differ from folio74 and The Objects of Non-Virtue. Whole-English query correctly returns one."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+        "register_identity": {
+          "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 275782,
+          "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+        },
+        "count": 199,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 152,
+          "wylie": 150,
+          "english": 280
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 338,
+            "field": "acip",
+            "start": 233316,
+            "bytes": 152,
+            "sha256": "4f3f8e64316235d67ff841f29e1940d0af8887669bd2ac376dc70117c1e85f43",
+            "original_text": "LHAG MA RDZUN PHRA MA NGAG KYAL GSUM DUG GSUM GYIS RDZOGS PAR 'DOD DE, 'DOD CHAGS KYIS KUN NAS BSLANGS PA 'DOD CHAGS KYIS RDZOGS PAR BYED PA LTA BU'O, ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 338,
+            "field": "english",
+            "start": 233470,
+            "bytes": 285,
+            "sha256": "d8b8162f58d41756030e5043517aa6db6e05f3af5c2997e4dba2ec1b355d2974",
+            "original_text": "The \"rest\"--which refers to the three of lying, divisive speech, and meaningless\r\ntalk--are accepted as being completed by all three poisons of the mind. Such\r\nactions motivated by desire, for one example, would be brought to their\r\ncompletion by desire.\r\n74\r\nThe Objects of Non-Virtue",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Same existing registered class; no separate new formatting erratum. The different C16 following heading does not correct or replace the C05 source.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  }
+]

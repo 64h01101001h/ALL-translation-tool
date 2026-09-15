@@ -1,0 +1,21 @@
+{
+  "actual_failure": "assembly-native exit1: FileNotFoundError for English337/intended-ranges.json",
+  "method_snapshot": "assemble.py.txt",
+  "scope": "Assembly failed before generating any new native evidence; only source/evidence and exact337 spec/body/resolver copies had been written. No originals or W changed.",
+  "partial_final_files": {
+    "spec.json": {
+      "bytes": 3901,
+      "sha256": "09b92cf4b68aee0571905c74e3d126b0211b377cea90a35b7cea2fabc8c6cd20"
+    },
+    "resolved-ranges.json": {
+      "bytes": 4554,
+      "sha256": "c84e2a905e5e843e188903a451bdee69ce7e25bebefaa8cec01407652a9d019a"
+    },
+    "body.html": {
+      "bytes": 3864,
+      "sha256": "b018659362817d686bffd2e49194947bc190b160ce95fdf615a1c9695ca7d170"
+    }
+  },
+  "correction": "The actual frozen English decisions.json records contain intended tib_range/eng_range. Project the exact seven fields and compare every record to unchanged original resolver output. Preserve original command and streams. Allow the already-created partial segment directory to be reused.",
+  "new_generator_or_resolver_runs": 0
+}

@@ -1,0 +1,89 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(337,'desire and ignorance complete deeds',[
+ ("'dod pas log par g-yem pa",'sexual misconduct',5,'Another three--the non-virtues of sexual misconduct','The complete long technical term is glossary-attested as sexual misconduct; the first dod pas belongs to that term, not to the later desire root. No speculative members.'),
+ ('brnab sems','coveting',5,'sexual misconduct, coveting, and stealing','Established coveting compound in the second position of this three-act list.'),
+ ('ma byin len','stealing',5,'sexual misconduct, coveting, and stealing','Exact LEN technical term owns stealing; no conversion or source normalization is performed.'),
+ ('gsum','three',5,'Another three','Counts the three just-listed deeds. Another and the non-virtues of are contextual English framing, not part of the numeral.'),
+ ("'dod chags",'desire',5,'completion by desire','The later desire compound is the root that completes the three acts; distinct from dod pas inside sexual misconduct.'),
+ ('kyis','by',6,'completion by desire','Whole instrumental particle links the first completion to desire.'),
+ ('rdzogs','completion',5,'stealing--are brought to completion','The first completion stem is nominalized in English; the complete rdzogs pa glossary attests completion, and this resultative construction supplies the local use. No hgm_gloss change.'),
+ ('par','to',6,'stealing--are brought to completion','First resultative complement marker owns to between the first brought and completion. It starts a complete Tibetan syllable.'),
+ ('byed','brought',5,'stealing--are brought to completion','The first causative predicate is rendered brought; exclude supplied are. Exact byed glossary includes brought.'),
+ ('log par lta ba','Mistaken views',5,'Mistaken views are brought','The first complete mistaken-view compound is the subject of the second completion clause.'),
+ ('log par','Mistaken',7,'Mistaken views are brought','Wrongness modifier inside the first compound; exact glossary mistaken supports this member.'),
+ ('lta ba','views',7,'Mistaken views are brought','View member inside the first parent; curated view and complete glossary views support the plural local form.'),
+ ('gti mug','ignorance',5,'by an ignorance of things','The ignorance root only; an and of things are explanatory framing and stay outside.'),
+ ('gis','by',6,'by an ignorance of things','Instrumental introduces ignorance as the cause of the second completion; not the earlier by desire.'),
+ ('rdzogs','completion',5,'Mistaken views are brought to completion','Second completion stem owns the occurrence in the mistaken-views clause.'),
+ ('par','to',6,'Mistaken views are brought to completion','Second resultative to belongs between the second brought and completion.'),
+ ('byed','brought',5,'Mistaken views are brought to completion','Second causative brought belongs to mistaken views, not to the preceding three deeds.'),
+ ('rmongs pa','lack of understanding',5,'a deep-seated lack of understanding','The complete nominal has the exact glossary equivalent lack of understanding. Exclude a and the disputed intensive rendering deep-seated; do not reduce the negative nominal to understanding.'),
+ ('las','from',6,'spring from a deep-seated','Ablative source relation links the arising of mistaken views to lack of understanding. The curated noun deeds is a different use of las; the complete glossary also attests from.'),
+ ('log lta','mistaken views',5,'for mistaken views spring','The second, shorter mistaken-view term is the subject of the causal explanation; it owns the lowercase repetition only.'),
+ ('log','mistaken',7,'for mistaken views spring','The shorter compound has the exact glossary wrongness member log/mistaken; distinct from log par in the earlier parent.'),
+ ('lta','views',7,'for mistaken views spring','The shorter nominal view member has exact glossary views; its range is strictly within the second parent.'),
+ ("'byung ba",'spring',5,'for mistaken views spring','Arising predicate, with exact glossary spring. The bound genitive after ba belongs to the reason construction and is excluded.'),
+ ('phyir','for',6,'for mistaken views spring','Causal particle scopes the final explanation. It owns the initial English for, not from (owned by las).')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Repeated completion/to/brought spans are assigned clause by clause: first the three acts and desire, then mistaken views and ignorance. The later log lta owns the lowercase mistaken views in the reason clause. The entire long sexual-misconduct term is retained as a glossary-attested compound. rmongs pa owns lack of understanding; cher/deep-seated remains omitted because an intensive and a rootedness metaphor are not yet secure as an independent lexical pair. No uncertain nulls, source correction or hgm_gloss promotion.',
+ [{'tib':'ni; de; bound genitive after byung ba','reason':'Topic, continuation and reason-construction grammar contribute to the expanded English clause structure; no unique separate exponent or proven absence is asserted.'},
+  {'tib':'cher','english':'deep-seated','reason':'CHER is attested as intense degree, on a gross level, and wide. Deep-seated plausibly renders intensity here, but also introduces rootedness; the full phrase has no exact master entry and both corpus occurrences repeat this same passage. Retain the exact wording unwrapped rather than bank the uncertain atom or a phrase merely to hide it.'},
+  {'english':'Another; the non-virtues of; list and; both are; an; of things; a','reason':'Contextual classification, passive auxiliaries, articles and English list framing are supplied or distributed. None is absorbed into a neighboring lexical span.'}])
+
+build(338,'three remaining speech deeds',[
+ ('lhag ma','rest',5,'The "rest"','Established remainder term. Exclude The and quotation marks despite the complete glossary also having the rest.'),
+ ('rdzun','lying',5,'the three of lying','First remaining speech deed; exact glossary lying.'),
+ ('phra ma','divisive speech',5,'lying, divisive speech','Established full divisive-speech compound. No speculative phra or ma member.'),
+ ('ngag kyal','meaningless talk',5,'and meaningless talk','Established whole term; supplied and is excluded.'),
+ ('ngag','talk',7,'and meaningless talk','Exact glossary talk licenses the speech member strictly inside meaningless talk.'),
+ ('kyal','meaningless',7,'and meaningless talk','Exact glossary meaningless licenses the qualifying member inside the parent; not a negative-affix decomposition.'),
+ ('gsum','three',5,'the three of lying','First numeral counts the speech deeds in the appositive. It is distinct from the second numeral inside three poisons.'),
+ ('dug gsum','three poisons',5,'by all three poisons of the mind','The established technical compound is exactly glossary-attested as three poisons. All and of the mind remain outside, despite the mental referent being clear.'),
+ ('dug','poisons',7,'by all three poisons of the mind','Exact poisons member inside the second three-expression.'),
+ ('gsum','three',7,'by all three poisons of the mind','Second numeral counts the poisons, not the speech deeds; strictly inside its own parent.'),
+ ('gyis','by',6,'completed by all three poisons','Whole instrumental relates completion of the remaining deeds to the three poisons.'),
+ ('rdzogs','completed',5,'accepted as being completed','First completion stem is the complement of accepted; the full rdzogs pa glossary attests completed. Being remains outside.'),
+ ('par','as',6,'accepted as being completed','Predicative complement marker corresponds to as after accepted; it does not own the following being auxiliary.'),
+ ("'dod",'accepted',5,'are accepted as being completed','Assertion/acceptance sense, expressly glossary-attested. This occurrence is not a desire root.'),
+ ("'dod chags",'desire',5,'Such actions motivated by desire','First complete desire compound belongs to the motivating stage of the example.'),
+ ('kyis','by',6,'Such actions motivated by desire','First kyis is the instrumental of motivated, distinct from final completion by desire.'),
+ ('kun nas bslangs pa','motivated',5,'Such actions motivated by desire','Exact full past-form compound has the glossary equivalent motivated. The shorter bslangs pa could mean motivate, but a child spanning the entire English parent would be degenerate; no invented kun nas null or emphasis atom.'),
+ ("'dod chags",'desire',5,'completion by desire','Second desire compound is the completing root of this example, distinct from motivation.'),
+ ('kyis','by',6,'completion by desire','Second kyis links final completion to desire.'),
+ ('rdzogs','completion',5,'brought to their completion','Second completion stem owns the noun in the example, excluding supplied their.'),
+ ('par','to',6,'brought to their completion','Second par is the resultative to in the example, distinct from earlier predicative as.'),
+ ('byed pa','brought',5,'would be brought to their completion','Causative predicate, exact full glossary brought; would be remains outside.'),
+ ('lta bu','example',5,'for one example','The exemplifying compound has the exact glossary example. The introduced singular one and framing for are excluded; the bound closing o is not silently included.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. First gsum counts the three speech deeds; dug gsum is the established three-poisons compound with two secure members, excluding all and of the mind. The two desire/kyis pairs distinguish motivation from completion. kun nas bslangs pa owns motivated whole, preserving the exact past spelling and glossary tier. lta bu owns example only; for one and the bound closing o stay unbanked. Preserve the following 74 The Objects of Non-Virtue as registered heading apparatus, with no duplicate filing. No source/master correction or hgm_gloss promotion.',
+ [{'tib':'de; closing bound o after lta bu','reason':'Continuative and closing grammar is distributed through English example framing and punctuation. No separate atom or absence claim is secure.'},
+  {'tib':'members of kun nas bslangs pa','reason':'The whole lexical compound owns motivated. A bslangs pa/motivated member would equal its English parent, and the intensifying kun nas has no independently demonstrable exponent inside that one word. Omit both rather than invent an internal null.'},
+  {'english':'The; which refers to the; of before lying; list and; are; being; all; of the mind; Such actions; for one; would be; their','reason':'Articles, appositive explanation, classification, example framing, auxiliaries and possessive are supplied or distributed; exact English is retained outside the narrow spans.'},
+  {'english':'74 The Objects of Non-Virtue','reason':'Numbered following heading is physically present and belongs to the established heading-glue apparatus class. C16:863 has the same prose followed instead by 37 Some Ethical Questions. No correction or new erratum.'}])
+
+build(339,'objects of the four divisions',[
+ ('gzhi','objects',5,'The objects consist of','Contextual object/basis of each class of deed: complete C05:340-342 explains the four divisions with this same Tibetan word and English objects. The master has only an unrelated auto-aligned give it a name gloss; it is explicitly rejected as local evidence, not promoted or corrected.'),
+ ('sems can','living beings',5,'consist of living beings','Established living-being compound is the first object category; no artificial sems/living or can/beings member.'),
+ ('longs spyod','enjoyments',5,'living beings, enjoyments','Established enjoyments compound, explicated as the second division in C05:341.'),
+ ('ming','Names',5,'Names and forms','First names occurrence is paired with forms, the third object category. Preserve original line-initial capital.'),
+ ('dang','and',6,'Names and forms','Second Tibetan dang is the explicit conjunction inside names and forms; the earlier dangling list conjunction is separately omitted.'),
+ ('gzugs','forms',5,'Names and forms','Forms paired with names; exact glossary form/forms and C05:342 support the category.'),
+ ('ming','names',5,'and then of names as well','Second names occurrence is the fourth category, distinct from the capitalized first occurrence. Exclude and then of and as well.'),
+ ('yin','consist of',5,'The objects consist of living beings','Final copular predicate states what the object categories are and is fronted as consist of before the list in English. The exact complete yin glossary attests consist of; it does not require a ni/consist mapping or an invented list verb.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. The four object categories are confirmed by the complete following commentary340-342. gzhi/objects is a contextual attestation; its unrelated auto-aligned master gloss is not used or changed. Final yin owns fronted consist of, expressly glossary-attested. The second dang owns and inside Names and forms. First dang, both ni and closing no remain omitted because the overall list/topic grammar is distributed across the period, and then of and as well. No uncertain punctuation-fusion null. Preserve all verse capitals and punctuation.',
+ [{'tib':'first dang after longs spyod','reason':'It coordinates the ongoing list, but English puts a period after enjoyments and also supplies and then before the final names. A unique word boundary or exclusive punctuation fusion is uncertain. Omit instead of claiming no exponent.'},
+  {'tib':'both ni; no','reason':'Topic transitions and final closure contribute to the fronted/copular list presentation and its framing. The positive yin/consist of correspondence is retained; no separate absence claim is made for these particles.'},
+  {'english':'The; and then of; as well','reason':'English determiner and list-transition/closing framing remain outside lexical claims. The mid-verse period and capital Names are preserved, not repaired as prose.'}])

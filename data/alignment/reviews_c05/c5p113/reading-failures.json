@@ -1,0 +1,10 @@
+{
+  "actual_tool_read_failures": [
+    {
+      "exit": 1,
+      "command": "Read tibetan/native/337-resolver-v1/command.json while inspecting native records",
+      "reason": "Original native captures store the actual argv in execution.json and contain five files, not a separate command.json. The preceding generator execution records were read successfully; subsequent rg and adapter reads resolved the path assumption. No original file or native result changed."
+    }
+  ],
+  "capture": "Actual direct exec_command traceback remains in this task transcript. This was a read-only path lookup failure, not a generator/resolver failure."
+}

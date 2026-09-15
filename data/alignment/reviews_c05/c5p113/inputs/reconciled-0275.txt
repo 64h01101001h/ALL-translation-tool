@@ -1,0 +1,131 @@
+"""Mechanical transcription of pinned root selection using the prior Z disposition/native packaging shape."""
+from pathlib import Path
+import datetime,hashlib,html,json,re,shutil
+R=Path(__file__).resolve().parents[1];B=R.parent
+K=['seq','id','d','tib','eng','tib_range','eng_range']
+def load(p):return json.loads(p.read_bytes())
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def pin(p):return ident(p.read_bytes())
+manifest=[load(R/'evidence/reconcile-brief-identity.json')]
+def cp(p,q):
+ q.parent.mkdir(parents=True,exist_ok=True);b=p.read_bytes();q.write_bytes(b);assert q.read_bytes()==b
+ manifest.append({'original':str(p),'copy':str(q.relative_to(R)),**ident(b)})
+root=load(B/'root-reconciliation-decisions.json');assert pin(B/'root-reconciliation-decisions.json')['sha256']=='a3dcdc768a98753a9efc73068cfdf5ec7149f2e3932e35c66003eb1e3cbbb3cd'
+assert root['base']=='english' and root['counts']=={'spans':55,'nonnull_d5':35,'d7':8,'nulls':0,'errata':0}
+base=load(B/'baseline.json');assert base['commit']==root['actual_acceptance_baseline'] and base['course_boundary']==336
+assert root['source_origin']=='2366cbeab00a4b89ea77947ed9c50e148e180d1d'
+for n in ['source.json','context.json','proposal-baseline.json','baseline.json','root-reconciliation-decisions.json',*root['reading_receipts'],'root-material-evidence.json','root-material-glossary-evidence.json','root-focused-corpus-evidence.json']:
+ cp(B/n,R/'evidence'/n)
+for n in ['proposal-protocol.md','current-alignment-output-contract.md']:cp(B.parent/n,R/'evidence'/n)
+for p in sorted((B/'baseline-through336-caller').iterdir()):
+ if p.is_file():cp(p,R/'evidence/baseline-through336-caller'/p.name)
+originals=[]
+for angle in ['tibetan','english']:
+ P=B/angle;f=load(P/'freeze.json');assert pin(P/'freeze.json')==root['original_freezes'][angle];assert f['file_count']==len(f['files']);assert f['source_origin_git_commit']==root['source_origin']
+ for rel,expected in f['files'].items():
+  assert rel and not Path(rel).is_absolute() and '..' not in Path(rel).parts
+  assert pin(P/rel)==expected,(angle,rel)
+ cp(P/'freeze.json',R/'evidence'/f'{angle}-freeze.json')
+ originals.append({'original_angle':angle,'original_freeze':str(P/'freeze.json'),'freeze_pin':pin(P/'freeze.json'),'files_verified':len(f['files']),'relative_reference_base':str(P),'rule':'All original material/source/native/history remains immutable here. Relative citations in copied original decision objects retain this original angle/segment context. Identity verification is not an independent semantic reading claim.'})
+cp(B/'tibetan/reading-receipt.json',R/'evidence/tibetan-reading-receipt.json')
+cp(B/'english/evidence/reading-and-scope.json',R/'evidence/english-reading-receipt.json')
+cp(B/'english/helpers/canonical.py',R/'evidence/reused-english-canonical.py.txt')
+put(R/'evidence/original-evidence-context.json',{'originals':originals,'role_scope':'Root is the semantic reconciler; this assembler previously authored Tibetan originals and makes no independent reconciliation or acceptance claim. Source/master/corpus and physical evidence is reused from these complete verified frozen trees.','new_source_queries':0})
+put(R/'evidence/original-freeze-verification.json',{'status':'PASS_IDENTITY_ONLY','originals':originals,'total_files_verified':sum(x['files_verified']for x in originals)})
+# Explicit Tibetan-id to selected English-id dispatch; full old pair AND occurrence checked below.
+maps={337:{'w1':'w1','w2':'w2','w3':'w3','w4':'w4','w5':'w5','p1':'p6','w6':'w7','p2':'p8','w7':'w9','w8':'w10','m1':'m11','m2':'m12','w9':'w13','p3':'p14','w10':'w15','p4':'p16','w11':'w17','f1':'w18','p5':'p19','w12':'w20','m3':'m21','w13':'w23','p6':'p24'},338:{'w1':'w1','w2':'w2','w3':'w3','w4':'w4','m1':'m5','m2':'m6','w5':'w7','w6':'w8','m3':'m9','m4':'m10','p1':'p11','w7':'w12','p2':'p13','w8':'w14','w9':'w15','p3':'p16','w10':'w17','w11':'w18','p4':'p19','w12':'w20','p5':'p21','w13':'w22','w14':'w23'},339:{'w1':'w1','w2':'w2','w3':'w3','w4':'w4','p1':'p5','w5':'w6','w6':'w7','w7':'w8'}}
+special={(x['seq'],x['english_id']):x for x in root['semantic_rulings']}
+changed_tib={(337,'f1'):(5,'rmongs pa','lack of understanding',[142,151],[227,248]),(338,'w6'):(5,'dug gsum','three poisons',[37,45],[126,139])}
+omit_rulings={(x['seq'],x['angle'],x['field'],x['index']):x for x in root['omission_rulings']}
+source={x['seq']:x for x in load(R/'evidence/source.json')};summaries=[];allrows=[];changes=[];reused=[]
+for seq in [337,338,339]:
+ D=R/str(seq);D.mkdir(exist_ok=True);E=B/'english'/str(seq);T=B/'tibetan'/str(seq)
+ e=load(E/'decisions.json');t=load(T/'original-decisions.json');es=load(E/'spec.json')['segments'][0];ts=load(T/'spec.json')['segments'][0]
+ assert [x['original_span']for x in t['decisions']]==ts['spans'];assert [{k:x[k]for k in sp}for sp,x in zip(es['spans'],e['spans'])]==es['spans'];assert set(maps[seq])=={x['original_span_id']for x in t['decisions']}
+ for name in ['spec.json','body.html','resolved-ranges.json','errata.json']:cp(E/name,D/name)
+ put(D/'intended-ranges.json',[{k:x[k]for k in K}for x in e['spans']])
+ rows=load(D/'resolved-ranges.json');assert all(list(x)==K for x in rows);assert rows==load(D/'intended-ranges.json');assert rows==[{k:x[k]for k in K}for x in e['spans']]
+ by={x['id']:x for x in rows};assert len(by)==len(rows);allrows+=rows;put(D/'final-ordered-tuples.json',rows)
+ rationale=[]
+ for orig,sp in zip(e['spans'],es['spans']):
+  ruling=special.get((seq,orig['id']));rationale.append({'seq':seq,'id':orig['id'],'span':sp,'original_basis':{'seq':seq,'angle':'english','field':'spans','id':orig['id']},'original_semantic_rationale':orig['rationale'],'rationale':ruling['reason']if ruling else root['remaining_spans']+' Exact original rationale: '+orig['rationale'],'judgment_by':'root','mechanical_assembler':'/root/reusable_closure_review'})
+ put(D/'final-rationales.json',rationale)
+ disp=[]
+ for angle,records in [('tibetan',t['decisions']),('english',e['spans'])]:
+  for index,original in enumerate(records):
+   sid=original['original_span_id']if angle=='tibetan'else original['id'];fid=maps[seq][sid]if angle=='tibetan'else sid;old=original['original_span']if angle=='tibetan'else original;oldranges=original['intended_ranges']if angle=='tibetan'else original;final=by[fid]
+   action='ACCEPT';reason=root['remaining_spans']+' Original rationale: '+original['rationale']
+   if angle=='tibetan'and(seq,sid)in changed_tib:
+    assert tuple(final[k]for k in ['d','tib','eng','tib_range','eng_range'])==changed_tib[(seq,sid)];action='CHANGE';reason=special[(seq,fid)]['reason']
+   else:
+    assert all(old[k]==final[k]for k in ['d','tib','eng']);assert all(oldranges[k]==final[k]for k in ['tib_range','eng_range'])
+    if(seq,fid)in special:reason=special[(seq,fid)]['reason']
+   rec={'seq':seq,'angle':angle,'field':'decisions'if angle=='tibetan'else'spans','index':index,'original_id':sid,'original':original,'disposition':action,'final_ids':[fid],'reason':reason,'judgment_by':'root','root_judgment':'../evidence/root-reconciliation-decisions.json'};disp.append(rec)
+   if action!='ACCEPT':changes.append({k:rec[k]for k in ['seq','angle','field','index','original_id','disposition']})
+ put(D/'original-dispositions.json',disp)
+ other=[]
+ for angle,doc,spdoc in [('tibetan',t,ts),('english',e,es)]:
+  for index,original in enumerate(doc['omissions']):
+   ruling=omit_rulings.get((seq,angle,'omissions',index));rec={'seq':seq,'angle':angle,'field':'omissions','index':index,'original':original,'disposition':'CHANGE'if ruling else'ACCEPT','reason':ruling['reason']if ruling else'Root retains the exact original omission with this reason: '+original['reason'],'judgment_by':'root'};other.append(rec)
+   if ruling:changes.append({k:rec[k]for k in ['seq','angle','field','index','disposition']})
+  for field,value in [('spec.note',spdoc['note']),('report.md',(B/angle/str(seq)/'report.md').read_text())]:
+   other.append({'seq':seq,'angle':angle,'field':field,'index':0,'original':value,'disposition':'PRESERVE_ORIGINAL_PROVENANCE','reason':'Preserve this complete original producer/rationale/native record. The final spec remains byte-identical to the English original including its truthful origin note. Separate reconciled provenance, final rationales, dispositions and report state root selection and exact changed Tibetan alternatives; no original reading or native execution is relabeled as assembler work.','judgment_by':'root'})
+ put(D/'original-other-dispositions.json',other)
+ omissions=[{'original_basis':{k:x[k]for k in ['seq','angle','field','index']},'original':x['original'],'disposition':x['disposition'],'retained_or_changed_reason':x['reason']}for x in other if x['field']=='omissions'];put(D/'omissions.json',omissions)
+ screens=[];original_docs=[]
+ for angle,filename,field in [('tibetan','five-ground-screens.json','screens'),('english','errata-review.json','category_screen')]:
+  doc=load(B/angle/str(seq)/filename);old=doc['category_screen']if angle=='english'else doc;assert len(old)==5
+  original_docs.append({'seq':seq,'angle':angle,'source_file':filename,'original':doc})
+  for index,original in enumerate(old):
+   screens.append({'seq':seq,'angle':angle,'field':field,'source_file':filename,'index':index,'original':original,'disposition':'ACCEPT_NO_NEW_ERRATUM','reason':root['errata_ruling'],'judgment_by':'root'})
+  assert load(B/angle/str(seq)/'errata.json')==[]
+ put(D/'errata-review.json',{'seq':seq,'judgment_by':'root','status':'PROVISIONAL_ROOT_RECONCILIATION; independent review pending','original_screens':screens,'complete_original_screen_documents':original_docs,'original_errata_candidates':[],'final_judgment':root['errata_ruling'],'final_errata':[]})
+ raw=(D/'spec.json').read_bytes();body=(D/'body.html').read_bytes()
+ for tool,out in [('generator',body),('resolver',(D/'resolved-ranges.json').read_bytes())]:
+  P=B/'english/native'/f'{seq}-{tool}-v1';Q=R/'native'/f'{seq}-{tool}-v1'
+  for p in sorted(P.iterdir()):
+   if p.is_file():cp(p,Q/p.name)
+  assert(Q/'stdin.bin').read_bytes()==raw and(Q/'stdout.bin').read_bytes()==out and(Q/'stderr.bin').read_bytes()==b''and(Q/'exit.txt').read_text()=='0\n';ex=load(Q/'execution.json');assert ex['exit']==0
+  for n in ['stdin','stdout','stderr']:assert ex['streams'][n]==ident((Q/(n+'.bin')).read_bytes())
+  reused.append({'seq':seq,'tool':tool,'mode':'REUSED_EXACT_ENGLISH_ORIGINAL; NOT_A_NEW_RECONCILER_EXECUTION','original_native':str(P),'copied_native':str(Q.relative_to(R)),'execution':pin(Q/'execution.json'),'input':pin(Q/'stdin.bin'),'output':pin(Q/'stdout.bin'),'stderr':pin(Q/'stderr.bin'),'exit':0,'method_copy':'evidence/reused-english-canonical.py.txt'})
+ gaps={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S);assert m;flat=re.sub(r'<span class="nul">.*?</span>','',m[1],flags=re.S);assert html.unescape(re.sub('<[^>]+>','',flat))==source[seq][field]
+  cur=0;g=[]
+  for lo,hi in sorted(x[side+'_range']for x in rows if x['d']!=7 and x[side+'_range']is not None):
+   if cur<lo:g.append({'range':[cur,lo],'text':source[seq][field][cur:lo]})
+   cur=max(cur,hi)
+  if cur<len(source[seq][field]):g.append({'range':[cur,len(source[seq][field])],'text':source[seq][field][cur:]})
+  gaps[side]=g
+ for x in rows:
+  for side,field in [('tib','wylie'),('eng','english')]:
+   lo,hi=x[side+'_range'];assert source[seq][field][lo:hi]==x[side]
+ assert all(x['d']not in[5,7]or x['eng']is None or x['eng'].split()[0].lower()not in['the','a','an','and','or','his','our','your','i','you']for x in rows)
+ put(D/'complete-unwrapped-extents.json',{'seq':seq,'range_convention':'zero-based half-open characters','source':'../evidence/source.json','material_reasons':'omissions.json','unwrapped':gaps})
+ for angle,doc in [('tibetan',t),('english',e)]:
+  assert [x['original']for x in disp if x['angle']==angle]==doc['decisions'if angle=='tibetan'else'spans'];assert [x['original']for x in other if x['angle']==angle and x['field']=='omissions']==doc['omissions']
+ count={'spans':len(rows),'nulls':sum(x['eng']is None for x in rows),'d5_total':sum(x['d']==5 for x in rows),'word_pairs':sum(x['d']==5 and x['eng']is not None for x in rows),'d7':sum(x['d']==7 for x in rows),'d6':sum(x['d']==6 for x in rows),'d3':sum(x['d']==3 for x in rows),'errata':0}
+ proof={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'native_mode':'REUSED_EXACT_ENGLISH_ORIGINAL','new_generator_runs':0,'new_resolver_runs':0,'stderr_bytes':0,'spec_bytes':len(raw),'spec_sha256':ident(raw)['sha256'],'body_bytes':len(body),'body_sha256':ident(body)['sha256'],'body_equals_native_stdout':True,'spec_equals_english_original':True,'source_plaintexts_exact_after_markup_and_null_marker_removal':True,'canonical_ranges_equal_preselected_intent':True,'no_supplied_d5_d7_heads':True,'counts':count,'native_generator_path':f'../native/{seq}-generator-v1','native_resolver_path':f'../native/{seq}-resolver-v1'};put(D/'verification.json',proof);summaries.append(proof)
+ lines=[f'C05:{seq} — PROVISIONAL root reconciliation; mechanical scribe /root/reusable_closure_review.',f'Source origin {root["source_origin"]} through333; actual acceptance baseline {base["commit"]} through336, separately captured.',
+ 'Root selects the exact unchanged English spec/body/ranges; the pinned root decision is the semantic authority for this assembly. This scribe previously authored the Tibetan original and claims no independent reconciliation.',
+ 'Final rationales record all root decisions.337 retains tight rmongs pa/lack of understanding and adds lta/views;338 retains tight dug gsum/three poisons;339 retains the shared final yin/consist of.',
+ 'All original span/rationale records, grouped omissions, notes, reports and category judgments are preserved by exact seq/angle/id or field/index plus complete original values.',
+ 'The rejected broader Tibetan phrase and parent survive as CHANGE dispositions; uncertain cher/deep-seated, of the mind and distributed list material remain unwrapped. No null is introduced.',
+ 'No new errata or source correction. All30 original category judgments and their complete five-ground documents are preserved across the three segments;338 heading apparatus is not refiled.',
+ 'Root reading scope remains exactly the copied root receipts and root decision. Original material/master/corpus/source/native evidence is reused by complete verified original freeze identities.',
+ f'Counts: {count["spans"]} spans; {count["word_pairs"]} nonnull d5 word pairs; {count["d7"]} d7; zero nulls; zero errata.',
+ f'Reused exact English generator EXIT=0; stdout/body {len(body)} bytes; stderr0. Reused exact English resolver EXIT=0; stderr0; ranges equal intended.',
+ 'New reconciler generators=0; new reconciler resolvers=0. Existing original command/input/output/error/exit captures are copied unchanged under ../native/; reuse is explicit in ../native-reuse.json.',
+ 'The exact English-origin spec note remains as original provenance; it is not a root or scribe execution claim.',
+ f'Spec SHA256 {proof["spec_sha256"]}; body SHA256 {proof["body_sha256"]}. Both native source columns reconstruct exactly.',
+ 'One read-only metadata lookup failure and one assembly filename-assumption failure are preserved in evidence/reading-failures.json, assembly-native/ and correction-history/. The successful assembly uses exact intended ranges from frozen English decisions; no generator or resolver rerun.',
+ 'No W writes, hgm_gloss promotion, registration or semantic acceptance. Independent skeptic review is still required.'];assert 10<=len(lines)<=25;(D/'report.md').write_text('\n'.join(lines)+'\n')
+put(R/'resolved-spans.json',allrows);put(R/'native-reuse.json',{'status':'EXACT_ORIGINAL_NATIVE_REUSE','new_reconciler_generator_runs':0,'new_reconciler_resolver_runs':0,'reused_generator_resolver_pairs':3,'records':reused})
+totals={k:sum(x['counts'][k]for x in summaries)for k in summaries[0]['counts']};assert [totals[x]for x in ['spans','word_pairs','d7','nulls','errata']]==[55,35,8,0,0]
+counts={'span_dispositions':sum(len(load(R/str(s)/'original-dispositions.json'))for s in [337,338,339]),'omission_dispositions':sum(sum(x['field']=='omissions'for x in load(R/str(s)/'original-other-dispositions.json'))for s in [337,338,339]),'screen_dispositions':sum(len(load(R/str(s)/'errata-review.json')['original_screens'])for s in [337,338,339]),'original_errata_candidates':0};assert counts=={'span_dispositions':109,'omission_dispositions':19,'screen_dispositions':30,'original_errata_candidates':0}
+put(R/'evidence/changed-disposition-index.json',changes)
+put(R/'summary.json',{'status':'READY_FOR_INDEPENDENT_REVIEW','producer':'Codex','reconciler_role':'root','mechanical_assembler':'/root/reusable_closure_review','source_origin_git_commit':root['source_origin'],'source_origin_course_boundary':333,'actual_acceptance_baseline':base['commit'],'actual_baseline_accepted_through':336,'segments':summaries,'totals':totals,'total_spans':55,'total_word_pairs':35,'total_nulls':0,'total_d7':8,'original_dispositions':counts,'native_generators':0,'native_resolvers':0,'reused_native_generator_resolver_pairs':3,'native_generator_failures':0,'native_resolver_failures':0,'new_original_proposal_generations':0,'new_source_queries':0,'read_only_lookup_failures':1,'preserved_assembly_failures':1,'independent_review_claimed':False})
+put(R/'provenance.json',{'status':'PROVISIONAL_ROOT_RECONCILIATION; independent review required','reconciler_role':'root','mechanical_assembler':'/root/reusable_closure_review','independent_reconciliation':False,'source_origin_git_commit':root['source_origin'],'source_origin_course_boundary':333,'actual_acceptance_baseline':base['commit'],'actual_baseline_accepted_through':336,'root_decisions':'evidence/root-reconciliation-decisions.json','root_reading_receipts':['evidence/'+x for x in root['reading_receipts']],'reading_scope':'Root scope is stated only in copied root records. The assembler read the explicit rulings and complete current decisions for faithful transcription, reused its own original reading, and makes no new independent review claim. All other original material evidence is mechanically identity-verified, not presented as newly read by the scribe.','semantic_dispatch':'Explicit seq/angle/id maps and seq/angle/field/index cases; complete old values and exact common ranges are checked.','native_reuse':'All three selected specs are byte-identical English originals. Three exact original native pairs are reused; zero new generators/resolvers or source queries. English note provenance remains unchanged.','original_evidence_context':'evidence/original-evidence-context.json'})
+put(R/'original-to-copy-manifest.json',manifest)
+print(json.dumps({'status':'PASS_MECHANICAL_ONLY','totals':totals,'original_dispositions':counts,'original_files_verified':sum(x['files_verified']for x in originals),'new_generators':0,'new_resolvers':0,'reused_native_pairs':3,'root_reconciler':'root','independent_review_claimed':False},indent=2))

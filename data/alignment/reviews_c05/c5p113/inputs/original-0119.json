@@ -1,0 +1,551 @@
+{
+  "queries": [
+    {
+      "term": "log",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "log",
+        "log"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 19646,
+          "wylie": "log",
+          "tibetan": "ལོག",
+          "tibetan_source": null,
+          "acip": "LOG",
+          "pronunciation": "lok",
+          "pronunciation_source": null,
+          "sanskrit": "nirvṛtti; nirvartana; {LC}nivṛtta; {LC}pratinivṛtta; {LC}nivṛtti; {LC}pratinivṛtya; {LC}mithyā; {LC}vi!!; {LC}vināyaka; {LC}viparyaya; {LC}vipratipatti; {LC}ut!!; {LC}unmārga; {LC}saṃdarśitakhredavaktra; {LC}jāgaraṇa; {LC}parimlāna; {LC}malina; {LC}virata",
+          "hopkins_english": "reverse; opposite; wrong; mistaken; unreal; overcome; to return; turn from; return; turn around; be turned upside down; dispose of; ceasing",
+          "hgm_gloss": "[\"stop\", \"turns back\", \"stopping\", \"wrong\", \"turn back\", \"opposite way\", \"turn it around\", \"mistaken\", \"order\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 776,
+          "raw": "{\"tibetan\": \"ལོག\", \"wylie\": \"log\", \"wylie_variants\": [\"log\"], \"tenses\": null, \"sanskrit\": \"nirvṛtti; nirvartana; {LC}nivṛtta; {LC}pratinivṛtta; {LC}nivṛtti; {LC}pratinivṛtya; {LC}mithyā; {LC}vi!!; {LC}vināyaka; {LC}viparyaya; {LC}vipratipatti; {LC}ut!!; {LC}unmārga; {LC}saṃdarśitakhredavaktra; {LC}jāgaraṇa; {LC}parimlāna; {LC}malina; {LC}virata\", \"hopkins_english\": \"reverse; opposite; wrong; mistaken; unreal; overcome; to return; turn from; return; turn around; be turned upside down; dispose of; ceasing\", \"hgm_gloss\": [\"stop\", \"turns back\", \"stopping\", \"wrong\", \"turn back\", \"opposite way\", \"turn it around\", \"mistaken\", \"order\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"lok\", \"acip\": \"LOG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C03\", \"C04\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P4\", \"P5\", \"P6\", \"P7\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08SourceOfAllMyGood\", \"TCS09\", \"TCS10\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 776}, \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:19645",
+        "glossary_entries:7271"
+      ]
+    },
+    {
+      "term": "lta",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "lta",
+        "lta"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 6815,
+          "wylie": "lta",
+          "tibetan": "ལྟ",
+          "tibetan_source": null,
+          "acip": "LTA",
+          "pronunciation": "ta",
+          "pronunciation_source": "GMR card (C15 Language Study Guide)",
+          "sanskrit": "{LCH} darśana; {MV}dṛṣṭi; {MSA}dṛṣṭika; {C}dṛk; {C}darśin; {C}dṛṣṭi-gata; {C}ālokite; {C} vyavalokayati; {C}īkṣaṇa; {MSA}(sam-ud √īkṣ): samudīkṣate; {MSA}phan lta = upakarekṣaṇa; {LC}na kāyasāvekṣī; {LC}iva; {LC}upama; {LC}kṣuradhārā-madhūpama; {LC}bhayadarśin; {LC}dṛṣṭa; {LC}satkāyadṛṣṭe hi vimukta-mānasaḥ; {LC}nirīkṣamāṇa; {LC}paśyati; {LC}paśyeccaturdiśam; {LC}prekṣante; {LC}prekṣāvahe; {LC}yādṛśī; {LC}na samanupaśyati; {LC}na paśyet; {LC}ālokana; {LC}īkṣante; {LC}dṛṣṭīgata; {LC}kathaṃ draṣṭā; {LC}paśyatha; {LC}paśyāmi; {LC}mṛga; {LC}vilokana",
+          "hopkins_english": "verb: view; look; see; read; noun: view; false view; {C}spectator; one who can demonstrate; one who sees; beholding; bound up with false views; looking towards; looking upon; eyes; see; views; behold; survey; consider; look down on",
+          "hgm_gloss": "[\"entertain\", \"consider\", \"consult\", \"imagine\", \"view\", \"viewpoints\", \"viewpoint\", \"views\", \"position\", \"ideas\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": "blta lta bltas ltos",
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 3507,
+          "raw": "{\"tibetan\": \"ལྟ\", \"wylie\": \"lta\", \"wylie_variants\": [\"lta\"], \"tenses\": \"blta lta bltas ltos\", \"sanskrit\": \"{LCH} darśana; {MV}dṛṣṭi; {MSA}dṛṣṭika; {C}dṛk; {C}darśin; {C}dṛṣṭi-gata; {C}ālokite; {C} vyavalokayati; {C}īkṣaṇa; {MSA}(sam-ud √īkṣ): samudīkṣate; {MSA}phan lta = upakarekṣaṇa; {LC}na kāyasāvekṣī; {LC}iva; {LC}upama; {LC}kṣuradhārā-madhūpama; {LC}bhayadarśin; {LC}dṛṣṭa; {LC}satkāyadṛṣṭe hi vimukta-mānasaḥ; {LC}nirīkṣamāṇa; {LC}paśyati; {LC}paśyeccaturdiśam; {LC}prekṣante; {LC}prekṣāvahe; {LC}yādṛśī; {LC}na samanupaśyati; {LC}na paśyet; {LC}ālokana; {LC}īkṣante; {LC}dṛṣṭīgata; {LC}kathaṃ draṣṭā; {LC}paśyatha; {LC}paśyāmi; {LC}mṛga; {LC}vilokana\", \"hopkins_english\": \"verb: view; look; see; read; noun: view; false view; {C}spectator; one who can demonstrate; one who sees; beholding; bound up with false views; looking towards; looking upon; eyes; see; views; behold; survey; consider; look down on\", \"hgm_gloss\": [\"entertain\", \"consider\", \"consult\", \"imagine\", \"view\", \"viewpoints\", \"viewpoint\", \"views\", \"position\", \"ideas\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ta\", \"acip\": \"LTA\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C04\", \"C05\", \"C06\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C12\", \"C13\", \"C14\", \"C15\", \"C16\", \"C17\", \"C18\", \"DDA\", \"DTE\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P3\", \"P5\", \"P6\", \"P7\", \"P8\", \"P9\", \"SOS\", \"SPF\", \"Sunlight\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 3507}, \"pronunciation_source\": \"GMR card (C15 Language Study Guide)\", \"hopkins_realigned\": \"uma-v26\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:6814",
+        "glossary_entries:2677"
+      ]
+    },
+    {
+      "term": "ngag",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "ngag",
+        "ngag"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 3406,
+          "wylie": "ngag",
+          "tibetan": "ངག",
+          "tibetan_source": null,
+          "acip": "NGAG",
+          "pronunciation": "ngak",
+          "pronunciation_source": "GMR card (C03 Language Study Guide)",
+          "sanskrit": "{LCh,L,MSA,MV}vāk; vāc; {LC}irā; {LC}upadeśa; {LC}vaidyopadeśa; {LC}go; {LC}pralāpa; {LC}bhāratī; {LC}vacana; {LC}vacas; {LC}vākya; {LC}vaidyavākya; {LC}vāca; {LC}vāṇī; {LC}[samyag] vāk; {LC}iḍā; {LC}ga",
+          "hopkins_english": "speech",
+          "hgm_gloss": "[\"speech\", \"words\", \"verbally\", \"statement\", \"verbal\", \"talk\", \"instruction\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C13\", \"C14\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P9\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"]",
+          "corpus_n_segments": 824,
+          "raw": "{\"tibetan\": \"ངག\", \"wylie\": \"ngag\", \"wylie_variants\": [\"ngag\"], \"tenses\": null, \"sanskrit\": \"{LCh,L,MSA,MV}vāk; vāc; {LC}irā; {LC}upadeśa; {LC}vaidyopadeśa; {LC}go; {LC}pralāpa; {LC}bhāratī; {LC}vacana; {LC}vacas; {LC}vākya; {LC}vaidyavākya; {LC}vāca; {LC}vāṇī; {LC}[samyag] vāk; {LC}iḍā; {LC}ga\", \"hopkins_english\": \"speech\", \"hgm_gloss\": [\"speech\", \"words\", \"verbally\", \"statement\", \"verbal\", \"talk\", \"instruction\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested\", \"pronunciation\": \"ngak\", \"acip\": \"NGAG\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C01\", \"C02\", \"C03\", \"C05\", \"C07\", \"C08\", \"C09\", \"C10\", \"C11\", \"C13\", \"C14\", \"C16\", \"C17\", \"C18\", \"DDA\", \"EM\", \"GIE\", \"GK\", \"ILL\", \"MB2\", \"P1\", \"P10\", \"P3\", \"P4\", \"P5\", \"P6\", \"P9\", \"TCS01\", \"TCS02\", \"TCS03\", \"TCS04Initiation\", \"TCS04Mantras\", \"TCS04PrayerBook\", \"TCS05\", \"TCS06\", \"TCS07\", \"TCS08NaropaSadhana\", \"TCS08NaropaTrials1_12\", \"TCS08PabongkaSadhana\", \"TCS08ThousandAngels\", \"TCS09\", \"TCS10\", \"TCS11\", \"TCS12\", \"TCS13\", \"TCS14\", \"TCS15\", \"TCS16KaliWang\", \"TCS16Reading\", \"TCS17\", \"TCS18Commentary\", \"TCS18LamaChupa\"], \"n_segments\": 824}, \"pronunciation_source\": \"GMR card (C03 Language Study Guide)\", \"lc_merged\": \"lc-v27\"}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:3405",
+        "glossary_entries:1433"
+      ]
+    },
+    {
+      "term": "kyal",
+      "sql": "SELECT DISTINCT e.* FROM entries e LEFT JOIN entry_variants v ON v.entry_id=e.id WHERE e.wylie=? OR v.wylie=? ORDER BY e.id",
+      "parameters": [
+        "kyal",
+        "kyal"
+      ],
+      "spine_count": 1,
+      "spine_rows": [
+        {
+          "id": 21785,
+          "wylie": "kyal",
+          "tibetan": "ཀྱལ",
+          "tibetan_source": null,
+          "acip": "KYAL",
+          "pronunciation": "kyel",
+          "pronunciation_source": null,
+          "sanskrit": null,
+          "hopkins_english": null,
+          "hgm_gloss": "[\"meaningless\"]",
+          "tier": "glossary",
+          "hgm_source": "HTG2016",
+          "status": "hgm-attested (not in Great Dictionary)",
+          "tenses": null,
+          "flags": null,
+          "corpus_courses": "[\"AK\", \"C05\", \"C09\", \"C16\", \"C17\", \"GIE\", \"TCS02\"]",
+          "corpus_n_segments": 17,
+          "raw": "{\"tibetan\": \"ཀྱལ\", \"wylie\": \"kyal\", \"wylie_variants\": [\"kyal\"], \"tenses\": null, \"sanskrit\": null, \"hopkins_english\": null, \"hgm_gloss\": [\"meaningless\"], \"hgm_evidence\": {\"tier\": \"glossary\", \"source\": \"HTG2016\"}, \"status\": \"hgm-attested (not in Great Dictionary)\", \"pronunciation\": \"kyel\", \"acip\": \"KYAL\", \"corpus_occurrences\": {\"courses\": [\"AK\", \"C05\", \"C09\", \"C16\", \"C17\", \"GIE\", \"TCS02\"], \"n_segments\": 17}}"
+        }
+      ],
+      "master_count": 2,
+      "master_keys": [
+        "unified_entries:21784",
+        "glossary_entries:71"
+      ]
+    }
+  ],
+  "master_objects": {
+    "unified_entries:19645": {
+      "collection": "unified_entries",
+      "index": 19645,
+      "entry": {
+        "tibetan": "ལོག",
+        "wylie": "log",
+        "wylie_variants": [
+          "log"
+        ],
+        "tenses": null,
+        "sanskrit": "nirvṛtti; nirvartana; {LC}nivṛtta; {LC}pratinivṛtta; {LC}nivṛtti; {LC}pratinivṛtya; {LC}mithyā; {LC}vi!!; {LC}vināyaka; {LC}viparyaya; {LC}vipratipatti; {LC}ut!!; {LC}unmārga; {LC}saṃdarśitakhredavaktra; {LC}jāgaraṇa; {LC}parimlāna; {LC}malina; {LC}virata",
+        "hopkins_english": "reverse; opposite; wrong; mistaken; unreal; overcome; to return; turn from; return; turn around; be turned upside down; dispose of; ceasing",
+        "hgm_gloss": [
+          "stop",
+          "turns back",
+          "stopping",
+          "wrong",
+          "turn back",
+          "opposite way",
+          "turn it around",
+          "mistaken",
+          "order"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "lok",
+        "acip": "LOG",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C03",
+            "C04",
+            "C05",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P7",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaSadhana",
+            "TCS08NaropaTrials1_12",
+            "TCS08SourceOfAllMyGood",
+            "TCS09",
+            "TCS10",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 776
+        },
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:7271": {
+      "collection": "glossary_entries",
+      "index": 7271,
+      "entry": {
+        "acip": "LOG",
+        "wylie": "log",
+        "tibetan": "ལོག",
+        "hgm_glosses": [
+          "stop",
+          "turns back",
+          "stopping",
+          "wrong",
+          "turn back",
+          "opposite way",
+          "turn it around",
+          "mistaken",
+          "order"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:6814": {
+      "collection": "unified_entries",
+      "index": 6814,
+      "entry": {
+        "tibetan": "ལྟ",
+        "wylie": "lta",
+        "wylie_variants": [
+          "lta"
+        ],
+        "tenses": "blta lta bltas ltos",
+        "sanskrit": "{LCH} darśana; {MV}dṛṣṭi; {MSA}dṛṣṭika; {C}dṛk; {C}darśin; {C}dṛṣṭi-gata; {C}ālokite; {C} vyavalokayati; {C}īkṣaṇa; {MSA}(sam-ud √īkṣ): samudīkṣate; {MSA}phan lta = upakarekṣaṇa; {LC}na kāyasāvekṣī; {LC}iva; {LC}upama; {LC}kṣuradhārā-madhūpama; {LC}bhayadarśin; {LC}dṛṣṭa; {LC}satkāyadṛṣṭe hi vimukta-mānasaḥ; {LC}nirīkṣamāṇa; {LC}paśyati; {LC}paśyeccaturdiśam; {LC}prekṣante; {LC}prekṣāvahe; {LC}yādṛśī; {LC}na samanupaśyati; {LC}na paśyet; {LC}ālokana; {LC}īkṣante; {LC}dṛṣṭīgata; {LC}kathaṃ draṣṭā; {LC}paśyatha; {LC}paśyāmi; {LC}mṛga; {LC}vilokana",
+        "hopkins_english": "verb: view; look; see; read; noun: view; false view; {C}spectator; one who can demonstrate; one who sees; beholding; bound up with false views; looking towards; looking upon; eyes; see; views; behold; survey; consider; look down on",
+        "hgm_gloss": [
+          "entertain",
+          "consider",
+          "consult",
+          "imagine",
+          "view",
+          "viewpoints",
+          "viewpoint",
+          "views",
+          "position",
+          "ideas"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "ta",
+        "acip": "LTA",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C04",
+            "C05",
+            "C06",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C12",
+            "C13",
+            "C14",
+            "C15",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "DTE",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P3",
+            "P5",
+            "P6",
+            "P7",
+            "P8",
+            "P9",
+            "SOS",
+            "SPF",
+            "Sunlight",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaSadhana",
+            "TCS08NaropaTrials1_12",
+            "TCS08PabongkaSadhana",
+            "TCS08ThousandAngels",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 3507
+        },
+        "pronunciation_source": "GMR card (C15 Language Study Guide)",
+        "hopkins_realigned": "uma-v26",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:2677": {
+      "collection": "glossary_entries",
+      "index": 2677,
+      "entry": {
+        "acip": "LTA",
+        "wylie": "lta",
+        "tibetan": "ལྟ",
+        "hgm_glosses": [
+          "entertain",
+          "consider",
+          "consult",
+          "imagine",
+          "view",
+          "viewpoints",
+          "viewpoint",
+          "views",
+          "position",
+          "ideas"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:3405": {
+      "collection": "unified_entries",
+      "index": 3405,
+      "entry": {
+        "tibetan": "ངག",
+        "wylie": "ngag",
+        "wylie_variants": [
+          "ngag"
+        ],
+        "tenses": null,
+        "sanskrit": "{LCh,L,MSA,MV}vāk; vāc; {LC}irā; {LC}upadeśa; {LC}vaidyopadeśa; {LC}go; {LC}pralāpa; {LC}bhāratī; {LC}vacana; {LC}vacas; {LC}vākya; {LC}vaidyavākya; {LC}vāca; {LC}vāṇī; {LC}[samyag] vāk; {LC}iḍā; {LC}ga",
+        "hopkins_english": "speech",
+        "hgm_gloss": [
+          "speech",
+          "words",
+          "verbally",
+          "statement",
+          "verbal",
+          "talk",
+          "instruction"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested",
+        "pronunciation": "ngak",
+        "acip": "NGAG",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C01",
+            "C02",
+            "C03",
+            "C05",
+            "C07",
+            "C08",
+            "C09",
+            "C10",
+            "C11",
+            "C13",
+            "C14",
+            "C16",
+            "C17",
+            "C18",
+            "DDA",
+            "EM",
+            "GIE",
+            "GK",
+            "ILL",
+            "MB2",
+            "P1",
+            "P10",
+            "P3",
+            "P4",
+            "P5",
+            "P6",
+            "P9",
+            "TCS01",
+            "TCS02",
+            "TCS03",
+            "TCS04Initiation",
+            "TCS04Mantras",
+            "TCS04PrayerBook",
+            "TCS05",
+            "TCS06",
+            "TCS07",
+            "TCS08NaropaSadhana",
+            "TCS08NaropaTrials1_12",
+            "TCS08PabongkaSadhana",
+            "TCS08ThousandAngels",
+            "TCS09",
+            "TCS10",
+            "TCS11",
+            "TCS12",
+            "TCS13",
+            "TCS14",
+            "TCS15",
+            "TCS16KaliWang",
+            "TCS16Reading",
+            "TCS17",
+            "TCS18Commentary",
+            "TCS18LamaChupa"
+          ],
+          "n_segments": 824
+        },
+        "pronunciation_source": "GMR card (C03 Language Study Guide)",
+        "lc_merged": "lc-v27"
+      }
+    },
+    "glossary_entries:1433": {
+      "collection": "glossary_entries",
+      "index": 1433,
+      "entry": {
+        "acip": "NGAG",
+        "wylie": "ngag",
+        "tibetan": "ངག",
+        "hgm_glosses": [
+          "speech",
+          "words",
+          "verbally",
+          "statement",
+          "verbal",
+          "talk",
+          "instruction"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    },
+    "unified_entries:21784": {
+      "collection": "unified_entries",
+      "index": 21784,
+      "entry": {
+        "tibetan": "ཀྱལ",
+        "wylie": "kyal",
+        "wylie_variants": [
+          "kyal"
+        ],
+        "tenses": null,
+        "sanskrit": null,
+        "hopkins_english": null,
+        "hgm_gloss": [
+          "meaningless"
+        ],
+        "hgm_evidence": {
+          "tier": "glossary",
+          "source": "HTG2016"
+        },
+        "status": "hgm-attested (not in Great Dictionary)",
+        "pronunciation": "kyel",
+        "acip": "KYAL",
+        "corpus_occurrences": {
+          "courses": [
+            "AK",
+            "C05",
+            "C09",
+            "C16",
+            "C17",
+            "GIE",
+            "TCS02"
+          ],
+          "n_segments": 17
+        }
+      }
+    },
+    "glossary_entries:71": {
+      "collection": "glossary_entries",
+      "index": 71,
+      "entry": {
+        "acip": "KYAL",
+        "wylie": "kyal",
+        "tibetan": "ཀྱལ",
+        "hgm_glosses": [
+          "meaningless"
+        ],
+        "source": "Hypertext Glossary (2016-05-16)",
+        "status": "glossary-attested"
+      }
+    }
+  }
+}

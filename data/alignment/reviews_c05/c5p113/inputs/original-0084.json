@@ -1,0 +1,98 @@
+{
+  "seq": 337,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical witness",
+      "source_record": {
+        "id": 1719,
+        "course": "C05",
+        "seq": 337,
+        "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+        "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+        "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+      },
+      "physical_evidence": "../evidence/physical-extents.json",
+      "finding": "Complete ACIP and English ASCII extents match after whitespace collapse; complete Wylie and English are unchanged from the spine. Physical agreement proves the available digital source reading, not publication independence."
+    },
+    {
+      "ground": 2,
+      "name": "complete parallel records and search scope",
+      "evidence": "../evidence/corpus.json",
+      "finding": "C16:862 repeats all three complete text fields, with differing row identity. Exact-field queries each return2 including C05:337. No independently published witness was obtained."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and known classes",
+      "original_git_object": "2366cbeab00a4b89ea77947ed9c50e148e180d1d:docs/errata_register.json",
+      "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5",
+      "register_count": 199,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register.json",
+        "../evidence/register-material-classes.json",
+        "../evidence/governing/docs/errata_register.json"
+      ],
+      "finding": "All199 records screened for current-segment references; no direct match. Registered converter, running-head, cap, spill and fused-footnote classes were read. Following-heading handling is explicit in the governing brief/spec. No registered class refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/supplemental-lexical.json",
+        "../evidence/original-context-rows.json"
+      ],
+      "finding": "No new source error identified. The lexicalized long sexual-misconduct term is directly attested; the precise force of cher/deep-seated is an alignment question, not proof of an English factual error.",
+      "counterevidence": "Shared text may preserve an upstream error, and the absence of a corrected independent witness cannot by itself disprove one. Here no sufficiently supported new defect remains after the local language/context and apparatus checks; uncertain correspondences remain omissions."
+    },
+    {
+      "ground": 5,
+      "name": "measured lengths and limits",
+      "characters": {
+        "acip": 182,
+        "wylie": 181,
+        "english": 249
+      },
+      "utf8_bytes": {
+        "acip": 182,
+        "wylie": 181,
+        "english": 249
+      },
+      "english_equals_1500": false,
+      "finding": "English is below1500 characters and has the complete physical-field ending; no evidence of the registered cap or a stranded final Tibetan syllable. These measurements do not establish semantic correspondence."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Exact ACIP/Wylie and material lexical forms have no supported new spelling defect; variants and bound endings are preserved."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No new source error identified. The lexicalized long sexual-misconduct term is directly attested; the precise force of cher/deep-seated is an alignment question, not proof of an English factual error."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No independently supported factual discrepancy. Interpretive metaphor, lexical paraphrase and discourse expansion are handled by narrow spans or omissions."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Complete physical fields and neighboring context show no newly supported truncation, converter loss, running head or row spill."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "Original punctuation, capitalization and list dashes preserved; no supported new formatting defect."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

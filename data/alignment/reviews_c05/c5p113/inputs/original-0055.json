@@ -1,0 +1,20 @@
+{
+  "actual_tool_read_failures": [
+    {
+      "exit": 1,
+      "command": "cat prior Tibetan proposal/run_native.py",
+      "reason": "Prior native helper is in helpers/run_native.py, found by listing; no files changed."
+    },
+    {
+      "exit": 1,
+      "command": "cat prior Tibetan helpers/capture_evidence.py",
+      "reason": "Prior capture helper is named capture.py, found by listing; no files changed."
+    },
+    {
+      "exit": 1,
+      "command": "cat campaign-artifacts/C05-334-336/tibetan/packaging-native/execution.json",
+      "reason": "Actual prior record directory is package-attempt02-native, located with rg; no production or proposal files changed by the failed read."
+    }
+  ],
+  "capture": "Actual direct exec_command output; no separate native streams were retained for these read-only path lookups."
+}

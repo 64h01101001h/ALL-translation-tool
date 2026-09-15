@@ -1,0 +1,1617 @@
+{
+  "seq": 337,
+  "judgment_by": "root",
+  "status": "PROVISIONAL_ROOT_RECONCILIATION; independent review pending",
+  "original_screens": [
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "screens",
+      "source_file": "five-ground-screens.json",
+      "index": 0,
+      "original": {
+        "seq": 337,
+        "kind": "TIBETAN_SPELLING",
+        "found": "MA BYIN LEN",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "MA BYIN LEN",
+            "source_row": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "occurrences": {
+              "acip": [
+                37
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              }
+            ],
+            "complete_witness": "../evidence/corpus.json complete_records/6880",
+            "witness_course": "C16",
+            "witness_seq": 862,
+            "fields_compared": [
+              "acip",
+              "wylie",
+              "english"
+            ],
+            "acip_equal": true,
+            "wylie_equal": true,
+            "english_equal": true,
+            "external_parallel": true,
+            "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+            "register_identity": {
+              "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 275782,
+              "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+            },
+            "count": 199,
+            "direct_matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ]
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "at_1500_cap": false,
+            "physical_extents": [
+              {
+                "seq": 337,
+                "field": "acip",
+                "start": 232876,
+                "bytes": 182,
+                "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 337,
+                "field": "english",
+                "start": 233060,
+                "bytes": 252,
+                "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+          },
+          "d_defensibility": {
+            "judgment": "No spelling correction in this row. This actual prose is LEN; the earlier distinct335 verse LAN question is outside these originals. Raw G-YEM is retained with its exact HGM compound and EWTS-warning, not silently normalized.",
+            "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+          }
+        }
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "screens",
+      "source_file": "five-ground-screens.json",
+      "index": 1,
+      "original": {
+        "seq": 337,
+        "kind": "ENGLISH_TYPO",
+        "found": "deep-seated lack of understanding",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "deep-seated lack of understanding",
+            "source_row": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                215
+              ]
+            }
+          },
+          "b_parallel": {
+            "queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              }
+            ],
+            "complete_witness": "../evidence/corpus.json complete_records/6880",
+            "witness_course": "C16",
+            "witness_seq": 862,
+            "fields_compared": [
+              "acip",
+              "wylie",
+              "english"
+            ],
+            "acip_equal": true,
+            "wylie_equal": true,
+            "english_equal": true,
+            "external_parallel": true,
+            "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+            "register_identity": {
+              "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 275782,
+              "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+            },
+            "count": 199,
+            "direct_matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ]
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "at_1500_cap": false,
+            "physical_extents": [
+              {
+                "seq": 337,
+                "field": "acip",
+                "start": 232876,
+                "bytes": 182,
+                "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 337,
+                "field": "english",
+                "start": 233060,
+                "bytes": 252,
+                "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+          },
+          "d_defensibility": {
+            "judgment": "No demonstrated typo. The complete intensity phrase is a coherent recast of cher rmongs pa; absence of an exact cher/deep-seated gloss limits atomization rather than proving an English error.",
+            "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+          }
+        }
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "screens",
+      "source_file": "five-ground-screens.json",
+      "index": 2,
+      "original": {
+        "seq": 337,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "an ignorance of things",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "an ignorance of things",
+            "source_row": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                158
+              ]
+            }
+          },
+          "b_parallel": {
+            "queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              }
+            ],
+            "complete_witness": "../evidence/corpus.json complete_records/6880",
+            "witness_course": "C16",
+            "witness_seq": 862,
+            "fields_compared": [
+              "acip",
+              "wylie",
+              "english"
+            ],
+            "acip_equal": true,
+            "wylie_equal": true,
+            "english_equal": true,
+            "external_parallel": true,
+            "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+            "register_identity": {
+              "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 275782,
+              "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+            },
+            "count": 199,
+            "direct_matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ]
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "at_1500_cap": false,
+            "physical_extents": [
+              {
+                "seq": 337,
+                "field": "acip",
+                "start": 232876,
+                "bytes": 182,
+                "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 337,
+                "field": "english",
+                "start": 233060,
+                "bytes": 252,
+                "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+          },
+          "d_defensibility": {
+            "judgment": "No factual correction: ignorance completes mistaken views and gives rise to them in the reason clause. The explanatory of things is not a separately attested gti mug gloss and remains unwrapped.",
+            "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+          }
+        }
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "screens",
+      "source_file": "five-ground-screens.json",
+      "index": 3,
+      "original": {
+        "seq": 337,
+        "kind": "INGEST_ARTEFACT",
+        "found": "Another three--the non-virtues of",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Another three--the non-virtues of",
+            "source_row": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                0
+              ]
+            }
+          },
+          "b_parallel": {
+            "queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              }
+            ],
+            "complete_witness": "../evidence/corpus.json complete_records/6880",
+            "witness_course": "C16",
+            "witness_seq": 862,
+            "fields_compared": [
+              "acip",
+              "wylie",
+              "english"
+            ],
+            "acip_equal": true,
+            "wylie_equal": true,
+            "english_equal": true,
+            "external_parallel": true,
+            "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+            "register_identity": {
+              "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 275782,
+              "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+            },
+            "count": 199,
+            "direct_matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ]
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "at_1500_cap": false,
+            "physical_extents": [
+              {
+                "seq": 337,
+                "field": "acip",
+                "start": 232876,
+                "bytes": 182,
+                "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 337,
+                "field": "english",
+                "start": 233060,
+                "bytes": 252,
+                "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+          },
+          "d_defensibility": {
+            "judgment": "Complete physical source and duplicate prose agree; double hyphens preserve list framing, with no cap, spill, or heading defect in this segment.",
+            "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+          }
+        }
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "field": "screens",
+      "source_file": "five-ground-screens.json",
+      "index": 4,
+      "original": {
+        "seq": 337,
+        "kind": "FORMATTING",
+        "found": "Mistaken views",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Mistaken views",
+            "source_row": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                114
+              ]
+            }
+          },
+          "b_parallel": {
+            "queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 337,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1719,
+                  6880
+                ]
+              }
+            ],
+            "complete_witness": "../evidence/corpus.json complete_records/6880",
+            "witness_course": "C16",
+            "witness_seq": 862,
+            "fields_compared": [
+              "acip",
+              "wylie",
+              "english"
+            ],
+            "acip_equal": true,
+            "wylie_equal": true,
+            "english_equal": true,
+            "external_parallel": true,
+            "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+            "register_identity": {
+              "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 275782,
+              "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+            },
+            "count": 199,
+            "direct_matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ]
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "at_1500_cap": false,
+            "physical_extents": [
+              {
+                "seq": 337,
+                "field": "acip",
+                "start": 232876,
+                "bytes": 182,
+                "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 337,
+                "field": "english",
+                "start": 233060,
+                "bytes": 252,
+                "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+          },
+          "d_defensibility": {
+            "judgment": "This capital starts the second prose sentence. Preserve capitalization and punctuation; no new formatting defect.",
+            "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+          }
+        }
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "field": "category_screen",
+      "source_file": "errata-review.json",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Exact ACIP/Wylie and material lexical forms have no supported new spelling defect; variants and bound endings are preserved."
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "field": "category_screen",
+      "source_file": "errata-review.json",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No new source error identified. The lexicalized long sexual-misconduct term is directly attested; the precise force of cher/deep-seated is an alignment question, not proof of an English factual error."
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "field": "category_screen",
+      "source_file": "errata-review.json",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No independently supported factual discrepancy. Interpretive metaphor, lexical paraphrase and discourse expansion are handled by narrow spans or omissions."
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "field": "category_screen",
+      "source_file": "errata-review.json",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Complete physical fields and neighboring context show no newly supported truncation, converter loss, running head or row spill."
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "field": "category_screen",
+      "source_file": "errata-review.json",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "Original punctuation, capitalization and list dashes preserved; no supported new formatting defect."
+      },
+      "disposition": "ACCEPT_NO_NEW_ERRATUM",
+      "reason": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 337,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 337,
+          "kind": "TIBETAN_SPELLING",
+          "found": "MA BYIN LEN",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "MA BYIN LEN",
+              "source_row": {
+                "id": 1719,
+                "course": "C05",
+                "seq": 337,
+                "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+                "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+              },
+              "occurrences": {
+                "acip": [
+                  37
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                }
+              ],
+              "complete_witness": "../evidence/corpus.json complete_records/6880",
+              "witness_course": "C16",
+              "witness_seq": 862,
+              "fields_compared": [
+                "acip",
+                "wylie",
+                "english"
+              ],
+              "acip_equal": true,
+              "wylie_equal": true,
+              "english_equal": true,
+              "external_parallel": true,
+              "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "register_identity": {
+                "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 275782,
+                "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+              },
+              "count": 199,
+              "direct_matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ]
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 182,
+                "wylie": 181,
+                "english": 249
+              },
+              "at_1500_cap": false,
+              "physical_extents": [
+                {
+                  "seq": 337,
+                  "field": "acip",
+                  "start": 232876,
+                  "bytes": 182,
+                  "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                  "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 337,
+                  "field": "english",
+                  "start": 233060,
+                  "bytes": 252,
+                  "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                  "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+            },
+            "d_defensibility": {
+              "judgment": "No spelling correction in this row. This actual prose is LEN; the earlier distinct335 verse LAN question is outside these originals. Raw G-YEM is retained with its exact HGM compound and EWTS-warning, not silently normalized.",
+              "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+            }
+          }
+        },
+        {
+          "seq": 337,
+          "kind": "ENGLISH_TYPO",
+          "found": "deep-seated lack of understanding",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "deep-seated lack of understanding",
+              "source_row": {
+                "id": 1719,
+                "course": "C05",
+                "seq": 337,
+                "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+                "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  215
+                ]
+              }
+            },
+            "b_parallel": {
+              "queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                }
+              ],
+              "complete_witness": "../evidence/corpus.json complete_records/6880",
+              "witness_course": "C16",
+              "witness_seq": 862,
+              "fields_compared": [
+                "acip",
+                "wylie",
+                "english"
+              ],
+              "acip_equal": true,
+              "wylie_equal": true,
+              "english_equal": true,
+              "external_parallel": true,
+              "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "register_identity": {
+                "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 275782,
+                "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+              },
+              "count": 199,
+              "direct_matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ]
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 182,
+                "wylie": 181,
+                "english": 249
+              },
+              "at_1500_cap": false,
+              "physical_extents": [
+                {
+                  "seq": 337,
+                  "field": "acip",
+                  "start": 232876,
+                  "bytes": 182,
+                  "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                  "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 337,
+                  "field": "english",
+                  "start": 233060,
+                  "bytes": 252,
+                  "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                  "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+            },
+            "d_defensibility": {
+              "judgment": "No demonstrated typo. The complete intensity phrase is a coherent recast of cher rmongs pa; absence of an exact cher/deep-seated gloss limits atomization rather than proving an English error.",
+              "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+            }
+          }
+        },
+        {
+          "seq": 337,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "an ignorance of things",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "an ignorance of things",
+              "source_row": {
+                "id": 1719,
+                "course": "C05",
+                "seq": 337,
+                "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+                "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  158
+                ]
+              }
+            },
+            "b_parallel": {
+              "queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                }
+              ],
+              "complete_witness": "../evidence/corpus.json complete_records/6880",
+              "witness_course": "C16",
+              "witness_seq": 862,
+              "fields_compared": [
+                "acip",
+                "wylie",
+                "english"
+              ],
+              "acip_equal": true,
+              "wylie_equal": true,
+              "english_equal": true,
+              "external_parallel": true,
+              "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "register_identity": {
+                "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 275782,
+                "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+              },
+              "count": 199,
+              "direct_matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ]
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 182,
+                "wylie": 181,
+                "english": 249
+              },
+              "at_1500_cap": false,
+              "physical_extents": [
+                {
+                  "seq": 337,
+                  "field": "acip",
+                  "start": 232876,
+                  "bytes": 182,
+                  "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                  "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 337,
+                  "field": "english",
+                  "start": 233060,
+                  "bytes": 252,
+                  "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                  "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+            },
+            "d_defensibility": {
+              "judgment": "No factual correction: ignorance completes mistaken views and gives rise to them in the reason clause. The explanatory of things is not a separately attested gti mug gloss and remains unwrapped.",
+              "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+            }
+          }
+        },
+        {
+          "seq": 337,
+          "kind": "INGEST_ARTEFACT",
+          "found": "Another three--the non-virtues of",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Another three--the non-virtues of",
+              "source_row": {
+                "id": 1719,
+                "course": "C05",
+                "seq": 337,
+                "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+                "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  0
+                ]
+              }
+            },
+            "b_parallel": {
+              "queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                }
+              ],
+              "complete_witness": "../evidence/corpus.json complete_records/6880",
+              "witness_course": "C16",
+              "witness_seq": 862,
+              "fields_compared": [
+                "acip",
+                "wylie",
+                "english"
+              ],
+              "acip_equal": true,
+              "wylie_equal": true,
+              "english_equal": true,
+              "external_parallel": true,
+              "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "register_identity": {
+                "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 275782,
+                "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+              },
+              "count": 199,
+              "direct_matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ]
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 182,
+                "wylie": 181,
+                "english": 249
+              },
+              "at_1500_cap": false,
+              "physical_extents": [
+                {
+                  "seq": 337,
+                  "field": "acip",
+                  "start": 232876,
+                  "bytes": 182,
+                  "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                  "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 337,
+                  "field": "english",
+                  "start": 233060,
+                  "bytes": 252,
+                  "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                  "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+            },
+            "d_defensibility": {
+              "judgment": "Complete physical source and duplicate prose agree; double hyphens preserve list framing, with no cap, spill, or heading defect in this segment.",
+              "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+            }
+          }
+        },
+        {
+          "seq": 337,
+          "kind": "FORMATTING",
+          "found": "Mistaken views",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Mistaken views",
+              "source_row": {
+                "id": 1719,
+                "course": "C05",
+                "seq": 337,
+                "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+                "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  114
+                ]
+              }
+            },
+            "b_parallel": {
+              "queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 337,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1719,
+                    6880
+                  ]
+                }
+              ],
+              "complete_witness": "../evidence/corpus.json complete_records/6880",
+              "witness_course": "C16",
+              "witness_seq": 862,
+              "fields_compared": [
+                "acip",
+                "wylie",
+                "english"
+              ],
+              "acip_equal": true,
+              "wylie_equal": true,
+              "english_equal": true,
+              "external_parallel": true,
+              "lineage_limit": "All three complete fields agree with C16:862. Digital duplication does not establish independent publication or a corrected witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+              "register_identity": {
+                "original_git_commit": "2366cbeab00a4b89ea77947ed9c50e148e180d1d",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 275782,
+                "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5"
+              },
+              "count": 199,
+              "direct_matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ]
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 182,
+                "wylie": 181,
+                "english": 249
+              },
+              "at_1500_cap": false,
+              "physical_extents": [
+                {
+                  "seq": 337,
+                  "field": "acip",
+                  "start": 232876,
+                  "bytes": 182,
+                  "sha256": "a991d8c1dee439defbbcc7cc06903fd526c9185051d0e37dbaf33106e8b315bb",
+                  "original_text": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 337,
+                  "field": "english",
+                  "start": 233060,
+                  "bytes": 252,
+                  "sha256": "6f808d7668fd32bca532e140ada4893f7bc216113c80b6279a89e33c79a1dd01",
+                  "original_text": "Another three--the non-virtues of sexual misconduct, coveting, and\r\nstealing--are brought to completion by desire. Mistaken views are brought\r\nto completion by an ignorance of things, for mistaken views spring from a\r\ndeep-seated lack of understanding.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;48 exact lexical queries and3 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+            },
+            "d_defensibility": {
+              "judgment": "This capital starts the second prose sentence. Preserve capitalization and punctuation; no new formatting defect.",
+              "material": "../evidence/lexical.json complete master_objects and exact query records; original-decisions.json source-specific rationales"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 337,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 337,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical witness",
+            "source_record": {
+              "id": 1719,
+              "course": "C05",
+              "seq": 337,
+              "acip": "'DOD PAS LOG PAR G-YEM PA BRNAB SEMS MA BYIN LEN GSUM 'DOD CHAGS KYIS NI RDZOGS PAR BYED, LOG PAR LTA BA GTI MUG GIS RDZOGS PAR BYED DE, CHER RMONGS PA LAS LOG LTA 'BYUNG BA'I PHYIR,",
+              "wylie": "'dod pas log par g-yem pa brnab sems ma byin len gsum 'dod chags kyis ni rdzogs par byed, log par lta ba gti mug gis rdzogs par byed de, cher rmongs pa las log lta 'byung ba'i phyir",
+              "english": "Another three--the non-virtues of sexual misconduct, coveting, and stealing--are brought to completion by desire. Mistaken views are brought to completion by an ignorance of things, for mistaken views spring from a deep-seated lack of understanding."
+            },
+            "physical_evidence": "../evidence/physical-extents.json",
+            "finding": "Complete ACIP and English ASCII extents match after whitespace collapse; complete Wylie and English are unchanged from the spine. Physical agreement proves the available digital source reading, not publication independence."
+          },
+          {
+            "ground": 2,
+            "name": "complete parallel records and search scope",
+            "evidence": "../evidence/corpus.json",
+            "finding": "C16:862 repeats all three complete text fields, with differing row identity. Exact-field queries each return2 including C05:337. No independently published witness was obtained."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and known classes",
+            "original_git_object": "2366cbeab00a4b89ea77947ed9c50e148e180d1d:docs/errata_register.json",
+            "sha256": "bcdb20769d1d5aa319781e4aa04b3958d757a328a96760b4659efd26bb9057c5",
+            "register_count": 199,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register.json",
+              "../evidence/register-material-classes.json",
+              "../evidence/governing/docs/errata_register.json"
+            ],
+            "finding": "All199 records screened for current-segment references; no direct match. Registered converter, running-head, cap, spill and fused-footnote classes were read. Following-heading handling is explicit in the governing brief/spec. No registered class refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/supplemental-lexical.json",
+              "../evidence/original-context-rows.json"
+            ],
+            "finding": "No new source error identified. The lexicalized long sexual-misconduct term is directly attested; the precise force of cher/deep-seated is an alignment question, not proof of an English factual error.",
+            "counterevidence": "Shared text may preserve an upstream error, and the absence of a corrected independent witness cannot by itself disprove one. Here no sufficiently supported new defect remains after the local language/context and apparatus checks; uncertain correspondences remain omissions."
+          },
+          {
+            "ground": 5,
+            "name": "measured lengths and limits",
+            "characters": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "utf8_bytes": {
+              "acip": 182,
+              "wylie": 181,
+              "english": 249
+            },
+            "english_equals_1500": false,
+            "finding": "English is below1500 characters and has the complete physical-field ending; no evidence of the registered cap or a stranded final Tibetan syllable. These measurements do not establish semantic correspondence."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Exact ACIP/Wylie and material lexical forms have no supported new spelling defect; variants and bound endings are preserved."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No new source error identified. The lexicalized long sexual-misconduct term is directly attested; the precise force of cher/deep-seated is an alignment question, not proof of an English factual error."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No independently supported factual discrepancy. Interpretive metaphor, lexical paraphrase and discourse expansion are handled by narrow spans or omissions."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Complete physical fields and neighboring context show no newly supported truncation, converter loss, running head or row spill."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "Original punctuation, capitalization and list dashes preserved; no supported new formatting defect."
+          }
+        ],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "final_judgment": "No new errata, source correction or head allowance. Root read all30 source-category judgments and their material five-ground evidence; physical source and full parallels support preservation, while no independent corrected witness or demonstrated new error is established. Source339 has no external exact witness. The338 heading is an already-registered class.",
+  "final_errata": []
+}
