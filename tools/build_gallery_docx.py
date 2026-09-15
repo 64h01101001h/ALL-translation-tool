@@ -86,7 +86,7 @@ PANES = {
  '15': ('Trainer', 'Learning to read, layer by layer: clause '
         'boundaries, particle roles, reading order, vocabulary, '
         'then the answer key — the master’s own English wherever '
-        'the passage lives in his corpus.'),
+        "the passage lives in Geshe Michael's corpus."),
  '16': ('Drills', 'Exercises that write themselves from the corpus — '
         'every answer is the master’s own text. Scrambles, '
         'fill-ins, particle choices, parallel reading, review.'),
@@ -197,7 +197,7 @@ def main():
     p = para(doc, WD_ALIGN_PARAGRAPH.CENTER, 6)
     add_run(p, 'Every screen above runs fully offline on a Mac, built '
                'on Geshe Michael Roach’s dictionary of 105,634 '
-               'entries and his corpus of 42,199 aligned passages. The '
+               "entries and Geshe Michael's corpus of 42,199 aligned passages. The "
                'queue in pane 15 is real: 205 machine-derived '
                'pronunciations awaiting the authority’s ruling.',
             size=9.5, italic=True, color=INKSOFT)

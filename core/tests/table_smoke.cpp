@@ -21,14 +21,14 @@ int main() {
     // 1 — RFC-4180 quoting: a quoted comma and a doubled quote
     {
         const Table t = readDelimited(
-            "a,b,c\n1,\"b,with,commas\",\"he said \"\"hi\"\"\"\n");
+            "a,b,c\n1,\"b,with,commas\",\"Geshe Michael said \"\"hi\"\"\"\n");
         CHECK(t.delimiter == ',' && t.headerFromFile &&
                   t.columns == std::vector<std::string>({"a", "b", "c"}),
               "T1 header read from the file; comma delimiter");
         CHECK(t.rows.size() == 1 &&
                   t.rows[0].cells ==
                       std::vector<std::string>({"1", "b,with,commas",
-                                                "he said \"hi\""}),
+                                                "Geshe Michael said \"hi\""}),
               "T1 a quoted comma stays in the cell and \"\" becomes one quote");
         CHECK(t.rows.size() == 1 && t.rows[0].sourceLine == 2 &&
                   t.refusedRows == 0,

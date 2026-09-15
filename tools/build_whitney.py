@@ -60,7 +60,7 @@ def main() -> int:
             m = rx.match(line.strip())
             if m:
                 # Whitney's own annotations kept verbatim: "(?)" marks
-                # a doubtful root; "(see √X)" is his cross-reference
+                # a doubtful root; "(see √X)" is Geshe Michael's cross-reference
                 meaning = m.group(5) or ("see √" + m.group(6).strip())
                 if m.group(4):
                     meaning += " [doubtful root (?)]"

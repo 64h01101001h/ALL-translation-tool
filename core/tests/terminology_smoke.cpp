@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     {   // Maximality never crosses tiers. A longer AUTO-ALIGNED span must
         // not delete a curated term inside it: the row is never built, so no
         // downstream label can rescue it, and the report then reads as an
-        // unrendered term for a draft that used his equivalent verbatim.
+        // unrendered term for a draft that used Geshe Michael's equivalent verbatim.
         //
         // SANGS RGYAS CHOS is the measured repro. Before the tier guard the
         // report held exactly ONE term -- `sangs rgyas chos`, auto-aligned,
@@ -94,12 +94,12 @@ int main(int argc, char** argv) {
         }
         CHECK(sr && sr->tier == "curated",
               "a curated term survives a longer auto-aligned container "
-              "(rule 1: his English outranks the machine's match)");
+              "(rule 1: Geshe Michael's English outranks the machine's match)");
         CHECK(ch && ch->tier == "curated",
               "and so does the second one");
         CHECK(sr && !sr->matched.empty() && ch && !ch->matched.empty(),
               "and both are reported as RENDERED, because the draft uses "
-              "his equivalents verbatim -- the old report called this an "
+              "Geshe Michael's equivalents verbatim -- the old report called this an "
               "unmatched term");
     }
 
@@ -133,11 +133,11 @@ int main(int argc, char** argv) {
     // verdict is a count of exactly that judgement. Found 2026-09-11 by
     // probing the shipped matcher rather than by reading it.
     {
-        CHECK(!allcore::glossMatches("mind", "he reminded them of the vow"),
+        CHECK(!allcore::glossMatches("mind", "Geshe Michael reminded them of the vow"),
               "gloss: \"mind\" does NOT match inside \"reminded\"");
         CHECK(!allcore::glossMatches("art", "a departure from the path"),
               "gloss: \"art\" does NOT match inside \"departure\"");
-        CHECK(!allcore::glossMatches("one", "he was honest about it"),
+        CHECK(!allcore::glossMatches("one", "Geshe Michael was honest about it"),
               "gloss: \"one\" does NOT match inside \"honest\"");
 
         // and the true matches still hold, because a fix that only tightens
@@ -162,7 +162,7 @@ int main(int argc, char** argv) {
               "gloss: a hyphenate still counts as the word");
 
         // a multi-word equivalent is bounded as a whole, not per word
-        CHECK(allcore::glossMatches("good deeds", "his good deeds ripen"),
+        CHECK(allcore::glossMatches("good deeds", "Geshe Michael's good deeds ripen"),
               "gloss: a multi-word equivalent matches as a phrase");
         CHECK(!allcore::glossMatches("good deeds", "good deedsmanship"),
               "gloss: and is bounded at its end like any other word");

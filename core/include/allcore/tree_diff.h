@@ -1,7 +1,7 @@
 // allcore/tree_diff.h — the divergence audit (queue item 6).
 //
 // Session 3's live problem: GMR's copy of the database and Nick's
-// Dropbox master "have diverged from each other probably" — the task he
+// Dropbox master "have diverged from each other probably" — the task Geshe Michael
 // gave Jamie was to compare the two trees and list the differences, so
 // Nick could confirm subject categories for anything one copy lacked.
 // This is that comparison, for any two roots the two browsers hold.

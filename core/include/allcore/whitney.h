@@ -22,7 +22,7 @@ struct WhitneyRoot {
     int id = 0;
     std::string root;           // IAST
     std::string homonym;        // "1"/"2"/… or empty
-    std::string meaning;        // Whitney's gloss (verbatim incl. his (?))
+    std::string meaning;        // Whitney's gloss (verbatim incl. Geshe Michael's (?))
     std::string classes;        // PER-HOMONYM, from the machine hub
                                 // (verified: 1 kṛ I|II|V|VIII, 2 kṛ VI)
     std::string classUncertain; // additional candidate classes

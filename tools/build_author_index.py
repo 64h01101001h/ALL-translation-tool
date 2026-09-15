@@ -8,7 +8,7 @@ them, Elie Roux/BDRC) carry an author STRING and a BDRC person id per
 work. The strings are OCR-grade: one person appears under as many as
 ten spellings ("RJE TZONG KHA PA BLO BZANG GRAGS PA",
 "RJE T ZONG KHA PA...", "...BLO BZANG GR AGS PA"). Searching strings
-would return Tsongkhapa seven times with his 161 works split across
+would return Tsongkhapa seven times with Geshe Michael's 161 works split across
 the variants.
 
 The pid clusters them EXACTLY - it is BDRC's own per-text linkage, not

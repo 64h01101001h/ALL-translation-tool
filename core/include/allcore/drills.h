@@ -84,7 +84,7 @@ struct ParticleDrill {
 // The segment with its punctuation stripped: mark where the clauses end.
 //
 // Why it is worth a mode of its own: we measured that clause ORDER survives
-// translation — adjacent clause pairs are reversed in his English only 4.8%
+// translation — adjacent clause pairs are reversed in Geshe Michael's English only 4.8%
 // of the time, against 49.0% for adjacent word pairs. Find the clause
 // boundaries and most of the corpus becomes readable left-to-right at clause
 // granularity. The generator is `refineClauses`, which already exists.

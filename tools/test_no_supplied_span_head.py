@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Ratchet gate: word-level English spans must not begin with a supplied
-function word (the/a/an/and/or/his/our/your/I/you) unless the licensing
+function word (the/a/an/and/or/Geshe Michael's/our/your/I/you) unless the licensing
 Tibetan word is named.
 
 Rule 7 of docs/ALIGNMENT_LAYER_SPEC.md says an article or hinge GMR supplied

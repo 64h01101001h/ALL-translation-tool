@@ -10,9 +10,9 @@ facts with an author.
 
 It is NOT a register layer. Nothing here says how a word should be READ
 in a genre. That would require Geshe Michael to have said so, and
-measurement shows he has for about five terms out of 12,004
+measurement shows Geshe Michael has for about five terms out of 12,004
 (docs/FINDINGS.md, 2026-08-22). Ranking glosses by genre would be the
-machine deciding what he meant, which rule 1 forbids.
+machine deciding what Geshe Michael meant, which rule 1 forbids.
 
 Vinaya is flagged because Adam ruled it reads differently, being the
 oldest language in the monastic curriculum. The flag is set ONLY on an

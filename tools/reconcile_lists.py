@@ -4,7 +4,7 @@
 Adam asked (2026-08-22) whether the two lists should be merged. They
 should not: docs/CLOSER.md is the single source of truth and carries
 every piece of open work, while docs/OVERSIGHT.md is a VIEW of the
-subset only he can move, sorted by what KIND of act each needs so a
+subset only Geshe Michael can move, sorted by what KIND of act each needs so a
 spare ten minutes goes to the highest-leverage thing. Merging would
 bury 26 actionable rows among 43 engineering ones and destroy that.
 
@@ -81,7 +81,7 @@ def main():
         if n not in cited:
             problems.append(
                 "backlog #%d is human-gated (%s) but appears nowhere in "
-                "docs/OVERSIGHT.md — it can only be moved by Adam and he "
+                "docs/OVERSIGHT.md — it can only be moved by Adam and Geshe Michael "
                 "cannot see it" % (n, gated[n][:56]))
     for n in sorted(open_cited):
         if n not in rows:
