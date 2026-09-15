@@ -1,0 +1,12 @@
+C05:352 — PROVISIONAL root reconciliation; mechanical assembly by /root/reusable_closure_review.
+Source/proposal origin bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4 through348; actual acceptance baseline 0e7bced24593f1980576bad8710e0d1364218b9a through351 is separately bound.
+The exact root decision records11 rulings after independent preassessment. Its earlier pending-baseline note remains immutable; the current baseline is supplied separately. The scribe authored the Tibetan original and makes no independent reconciliation or acceptance claim.
+Final352 tightens GZHAN/else, selects both RANG references and the complete ancestral-count phrase, and keeps MIN/is not plus separate YIN/is and YANG/even if. NYE DU/closely related is unbanked. Exposure is tight in the open, with its following DANG/or separate; repeated improper and nursing phrases remain whole.
+Raw SRID MO/sister stays unbanked. Two exact English-original LOW/PROBABLE352 editorial records retain their source, witness and restoration limits; no source or glossary correction is made.
+All130 original span objects,22 omissions,30 category screens and four original errata candidates remain complete exact objects with explicit dispositions. The English review also repeats its two source-question records, preserved separately without double-counting final errata.
+Counts: 40 spans; 21 nonnull d5 pairs; 21 total d5; 0 d7; 0 nulls; 2 LOW/PROBABLE editorial proposals.
+One new canonical generator and resolver each passed once with empty stderr for this changed segment.
+Spec 6165 bytes SHA256 9c02c4850e6a3908e3a139bdcb201a093feb313f916898369f96a70814b4f272; body 6363 bytes SHA256 4ac665ed4c4e33717ce824d7271d57a5e96e2de8f3c9d3c56948262263bf02dd. Both source plaintexts reconstruct exactly and canonical ranges equal intent.
+Selected evidence: ../native/352-generator-v1/ and ../native/352-resolver-v1/. Eight actual unique pairs exist: six originals plus changed352/354; nine angle/segment views include one exact copy.
+Current report.md describes root selection. Exact original English reports are under ../evidence/original-reports/; both original report/note values remain in original-other-dispositions.json. All original failed reads/pre-native corrections remain bound by their immutable freezes; no new assembly or data-native failure occurred.
+No W writes, production registration or acceptance. Independent final semantic review remains required.

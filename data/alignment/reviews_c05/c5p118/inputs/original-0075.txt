@@ -1,0 +1,10 @@
+"""One source-question query using the existing complete-record capture loop."""
+import pathlib,json,gzip,sqlite3,re
+T=pathlib.Path(__file__).resolve().parents[1];base=json.loads((T/'evidence/proposal-baseline.json').read_bytes());db=sqlite3.connect('file:'+base['source_pins']['spine']['path']+'?mode=ro',uri=True);db.row_factory=sqlite3.Row;corpus=json.load(gzip.open(base['source_pins']['corpus']['path'],'rt'))
+sql="SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq";found=[dict(r)for r in db.execute(sql,('sring mo',))];records={}
+for r in found:
+ assert json.loads(r['raw'])==corpus[r['id']-1];records[str(r['id'])]={'spine_row':r,'corpus_index':r['id']-1,'corpus_record':corpus[r['id']-1]}
+old=json.loads((T/'evidence/corpus.json').read_bytes());q=next(q for q in old['queries']if q['origin']=='ACTUAL_NEW_QUERY'and q['parameters']==['srid mo']);boundary=[]
+for rid in q['row_ids']:
+ r=old['complete_records'][str(rid)]['spine_row'];matches=[m.span()for m in re.finditer(r'(?<![A-Za-z])srid mo(?![A-Za-z])',r['wylie'])];boundary.append({'id':rid,'course':r['course'],'seq':r['seq'],'whole_term_ranges':matches,'excluded_substring_only':not bool(matches)})
+x={'queries':[{'origin':'ACTUAL_NEW_QUERY','field':'wylie','sql':sql,'parameters':['sring mo'],'count':len(found),'row_ids':[r['id']for r in found]}],'complete_records':records,'srid_mo_existing_query_boundary_audit':{'original_raw_substring_count':q['count'],'method':'Both alphabetic boundaries; SRID MOD substring matches excluded explicitly, without another query.','rows':boundary,'whole_term_segment_count':sum(bool(x['whole_term_ranges'])for x in boundary)}};(T/'evidence/corpus-supplement.json').write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n');print(json.dumps({'query_count':1,'new_complete_records':len(records),'whole_srid_mo_segments':x['srid_mo_existing_query_boundary_audit']['whole_term_segment_count']},indent=2))

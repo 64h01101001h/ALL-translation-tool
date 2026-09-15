@@ -1,0 +1,356 @@
+{
+  "queries": [
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1734,
+        6891
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir"
+      ],
+      "count": 2,
+      "row_ids": [
+        1734,
+        6891
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even if she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow."
+      ],
+      "count": 1,
+      "row_ids": [
+        1734
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1735,
+        6892
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+      ],
+      "count": 2,
+      "row_ids": [
+        1735,
+        6892
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+      ],
+      "count": 1,
+      "row_ids": [
+        1735
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+      ],
+      "count": 1,
+      "row_ids": [
+        1736
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+      ],
+      "count": 1,
+      "row_ids": [
+        1736
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+      ],
+      "count": 1,
+      "row_ids": [
+        1736
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "srid mo"
+      ],
+      "count": 4,
+      "row_ids": [
+        997,
+        1734,
+        6891,
+        34323
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "pha ma bdun rgyud"
+      ],
+      "count": 2,
+      "row_ids": [
+        1734,
+        6891
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "mngon par go ba"
+      ],
+      "count": 5,
+      "row_ids": [
+        1730,
+        1735,
+        6887,
+        6892,
+        9347
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "nyams su myong gang de"
+      ],
+      "count": 1,
+      "row_ids": [
+        1736
+      ]
+    }
+  ],
+  "complete_records": {
+    "1734": {
+      "spine_row": {
+        "id": 1734,
+        "course": "C05",
+        "seq": 352,
+        "acip": "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,",
+        "wylie": "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir",
+        "english": "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even if she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,\", \"wylie\": \"gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir\", \"english\": \"This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even if she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow.\"}"
+      },
+      "corpus_index": 1733,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,",
+        "wylie": "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir",
+        "english": "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even if she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow."
+      }
+    },
+    "6891": {
+      "spine_row": {
+        "id": 6891,
+        "course": "C16",
+        "seq": 873,
+        "acip": "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,",
+        "wylie": "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir",
+        "english": "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even is she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,\", \"wylie\": \"gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir\", \"english\": \"This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even is she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow.\"}"
+      },
+      "corpus_index": 6890,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,",
+        "wylie": "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir",
+        "english": "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even is she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow."
+      }
+    },
+    "1735": {
+      "spine_row": {
+        "id": 1735,
+        "course": "C05",
+        "seq": 353,
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions",
+        "raw": "{\"course\": \"C05\", \"acip\": \"RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,\", \"wylie\": \"rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,\", \"english\": \"Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \\\"four expressions.\\\" 77 The Four Expressions\"}"
+      },
+      "corpus_index": 1734,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+      }
+    },
+    "6892": {
+      "spine_row": {
+        "id": 6892,
+        "course": "C16",
+        "seq": 874,
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \"Branch\" Non-Virtues",
+        "raw": "{\"course\": \"C16\", \"acip\": \"RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,\", \"wylie\": \"rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,\", \"english\": \"Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \\\"Branch\\\" Non-Virtues\"}"
+      },
+      "corpus_index": 6891,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-- purposely, and without any mistaken identity. 39 Six \"Branch\" Non-Virtues"
+      }
+    },
+    "1736": {
+      "spine_row": {
+        "id": 1736,
+        "course": "C05",
+        "seq": 354,
+        "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+        "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+        "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,\", \"wylie\": \"mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad\", \"english\": \"That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed.\"}"
+      },
+      "corpus_index": 1735,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+        "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+        "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+      }
+    },
+    "997": {
+      "spine_row": {
+        "id": 997,
+        "course": "C03",
+        "seq": 433,
+        "acip": "DE LTAR 'CHI BA'I NGANG TSUL DANG , NGAN SONG GI SDUG BSNGAL BSAM ZHING , SKYABS 'GRO DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS, GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD,",
+        "wylie": "de ltar 'chi ba'i ngang tshul dang , ngan song gi sdug bsngal bsam zhing , skyabs 'gro dang las 'bras kyi blang dor la tshul bzhin 'bad pas, gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod",
+        "english": "Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life--as a pleasure being or human--and also acquire some incredible amount of wealth; at least for the time being.",
+        "raw": "{\"course\": \"C03\", \"acip\": \"DE LTAR 'CHI BA'I NGANG TSUL DANG , NGAN SONG GI SDUG BSNGAL BSAM ZHING , SKYABS 'GRO DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS, GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD,\", \"wylie\": \"de ltar 'chi ba'i ngang tshul dang , ngan song gi sdug bsngal bsam zhing , skyabs 'gro dang las 'bras kyi blang dor la tshul bzhin 'bad pas, gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod\", \"english\": \"Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life--as a pleasure being or human--and also acquire some incredible amount of wealth; at least for the time being.\"}"
+      },
+      "corpus_index": 996,
+      "corpus_record": {
+        "course": "C03",
+        "acip": "DE LTAR 'CHI BA'I NGANG TSUL DANG , NGAN SONG GI SDUG BSNGAL BSAM ZHING , SKYABS 'GRO DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS, GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD,",
+        "wylie": "de ltar 'chi ba'i ngang tshul dang , ngan song gi sdug bsngal bsam zhing , skyabs 'gro dang las 'bras kyi blang dor la tshul bzhin 'bad pas, gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod",
+        "english": "Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life--as a pleasure being or human--and also acquire some incredible amount of wealth; at least for the time being."
+      }
+    },
+    "34323": {
+      "spine_row": {
+        "id": 34323,
+        "course": "P1",
+        "seq": 78,
+        "acip": "DE LTAR 'CHI BA'I NGANG TSUL DANG NGAN SONG GI SDUG BSNGAL BSAM ZHING SKYABS 'GRO, DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD",
+        "wylie": "de ltar 'chi ba'i ngang tshul dang ngan song gi sdug bsngal bsam zhing skyabs 'gro, dang las 'bras kyi blang dor la tshul bzhin 'bad pas gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod",
+        "english": "Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life—as a pleasure being or human—and also acquire some incredible amount of wealth; at least for the",
+        "raw": "{\"course\": \"P1\", \"acip\": \"DE LTAR 'CHI BA'I NGANG TSUL DANG NGAN SONG GI SDUG BSNGAL BSAM ZHING SKYABS 'GRO, DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD\", \"wylie\": \"de ltar 'chi ba'i ngang tshul dang ngan song gi sdug bsngal bsam zhing skyabs 'gro, dang las 'bras kyi blang dor la tshul bzhin 'bad pas gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod\", \"english\": \"Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life—as a pleasure being or human—and also acquire some incredible amount of wealth; at least for the\", \"wylie_method\": \"glyph-decode\", \"decode_score\": 1.0}"
+      },
+      "corpus_index": 34322,
+      "corpus_record": {
+        "course": "P1",
+        "acip": "DE LTAR 'CHI BA'I NGANG TSUL DANG NGAN SONG GI SDUG BSNGAL BSAM ZHING SKYABS 'GRO, DANG LAS 'BRAS KYI BLANG DOR LA TSUL BZHIN 'BAD PAS GNAS SKABS MNGON MTHO LHA MI'I RTEN BZANG DANG DPAL 'BYOR PHUN SUM TSOGS PA LAN RE LAN GNYIS TZAM 'THOB PA SRID MOD",
+        "wylie": "de ltar 'chi ba'i ngang tshul dang ngan song gi sdug bsngal bsam zhing skyabs 'gro, dang las 'bras kyi blang dor la tshul bzhin 'bad pas gnas skabs mngon mtho lha mi'i rten bzang dang dpal 'byor phun sum tshogs pa lan re lan gnyis tsam 'thob pa srid mod",
+        "english": "Suppose we are able to follow all the instructions above: we contemplate how death works, and think on the sufferings of the lower realms. Then we make all the effort we are supposed to in going for refuge, and in observing the laws of deeds and their consequences. Admittedly then we could manage, once or twice, to reach one of the better forms of life—as a pleasure being or human—and also acquire some incredible amount of wealth; at least for the",
+        "wylie_method": "glyph-decode",
+        "decode_score": 1.0
+      }
+    },
+    "1730": {
+      "spine_row": {
+        "id": 1730,
+        "course": "C05",
+        "seq": 348,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,\", \"wylie\": \"srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o\", \"english\": \"Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.\"}"
+      },
+      "corpus_index": 1729,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      }
+    },
+    "6887": {
+      "spine_row": {
+        "id": 6887,
+        "course": "C16",
+        "seq": 869,
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,\", \"wylie\": \"srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o\", \"english\": \"Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given.\"}"
+      },
+      "corpus_index": 6886,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",SROG GCOD PA NI BSAMS BZHIN DU, ,MA NOR BAR NI GZHAN GSAD PA'O, ,MA BYIN LEN PA GZHAN GYI NOR, ,GTHU DANG 'JAB BUS BDAG GIR BYED, ,BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "srog gcod pa ni bsams bzhin du, ,ma nor bar ni gzhan gsad pa'o, ,ma byin len pa gzhan gyi nor, ,gthu dang 'jab bus bdag gir byed, ,bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Taking life is killing another being Purposely, and without a mistake. Stealing is to take possession of Another's wealth by means of force or stealth. Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meanings of one's words Are understood, a wrong impression given."
+      }
+    },
+    "9347": {
+      "spine_row": {
+        "id": 9347,
+        "course": "TCS02",
+        "seq": 73,
+        "acip": ",BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meaning of one's words Are understood, a wrong impression given. (3) Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity. This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) Sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--your mother, or sister, or any female related to you up to seven generations past; 2) Sex with a woman, even if she is one's wife, using an improper part of her body--her her mouth or anus; 3) Sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) Sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow. (4) Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-                -purposely, and without any mistaken identity.",
+        "raw": "{\"course\": \"TCS02\", \"acip\": \",BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,\", \"wylie\": \"bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o\", \"english\": \"Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meaning of one's words Are understood, a wrong impression given. (3) Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity. This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) Sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--your mother, or sister, or any female related to you up to seven generations past; 2) Sex with a woman, even if she is one's wife, using an improper part of her body--her her mouth or anus; 3) Sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) Sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow. (4) Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-                -purposely, and without any mistaken identity.\"}"
+      },
+      "corpus_index": 9346,
+      "corpus_record": {
+        "course": "TCS02",
+        "acip": ",BGROD MIN 'GRO BA 'DOD PA YIS, ,LOG PAR G-YEM PA RNAM PA BZHI, ,RDZUN TSIG 'DU SHES GZHAN SGYUR BA'I, ,TSIG DON MNGON PAR GO BA'O,",
+        "wylie": "bgrod min 'gro ba 'dod pa yis, ,log par g-yem pa rnam pa bzhi, ,rdzun tshig 'du shes gzhan sgyur ba'i, ,tshig don mngon par go ba'o",
+        "english": "Sexual misconduct, of four types, Engaging in improper kinds of sex. Lying's when the meaning of one's words Are understood, a wrong impression given. (3) Sexual misconduct is engaging in kinds of sex which are improper to perform, purposely and with no mistaken identity. This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) Sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--your mother, or sister, or any female related to you up to seven generations past; 2) Sex with a woman, even if she is one's wife, using an improper part of her body--her her mouth or anus; 3) Sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) Sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow. (4) Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him-                -purposely, and without any mistaken identity."
+      }
+    }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "status": "ROOT_ORIGINAL_INTAKE_COMPLETE_NO_SELECTION",
+  "utc": "2026-09-15T04:24:18.445438+00:00",
+  "freeze": {
+    "bytes": 19376,
+    "sha256": "bf41074a8503ff6e8f0cd7b5e7894efdfa71d82cae897359c8c561e28edaa623"
+  },
+  "members_verified": 123,
+  "stable_read_original_files_unchanged": true,
+  "original_spans_read": 66,
+  "omissions_read": 11,
+  "notes_read": 3,
+  "five_category_screens_per_segment_read": 5,
+  "five_grounds_each_screen": true,
+  "source_questions_read": 2,
+  "native_runs_verified_without_rerun": [
+    {
+      "path": "tibetan/native/352-generator-v1",
+      "execution": {
+        "bytes": 951,
+        "sha256": "281c235c671d584c8aa22910755f6512c0ecc123ece3ea9c31dfb33cef59ecb3"
+      }
+    },
+    {
+      "path": "tibetan/native/352-resolver-v1",
+      "execution": {
+        "bytes": 950,
+        "sha256": "50fc994d5bd26bb427fc19e34bb32cdc8d6b30022b86e9639db12f9c3b8e75b7"
+      }
+    },
+    {
+      "path": "tibetan/native/353-generator-v1",
+      "execution": {
+        "bytes": 950,
+        "sha256": "f55a2025994cca970d84e94cb652d2484d7cded786c1b4f7b7eea81c840b289e"
+      }
+    },
+    {
+      "path": "tibetan/native/353-resolver-v1",
+      "execution": {
+        "bytes": 949,
+        "sha256": "46beda95950ad795aa638576f84f0b74ec3c87d5311fe74376995c204e492d72"
+      }
+    },
+    {
+      "path": "tibetan/native/354-generator-v1",
+      "execution": {
+        "bytes": 952,
+        "sha256": "44ce3a7c49d5472e29a01b655155571565eee7fe85022ccc7dbd09322cfbbe80"
+      }
+    },
+    {
+      "path": "tibetan/native/354-resolver-v1",
+      "execution": {
+        "bytes": 950,
+        "sha256": "4512cbd74629637371c17344ba5d185d106024601aad384a8a95c5bb16107987"
+      }
+    }
+  ],
+  "segment_evidence": [
+    {
+      "seq": 352,
+      "verification": {
+        "bytes": 893,
+        "sha256": "57ac697fd30c1f5971f52076e3671719e4ef633c3613c89619472f244aabe5df"
+      },
+      "screens": {
+        "bytes": 63445,
+        "sha256": "0221f94c5b75d7dc9e5620e95536f4955d33a62b2bf04c6b28eaf58fe17be9e2"
+      },
+      "errata": {
+        "bytes": 2138,
+        "sha256": "1eccc3f61bdc5c5188a4b0209a31521a3026d760950ab91565bc7f4efe3e1cb9"
+      }
+    },
+    {
+      "seq": 353,
+      "verification": {
+        "bytes": 891,
+        "sha256": "152e595959c6d47299a41452235f40bc06e3596157e16cd4d16865423e714f2f"
+      },
+      "screens": {
+        "bytes": 48244,
+        "sha256": "34cfa2710ba5c0ff5435f9f9da5f2472b07cce37d1d0fbadb7e400252c7705f1"
+      },
+      "errata": {
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      }
+    },
+    {
+      "seq": 354,
+      "verification": {
+        "bytes": 893,
+        "sha256": "db46a50ccd40d9095f6cf81822ad74b416278375b6a71790f81dbac936af40d5"
+      },
+      "screens": {
+        "bytes": 46760,
+        "sha256": "85b6c732f1abc95adab62ec2315a6e69722f2eb2c752d244baf46434965d0094"
+      },
+      "errata": {
+        "bytes": 3,
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+      }
+    }
+  ],
+  "reading_limit": "All15 d_defensibility judgments and two full proposed errata read in bounded final output; repeated a/b/c/e fields deduplicated by exact object identity and complete unique per-segment grounds read. Author146master/20corpus count not inherited: root material46masters/4nonlocalcorpus/1register objects remains separately pinned. No root source-error disposition or alignment choice before independent preassessment.",
+  "read_only_tool_history": "One assumed errata-review path FileNotFoundError; actual freeze identifies five-ground-screens. Two overbroad outputs truncated, followed by bounded full judgment/proposal and missing353ground reading. Intake first assertion incorrectly assumed resolver stdin was HTML; actual adapter consumes spec for both generator and resolver. Corrected assertion verifies exact spec stdin. No artifact writes in failed intake, source edits or native reruns."
+}

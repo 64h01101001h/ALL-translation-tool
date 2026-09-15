@@ -1,0 +1,130 @@
+{
+  "seq": 354,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1736,
+        "course": "C05",
+        "seq": 354,
+        "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+        "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+        "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current ACIP/Wylie/GMR fields and neighboring context346–360 read. Six complete physical ASCII extents were read and their whitespace-collapse identity verified. Available digital agreement is evidence of the reading, not automatic proof that its spelling or grammar is correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 1,
+          "row_ids": [
+            1736
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 1,
+          "row_ids": [
+            1736
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1736
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/supplemental-corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "Each exact current field has one non-C13 match, the current row itself. The complete mig rna yid search also returned only354. Full local356 prose explains the four labels and the remaining nose/tongue/body faculties. It is a contextual explanation, not an independent copy of the verse. All22 unique focused complete corpus objects were fully read; no external independent publication was collated."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-question-search.json"
+      ],
+      "finding": "Seven unchanged complete class records reused by exact prior personal-reading identity. The source-question search has one E-011 hit for a different MTSOR correction; its full record was read. No current-segment or current-question duplicate. Registered following-heading/converter/footnote/folio/cap classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The compressed verse has the four experience labels in the same order as the explanatory prose356. RNAM SHES/consciousness and RNAM PAR SHES PA/known are different local uses. No doctrinal reversal or source correction is inferred from the broad gloss inventories.",
+      "counterevidence": "Complete master tiers distinguish glossary evidence from awaiting-equivalent scaffold and auto-aligned candidates. No HGM gloss is promoted. Same-source course repetitions do not establish independent publication accuracy, and an intelligible contextual paraphrase does not isolate every source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 139,
+        "wylie": 137,
+        "english": 169
+      },
+      "utf8_bytes": {
+        "acip": 139,
+        "wylie": 137,
+        "english": 169
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": [
+        7,
+        7,
+        7,
+        7
+      ],
+      "finding": "All fields are physically complete and below1500 characters. Four complete physical Tibetan verse lines each have7 written syllables; the English has four physical lines. Capitalization is verse lineation."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,290 @@
+{
+  "queries": [
+    {
+      "origin": "ACTUAL_NEW_QUERY",
+      "field": "wylie",
+      "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+      "parameters": [
+        "sring mo"
+      ],
+      "count": 12,
+      "row_ids": [
+        193,
+        6107,
+        23720,
+        22846,
+        34018,
+        20701,
+        20704,
+        20748,
+        20749,
+        20773,
+        20878,
+        20996
+      ]
+    }
+  ],
+  "complete_records": {
+    "193": {
+      "spine_row": {
+        "id": 193,
+        "course": "C01",
+        "seq": 193,
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102",
+        "raw": "{\"acip\": \",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,\", \"wylie\": \"nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin\", \"english\": \"He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102\", \"course\": \"C01\"}"
+      },
+      "corpus_index": 192,
+      "corpus_record": {
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "He said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.102",
+        "course": "C01"
+      }
+    },
+    "6107": {
+      "spine_row": {
+        "id": 6107,
+        "course": "C16",
+        "seq": 89,
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34",
+        "raw": "{\"course\": \"C16\", \"acip\": \",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,\", \"wylie\": \"nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin\", \"english\": \"Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34\"}"
+      },
+      "corpus_index": 6106,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",NGA SKYID PA GNYEN GYIS MTSOR ZHING , ,SDUG PA DGRA YIS MA TSOR BAR, ,RGAS PA GROGS KYIS MA TSOR ZHING , ,NA BA SRING MOS MA TSOR BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHI BA MI YIS MA TSOR ZHING , ,RO RUL BYA YIS MA MTHONG BAR, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,SHA RUS SBRANG MAS 'JIB PA DANG , ,RTZA RGYUS 'BU YIS ZA BA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA SGO NA MI RJES MED PA DANG , ,NANG NA KHRAG RJES MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,RO LA 'KHOR MI MED PA DANG , ,SHI NA DU MI MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,NGA GAR SONG 'DRI MI MED PA DANG , ,'DIR SONG GTAD SO MED PA RU, ,RI KHROD 'DI RU 'CHI NUS NA, ,RNAL 'BYOR BSAM PA RDZOGS PA YIN, ,MI MED LUNG PA'I BRAG PHUG TU, ,SPRANG PO SHI BA'I SMON LAM 'DI, ,'GRO BA'I DON DU THEBS PAR SHOG,THEBS NA BSAM PA RDZOGS PA YIN, , ZHES GSUNGS PA RED, 'DI DAG KYANG TSE BLOS BTANG BA'I GSUNG MGUR YIN,",
+        "wylie": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,shi ba mi yis ma tshor zhing , ,ro rul bya yis ma mthong bar, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,sha rus sbrang mas 'jib pa dang , ,rtsa rgyus 'bu yis za ba ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga sgo na mi rjes med pa dang , ,nang na khrag rjes med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,ro la 'khor mi med pa dang , ,shi na du mi med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,nga gar song 'dri mi med pa dang , ,'dir song gtad so med pa ru, ,ri khrod 'di ru 'chi nus na, ,rnal 'byor bsam pa rdzogs pa yin, ,mi med lung pa'i brag phug tu, ,sprang po shi ba'i smon lam 'di, ,'gro ba'i don du thebs par shog,thebs na bsam pa rdzogs pa yin, , zhes gsungs pa red, 'di dag kyang tshe blos btang ba'i gsung mgur yin",
+        "english": "Lord Milarepa said too, No way my loved ones know I'm glad, No way my enemies know I'm sad; If I can die here in this cave My hermit's wishes have come true. No way my friends know I've got old, No way my sister knows I'm sick; If I can die here in this cave My hermit's wishes have come true. No way that people know I've died, No rotting corpse that vultures spy; If I can die here in this cave My hermit's wishes have come true. Flies will suck my meat and bones, Maggots eat tendons, ligament; If I can die here in this cave My hermit's wishes have come true. No footprints leading from my door, No bloodstains left here on the floor; If I can die here in this cave My hermit's wishes have come true. No one to hold a deathbed vigil, No one to weep when I am gone; If I can die here in this cave My hermit's wishes have come true. No one to wonder where I went No one who knows where I am found; If I can die here in this cave My hermit's wishes have come true. May this death prayer of a beggar In the wild of a mountain cave Come to help all living beings; Then my wishes have come true.34"
+      }
+    },
+    "23720": {
+      "spine_row": {
+        "id": 23720,
+        "course": "GIE",
+        "seq": 208,
+        "acip": "DON DAM SNYE MA DE NYID LAS, ,MING BO {%PO} DANG NI SRING MO BAG, MA'I {%BAG MAR} RIGS MA YIN, ,ZHES SOGS DANG,",
+        "wylie": "don dam snye ma de nyid las, ,ming bo {%po} dang ni sring mo bag, ma'i {%bag mar} rigs ma yin, ,zhes sogs dang",
+        "english": "And from the same Ultimate Dwelling Place are lines including— A brother should never take His sister as a bride!",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"DON DAM SNYE MA DE NYID LAS, ,MING BO {%PO} DANG NI SRING MO BAG, MA'I {%BAG MAR} RIGS MA YIN, ,ZHES SOGS DANG,\", \"wylie\": \"don dam snye ma de nyid las, ,ming bo {%po} dang ni sring mo bag, ma'i {%bag mar} rigs ma yin, ,zhes sogs dang\", \"english\": \"And from the same Ultimate Dwelling Place are lines including— A brother should never take His sister as a bride!\"}"
+      },
+      "corpus_index": 23719,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "DON DAM SNYE MA DE NYID LAS, ,MING BO {%PO} DANG NI SRING MO BAG, MA'I {%BAG MAR} RIGS MA YIN, ,ZHES SOGS DANG,",
+        "wylie": "don dam snye ma de nyid las, ,ming bo {%po} dang ni sring mo bag, ma'i {%bag mar} rigs ma yin, ,zhes sogs dang",
+        "english": "And from the same Ultimate Dwelling Place are lines including— A brother should never take His sister as a bride!"
+      }
+    },
+    "22846": {
+      "spine_row": {
+        "id": 22846,
+        "course": "MB2",
+        "seq": 97,
+        "acip": "PHAN TSUN DU PHA MA DANG, SRING MO DANG, MDZA' BSHES DANG, NYE DU'I MYA NGAN MYONG ZHING, SDUG BSNGAL DANG, MYA NGAN GYI ZUG RNGUS LUS LA ZUG PA DE DAG",
+        "wylie": "phan tshun du pha ma dang, sring mo dang, mdza' bshes dang, nye du'i mya ngan myong zhing, sdug bsngal dang, mya ngan gyi zug rngus lus la zug pa de dag",
+        "english": "They and their parents will be stricken by circumstances that cause them to grieve—either they for their parents, or their parents for them.  And this will happen as well with their siblings, and their friends, and all of their relatives.  Their bodies will be stricken by that special, cutting pain that comes from this kind of suffering, and this kind of grieving.",
+        "raw": "{\"course\": \"MB2\", \"acip\": \"PHAN TSUN DU PHA MA DANG, SRING MO DANG, MDZA' BSHES DANG, NYE DU'I MYA NGAN MYONG ZHING, SDUG BSNGAL DANG, MYA NGAN GYI ZUG RNGUS LUS LA ZUG PA DE DAG\", \"wylie\": \"phan tshun du pha ma dang, sring mo dang, mdza' bshes dang, nye du'i mya ngan myong zhing, sdug bsngal dang, mya ngan gyi zug rngus lus la zug pa de dag\", \"english\": \"They and their parents will be stricken by circumstances that cause them to grieve—either they for their parents, or their parents for them.  And this will happen as well with their siblings, and their friends, and all of their relatives.  Their bodies will be stricken by that special, cutting pain that comes from this kind of suffering, and this kind of grieving.\"}"
+      },
+      "corpus_index": 22845,
+      "corpus_record": {
+        "course": "MB2",
+        "acip": "PHAN TSUN DU PHA MA DANG, SRING MO DANG, MDZA' BSHES DANG, NYE DU'I MYA NGAN MYONG ZHING, SDUG BSNGAL DANG, MYA NGAN GYI ZUG RNGUS LUS LA ZUG PA DE DAG",
+        "wylie": "phan tshun du pha ma dang, sring mo dang, mdza' bshes dang, nye du'i mya ngan myong zhing, sdug bsngal dang, mya ngan gyi zug rngus lus la zug pa de dag",
+        "english": "They and their parents will be stricken by circumstances that cause them to grieve—either they for their parents, or their parents for them.  And this will happen as well with their siblings, and their friends, and all of their relatives.  Their bodies will be stricken by that special, cutting pain that comes from this kind of suffering, and this kind of grieving."
+      }
+    },
+    "34018": {
+      "spine_row": {
+        "id": 34018,
+        "course": "SOS",
+        "seq": 164,
+        "acip": "'GRES MOS ZHUS PA LAS, SRING MO SKYE BA GANG NAS KYANG MA 'ONGS,",
+        "wylie": "'gres mos zhus pa las, sring mo skye ba gang nas kyang ma 'ongs",
+        "english": "And as Lord Buddha also says in The Sutra Requested by the Elder Woman, “O sister, nothing starts from anywhere.”",
+        "raw": "{\"course\": \"SOS\", \"acip\": \"'GRES MOS ZHUS PA LAS, SRING MO SKYE BA GANG NAS KYANG MA 'ONGS,\", \"wylie\": \"'gres mos zhus pa las, sring mo skye ba gang nas kyang ma 'ongs\", \"english\": \"And as Lord Buddha also says in The Sutra Requested by the Elder Woman, “O sister, nothing starts from anywhere.”\"}"
+      },
+      "corpus_index": 34017,
+      "corpus_record": {
+        "course": "SOS",
+        "acip": "'GRES MOS ZHUS PA LAS, SRING MO SKYE BA GANG NAS KYANG MA 'ONGS,",
+        "wylie": "'gres mos zhus pa las, sring mo skye ba gang nas kyang ma 'ongs",
+        "english": "And as Lord Buddha also says in The Sutra Requested by the Elder Woman, “O sister, nothing starts from anywhere.”"
+      }
+    },
+    "20701": {
+      "spine_row": {
+        "id": 20701,
+        "course": "TCS17",
+        "seq": 839,
+        "acip": "PHO NYA MO YANG GANG YIN SNYAM NA, MA DANG SRING MO DANG BU MO DANG CHUNG MA RNAMS PHO NYA MOR GNAS PA YIN LA, DE YANG ZHING LAS SKYES PA DANG SNGAGS LAS SKYES PA DANG, LHAN CIG SKYES PA NI MA LA SOGS PA STE, SPYAN LA SOGS PA'I LHA MO RNAMS LA SNYOMS PAR 'JUG PAS MCHOD PAR BYA'O ZER RO,,",
+        "wylie": "pho nya mo yang gang yin snyam na, ma dang sring mo dang bu mo dang chung ma rnams pho nya mor gnas pa yin la, de yang zhing las skyes pa dang sngags las skyes pa dang, lhan cig skyes pa ni ma la sogs pa ste, spyan la sogs pa'i lha mo rnams la snyoms par 'jug pas mchod par bya'o zer ro",
+        "english": "\"And what kind of Messenger would this be?\" you might ask.  We are talking of a mother or a sister or a daughter or a wife who is dwelling within the Messenger.  The \"mother\" and so on here are Messengers born of a holy place; born of the secret word; and born of the simultaneous--which is to say, we must make offering by performing union with goddesses such as the Lady of Eyes.",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \"PHO NYA MO YANG GANG YIN SNYAM NA, MA DANG SRING MO DANG BU MO DANG CHUNG MA RNAMS PHO NYA MOR GNAS PA YIN LA, DE YANG ZHING LAS SKYES PA DANG SNGAGS LAS SKYES PA DANG, LHAN CIG SKYES PA NI MA LA SOGS PA STE, SPYAN LA SOGS PA'I LHA MO RNAMS LA SNYOMS PAR 'JUG PAS MCHOD PAR BYA'O ZER RO,,\", \"wylie\": \"pho nya mo yang gang yin snyam na, ma dang sring mo dang bu mo dang chung ma rnams pho nya mor gnas pa yin la, de yang zhing las skyes pa dang sngags las skyes pa dang, lhan cig skyes pa ni ma la sogs pa ste, spyan la sogs pa'i lha mo rnams la snyoms par 'jug pas mchod par bya'o zer ro\", \"english\": \"\\\"And what kind of Messenger would this be?\\\" you might ask.  We are talking of a mother or a sister or a daughter or a wife who is dwelling within the Messenger.  The \\\"mother\\\" and so on here are Messengers born of a holy place; born of the secret word; and born of the simultaneous--which is to say, we must make offering by performing union with goddesses such as the Lady of Eyes.\"}"
+      },
+      "corpus_index": 20700,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": "PHO NYA MO YANG GANG YIN SNYAM NA, MA DANG SRING MO DANG BU MO DANG CHUNG MA RNAMS PHO NYA MOR GNAS PA YIN LA, DE YANG ZHING LAS SKYES PA DANG SNGAGS LAS SKYES PA DANG, LHAN CIG SKYES PA NI MA LA SOGS PA STE, SPYAN LA SOGS PA'I LHA MO RNAMS LA SNYOMS PAR 'JUG PAS MCHOD PAR BYA'O ZER RO,,",
+        "wylie": "pho nya mo yang gang yin snyam na, ma dang sring mo dang bu mo dang chung ma rnams pho nya mor gnas pa yin la, de yang zhing las skyes pa dang sngags las skyes pa dang, lhan cig skyes pa ni ma la sogs pa ste, spyan la sogs pa'i lha mo rnams la snyoms par 'jug pas mchod par bya'o zer ro",
+        "english": "\"And what kind of Messenger would this be?\" you might ask.  We are talking of a mother or a sister or a daughter or a wife who is dwelling within the Messenger.  The \"mother\" and so on here are Messengers born of a holy place; born of the secret word; and born of the simultaneous--which is to say, we must make offering by performing union with goddesses such as the Lady of Eyes."
+      }
+    },
+    "20704": {
+      "spine_row": {
+        "id": 20704,
+        "course": "TCS17",
+        "seq": 842,
+        "acip": ",BLA MA'I PHYAG RGYA NI MA'O, ,LHAN CIG NYEN PA NI SRING MO'O, ,RANG GIS CHOS BSTAN PA NI BU MO'O, ,BLA MAS BYIN PA NI CHUNG MA 'O ZHES 'CHAD LA,",
+        "wylie": "bla ma'i phyag rgya ni ma'o, ,lhan cig nyen pa ni sring mo'o, ,rang gis chos bstan pa ni bu mo'o, ,bla mas byin pa ni chung ma 'o zhes 'chad la",
+        "english": "Our Lama's spiritual partner is our mother; The one we work together with is our sister. The one we teach is our daughter, And the one our Lama gives us is our wife.",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \",BLA MA'I PHYAG RGYA NI MA'O, ,LHAN CIG NYEN PA NI SRING MO'O, ,RANG GIS CHOS BSTAN PA NI BU MO'O, ,BLA MAS BYIN PA NI CHUNG MA 'O ZHES 'CHAD LA,\", \"wylie\": \"bla ma'i phyag rgya ni ma'o, ,lhan cig nyen pa ni sring mo'o, ,rang gis chos bstan pa ni bu mo'o, ,bla mas byin pa ni chung ma 'o zhes 'chad la\", \"english\": \"Our Lama's spiritual partner is our mother; The one we work together with is our sister. The one we teach is our daughter, And the one our Lama gives us is our wife.\"}"
+      },
+      "corpus_index": 20703,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": ",BLA MA'I PHYAG RGYA NI MA'O, ,LHAN CIG NYEN PA NI SRING MO'O, ,RANG GIS CHOS BSTAN PA NI BU MO'O, ,BLA MAS BYIN PA NI CHUNG MA 'O ZHES 'CHAD LA,",
+        "wylie": "bla ma'i phyag rgya ni ma'o, ,lhan cig nyen pa ni sring mo'o, ,rang gis chos bstan pa ni bu mo'o, ,bla mas byin pa ni chung ma 'o zhes 'chad la",
+        "english": "Our Lama's spiritual partner is our mother; The one we work together with is our sister. The one we teach is our daughter, And the one our Lama gives us is our wife."
+      }
+    },
+    "20748": {
+      "spine_row": {
+        "id": 20748,
+        "course": "TCS17",
+        "seq": 886,
+        "acip": "MA DANG SRING MO ZHES BYA BA LA SOGS PA LA, MA ZHES BYA BA NI MA DANG 'DRA BAR (SGRUB PA PO DANG SEMS SHIN TU) RJES SU 'THUN PA'I PHYAG RGYA MA'O,,",
+        "wylie": "ma dang sring mo zhes bya ba la sogs pa la, ma zhes bya ba ni ma dang 'dra bar (sgrub pa po dang sems shin tu) rjes su 'thun pa'i phyag rgya ma'o",
+        "english": "We see references to a \"mother\" and a \"sister\" and so on; the point here is that our spiritual partner is someone who is as close to us as our own Mother.  (That is, our hearts are extremely close.)",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \"MA DANG SRING MO ZHES BYA BA LA SOGS PA LA, MA ZHES BYA BA NI MA DANG 'DRA BAR (SGRUB PA PO DANG SEMS SHIN TU) RJES SU 'THUN PA'I PHYAG RGYA MA'O,,\", \"wylie\": \"ma dang sring mo zhes bya ba la sogs pa la, ma zhes bya ba ni ma dang 'dra bar (sgrub pa po dang sems shin tu) rjes su 'thun pa'i phyag rgya ma'o\", \"english\": \"We see references to a \\\"mother\\\" and a \\\"sister\\\" and so on; the point here is that our spiritual partner is someone who is as close to us as our own Mother.  (That is, our hearts are extremely close.)\"}"
+      },
+      "corpus_index": 20747,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": "MA DANG SRING MO ZHES BYA BA LA SOGS PA LA, MA ZHES BYA BA NI MA DANG 'DRA BAR (SGRUB PA PO DANG SEMS SHIN TU) RJES SU 'THUN PA'I PHYAG RGYA MA'O,,",
+        "wylie": "ma dang sring mo zhes bya ba la sogs pa la, ma zhes bya ba ni ma dang 'dra bar (sgrub pa po dang sems shin tu) rjes su 'thun pa'i phyag rgya ma'o",
+        "english": "We see references to a \"mother\" and a \"sister\" and so on; the point here is that our spiritual partner is someone who is as close to us as our own Mother.  (That is, our hearts are extremely close.)"
+      }
+    },
+    "20749": {
+      "spine_row": {
+        "id": 20749,
+        "course": "TCS17",
+        "seq": 887,
+        "acip": "SRING MO DANG BU MO (ZHES PA YANG SNGAR BSHAD PA) DE BZHIN TE,:- ^ (SA STON TE, DE NYID SPYOD PA DANG PO GNYIS KYI SKABS KYI LAS RGYA LA'ANG 'DRA BAS DER YANG SBYAR RO,,) ^ DES NA MA LTAR BYAMS PA DANG, SRING MO LTAR BRTZE BA DANG, BU MO LTAR GDUNG SEMS CHE BA DANG, 'DRA BA'I SGO NAS MA DANG SRING MO DANG BU MO ZHES BSHAD KYI DE DAG DNGOS MA YIN NO,,",
+        "wylie": "sring mo dang bu mo (zhes pa yang sngar bshad pa) de bzhin te,:- ^ (sa ston te, de nyid spyod pa dang po gnyis kyi skabs kyi las rgya la'ang 'dra bas der yang sbyar ro,,) ^ des na ma ltar byams pa dang, sring mo ltar brtse ba dang, bu mo ltar gdung sems che ba dang, 'dra ba'i sgo nas ma dang sring mo dang bu mo zhes bshad kyi de dag dngos ma yin no",
+        "english": "The references to a \"sister\" and a \"daughter\" are also similar (to what we have said before; the references are also meant to be applied to an actual partner at the point where we are practicing the first two types of activity).  And so we can say that our partner should be someone who loves us in the same way that our own Mother does; and that we should love each other with the same intensity that sisters and brothers love each other; and that we should feel the same deep affection for them that one would towards their own daughter.  Partner are referred to then with the words \"mother\" and \"sister\" and \"daughter,\" but of course this is not to say that our mother and the rest would actually be our partner. * * * Je Rinpoche waxes further on the love that a partner should feel in the same text at ff. 120b-121a:",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \"SRING MO DANG BU MO (ZHES PA YANG SNGAR BSHAD PA) DE BZHIN TE,:- ^ (SA STON TE, DE NYID SPYOD PA DANG PO GNYIS KYI SKABS KYI LAS RGYA LA'ANG 'DRA BAS DER YANG SBYAR RO,,) ^ DES NA MA LTAR BYAMS PA DANG, SRING MO LTAR BRTZE BA DANG, BU MO LTAR GDUNG SEMS CHE BA DANG, 'DRA BA'I SGO NAS MA DANG SRING MO DANG BU MO ZHES BSHAD KYI DE DAG DNGOS MA YIN NO,,\", \"wylie\": \"sring mo dang bu mo (zhes pa yang sngar bshad pa) de bzhin te,:- ^ (sa ston te, de nyid spyod pa dang po gnyis kyi skabs kyi las rgya la'ang 'dra bas der yang sbyar ro,,) ^ des na ma ltar byams pa dang, sring mo ltar brtse ba dang, bu mo ltar gdung sems che ba dang, 'dra ba'i sgo nas ma dang sring mo dang bu mo zhes bshad kyi de dag dngos ma yin no\", \"english\": \"The references to a \\\"sister\\\" and a \\\"daughter\\\" are also similar (to what we have said before; the references are also meant to be applied to an actual partner at the point where we are practicing the first two types of activity).  And so we can say that our partner should be someone who loves us in the same way that our own Mother does; and that we should love each other with the same intensity that sisters and brothers love each other; and that we should feel the same deep affection for them that one would towards their own daughter.  Partner are referred to then with the words \\\"mother\\\" and \\\"sister\\\" and \\\"daughter,\\\" but of course this is not to say that our mother and the rest would actually be our partner. * * * Je Rinpoche waxes further on the love that a partner should feel in the same text at ff. 120b-121a:\"}"
+      },
+      "corpus_index": 20748,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": "SRING MO DANG BU MO (ZHES PA YANG SNGAR BSHAD PA) DE BZHIN TE,:- ^ (SA STON TE, DE NYID SPYOD PA DANG PO GNYIS KYI SKABS KYI LAS RGYA LA'ANG 'DRA BAS DER YANG SBYAR RO,,) ^ DES NA MA LTAR BYAMS PA DANG, SRING MO LTAR BRTZE BA DANG, BU MO LTAR GDUNG SEMS CHE BA DANG, 'DRA BA'I SGO NAS MA DANG SRING MO DANG BU MO ZHES BSHAD KYI DE DAG DNGOS MA YIN NO,,",
+        "wylie": "sring mo dang bu mo (zhes pa yang sngar bshad pa) de bzhin te,:- ^ (sa ston te, de nyid spyod pa dang po gnyis kyi skabs kyi las rgya la'ang 'dra bas der yang sbyar ro,,) ^ des na ma ltar byams pa dang, sring mo ltar brtse ba dang, bu mo ltar gdung sems che ba dang, 'dra ba'i sgo nas ma dang sring mo dang bu mo zhes bshad kyi de dag dngos ma yin no",
+        "english": "The references to a \"sister\" and a \"daughter\" are also similar (to what we have said before; the references are also meant to be applied to an actual partner at the point where we are practicing the first two types of activity).  And so we can say that our partner should be someone who loves us in the same way that our own Mother does; and that we should love each other with the same intensity that sisters and brothers love each other; and that we should feel the same deep affection for them that one would towards their own daughter.  Partner are referred to then with the words \"mother\" and \"sister\" and \"daughter,\" but of course this is not to say that our mother and the rest would actually be our partner. * * * Je Rinpoche waxes further on the love that a partner should feel in the same text at ff. 120b-121a:"
+      }
+    },
+    "20773": {
+      "spine_row": {
+        "id": 20773,
+        "course": "TCS17",
+        "seq": 911,
+        "acip": "DE RNAMS KYANG SHIN TU BRTZE ZHING GDUNG BA'I DBANG GIS MA DANG SRING MO DANG BU MO DANG CHUNG MA BZHIN DU, PHO NYA MOR GNAS NA LHAG PAR SDUG PA'I SEMS KYIS RTAG TU MCHOD PAR BYA'O,,",
+        "wylie": "de rnams kyang shin tu brtse zhing gdung ba'i dbang gis ma dang sring mo dang bu mo dang chung ma bzhin du, pho nya mor gnas na lhag par sdug pa'i sems kyis rtag tu mchod par bya'o",
+        "english": "And we should be overcome with love for Them, and feel deep affection for Them, in the same way that we would for our Mother, or sister, or daughter, or wife.  We should feel an overwhelming attraction for the one who serves as our Messenger woman, and constantly make Her offerings.",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \"DE RNAMS KYANG SHIN TU BRTZE ZHING GDUNG BA'I DBANG GIS MA DANG SRING MO DANG BU MO DANG CHUNG MA BZHIN DU, PHO NYA MOR GNAS NA LHAG PAR SDUG PA'I SEMS KYIS RTAG TU MCHOD PAR BYA'O,,\", \"wylie\": \"de rnams kyang shin tu brtse zhing gdung ba'i dbang gis ma dang sring mo dang bu mo dang chung ma bzhin du, pho nya mor gnas na lhag par sdug pa'i sems kyis rtag tu mchod par bya'o\", \"english\": \"And we should be overcome with love for Them, and feel deep affection for Them, in the same way that we would for our Mother, or sister, or daughter, or wife.  We should feel an overwhelming attraction for the one who serves as our Messenger woman, and constantly make Her offerings.\"}"
+      },
+      "corpus_index": 20772,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": "DE RNAMS KYANG SHIN TU BRTZE ZHING GDUNG BA'I DBANG GIS MA DANG SRING MO DANG BU MO DANG CHUNG MA BZHIN DU, PHO NYA MOR GNAS NA LHAG PAR SDUG PA'I SEMS KYIS RTAG TU MCHOD PAR BYA'O,,",
+        "wylie": "de rnams kyang shin tu brtse zhing gdung ba'i dbang gis ma dang sring mo dang bu mo dang chung ma bzhin du, pho nya mor gnas na lhag par sdug pa'i sems kyis rtag tu mchod par bya'o",
+        "english": "And we should be overcome with love for Them, and feel deep affection for Them, in the same way that we would for our Mother, or sister, or daughter, or wife.  We should feel an overwhelming attraction for the one who serves as our Messenger woman, and constantly make Her offerings."
+      }
+    },
+    "20878": {
+      "spine_row": {
+        "id": 20878,
+        "course": "TCS17",
+        "seq": 1016,
+        "acip": ",'DI DAG MDOR BSDUS MGON PO KLU SGRUB KYIS, ,BSHES SPRINGS LAS GSUNGS YA RABS BUD MED NI, ,SRING MO LTA BUR RJES MTHUN GANG YIN DANG, ,MDZA' MO BZHIN DU SNYING LA BABS PA DANG, ,MA BZHIN PHAN PAR 'DOD DANG BRAN MO BZHIN, ,DBANG GYUR GANG YIN RIGS KYI LHA BZHIN BKUR,",
+        "wylie": "'di dag mdor bsdus mgon po klu sgrub kyis, ,bshes springs las gsungs ya rabs bud med ni, ,sring mo lta bur rjes mthun gang yin dang, ,mdza' mo bzhin du snying la babs pa dang, ,ma bzhin phan par 'dod dang bran mo bzhin, ,dbang gyur gang yin rigs kyi lha bzhin bkur",
+        "english": "To summarize all these, bring to mind The description that our protector, Nagarjuna, Gives in his Letter to a Friend for a woman Who is one of high integrity. She should be as dear to our heart As a sister, and as pleasing as a good female friend. She should have the same desire to help us As our very own Mother possesses; And should be as self-controlled as a servant. A woman like this, He says, should be Honored like the goddess your family worships. * * * His Holiness the First Panchen Lama, Lobsang Chukyi Gyeltsen, discusses the best configuration of mind and body for partner practice in His Essence of the Ocean of Attainments: An Explanation of the Creation Stage of the Glorious Secret Collection (Guhya Samaja), King of All the Secret Teachings (ACIP digital text S00265, ff. 41b-42b):",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \",'DI DAG MDOR BSDUS MGON PO KLU SGRUB KYIS, ,BSHES SPRINGS LAS GSUNGS YA RABS BUD MED NI, ,SRING MO LTA BUR RJES MTHUN GANG YIN DANG, ,MDZA' MO BZHIN DU SNYING LA BABS PA DANG, ,MA BZHIN PHAN PAR 'DOD DANG BRAN MO BZHIN, ,DBANG GYUR GANG YIN RIGS KYI LHA BZHIN BKUR,\", \"wylie\": \"'di dag mdor bsdus mgon po klu sgrub kyis, ,bshes springs las gsungs ya rabs bud med ni, ,sring mo lta bur rjes mthun gang yin dang, ,mdza' mo bzhin du snying la babs pa dang, ,ma bzhin phan par 'dod dang bran mo bzhin, ,dbang gyur gang yin rigs kyi lha bzhin bkur\", \"english\": \"To summarize all these, bring to mind The description that our protector, Nagarjuna, Gives in his Letter to a Friend for a woman Who is one of high integrity. She should be as dear to our heart As a sister, and as pleasing as a good female friend. She should have the same desire to help us As our very own Mother possesses; And should be as self-controlled as a servant. A woman like this, He says, should be Honored like the goddess your family worships. * * * His Holiness the First Panchen Lama, Lobsang Chukyi Gyeltsen, discusses the best configuration of mind and body for partner practice in His Essence of the Ocean of Attainments: An Explanation of the Creation Stage of the Glorious Secret Collection (Guhya Samaja), King of All the Secret Teachings (ACIP digital text S00265, ff. 41b-42b):\"}"
+      },
+      "corpus_index": 20877,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": ",'DI DAG MDOR BSDUS MGON PO KLU SGRUB KYIS, ,BSHES SPRINGS LAS GSUNGS YA RABS BUD MED NI, ,SRING MO LTA BUR RJES MTHUN GANG YIN DANG, ,MDZA' MO BZHIN DU SNYING LA BABS PA DANG, ,MA BZHIN PHAN PAR 'DOD DANG BRAN MO BZHIN, ,DBANG GYUR GANG YIN RIGS KYI LHA BZHIN BKUR,",
+        "wylie": "'di dag mdor bsdus mgon po klu sgrub kyis, ,bshes springs las gsungs ya rabs bud med ni, ,sring mo lta bur rjes mthun gang yin dang, ,mdza' mo bzhin du snying la babs pa dang, ,ma bzhin phan par 'dod dang bran mo bzhin, ,dbang gyur gang yin rigs kyi lha bzhin bkur",
+        "english": "To summarize all these, bring to mind The description that our protector, Nagarjuna, Gives in his Letter to a Friend for a woman Who is one of high integrity. She should be as dear to our heart As a sister, and as pleasing as a good female friend. She should have the same desire to help us As our very own Mother possesses; And should be as self-controlled as a servant. A woman like this, He says, should be Honored like the goddess your family worships. * * * His Holiness the First Panchen Lama, Lobsang Chukyi Gyeltsen, discusses the best configuration of mind and body for partner practice in His Essence of the Ocean of Attainments: An Explanation of the Creation Stage of the Glorious Secret Collection (Guhya Samaja), King of All the Secret Teachings (ACIP digital text S00265, ff. 41b-42b):"
+      }
+    },
+    "20996": {
+      "spine_row": {
+        "id": 20996,
+        "course": "TCS17",
+        "seq": 1134,
+        "acip": "MNYES PAR BYAS KYANG ZHES BYA BA NI, MA DANG SRING MO DANG BU MO DANG 'DRA BAR PHAN PAR 'DOD PA DANG, (DE YANG) DAM TSIG SHES PAR (BYAS NAS BSRUNG BA DANG BSHAD MA THAG PA'I) YE SHES KYI PHYAG RGYA RNAMS (DANG SBYOR BA'I THABS) KYIS NI,",
+        "wylie": "mnyes par byas kyang zhes bya ba ni, ma dang sring mo dang bu mo dang 'dra bar phan par 'dod pa dang, (de yang) dam tshig shes par (byas nas bsrung ba dang bshad ma thag pa'i) ye shes kyi phyag rgya rnams (dang sbyor ba'i thabs) kyis ni",
+        "english": "The lines that talk about \"having pleased Them as well\" are referring to a partner who is like our mother, or our sister, or our daughter in Their wish to do us benefit.  (And we must also) come to learn our pledges, (and honor them, and then practice union) with an imaginary partner (of the kind we just described).",
+        "raw": "{\"course\": \"TCS17\", \"acip\": \"MNYES PAR BYAS KYANG ZHES BYA BA NI, MA DANG SRING MO DANG BU MO DANG 'DRA BAR PHAN PAR 'DOD PA DANG, (DE YANG) DAM TSIG SHES PAR (BYAS NAS BSRUNG BA DANG BSHAD MA THAG PA'I) YE SHES KYI PHYAG RGYA RNAMS (DANG SBYOR BA'I THABS) KYIS NI,\", \"wylie\": \"mnyes par byas kyang zhes bya ba ni, ma dang sring mo dang bu mo dang 'dra bar phan par 'dod pa dang, (de yang) dam tshig shes par (byas nas bsrung ba dang bshad ma thag pa'i) ye shes kyi phyag rgya rnams (dang sbyor ba'i thabs) kyis ni\", \"english\": \"The lines that talk about \\\"having pleased Them as well\\\" are referring to a partner who is like our mother, or our sister, or our daughter in Their wish to do us benefit.  (And we must also) come to learn our pledges, (and honor them, and then practice union) with an imaginary partner (of the kind we just described).\"}"
+      },
+      "corpus_index": 20995,
+      "corpus_record": {
+        "course": "TCS17",
+        "acip": "MNYES PAR BYAS KYANG ZHES BYA BA NI, MA DANG SRING MO DANG BU MO DANG 'DRA BAR PHAN PAR 'DOD PA DANG, (DE YANG) DAM TSIG SHES PAR (BYAS NAS BSRUNG BA DANG BSHAD MA THAG PA'I) YE SHES KYI PHYAG RGYA RNAMS (DANG SBYOR BA'I THABS) KYIS NI,",
+        "wylie": "mnyes par byas kyang zhes bya ba ni, ma dang sring mo dang bu mo dang 'dra bar phan par 'dod pa dang, (de yang) dam tshig shes par (byas nas bsrung ba dang bshad ma thag pa'i) ye shes kyi phyag rgya rnams (dang sbyor ba'i thabs) kyis ni",
+        "english": "The lines that talk about \"having pleased Them as well\" are referring to a partner who is like our mother, or our sister, or our daughter in Their wish to do us benefit.  (And we must also) come to learn our pledges, (and honor them, and then practice union) with an imaginary partner (of the kind we just described)."
+      }
+    }
+  },
+  "srid_mo_existing_query_boundary_audit": {
+    "original_raw_substring_count": 4,
+    "method": "Both alphabetic boundaries; SRID MOD substring matches excluded explicitly, without another query.",
+    "rows": [
+      {
+        "id": 997,
+        "course": "C03",
+        "seq": 433,
+        "whole_term_ranges": [],
+        "excluded_substring_only": true
+      },
+      {
+        "id": 1734,
+        "course": "C05",
+        "seq": 352,
+        "whole_term_ranges": [
+          [
+            74,
+            81
+          ]
+        ],
+        "excluded_substring_only": false
+      },
+      {
+        "id": 6891,
+        "course": "C16",
+        "seq": 873,
+        "whole_term_ranges": [
+          [
+            74,
+            81
+          ]
+        ],
+        "excluded_substring_only": false
+      },
+      {
+        "id": 34323,
+        "course": "P1",
+        "seq": 78,
+        "whole_term_ranges": [],
+        "excluded_substring_only": true
+      }
+    ],
+    "whole_term_segment_count": 2
+  }
+}

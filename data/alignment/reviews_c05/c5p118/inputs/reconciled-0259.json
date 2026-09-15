@@ -1,0 +1,2674 @@
+{
+  "seq": 354,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 354,
+        "kind": "TIBETAN_SPELLING",
+        "found": "RNA",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "RNA",
+            "source_row": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "occurrences": {
+              "acip": [
+                5,
+                17,
+                82
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 354,
+                "field": "acip",
+                "start": 241732,
+                "bytes": 142,
+                "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 354,
+                "field": "english",
+                "start": 241876,
+                "bytes": 172,
+                "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The exact source has RNA, not RNA BA; its complete glossary directly attests ear. RNAM SHES and the later RNAM PAR SHES PA are different noun/verb forms in the same verse. Preserve both, with no normalization or alleged misspelling from superficial similarity.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 354,
+        "kind": "ENGLISH_TYPO",
+        "found": "What's heard",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "What's heard",
+            "source_row": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                117
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 354,
+                "field": "acip",
+                "start": 241732,
+                "bytes": 142,
+                "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 354,
+                "field": "english",
+                "start": 241876,
+                "bytes": 172,
+                "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The capital What's starts a preserved verse line, as does Of eye. Capitalization across line flattening is not a lexical typo. The exact field query returns this one English row, and no corrected witness is claimed.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 354,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "respectively",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "respectively",
+            "source_row": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                91
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 354,
+                "field": "acip",
+                "start": 241732,
+                "bytes": 142,
+                "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 354,
+                "field": "english",
+                "start": 241876,
+                "bytes": 172,
+                "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The complete sequence distinguishes eye/ear/thought consciousness and the remaining three, then seen/heard/known/sensed. Direct complete master entries and the source context support that respective order. The extra by and repeated relatives unfold shared grammar rather than reversing the sensory classification.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 354,
+        "kind": "INGEST_ARTEFACT",
+        "found": "what is sensed.",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "what is sensed.",
+            "source_row": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                154
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 354,
+                "field": "acip",
+                "start": 241732,
+                "bytes": 142,
+                "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 354,
+                "field": "english",
+                "start": 241876,
+                "bytes": 172,
+                "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "All four Tibetan lines and the complete English verse are present in their physical extents. The fields are below the1500-character cap; all three exact-field queries return one row. No heading glue, clipped ending or lost continuation is established in this segment.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 354,
+        "kind": "FORMATTING",
+        "found": "consciousness Of eye",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "consciousness Of eye",
+            "source_row": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                20
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 354,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 354,
+                "field": "acip",
+                "start": 241732,
+                "bytes": 142,
+                "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 354,
+                "field": "english",
+                "start": 241876,
+                "bytes": 172,
+                "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The mid-sentence capital Of is the flattened verse-line start. Preserve case and punctuation exactly; the single KYI genitive is shared across repeated Of/of phrases rather than assigned arbitrarily or corrected as malformed prose.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Complete original category and five grounds retained; no additional source correction under root selection.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 354,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 354,
+          "kind": "TIBETAN_SPELLING",
+          "found": "RNA",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "RNA",
+              "source_row": {
+                "id": 1736,
+                "course": "C05",
+                "seq": 354,
+                "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+                "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+              },
+              "occurrences": {
+                "acip": [
+                  5,
+                  17,
+                  82
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 139,
+                "wylie": 137,
+                "english": 169
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 354,
+                  "field": "acip",
+                  "start": 241732,
+                  "bytes": 142,
+                  "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                  "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 354,
+                  "field": "english",
+                  "start": 241876,
+                  "bytes": 172,
+                  "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                  "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The exact source has RNA, not RNA BA; its complete glossary directly attests ear. RNAM SHES and the later RNAM PAR SHES PA are different noun/verb forms in the same verse. Preserve both, with no normalization or alleged misspelling from superficial similarity.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 354,
+          "kind": "ENGLISH_TYPO",
+          "found": "What's heard",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "What's heard",
+              "source_row": {
+                "id": 1736,
+                "course": "C05",
+                "seq": 354,
+                "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+                "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  117
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 139,
+                "wylie": 137,
+                "english": 169
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 354,
+                  "field": "acip",
+                  "start": 241732,
+                  "bytes": 142,
+                  "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                  "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 354,
+                  "field": "english",
+                  "start": 241876,
+                  "bytes": 172,
+                  "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                  "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The capital What's starts a preserved verse line, as does Of eye. Capitalization across line flattening is not a lexical typo. The exact field query returns this one English row, and no corrected witness is claimed.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 354,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "respectively",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "respectively",
+              "source_row": {
+                "id": 1736,
+                "course": "C05",
+                "seq": 354,
+                "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+                "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  91
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 139,
+                "wylie": 137,
+                "english": 169
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 354,
+                  "field": "acip",
+                  "start": 241732,
+                  "bytes": 142,
+                  "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                  "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 354,
+                  "field": "english",
+                  "start": 241876,
+                  "bytes": 172,
+                  "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                  "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The complete sequence distinguishes eye/ear/thought consciousness and the remaining three, then seen/heard/known/sensed. Direct complete master entries and the source context support that respective order. The extra by and repeated relatives unfold shared grammar rather than reversing the sensory classification.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 354,
+          "kind": "INGEST_ARTEFACT",
+          "found": "what is sensed.",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "what is sensed.",
+              "source_row": {
+                "id": 1736,
+                "course": "C05",
+                "seq": 354,
+                "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+                "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  154
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 139,
+                "wylie": 137,
+                "english": 169
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 354,
+                  "field": "acip",
+                  "start": 241732,
+                  "bytes": 142,
+                  "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                  "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 354,
+                  "field": "english",
+                  "start": 241876,
+                  "bytes": 172,
+                  "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                  "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "All four Tibetan lines and the complete English verse are present in their physical extents. The fields are below the1500-character cap; all three exact-field queries return one row. No heading glue, clipped ending or lost continuation is established in this segment.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 354,
+          "kind": "FORMATTING",
+          "found": "consciousness Of eye",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "consciousness Of eye",
+              "source_row": {
+                "id": 1736,
+                "course": "C05",
+                "seq": 354,
+                "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+                "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  20
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 354,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 139,
+                "wylie": 137,
+                "english": 169
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 354,
+                  "field": "acip",
+                  "start": 241732,
+                  "bytes": 142,
+                  "sha256": "8a44c081ec06b945847e13db0441105f7af443bce9edb6417c431117bd3c48d0",
+                  "original_text": ",MIG RNA YID KYI RNAM SHES DANG ,\r\n,GSUM GYIS NYAMS SU MYONG GANG DE,\r\n,MTHONG THOS RNAM PAR SHES PA DANG ,\r\n,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 354,
+                  "field": "english",
+                  "start": 241876,
+                  "bytes": 172,
+                  "sha256": "0137f1fea25d2d26f01af604c30cd34e24720f9163b63f48bbfc6f3c2bed2150",
+                  "original_text": "That experienced by consciousness\r\nOf eye, of ear, the thought, and by the three\r\nRepresents respectively what's seen,\r\nWhat's heard, what's known, and also what is sensed.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The mid-sentence capital Of is the flattened verse-line start. Preserve case and punctuation exactly; the single KYI genitive is shared across repeated Of/of phrases rather than assigned arbitrarily or corrected as malformed prose.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 354,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 354,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1736,
+              "course": "C05",
+              "seq": 354,
+              "acip": ",MIG RNA YID KYI RNAM SHES DANG , ,GSUM GYIS NYAMS SU MYONG GANG DE, ,MTHONG THOS RNAM PAR SHES PA DANG , ,RTOGS PA YIN TE RIM BZHIN BSHAD,",
+              "wylie": "mig rna yid kyi rnam shes dang , ,gsum gyis nyams su myong gang de, ,mthong thos rnam par shes pa dang , ,rtogs pa yin te rim bzhin bshad",
+              "english": "That experienced by consciousness Of eye, of ear, the thought, and by the three Represents respectively what's seen, What's heard, what's known, and also what is sensed."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "Complete current ACIP/Wylie/GMR fields and neighboring context346–360 read. Six complete physical ASCII extents were read and their whitespace-collapse identity verified. Available digital agreement is evidence of the reading, not automatic proof that its spelling or grammar is correct."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "field": "english",
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/supplemental-corpus.json",
+              "../evidence/original-context-manifest.json"
+            ],
+            "finding": "Each exact current field has one non-C13 match, the current row itself. The complete mig rna yid search also returned only354. Full local356 prose explains the four labels and the remaining nose/tongue/body faculties. It is a contextual explanation, not an independent copy of the verse. All22 unique focused complete corpus objects were fully read; no external independent publication was collated."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+            "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+            "register_count": 202,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-question-search.json"
+            ],
+            "finding": "Seven unchanged complete class records reused by exact prior personal-reading identity. The source-question search has one E-011 hit for a different MTSOR correction; its full record was read. No current-segment or current-question duplicate. Registered following-heading/converter/footnote/folio/cap classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The compressed verse has the four experience labels in the same order as the explanatory prose356. RNAM SHES/consciousness and RNAM PAR SHES PA/known are different local uses. No doctrinal reversal or source correction is inferred from the broad gloss inventories.",
+            "counterevidence": "Complete master tiers distinguish glossary evidence from awaiting-equivalent scaffold and auto-aligned candidates. No HGM gloss is promoted. Same-source course repetitions do not establish independent publication accuracy, and an intelligible contextual paraphrase does not isolate every source word."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "utf8_bytes": {
+              "acip": 139,
+              "wylie": 137,
+              "english": 169
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": [
+              7,
+              7,
+              7,
+              7
+            ],
+            "finding": "All fields are physically complete and below1500 characters. Four complete physical Tibetan verse lines each have7 written syllables; the English has four physical lines. Capitalization is verse lineation."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

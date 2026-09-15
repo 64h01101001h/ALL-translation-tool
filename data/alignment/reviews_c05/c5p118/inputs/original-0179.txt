@@ -1,0 +1,97 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(352,'four kinds of sexual misconduct',[
+ ('gzhan','someone else',5,"someone else's wife",'Other/another identifies the owner of the first wife; the English pronoun is someone else. Exclude the possessive clitic. The unrelated auto-aligned a bodhisattva gloss is not promoted.'),
+ ('chung ma','wife',5,"someone else's wife",'First wife is the wife of someone else. Complete glossary explicitly attests wife; do not reuse the later anaphoric wife or the own-wife occurrence.'),
+ ('dang','or',6,'wife or with a woman','First coordinator introduces the alternative woman not married to another person. It owns the actual or after the first wife.'),
+ ('min','is not',5,'she is not another','Complete negative copula has exact glossary is not. Exclude the supplied she and repeated another-person wife description.'),
+ ('yang','although',6,'although she is not','First concessive particle has exact glossary although; it governs the negative condition in the first type.'),
+ ('ma','mother',5,'his mother,','Mother sense of MA is explicit, not the negative particle found later. Exclude the possessive pronoun.'),
+ ('dang','or',6,'mother, or sister','Coordinator between mother and the raw sister term owns the first family-list or.'),
+ ('dang','or',6,'sister, or any female','Next coordinator follows unbanked SRID MO and introduces the broader female-relative group. It owns the second family-list or.'),
+ ('pha ma','generations',5,'seven generations past','The complete PHA MA glossary explicitly includes generations. Here parents are counted through ancestry; RGYUD reinforces lineage and is not assigned the same English noun twice.'),
+ ('bdun','seven',5,'seven generations past','Exact number of generations. Exclude past and the preceding up to.'),
+ ('tshun chad du','up to',6,'up to seven generations','Whole limiting postposition has exact glossary up to. Retain its final DU rather than pretending that suffix has a separate exponent.'),
+ ("'brel ba",'related',5,'female related to one','Explicit related predicate in the extended ancestry condition; distinguish the earlier closely related framing phrase.'),
+ ('mo','female',5,'any female related','Standalone feminine word MO follows NYE DU, which remains unbanked as a kin noun. No parent span has consumed it; the complete MO glossary explicitly has female. Do not extract the earlier MO from raw SRID MO.'),
+ ('chung ma','wife',5,"one's wife, using",'Second explicit source wife is the own-wife condition in type2; the English wife inside the type1 anaphoric explanation is not claimed.'),
+ ('yin','is',5,"she is one's wife",'Positive copula belongs to the own-wife concession. Exclude she; the earlier negative copula has its own complete is not target.'),
+ ('yang','even if',6,'even if she is','Second concessive particle has exact glossary even if, distinct from although in type1.'),
+ ('yan lag','part',5,'improper part of her body','Limb/part compound owns the explicit part. Of her body is explanatory expansion; it is not captured inside a disconnected body-part parent.'),
+ ('ma yin pa','improper',3,'an improper part','Whole negative-copular phrase is the attested improper qualification of the body part. Keep the negative meaning whole, without extracting im or banking a positive proper atom.'),
+ ('kha','mouth',5,'her mouth or anus','Exact mouth noun; exclude her.'),
+ ('dang','or',6,'mouth or anus','Coordinator joins mouth and anus inside type2; it does not own a type-boundary semicolon.'),
+ ('gshang lam','anus',5,'mouth or anus','Exact anatomical compound has glossary anus. Neither component has a strictly narrower English word inside anus, so no forced d7 member.'),
+ ('yul','place',5,'an improper place','Place sense of YUL is explicit in type3, not a person/object sense from another context.'),
+ ('ma yin pa','improper',3,'an improper place','Second whole negative qualification belongs to place, distinct from the body-part and time qualifications.'),
+ ('snang ba dang bcas pa','in the open',3,'out in the open','Whole visible/exposed condition is rendered by in the open. SNANG BA supplies visibility and DANG BCAS PA possession; neither open nor in is assigned to an isolated source syllable. Exclude out.'),
+ ('dang','or',6,'open or in the environs','Coordinator between the exposed location and the sacred-site location owns this or; the earlier DANG inside DANG BCAS PA is already inside the phrase.'),
+ ('mchod rten','shrine',5,'a shrine or temple','Established shrine compound. Exclude a and do not invent offering/basis members inside the single word shrine.'),
+ ('dang','or',6,'shrine or temple','Coordinator joins the two sacred locations.'),
+ ('gtsug lag khang','temple',5,'shrine or temple','Established temple compound, with exact source spelling retained.'),
+ ('drung du','in the environs of',6,'in the environs of a shrine','Complete locative postposition has this exact glossary expression. It governs the coordinated shrine/temple; the source GI remains unbanked rather than duplicating of.'),
+ ('dang','and',6,'temple; and 4)','Coordinator closes type3 and introduces the fourth type. It owns the explicit and after the semicolon, excluding numbering and sex at.'),
+ ('dus','time',5,'an improper time','Time noun is the type4 heading; do not reuse the later period in its third example.'),
+ ('ma yin pa','improper',3,'an improper time','Third complete negative qualification belongs to time. No new affix convention is used.'),
+ ("nu zho 'thung ba",'nursing',3,'still nursing from','Whole breast-milk drinking phrase describes nursing. NU ZHO is an awaiting-equivalent scaffold and THUNG BA has drink; the local full source makes the phrase sense clear. Exclude baby, still and from the woman, which expand participants and time.'),
+ ('dang','or',6,'woman, or when she is pregnant','Coordinator joins the nursing and pregnancy conditions within type4.'),
+ ('sbrum pa','pregnant',5,'she is pregnant','Exact glossary pregnant; she is stays outside.'),
+ ('dang','or',6,'pregnant, or during','Coordinator joins pregnancy and the vow-observance period.'),
+ ('bsnyen gnas',"one-day layman's vow",5,"the one-day layman's vow",'Complete technical compound has exactly one-day layman\'s vow in the glossary. Exclude the article; no invented internal vow/member alignment.'),
+ ('gnas pa','observing',5,'she is observing','Abiding/keeping predicate governs the vow and is rendered observing. The full GNAS PA glossary supports keeping/maintaining. The later SPYAD refers to the sexual act under these conditions; its isolated observing glossary candidate would give the wrong local ownership.'),
+ ('log g-yem','sexual misconduct',5,'This sexual misconduct','The final source conclusion names sexual misconduct; English names the same category in the introductory frame. The preceding351 already introduced four types, but this source has its own explicit category noun.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep the three improper qualifications and the eight local or coordinators distinct. Raw SRID MO remains unbanked for spelling review; no source correction. PHA MA owns generations with RGYUD left distributed. MO/female is a flat lexical word after omitted NYE DU. Whole negative qualifications, exposure and nursing phrases preserve their meaning without false atoms. GNAS PA owns observing the vow; SPYAD/observing is rejected in this local construction. Exact GMR wording and all source punctuation remain unchanged.',
+ [{'tib':'gyis; bdag tu bzung ba; de; first rang gi; second rang gi; repeated English possessor descriptions','reason':'Ownership is recast through possessive and anaphoric English descriptions. Do not force the source possession idiom onto wife alone or select arbitrarily among oneself, his, one and another person. No absence is proved and no null is added.'},
+ {'tib':'srid mo','english':'sister','reason':'The raw SRID MO reading is exact in physical ACIP and C16. SRING MO supports the intended sister sense, but using it here would silently normalize the source. Keep the malformed candidate unbanked and assess it separately as LOW/PROBABLE spelling review.'},
+ {'tib':'rgyud; nye du; type-boundary dang after nye du mo and gshang lam; gi before drung du','reason':'Lineage and kin meaning are distributed across generations and repeated related descriptions; no duplicate noun or forced closely atom is claimed. Two type-boundary coordinators are rendered by list punctuation, but I do not add speculative punctuation-fusion nulls. The locative postposition already owns the complete in the environs of expression.'},
+ {'tib':"la; cha; spyad na; du 'gyur ba'i phyir",'reason':'Vow observance, temporal setting, performance of the sexual act and concluding classification are distributed into repeated English sex/case frames and the opening sentence. SPYAD does not locally mean observing the vow, despite that glossary candidate. The English period/constitutes/as framing does not isolate a safe additional atom.'},
+ {'english':"This; is of four different types; as the number of the following list each constitutes one of its forms; numbering1–4; sex with/in/at; with a woman; another person's wife; too closely related to oneself; his; any; to one; past; one's; using an; of her body; her; out; a; while a baby is still; from the woman; when she is; during the period that she is; the",'reason':'Repeated participants, articles, explanation, numbered-list framing and the prior351 four-types continuation remain outside the stated narrow claims. The awkward number/list wording is preserved for editorial review, not silently rewritten.'}])
+build(353,'the definition of lying',[
+ ('rdzun tshig','Lying',5,'Lying is when','Established lying compound; exclude is when. The words component has no separate English lexical member inside Lying.'),
+ ('bsams bzhin','purposely',5,'him--purposely','Exact intentionality compound occurs late in English but early in Tibetan; punctuation and conjunction stay outside.'),
+ ('ma','without',6,'without any mistaken','Negation belongs to the mistake condition, excluding any.'),
+ ('nor','mistaken',5,'any mistaken identity','Error sense owns mistaken. Identity is explanatory specification and remains outside.'),
+ ("'du shes",'impression',5,'wrong impression has','The complete noun record explicitly attests impression. This narrow mental-content noun is retained while GZHAN DU BSGYUR/wrong-given remains unbanked as a recast predicate; the noun claim does not authorize those false word atoms.'),
+ ('smras pa','spoken',5,"one's spoken words",'Complete speech participle has exact glossary spoken. Exclude the possessive framing.'),
+ ('tshig','words',5,'spoken words are','Explicit speech noun in the meaning condition, distinct from the earlier lying compound.'),
+ ('gi','of',6,"meanings of one's",'Genitive links meanings to the spoken words and owns this of. The bound source genitive after SMRAS PA is not separately mapped.'),
+ ('don','meanings',5,'the meanings of','Meaning/content sense owns meanings, preserving the plural translation and excluding the article.'),
+ ('pha rol pos','other person',5,'the other person involved','Whole agentive-inflected OTHER PERSON compound is preserved. The agentive s cannot be separated; by/the/involved are not included inside the noun claim.'),
+ ('go ba','understood',5,'are understood by','Direct glossary understood; exclude are. MNGON PAR adds an explicitness qualification but has no unique English word here.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Keep impression as the narrow attested noun, while wrong/given remain an uncertain recast of GZHAN DU BSGYUR. PHA ROL POS is retained whole; no detached agentive s. The concluding next-section prose,77 and heading are preserved unbanked. Exact source and GMR wording remain unchanged, with no hgm_gloss promotion or invented null.',
+ [{'tib':'ni; du; bar; nas; bound genitives and declarative o; mngon par','reason':'Topic, adverbial, connective and explicitness grammar is distributed into the English definition. No separate exponent or absence is proved; leave it unbanked.'},
+ {'tib':'gzhan du bsgyur','english':'wrong; has been given','reason':'Changing the perception to something else is recast as a wrong impression given. GZHAN is other, and BSGYUR is turn/change; neither alone is a secure wrong/given word pair. Keep only the independently supported impression noun.'},
+ {'english':"is when the; one's; are; by the; involved; and a; him; and; any; identity; Next we describe the \"four expressions.\" 77 The Four Expressions",'reason':'Articles, participants, auxiliaries and the next-section transition/heading have no new narrow source counterpart. The heading is registered apparatus, not a new typo filing or a null target.'}])
+build(354,'four expressions and consciousness',[
+ ('mig','eye',5,'Of eye,','Exact eye noun. Exclude the repeated English relation Of.'),
+ ('rna','ear',5,'of ear,','Exact short source form RNA has glossary ear; do not silently expand it to RNA BA.'),
+ ('yid','thought',5,'the thought,','The mental faculty is explicitly thought in the glossary and in the nearby prose explanation356; exclude the.'),
+ ('rnam shes','consciousness',5,'by consciousness','Established consciousness compound. It governs the coordinated eye/ear/thought faculties; no internal lexical member fits inside the single English word.'),
+ ('dang','and',6,'thought, and by','First coordinator joins the first consciousness group to the remaining three faculties, owning and before the second by.'),
+ ('gsum','three',5,'by the three','Exact number of remaining faculties, explained as nose/tongue/body in complete context356. Exclude the.'),
+ ('nyams su myong','experienced',5,'That experienced','Established experiential compound with exact glossary experienced; no isolated SU or MYONG mapping is forced.'),
+ ('gang de','That',3,'That experienced','Whole relative-correlative frame GANG DE identifies what is experienced and is compressed to the opening That. Keep the phrase whole rather than declaring either part absent.'),
+ ('mthong','seen',5,"what's seen",'First of the four explicit experience labels; exclude the relative/copular frame.'),
+ ('thos','heard',5,"What's heard",'Second label is directly heard; capitalization belongs to the adjacent supplied relative word, not this source noun.'),
+ ('rnam par shes pa','known',5,"what's known",'Whole technical cognition expression is known in this fourfold list; distinguish the earlier RNAM SHES/consciousness noun. Complete glossary and prose356 establish the local order.'),
+ ('dang','and',6,'and also what is sensed','Second coordinator joins the last two experience labels. Tighten to and, leaving also as reinforcement.'),
+ ('rtogs pa','sensed',5,'what is sensed','Fourth label is exactly sensed in the complete glossary and local356 explanation. Do not swap it with the preceding known.'),
+ ('rim bzhin','respectively',5,'Represents respectively','Established order expression is exactly respectively. It links the two fourfold lists without changing the source order.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Preserve the fourfold order and distinguish consciousness from known. GANG DE/That remains one relative phrase; shared KYI and GYIS relations stay unbanked rather than choosing arbitrarily among repeated of/by. The YIN/BSHAD naming predicate is distributed into Represents and remains omitted despite a broad glossary candidate. Verse capitalization is retained as lineation, with no new null or source correction.',
+ [{'tib':'kyi; gyis','english':'Of; of; first by; second by','reason':'The genitive and instrumental scope over coordinated groups, while English repeats of and by. No unique one-to-one ownership is secure; omission avoids arbitrary repeated-target selection and does not imply absence.'},
+ {'tib':'yin te; bshad','english':'Represents','reason':'The copula and naming/explanation predicate jointly support the English classification. BSHAD has a broad represents glossary candidate, but I cannot isolate it confidently from the YIN construction here. Leave both unbanked without a null.'},
+ {'english':"the; what's; What's; what is; also",'reason':'Articles, relative/copular frames and additive reinforcement remain outside the stated lexical claims. No English words are silently removed or supplied.'}])

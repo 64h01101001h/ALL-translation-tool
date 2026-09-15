@@ -1,0 +1,23 @@
+{
+  "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+  "terms": [
+    "srid mo",
+    "sring mo",
+    "as the number of the following"
+  ],
+  "count": 1,
+  "complete_records": [
+    {
+      "item_id": "E-011",
+      "course": "C01",
+      "segment": "C01:193",
+      "kind": "TIBETAN_SPELLING",
+      "found": "nga skyid pa gnyen gyis mtshor zhing , ,sdug pa dgra yis ma tshor bar, ,rgas pa grogs kyis ma tshor zhing , ,na ba sring mos ma tshor bar,",
+      "expected": "nga skyid pa gnyen gyis ma tshor zhing",
+      "evidence": "Verified verbatim at C01:193 (hint correct). The same segment carries five parallel lines with the negation intact: \"dgra yis ma tshor bar\", \"grogs kyis ma tshor zhing\", \"sring mos ma tshor bar\", \"mi yis ma tshor zhing\". The English of line 1 is negative — \"No way my loved ones know I'm glad\" — matching \"ma tshor\", and the seven-syllable meter also requires the extra syllable. \"gnyen gyis ma tshor\" occurs nowhere else in the corpus, and the identical error appears in the duplicated verse at C16:89. Same error shape as E-008: \"ma tshor\" collapsed to \"mtshor\".",
+      "severity": "MEDIUM",
+      "confidence": "CONFIRMED",
+      "note": "Two occurrences to fix: C01:193 and C16:89 (the same Milarepa cave verse). Caution for any automated cleanup: \"mtshor\" on its own is a legitimate form elsewhere (mtsho + terminative, e.g. rgya mtshor) and is a dictionary headword, so this must not be fixed by global search-and-replace — only the \"gnyen gyis mtshor\" line is wrong."
+    }
+  ]
+}

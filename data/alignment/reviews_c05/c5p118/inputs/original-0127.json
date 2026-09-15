@@ -1,0 +1,165 @@
+{
+  "seq": 352,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1734,
+        "course": "C05",
+        "seq": 352,
+        "acip": "GZHAN GYIS BDAG TU BZUNG BA'I CHUNG MA DANG , DE MIN YANG RANG GI MA DANG SRID MO DANG PHA MA BDUN RGYUD TSUN CHAD DU 'BREL BA'I NYE DU MO DANG , RANG GI CHUNG MA YIN YANG YAN LAG MA YIN PA KHA DANG GSHANG LAM DANG , YUL MA YIN PA SNANG BA DANG BCAS PA DANG , MCHOD RTEN DANG GTZUG LAG KHANG GI DRUNG DU DANG , DUS MA YIN PA NU ZHO 'THUNG BA DANG , SBRUM PA DANG , BSNYEN GNAS LA GNAS PA'I CHA SPYAD NA LOG G-YEM DU 'GYUR BA'I PHYIR,",
+        "wylie": "gzhan gyis bdag tu bzung ba'i chung ma dang , de min yang rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du 'brel ba'i nye du mo dang , rang gi chung ma yin yang yan lag ma yin pa kha dang gshang lam dang , yul ma yin pa snang ba dang bcas pa dang , mchod rten dang gtsug lag khang gi drung du dang , dus ma yin pa nu zho 'thung ba dang , sbrum pa dang , bsnyen gnas la gnas pa'i cha spyad na log g-yem du 'gyur ba'i phyir",
+        "english": "This sexual misconduct is of four different types, as the number of the following list each constitutes one of its forms: 1) sex with someone else's wife or with a woman who, although she is not another person's wife, is too closely related to oneself--his mother, or sister, or any female related to one up to seven generations past; 2) sex with a woman, even if she is one's wife, using an improper part of her body--her mouth or anus; 3) sex in an improper place--out in the open or in the environs of a shrine or temple; and 4) sex at an improper time--while a baby is still nursing from the woman, or when she is pregnant, or during the period that she is observing the one-day layman's vow."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current ACIP/Wylie/GMR fields and neighboring context346–360 read. Six complete physical ASCII extents were read and their whitespace-collapse identity verified. Available digital agreement is evidence of the reading, not automatic proof that its spelling or grammar is correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1734,
+            6891
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1734,
+            6891
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1734
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/supplemental-corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "C16:873 matches ACIP/Wylie completely and repeats the awkward number/list opening. Its English has even is where C05 has even if, so the full English fields are not byte-identical. TCS02:73 has the same opening grammar and expanded list, but different surrounding verse/prose, your/you instead of his/one, capitals and a duplicated her; it is not an identical current row or independent corrected witness. All22 unique focused complete corpus objects were fully read; no external independent publication was collated."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-question-search.json"
+      ],
+      "finding": "Seven unchanged complete class records reused by exact prior personal-reading identity. The source-question search has one E-011 hit for a different MTSOR correction; its full record was read. No current-segment or current-question duplicate. Registered following-heading/converter/footnote/folio/cap classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "Two LOW/PROBABLE source questions are proposed separately below: raw SRID MO in the sister position, and the awkward number/list grammar. Both remain exact. Inflected technical terms, repeated list words and participant expansions are not corrected or forced into word pairs.",
+      "counterevidence": "Complete master tiers distinguish glossary evidence from awaiting-equivalent scaffold and auto-aligned candidates. No HGM gloss is promoted. Same-source course repetitions do not establish independent publication accuracy, and an intelligible contextual paraphrase does not isolate every source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 433,
+        "wylie": 433,
+        "english": 696
+      },
+      "utf8_bytes": {
+        "acip": 433,
+        "wylie": 433,
+        "english": 696
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are physically complete and below1500 characters. This is prose, so a verse-metre argument is not applicable. The physical list explicitly contains1),2),3),4); raw SRID MO and candidate SRING MO each have2 syllables, which does not adjudicate the spelling."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "PROPOSE_LOW_PROBABLE_REVIEW",
+      "reason": "See the exact source-specific proposed record with positive evidence and counterevidence; no source correction."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "PROPOSE_LOW_PROBABLE_REVIEW",
+      "reason": "See the exact source-specific proposed record with positive evidence and counterevidence; no source correction."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    }
+  ],
+  "source_questions": [
+    {
+      "seq": 352,
+      "kind": "TIBETAN_SPELLING",
+      "found": "MA DANG SRID MO DANG",
+      "expected": "For human review: MA DANG SRING MO DANG is the supported sister-reading candidate. Preserve raw SRID MO until reviewed.",
+      "evidence": "C05:352 ACIP and the complete physical ASCII extent both read MA DANG SRID MO DANG; Wylie srid mo is faithful. No exact srid mo master record was returned. The complete sring mo scaffold supplies Sanskrit bhagini/svasr with no HGM gloss, and12 complete corpus records containing sring mo were read. GIE:208 explicitly calls a sister a potential bride in a prohibition; C01:193/C16:89 and SOS:164 use sister in other settings; TCS17:839/842/886/887/911/1016/1134 establish repeated sister usage, while MB2:97 renders siblings. These are usage witnesses, not a corrected copy of this sentence. The srid mo substring search returned4 rows: only C05:352/C16:873 contain the actual two-word form; C03:433/P1:78 contain SRID MOD and are irrelevant to sister spelling. Counterevidence: C16:873 repeats the entire ACIP/Wylie with SRID MO, and the physical source agrees. Thus a local converter or ingestion error is not established and a nonstandard source reading cannot be conclusively excluded. Both candidate forms have2 syllables in prose; metre does not decide. Complete fields are below1500 characters. The202-record origin register has no current SRID MO finding; E-011 mentions a different sister line while correcting MTSOR, not this spelling. Propose LOW/PROBABLE human spelling review, with source/master unchanged and raw srid mo unbanked.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    },
+    {
+      "seq": 352,
+      "kind": "ENGLISH_TYPO",
+      "found": "as the number of the following list each constitutes one of its forms",
+      "expected": "For human review: as each item in the following list constitutes one of its forms is a possible grammatical repair. Do not replace the source automatically.",
+      "evidence": "The exact C05:352 English and its complete physical ASCII extent have as the number of the following list each constitutes one of its forms. The following list explicitly enumerates1) through4); singular the number combined with distributive each is awkward and obscures the reference to its individual entries. A repair involving each item would express the local sense without changing the fourfold taxonomy. Counterevidence: C16:873 and the expanded English at TCS02:73 repeat this full opening wording; neither supplies an independently corrected reading. Number may have been intended collectively for numbered list items, so the intended wording cannot be uniquely restored and no factual-doctrine error is claimed. The Tibetan352 explains the instances, while the preceding351 introduces four types; this distribution supports the intended enumeration but not one exact English repair. Physical completeness and sub1500 length exclude an evident cap truncation here. No matching source phrase or current segment entry was found in the202-record origin register. Propose LOW/PROBABLE editorial grammar review only, preserving all exact GMR text.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    }
+  ],
+  "proposed_errata": [
+    {
+      "seq": 352,
+      "kind": "TIBETAN_SPELLING",
+      "found": "MA DANG SRID MO DANG",
+      "expected": "For human review: MA DANG SRING MO DANG is the supported sister-reading candidate. Preserve raw SRID MO until reviewed.",
+      "evidence": "C05:352 ACIP and the complete physical ASCII extent both read MA DANG SRID MO DANG; Wylie srid mo is faithful. No exact srid mo master record was returned. The complete sring mo scaffold supplies Sanskrit bhagini/svasr with no HGM gloss, and12 complete corpus records containing sring mo were read. GIE:208 explicitly calls a sister a potential bride in a prohibition; C01:193/C16:89 and SOS:164 use sister in other settings; TCS17:839/842/886/887/911/1016/1134 establish repeated sister usage, while MB2:97 renders siblings. These are usage witnesses, not a corrected copy of this sentence. The srid mo substring search returned4 rows: only C05:352/C16:873 contain the actual two-word form; C03:433/P1:78 contain SRID MOD and are irrelevant to sister spelling. Counterevidence: C16:873 repeats the entire ACIP/Wylie with SRID MO, and the physical source agrees. Thus a local converter or ingestion error is not established and a nonstandard source reading cannot be conclusively excluded. Both candidate forms have2 syllables in prose; metre does not decide. Complete fields are below1500 characters. The202-record origin register has no current SRID MO finding; E-011 mentions a different sister line while correcting MTSOR, not this spelling. Propose LOW/PROBABLE human spelling review, with source/master unchanged and raw srid mo unbanked.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    },
+    {
+      "seq": 352,
+      "kind": "ENGLISH_TYPO",
+      "found": "as the number of the following list each constitutes one of its forms",
+      "expected": "For human review: as each item in the following list constitutes one of its forms is a possible grammatical repair. Do not replace the source automatically.",
+      "evidence": "The exact C05:352 English and its complete physical ASCII extent have as the number of the following list each constitutes one of its forms. The following list explicitly enumerates1) through4); singular the number combined with distributive each is awkward and obscures the reference to its individual entries. A repair involving each item would express the local sense without changing the fourfold taxonomy. Counterevidence: C16:873 and the expanded English at TCS02:73 repeat this full opening wording; neither supplies an independently corrected reading. Number may have been intended collectively for numbered list items, so the intended wording cannot be uniquely restored and no factual-doctrine error is claimed. The Tibetan352 explains the instances, while the preceding351 introduces four types; this distribution supports the intended enumeration but not one exact English repair. Physical completeness and sub1500 length exclude an evident cap truncation here. No matching source phrase or current segment entry was found in the202-record origin register. Propose LOW/PROBABLE editorial grammar review only, preserving all exact GMR text.",
+      "severity": "LOW",
+      "confidence": "PROBABLE"
+    }
+  ],
+  "source_corrections": false
+}

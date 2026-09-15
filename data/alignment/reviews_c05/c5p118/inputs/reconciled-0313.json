@@ -1,0 +1,28 @@
+{
+  "utc": "2026-09-15T03:54:34.396233+00:00",
+  "status": "ROOT_EXACT_PARALLEL_READING_COMPLETE",
+  "queries": 9,
+  "preparation": {
+    "bytes": 30494,
+    "sha256": "1e649a6e5cef231ff11bf1b06faf32630d1fb21d5322fe45c81dd3e126a95763"
+  },
+  "complete_nonlocal_wrappers_read": [
+    {
+      "id": 6891,
+      "course": "C16",
+      "seq": 873
+    },
+    {
+      "id": 6892,
+      "course": "C16",
+      "seq": 874
+    }
+  ],
+  "actual_full_corpus_record_match": true,
+  "corpus": {
+    "bytes": 8965675,
+    "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+  },
+  "findings": "C16:873 repeats352 Tibetan but its English has even is versus C05 even if. C16:874 repeats353 Tibetan but English spacing and appended page/heading differ. These are publication-family witnesses, not independent authority or source-restoration proof. No354 exact nonlocal result found in these nine exact queries; this is not an exhaustive absence claim.",
+  "limits": "Only two full nonlocal wrappers newly read; current C05 source objects were already fully read and exact-wrapper fields verified. No original proposal, lexical decision or acceptance."
+}

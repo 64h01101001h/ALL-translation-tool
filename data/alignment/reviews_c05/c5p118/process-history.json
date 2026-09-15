@@ -1,0 +1,57 @@
+{
+  "source_first": {
+    "path": "independent-source-first-notes.json",
+    "pin": {
+      "bytes": 9854,
+      "sha256": "121cb3a2ddb5b68f33fba4b874a3123148489d6517f22c2583bab90c85e4d846"
+    }
+  },
+  "precommitted_assessment": {
+    "path": "independent-pre-reconciliation-assessment.json",
+    "pin": {
+      "bytes": 33996,
+      "sha256": "3b980c795091fdc16c0e5411724f7fe8359074b2cd508fe78a9e7d73b47ada44"
+    }
+  },
+  "original_history": "Two English read displays were truncated, then the complete affected352 span objects and353 source ground were reprinted; no missing material was credited. All new master/corpus batches and all deduplicated T grounds were read fully. Tibetan pre-native anchor preflight corrected an ambiguous not/another anchor before authoring and exited0, with its preimage/result preserved; a separate read-only helper path search exited2. All six original native pairs passed once. No original file was changed by this reviewer.",
+  "tibetan_pre_native_anchor_preflight": {
+    "status": "FOUND_AND_CORRECTED_BEFORE_AUTHOR_OR_GENERATION",
+    "actual_command_exit": 0,
+    "findings": [
+      [
+        352,
+        "p2",
+        "English anchor she is not another contains not twice because another includes those letters"
+      ]
+    ],
+    "correction": "Use the unique is not anchor; intended explicit negative occurrence unchanged."
+  },
+  "english_read_history": {
+    "native_failures": 0,
+    "read_only_lookup_failures": [],
+    "display_history": "The first33-new-master display exceeded the outer tool-output budget and truncated the middle. Complete objects at indices11–23 of the new-key list were reprinted in a bounded display; the remaining first-group objects were fully visible. All94 new complete objects were read, with no source-query or native rerun."
+  },
+  "reconciliation_history": "Six original pairs plus two successful changed352/354 pairs;353 reuses the exact original English pair. No reconciliation generation/resolver or assembly failure. Historical root null-baseline note remains unchanged and current351 baseline is separately bound.",
+  "reviewer_history": [
+    {
+      "kind": "READ_OUTPUT_TRUNCATION",
+      "resolution": "Initial combined final-rationale display exceeded output budget. All66 rationale source texts and25 omission records were subsequently fully displayed; current exact-object identity also binds prior reading."
+    },
+    {
+      "kind": "READ_ONLY_PATH_LOOKUP",
+      "actual_exit": 1,
+      "requested_missing_path": "reconciled/report.md",
+      "actual_stderr": "cat: campaign-artifacts/C05-352-354/reconciled/report.md: No such file or directory",
+      "resolution": "Current reports are per-segment; all three were then read fully. Other requested native-selection/provenance reads in that call succeeded."
+    },
+    {
+      "kind": "READ_ONLY_PATH_LOOKUP",
+      "actual_exit": 1,
+      "requested_missing_path": "reconciled/actual-process-history.json",
+      "actual_stderr": "cat: campaign-artifacts/C05-352-354/reconciled/actual-process-history.json: No such file or directory",
+      "resolution": "No such file is claimed in the freeze. Actual native selection, provenance, per-segment reports and original history files were read and bound."
+    }
+  ],
+  "reviewer_source_original_and_final_identity_captures": "Three actual proof/copy commands passed exit0/empty stderr; none executes a source query or alignment engine. Package validation follows separately.",
+  "method_review_scope": "The separate raw-source compatibility method review is outside this semantic package. F raw versus G standard source-capture classification has no semantic effect."
+}

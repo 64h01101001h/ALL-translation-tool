@@ -1,0 +1,2687 @@
+{
+  "seq": 353,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 353,
+        "kind": "TIBETAN_SPELLING",
+        "found": "MA NOR BAR",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "MA NOR BAR",
+            "source_row": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "occurrences": {
+              "acip": [
+                29
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 353,
+                "field": "acip",
+                "start": 241348,
+                "bytes": 124,
+                "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 353,
+                "field": "english",
+                "start": 241474,
+                "bytes": 254,
+                "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The source here has BAR, retained exactly. The previous351 PAR question does not license normalizing this row. ACIP TSIG and Wylie TSHIG follow the captured conversion; PHA ROL POS retains the whole agentive-inflected phrase. Complete physical and C16 Tibetan fields agree; no new spelling correction is established.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 353,
+        "kind": "ENGLISH_TYPO",
+        "found": "him--purposely,",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "him--purposely,",
+            "source_row": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                132
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 353,
+                "field": "acip",
+                "start": 241348,
+                "bytes": 124,
+                "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 353,
+                "field": "english",
+                "start": 241474,
+                "bytes": 254,
+                "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The double hyphen and lack of a space introduce purposely in the physical text. C16 has a space after the hyphen, but spacing variation alone does not establish a word-level error. Wrong impression given is an expanded transformation clause, left distributed instead of assigning an invented GZHAN/wrong atom.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 353,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "mistaken identity",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "mistaken identity",
+            "source_row": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                164
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 353,
+                "field": "acip",
+                "start": 241348,
+                "bytes": 124,
+                "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 353,
+                "field": "english",
+                "start": 241474,
+                "bytes": 254,
+                "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "NOR supplies mistaken in the intentional deception definition; identity is explanatory context. The other person’s understanding and transformed impression are both represented. No doctrinal reversal is established merely because the passive English distributes Tibetan cause and consequence.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 353,
+        "kind": "INGEST_ARTEFACT",
+        "found": "Next we describe the \"four expressions.\" 77 The Four Expressions",
+        "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+        "five_grounds": {
+          "a_quote": {
+            "found": "Next we describe the \"four expressions.\" 77 The Four Expressions",
+            "source_row": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                183
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 353,
+                "field": "acip",
+                "start": 241348,
+                "bytes": 124,
+                "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 353,
+                "field": "english",
+                "start": 241474,
+                "bytes": 254,
+                "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "Physical bytes show the appended transition and separate page/title after the definition. The current Tibetan row has no corresponding four-expression heading. This is the already registered following-section/folio/row-boundary class, not a new claim of missing semantic content. Preserve it unwrapped, without a new duplicate erratum or borrowed Tibetan span.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 353,
+        "kind": "FORMATTING",
+        "found": "\"four expressions.\"",
+        "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+        "five_grounds": {
+          "a_quote": {
+            "found": "\"four expressions.\"",
+            "source_row": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                204
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 353,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "srid mo"
+                ],
+                "count": 4,
+                "row_ids": [
+                  997,
+                  1734,
+                  6891,
+                  34323
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "pha ma bdun rgyud"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1734,
+                  6891
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "as the number of the following list"
+                ],
+                "count": 3,
+                "row_ids": [
+                  1734,
+                  6891,
+                  9347
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "each member of the following list"
+                ],
+                "count": 0,
+                "row_ids": []
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "mig rna yid kyi rnam shes"
+                ],
+                "count": 1,
+                "row_ids": [
+                  1736
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rdzun tshig ni bsams bzhin"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "sring mo"
+                ],
+                "count": 12,
+                "row_ids": [
+                  193,
+                  6107,
+                  23720,
+                  22846,
+                  34018,
+                  20701,
+                  20704,
+                  20748,
+                  20749,
+                  20773,
+                  20878,
+                  20996
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+            "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+            "register_identity": {
+              "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 280652,
+              "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+            },
+            "count": 202,
+            "search_terms": [
+              "c05:352",
+              "c05:353",
+              "c05:354",
+              "srid mo",
+              "number of the following list",
+              "77 the four expressions"
+            ],
+            "matches": [],
+            "classes_checked": [
+              "following-section heading glue",
+              "folio/footnote fusion",
+              "E-044 converter escapes",
+              "E-071 running head",
+              "E-107 cap",
+              "E-111 row spill"
+            ],
+            "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 353,
+                "field": "acip",
+                "start": 241348,
+                "bytes": 124,
+                "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 353,
+                "field": "english",
+                "start": 241474,
+                "bytes": 254,
+                "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "lexical_queries": 80,
+            "material_master_objects": 146,
+            "personally_read_reused_objects": 53,
+            "complete_new_master_objects_read": 93,
+            "new_corpus_queries": 7,
+            "neutral_queries_reused": 9,
+            "complete_corpus_objects_read": 20
+          },
+          "d_defensibility": {
+            "judgment": "The quoted transitional phrase and following title belong to the printed apparatus outside the definition. C16 instead appends a different following heading, so its full English is not an exact witness. Keep quotes, title and77 verbatim rather than treating their typography as a new spelling/factual correction.",
+            "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FINDING",
+        "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "REGISTERED_CLASS_NOT_REFILED",
+        "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "REGISTERED_CLASS_NOT_REFILED",
+        "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+      },
+      "disposition": "RETAIN_NO_NEW_ERRATUM",
+      "reason": "Exact English eleven tuples/body/native unchanged, matching Tibetan semantic ranges despite different IDs. Preserve wrong-impression/given distribution, agentive PHA ROL POS, bare BSAMS BZHIN and explicit MA/without. Following transition/page77/title remain unwrapped known apparatus, without invented corresponding Tibetan or duplicate source error.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 353,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 353,
+          "kind": "TIBETAN_SPELLING",
+          "found": "MA NOR BAR",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "MA NOR BAR",
+              "source_row": {
+                "id": 1735,
+                "course": "C05",
+                "seq": 353,
+                "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+                "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+              },
+              "occurrences": {
+                "acip": [
+                  29
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1735
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 124,
+                "wylie": 124,
+                "english": 247
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 353,
+                  "field": "acip",
+                  "start": 241348,
+                  "bytes": 124,
+                  "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                  "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 353,
+                  "field": "english",
+                  "start": 241474,
+                  "bytes": 254,
+                  "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                  "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The source here has BAR, retained exactly. The previous351 PAR question does not license normalizing this row. ACIP TSIG and Wylie TSHIG follow the captured conversion; PHA ROL POS retains the whole agentive-inflected phrase. Complete physical and C16 Tibetan fields agree; no new spelling correction is established.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 353,
+          "kind": "ENGLISH_TYPO",
+          "found": "him--purposely,",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "him--purposely,",
+              "source_row": {
+                "id": 1735,
+                "course": "C05",
+                "seq": 353,
+                "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+                "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  132
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1735
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 124,
+                "wylie": 124,
+                "english": 247
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 353,
+                  "field": "acip",
+                  "start": 241348,
+                  "bytes": 124,
+                  "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                  "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 353,
+                  "field": "english",
+                  "start": 241474,
+                  "bytes": 254,
+                  "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                  "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The double hyphen and lack of a space introduce purposely in the physical text. C16 has a space after the hyphen, but spacing variation alone does not establish a word-level error. Wrong impression given is an expanded transformation clause, left distributed instead of assigning an invented GZHAN/wrong atom.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 353,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "mistaken identity",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "mistaken identity",
+              "source_row": {
+                "id": 1735,
+                "course": "C05",
+                "seq": 353,
+                "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+                "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  164
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1735
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 124,
+                "wylie": 124,
+                "english": 247
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 353,
+                  "field": "acip",
+                  "start": 241348,
+                  "bytes": 124,
+                  "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                  "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 353,
+                  "field": "english",
+                  "start": 241474,
+                  "bytes": 254,
+                  "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                  "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "NOR supplies mistaken in the intentional deception definition; identity is explanatory context. The other person’s understanding and transformed impression are both represented. No doctrinal reversal is established merely because the passive English distributes Tibetan cause and consequence.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 353,
+          "kind": "INGEST_ARTEFACT",
+          "found": "Next we describe the \"four expressions.\" 77 The Four Expressions",
+          "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+          "five_grounds": {
+            "a_quote": {
+              "found": "Next we describe the \"four expressions.\" 77 The Four Expressions",
+              "source_row": {
+                "id": 1735,
+                "course": "C05",
+                "seq": 353,
+                "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+                "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  183
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1735
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 124,
+                "wylie": 124,
+                "english": 247
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 353,
+                  "field": "acip",
+                  "start": 241348,
+                  "bytes": 124,
+                  "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                  "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 353,
+                  "field": "english",
+                  "start": 241474,
+                  "bytes": 254,
+                  "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                  "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "Physical bytes show the appended transition and separate page/title after the definition. The current Tibetan row has no corresponding four-expression heading. This is the already registered following-section/folio/row-boundary class, not a new claim of missing semantic content. Preserve it unwrapped, without a new duplicate erratum or borrowed Tibetan span.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 353,
+          "kind": "FORMATTING",
+          "found": "\"four expressions.\"",
+          "decision": "NO_NEW_ERRATUM_KNOWN_CLASS",
+          "five_grounds": {
+            "a_quote": {
+              "found": "\"four expressions.\"",
+              "source_row": {
+                "id": 1735,
+                "course": "C05",
+                "seq": 353,
+                "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+                "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  204
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 353,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1735
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "srid mo"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    997,
+                    1734,
+                    6891,
+                    34323
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "pha ma bdun rgyud"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1734,
+                    6891
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "as the number of the following list"
+                  ],
+                  "count": 3,
+                  "row_ids": [
+                    1734,
+                    6891,
+                    9347
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "each member of the following list"
+                  ],
+                  "count": 0,
+                  "row_ids": []
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "mig rna yid kyi rnam shes"
+                  ],
+                  "count": 1,
+                  "row_ids": [
+                    1736
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rdzun tshig ni bsams bzhin"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1735,
+                    6892
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "sring mo"
+                  ],
+                  "count": 12,
+                  "row_ids": [
+                    193,
+                    6107,
+                    23720,
+                    22846,
+                    34018,
+                    20701,
+                    20704,
+                    20748,
+                    20749,
+                    20773,
+                    20878,
+                    20996
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json and corpus-supplement.json; all20 complete records read",
+              "lineage_limit": "C16:873/874 repeats Tibetan352/353 but its English differs (even is; alternate following heading). Neither a duplicated publication-family text nor a corpus substring establishes an independent corrected edition. TCS02:73 English spills beyond its Tibetan row and contains its own her her duplication. No exact C16 parallel was returned for354. The SRID MO substring query has4 hits but only2 whole-term hits; C03:433/P1:78 are SRID MOD and are excluded. Twelve complete SRING MO records provide contextual sister/kinship usage, including figurative mother/sister passages, not a corrected identical352 witness."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+              "register_identity": {
+                "original_git_commit": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 280652,
+                "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441"
+              },
+              "count": 202,
+              "search_terms": [
+                "c05:352",
+                "c05:353",
+                "c05:354",
+                "srid mo",
+                "number of the following list",
+                "77 the four expressions"
+              ],
+              "matches": [],
+              "classes_checked": [
+                "following-section heading glue",
+                "folio/footnote fusion",
+                "E-044 converter escapes",
+                "E-071 running head",
+                "E-107 cap",
+                "E-111 row spill"
+              ],
+              "later_baseline_delta": "Acceptance through351 was not available at this original packaging; no future receipt or register delta is invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 124,
+                "wylie": 124,
+                "english": 247
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 353,
+                  "field": "acip",
+                  "start": 241348,
+                  "bytes": 124,
+                  "sha256": "5d041bb8d542ea384e8a5aafdfdab141bdefb01854371db81196f42ec44592b3",
+                  "original_text": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 353,
+                  "field": "english",
+                  "start": 241474,
+                  "bytes": 254,
+                  "sha256": "46fe866f0ce131013104db5ff8ccb2f1013970fe85e9712671a6c50c9a40346f",
+                  "original_text": "Lying is when the meanings of one's spoken words are understood by the\r\nother person involved, and a wrong impression has been given\r\nhim--purposely, and without any mistaken identity.\r\nNext we describe the \"four expressions.\"\r\n\r\n77\r\nThe Four Expressions",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "lexical_queries": 80,
+              "material_master_objects": 146,
+              "personally_read_reused_objects": 53,
+              "complete_new_master_objects_read": 93,
+              "new_corpus_queries": 7,
+              "neutral_queries_reused": 9,
+              "complete_corpus_objects_read": 20
+            },
+            "d_defensibility": {
+              "judgment": "The quoted transitional phrase and following title belong to the printed apparatus outside the definition. C16 instead appends a different following heading, so its full English is not an exact witness. Keep quotes, title and77 verbatim rather than treating their typography as a new spelling/factual correction.",
+              "material": "../evidence/lexical.json complete master objects with personally-read identity reuse; corpus.json and corpus-supplement.json complete objects; original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 353,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 353,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1735,
+              "course": "C05",
+              "seq": 353,
+              "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+              "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+              "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "Complete current ACIP/Wylie/GMR fields and neighboring context346–360 read. Six complete physical ASCII extents were read and their whitespace-collapse identity verified. Available digital agreement is evidence of the reading, not automatic proof that its spelling or grammar is correct."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1735,
+                  6892
+                ]
+              },
+              {
+                "field": "english",
+                "count": 1,
+                "row_ids": [
+                  1735
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/supplemental-corpus.json",
+              "../evidence/original-context-manifest.json"
+            ],
+            "finding": "C16:874 matches ACIP/Wylie completely; its English inserts a space after him--, omits the Next we describe transition and appends39 Six Branch Non-Virtues instead of77 The Four Expressions. Preserve both histories without treating a differing following heading as a correction to current353. The related348/TCS02:73 verse also has the wrong-impression recast. All22 unique focused complete corpus objects were fully read; no external independent publication was collated."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+            "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+            "register_count": 202,
+            "direct_current_segment_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register-question-search.json"
+            ],
+            "finding": "Seven unchanged complete class records reused by exact prior personal-reading identity. The source-question search has one E-011 hit for a different MTSOR correction; its full record was read. No current-segment or current-question duplicate. Registered following-heading/converter/footnote/folio/cap classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "The lying definition is recast in English with wrong impression given; lexical uncertainty belongs to alignment omissions, not a source-error claim. The terminal transition,77 and following heading are supplied apparatus covered by the existing following-heading class.",
+            "counterevidence": "Complete master tiers distinguish glossary evidence from awaiting-equivalent scaffold and auto-aligned candidates. No HGM gloss is promoted. Same-source course repetitions do not establish independent publication accuracy, and an intelligible contextual paraphrase does not isolate every source word."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "utf8_bytes": {
+              "acip": 124,
+              "wylie": 124,
+              "english": 247
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "All fields are physically complete and below1500 characters. This is prose, so a verse-metre argument is not applicable. The printed transition,77 and heading are visibly separate lines within the captured English extent."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FINDING",
+            "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "REGISTERED_CLASS_NOT_REFILED",
+            "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "REGISTERED_CLASS_NOT_REFILED",
+            "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

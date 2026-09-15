@@ -1,0 +1,127 @@
+{
+  "seq": 353,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1735,
+        "course": "C05",
+        "seq": 353,
+        "acip": "RDZUN TSIG NI BSAMS BZHIN DU MA NOR BAR 'DU SHES GZHAN DU BSGYUR NAS SMRAS PA'I TSIG GI DON PHA ROL POS MNGON PAR GO BA'O, ,",
+        "wylie": "rdzun tshig ni bsams bzhin du ma nor bar 'du shes gzhan du bsgyur nas smras pa'i tshig gi don pha rol pos mngon par go ba'o,",
+        "english": "Lying is when the meanings of one's spoken words are understood by the other person involved, and a wrong impression has been given him--purposely, and without any mistaken identity. Next we describe the \"four expressions.\" 77 The Four Expressions"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete current ACIP/Wylie/GMR fields and neighboring context346–360 read. Six complete physical ASCII extents were read and their whitespace-collapse identity verified. Available digital agreement is evidence of the reading, not automatic proof that its spelling or grammar is correct."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1735,
+            6892
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1735,
+            6892
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1735
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/supplemental-corpus.json",
+        "../evidence/original-context-manifest.json"
+      ],
+      "finding": "C16:874 matches ACIP/Wylie completely; its English inserts a space after him--, omits the Next we describe transition and appends39 Six Branch Non-Virtues instead of77 The Four Expressions. Preserve both histories without treating a differing following heading as a correction to current353. The related348/TCS02:73 verse also has the wrong-impression recast. All22 unique focused complete corpus objects were fully read; no external independent publication was collated."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "bd2f2ebafd06d389f2d896cd88a3f53fd7edd5e4:docs/errata_register.json",
+      "sha256": "fe0cbda0a0e694dcd12fe1c3052772cb24c0752eeb374a5a8e0da73ed61f5441",
+      "register_count": 202,
+      "direct_current_segment_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register-question-search.json"
+      ],
+      "finding": "Seven unchanged complete class records reused by exact prior personal-reading identity. The source-question search has one E-011 hit for a different MTSOR correction; its full record was read. No current-segment or current-question duplicate. Registered following-heading/converter/footnote/folio/cap classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The lying definition is recast in English with wrong impression given; lexical uncertainty belongs to alignment omissions, not a source-error claim. The terminal transition,77 and following heading are supplied apparatus covered by the existing following-heading class.",
+      "counterevidence": "Complete master tiers distinguish glossary evidence from awaiting-equivalent scaffold and auto-aligned candidates. No HGM gloss is promoted. Same-source course repetitions do not establish independent publication accuracy, and an intelligible contextual paraphrase does not isolate every source word."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 124,
+        "wylie": 124,
+        "english": 247
+      },
+      "utf8_bytes": {
+        "acip": 124,
+        "wylie": 124,
+        "english": 247
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "All fields are physically complete and below1500 characters. This is prose, so a verse-metre argument is not applicable. The printed transition,77 and heading are visibly separate lines within the captured English extent."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No additional supported source defect. Preserve exact GMR wording and source forms; uncertainty is recorded in omissions and source questions."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "REGISTERED_CLASS_NOT_REFILED",
+      "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "REGISTERED_CLASS_NOT_REFILED",
+      "reason": "Next-section transition and77/following heading remain literal apparatus. C16 has different appended material; do not transpose it here."
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

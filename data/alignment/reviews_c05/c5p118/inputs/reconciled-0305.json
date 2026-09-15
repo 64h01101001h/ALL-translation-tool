@@ -1,0 +1,40 @@
+{
+  "utc": "2026-09-15T04:06:39.787459+00:00",
+  "status": "ROOT_TWO_ADDITIONAL_FULL_CORPUS_READINGS_COMPLETE",
+  "new_full_objects": [
+    {
+      "source": "corpus.json",
+      "id": 9347,
+      "course": "TCS02",
+      "seq": 73,
+      "corpus_index": 9346
+    },
+    {
+      "source": "supplemental-corpus.json",
+      "id": 23720,
+      "course": "GIE",
+      "seq": 208,
+      "corpus_index": 23719
+    }
+  ],
+  "prior_full_nonlocal_corpus_count": 2,
+  "current_complete_nonlocal_count": 4,
+  "complete_fields_read": true,
+  "duplicate_raw_fields_verified": true,
+  "current_corpus": {
+    "bytes": 8965675,
+    "sha256": "1a1d8764a960c119d227c3cb7a7b0cb03073f9dc54116a3ec4e585c40323ddf8"
+  },
+  "sources": {
+    "corpus.json": {
+      "bytes": 39119,
+      "sha256": "1e02f61e5380f4a7d357e33d31b652205e77d0c4acdf89f281d9c82c00fff9bc"
+    },
+    "supplemental-corpus.json": {
+      "bytes": 49091,
+      "sha256": "f54b7998386d1c7730f098620be2b13f16a1eeaca00359a8c5bc8b1a7dd18512"
+    }
+  },
+  "findings": "GIE208 is a full separate usage witness for SRING MO/sister, not a corrected copy of352. TCS02:73 includes short Tibetan verse with long English prose beyond it; its exact number/list opening repeats but participants/capitalization/her duplication differ. Do not present it as a complete same-prose Tibetan witness or corrected publication.",
+  "limits": "Four full nonlocal corpus objects total, not the author22 focused objects. E-011 complete source-search object was separately read; actual register equality still to verify. No acceptance or new original choice."
+}
