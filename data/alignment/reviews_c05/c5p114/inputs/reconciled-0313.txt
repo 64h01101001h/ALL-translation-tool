@@ -1,0 +1,47 @@
+"""Preserve the preceding author; adapt only explicit root revision2 dispatch and native selection."""
+from pathlib import Path
+import difflib
+R=Path(__file__).resolve().parents[1]
+s=(R/'helpers/author.py').read_text()
+s=s.replace("root=load(B/'root-reconciliation-decisions.json');assert pin(B/'root-reconciliation-decisions.json')=={'bytes':11066,'sha256':'728e8f85fc8628fc093da054ad40e13061fcc3d5616103c1f0b950ff0c8b9055'}\nassert root['base']=='english'and root['source_origin']==ORIGIN and len(root['rulings'])==13", """oldroot=load(B/'root-reconciliation-decisions.json');root2=load(B/'root-reconciliation-decisions-v2.json');assert pin(B/'root-reconciliation-decisions-v2.json')=={'bytes':8667,'sha256':'303d904ae0f83d8887191f4a9145c57cecbf3e4e86a9e7570bc63dbbf817d6fb'}
+assert pin(B/'root-reconciliation-decisions.json')==root2['previous_root_decision'];assert pin(B/'semantic-review/independent-pre-reconciliation-assessment.json')==root2['independent_preliminary_assessment']
+root=dict(oldroot);root['errata']=root2['errata_decision'];root['other_spans']=root2['other_spans'];root['rulings']=[]
+for o in root2['semantic_rulings']:
+ for sid in o.get('ids',[o.get('id')]):
+  x=dict(o);x['id']=sid;x['action']=o['decision'];root['rulings'].append(x)
+assert root['base']=='english'and root['source_origin']==ORIGIN and len(root['rulings'])==12""")
+s=s.replace("'baseline.json','root-reconciliation-decisions.json',*root['evidence_pins']", "'baseline.json','root-reconciliation-decisions.json','root-reconciliation-decisions-v2.json',*root['evidence_pins']")
+s=s.replace("for n in ['proposal-protocol.md'", "for n in ['independent-pre-reconciliation-assessment.json','findings-before-revision2.json']:cp(B/'semantic-review'/n,R/'evidence'/n)\nfor n in ['proposal-protocol.md'")
+a=s.index('insert={');b=s.index('source={',a)
+s=s[:a]+'''insert={340:{},341:{},342:{'w13':['m3']}}
+rulings={(x['seq'],x['angle'],x['id']):x for x in root['rulings']}
+changed_omissions={
+ (340,'tibetan',0):'Retain original apparatus/anaphora/grammar omissions and also omit second and third ni/is. Glossary is does not resolve their disputed allocation among supplied definition frames; no null.',
+ (340,'tibetan',3):'Retain unsplit technical compounds and omit snyan pa/pleasant: it would cut the unhyphenated English word outside the written four-negative-affix exception. Keep whole unpleasant and approved mi/un; gcod pa/take also stays unbanked as an uncertain idiomatic child.',
+ (341,'english',2):'Both source byung ba predicates share one fronted occur. Omit BOTH without exclusive ownership, duplication or null. Final phyir remains within distributed causal closure.',
+ (341,'tibetan',2):'Select lexical nang/within with adjacent gi distributed, and flat dbang/force plus whole gis/by. Reject both first la/in and second la/of as disputed allocation within expanded English relations. Keep the nominal of after force distinct from of after taking possession; both remain unbanked.',
+ (342,'tibetan',2):'Retain the original distributed grammar omissions and also leave whole kyis/of unbanked as a disputed division of the English part of recast. Select bsdus pa/part of intact; its relation is not claimed absent.'}
+notes={341:'ROOT revision2 selects English originals except first byung ba/occur. Both source predicates share one occur and remain omitted without null. Narrow nang/within and flat dbang/force plus whole gis/by remain; both la case atoms and anaphoric de stay uncertain.',342:'ROOT revision2 selects English originals plus exact positive dge/virtues inside hyphenated non-virtues. Bsdus pa/part of remains intact and kyis/of stays uncertain. MED keeps English verb-null metadata; the source-error question is deferred with no errata banked.'}
+''' +s[b:]
+s=s.replace("  if seq==342 and sp['id']=='w11':sp['eng']='part';row['eng']='part';row['eng_range']=[153,157]\n",'')
+s=s.replace('{340:30,341:16,342:32}','{340:27,341:15,342:31}')
+s=s.replace("seg['note']='Codex", "seg['note']=espec['segments'][0]['note'] if seq==340 else 'Codex")
+s=s.replace("+notes[seq]+", "+notes.get(seq,'')+")
+s=s.replace("put(D/'spec.json',{'course':'C05','segments':[seg]});put", "put(D/'spec.json',{'course':'C05','segments':[seg]});\n if seq==340:cp(B/'english/340/spec.json',D/'spec.json')\n put")
+s=s.replace(" assert (D/'spec.json').read_bytes()!=(B/'english'/str(seq)/'spec.json').read_bytes()", " assert ((D/'spec.json').read_bytes()==(B/'english'/str(seq)/'spec.json').read_bytes())==(seq==340)")
+s=s.replace("  if(seq,sid)==(340,'m25'):extra.append('Root now also selects the positive snyan pa/pleasant member m6; retain this negative mi/un pair unchanged.')", "  if(seq,sid)==(340,'m25'):extra.append('Root revision2 preserves this approved negative member and rejects the positive pleasant cut under written Rule8.')")
+s=s.replace("rulings[(342,'tibetan','w11')]['reason']", "rulings[(342,'english','w14')]['reason']")
+s=s.replace("../evidence/root-reconciliation-decisions.json", "../evidence/root-reconciliation-decisions-v2.json")
+s=s.replace("elif rule and rule['action']=='ADD':ids=[sid]", "elif rule and rule['action']=='ADD':ids=[sid]")
+s=s.replace("else:assert rule and rule['action']=='REJECT';ids=[]", "else:assert rule and rule['action']in ['OMIT_UNCERTAIN','REJECT_UNAUTHORIZED_INTERIOR_POSITIVE_STEM'];ids=[]")
+s=s.replace("reason=rule['reason'];action='REJECT'if not ids else('CHANGE'if rule['action']not in ['ADD']else'ACCEPT')", "reason=rule['reason'];action='REJECT'if not ids else('CHANGE'if rule['action']in ['PREFER_ENGLISH_NANG_D5','PREFER_ENGLISH_DBANG_AND_GIS']else'ACCEPT')")
+s=s.replace("   old=o['original_span']", "   if(seq,angle,sid)==(342,'tibetan','w8'):action='CHANGE';reason=rulings[(342,'tibetan','p2')]['reason']\n   if(seq,angle,sid)==(342,'tibetan','w11'):action='CHANGE';reason=rulings[(342,'english','w14')]['reason']\n   old=o['original_span']")
+s=s.replace("   if(seq,angle,sid)==(342,'tibetan','w8'):reason=rulings[(342,'english','w11')]['reason']+' This exact Tibetan part proposal is retained.'\n",'')
+s=s.replace("assert len(changes)==13", "assert len(changes)==12")
+s=s.replace("'root_decisions':'evidence/root-reconciliation-decisions.json'", "'root_decisions':'evidence/root-reconciliation-decisions-v2.json'")
+s=s.replace("'native_plan':'All three specs change; run each final canonical generator and resolver once. No identical-input reuse claim.'", "'native_plan':'340 is exact unchanged English input and reuses its actual native pair. Changed341342 each require one new pair. Selected current paths use v2; successful superseded v1 captures remain history and are not failures.'")
+s=s.replace("'spans':sum", "'revision':2,'spans':sum")
+(R/'helpers/author_v2.py').write_text(s)
+H=R/'correction-history/root-revision2';H.mkdir(exist_ok=True)
+(H/'author-v1-to-v2.diff.txt').write_text(''.join(difflib.unified_diff((R/'helpers/author.py').read_text().splitlines(True),s.splitlines(True),fromfile='helpers/author.py',tofile='helpers/author_v2.py')))
+print('Root revision2 data dispatch prepared; original author retained.')

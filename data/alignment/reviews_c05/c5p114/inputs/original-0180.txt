@@ -1,0 +1,17 @@
+import sys,subprocess,os,json,hashlib,datetime,time
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];W=A.parents[2]/'campaign-worktree'
+mode=sys.argv[1]
+def sha(b):return hashlib.sha256(b).hexdigest()
+for seq in map(int,sys.argv[2:]):
+ spec=(A/str(seq)/'spec.json').read_bytes();v=1
+ while(A/'native'/f'{seq}-{mode}-v{v}').exists():v+=1
+ p=A/'native'/f'{seq}-{mode}-v{v}';p.mkdir(parents=True);argv=[sys.executable,'-B',str(A/'helpers/canonical.py'),mode];t=time.monotonic();utc=datetime.datetime.now(datetime.timezone.utc).isoformat()
+ r=subprocess.run(argv,cwd=W,input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+ for name,b in [('stdin',spec),('stdout',r.stdout),('stderr',r.stderr)]:(p/(name+'.bin')).write_bytes(b)
+ (p/'exit.txt').write_text(str(r.returncode)+'\n');(p/'execution.json').write_text(json.dumps({'argv':argv,'cwd':str(W),'utc':utc,'elapsed_seconds':time.monotonic()-t,'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'exit':r.returncode,'native_file':str(W/'tools/gen_alignment_page.py'),'adapter':'Only import/call canonical W main/resolve and force SQLite URI mode=ro; no generator source edits.','streams':{n:{'bytes':len(b),'sha256':sha(b)}for n,b in [('stdin',spec),('stdout',r.stdout),('stderr',r.stderr)]}},indent=2)+'\n')
+ print(seq,mode,'EXIT='+str(r.returncode),'stdout_bytes='+str(len(r.stdout)),'stderr_bytes='+str(len(r.stderr)))
+ if r.returncode or r.stderr:print(r.stderr.decode());sys.exit(1)
+ if mode=='resolver':
+  got=json.loads(r.stdout);expected=json.loads((A/str(seq)/'decisions.json').read_text())['spans'];keys=['id','d','tib','eng','seq','tib_range','eng_range'];assert [{k:x[k]for k in keys}for x in got]==[{k:x[k]for k in keys}for x in expected],('INTENDED RANGES DISAGREE',seq)
+ (A/str(seq)/('body.html'if mode=='generator'else'resolved-ranges.json')).write_bytes(r.stdout)

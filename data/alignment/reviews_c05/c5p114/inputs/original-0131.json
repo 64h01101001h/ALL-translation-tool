@@ -1,0 +1,96 @@
+{
+  "seq": 341,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1723,
+        "course": "C05",
+        "seq": 341,
+        "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+        "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+        "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete physical ASCII extents agree with exact ACIP/English after whitespace collapse. Source fields stay verbatim. Physical agreement establishes the available digital reading, not an independently published witness."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/supplemental-corpus.json"
+      ],
+      "finding": "Each of this row's three complete text-field queries returns only the current row. No corrected same-passage witness was found.340 quoted harsh-speech line appears in full C05:357/C16:875/TCS02:74 records.342 negative-virtue definitions are supported by full C05:357/362 and their C16:875/880 counterparts; these are different passages and publication independence is unproved. Supplemental dge mi dge med count3, dge ba dang mi dge ba med count2, English virtues and non-virtues count2, med par lta ba count18; wider incidental results are retained without a full-reading claim."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b6799188c8cb95f9095fea7cdc6bbf4d653894:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-classes.json",
+      "finding": "Current exact segment references screened across all200 records; no direct duplicate. Previously read unchanged converter/header/cap/spill/footnote class records reused by identity. E-120 fully read as an analogous GMR omission requiring human review.342 following heading belongs to the registered apparatus class and is not newly filed."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "The two causal alternatives share the one English occur. Singular enjoyment and initial plural enjoyments have exact full lexical support; final certain enjoyments is anaphoric expansion. Shared predicate and expanded wording do not establish a source omission.",
+      "counterevidence": "Corpus agreement cannot prove publication independence or eliminate upstream errors. Dictionary glosses do not license adding English. Contextual abbreviation, grammatical recasts and shared predicates can explain unmatched pieces; the342 absence observation is firmer than any claim about translator intent."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits",
+      "characters": {
+        "acip": 162,
+        "wylie": 161,
+        "english": 220
+      },
+      "utf8_bytes": {
+        "acip": 162,
+        "wylie": 161,
+        "english": 220
+      },
+      "english_equals_1500": false,
+      "finding": "English is below1500 and matches its complete physical extent. No evidence of cap truncation or boundary spill. The342 source question is internal to a complete field, separate from its following numbered heading."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FINDING",
+      "reason": "The two causal alternatives share the one English occur. Singular enjoyment and initial plural enjoyments have exact full lexical support; final certain enjoyments is anaphoric expansion. Shared predicate and expanded wording do not establish a source omission."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

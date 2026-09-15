@@ -1,0 +1,15 @@
+{
+  "kind": "PRE_FREEZE_INTENDED_RANGE_CORRECTION",
+  "failed_command": "python3 -B campaign-artifacts/C05-340-342/english/helpers/run_native.py resolver 340 341 342",
+  "failure": "AssertionError: (INTENDED RANGES DISAGREE,342) in run_native.py:16 after native342 resolver returned exit0 and empty stderr.",
+  "native_result_unchanged": {
+    "path": "native/342-resolver-v1",
+    "stdout_bytes": 5971,
+    "stdout_sha256": "7955f067d1900d6769a55aac704484756cb0d4ba2a22b8903e00496e95f9d9c2",
+    "native_exit": 0
+  },
+  "defect": "Draft helper substring search selected for inside forms at[48,51] from anchor forms, for the non-virtue. Canonical whole-word resolver selected the semantically intended causal for at[55,58].",
+  "correction": "Only342 p18 intention eng_range and complete_local_clause_anchor changed, plus that source-data anchor in author.py. Complete old decisions/author retained here. Spec/body/native inputs and outputs remain byte-identical.",
+  "verification": "Recompared the existing native342 resolver stdout to corrected intentions; all30 agree, then copied its exact bytes into resolved-ranges.json. No generator/resolver or source SQL rerun.",
+  "semantic_effect": "None: phyir still owns the causal for after the first forms phrase."
+}

@@ -1,0 +1,106 @@
+{
+  "seq": 342,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1724,
+        "course": "C05",
+        "seq": 342,
+        "acip": "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,",
+        "wylie": "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir",
+        "english": "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "Complete physical ASCII extents agree with exact ACIP/English after whitespace collapse. Source fields stay verbatim. Physical agreement establishes the available digital reading, not an independently published witness."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/supplemental-corpus.json"
+      ],
+      "finding": "Each of this row's three complete text-field queries returns only the current row. No corrected same-passage witness was found.340 quoted harsh-speech line appears in full C05:357/C16:875/TCS02:74 records.342 negative-virtue definitions are supported by full C05:357/362 and their C16:875/880 counterparts; these are different passages and publication independence is unproved. Supplemental dge mi dge med count3, dge ba dang mi dge ba med count2, English virtues and non-virtues count2, med par lta ba count18; wider incidental results are retained without a full-reading claim."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "58b6799188c8cb95f9095fea7cdc6bbf4d653894:docs/errata_register.json",
+      "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b",
+      "register_count": 200,
+      "direct_current_segment_matches": [],
+      "evidence": "../evidence/register-material-classes.json",
+      "finding": "Current exact segment references screened across all200 records; no direct duplicate. Previously read unchanged converter/header/cap/spill/footnote class records reused by identity. E-120 fully read as an analogous GMR omission requiring human review.342 following heading belongs to the registered apparatus class and is not newly filed."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "MED has no explicit existential-negative exponent in this exact English; this is separated from the uncertain judgment whether the object-focused explanation intentionally abbreviates the known mistaken-view definition. A LOW/UNCERTAIN omission question is retained; no corrected text is authored.",
+      "counterevidence": "Corpus agreement cannot prove publication independence or eliminate upstream errors. Dictionary glosses do not license adding English. Contextual abbreviation, grammatical recasts and shared predicates can explain unmatched pieces; the342 absence observation is firmer than any claim about translator intent."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits",
+      "characters": {
+        "acip": 208,
+        "wylie": 208,
+        "english": 334
+      },
+      "utf8_bytes": {
+        "acip": 208,
+        "wylie": 208,
+        "english": 334
+      },
+      "english_equals_1500": false,
+      "finding": "English is below1500 and matches its complete physical extent. No evidence of cap truncation or boundary spill. The342 source question is internal to a complete field, separate from its following numbered heading."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FINDING",
+      "reason": "No supported new source defect: exact forms and contextual meanings are accounted for by lexical spans and explicit omissions."
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "PROPOSE_LOW_UNCERTAIN",
+      "reason": "MED has no explicit existential-negative exponent in this exact English; this is separated from the uncertain judgment whether the object-focused explanation intentionally abbreviates the known mistaken-view definition. A LOW/UNCERTAIN omission question is retained; no corrected text is authored."
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "REGISTERED_CLASS_ONLY",
+      "reason": "75 Some Ethical Questions is a preserved numbered following heading; do not refile its registered class."
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "REGISTERED_CLASS_ONLY",
+      "reason": "75 Some Ethical Questions is a preserved numbered following heading; do not refile its registered class."
+    }
+  ],
+  "proposed_errata": [
+    {
+      "seq": 342,
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "found": "a view about the virtues and non-virtues that are all part of names and forms in general",
+      "expected": "For human review: determine whether the description should explicitly state the view that virtue and non-virtue do not exist. No replacement GMR wording is asserted.",
+      "evidence": "The exact ACIP clause MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA describes a view denying existence of virtue and non-virtue included in names and forms. MED is a separate existential negative; neither non- in the supplied singular non-virtue nor the non- of MI DGE renders it. The English instead says a view about those categories without stating this content. Complete C05:357 and C05:362 explicitly explain mistaken view as the idea that neither virtue nor non-virtue even exists; C16:875/880 repeat those respective definition passages, with a heading difference at880. They establish contextual usage, not a corrected same-passage witness. All three exact342 fields and its longer diagnostic phrase match only342 in the available corpus. Physical ASCII already has this English and the Tibetan MED, so local digital loss is not established. Counterevidence: the present discussion identifies objects, and the surrounding non-virtue context may intentionally abbreviate the familiar mistaken-view definition. The listed objects remain intelligible. That prevents a confident error verdict; retain LOW/UNCERTAIN for author review. All200 origin-register entries were screened with no342 duplicate; E-120 shows an analogous translation-omission review, not authority to alter GMR English. Full fields are below1500 characters and physically complete. Preserve source and master unchanged.",
+      "severity": "LOW",
+      "confidence": "UNCERTAIN"
+    }
+  ],
+  "source_corrections": false
+}

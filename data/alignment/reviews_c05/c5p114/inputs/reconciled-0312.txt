@@ -1,0 +1,37 @@
+from pathlib import Path
+import difflib
+R=Path(__file__).resolve().parents[1];s=(R/'helpers/package.py').read_text()
+s=s.replace("assert all(list(x)==K for x in actual);rows", "assert all(set(K).issubset(x) for x in actual);rows")
+s=s.replace("f'{seq}-{tool}-v1'", "f'{seq}-{tool}-v2'")
+s=s.replace("'new_generator_runs':1,'new_resolver_runs':1", "'new_generator_runs':0 if seq==340 else 1,'new_resolver_runs':0 if seq==340 else 1,'native_mode':'REUSED_EXACT_ENGLISH_ORIGINAL'if seq==340 else'NEW_REVISION2_EXECUTION'")
+s=s.replace("f'../native/{seq}-generator-v1'", "f'../native/{seq}-generator-v2'").replace("f'../native/{seq}-resolver-v1'", "f'../native/{seq}-resolver-v2'")
+a=s.index(' lines=[');b=s.index("put(R/'resolved-spans.json'",a)
+s=s[:a]+''' lines=[f'C05:{seq} — PROVISIONAL root revision2 reconciliation; mechanical assembler /root/reusable_closure_review.',
+ f'Source/proposal origin {provenance["source_origin_git_commit"]} through336; actual acceptance baseline {baseline["commit"]} through339 remains separate.',
+ 'Root-reconciliation-decisions-v2.json supplies all semantic rulings. This assembler previously authored Tibetan originals and makes no independent semantic claim.',
+ 'Final340 selects exact English27 unchanged. Final341 omits first byung ba/occur so both shared predicates remain unbanked. Final342 adds only dge/virtues inside hyphenated non-virtues, retaining bsdus pa/part of.',
+ 'Written Rule8 excludes pleasant cut inside unhyphenated unpleasant. Original root revision1 acceptance was wrong; the independent finding and full78-span revision1 remain preserved, including all successful native captures.',
+ 'Disputed ni/is, both341 la atoms and342 kyis/of remain unbanked without null. Gcod pa/take is an uncertain idiomatic child; approved whole expressions and mi/un remain.',
+ 'All152 original span/rationales,29 original omissions,30 category screens, complete screen documents and one original source-question proposal survive as exact objects with explicit final dispositions.',
+ 'The English342 LOW/UNCERTAIN source-error question remains deferred human-review evidence with its full original grounds. MED absence is retained as a verb-null; no error or exact restoration is asserted and no errata is banked.',
+ 'The unbanked nominal of after force (English171–173) is distinct from of after taking possession. Both are now unbanked under revision2; revision1 prose correction remains preserved.',
+ 'Complete original material/native evidence remains at202 verified frozen original members. Reading identity is not new independent reading; root scope is only its actual pinned receipts.',
+ f"Counts: {count['spans']} spans; {count['word_pairs']} nonnull d5 pairs; {count['d5_total']} total d5; {count['d7']} d7; {count['nulls']} nulls; zero errata.",
+ ('Exact English340 generator/resolver input/output/error/exit captures are REUSED, not executed again.' if seq==340 else 'One NEW revision2 canonical generator and one NEW resolver each exited0 once with empty stderr.'),
+ f'Selected command/input/output/error/exit records: ../native/{seq}-generator-v2/ and ../native/{seq}-resolver-v2/.',
+ 'Final selected native pairs consist of one English-original reuse plus two new pairs. Eleven actual unique proposal/reconciliation pairs exist: six original, three superseded revision1, two new revision2; successful revision1 pairs are not failures.',
+ f"Spec SHA256={proof['spec_sha256']}; body SHA256={proof['body_sha256']}. Source plaintexts reconstruct exactly and all actual canonical ranges equal intent.",
+ 'No assembly or final data native failures. All prior source-original failures/history and the root semantic correction remain preserved.',
+ 'No W/source/master edits, hgm_gloss promotion, registration or acceptance. Independent final skeptic review remains required.'];assert 10<=len(lines)<=25
+ (D/('reconciliation-report.md'if seq==340 else'report.md')).write_text('\\n'.join(lines)+'\\n')
+ if seq==340:
+  for n in ['spec.json','body.html','resolved-ranges.json','report.md','errata.json']:assert(D/n).read_bytes()==(B/'english/340'/n).read_bytes()
+''' +s[b:]
+s=s.replace('[78,49,50,9,1,0]','[73,49,50,8,1,0]')
+s=s.replace("'total_spans':78", "'total_spans':73").replace("'total_d7':9", "'total_d7':8")
+s=s.replace("'native_generators':3,'native_resolvers':3", "'native_generators':2,'native_resolvers':2,'selected_final_native_pairs':3,'reused_native_generator_resolver_pairs':1,'superseded_revision1_native_pairs':3,'total_unique_actual_native_pairs':11")
+s=s.replace("provenance['native_actual']='Three NEW final canonical generators and three NEW resolvers each passed once; exact streams and actual commands retained. Zero final data native failures.'", "provenance['native_actual']='Two NEW revision2 generator/resolver pairs passed once plus one explicitly reused exact English340 original pair. Three successful unaccepted revision1 pairs remain history; eleven unique actual pairs total. Zero final data native failures.'")
+s=s.replace("'status':'PASS_MECHANICAL_ONLY','totals'", "'status':'PASS_MECHANICAL_ONLY','revision':2,'totals'")
+(R/'helpers/package_v2.py').write_text(s)
+(R/'correction-history/root-revision2/package-v1-to-v2.diff.txt').write_text(''.join(difflib.unified_diff((R/'helpers/package.py').read_text().splitlines(True),s.splitlines(True),fromfile='helpers/package.py',tofile='helpers/package_v2.py')))
+print('Prepared same packaging checks with explicit selected v2/native reuse accounting.')

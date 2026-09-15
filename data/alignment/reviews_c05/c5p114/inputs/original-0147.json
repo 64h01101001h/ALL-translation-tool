@@ -1,0 +1,285 @@
+{
+  "queries": [
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[IV.283-4] 'O NA, CHA BZHI PO DE DAG GI GZHI GANG ZHE NA, CHA DANG PO'I GZHI NI SEMS CAN YIN TE, GSOD PA NI SEMS CAN GYI SROG GCOD PA DANG , GNOD SEMS SEMS CAN LA SDANG BA, TSIG RTZUB PO NI MI SNYAN PA, ZHES 'BYUNG BA'I PHYIR,"
+      ],
+      "count": 1,
+      "row_ids": [
+        1722
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "[iv.283-4] 'o na, cha bzhi po de dag gi gzhi gang zhe na, cha dang po'i gzhi ni sems can yin te, gsod pa ni sems can gyi srog gcod pa dang , gnod sems sems can la sdang ba, tshig rtsub po ni mi snyan pa, zhes 'byung ba'i phyir"
+      ],
+      "count": 1,
+      "row_ids": [
+        1722
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "One might ask what things serve as the objects for each of the four divisions of non-virtues just mentioned. The object of the non-virtues of the first division consists of living beings: killing is to take the life of a living being; malice is to feel hatred for a living being; and--as the root text itself says--\"harsh speech is that which is unpleasant.\""
+      ],
+      "count": 1,
+      "row_ids": [
+        1722
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+      ],
+      "count": 1,
+      "row_ids": [
+        1723
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+      ],
+      "count": 1,
+      "row_ids": [
+        1723
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+      ],
+      "count": 1,
+      "row_ids": [
+        1723
+      ]
+    },
+    {
+      "field": "acip",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE acip=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE wylie=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "english",
+      "op": "=",
+      "sql": "SELECT * FROM corpus_segments WHERE english=? AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "dge mi dge med par lta ba"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "ming gzugs kyis bsdus"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "english",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(english,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "the virtues and non-virtues that are all part"
+      ],
+      "count": 1,
+      "row_ids": [
+        1724
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "sems can gyi nang gi reg bya"
+      ],
+      "count": 1,
+      "row_ids": [
+        1723
+      ]
+    },
+    {
+      "field": "wylie",
+      "op": "instr",
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "tshig rtsub po ni mi snyan pa"
+      ],
+      "count": 4,
+      "row_ids": [
+        1722,
+        1739,
+        6893,
+        9348
+      ]
+    }
+  ],
+  "complete_records": {
+    "1722": {
+      "spine_row": {
+        "id": 1722,
+        "course": "C05",
+        "seq": 340,
+        "acip": "[IV.283-4] 'O NA, CHA BZHI PO DE DAG GI GZHI GANG ZHE NA, CHA DANG PO'I GZHI NI SEMS CAN YIN TE, GSOD PA NI SEMS CAN GYI SROG GCOD PA DANG , GNOD SEMS SEMS CAN LA SDANG BA, TSIG RTZUB PO NI MI SNYAN PA, ZHES 'BYUNG BA'I PHYIR,",
+        "wylie": "[iv.283-4] 'o na, cha bzhi po de dag gi gzhi gang zhe na, cha dang po'i gzhi ni sems can yin te, gsod pa ni sems can gyi srog gcod pa dang , gnod sems sems can la sdang ba, tshig rtsub po ni mi snyan pa, zhes 'byung ba'i phyir",
+        "english": "One might ask what things serve as the objects for each of the four divisions of non-virtues just mentioned. The object of the non-virtues of the first division consists of living beings: killing is to take the life of a living being; malice is to feel hatred for a living being; and--as the root text itself says--\"harsh speech is that which is unpleasant.\"",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.283-4] 'O NA, CHA BZHI PO DE DAG GI GZHI GANG ZHE NA, CHA DANG PO'I GZHI NI SEMS CAN YIN TE, GSOD PA NI SEMS CAN GYI SROG GCOD PA DANG , GNOD SEMS SEMS CAN LA SDANG BA, TSIG RTZUB PO NI MI SNYAN PA, ZHES 'BYUNG BA'I PHYIR,\", \"wylie\": \"[iv.283-4] 'o na, cha bzhi po de dag gi gzhi gang zhe na, cha dang po'i gzhi ni sems can yin te, gsod pa ni sems can gyi srog gcod pa dang , gnod sems sems can la sdang ba, tshig rtsub po ni mi snyan pa, zhes 'byung ba'i phyir\", \"english\": \"One might ask what things serve as the objects for each of the four divisions of non-virtues just mentioned. The object of the non-virtues of the first division consists of living beings: killing is to take the life of a living being; malice is to feel hatred for a living being; and--as the root text itself says--\\\"harsh speech is that which is unpleasant.\\\"\"}"
+      },
+      "corpus_index": 1721,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.283-4] 'O NA, CHA BZHI PO DE DAG GI GZHI GANG ZHE NA, CHA DANG PO'I GZHI NI SEMS CAN YIN TE, GSOD PA NI SEMS CAN GYI SROG GCOD PA DANG , GNOD SEMS SEMS CAN LA SDANG BA, TSIG RTZUB PO NI MI SNYAN PA, ZHES 'BYUNG BA'I PHYIR,",
+        "wylie": "[iv.283-4] 'o na, cha bzhi po de dag gi gzhi gang zhe na, cha dang po'i gzhi ni sems can yin te, gsod pa ni sems can gyi srog gcod pa dang , gnod sems sems can la sdang ba, tshig rtsub po ni mi snyan pa, zhes 'byung ba'i phyir",
+        "english": "One might ask what things serve as the objects for each of the four divisions of non-virtues just mentioned. The object of the non-virtues of the first division consists of living beings: killing is to take the life of a living being; malice is to feel hatred for a living being; and--as the root text itself says--\"harsh speech is that which is unpleasant.\""
+      }
+    },
+    "1723": {
+      "spine_row": {
+        "id": 1723,
+        "course": "C05",
+        "seq": 341,
+        "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+        "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+        "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,\", \"wylie\": \"cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir\", \"english\": \"The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments.\"}"
+      },
+      "corpus_index": 1722,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+        "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+        "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+      }
+    },
+    "1724": {
+      "spine_row": {
+        "id": 1724,
+        "course": "C05",
+        "seq": 342,
+        "acip": "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,",
+        "wylie": "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir",
+        "english": "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions",
+        "raw": "{\"course\": \"C05\", \"acip\": \"CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,\", \"wylie\": \"cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir\", \"english\": \"The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions\"}"
+      },
+      "corpus_index": 1723,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,",
+        "wylie": "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir",
+        "english": "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions"
+      }
+    },
+    "1739": {
+      "spine_row": {
+        "id": 1739,
+        "course": "C05",
+        "seq": 357,
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN\", \"wylie\": \"phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin\", \"english\": \"Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists.\"}"
+      },
+      "corpus_index": 1738,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+      }
+    },
+    "6893": {
+      "spine_row": {
+        "id": 6893,
+        "course": "C16",
+        "seq": 875,
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN\", \"wylie\": \"phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin\", \"english\": \"Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists.\"}"
+      },
+      "corpus_index": 6892,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYI SEMS KYI TSIG,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN BRNAB SEMS NI, ,LOG PAS GZHAN GYI NOR LA CHAGS, ,GNOD SEMS SEMS CAN LA SDANG BA, ,DGE DANG MI DGE MED LTA BA, ,LOG PAR LTA BA YIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gyi sems kyi tshig,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin brnab sems ni, ,log pas gzhan gyi nor la chags, ,gnod sems sems can la sdang ba, ,dge dang mi dge med lta ba, ,log par lta ba yin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. Coveting Wrong desire for another's wealth. Harmful intent, hating a living being; Mistaken view, the idea that neither virtue Nor non-virtue even exists."
+      }
+    },
+    "9348": {
+      "spine_row": {
+        "id": 9348,
+        "course": "TCS02",
+        "seq": 74,
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist.",
+        "raw": "{\"course\": \"TCS02\", \"acip\": \",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN\", \"wylie\": \"phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin\", \"english\": \"Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \\\"Meaningless speech\\\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \\\"meaningless speech\\\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist.\"}"
+      },
+      "corpus_index": 9347,
+      "corpus_record": {
+        "course": "TCS02",
+        "acip": ",PHRA MA PHA ROL DBYE BA'I PHYIR, ,NYON MONGS CAN GYE SEMS KYI TSIG, ,TSIG RTZUB PO NI MI SNYAN PA, ,NYON MONGS CAN KUN KYAL PA NYID, ,GZHAN NI DE LAS GZHAN NYON MONGS, ,KHA GSAG GLU DANG ZLOS GAR BZHIN, ,BSTAN BCOS NGAN BZHIN",
+        "wylie": "phra ma pha rol dbye ba'i phyir, ,nyon mongs can gye sems kyi tshig, ,tshig rtsub po ni mi snyan pa, ,nyon mongs can kun kyal pa nyid, ,gzhan ni de las gzhan nyon mongs, ,kha gsag glu dang zlos gar bzhin, ,bstan bcos ngan bzhin",
+        "english": "Divisive speech, the words of a mentally Afflicted state meant to split up others. Harsh speech is that which is unpleasant; Meaningless, really every afflicted. Others, every other afflicted type like Flattery for gain, a song, a show. Like too wrong commentaries. (5) Divisive speech consists of words which are spoken purposely, without any mistake, and in a mentally afflicted state; they are meant to split up others who are friends, and their meaning should be understood by the other person. (6) Harsh speech consists of unpleasant words which are spoken purposely, and without any mistake; their meaning to should be understood by the other person. (7) \"Meaningless speech\" really refers to every case of words spoken in an afflicted state of mind.  Other groups say that what \"meaningless speech\" actually refers to is every afflicted type of the spoken word other than those three already mentioned.  They say cases would be like a monk's engaging in the improper livelihood of flattering someone for the purpose of some gain, or else singing a song out of desire. Still other cases would be where the monk told stories to entertain others at a show put on by some performer, or too where he began reciting some wrong commentary written by a non-Buddhist."
+      }
+    }
+  }
+}

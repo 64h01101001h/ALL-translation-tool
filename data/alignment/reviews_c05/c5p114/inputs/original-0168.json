@@ -1,0 +1,8 @@
+{
+  "command": "rg -n 'SUPPLIED|supplied|HEAD|what|subword|cls' campaign-worktree/tools/gen_alignment_page.py campaign-worktree/tools/check_no_supplied_span_head.py",
+  "observed_error": "rg: campaign-worktree/tools/check_no_supplied_span_head.py: No such file or directory (os error 2)",
+  "classification": "Read-only lookup used a nonexistent guessed filename; generator matches were returned, but this was not a successful complete two-file search.",
+  "stream_limit": "The command tool merged displayed output; no separate stdout/stderr or numeric exit was banked for this incidental read.",
+  "native_effect": "No native generator/resolver has run yet; no spec/source mutation resulted.",
+  "recovery": "Locate the existing rule through rg --files, then read it."
+}

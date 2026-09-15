@@ -1,0 +1,113 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'verb' if (seq,tib)==(342,'med') else 'conj','nul':why} if eng is None else {});s.update({'subword':True} if (seq,tib,eng)==(340,'mi','un') else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(340,'objects of the first division',[
+ ('cha','divisions',5,'each of the four divisions','First division noun refers to the four groups being asked about; exact glossary divisions.'),
+ ('bzhi po','four',5,'each of the four divisions','Collective four names the groups enumerated in339 and explained340-342. The master auto-aligned one may ask is unrelated and rejected; this is a direct local numeral attestation.'),
+ ('gi','for',6,'objects for each of the four divisions','Genitive relation between objects and the four divisions is recast as for. Exclude each of the; this is not a claim that gi supplies the distributive.'),
+ ('gzhi','objects',5,'serve as the objects for each','First object noun belongs to the question; the unrelated mined give it a name gloss is not used or changed.'),
+ ('gang','what',5,'ask what things serve','Interrogative what is exact glossary usage. Things serve as is explanatory English framing and stays outside.'),
+ ('zhe na','ask',3,'One might ask what things','Question formula at phrase depth, tightened to ask. One might is supplied framing; the unrelated auto-aligned correct perception is rejected.'),
+ ('cha','division',5,'the first division consists','Second division noun belongs to the answer about the first group.'),
+ ('dang po','first',5,'the first division consists','Ordinal first identifies the initial group; no article or division noun absorbed.'),
+ ('gzhi','object',5,'The object of the non-virtues','Second object noun is singular in the answer, distinct from question objects.'),
+ ('sems can','living beings',5,'consists of living beings','First living-being compound supplies the general object category.'),
+ ('yin','consists of',5,'division consists of living beings','Copular predicate is recast as consists of; complete yin glossary attests consist of, with local singular inflection.'),
+ ('gsod pa','killing',5,'living beings: killing is','Act name killing; distinct from the following explanatory take the life compound.'),
+ ('sems can','living being',5,'the life of a living being','Second living-being compound identifies whose life is taken; exclude a.'),
+ ('gyi','of',6,'the life of a living being','Possessive relation between the being and its life, rendered of after life.'),
+ ('srog gcod pa','take the life',5,'killing is to take the life','Whole established killing compound has the exact glossary take the life. The internal the belongs to that attested idiom; preceding to and the affected being stay outside.'),
+ ('srog','life',7,'killing is to take the life','Life is the secure member of the taking-life compound. No gcod pa/take member is inferred from the remaining verb slot.'),
+ ('gnod sems','malice',5,'malice is to feel hatred','Established harmful-intent compound rendered malice.'),
+ ('sems can','living being',5,'hatred for a living being','Third living-being compound is the target of malice, distinct from the being whose life is taken.'),
+ ('la','for',6,'hatred for a living being','Target relation of hatred, rendered for; not the earlier objects-for relation.'),
+ ('sdang ba','hatred',5,'malice is to feel hatred','Full nominal has exact glossary hatred. Keep feel outside instead of stretching the noun to own the English light-verb framing.'),
+ ('tshig rtsub po','harsh speech',5,'"harsh speech is that','Established harsh-speech compound in the root quotation.'),
+ ('tshig','speech',7,'"harsh speech is that','Speech member strictly within harsh speech, distinct from the surrounding reporting formula.'),
+ ('rtsub po','harsh',7,'"harsh speech is that','Exact harsh modifier inside the parent.'),
+ ('mi snyan pa','unpleasant',5,'which is unpleasant','Established negative adjective with exact glossary unpleasant.'),
+ ('mi','un',7,'which is unpleasant','Negative member owns the confirmed English un prefix within unpleasant, using subword:true. The positive remainder is not separately split.'),
+ ("zhes 'byung ba",'says',3,'as the root text itself says','Complete quotation/report formula appears as says. Its mined easy to understand gloss is unrelated; the local quote and full parallel root quotation support this d3 attestation. Supplied the root text itself remains unwrapped.'),
+ ('phyir','as',6,'as the root text itself says','Reason/citation link is rendered as before the report formula; not the earlier serve as framing.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Three sems can occurrences own general living beings, the being whose life is taken, and the target of hatred. srog gcod pa owns the attested idiom take the life, with srog/life only; gcod pa/take is not inferred. sdang ba owns hatred without feel. The mi/un member inside unpleasant uses the confirmed negative-prefix convention and subword=true. zhe na/ask and zhes byung ba/says are narrow d3 formulas with unrelated mined glosses rejected. Distributed topic/list framing remains omitted, not falsely nulled. Source and GMR wording are exact; no hgm_gloss promotion.',
+ [{'tib':"[iv.283-4]; 'o na",'reason':'Citation apparatus and opening now-then discourse are preserved; neither is absorbed into One might ask or what things serve as.'},
+  {'tib':'de dag','reason':'Plural anaphoric reference is distributed across each and just mentioned in the expanded question. The full glossary permits each as well as these, so neither a unique each atom nor an absence claim is secure.'},
+  {'tib':'three ni; te; bound genitives after dang po and byung ba','reason':'Topic, continuation, nominal predication and citation grammar are spread across is/to/that which is and punctuation. Unique separate exponents are uncertain; no null asserted.'},
+  {'tib':'dang after srog gcod pa','reason':'The single coordinator follows the killing definition, while English uses a semicolon there and explicit and before the third definition. Coordination is present but boundary ownership is uncertain; omit without a punctuation-fusion null.'},
+  {'tib':'gcod pa inside srog gcod pa','reason':'Cutting and taking are not independently equivalent merely because their whole life-taking constructions match. Complete gcod pa has cut/lose readings; the established parent licenses take the life as a unit. Retain srog/life alone as a member.'},
+  {'english':'One might; things serve as the; each of the; of non-virtues just mentioned; The; of the non-virtues of the; is to; articles a; feel; and; the root text itself; is that which is','reason':'Supplied participants, light verbs, classification and reporting/list framing stay outside the narrow lexical claims. Complete original English remains visible.'}])
+
+build(341,'enjoyments as objects',[
+ ('cha','division',5,'the second division','Division noun identifies the second group of non-virtues.'),
+ ('gnyis pa','second',5,'the second division','Second is the exact glossary ordinal here; division has its own cha.'),
+ ('gzhi','object',5,'as their object','Object noun at the end of the recast first clause; not the later enjoyment objects. Master mined give it a name remains rejected.'),
+ ('longs spyod','enjoyments',5,'have enjoyments as their object','First enjoyments compound is the general object category, not the final anaphoric certain enjoyments.'),
+ ('yin','have',5,'division have enjoyments','Copular predication is recast as have X as their object. The complete yin glossary attests have; as their remains outside this verb.'),
+ ('sems can','living being',5,'within a living being','The sole living-being compound locates the physical sensations; exclude a.'),
+ ('nang','within',5,'within a living being','Interior/local relational word is rendered within, exactly glossary-attested. Depth follows the Tibetan lexical noun, not English preposition form.'),
+ ('reg bya','physical sensations',5,'in the form of physical sensations','Whole tangible-object compound has exact glossary physical sensations. Do not assign reg or bya to an arbitrary English member.'),
+ ('longs spyod pa','enjoyment',5,'through enjoyment in the form','Second, nominalized enjoyment compound owns the singular in the explanatory clause, not either plural enjoyments.'),
+ ('las','through',6,'occur through enjoyment','Causal/ablative relation from enjoyment is rendered through; complete glossary supports this particle use.'),
+ ('byung ba','occur',5,'they occur through enjoyment','First arising predicate owns the sole English occur, shared by the two coordinated causal explanations.'),
+ ('dang','or',6,'living being, or by force','Coordinator presents two alternative ways the non-virtues arise; exact glossary or is licensed by the local structure.'),
+ ('bdag tu bzung ba','taking possession',5,"one's taking possession of",'Whole appropriation compound has the exact glossary taking possession. Do not absorb agentive possessive one\'s or the object certain enjoyments.'),
+ ('bzung ba','taking',7,"one's taking possession of",'Grasp/take member has exact glossary taking and is strictly within the appropriation parent; possession remains licensed by the whole compound.'),
+ ('dbang','force',5,'by force of', 'Force is the exact lexical head of the causal expression; exclude by and of.'),
+ ('gis','by',6,'or by force of','Whole instrumental supplies by in the second causal alternative.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. The first longs spyod owns plural enjoyments in the object category; longs spyod pa owns singular enjoyment in the explanation. Final certain enjoyments is an anaphoric English repetition associated with de la and remains unbanked. bdag tu bzung ba/taking possession is an attested compound with bzung ba/taking as the secure member. The first byung ba owns the sole occur, shared across both alternatives; the second occurrence and causal closure are omitted without asserting absent meaning. No uncertain nulls or source/master changes.',
+ [{'tib':'ni; te; bound genitives; gyi and gi around nang; first la after reg bya','reason':'Topic and internal/possessive grammar is distributed across have X as their object, within, and in the form of. The narrow yin/have and nang/within attestations remain; no invented standalone form equivalent or absence claim.'},
+  {'tib':'de la','english':'of certain enjoyments','reason':'Anaphoric target is expanded as certain enjoyments, echoing the earlier term. A pronoun/noun or whole de la phrase alignment would overstate an uncertain unique correspondence; preserve unwrapped.'},
+  {'tib':'second byung ba; final phyir','reason':'Both causal alternatives share the one English occur. Bank it once at the first predicate and omit the repeated second predicate plus causal closure; this is shared/distributed scope, not a claim of absent causation.'},
+  {'tib':'bdag tu inside bdag tu bzung ba','reason':'The appropriation sense licenses possession in the whole attested compound, but bdag tu has no separate exact master record and an internal member is not established merely by the remaining English word.'},
+  {'english':"The non-virtues of the; as their; they; in the form of; a; of one's; of certain enjoyments",'reason':'Supplied classification, agentive/possessive and explanatory framing remains outside the lexical spans.'}])
+
+build(342,'objects of the last two divisions',[
+ ('cha','division',5,'the third division','First division noun refers to the third group.'),
+ ('gsum pa','third',5,'the third division','Exact ordinal third; not cardinal three.'),
+ ('gzhi','objects',5,'The objects of the third division','First object noun in the third-group clause, supported by local339-342 usage; unrelated mined master gloss rejected.'),
+ ('ming','names',5,'third division are names and forms','First names occurrence belongs to the third group\'s paired object category.'),
+ ('dang','and',6,'third division are names and forms','Explicit first category coordinator owns and between first names and forms.'),
+ ('gzugs','forms',5,'third division are names and forms','First forms occurrence in that category.'),
+ ('yin','are',5,'third division are names and forms','First copula predicates the third group\'s objects.'),
+ ('ming gzugs','names and forms',5,'part of names and forms in general','Second names/forms occurrence is the exact glossary-attested short compound in the reason, distinct from the first explicitly coordinated category.'),
+ ('ming','names',7,'part of names and forms in general','Names member inside the second occurrence.'),
+ ('gzugs','forms',7,'part of names and forms in general','Forms member inside the second occurrence; internal and belongs to the attested whole compound.'),
+ ('bsdus pa','part of',5,'that are all part of names','Inclusion predicate has the exact glossary part of. The relational of belongs to that attested rendering; supplied that are all stays outside.'),
+ ('dge','virtues',5,'a view about the virtues and non-virtues','Positive virtues inside the object of the view; not the earlier supplied singular non-virtue.'),
+ ('mi dge','non-virtues',5,'a view about the virtues and non-virtues','Exact negative-virtue term, plural in this clause. Its non- does not express the separate existential negation med.'),
+ ('med',None,5,'','Existential negative predicate scoped over virtues and non-virtues has no separately alignable English exponent in this row: a view about the virtues and non-virtues leaves nonexistence unstated. The non- of non-virtues belongs to mi dge, not med. This null records an observed lack of explicit rendering, not a source correction or a verdict on whether GMR intended contextual abbreviation.'),
+ ('lta ba','view',5,'arises from a view about','View noun only; neither the article a nor about is absorbed. The missing existential content is separately exposed as med null.'),
+ ('las','from',6,'arises from a view about','First causal source relation owns from after arises.'),
+ ('byung ba','arises',5,'in this case arises from','First occurrence predicate is the singular arises in the third-division explanation.'),
+ ('phyir','for',6,'for the non-virtue','First causal marker owns for introducing the third-division reason.'),
+ ('cha','division',5,'the last division','Second division noun refers to the fourth and final group.'),
+ ('bzhi pa','last',5,'the last division','Fourth is last in the explicitly four-part enumeration stated340 and listed339. This is a local ordinal paraphrase, not an assertion that bzhi pa always means last. The mined third and fourth is not treated as a curated definition.'),
+ ('gzhi','objects',5,'The objects of the last division','Second object noun belongs to the last group.'),
+ ('ming','names',5,'last division are names','Third names occurrence supplies the last group\'s category; distinct from the explanatory final names.'),
+ ('yin','are',5,'last division are names','Second main copula predicates the last group\'s objects; not the are inside the preceding inclusion clause.'),
+ ('rdzun tshig','lying',5,'for lying and so forth','Whole established lying-speech compound has exact glossary lying; no degenerate rdzun child.'),
+ ('sogs','and so forth',6,'for lying and so forth','Enumerative closing gesture only; all and the following predicate are not absorbed.'),
+ ('ming','names',5,'based on the names of things','Fourth names occurrence is the basis of lying and the other speech deeds; exclude the and of things.'),
+ ('la','on',6,'based on the names of things','Basis relation is rendered on with based; whole syllable particle.'),
+ ('brten','based',5,'ultimately--based on the names','Exact glossary based licenses the dependency predicate. Nas is separately omitted; no ultimately added to this span.'),
+ ("'byung ba",'occur',5,'and so forth all occur','Second occurrence predicate, this time plural occur for the speech deeds; distinct source apostrophe preserved.'),
+ ('phyir','for',6,'names, for lying','Second causal marker owns for introducing the final explanation.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Four names occurrences are distinguished: third-group category, explanatory names/forms compound, last-group category, and basis of speech. bsdus pa owns attested part of. MED has no explicit existential-negative English exponent and is recorded as a d5 null with cls=verb; non-virtues belongs to mi dge and cannot be reused for MED. A LOW/UNCERTAIN English-factual-omission question is proposed for human review, with contextual abbreviation as counterevidence; exact source wording is unchanged. Fourth/last is a local four-item-list paraphrase. Preserve the following 75 Some Ethical Questions as registered heading apparatus. No hgm_gloss promotion or source correction.',
+ [{'tib':'kyis; bound genitives; par after med; both te; nas','reason':'Inclusion relation, complement structure and continuative/causal grammar are distributed across part of, about, relative framing and the explanatory clauses. The clear med absence is separated from these uncertain grammar correspondences; no additional nulls.'},
+  {'english':'the non-virtue in this case','reason':'Supplied identification of the mistaken-view deed, distinct from the later plural non-virtues explicitly paired with mi dge. It does not render the negative existential predicate med.'},
+  {'english':'The; repeated of the; a; about the; and between virtues and non-virtues; that are all; in general; all before occur; ultimately; the; of things','reason':'Articles, explanatory framing, classification and English coordination/generalization remain outside the narrow claims.'},
+  {'tib':'mi as a child of mi dge','reason':'English non- is outside the four confirmed negative-affix forms. No unsupported new affix convention is introduced and no false null hides its visible exponent.'},
+  {'english':'75 Some Ethical Questions','reason':'Numbered following heading is physically present and is the registered heading-glue class; preserve it without duplicate filing.'}])

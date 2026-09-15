@@ -1,0 +1,122 @@
+{
+  "status": "ROOT_RECONCILIATION_REVISION2_PENDING_INDEPENDENT_FINAL_REVIEW",
+  "utc": "2026-09-15T01:16:06.320522+00:00",
+  "reconciler": "root",
+  "previous_root_decision": {
+    "bytes": 11066,
+    "sha256": "728e8f85fc8628fc093da054ad40e13061fcc3d5616103c1f0b950ff0c8b9055"
+  },
+  "independent_preliminary_assessment": {
+    "bytes": 6357,
+    "sha256": "c6b752b15e1f2a62c93e1c7d9d47d053227db48a435cd096bb1843c2f092e225"
+  },
+  "original_freezes": {
+    "tibetan": {
+      "bytes": 16748,
+      "sha256": "cfc8865f711352af925bb2cdb35f5f5faae90835b146d1804c04e1ba854e7761"
+    },
+    "english": {
+      "bytes": 16944,
+      "sha256": "7795fbd3b194fadfe9ead46fb41e7a8f4e51feb19b1f6246493bd1af21fc65ab"
+    }
+  },
+  "source_origin": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+  "actual_acceptance_baseline": "1e309d1cba99844e45d2bfef6285333c6945deee",
+  "base": "english",
+  "final_selection": {
+    "340": "All27 English original spans/spec/body/ranges EXACTLY unchanged. Preserve English spec notes as truthful original provenance; separate reconciliation records identify root selection. Reuse actual English340 native pair; do not regenerate unchanged input.",
+    "341": "All16 English original spans except omit w11 byung ba/occur.15final spans; no Tibetan extras. Original root-selected la/of removed; nang/within and flat dbang/force plus whole gis/by retained. New changed spec needs one generator/resolver pair.",
+    "342": "All30 English original spans unchanged, including bsdus pa/part of, plus exact Tibetan m3 dge/virtues within mi dge/non-virtues.31final spans. No kyis/of addition. Retain English w14 MEDnull and its self-contained cls=verb reason. New changed spec needs one generator/resolver pair."
+  },
+  "counts": {
+    "spans": 73,
+    "nonnull_d5": 49,
+    "total_d5": 50,
+    "d7": 8,
+    "nulls": 1,
+    "errata": 0
+  },
+  "semantic_rulings": [
+    {
+      "seq": 340,
+      "angle": "tibetan",
+      "id": "m6",
+      "decision": "REJECT_UNAUTHORIZED_INTERIOR_POSITIVE_STEM",
+      "reason": "Independent reviewer correctly identified written Rule8: only four declared negative affixes are exceptions to NO BROKEN WORDS. Pleasant cut inside unhyphenated unpleasant is not one. Direct local morphology and a generator D7 substring exemption do not override that rule. Keep whole mi snyan pa/unpleasant and approved mi/un; leave snyan pa unbanked with this reason. Root previous acceptance was wrong and remains preserved."
+    },
+    {
+      "seq": 340,
+      "angle": "tibetan",
+      "ids": [
+        "p2",
+        "p5"
+      ],
+      "decision": "OMIT_UNCERTAIN",
+      "reason": "Full NI glossary does include is, but this does not alone localize topic/focus to one of the supplied English copular/is to/is that which is words in these definitions. Independent proposal/review disagreement exposes uncertain allocation. Keep these ni and English copular frames unbanked rather than assert a narrow local atom; no null."
+    },
+    {
+      "seq": 340,
+      "angle": "tibetan",
+      "id": "m2",
+      "decision": "OMIT_UNCERTAIN",
+      "reason": "Cut/take remains a whole-idiom recast, not an independently secure member just because the remaining verb slot exists. Whole srog gcod pa/take the life and srog/life remain."
+    },
+    {
+      "seq": 341,
+      "angle": "english",
+      "id": "w11",
+      "decision": "OMIT_SHARED_PREDICATE",
+      "reason": "Two Tibetan byung ba predicates share one fronted English occur governing both alternative causes. Exclusive occurrence ownership is underdetermined. Omit both, retain the shared-scope explanation, and do not null either or duplicate occur. Independent reviewer accepts this conservative scope."
+    },
+    {
+      "seq": 341,
+      "angle": "tibetan",
+      "ids": [
+        "p2",
+        "p5"
+      ],
+      "decision": "OMIT_UNCERTAIN",
+      "reason": "English in the form of and possession of certain enjoyments recast the source relations with explanatory/anaphoric expansion. A standalone la/in or la/of is disputed and not sufficiently secure under current evidence. Preserve both original proposals and root prior argument, but leave both case atoms unbanked without null. The of after force links force to taking possession; keep that distinct from the of after taking possession."
+    },
+    {
+      "seq": 341,
+      "angle": "tibetan",
+      "id": "p1",
+      "decision": "PREFER_ENGLISH_NANG_D5",
+      "reason": "Both nang and nang gi have within attestation; select recoverable lexical nang/within at d5 and leave adjacent genitive relation distributed, not absent."
+    },
+    {
+      "seq": 341,
+      "angle": "tibetan",
+      "id": "p6",
+      "decision": "PREFER_ENGLISH_DBANG_AND_GIS",
+      "reason": "Full idiom is attested, but lexical force and intact instrumental gis/by are independently supported. Keep flat dbang/force and whole gis/by; supplied possessive/nominal of remains outside. No suffix split."
+    },
+    {
+      "seq": 342,
+      "angle": "tibetan",
+      "id": "p2",
+      "decision": "OMIT_UNCERTAIN",
+      "reason": "English of is governed by part in the nominal recast of the Tibetan inclusion predicate. Full bsdus pa directly attests part of; a separate kyis/of allocation is disputed. Retain whole bsdus pa/part of and leave kyis unbanked without claiming its relation absent."
+    },
+    {
+      "seq": 342,
+      "angle": "tibetan",
+      "id": "m3",
+      "decision": "ADD",
+      "reason": "Positive dge/virtues is a transparent source member and virtues is a complete hyphen-delimited English member strictly within mi dge/non-virtues. Full DGE glossary directly attests virtues; this differs from cutting pleasant inside an unhyphenated word and introduces no non- negative-affix exception."
+    },
+    {
+      "seq": 342,
+      "angle": "english",
+      "id": "w14",
+      "decision": "ACCEPT_AFFIRMATIVE_ABSENCE",
+      "reason": "MED is the separate negative existential, and the complete English states only a view about virtues/non-virtues. No English exponent of nonexistence is present; non- belongs to mi dge. Preserve the self-contained verb-null reason, without adding English or asserting translator intent."
+    }
+  ],
+  "other_spans": "All remaining final pairs retain source-specific English-original rationale. Ask/report formulas stay d3 and narrow, repeated living-being/names/object/ordinal/predicate occurrences stay distinct, whole technical compounds are not speculatively split. tshig/speech is supported by the whole local harsh-speech parent; no claim of standalone glossary speech, which has words/quotation.",
+  "final_omissions": "Keep all29 complete original omission records with exact seq/angle/field/index identities. Final state follows English omissions, except341 English omission index2 now BOTH byung ba (shared occur); retain T341 both-byung omission. T340 original omissions must now explicitly cover second/third ni and prohibited snyan/pleasant, T341 firstla/in and secondla/of omitted, T342 kyis/of omitted while retaining positive dge child. Do not carry revision1 omission statements claiming accepted ni/is,341la/of,342kyis/of or snyan/pleasant. Preserve all rejected extra spans with exact original object and reason; shared predicates are not nulls.",
+  "errata_decision": "Preserve English342 LOW/UNCERTAIN source-omission question in deferred human-review evidence, with its complete original and independent rationale. Do not bank a new ENGLISH_FACTUAL_ERROR entry: contextual object-focused abbreviation remains plausible and no corrected same-passage witness demonstrates error. The concrete absence is recorded by MEDnull. Reviewer agrees deferral is defensible. E-120 and357/362 corroboration do not authorize source replacement. No errata or head allowance.",
+  "native_instructions": "Preserve complete78-span revision1 and its successful3generator/3resolver pairs before changing anything. Final340 copies exact English spec/body/ranges and original nativecapture under an explicitly reused current final native path. Final341342 each require exactly one new generation/resolver. Use version2 selected-native paths for all3, retaining v1unaccepted current captures and revision1 copies as history. Total actual generation/resolution executions become11pairs:6original+3revision1+2revision2, while selected9angle/segment capture records include one reusedEnglish340 pair. Do not falsely call3newrevision2runs or treat successful supersededrevision1 as failures.",
+  "limits": "Root revision2 decision only. Wait for exact finalfreeze, independent skeptic and separate rootacceptance. Preserve GMR/source/master, no hgm_gloss promotion or production mutations."
+}

@@ -1,0 +1,7 @@
+{
+  "status": "REVIEWER_COUNT_METADATA_SHAPE_FAILURE_PRESERVED",
+  "failed_capture": "native/final-evidence-copy",
+  "failure": "KeyError: field; four supplemental query records carry their column in exact SQL instead of a redundant field key.",
+  "correction": "Read the explicit instr column from those four original SQL strings when field is absent; preserve original queries unchanged.",
+  "effect": "Failure occurred after frozen identities and master count checks, before final copy/review acceptance. No generator/resolver or source query was run; retry checks the existing frozen evidence."
+}

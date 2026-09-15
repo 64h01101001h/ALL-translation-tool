@@ -1,0 +1,652 @@
+[
+  {
+    "seq": 341,
+    "kind": "TIBETAN_SPELLING",
+    "found": "BDAG TU BZUNG BA'I",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "BDAG TU BZUNG BA'I",
+        "source_row": {
+          "id": 1723,
+          "course": "C05",
+          "seq": 341,
+          "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+          "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+          "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+        },
+        "occurrences": {
+          "acip": [
+            116
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          }
+        ],
+        "complete_record": "../evidence/corpus.json complete_records/1723",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "all_fields_equal_source": true,
+        "external_parallel_found": false,
+        "lineage_limit": "All three complete-field queries for this segment return only its own source row. Four targeted possession/negative-view queries also return only the current341 or342 row. No external exact or corrected witness, publication independence, or ingestion mechanism was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 162,
+          "wylie": 161,
+          "english": 220
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 341,
+            "field": "acip",
+            "start": 234524,
+            "bytes": 162,
+            "sha256": "c343c51db5d8835cb6537b4d2c7711e0328e8a4e379630f5d833d4d61c9ee65b",
+            "original_text": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 341,
+            "field": "english",
+            "start": 234688,
+            "bytes": 222,
+            "sha256": "7853ecd116aa5afd1c9ca7fae3e71fa156a4878ce5bd0908bd3380d54b911e6d",
+            "original_text": "The non-virtues of the second division have enjoyments as their object: they\r\noccur through enjoyment in the form of physical sensations within a living\r\nbeing, or by force of one's taking possession of certain enjoyments.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "64 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field queries reused without rerun.122 full material master objects:45 exact personally-read prior objects reused and77 new objects read completely."
+      },
+      "d_defensibility": {
+        "judgment": "The bound genitive follows the complete attested taking-possession compound. Preserve raw spelling and whole gis in dbang gis; no new spelling correction is supported.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records, personally-read-object-reuse.json, and original-decisions.json local rationales"
+      }
+    }
+  },
+  {
+    "seq": 341,
+    "kind": "ENGLISH_TYPO",
+    "found": "one's taking possession",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "one's taking possession",
+        "source_row": {
+          "id": 1723,
+          "course": "C05",
+          "seq": 341,
+          "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+          "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+          "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            174
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          }
+        ],
+        "complete_record": "../evidence/corpus.json complete_records/1723",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "all_fields_equal_source": true,
+        "external_parallel_found": false,
+        "lineage_limit": "All three complete-field queries for this segment return only its own source row. Four targeted possession/negative-view queries also return only the current341 or342 row. No external exact or corrected witness, publication independence, or ingestion mechanism was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 162,
+          "wylie": 161,
+          "english": 220
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 341,
+            "field": "acip",
+            "start": 234524,
+            "bytes": 162,
+            "sha256": "c343c51db5d8835cb6537b4d2c7711e0328e8a4e379630f5d833d4d61c9ee65b",
+            "original_text": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 341,
+            "field": "english",
+            "start": 234688,
+            "bytes": 222,
+            "sha256": "7853ecd116aa5afd1c9ca7fae3e71fa156a4878ce5bd0908bd3380d54b911e6d",
+            "original_text": "The non-virtues of the second division have enjoyments as their object: they\r\noccur through enjoyment in the form of physical sensations within a living\r\nbeing, or by force of one's taking possession of certain enjoyments.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "64 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field queries reused without rerun.122 full material master objects:45 exact personally-read prior objects reused and77 new objects read completely."
+      },
+      "d_defensibility": {
+        "judgment": "The possessive and nominal construction are grammatical. The source has no independently localized one word; leave supplied one's outside rather than deleting or altering it.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records, personally-read-object-reuse.json, and original-decisions.json local rationales"
+      }
+    }
+  },
+  {
+    "seq": 341,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "they occur through enjoyment",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "they occur through enjoyment",
+        "source_row": {
+          "id": 1723,
+          "course": "C05",
+          "seq": 341,
+          "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+          "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+          "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            72
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          }
+        ],
+        "complete_record": "../evidence/corpus.json complete_records/1723",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "all_fields_equal_source": true,
+        "external_parallel_found": false,
+        "lineage_limit": "All three complete-field queries for this segment return only its own source row. Four targeted possession/negative-view queries also return only the current341 or342 row. No external exact or corrected witness, publication independence, or ingestion mechanism was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 162,
+          "wylie": 161,
+          "english": 220
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 341,
+            "field": "acip",
+            "start": 234524,
+            "bytes": 162,
+            "sha256": "c343c51db5d8835cb6537b4d2c7711e0328e8a4e379630f5d833d4d61c9ee65b",
+            "original_text": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 341,
+            "field": "english",
+            "start": 234688,
+            "bytes": 222,
+            "sha256": "7853ecd116aa5afd1c9ca7fae3e71fa156a4878ce5bd0908bd3380d54b911e6d",
+            "original_text": "The non-virtues of the second division have enjoyments as their object: they\r\noccur through enjoyment in the form of physical sensations within a living\r\nbeing, or by force of one's taking possession of certain enjoyments.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "64 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field queries reused without rerun.122 full material master objects:45 exact personally-read prior objects reused and77 new objects read completely."
+      },
+      "d_defensibility": {
+        "judgment": "Two Tibetan byung ba predicates are compressed into one shared English occur across alternative causes. This is a distributed predicate alignment limit, not demonstrated error or absence of the second causal proposition.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records, personally-read-object-reuse.json, and original-decisions.json local rationales"
+      }
+    }
+  },
+  {
+    "seq": 341,
+    "kind": "INGEST_ARTEFACT",
+    "found": "physical sensations within a living being",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "physical sensations within a living being",
+        "source_row": {
+          "id": 1723,
+          "course": "C05",
+          "seq": 341,
+          "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+          "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+          "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            116
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          }
+        ],
+        "complete_record": "../evidence/corpus.json complete_records/1723",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "all_fields_equal_source": true,
+        "external_parallel_found": false,
+        "lineage_limit": "All three complete-field queries for this segment return only its own source row. Four targeted possession/negative-view queries also return only the current341 or342 row. No external exact or corrected witness, publication independence, or ingestion mechanism was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 162,
+          "wylie": 161,
+          "english": 220
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 341,
+            "field": "acip",
+            "start": 234524,
+            "bytes": 162,
+            "sha256": "c343c51db5d8835cb6537b4d2c7711e0328e8a4e379630f5d833d4d61c9ee65b",
+            "original_text": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 341,
+            "field": "english",
+            "start": 234688,
+            "bytes": 222,
+            "sha256": "7853ecd116aa5afd1c9ca7fae3e71fa156a4878ce5bd0908bd3380d54b911e6d",
+            "original_text": "The non-virtues of the second division have enjoyments as their object: they\r\noccur through enjoyment in the form of physical sensations within a living\r\nbeing, or by force of one's taking possession of certain enjoyments.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "64 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field queries reused without rerun.122 full material master objects:45 exact personally-read prior objects reused and77 new objects read completely."
+      },
+      "d_defensibility": {
+        "judgment": "The complete physical English extent and source row agree. Reg bya has exact HGM physical sensations; no heading, cap, or row spill is shown.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records, personally-read-object-reuse.json, and original-decisions.json local rationales"
+      }
+    }
+  },
+  {
+    "seq": 341,
+    "kind": "FORMATTING",
+    "found": "being, or by force",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "being, or by force",
+        "source_row": {
+          "id": 1723,
+          "course": "C05",
+          "seq": 341,
+          "acip": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+          "wylie": "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir",
+          "english": "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            152
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "cha gnyis pa'i gzhi ni longs spyod yin te, sems can gyi nang gi reg bya la longs spyod pa las byung ba dang , de la bdag tu bzung ba'i dbang gis byung ba'i phyir"
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 341,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The non-virtues of the second division have enjoyments as their object: they occur through enjoyment in the form of physical sensations within a living being, or by force of one's taking possession of certain enjoyments."
+            ],
+            "count": 1,
+            "row_ids": [
+              1723
+            ]
+          }
+        ],
+        "complete_record": "../evidence/corpus.json complete_records/1723",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "all_fields_equal_source": true,
+        "external_parallel_found": false,
+        "lineage_limit": "All three complete-field queries for this segment return only its own source row. Four targeted possession/negative-view queries also return only the current341 or342 row. No external exact or corrected witness, publication independence, or ingestion mechanism was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+        "register_identity": {
+          "original_git_commit": "58b6799188c8cb95f9095fea7cdc6bbf4d653894",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 277302,
+          "sha256": "27a9823b76971ca4b29e123c7eace6915cdbd8f4f839b305cb858634e486365b"
+        },
+        "count": 200,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 162,
+          "wylie": 161,
+          "english": 220
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 341,
+            "field": "acip",
+            "start": 234524,
+            "bytes": 162,
+            "sha256": "c343c51db5d8835cb6537b4d2c7711e0328e8a4e379630f5d833d4d61c9ee65b",
+            "original_text": "CHA GNYIS PA'I GZHI NI LONGS SPYOD YIN TE, SEMS CAN GYI NANG GI REG BYA LA LONGS SPYOD PA LAS BYUNG BA DANG , DE LA BDAG TU BZUNG BA'I DBANG GIS BYUNG BA'I PHYIR,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 341,
+            "field": "english",
+            "start": 234688,
+            "bytes": 222,
+            "sha256": "7853ecd116aa5afd1c9ca7fae3e71fa156a4878ce5bd0908bd3380d54b911e6d",
+            "original_text": "The non-virtues of the second division have enjoyments as their object: they\r\noccur through enjoyment in the form of physical sensations within a living\r\nbeing, or by force of one's taking possession of certain enjoyments.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "64 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field queries reused without rerun.122 full material master objects:45 exact personally-read prior objects reused and77 new objects read completely."
+      },
+      "d_defensibility": {
+        "judgment": "The comma and alternative coordinator separate the two causal cases. Dang has a direct or use here; preserve the physical punctuation without filing an additive-versus-alternative typo.",
+        "material": "../evidence/lexical.json complete master_objects and exact query records, personally-read-object-reuse.json, and original-decisions.json local rationales"
+      }
+    }
+  }
+]

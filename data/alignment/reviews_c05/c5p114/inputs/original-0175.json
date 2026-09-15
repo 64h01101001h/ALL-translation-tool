@@ -1,0 +1,446 @@
+{
+  "queries": [
+    {
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "dge mi dge med"
+      ],
+      "count": 3,
+      "row_ids": [
+        1724,
+        27279,
+        29295
+      ]
+    },
+    {
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "dge ba dang mi dge ba med"
+      ],
+      "count": 2,
+      "row_ids": [
+        1744,
+        6898
+      ]
+    },
+    {
+      "sql": "SELECT * FROM corpus_segments WHERE instr(english,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "virtues and non-virtues"
+      ],
+      "count": 2,
+      "row_ids": [
+        1724,
+        24638
+      ]
+    },
+    {
+      "sql": "SELECT * FROM corpus_segments WHERE instr(wylie,?)>0 AND course!='C13' ORDER BY course,seq",
+      "parameters": [
+        "med par lta ba"
+      ],
+      "count": 18,
+      "row_ids": [
+        24920,
+        1724,
+        1744,
+        1761,
+        1762,
+        5639,
+        5644,
+        5838,
+        6898,
+        6913,
+        6914,
+        8788,
+        8793,
+        23760,
+        23828,
+        34209,
+        37343,
+        11775
+      ]
+    }
+  ],
+  "complete_records": {
+    "1724": {
+      "spine_row": {
+        "id": 1724,
+        "course": "C05",
+        "seq": 342,
+        "acip": "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,",
+        "wylie": "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir",
+        "english": "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions",
+        "raw": "{\"course\": \"C05\", \"acip\": \"CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,\", \"wylie\": \"cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir\", \"english\": \"The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions\"}"
+      },
+      "corpus_index": 1723,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "CHA GSUM PA'I GZHI NI MING DANG GZUGS YIN TE, MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR, CHA BZHI PA'I GZHI NI MING YIN TE, RDZUN TSIG SOGS MING LA BRTEN NAS 'BYUNG BA'I PHYIR,",
+        "wylie": "cha gsum pa'i gzhi ni ming dang gzugs yin te, ming gzugs kyis bsdus pa'i dge mi dge med par lta ba las byung ba'i phyir, cha bzhi pa'i gzhi ni ming yin te, rdzun tshig sogs ming la brten nas 'byung ba'i phyir",
+        "english": "The objects of the third division are names and forms, for the non-virtue in this case arises from a view about the virtues and non-virtues that are all part of names and forms in general. The objects of the last division are names, for lying and so forth all occur--ultimately--based on the names of things. 75 Some Ethical Questions"
+      }
+    },
+    "27279": {
+      "spine_row": {
+        "id": 27279,
+        "course": "GK",
+        "seq": 331,
+        "acip": "[E11] GNYIS BA {%PA} GRUB STE, TSOGS DRUG LA DGE MI DGE MED NA DGE MI DGE'I SEMS MED PAR 'GYUR BA'I PHYIR,",
+        "wylie": "[e11] gnyis ba {%pa} grub ste, tshogs drug la dge mi dge med na dge mi dge'i sems med par 'gyur ba'i phyir",
+        "english": "And the second reason is correct because—if the collection of six were to lack good deeds and bad—then there would be no state of mind which was virtuous, or non-virtuous.",
+        "raw": "{\"course\": \"GK\", \"acip\": \"[E11] GNYIS BA {%PA} GRUB STE, TSOGS DRUG LA DGE MI DGE MED NA DGE MI DGE'I SEMS MED PAR 'GYUR BA'I PHYIR,\", \"wylie\": \"[e11] gnyis ba {%pa} grub ste, tshogs drug la dge mi dge med na dge mi dge'i sems med par 'gyur ba'i phyir\", \"english\": \"And the second reason is correct because—if the collection of six were to lack good deeds and bad—then there would be no state of mind which was virtuous, or non-virtuous.\"}"
+      },
+      "corpus_index": 27278,
+      "corpus_record": {
+        "course": "GK",
+        "acip": "[E11] GNYIS BA {%PA} GRUB STE, TSOGS DRUG LA DGE MI DGE MED NA DGE MI DGE'I SEMS MED PAR 'GYUR BA'I PHYIR,",
+        "wylie": "[e11] gnyis ba {%pa} grub ste, tshogs drug la dge mi dge med na dge mi dge'i sems med par 'gyur ba'i phyir",
+        "english": "And the second reason is correct because—if the collection of six were to lack good deeds and bad—then there would be no state of mind which was virtuous, or non-virtuous."
+      }
+    },
+    "29295": {
+      "spine_row": {
+        "id": 29295,
+        "course": "ILL",
+        "seq": 1976,
+        "acip": ",DE PHYIR RNAM SMIN MI DGE NAG PO'I LAS, ,RNAM SMIN DGE NYID DGE LAS YIN MTHONG ZHING, ,DGE MI DGE MED BLO CAN THAR 'GYUR TE, ,LAS 'BRAS RNAMS LA SEMS PA'ANG DGAG PA MDZAD,",
+        "wylie": "de phyir rnam smin mi dge nag po'i las, ,rnam smin dge nyid dge las yin mthong zhing, ,dge mi dge med blo can thar 'gyur te, ,las 'bras rnams la sems pa'ang dgag pa mdzad",
+        "english": "As such, we can see That a non-virtuous ripening Is black karma, While that virtuous ripening Is from a good deed. And also intelligent ones Who understand There exists no virtue Nor non-virtue Come to be freed. And they undertake To prevent overthinking Karma & its consequences.",
+        "raw": "{\"course\": \"ILL\", \"acip\": \",DE PHYIR RNAM SMIN MI DGE NAG PO'I LAS, ,RNAM SMIN DGE NYID DGE LAS YIN MTHONG ZHING, ,DGE MI DGE MED BLO CAN THAR 'GYUR TE, ,LAS 'BRAS RNAMS LA SEMS PA'ANG DGAG PA MDZAD,\", \"wylie\": \"de phyir rnam smin mi dge nag po'i las, ,rnam smin dge nyid dge las yin mthong zhing, ,dge mi dge med blo can thar 'gyur te, ,las 'bras rnams la sems pa'ang dgag pa mdzad\", \"english\": \"As such, we can see That a non-virtuous ripening Is black karma, While that virtuous ripening Is from a good deed. And also intelligent ones Who understand There exists no virtue Nor non-virtue Come to be freed. And they undertake To prevent overthinking Karma & its consequences.\"}"
+      },
+      "corpus_index": 29294,
+      "corpus_record": {
+        "course": "ILL",
+        "acip": ",DE PHYIR RNAM SMIN MI DGE NAG PO'I LAS, ,RNAM SMIN DGE NYID DGE LAS YIN MTHONG ZHING, ,DGE MI DGE MED BLO CAN THAR 'GYUR TE, ,LAS 'BRAS RNAMS LA SEMS PA'ANG DGAG PA MDZAD,",
+        "wylie": "de phyir rnam smin mi dge nag po'i las, ,rnam smin dge nyid dge las yin mthong zhing, ,dge mi dge med blo can thar 'gyur te, ,las 'bras rnams la sems pa'ang dgag pa mdzad",
+        "english": "As such, we can see That a non-virtuous ripening Is black karma, While that virtuous ripening Is from a good deed. And also intelligent ones Who understand There exists no virtue Nor non-virtue Come to be freed. And they undertake To prevent overthinking Karma & its consequences."
+      }
+    },
+    "1744": {
+      "spine_row": {
+        "id": 1744,
+        "course": "C05",
+        "seq": 362,
+        "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+        "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+        "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\"",
+        "raw": "{\"course\": \"C05\", \"acip\": \",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,\", \"wylie\": \"brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o\", \"english\": \"Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \\\"a path of action.\\\" 79 Explanation of the Expression \\\"Path of Action\\\"\"}"
+      },
+      "corpus_index": 1743,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+        "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+        "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 79 Explanation of the Expression \"Path of Action\""
+      }
+    },
+    "6898": {
+      "spine_row": {
+        "id": 6898,
+        "course": "C16",
+        "seq": 880,
+        "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+        "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+        "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 40 Explanation of the Expression \"Path of Action\"",
+        "raw": "{\"course\": \"C16\", \"acip\": \",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,\", \"wylie\": \"brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o\", \"english\": \"Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \\\"a path of action.\\\" 40 Explanation of the Expression \\\"Path of Action\\\"\"}"
+      },
+      "corpus_index": 6897,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",BRNAB SEMS NI LOG PA STE MI RIGS PAS GZHAN GYI NOR LA CHAGS NAS BDAG GIR BYED 'DOD PA'O, , GNOD SEMS NI SEMS CAN LA SDANG BA'I RNAM PAR ZHUGS PAS GNOD PA BYED 'DOD PA'O, , DGE BA DANG MI DGE BA MED PAR LTA BA NI LOG PAR LTA BA'O,",
+        "wylie": "brnab sems ni log pa ste mi rigs pas gzhan gyi nor la chags nas bdag gir byed 'dod pa'o, , gnod sems ni sems can la sdang ba'i rnam par zhugs pas gnod pa byed 'dod pa'o, , dge ba dang mi dge ba med par lta ba ni log par lta ba'o",
+        "english": "Coveting consists of a wrong (that is, an improper) desire for another's wealth, which leads to a wish that one make it his own. Harmful intent is the desire to hurt another living being, a desire which comes from the attitude of hating him. And mistaken view is the idea that neither virtue nor non-virtue even exists. Next we discuss the literal meaning of the expression \"a path of action.\" 40 Explanation of the Expression \"Path of Action\""
+      }
+    },
+    "24638": {
+      "spine_row": {
+        "id": 24638,
+        "course": "GIE",
+        "seq": 1126,
+        "acip": "[E31] BSGOM TSUL NI DE LTAR BLANG DOR BYA BA'I PHYIR DU 'DUN PA BSKYED, 'BAD PA BRTZON 'GRUS RTZOM, SEMS RAB TU 'DZIN, RAB TU 'JOG PAR BYED PA YIN LA,",
+        "wylie": "[e31] bsgom tshul ni de ltar blang dor bya ba'i phyir du 'dun pa bskyed, 'bad pa brtson 'grus rtsom, sems rab tu 'dzin, rab tu 'jog par byed pa yin la",
+        "english": "The method of practice we use here is that—first of all—we build up within ourselves a real aspiration to both take up what we need to, and give up what we need to, with regard to those virtues and non-virtues.  After that we redouble all our attempts & efforts.  We keep our thoughts strong, and then work to make them incredibly firm.",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"[E31] BSGOM TSUL NI DE LTAR BLANG DOR BYA BA'I PHYIR DU 'DUN PA BSKYED, 'BAD PA BRTZON 'GRUS RTZOM, SEMS RAB TU 'DZIN, RAB TU 'JOG PAR BYED PA YIN LA,\", \"wylie\": \"[e31] bsgom tshul ni de ltar blang dor bya ba'i phyir du 'dun pa bskyed, 'bad pa brtson 'grus rtsom, sems rab tu 'dzin, rab tu 'jog par byed pa yin la\", \"english\": \"The method of practice we use here is that—first of all—we build up within ourselves a real aspiration to both take up what we need to, and give up what we need to, with regard to those virtues and non-virtues.  After that we redouble all our attempts & efforts.  We keep our thoughts strong, and then work to make them incredibly firm.\"}"
+      },
+      "corpus_index": 24637,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "[E31] BSGOM TSUL NI DE LTAR BLANG DOR BYA BA'I PHYIR DU 'DUN PA BSKYED, 'BAD PA BRTZON 'GRUS RTZOM, SEMS RAB TU 'DZIN, RAB TU 'JOG PAR BYED PA YIN LA,",
+        "wylie": "[e31] bsgom tshul ni de ltar blang dor bya ba'i phyir du 'dun pa bskyed, 'bad pa brtson 'grus rtsom, sems rab tu 'dzin, rab tu 'jog par byed pa yin la",
+        "english": "The method of practice we use here is that—first of all—we build up within ourselves a real aspiration to both take up what we need to, and give up what we need to, with regard to those virtues and non-virtues.  After that we redouble all our attempts & efforts.  We keep our thoughts strong, and then work to make them incredibly firm."
+      }
+    },
+    "24920": {
+      "spine_row": {
+        "id": 24920,
+        "course": "AK",
+        "seq": 126,
+        "acip": "CHAD PAR LTA BA DANG, RTAG PAR LTA BA DANG, MED PAR LTA BA DANG,",
+        "wylie": "chad par lta ba dang, rtag par lta ba dang, med par lta ba dang",
+        "english": "Holding the view that things must stop existing; or that they cannot change; or that they don't exist at all. Wrong ideas about emptiness, and their result",
+        "raw": "{\"course\": \"AK\", \"acip\": \"CHAD PAR LTA BA DANG, RTAG PAR LTA BA DANG, MED PAR LTA BA DANG,\", \"wylie\": \"chad par lta ba dang, rtag par lta ba dang, med par lta ba dang\", \"english\": \"Holding the view that things must stop existing; or that they cannot change; or that they don't exist at all. Wrong ideas about emptiness, and their result\"}"
+      },
+      "corpus_index": 24919,
+      "corpus_record": {
+        "course": "AK",
+        "acip": "CHAD PAR LTA BA DANG, RTAG PAR LTA BA DANG, MED PAR LTA BA DANG,",
+        "wylie": "chad par lta ba dang, rtag par lta ba dang, med par lta ba dang",
+        "english": "Holding the view that things must stop existing; or that they cannot change; or that they don't exist at all. Wrong ideas about emptiness, and their result"
+      }
+    },
+    "1761": {
+      "spine_row": {
+        "id": 1761,
+        "course": "C05",
+        "seq": 379,
+        "acip": ",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,",
+        "wylie": "med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o",
+        "english": "Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it.",
+        "raw": "{\"course\": \"C05\", \"acip\": \",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,\", \"wylie\": \"med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o\", \"english\": \"Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it.\"}"
+      },
+      "corpus_index": 1760,
+      "corpus_record": {
+        "course": "C05",
+        "acip": ",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,",
+        "wylie": "med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o",
+        "english": "Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it."
+      }
+    },
+    "1762": {
+      "spine_row": {
+        "id": 1762,
+        "course": "C05",
+        "seq": 380,
+        "acip": "[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,",
+        "wylie": "[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do",
+        "english": "One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist.",
+        "raw": "{\"course\": \"C05\", \"acip\": \"[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,\", \"wylie\": \"[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do\", \"english\": \"One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist.\"}"
+      },
+      "corpus_index": 1761,
+      "corpus_record": {
+        "course": "C05",
+        "acip": "[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,",
+        "wylie": "[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do",
+        "english": "One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist."
+      }
+    },
+    "5639": {
+      "spine_row": {
+        "id": 5639,
+        "course": "C15",
+        "seq": 88,
+        "acip": "NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,",
+        "wylie": "ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,",
+        "english": "This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \"lack of any nature of their own.\" If on the other hand one were to say that \"lacking any nature of their own\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all.",
+        "raw": "{\"course\": \"C15\", \"acip\": \"NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,\", \"wylie\": \"ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,\", \"english\": \"This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \\\"lack of any nature of their own.\\\" If on the other hand one were to say that \\\"lacking any nature of their own\\\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all.\"}"
+      },
+      "corpus_index": 5638,
+      "corpus_record": {
+        "course": "C15",
+        "acip": "NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,",
+        "wylie": "ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,",
+        "english": "This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \"lack of any nature of their own.\" If on the other hand one were to say that \"lacking any nature of their own\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all."
+      }
+    },
+    "5644": {
+      "spine_row": {
+        "id": 5644,
+        "course": "C15",
+        "seq": 93,
+        "acip": "DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,",
+        "wylie": "de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,",
+        "english": "If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality.",
+        "raw": "{\"course\": \"C15\", \"acip\": \"DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,\", \"wylie\": \"de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,\", \"english\": \"If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality.\"}"
+      },
+      "corpus_index": 5643,
+      "corpus_record": {
+        "course": "C15",
+        "acip": "DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,",
+        "wylie": "de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,",
+        "english": "If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality."
+      }
+    },
+    "5838": {
+      "spine_row": {
+        "id": 5838,
+        "course": "C15",
+        "seq": 287,
+        "acip": "DE DAG GI LTAR NA 'DOGS PA'I GZHI'I DNGOS PO TZAM YANG MED PAS 'DOGS PA DE NYID KYANG THAMS CAD KYI THAMS CAD DU MED PAR 'GYUR NA GDAGS PA TZAM GYI DE KHO NA LTA YOD PAR GA LA 'GYUR TE, DE BAS NA RNAM GRANGS DES NA DE DAG GIS NI DE KHO NA DANG BTAGS PA DE GNYIS KA LA YANG SKUR PA BTAB PAR 'GYUR TE, BTAGS PA DANG DE KHO NA LA SKUR BA BTAB PAS NA MED PAR LTA BA'I GTZO BO YIN PAR RIG PAR BYA'O ZHES GSUNGS SHING ,",
+        "wylie": "de dag gi ltar na 'dogs pa'i gzhi'i dngos po tsam yang med pas 'dogs pa de nyid kyang thams cad kyi thams cad du med par 'gyur na gdags pa tsam gyi de kho na lta yod par ga la 'gyur te, de bas na rnam grangs des na de dag gis ni de kho na dang btags pa de gnyis ka la yang skur pa btab par 'gyur te, btags pa dang de kho na la skur ba btab pas na med par lta ba'i gtso bo yin par rig par bya'o zhes gsungs shing",
+        "english": "According to them, not even the very foundation to which we apply our constructs -- functional things in themselves -- is something that exists. And constructing itself then would be something that didn't, all in all, exist either. How on earth then could suchness, in the form of everything being a construct, exist either? As such those who purport this idea are, according to their own beliefs, guilty of discounting both thusness and the idea of constructs. And you should understand that--since their viewpoint is one which discounts both the idea of concepts and thusness--it is the most dangerous of all those views that nothing exists.",
+        "raw": "{\"course\": \"C15\", \"acip\": \"DE DAG GI LTAR NA 'DOGS PA'I GZHI'I DNGOS PO TZAM YANG MED PAS 'DOGS PA DE NYID KYANG THAMS CAD KYI THAMS CAD DU MED PAR 'GYUR NA GDAGS PA TZAM GYI DE KHO NA LTA YOD PAR GA LA 'GYUR TE, DE BAS NA RNAM GRANGS DES NA DE DAG GIS NI DE KHO NA DANG BTAGS PA DE GNYIS KA LA YANG SKUR PA BTAB PAR 'GYUR TE, BTAGS PA DANG DE KHO NA LA SKUR BA BTAB PAS NA MED PAR LTA BA'I GTZO BO YIN PAR RIG PAR BYA'O ZHES GSUNGS SHING ,\", \"wylie\": \"de dag gi ltar na 'dogs pa'i gzhi'i dngos po tsam yang med pas 'dogs pa de nyid kyang thams cad kyi thams cad du med par 'gyur na gdags pa tsam gyi de kho na lta yod par ga la 'gyur te, de bas na rnam grangs des na de dag gis ni de kho na dang btags pa de gnyis ka la yang skur pa btab par 'gyur te, btags pa dang de kho na la skur ba btab pas na med par lta ba'i gtso bo yin par rig par bya'o zhes gsungs shing\", \"english\": \"According to them, not even the very foundation to which we apply our constructs -- functional things in themselves -- is something that exists. And constructing itself then would be something that didn't, all in all, exist either. How on earth then could suchness, in the form of everything being a construct, exist either? As such those who purport this idea are, according to their own beliefs, guilty of discounting both thusness and the idea of constructs. And you should understand that--since their viewpoint is one which discounts both the idea of concepts and thusness--it is the most dangerous of all those views that nothing exists.\"}"
+      },
+      "corpus_index": 5837,
+      "corpus_record": {
+        "course": "C15",
+        "acip": "DE DAG GI LTAR NA 'DOGS PA'I GZHI'I DNGOS PO TZAM YANG MED PAS 'DOGS PA DE NYID KYANG THAMS CAD KYI THAMS CAD DU MED PAR 'GYUR NA GDAGS PA TZAM GYI DE KHO NA LTA YOD PAR GA LA 'GYUR TE, DE BAS NA RNAM GRANGS DES NA DE DAG GIS NI DE KHO NA DANG BTAGS PA DE GNYIS KA LA YANG SKUR PA BTAB PAR 'GYUR TE, BTAGS PA DANG DE KHO NA LA SKUR BA BTAB PAS NA MED PAR LTA BA'I GTZO BO YIN PAR RIG PAR BYA'O ZHES GSUNGS SHING ,",
+        "wylie": "de dag gi ltar na 'dogs pa'i gzhi'i dngos po tsam yang med pas 'dogs pa de nyid kyang thams cad kyi thams cad du med par 'gyur na gdags pa tsam gyi de kho na lta yod par ga la 'gyur te, de bas na rnam grangs des na de dag gis ni de kho na dang btags pa de gnyis ka la yang skur pa btab par 'gyur te, btags pa dang de kho na la skur ba btab pas na med par lta ba'i gtso bo yin par rig par bya'o zhes gsungs shing",
+        "english": "According to them, not even the very foundation to which we apply our constructs -- functional things in themselves -- is something that exists. And constructing itself then would be something that didn't, all in all, exist either. How on earth then could suchness, in the form of everything being a construct, exist either? As such those who purport this idea are, according to their own beliefs, guilty of discounting both thusness and the idea of constructs. And you should understand that--since their viewpoint is one which discounts both the idea of concepts and thusness--it is the most dangerous of all those views that nothing exists."
+      }
+    },
+    "6913": {
+      "spine_row": {
+        "id": 6913,
+        "course": "C16",
+        "seq": 895,
+        "acip": ",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,",
+        "wylie": "med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o",
+        "english": "Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it.",
+        "raw": "{\"course\": \"C16\", \"acip\": \",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,\", \"wylie\": \"med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o\", \"english\": \"Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it.\"}"
+      },
+      "corpus_index": 6912,
+      "corpus_record": {
+        "course": "C16",
+        "acip": ",MED PAR LTA BAS RTZA BA GCOD, ,'DOD GTOGS SKYES NAS THOB PA RNAMS, ,RGYU DANG 'BRAS LA SKUR 'DEBS PAS, ,KUN GYIS RIM GYIS MI'I NANG DU, ,SKYES PA BUD MED KYIS GCOD DO, ,LTA SPYAD DE NI MI LDAN PA'O,",
+        "wylie": "med par lta bas rtsa ba gcod, ,'dod gtogs skyes nas thob pa rnams, ,rgyu dang 'bras la skur 'debs pas, ,kun gyis rim gyis mi'i nang du, ,skyes pa bud med kyis gcod do, ,lta spyad de ni mi ldan pa'o",
+        "english": "Most basic lost by the view they don't exist; Taken in the desire, had from birth. Through the one denying cause and effect, And through all. In stages, among humans, Lost by those who are male or female, by the Intellectual. This is not to have it."
+      }
+    },
+    "6914": {
+      "spine_row": {
+        "id": 6914,
+        "course": "C16",
+        "seq": 896,
+        "acip": "[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,",
+        "wylie": "[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do",
+        "english": "One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist.",
+        "raw": "{\"course\": \"C16\", \"acip\": \"[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,\", \"wylie\": \"[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do\", \"english\": \"One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist.\"}"
+      },
+      "corpus_index": 6913,
+      "corpus_record": {
+        "course": "C16",
+        "acip": "[IV.313-8] ,BZHI PA NI, MI DGE BA GANG GIS DGE RTZA GCOD CE NA, MED PAR LTA BAS DGE BA'I RTZA BA GCOD PAR BYED DO,",
+        "wylie": "[iv.313-8] ,bzhi pa ni, mi dge ba gang gis dge rtsa gcod ce na, med par lta bas dge ba'i rtsa ba gcod par byed do",
+        "english": "One may ask just what kind of non-virtue can make one lose his most basic virtue. The most basic virtue that a person possesses is lost by the view that certain important objects don't even exist."
+      }
+    },
+    "8788": {
+      "spine_row": {
+        "id": 8788,
+        "course": "C18",
+        "seq": 993,
+        "acip": "NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,",
+        "wylie": "ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,",
+        "english": "This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \"lack of any nature of their own.\" If on the other hand one were to say that \"lacking any nature of their own\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all.",
+        "raw": "{\"course\": \"C18\", \"acip\": \"NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,\", \"wylie\": \"ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,\", \"english\": \"This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \\\"lack of any nature of their own.\\\" If on the other hand one were to say that \\\"lacking any nature of their own\\\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all.\"}"
+      },
+      "corpus_index": 8787,
+      "corpus_record": {
+        "course": "C18",
+        "acip": "NGO BO NYID MED PAR GSUNGS PA'I NGO BO NYID MED TSUL NI DE LTAR DU BSHAD KYI DE LTA MIN PAR NGO BO NYID GSUM GA RANG GI MTSAN NYID KYIS MA GRUB PA LA NGO BO NYID MED PAR BSHAD NA NGO BO NYID MED PAR GSUNGS PA'I MDO SDE LA SGRA JI BZHIN PAR ZHEN PA YIN LA, DE LTA NA MED LTA'AM CHAD PAR LTA BA THOB PAR 'GYUR TE NGO BO NYID GSUM GA LA SKUR BA 'DEBS PAS MTSAN NYID MED PAR LTA BA CAN DU 'GYUR BA'I PHYIR RO, ,",
+        "wylie": "ngo bo nyid med par gsungs pa'i ngo bo nyid med tshul ni de ltar du bshad kyi de lta min par ngo bo nyid gsum ga rang gi mtshan nyid kyis ma grub pa la ngo bo nyid med par bshad na ngo bo nyid med par gsungs pa'i mdo sde la sgra ji bzhin par zhen pa yin la, de lta na med lta'am chad par lta ba thob par 'gyur te ngo bo nyid gsum ga la skur ba 'debs pas mtshan nyid med par lta ba can du 'gyur ba'i phyir ro,",
+        "english": "This is the way one should explain how it is that things lack any nature of their own when the sutra speaks of a \"lack of any nature of their own.\" If on the other hand one were to say that \"lacking any nature of their own\" meant that none of the three natures existed by definition, then you would be expressing the belief that the sutras which state that nothing has any nature of its own are to be taken to mean exactly what they say. This would amount to espousing the view that nothing exists, or the view that everything has discontinued. This in turn would be discounting the existence of all three of the natures; and we could say then that you had turned into one of those people who holds the view that nothing has any definitive characteristics at all."
+      }
+    },
+    "8793": {
+      "spine_row": {
+        "id": 8793,
+        "course": "C18",
+        "seq": 998,
+        "acip": "DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,",
+        "wylie": "de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,",
+        "english": "If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality.",
+        "raw": "{\"course\": \"C18\", \"acip\": \"DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,\", \"wylie\": \"de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,\", \"english\": \"If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality.\"}"
+      },
+      "corpus_index": 8792,
+      "corpus_record": {
+        "course": "C18",
+        "acip": "DE DAG GZHI DES NA CHOS THAMS CAD LA MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA 'THOB PAR 'GYUR TE, MED PAR LTA BA DANG MTSAN NYID MED PAR LTA BA THOB NAS KYANG CHOS THAMS CAD LA MTSAN NYID THAMS CAD KYIS SKUR PA 'DEBS TE, CHOS RNAMS KYI KUN BRTAGS PA'I MTSAN NYID LA YANG SKUR PA 'DEBS CHOS RNAMS KYI GZHAN GYI DBANG GI MTSAN NYID DANG YONGS SU GRUB PA'I MTSAN NYID LA YANG SKUR PA 'DEBS SO, ,",
+        "wylie": "de dag gzhi des na chos thams cad la med par lta ba dang mtshan nyid med par lta ba 'thob par 'gyur te, med par lta ba dang mtshan nyid med par lta ba thob nas kyang chos thams cad la mtshan nyid thams cad kyis skur pa 'debs te, chos rnams kyi kun brtags pa'i mtshan nyid la yang skur pa 'debs chos rnams kyi gzhan gyi dbang gi mtshan nyid dang yongs su grub pa'i mtshan nyid la yang skur pa 'debs so,",
+        "english": "If one were to start from this point, it would amount to espousing the view that nothing exists at all, and the view that nothing has any definitive characteristics at all. And once one reached the point of espousing the view that nothing exists, or that nothing has any definitive characteristics, then one would be discounting the existence of all things, from the point of view of each and every one of their attributes. This is true because one would then be discounting the existence of the attribute of having constructs for every existing thing; and one would also be discounting the existence of the attributes of having dependent things and having totality."
+      }
+    },
+    "23760": {
+      "spine_row": {
+        "id": 23760,
+        "course": "GIE",
+        "seq": 248,
+        "acip": "LAS 'BRAS YOD PAR BDEN GRUB TU BZUNGS NAS DGE BA BYED PA NI, THAR PA'I RGYU KHYAD PAR CAN MIN KYANG BDE 'GRO'I RGYUR 'GRO LA, LAS 'BRAS MED PAR LTA BA DANG DE LA YID MI CHES PA NI, NGAN 'GRO'I RGYU DNGOS YIN TE,",
+        "wylie": "las 'bras yod par bden grub tu bzungs nas dge ba byed pa ni, thar pa'i rgyu khyad par can min kyang bde 'gro'i rgyur 'gro la, las 'bras med par lta ba dang de la yid mi ches pa ni, ngan 'gro'i rgyu dngos yin te",
+        "english": "Holding to the perception that the law of karma and its consequences does exist—but that it exists as something ultimately real—and then engaging in good deeds cannot serve as any exceptional cause for reaching freedom.  Nonetheless, it can provide a cause for us to take a birth into the higher realms of existence—whereas the belief that there is no such law, and thus failing to believe in it, is a genuine cause for a birth in the realms of misery.",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"LAS 'BRAS YOD PAR BDEN GRUB TU BZUNGS NAS DGE BA BYED PA NI, THAR PA'I RGYU KHYAD PAR CAN MIN KYANG BDE 'GRO'I RGYUR 'GRO LA, LAS 'BRAS MED PAR LTA BA DANG DE LA YID MI CHES PA NI, NGAN 'GRO'I RGYU DNGOS YIN TE,\", \"wylie\": \"las 'bras yod par bden grub tu bzungs nas dge ba byed pa ni, thar pa'i rgyu khyad par can min kyang bde 'gro'i rgyur 'gro la, las 'bras med par lta ba dang de la yid mi ches pa ni, ngan 'gro'i rgyu dngos yin te\", \"english\": \"Holding to the perception that the law of karma and its consequences does exist—but that it exists as something ultimately real—and then engaging in good deeds cannot serve as any exceptional cause for reaching freedom.  Nonetheless, it can provide a cause for us to take a birth into the higher realms of existence—whereas the belief that there is no such law, and thus failing to believe in it, is a genuine cause for a birth in the realms of misery.\"}"
+      },
+      "corpus_index": 23759,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "LAS 'BRAS YOD PAR BDEN GRUB TU BZUNGS NAS DGE BA BYED PA NI, THAR PA'I RGYU KHYAD PAR CAN MIN KYANG BDE 'GRO'I RGYUR 'GRO LA, LAS 'BRAS MED PAR LTA BA DANG DE LA YID MI CHES PA NI, NGAN 'GRO'I RGYU DNGOS YIN TE,",
+        "wylie": "las 'bras yod par bden grub tu bzungs nas dge ba byed pa ni, thar pa'i rgyu khyad par can min kyang bde 'gro'i rgyur 'gro la, las 'bras med par lta ba dang de la yid mi ches pa ni, ngan 'gro'i rgyu dngos yin te",
+        "english": "Holding to the perception that the law of karma and its consequences does exist—but that it exists as something ultimately real—and then engaging in good deeds cannot serve as any exceptional cause for reaching freedom.  Nonetheless, it can provide a cause for us to take a birth into the higher realms of existence—whereas the belief that there is no such law, and thus failing to believe in it, is a genuine cause for a birth in the realms of misery."
+      }
+    },
+    "23828": {
+      "spine_row": {
+        "id": 23828,
+        "course": "GIE",
+        "seq": 316,
+        "acip": "DE 'DI SNYAM DU SEMS TE, BDAG DANG 'JIG RTEN NI, MTHA' YOD KYANG YOD LA, MTHA' MED KYANG MED PA 'DI NYID BDEN GYI, GZHAN NI, GTI MUG GO ,SNYAM PA 'DI NI, MTHA' YOD PA DANG MTHA' MED PAR LTA BA'O,,",
+        "wylie": "de 'di snyam du sems te, bdag dang 'jig rten ni, mtha' yod kyang yod la, mtha' med kyang med pa 'di nyid bden gyi, gzhan ni, gti mug go ,snyam pa 'di ni, mtha' yod pa dang mtha' med par lta ba'o",
+        "english": "This type of person then thinks to themselves, “The reality here is that my self, and the world, do have a first beginning; while at the same time, we have no such beginning.  This then is the one real truth, and what everyone else thinks is pure delusion.”  This is [the third view of the Extremists,] the view that there truly is a first beginning; but at the same time, no such beginning.",
+        "raw": "{\"course\": \"GIE\", \"acip\": \"DE 'DI SNYAM DU SEMS TE, BDAG DANG 'JIG RTEN NI, MTHA' YOD KYANG YOD LA, MTHA' MED KYANG MED PA 'DI NYID BDEN GYI, GZHAN NI, GTI MUG GO ,SNYAM PA 'DI NI, MTHA' YOD PA DANG MTHA' MED PAR LTA BA'O,,\", \"wylie\": \"de 'di snyam du sems te, bdag dang 'jig rten ni, mtha' yod kyang yod la, mtha' med kyang med pa 'di nyid bden gyi, gzhan ni, gti mug go ,snyam pa 'di ni, mtha' yod pa dang mtha' med par lta ba'o\", \"english\": \"This type of person then thinks to themselves, “The reality here is that my self, and the world, do have a first beginning; while at the same time, we have no such beginning.  This then is the one real truth, and what everyone else thinks is pure delusion.”  This is [the third view of the Extremists,] the view that there truly is a first beginning; but at the same time, no such beginning.\"}"
+      },
+      "corpus_index": 23827,
+      "corpus_record": {
+        "course": "GIE",
+        "acip": "DE 'DI SNYAM DU SEMS TE, BDAG DANG 'JIG RTEN NI, MTHA' YOD KYANG YOD LA, MTHA' MED KYANG MED PA 'DI NYID BDEN GYI, GZHAN NI, GTI MUG GO ,SNYAM PA 'DI NI, MTHA' YOD PA DANG MTHA' MED PAR LTA BA'O,,",
+        "wylie": "de 'di snyam du sems te, bdag dang 'jig rten ni, mtha' yod kyang yod la, mtha' med kyang med pa 'di nyid bden gyi, gzhan ni, gti mug go ,snyam pa 'di ni, mtha' yod pa dang mtha' med par lta ba'o",
+        "english": "This type of person then thinks to themselves, “The reality here is that my self, and the world, do have a first beginning; while at the same time, we have no such beginning.  This then is the one real truth, and what everyone else thinks is pure delusion.”  This is [the third view of the Extremists,] the view that there truly is a first beginning; but at the same time, no such beginning."
+      }
+    },
+    "34209": {
+      "spine_row": {
+        "id": 34209,
+        "course": "SOS",
+        "seq": 355,
+        "acip": "DES NA SPYIR LAS 'BRAS DANG DKON MCHOG GSUM MED PAR LTA BA SOGS CHAD MTHAR LHUNG BA YIN ZHING, JI LTA JI SNYED PA'I CHOS RAGS PA DANG BDEN BZHI RAGS PA SOGS MED PAR LTA BA'ANG DE DANG MTSUNGS PAR SEMS LA,",
+        "wylie": "des na spyir las 'bras dang dkon mchog gsum med par lta ba sogs chad mthar lhung ba yin zhing, ji lta ji snyed pa'i chos rags pa dang bden bzhi rags pa sogs med par lta ba'ang de dang mtshungs par sems la",
+        "english": "And as such, people can still—generally speaking, in my thinking—have fallen into the extreme view of thinking things don't exist, in the sense of denying details of something like the laws of karma and its consequences; or the Three Jewels. And they can still hold the view that things like certain gross objects taken in either by how all things are or by how many things there are, or gross details of the four truths, don't even exist.",
+        "raw": "{\"course\": \"SOS\", \"acip\": \"DES NA SPYIR LAS 'BRAS DANG DKON MCHOG GSUM MED PAR LTA BA SOGS CHAD MTHAR LHUNG BA YIN ZHING, JI LTA JI SNYED PA'I CHOS RAGS PA DANG BDEN BZHI RAGS PA SOGS MED PAR LTA BA'ANG DE DANG MTSUNGS PAR SEMS LA,\", \"wylie\": \"des na spyir las 'bras dang dkon mchog gsum med par lta ba sogs chad mthar lhung ba yin zhing, ji lta ji snyed pa'i chos rags pa dang bden bzhi rags pa sogs med par lta ba'ang de dang mtshungs par sems la\", \"english\": \"And as such, people can still—generally speaking, in my thinking—have fallen into the extreme view of thinking things don't exist, in the sense of denying details of something like the laws of karma and its consequences; or the Three Jewels. And they can still hold the view that things like certain gross objects taken in either by how all things are or by how many things there are, or gross details of the four truths, don't even exist.\"}"
+      },
+      "corpus_index": 34208,
+      "corpus_record": {
+        "course": "SOS",
+        "acip": "DES NA SPYIR LAS 'BRAS DANG DKON MCHOG GSUM MED PAR LTA BA SOGS CHAD MTHAR LHUNG BA YIN ZHING, JI LTA JI SNYED PA'I CHOS RAGS PA DANG BDEN BZHI RAGS PA SOGS MED PAR LTA BA'ANG DE DANG MTSUNGS PAR SEMS LA,",
+        "wylie": "des na spyir las 'bras dang dkon mchog gsum med par lta ba sogs chad mthar lhung ba yin zhing, ji lta ji snyed pa'i chos rags pa dang bden bzhi rags pa sogs med par lta ba'ang de dang mtshungs par sems la",
+        "english": "And as such, people can still—generally speaking, in my thinking—have fallen into the extreme view of thinking things don't exist, in the sense of denying details of something like the laws of karma and its consequences; or the Three Jewels. And they can still hold the view that things like certain gross objects taken in either by how all things are or by how many things there are, or gross details of the four truths, don't even exist."
+      }
+    },
+    "37343": {
+      "spine_row": {
+        "id": 37343,
+        "course": "SVN",
+        "seq": 883,
+        "acip": "DER THAL, YOD PA DANG MED PAR LTA BA'I MTHAR 'DZIN GYI LTA BA PHYIN CI LOG GI NYES PAS SEMS RGYUD BCINGS PA YIN PA'I PHYIR,",
+        "wylie": "der thal, yod pa dang med par lta ba'i mthar 'dzin gyi lta ba phyin ci log gi nyes pas sems rgyud bcings pa yin pa'i phyir",
+        "english": "And this indeed must be the case, Because the stream of their mind is chained by all the problems of that totally mistaken view which holds to the two extremes of things existing, or not existing. How realized beings see things",
+        "raw": "{\"acip\": \"DER THAL, YOD PA DANG MED PAR LTA BA'I MTHAR 'DZIN GYI LTA BA PHYIN CI LOG GI NYES PAS SEMS RGYUD BCINGS PA YIN PA'I PHYIR,\", \"wylie\": \"der thal, yod pa dang med par lta ba'i mthar 'dzin gyi lta ba phyin ci log gi nyes pas sems rgyud bcings pa yin pa'i phyir\", \"english\": \"And this indeed must be the case, Because the stream of their mind is chained by all the problems of that totally mistaken view which holds to the two extremes of things existing, or not existing. How realized beings see things\", \"course\": \"SVN\", \"source_wave\": \"gmr-volumes-2026-08\"}"
+      },
+      "corpus_index": 37342,
+      "corpus_record": {
+        "acip": "DER THAL, YOD PA DANG MED PAR LTA BA'I MTHAR 'DZIN GYI LTA BA PHYIN CI LOG GI NYES PAS SEMS RGYUD BCINGS PA YIN PA'I PHYIR,",
+        "wylie": "der thal, yod pa dang med par lta ba'i mthar 'dzin gyi lta ba phyin ci log gi nyes pas sems rgyud bcings pa yin pa'i phyir",
+        "english": "And this indeed must be the case, Because the stream of their mind is chained by all the problems of that totally mistaken view which holds to the two extremes of things existing, or not existing. How realized beings see things",
+        "course": "SVN",
+        "source_wave": "gmr-volumes-2026-08"
+      }
+    },
+    "11775": {
+      "spine_row": {
+        "id": 11775,
+        "course": "TCS05",
+        "seq": 96,
+        "acip": "SANGS RGYAS DANG DBYER MED PAR LTA BA'I DGOS PA NI RDO RJE 'CHANG DANG BLA MA LA DAD PA MNYAM PAR BYA BA DANG RDO RJE 'CHANG GI NGA RGYAL BRTAN PAR BYA BA DANG TSEGS CHUNG NGUS TSOGS BSAGS PAS MYUR DU 'GRUB PA'I DON DU YIN PAR SH'AN+TI PAS GSANG 'DUS KYI 'GREL PAR GSUNGS SO,",
+        "wylie": "sangs rgyas dang dbyer med par lta ba'i dgos pa ni rdo rje 'chang dang bla ma la dad pa mnyam par bya ba dang rdo rje 'chang gi nga rgyal brtan par bya ba dang tshegs chung ngus tshogs bsags pas myur du 'grub pa'i don du yin par shAn+ti pas gsang 'dus kyi 'grel par gsungs so",
+        "english": "Exactly why is it that we must view our Master as being indivisible from the Buddha?  The point is that we thus come to feel an equal amount of faith for both the Keeper of the Diamond and our Lama. It further helps us become firm in our own practice of identifying ourselves with the Keeper of the Diamond, and enables us to speedily collect great amounts of good karma, without any trouble at all.   These are the benefits which Shantipa describes in his commentary to the Secret Collection. ***",
+        "raw": "{\"course\": \"TCS05\", \"acip\": \"SANGS RGYAS DANG DBYER MED PAR LTA BA'I DGOS PA NI RDO RJE 'CHANG DANG BLA MA LA DAD PA MNYAM PAR BYA BA DANG RDO RJE 'CHANG GI NGA RGYAL BRTAN PAR BYA BA DANG TSEGS CHUNG NGUS TSOGS BSAGS PAS MYUR DU 'GRUB PA'I DON DU YIN PAR SH'AN+TI PAS GSANG 'DUS KYI 'GREL PAR GSUNGS SO,\", \"wylie\": \"sangs rgyas dang dbyer med par lta ba'i dgos pa ni rdo rje 'chang dang bla ma la dad pa mnyam par bya ba dang rdo rje 'chang gi nga rgyal brtan par bya ba dang tshegs chung ngus tshogs bsags pas myur du 'grub pa'i don du yin par shAn+ti pas gsang 'dus kyi 'grel par gsungs so\", \"english\": \"Exactly why is it that we must view our Master as being indivisible from the Buddha?  The point is that we thus come to feel an equal amount of faith for both the Keeper of the Diamond and our Lama. It further helps us become firm in our own practice of identifying ourselves with the Keeper of the Diamond, and enables us to speedily collect great amounts of good karma, without any trouble at all.   These are the benefits which Shantipa describes in his commentary to the Secret Collection. ***\"}"
+      },
+      "corpus_index": 11774,
+      "corpus_record": {
+        "course": "TCS05",
+        "acip": "SANGS RGYAS DANG DBYER MED PAR LTA BA'I DGOS PA NI RDO RJE 'CHANG DANG BLA MA LA DAD PA MNYAM PAR BYA BA DANG RDO RJE 'CHANG GI NGA RGYAL BRTAN PAR BYA BA DANG TSEGS CHUNG NGUS TSOGS BSAGS PAS MYUR DU 'GRUB PA'I DON DU YIN PAR SH'AN+TI PAS GSANG 'DUS KYI 'GREL PAR GSUNGS SO,",
+        "wylie": "sangs rgyas dang dbyer med par lta ba'i dgos pa ni rdo rje 'chang dang bla ma la dad pa mnyam par bya ba dang rdo rje 'chang gi nga rgyal brtan par bya ba dang tshegs chung ngus tshogs bsags pas myur du 'grub pa'i don du yin par shAn+ti pas gsang 'dus kyi 'grel par gsungs so",
+        "english": "Exactly why is it that we must view our Master as being indivisible from the Buddha?  The point is that we thus come to feel an equal amount of faith for both the Keeper of the Diamond and our Lama. It further helps us become firm in our own practice of identifying ourselves with the Keeper of the Diamond, and enables us to speedily collect great amounts of good karma, without any trouble at all.   These are the benefits which Shantipa describes in his commentary to the Secret Collection. ***"
+      }
+    }
+  }
+}
