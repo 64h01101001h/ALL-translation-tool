@@ -1,0 +1,6 @@
+{
+  "status": "FIRST_PACKAGE_EXECUTION_PASS; COPY-MANIFEST_METADATA_COMPLETION",
+  "reason": "Add the standard original absolute path to immutable-Git copy records while retaining original_git_commit and repository_relative_path. This fixes a missing copy-manifest field only; all prior checks passed, no generator/resolver or source query rerun.",
+  "before": "original-to-copy-manifest-before.json",
+  "exact_first_executed_method": "package.py"
+}

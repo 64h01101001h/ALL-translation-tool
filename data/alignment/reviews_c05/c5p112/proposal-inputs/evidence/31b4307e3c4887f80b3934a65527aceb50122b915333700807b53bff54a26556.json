@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "campaign-artifacts/C05-334-336/english/helpers/package_freeze.py"
+  ],
+  "actual_exit": 1,
+  "reporting": "Failure and traceback reported by exec_command; saved traceback is a transcription of that tool output, not an independently captured stderr stream.",
+  "failed_check": "336 English markup-only stripping included the canonical span.nul explanation. Native body itself is correct.",
+  "resolution": "Reuse the already-existing F English package.py null-annotation exclusion. No source/spec/body/native changes or reruns."
+}

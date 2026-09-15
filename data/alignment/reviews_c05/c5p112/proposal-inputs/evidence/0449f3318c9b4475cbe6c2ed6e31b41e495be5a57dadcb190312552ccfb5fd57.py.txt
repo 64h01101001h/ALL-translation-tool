@@ -1,0 +1,14 @@
+import sys,os,subprocess,json,datetime,hashlib,time
+from pathlib import Path
+A=Path(__file__).resolve().parents[1]
+def sh(b):return hashlib.sha256(b).hexdigest()
+for seq in [334,335,336]:
+ spec=(A/str(seq)/'spec.json').read_bytes()
+ for name in ['generator','resolver']:
+  p=A/'native'/f'{seq}-{name}-v1';p.mkdir(parents=True,exist_ok=False);(p/'stdin.bin').write_bytes(spec);argv=[sys.executable,'-B',str(A/'helpers/native_adapter.py'),name];start=datetime.datetime.now(datetime.timezone.utc).isoformat();t=time.monotonic();c=subprocess.run(argv,cwd=A,input=spec,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'});elapsed=time.monotonic()-t
+  (p/'stdout.bin').write_bytes(c.stdout);(p/'stderr.bin').write_bytes(c.stderr);(p/'exit.txt').write_text(str(c.returncode)+'\n');(p/'execution.json').write_text(json.dumps({'argv':argv,'cwd':str(A),'environment_override':{'PYTHONDONTWRITEBYTECODE':'1'},'utc':start,'elapsed_seconds':elapsed,'exit':c.returncode,'streams':{k:{'bytes':len(v),'sha256':sh(v)}for k,v in [('stdin',spec),('stdout',c.stdout),('stderr',c.stderr)]}},indent=2)+'\n')
+  print(seq,name,'exit',c.returncode,'stdout',len(c.stdout),'stderr',len(c.stderr))
+  if c.returncode or c.stderr: print(c.stderr.decode());sys.exit(1)
+  (A/str(seq)/('body.html' if name=='generator'else'resolved-ranges.json')).write_bytes(c.stdout)
+  if name=='resolver':
+   actual=json.loads(c.stdout);expected=json.loads((A/str(seq)/'intended-ranges.json').read_text());assert [{k:x[k]for k in ['id','d','tib','eng','seq','tib_range','eng_range']}for x in actual]==[{k:x[k]for k in ['id','d','tib','eng','seq','tib_range','eng_range']}for x in expected],('intended range mismatch',seq)

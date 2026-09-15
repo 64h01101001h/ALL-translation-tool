@@ -1,0 +1,667 @@
+[
+  {
+    "seq": 334,
+    "kind": "TIBETAN_SPELLING",
+    "found": "GSUM PA LA",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "GSUM PA LA",
+        "source_row": {
+          "id": 1716,
+          "course": "C05",
+          "seq": 334,
+          "acip": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+          "wylie": "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no",
+          "english": "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+        },
+        "occurrences": {
+          "acip": [
+            1
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+            ],
+            "count": 1,
+            "row_ids": [
+              1716
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6877",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "lineage_limit": "Text comparison establishes neither independent publication nor a specific ingestion mechanism.334 differs in folio73 versus36; the anomalous prose is shared."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 90,
+          "wylie": 89,
+          "english": 278
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 334,
+            "field": "acip",
+            "start": 231655,
+            "bytes": 90,
+            "sha256": "c873099519d9e95cea8ca01f233df0f762f4d1ac507f251a08494d9fa2f21fe9",
+            "original_text": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 334,
+            "field": "english",
+            "start": 231747,
+            "bytes": 283,
+            "sha256": "30a7a83f7acbccb9cb0a9af79569f1b72394a8cb6cd69712a075e7b10af1f698",
+            "original_text": "This brings us to our third point, a detailed discussion of non-virtuous paths\r\nof action. We present first the way these paths are committed, the their\r\nindividual definitions, and finally the literal meaning of the expression \"a path\r\nof action.\"\r\n73\r\nHow Non-Virtues are Completed",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "No new spelling correction. The source outline is grammatically coherent; the spelling of its established words is supported by complete master records.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 334,
+    "kind": "ENGLISH_TYPO",
+    "found": "the their",
+    "decision": "PROPOSE_LOW_PROBABLE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "the their",
+        "source_row": {
+          "id": 1716,
+          "course": "C05",
+          "seq": 334,
+          "acip": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+          "wylie": "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no",
+          "english": "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            142
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+            ],
+            "count": 1,
+            "row_ids": [
+              1716
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6877",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "lineage_limit": "Text comparison establishes neither independent publication nor a specific ingestion mechanism.334 differs in folio73 versus36; the anomalous prose is shared."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 90,
+          "wylie": 89,
+          "english": 278
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 334,
+            "field": "acip",
+            "start": 231655,
+            "bytes": 90,
+            "sha256": "c873099519d9e95cea8ca01f233df0f762f4d1ac507f251a08494d9fa2f21fe9",
+            "original_text": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 334,
+            "field": "english",
+            "start": 231747,
+            "bytes": 283,
+            "sha256": "30a7a83f7acbccb9cb0a9af79569f1b72394a8cb6cd69712a075e7b10af1f698",
+            "original_text": "This brings us to our third point, a detailed discussion of non-virtuous paths\r\nof action. We present first the way these paths are committed, the their\r\nindividual definitions, and finally the literal meaning of the expression \"a path\r\nof action.\"\r\n73\r\nHow Non-Virtues are Completed",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "PROPOSE LOW/PROBABLE: adjacent the their is anomalous. then their fits first/finally framing, but deletion of the is another plausible repair. Both C05:334/C16:859 preserve the anomaly; the exact corrected phrase query returned0. No verified restoration or origin mechanism.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 334,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "third point",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "third point",
+        "source_row": {
+          "id": 1716,
+          "course": "C05",
+          "seq": 334,
+          "acip": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+          "wylie": "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no",
+          "english": "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            22
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+            ],
+            "count": 1,
+            "row_ids": [
+              1716
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6877",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "lineage_limit": "Text comparison establishes neither independent publication nor a specific ingestion mechanism.334 differs in folio73 versus36; the anomalous prose is shared."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 90,
+          "wylie": 89,
+          "english": 278
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 334,
+            "field": "acip",
+            "start": 231655,
+            "bytes": 90,
+            "sha256": "c873099519d9e95cea8ca01f233df0f762f4d1ac507f251a08494d9fa2f21fe9",
+            "original_text": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 334,
+            "field": "english",
+            "start": 231747,
+            "bytes": 283,
+            "sha256": "30a7a83f7acbccb9cb0a9af79569f1b72394a8cb6cd69712a075e7b10af1f698",
+            "original_text": "This brings us to our third point, a detailed discussion of non-virtuous paths\r\nof action. We present first the way these paths are committed, the their\r\nindividual definitions, and finally the literal meaning of the expression \"a path\r\nof action.\"\r\n73\r\nHow Non-Virtues are Completed",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "No factual correction: gsum pa names the third point, followed by its three subtopics. The expanded discussion and repeated paths are translation framing.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 334,
+    "kind": "INGEST_ARTEFACT",
+    "found": "73 How Non-Virtues are Completed",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "73 How Non-Virtues are Completed",
+        "source_row": {
+          "id": 1716,
+          "course": "C05",
+          "seq": 334,
+          "acip": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+          "wylie": "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no",
+          "english": "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            246
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+            ],
+            "count": 1,
+            "row_ids": [
+              1716
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6877",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "lineage_limit": "Text comparison establishes neither independent publication nor a specific ingestion mechanism.334 differs in folio73 versus36; the anomalous prose is shared."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 90,
+          "wylie": 89,
+          "english": 278
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 334,
+            "field": "acip",
+            "start": 231655,
+            "bytes": 90,
+            "sha256": "c873099519d9e95cea8ca01f233df0f762f4d1ac507f251a08494d9fa2f21fe9",
+            "original_text": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 334,
+            "field": "english",
+            "start": 231747,
+            "bytes": 283,
+            "sha256": "30a7a83f7acbccb9cb0a9af79569f1b72394a8cb6cd69712a075e7b10af1f698",
+            "original_text": "This brings us to our third point, a detailed discussion of non-virtuous paths\r\nof action. We present first the way these paths are committed, the their\r\nindividual definitions, and finally the literal meaning of the expression \"a path\r\nof action.\"\r\n73\r\nHow Non-Virtues are Completed",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Registered following-heading/folio class: physical source has separate73 and heading lines; English field folds them together. Preserve and leave unpaired; do not re-file.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 334,
+    "kind": "FORMATTING",
+    "found": "73 How Non-Virtues are Completed",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "73 How Non-Virtues are Completed",
+        "source_row": {
+          "id": 1716,
+          "course": "C05",
+          "seq": 334,
+          "acip": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+          "wylie": "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no",
+          "english": "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            246
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "gsum pa la, mi dge ba'i las lam gyi byed pa, so so'i mtshan nyid, las lam gyi sgra don no"
+            ],
+            "count": 2,
+            "row_ids": [
+              1716,
+              6877
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 334,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "This brings us to our third point, a detailed discussion of non-virtuous paths of action. We present first the way these paths are committed, the their individual definitions, and finally the literal meaning of the expression \"a path of action.\" 73 How Non-Virtues are Completed"
+            ],
+            "count": 1,
+            "row_ids": [
+              1716
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6877",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": false,
+        "lineage_limit": "Text comparison establishes neither independent publication nor a specific ingestion mechanism.334 differs in folio73 versus36; the anomalous prose is shared."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 90,
+          "wylie": 89,
+          "english": 278
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 334,
+            "field": "acip",
+            "start": 231655,
+            "bytes": 90,
+            "sha256": "c873099519d9e95cea8ca01f233df0f762f4d1ac507f251a08494d9fa2f21fe9",
+            "original_text": ",GSUM PA LA, MI DGE BA'I LAS LAM GYI BYED PA, SO SO'I MTSAN NYID, LAS LAM GYI SGRA DON NO,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 334,
+            "field": "english",
+            "start": 231747,
+            "bytes": 283,
+            "sha256": "30a7a83f7acbccb9cb0a9af79569f1b72394a8cb6cd69712a075e7b10af1f698",
+            "original_text": "This brings us to our third point, a detailed discussion of non-virtuous paths\r\nof action. We present first the way these paths are committed, the their\r\nindividual definitions, and finally the literal meaning of the expression \"a path\r\nof action.\"\r\n73\r\nHow Non-Virtues are Completed",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Same already registered heading/folio class; no separate new formatting erratum.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  }
+]

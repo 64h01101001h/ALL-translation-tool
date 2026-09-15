@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "import pathlib,json,importlib.util\nR=pathlib.Path.cwd();Z=R/'campaign-artifacts/C05-334-336';S=Z/'semantic-review';Q=Z/'reconciled';manifest=S/'original-to-copy-manifest.json';known={x['original']for x in json.loads(manifest.read_text())}\noriginals=[Q/rel for rel in json.loads((Q/'freeze.json').read_text())['files']]+[Q/'freeze.json',Z/'baseline.json',R/'campaign-artifacts/capture_next_baseline.py']\noriginals.extend(p for p in(Z/'baseline-through333-caller').rglob('*')if p.is_file())\nspec=importlib.util.spec_from_file_location('existing_preserve',R/'campaign-artifacts/copy_evidence_once_v2.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);result=m.preserve(S,manifest,[p for p in originals if str(p.resolve())not in known]);print(json.dumps(result))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-15T00:18:02.825465+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

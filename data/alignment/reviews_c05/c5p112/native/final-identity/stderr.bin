@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 24, in <module>
+    p=Q/str(seq);specraw=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();sp=load(p/'spec.json')['segments'][0];actual=load(p/'resolved-ranges.json');intended=load(p/'intended-ranges.json');assert actual==intended
+                                                                                                                                                                                                                   ^^^^^^^^^^^^^^^^
+AssertionError

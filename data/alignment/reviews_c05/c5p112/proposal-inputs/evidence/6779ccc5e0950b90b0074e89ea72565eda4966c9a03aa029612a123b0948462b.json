@@ -1,0 +1,45 @@
+{
+  "kind": "EVIDENCE_RATIONALE_CORRECTION_ONLY",
+  "utc": "2026-09-15T00:14:01.138914+00:00",
+  "revision": 2,
+  "reason": "Root relayed an independent-skeptic finding: adopted334 erratum evidence described a first/second/finally enumeration although the source explicitly contains first and finally, with no literal second. Root approved the bounded wording correction.",
+  "reported_by": "root, relaying /root/c05_325_327_skeptic; independent review has not frozen",
+  "authorization": "Root explicitly requested this adopted-evidence correction only.",
+  "affected_file": "334/errata.json",
+  "json_pointer": "/0/evidence",
+  "original_file": {
+    "path": "correction-history/erratum-enumeration-rationale-01/334-original-errata.json",
+    "bytes": 1419,
+    "sha256": "370022fa1e4b0ee58f51f055df7003569872fee9f715237e1adb60e26fe29551"
+  },
+  "corrected_file": {
+    "bytes": 1419,
+    "sha256": "d1539dc09f540cfd65eebc0ab4bca7d5658798dcd3d98fcfaae3c705ffb0f969"
+  },
+  "original_freeze": {
+    "path": "correction-history/erratum-enumeration-rationale-01/original-freeze.json",
+    "bytes": 15604,
+    "sha256": "bd9147aeaebe9c756650d7b9035c0312141a1e2480c79a3d0f0d639dd81cf6a3",
+    "original_frozen_file_count": 97
+  },
+  "changes": [
+    {
+      "before": "In this first/second/finally enumeration, then their is a plausible lost-n repair,",
+      "after": "In this enumeration framed by first and finally, then their is a plausible repair,",
+      "byte_offset": 292
+    }
+  ],
+  "original_quotes_unchanged": {
+    "file": "334/errata-review.json",
+    "json_paths": [
+      "/original_screens/6/original/five_grounds/d_defensibility/judgment",
+      "/original_errata_candidates/1/original/evidence"
+    ],
+    "pin": {
+      "bytes": 56913,
+      "sha256": "f3f4b0f433a7ad61dcd402adf91589a2128dbd8bc984a650339a0e4c8d4e0712"
+    },
+    "reason": "These values quote the frozen English proposal and remain exact, including its original overstatement. The correction applies only to the final adopted erratum evidence."
+  },
+  "unchanged": "All other96 original reconciliation files, including all specs, bodies, ranges, rationales, reports and native captures, remain byte-identical. All95 frozen English original files and its freeze remain exact. No source queries, generator/resolver reruns, W writes, or semantic span/erratum-confidence changes."
+}

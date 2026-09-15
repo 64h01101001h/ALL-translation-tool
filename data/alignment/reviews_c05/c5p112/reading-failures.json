@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "read-only inspection failure",
+    "actual_exit": 1,
+    "error": "TypeError: list indices must be integers or slices, not str",
+    "cause": "Comparative previously read master-map inspection assumed the earlier F evidence used a dictionary; it used a list.",
+    "resolution": "Restricted the prior-read comparison to Y dictionary-shaped evidence and checked exact complete-entry equality.",
+    "native_capture": "Direct exec_command failure; no independent native recorder or separate stderr stream.",
+    "mutation": "None"
+  },
+  {
+    "kind": "read-only inspection failure",
+    "actual_exit": 1,
+    "error": "KeyError: 0",
+    "cause": "Corpus shape inspection indexed complete_records as a list; its actual shape is a dictionary.",
+    "resolution": "Inspected dictionary values and read all 45 material records by explicit spine IDs.",
+    "native_capture": "Direct exec_command chunk37dd31 failure; no independent native recorder or separate stderr stream.",
+    "mutation": "None"
+  }
+]

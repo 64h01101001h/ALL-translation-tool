@@ -1,0 +1,21 @@
+import sys,json,sqlite3,hashlib
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];W=A.parents[2]/'campaign-worktree'
+base=json.loads((A/'evidence/proposal-baseline.json').read_text())
+for name in ['tools/gen_alignment_page.py']:
+ assert hashlib.sha256((W/name).read_bytes()).hexdigest()==base['governing_git_pins'][name]['sha256']
+sys.path.insert(0,str(W/'tools'));import gen_alignment_page as G
+G.B.SPINE=str(W/'build/hgm_spine_v27_2.db')
+connect=sqlite3.connect
+def readonly(path,*args,**kwargs):
+ if str(path)==G.B.SPINE:
+  kwargs['uri']=True;return connect('file:'+str(path)+'?mode=ro',*args,**kwargs)
+ return connect(path,*args,**kwargs)
+sqlite3.connect=readonly
+if sys.argv[1]=='generator':G.main()
+else:
+ s=json.load(sys.stdin);db=sqlite3.connect(G.B.SPINE);out=[]
+ for seg in s['segments']:
+  w,e=db.execute('select wylie,english from corpus_segments where course=? and seq=?',(s['course'],seg['seq'])).fetchone();sp=seg['spans'];tr=G.resolve(w,sp,'tib',seg['seq']);by={x['id']:x for x in sp};er=G.resolve(e,G.with_members(sp,[by[i]for i in seg['eng_order']],e),'eng',seg['seq'])
+  out.extend([{**x,'seq':seg['seq'],'tib_range':tr[x['id']],'eng_range':er.get(x['id'])}for x in sp])
+ print(json.dumps(out,ensure_ascii=False,indent=2))

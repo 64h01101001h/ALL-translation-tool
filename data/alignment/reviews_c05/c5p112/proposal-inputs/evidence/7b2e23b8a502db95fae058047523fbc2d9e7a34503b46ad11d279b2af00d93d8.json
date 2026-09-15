@@ -1,0 +1,672 @@
+[
+  {
+    "seq": 336,
+    "kind": "TIBETAN_SPELLING",
+    "found": "GANG GANG GIS",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "GANG GANG GIS",
+        "source_row": {
+          "id": 1718,
+          "course": "C05",
+          "seq": 336,
+          "acip": "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+          "wylie": "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed",
+          "english": "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+        },
+        "occurrences": {
+          "acip": [
+            47
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6879",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "lineage_limit": "The complete fields are digitally identical; no independently corrected witness was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 171,
+          "wylie": 171,
+          "english": 201
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 336,
+            "field": "acip",
+            "start": 232493,
+            "bytes": 174,
+            "sha256": "6b0c173d323f16a394525d2cc5cb7156556daf376fdf3172cd4a43f54171d131",
+            "original_text": "[IV.277-82]\r\n\r\n,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 336,
+            "field": "english",
+            "start": 232669,
+            "bytes": 203,
+            "sha256": "eb5cf2ca587b8be23aabac19976aad4da3ac9f25a2484ceca94ec0b832685849",
+            "original_text": "One may ask just what it is that brings each of the different non-virtues to\r\ncompletion. Three of them--taking life, malice, and harsh speech--are\r\nbrought to their completion by the emotion of dislike.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "No supported correction: the distributive/interrogative construction is recast into what brings each different non-virtue. Irrelevant auto-mined gang gang wording does not invalidate the source or license a new translation.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 336,
+    "kind": "ENGLISH_TYPO",
+    "found": "them--taking life",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "them--taking life",
+        "source_row": {
+          "id": 1718,
+          "course": "C05",
+          "seq": 336,
+          "acip": "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+          "wylie": "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed",
+          "english": "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            98
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6879",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "lineage_limit": "The complete fields are digitally identical; no independently corrected witness was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 171,
+          "wylie": 171,
+          "english": 201
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 336,
+            "field": "acip",
+            "start": 232493,
+            "bytes": 174,
+            "sha256": "6b0c173d323f16a394525d2cc5cb7156556daf376fdf3172cd4a43f54171d131",
+            "original_text": "[IV.277-82]\r\n\r\n,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 336,
+            "field": "english",
+            "start": 232669,
+            "bytes": 203,
+            "sha256": "eb5cf2ca587b8be23aabac19976aad4da3ac9f25a2484ceca94ec0b832685849",
+            "original_text": "One may ask just what it is that brings each of the different non-virtues to\r\ncompletion. Three of them--taking life, malice, and harsh speech--are\r\nbrought to their completion by the emotion of dislike.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "The double hyphen introduces the actual list; no new typo follows from this preserved punctuation.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 336,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "Three of them",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "Three of them",
+        "source_row": {
+          "id": 1718,
+          "course": "C05",
+          "seq": 336,
+          "acip": "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+          "wylie": "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed",
+          "english": "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            89
+          ]
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6879",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "lineage_limit": "The complete fields are digitally identical; no independently corrected witness was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 171,
+          "wylie": 171,
+          "english": 201
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 336,
+            "field": "acip",
+            "start": 232493,
+            "bytes": 174,
+            "sha256": "6b0c173d323f16a394525d2cc5cb7156556daf376fdf3172cd4a43f54171d131",
+            "original_text": "[IV.277-82]\r\n\r\n,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 336,
+            "field": "english",
+            "start": 232669,
+            "bytes": 203,
+            "sha256": "eb5cf2ca587b8be23aabac19976aad4da3ac9f25a2484ceca94ec0b832685849",
+            "original_text": "One may ask just what it is that brings each of the different non-virtues to\r\ncompletion. Three of them--taking life, malice, and harsh speech--are\r\nbrought to their completion by the emotion of dislike.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "The answer lists three non-virtues and assigns their completion to dislike; this is distinct from the three completing roots in335. No factual correction.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 336,
+    "kind": "INGEST_ARTEFACT",
+    "found": "[IV.277-82]",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "[IV.277-82]",
+        "source_row": {
+          "id": 1718,
+          "course": "C05",
+          "seq": 336,
+          "acip": "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+          "wylie": "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed",
+          "english": "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+        },
+        "occurrences": {
+          "acip": [
+            0
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6879",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "lineage_limit": "The complete fields are digitally identical; no independently corrected witness was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 171,
+          "wylie": 171,
+          "english": 201
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 336,
+            "field": "acip",
+            "start": 232493,
+            "bytes": 174,
+            "sha256": "6b0c173d323f16a394525d2cc5cb7156556daf376fdf3172cd4a43f54171d131",
+            "original_text": "[IV.277-82]\r\n\r\n,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 336,
+            "field": "english",
+            "start": 232669,
+            "bytes": 203,
+            "sha256": "eb5cf2ca587b8be23aabac19976aad4da3ac9f25a2484ceca94ec0b832685849",
+            "original_text": "One may ask just what it is that brings each of the different non-virtues to\r\ncompletion. Three of them--taking life, malice, and harsh speech--are\r\nbrought to their completion by the emotion of dislike.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Verse-reference apparatus is present as a separate physical source line and preserved in the source. Leave unpaired; no text is invented for it.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  },
+  {
+    "seq": 336,
+    "kind": "FORMATTING",
+    "found": "[IV.277-82]",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "[IV.277-82]",
+        "source_row": {
+          "id": 1718,
+          "course": "C05",
+          "seq": 336,
+          "acip": "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+          "wylie": "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed",
+          "english": "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+        },
+        "occurrences": {
+          "acip": [
+            0
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "[IV.277-82] ,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "[iv.277-82] ,dang po ni, 'o na mi dge ba rnams gang gang gis mthar phyin par byed ce na, gsod pa dang gnod sems dang tshig rtsub po gsum zhe sdang gis mthar phyin par byed"
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 336,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "One may ask just what it is that brings each of the different non-virtues to completion. Three of them--taking life, malice, and harsh speech--are brought to their completion by the emotion of dislike."
+            ],
+            "count": 2,
+            "row_ids": [
+              1718,
+              6879
+            ]
+          }
+        ],
+        "complete_witness": "../evidence/corpus.json complete_records/6879",
+        "fields_compared": [
+          "acip",
+          "wylie",
+          "english"
+        ],
+        "acip_equal": true,
+        "wylie_equal": true,
+        "english_equal": true,
+        "lineage_limit": "The complete fields are digitally identical; no independently corrected witness was established."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+        "register_identity": {
+          "original_git_commit": "662a74015519ea5f0616fa50700f873b96429675",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 274225,
+          "sha256": "c87cc9d8db64d6941027eeecd15c7e4adf541e24f18a8a412a087448fa077007"
+        },
+        "count": 198,
+        "direct_matches": [],
+        "classes_checked": [
+          "following-section heading glue",
+          "folio/footnote fusion",
+          "E-044 converter escapes",
+          "E-071 running head",
+          "E-107 cap",
+          "E-111 row spill"
+        ]
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 171,
+          "wylie": 171,
+          "english": 201
+        },
+        "at_1500_cap": false,
+        "physical_extents": [
+          {
+            "seq": 336,
+            "field": "acip",
+            "start": 232493,
+            "bytes": 174,
+            "sha256": "6b0c173d323f16a394525d2cc5cb7156556daf376fdf3172cd4a43f54171d131",
+            "original_text": "[IV.277-82]\r\n\r\n,DANG PO NI, 'O NA MI DGE BA RNAMS GANG GANG GIS MTHAR PHYIN PAR BYED CE NA, GSOD PA DANG GNOD SEMS DANG TSIG RTZUB PO GSUM ZHE SDANG GIS MTHAR PHYIN PAR BYED,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 336,
+            "field": "english",
+            "start": 232669,
+            "bytes": 203,
+            "sha256": "eb5cf2ca587b8be23aabac19976aad4da3ac9f25a2484ceca94ec0b832685849",
+            "original_text": "One may ask just what it is that brings each of the different non-virtues to\r\ncompletion. Three of them--taking life, malice, and harsh speech--are\r\nbrought to their completion by the emotion of dislike.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "evidence_queries": "../evidence/lexical.json and ../evidence/corpus.json;43 exact lexical queries and4 targeted corpus queries actually executed;9 neutral full-field captures reused, not rerun."
+      },
+      "d_defensibility": {
+        "judgment": "Preserved reference apparatus, not a translation word or new formatting erratum. Initial DANG PO NI is not given an invented English First.",
+        "material": "../evidence/lexical.json full master_objects and exact query records; original-decisions.json source-specific rationales"
+      }
+    }
+  }
+]

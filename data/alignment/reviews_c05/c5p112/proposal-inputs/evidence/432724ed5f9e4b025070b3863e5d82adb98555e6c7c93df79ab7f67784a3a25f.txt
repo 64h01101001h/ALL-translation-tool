@@ -1,0 +1,52 @@
+import json,hashlib,re,html,datetime
+from pathlib import Path
+A=Path(__file__).resolve().parents[1]
+def load(p):return json.loads(p.read_text())
+def sha(b):return hashlib.sha256(b).hexdigest()
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+assert not(A/'freeze.json').exists()
+base=load(A/'evidence/proposal-baseline.json');source={r['seq']:r for r in load(A/'evidence/source-context.json')};reg=load(A/'evidence/register.json');cor=load(A/'evidence/corpus.json');lex=load(A/'evidence/lexical.json');extra=load(A/'evidence/supplemental-lexical.json')
+for name,p in base['source_pins'].items():
+ b=Path(p['path']).read_bytes();assert len(b)==p['bytes']and sha(b)==p['sha256'],name
+assert not reg['direct_matches']
+materials={str(p.relative_to(A)):{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted((A/'evidence').glob('*.json'))}
+put(A/'evidence/material-manifest.json',materials)
+summary=[]
+for seq in [334,335,336]:
+ p=A/str(seq);s=load(p/'spec.json')['segments'][0];spec=(p/'spec.json').read_bytes();body=(p/'body.html').read_bytes();resolved=load(p/'resolved-ranges.json');dec=load(p/'decisions.json')['spans'];ks=['id','d','tib','eng','seq','tib_range','eng_range'];assert [{k:x[k]for k in ks}for x in dec]==[{k:x[k]for k in ks}for x in resolved]
+ for tool,name in [('generator','body.html'),('resolver','resolved-ranges.json')]:
+  n=A/'native'/f'{seq}-{tool}-v1';assert(n/'stdin.bin').read_bytes()==spec and(n/'stdout.bin').read_bytes()==(p/name).read_bytes();assert(n/'stderr.bin').read_bytes()==b''and(n/'exit.txt').read_text()=='0\n'
+ for side,field in [('tib','wylie'),('eng','english')]:
+  part=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S).group(1);plain=html.unescape(re.sub('<[^>]*>','',part));assert plain==source[seq][field]
+ for d in dec:
+  t=d['tib_range'];e=d['eng_range'];assert source[seq]['wylie'][t[0]:t[1]]==d['tib']and (e is None and d['eng'] is None or e is not None and source[seq]['english'][e[0]:e[1]]==d['eng'])
+ counts={'spans':len(s['spans']),'nulls':sum(x['eng']is None for x in s['spans']),'d5_total':sum(x['d']==5 for x in s['spans']),'nonnull_d5':sum(x['d']==5 and x['eng']is not None for x in s['spans']),'d7':sum(x['d']==7 for x in s['spans']),'d6':sum(x['d']==6 for x in s['spans']),'d3':sum(x['d']==3 for x in s['spans']),'errata_proposed':len(load(p/'errata.json'))}
+ proof={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'stderr_bytes':0,'spec_bytes':len(spec),'spec_sha256':sha(spec),'body_bytes':len(body),'body_sha256':sha(body),'body_equals_native_stdout':True,'source_fields_exact_after_markup_removal':True,'canonical_ranges_equal_intended':True,'native_generator_path':f'native/{seq}-generator-v1','native_resolver_path':f'native/{seq}-resolver-v1','counts':counts};put(p/'verification.json',proof);summary.append(proof)
+ put(p/'resolved-spans.json',[{k:x[k]for k in ['seq','id','d','tib','eng','tib_range','eng_range']}for x in resolved])
+ challenge={334:'Challenge byed pa/committed first: the performance nominal becomes an English passive; the full glossary attests committed, while the way these paths are stays unwrapped.',335:'Challenge MA BYIN LAN/Stealing first: the exact whole form is glossary-attested and retained, but the nearby LEN form and uncertain source lineage remain explicit counterevidence. No lan member is claimed.',336:'Challenge the first answer dang null first: its coordination is concretely realized by the comma after taking life, while the second dang owns and; this is a punctuation-fusion judgment.'}[seq]
+ lines=[f'C05:{seq} — Codex independent English-first; PROVISIONAL proposal only.',challenge,
+  f"Counts: {counts['spans']} spans; {counts['nonnull_d5']} non-null d5 pairs; {counts['d5_total']} total d5; {counts['d7']} d7; {counts['nulls']} nulls; {counts['errata_proposed']} proposed errata.",
+  f"Source origin {base['commit']} through327. No through333 acceptance baseline has been consumed.",
+  'Complete source/context328–342 was checked against SQLite URI mode=ro; six original physical ASCII byte extents equal complete ACIP/English fields after whitespace collapse.',
+  'Full material master objects, query result sets and original corpus records are preserved once under ../evidence, with exact source/Git identities and collection/index provenance.',
+  'C16:859 repeats the 334 Tibetan and prose including the their, but heading number36 replaces73; 335/336 have complete equal-field parallels at C16:860/861. Publication independence is unproved.',
+  'decisions.json gives every intended range, rationale and omission. errata-review.json applies five grounds to all five source-error categories.',
+  f"Actual canonical generator EXIT=0; stdout/body={len(body)} bytes; stderr=0 bytes; body SHA256 {sha(body)}.",
+  f"Actual canonical resolver EXIT=0; stderr=0; all intended ranges agree. Native captures: ../native/{seq}-generator-v1 and ../native/{seq}-resolver-v1.",
+  f"Spec SHA256 {sha(spec)}. Complete source text is exact after markup removal. One generator and one resolver ran per final spec.",
+  'No native failures. One earlier read-only brief-path lookup failure is preserved; the correct immutable Git brief was then read in full.',
+  'No source/master changes, hgm_gloss promotion, other-angle access or semantic acceptance is claimed.']
+ (p/'report.md').write_text('\n'.join(lines)+'\n')
+
+totals={k:sum(x['counts'][k]for x in summary)for k in summary[0]['counts']}
+put(A/'summary.json',{'producer':'Codex independent English-first proposal','segments':summary,'total':totals,'source_origin_git_commit':base['commit'],'source_course_boundary':327,'future_acceptance_baseline_consumed':False,'semantic_status':'PROPOSAL ONLY'})
+read_pairs={('C05',328),('C05',334),('C05',335),('C05',336),('C05',337),('C05',338),('C05',348),('C05',373),('C05',374),('C09',85),('C09',130),('C16',859),('C16',860),('C16',861),('C16',862),('C16',863),('C10',302),('ILL',107),('TCS14',368)}
+read_ids=[int(k)for k,v in cor['complete_records'].items()if(v['spine_row']['course'],v['spine_row']['seq'])in read_pairs]
+put(A/'evidence/reading-and-scope.json',{'producer':'Codex independent English-first','complete_source_context_read':list(range(328,343)),'master_queries_completely_read':[q['term']for d in [lex,extra]for q in d['queries']],'unique_complete_master_objects':len(set(lex['master_objects'])|set(extra['master_objects'])),'complete_corpus_records_read':sorted(read_ids),'corpus_reading_limits':'All retained query result identities/counts were inspected; the complete 19 material records listed here were read. The 102-row gsum pa la exploratory set and other incidental results were preserved without a claim that all145 full rows were read. No C13 rows were queried. Textually identical C16 copies are not claimed as independently published witnesses.','source_evidence':'All six physical byte windows and all15 context rows were read. Root preliminary source-preparation captures supply source identities only, not root lexical review or acceptance.','occurrence_review':'All58 measured source/English span intentions were read before final generation, including repeated las lam, completion, to, byed and GIS, plus one affirmative comma-fusion null.','governance':'Complete immutable-origin AGENTS, alignment spec, proposal brief and course-shape section were read; full errata register was screened, and material registered classes plus analogous E-147 were read. All governing objects are copied with original Git metadata; Python governance is .py.txt.','isolation':'No other334–336 angle or reconciliation was read; no W writes, subagents, paid APIs or account operations.','failure':'One initial wrong brief path lookup failed with FileNotFoundError, then the correct origin file was read. Six final native calls succeeded first try.'})
+put(A/'evidence/final-evidence-verification.json',{'status':'PASS_MECHANICAL_ONLY','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_source_pins_verified':list(base['source_pins']),'source_context_query_count':15,'lexical_query_count':len(lex['queries'])+len(extra['queries']),'corpus_query_count':len(cor['queries']),'unique_master_objects':len(set(lex['master_objects'])|set(extra['master_objects'])),'stored_full_corpus_objects':len(cor['complete_records']),'full_material_corpus_objects_read':len(read_ids),'complete_physical_fields_verified':6,'generator_successes':3,'resolver_successes':3,'native_failures':0,'source_queries_repeated_for_packaging':False,'body_and_range_fidelity':'All3 native stdout bodies equal final body files, source fields are unchanged, and all58 canonical ranges equal the pre-generation intentions. Public resolved-spans.json uses ordered v1 keys; original native resolver bytes remain unchanged.','semantic_limit':'Mechanical fidelity is not independent semantic acceptance.'})
+materials={str(p.relative_to(A)):{'path':str(p),'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted((A/'evidence').glob('*.json'))if p.name!='material-manifest.json'}
+put(A/'evidence/material-manifest.json',materials)
+files={str(p.relative_to(A)):{'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())}for p in sorted(A.rglob('*'))if p.is_file()and p.name!='freeze.json'}
+freeze={'schema':'c05-independent-proposal-freeze-v1','producer':'Codex independent English-first proposal','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source_origin_git_commit':base['commit'],'source_course_boundary':327,'segments':[334,335,336],'acceptance_baseline_consumed':None,'semantic_status':'PROPOSAL_ONLY; independent reconciliation and review required','files':files,'file_count':len(files),'counts':totals,'total_spans':totals['spans'],'total_nulls':totals['nulls'],'total_word_pairs':totals['nonnull_d5'],'total_d7':totals['d7'],'original_external_sources':base['source_pins'],'complete_evidence_strategy':'Original source and governance identities; complete material master/corpus records once per angle, with full query-result identities and honest reading scope; no copied old fixtures or new verifier framework.'}
+put(A/'freeze.json',freeze)
+print(json.dumps({'freeze_sha256':sha((A/'freeze.json').read_bytes()),'freeze_bytes':(A/'freeze.json').stat().st_size,'files':len(files),'payload_bytes':sum(x['bytes']for x in files.values()),'totals':totals},indent=2))

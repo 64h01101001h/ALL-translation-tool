@@ -1,0 +1,95 @@
+import json
+from pathlib import Path
+A=Path(__file__).resolve().parents[1];rows={r['seq']:r for r in json.loads((A/'evidence/source-context.json').read_text())}
+def put(p,x):p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def build(seq,title,items,note,omissions):
+ r=rows[seq];sp=[];dec=[];cur=0;parent=None
+ for i,(tib,eng,d,anchor,why)in enumerate(items,1):
+  sid=('m'if d==7 else'p'if d==6 else'f'if d<5 else'w')+str(i);at=r['wylie'].find(tib,parent[0]if d==7 else cur,parent[1]if d==7 else len(r['wylie']));assert at>=0,(seq,tib);tr=[at,at+len(tib)]
+  if d!=7:cur=tr[1]
+  if d==5:parent=tr
+  ea=r['english'].index(eng,r['english'].index(anchor)) if eng is not None else None;er=[ea,ea+len(eng)] if ea is not None else None;s={'id':sid,'d':d,'tib':tib,'eng':eng};s.update({'cls':'conj','nul':why} if eng is None else {});sp.append(s);dec.append({**s,'seq':seq,'tib_range':tr,'eng_range':er,'complete_local_clause_anchor':anchor,'rationale':why})
+ order=[x['id']for x in sorted([x for x in dec if x['d']!=7 and x['eng']is not None],key=lambda x:x['eng_range'][0])]
+ put(A/str(seq)/'spec.json',{'course':'C05','segments':[{'seq':seq,'title':title,'spans':sp,'eng_order':order,'note':note}]});put(A/str(seq)/'decisions.json',{'producer':'Codex independent English-first','status':'PROVISIONAL','source_row':r,'spans':dec,'omissions':omissions});put(A/str(seq)/'errata.json',[]);print(seq,'spans',len(sp),'d5',sum(x['d']==5 for x in sp))
+build(334,'outline of non-virtuous paths',[
+ ('gsum pa','third point',5,'our third point','Full ordinal is expressly glossary-attested as third point; the preceding This brings us to our framing is excluded.'),
+ ('mi dge ba','non-virtuous',5,'non-virtuous paths of action','Technical non-virtue compound used adjectivally; the following bound genitive is not captured.'),
+ ('las lam','paths of action',5,'non-virtuous paths of action','First explicit path-of-action compound owns the initial English term. The later these paths is a supplied repetition.'),
+ ('las','action',7,'non-virtuous paths of action','Lexical action member of the first compound; complete glossary supports action although curated root-text register prefers deeds.'),
+ ('lam','paths',7,'non-virtuous paths of action','Path member in the first compound; English plural belongs inside the parent.'),
+ ('byed pa','committed',5,'these paths are committed','Nominal performance/function is recast as the passive committed; exact HGM glossary attests committed. Do not absorb the way these paths are.'),
+ ('so so','individual',5,'their individual definitions','Distributive individual modifies definitions. The malformed the their stays outside this span.'),
+ ('mtshan nyid','definitions',5,'their individual definitions','Complete established definition compound; no speculative nyid member.'),
+ ('las lam','path of action',5,'the expression "a path of action','Second explicit compound is the quoted singular term; the quoted article a remains unwrapped.'),
+ ('las','action',7,'the expression "a path of action','Action member inside the final term, distinct from the first action occurrence.'),
+ ('lam','path',7,'the expression "a path of action','Path member inside the final singular term.'),
+ ('gyi','of',6,'literal meaning of the expression','Second genitive relates the literal meaning to the named expression. It owns the of immediately after meaning, not of inside either path-of-action compound.'),
+ ('sgra don','literal meaning',5,'literal meaning of the expression','Established whole compound with exact HGM glossary equivalent; expression is not pulled into its English range.'),
+ ('don','meaning',7,'literal meaning of the expression','Meaning is the lexical head of the compound; no sgra/literal member is asserted.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. The two las lam occurrences own the initial paths of action and final quoted path of action; these paths is an added English repetition. byed pa owns committed only. sgra don is an established compound with don/meaning as its secure member. The second gyi owns of after meaning. Original the their is preserved unwrapped and proposed only as a LOW/PROBABLE English typo for review, with intended repair uncertain. The following 73 How Non-Virtues are Completed is registered heading apparatus and remains unaligned. No source correction or hgm_gloss promotion.',
+ [{'tib':'la; first gyi; bound genitives; no','reason':'Outline, relational and closing grammar is expressed through expanded English framing; no independent absence or unique atom is asserted.'},
+  {'tib':'sgra as an internal member of sgra don','reason':'The complete compound licenses literal meaning; words/term does not independently establish sgra as literal. The word expression is outside the English parent, so it cannot be a member.'},
+  {'english':'This brings us to our; a detailed discussion of; We present first the way these paths are; the their; and finally the; the expression; quoted a','reason':'Expanded discourse, repeated paths, malformed determiner wording and supplied framing remain unwrapped; byed pa is not stretched to own the full way these paths are committed.'},
+  {'english':'73 How Non-Virtues are Completed','reason':'Following numbered heading is the already-registered apparatus class. Preserve complete source; do not file the class again.'}])
+
+build(335,'roots that complete non-virtues',[
+ ('gsod','Taking life',5,'Taking life, malice','Exact GSOD glossary attests taking life; the whole English act name belongs to this lexical verb.'),
+ ('gnod sems','malice',5,'Taking life, malice','Established harmful-intent compound, here malice.'),
+ ('tshig rtsub po','harsh speech',5,'and harsh speech are','Whole harsh-speech compound has exact HGM glossary support.'),
+ ('tshig','speech',7,'and harsh speech are','Speech is the linguistic-object member inside harsh speech; comparative speech and HGM words/wording readings support it in the full compound.'),
+ ('rtsub po','harsh',7,'and harsh speech are','Exact HGM harsh equivalent supports this modifier member.'),
+ ('zhe sdang','dislike',5,'completion by dislike','The root of aversion owns dislike only. The master is explicitly auto-aligned, medium confidence, not a curated definition; verse/commentary and C05:373 support the local correspondence.'),
+ ('gis','by',6,'completion by dislike','Whole standalone instrumental marks the emotion bringing the first three acts to completion.'),
+ ('mthar phyin','completion',5,'their completion by dislike','Established completion compound; their is supplied and excluded. No member-level split of mthar/phyin is asserted.'),
+ ('byed','Brought',5,'Brought to their completion','Causative bring predicate, explicitly HGM-attested as brought. It does not claim to their completion, which expresses the result and a supplied possessive.'),
+ ('log g-yem','Sexual misconduct',5,'Sexual misconduct, coveting','Exact short technical compound has HGM glossary sexual misconduct. No speculative sex/wrong members.'),
+ ('brnab sems','coveting',5,'Sexual misconduct, coveting','Established coveting compound.'),
+ ('ma byin lan','Stealing',5,'and Stealing are brought','Exact LAN spelling is expressly glossary-attested as stealing in unified_entries:24455 and glossary_entries:5362. Keep the whole term; do not silently replace LAN with LEN or split lan as taking.'),
+ ('chags pa','desire',5,'completion by desire','Second root is desire, expressly HGM-attested under chags pa.'),
+ ('yis','by',6,'completion by desire','Whole standalone instrumental after desire. Its unrelated auto-aligned master gloss is not used as evidence; local instrumental grammar and the complete clause justify by.'),
+ ('rdzogs par byed','brought to completion',3,'Stealing are brought to completion','Complete causative phrase with an exact contiguous English rendering. The scaffold master is awaiting-hgm-equivalent; this contextual d3 proposal does not promote it into hgm_gloss or claim a lexical compound.'),
+ ('log par lta ba','Mistaken views',5,'Mistaken views by ignorance','Established mistaken-view compound; the subsequent by ignorance remains outside.'),
+ ('log par','Mistaken',7,'Mistaken views by ignorance','Exact mistaken gloss for the wrongness member.'),
+ ('lta ba','views',7,'Mistaken views by ignorance','View member; curated and glossary records support view/views in context.'),
+ ('gti mug','ignorance',5,'by ignorance of things','Ignorance root only; of things is an explanatory English addition.'),
+ ('gis','by',6,'by ignorance of things','Second GIS is the third root relation, after mistaken views; distinct from the first dislike instrumental.'),
+ ('lhag ma','rest',5,'The rest accepted','Remainder of the deeds; exclude supplied article The despite whole-gloss the rest.'),
+ ('gsum','three',5,'completed by three','Counts the three roots completing the remaining acts, as C05:338 explicitly explains; not the number of remaining acts here.'),
+ ('gyis','by',6,'completed by three','Final instrumental marks those three roots.'),
+ ('rdzogs','completed',5,'accepted as completed','Complete/finish lexical stem in the final accepted-as construction; C05:338 repeats this same predicate with completed.'),
+ ('par','as',6,'accepted as completed','Standalone predicative complement marker links completed with accepted; the relation is as, not an extra completion verb.'),
+ ("'dod",'accepted',5,'The rest accepted','Assert/accept sense of the verb, supported by full HGM glossary and commentary; it does not mean desire in this final clause.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. Read the four root clauses separately. mthar phyin/completion and byed/Brought exclude supplied their. The contiguous rdzogs par byed is a d3 causative phrase; its scaffold record remains awaiting-hgm-equivalent. Final rdzogs/completed, par/as and dod/accepted keep assertion distinct from the prior desire root. Exact MA BYIN LAN/Stealing is supported by its complete HGM glossary record and is banked whole with no normalization. yis/by follows actual instrumental grammar; its unrelated mined gloss is rejected. The sole first-list dang is omitted because its list coordination does not give a secure unique English boundary. Capitals are original verse lineation.',
+ [{'tib':'dang after gsod','reason':'One explicit Tibetan coordinator occurs after the first of three acts, while English places and before the third. Overall coordination is present; assigning a unique boundary or claiming absence would overstate the evidence. Omit, not null.'},
+  {'tib':'both ni','reason':'Topic/focus marking is absorbed in verse presentation; it is not independently equated with the passive are and no absence claim is made.'},
+  {'tib':'mthar / phyin; members of log g-yem or ma byin lan','reason':'Whole technical meanings are secure, but member assignments would introduce unsupported internal equivalences or normalize the source spelling.'},
+  {'english':'are; to their before the first completion; second-list and; of things; The','reason':'Supplied passive framing, possessive, list conjunction and explanatory object/article remain outside lexical claims.'}])
+
+build(336,'how dislike completes three acts',[
+ ('mi dge ba','non-virtues',5,'different non-virtues to completion','Technical non-virtue compound, in the question about completion.'),
+ ('mthar phyin','completion',5,'non-virtues to completion','First completion compound belongs to the question; it is distinct from the answer completion.'),
+ ('par','to',6,'non-virtues to completion','First resultative complement marker relates brings to completion; the intervening English object does not change its local grammatical role.'),
+ ('byed','brings',5,'what it is that brings','First causative predicate is active brings in the question; exact full byed glossary supports brings.'),
+ ('ce na','ask',3,'One may ask just what','Question formula retained at d3, tightened to ask; supplied One may stays outside. The rest of the question is not absorbed into this formula.'),
+ ('gsod pa','taking life',5,'Three of them--taking life','Complete killing term, expressly glossary-attested as taking life.'),
+ ('dang',None,6,'','First answer-list conjunction has no separate word exponent: its coordination is concretely realized by the comma after taking life in the three-item English list; the final and is reserved for the second dang. Null records punctuation fusion, not absent coordination.'),
+ ('gnod sems','malice',5,'taking life, malice','Second answer-list act is the established malice compound.'),
+ ('dang','and',6,'malice, and harsh speech','Second explicit answer-list coordinator owns the explicit final English and.'),
+ ('tshig rtsub po','harsh speech',5,'malice, and harsh speech','Whole harsh-speech compound in the answer.'),
+ ('tshig','speech',7,'malice, and harsh speech','Speech member inside the full compound; no added English participant.'),
+ ('rtsub po','harsh',7,'malice, and harsh speech','Harsh modifier inside the parent, expressly glossary-supported.'),
+ ('gsum','Three',5,'Three of them--taking life','Numeral counts the three acts just listed; of them is supplied.'),
+ ('zhe sdang','dislike',5,'the emotion of dislike','Aversion root owns dislike only, not the expanded the emotion of. Master provenance remains auto-aligned/medium; local root-list context supports the attestation.'),
+ ('gis','by',6,'completion by the emotion','Second GIS is the answer instrumental, directly rendered by; the first question GIS stays omitted as distributed.'),
+ ('mthar phyin','completion',5,'their completion by the emotion','Second completion compound belongs to the answer and excludes their.'),
+ ('par','to',6,'brought to their completion','Second resultative complement marker owns to between brought and their completion; not the earlier question to.'),
+ ('byed','brought',5,'brought to their completion','Answer causative predicate is passive brought; exclude are and their. The identical Tibetan byed in the question owns brings instead.')
+],
+ 'PROVISIONAL machine alignment by Codex, independent English-first proposal. The question and answer have separate completion, to and bring occurrences. ce na owns ask at d3 without supplied One may. gang gang, rnams and the question GIS are omitted because what/each/different and the English subject recast distribute their functions; no uncertain null is banked. The first answer dang has a specific comma-fusion null and the second owns and. dang po and o na remain omitted rather than being assigned to One or just. zhe sdang owns dislike only, leaving the emotion of unwrapped. Original citation apparatus and GMR English are preserved.',
+ [{'tib':'dang po ni','reason':'Outline first-point formula precedes the question; One in One may ask is an indefinite questioner, not this ordinal. No distinct English outline equivalent is secure, so omit without an absence claim.'},
+  {'tib':"'o na",'reason':'Discourse now-then formula may contribute to just or the question framing, but just modifies what in this English. A unique standalone correspondence is uncertain; omit.'},
+  {'tib':'rnams; gang gang; first gis','reason':'Plural/distributive marking and the interrogative agent are recast across what it is that, each, different and plural non-virtues. RNAMS has glossary different/various as well as plural s, so neither a confident plural-fusion null nor a unique separate atom is asserted.'},
+  {'english':'One may; just what it is that; each of the different; of them; are; their; the emotion of','reason':'Question/participant framing and explanatory or distributed material remain unwrapped. No complete question span is used to conceal uncertain internal correspondences.'},
+  {'tib':'[iv.277-82]','reason':'Citation apparatus is preserved exactly and remains unaligned; no new erratum is inferred.'}])

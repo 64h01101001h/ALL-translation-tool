@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment/campaign-artifacts/C05-334-336/english/helpers/package_freeze.py", line 20, in <module>
+    part=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S).group(1);plain=html.unescape(re.sub('<[^>]*>','',part));assert plain==source[seq][field]
+AssertionError

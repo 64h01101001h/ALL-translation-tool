@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib,subprocess,importlib.util\nR=Path.cwd();Z=R/'campaign-artifacts/C05-334-336';S=Z/'semantic-review';W=R/'campaign-worktree';origin='662a74015519ea5f0616fa50700f873b96429675'\nmanifest=S/'original-to-copy-manifest.json';assert not manifest.exists();records=[]\nfor rel in ['AGENTS.md','docs/ALIGNMENT_LAYER_SPEC.md','docs/alignment_briefs/RECONCILE_BRIEF.md','docs/alignment_briefs/REFUTE_BRIEF.md','docs/NEVER_BANK_A_FALSEHOOD.md','docs/errata_register.json','tools/gen_alignment_page.py','tools/build_alignment_layer.py','engines/hgm_tools.py']:\n raw=subprocess.check_output(['git','show',origin+':'+rel],cwd=W);dest='governing/'+rel+('.txt' if rel.endswith('.py')else'');p=S/dest;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw);records.append({'original':str(W/rel),'copy':dest,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),'original_git_commit':origin,'repository_relative_path':rel})\nmanifest.write_text(json.dumps(records,indent=2)+'\\n')\noriginals=[]\nfor angle in ['tibetan','english']:\n p=Z/angle;freeze=json.loads((p/'freeze.json').read_text());originals.extend(p/rel for rel in freeze['files']);originals.append(p/'freeze.json')\noriginals.extend(Z/name for name in ['source.json','context.json','proposal-baseline.json','root-preparation-original-rows.json','root-parallel-preparation.json','root-preparation-proof.json'])\nfor name in ['source-preparation-caller','proposal-origin-caller']:\n originals.extend(p for p in (Z/name).rglob('*')if p.is_file())\noriginals.extend([R/'campaign-artifacts/current-alignment-output-contract.md',R/'campaign-artifacts/record_external_step.py',R/'campaign-artifacts/copy_evidence_once_v2.py'])\nspec=importlib.util.spec_from_file_location('existing_preserve',R/'campaign-artifacts/copy_evidence_once_v2.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)\nknown={x['original']for x in records};result=m.preserve(S,manifest,[p for p in originals if str(p.resolve())not in known]);print(json.dumps(result))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-15T00:00:06.043528+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075"
+}

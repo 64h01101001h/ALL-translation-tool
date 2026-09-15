@@ -1,0 +1,69 @@
+"""Current-batch packaging using the existing canonical-stream/range/plaintext checks."""
+import datetime,gzip,hashlib,html,json,pathlib,re,shutil
+R=pathlib.Path(__file__).resolve().parents[1];Y=R.parent
+ORIGIN='662a74015519ea5f0616fa50700f873b96429675'
+def read(p):return json.loads(p.read_text())
+def put(p,x):p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+def ident(b):return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+source={x['seq']:x for x in read(R/'evidence/source.json')};summary=[];ordered=[]
+for seq in [334,335,336]:
+ D=R/str(seq);raw=(D/'spec.json').read_bytes();spec=read(D/'spec.json');sp=spec['segments'][0]['spans'];body=(D/'body.html').read_bytes();actual=read(D/'resolved-ranges.json');keys=['seq','id','d','tib','eng','tib_range','eng_range'];rows=[{k:x[k]for k in keys}for x in actual]
+ assert rows==read(D/'intended-ranges.json');put(D/'final-ordered-tuples.json',rows);ordered+=rows
+ for tool,content in [('generator',body),('resolver',(D/'resolved-ranges.json').read_bytes())]:
+  p=R/'native'/f'{seq}-{tool}-v1';assert(p/'stdin.bin').read_bytes()==raw and(p/'stdout.bin').read_bytes()==content and(p/'stderr.bin').read_bytes()==b''and(p/'exit.txt').read_text()=='0\n';ex=read(p/'execution.json');assert ex['exit']==0
+  for n in ['stdin','stdout','stderr']:assert ex['streams'][n]==ident((p/(n+'.bin')).read_bytes())
+ for side,field in [('tib','wylie'),('eng','english')]:
+  m=re.search('<div class="'+side+'"><div class="lab">.*?</div>\n(.*?)\n</div>',body.decode(),re.S);assert m
+  flat=re.sub(r'<span class="nul">.*?</span>','',m[1],flags=re.S);assert html.unescape(re.sub('<[^>]+>','',flat))==source[seq][field]
+ gaps={}
+ for side,field in [('tib','wylie'),('eng','english')]:
+  ext=sorted([x[side+'_range']for x in rows if x[side+'_range']is not None and x['d']!=7]);cur=0;g=[]
+  for a,b in ext:
+   if cur<a:g.append({'range':[cur,a],'text':source[seq][field][cur:a]})
+   cur=max(cur,b)
+  if cur<len(source[seq][field]):g.append({'range':[cur,len(source[seq][field])],'text':source[seq][field][cur:]})
+  gaps[side]=g
+ put(D/'complete-unwrapped-extents.json',{'seq':seq,'range_convention':'zero-based half-open characters','source':'../evidence/source.json','material_reasons':'omissions.json','unwrapped':gaps})
+ count={'spans':len(sp),'nulls':sum(x['eng']is None for x in sp),'d5_total':sum(x['d']==5 for x in sp),'word_pairs':sum(x['d']==5 and x['eng']is not None for x in sp),'d7':sum(x['d']==7 for x in sp),'d6':sum(x['d']==6 for x in sp),'d3':sum(x['d']==3 for x in sp),'errata':len(read(D/'errata.json'))}
+ no_heads=all(x['d']not in[5,7]or x['eng']is None or x['eng'].split()[0].lower()not in['the','a','an','and','or','his','our','your','i','you']for x in sp);assert no_heads
+ proof={'seq':seq,'status':'PASS_MECHANICAL_ONLY','generator_exit':0,'resolver_exit':0,'stderr_bytes':0,'spec_bytes':len(raw),'spec_sha256':ident(raw)['sha256'],'body_bytes':len(body),'body_sha256':ident(body)['sha256'],'body_equals_native_stdout':True,'source_plaintexts_exact_after_markup_and_null_marker_removal':True,'canonical_ranges_equal_preselected_intent':True,'no_supplied_d5_d7_heads':no_heads,'counts':count,'native_generator_path':f'../native/{seq}-generator-v1','native_resolver_path':f'../native/{seq}-resolver-v1'}
+ put(D/'verification.json',proof);summary.append(proof)
+ dispositions=read(D/'original-dispositions.json');assert len(dispositions)=={334:26,335:53,336:36}[seq]
+ for a in['english','tibetan']:
+  orig=read(Y/a/str(seq)/('decisions.json'if a=='english'else'original-decisions.json'));ors=orig['spans'if a=='english'else'decisions'];subset=[x for x in dispositions if x['angle']==a];assert [x['original']for x in subset]==ors
+  other=read(D/'original-other-dispositions.json');assert [x['original']for x in other if x['angle']==a and x['field']=='omissions']==orig['omissions']
+  for x in other:
+   if x['angle']==a and x['field']=='spec.note':assert x['original']==read(Y/a/str(seq)/'spec.json')['segments'][0]['note']
+   if x['angle']==a and x['field']=='report.md':assert x['original']==(Y/a/str(seq)/'report.md').read_text()
+  er=read(D/'errata-review.json');scr=read(Y/a/str(seq)/('five-ground-screens.json'if a=='tibetan'else'errata-review.json'));scr=scr if a=='tibetan'else scr['categories']
+  assert [x['original']for x in er['original_screens']if x['angle']==a]==scr
+  assert [x['original']for x in er['original_errata_candidates']if x['angle']==a]==read(Y/a/str(seq)/'errata.json')
+ for x in rows:
+  lo,hi=x['tib_range'];assert source[seq]['wylie'][lo:hi]==x['tib']
+  if x['eng_range']is not None:lo,hi=x['eng_range'];assert source[seq]['english'][lo:hi]==x['eng']
+ lines=[f'C05:{seq} — PROVISIONAL root reconciliation; mechanical assembler /root/c05_325_327_reconciliation.',
+  'Source/proposal origin662a74015519ea5f0616fa50700f873b96429675 through327; actual through333 acceptance baseline remains pending.',
+  spec['segments'][0]['note'],
+  'The pinned root-reconciliation-decisions.json supplies the semantic rulings; this assembler previously authored the English angle and does not claim independent reconciliation.',
+  'Every original span rationale is preserved by seq/angle/id and full original value; all grouped omissions, notes and reports have explicit dispositions.',
+  'All30 original five-ground screens and all3 proposed-erratum records remain exact within the per-segment errata-review files, including the rejected LAN restoration.',
+  'Root reading scope is only that stated in the pinned root judgment and reading addendum. No claim is made that root read either entire original master inventory.',
+  'Source, complete lexical/master/corpus and physical records are reused by exact original freeze identity; no original proposal generation or source query is repeated for packaging.',
+  'Final rationales/intended ranges and all unwrapped extents are recorded separately. Omitted uncertainty is not a null; one explicit answer-list comma-fusion null is retained.',
+  f"Counts: {count['spans']} spans; {count['word_pairs']} non-null d5 word pairs; {count['d5_total']} total d5; {count['d7']} d7; {count['nulls']} nulls; {count['errata']} retained errata.",
+  f'Final canonical generator EXIT=0; stdout/body bytes={len(body)}; stderr bytes=0.',
+  'Final canonical resolver EXIT=0; stderr bytes=0; every actual canonical range equals its preselected intended occurrence.',
+  f'Actual native command/input/output/error/exit: ../native/{seq}-generator-v1/ and ../native/{seq}-resolver-v1/.',
+  f"Spec SHA256={proof['spec_sha256']}; body SHA256={proof['body_sha256']}.",
+  'No new native or packaging failures. Both original freeze trees retain their actual failures and history unchanged.',
+  'No W/source/master edits, hgm_gloss promotion, registration or semantic acceptance. Independent skeptic review remains required.']
+ (D/'report.md').write_text('\n'.join(lines)+'\n')
+
+put(R/'resolved-spans.json',ordered)
+totals={k:sum(x['counts'][k]for x in summary)for k in summary[0]['counts']}
+assert [totals[x]for x in['spans','word_pairs','d7','nulls','errata']]==[63,36,13,1,1]
+original_counts={'span_dispositions':sum(len(read(R/str(s)/'original-dispositions.json'))for s in[334,335,336]),'omission_dispositions':sum(sum(x['field']=='omissions'for x in read(R/str(s)/'original-other-dispositions.json'))for s in[334,335,336]),'screen_dispositions':sum(len(read(R/str(s)/'errata-review.json')['original_screens'])for s in[334,335,336]),'original_errata_candidates':sum(len(read(R/str(s)/'errata-review.json')['original_errata_candidates'])for s in[334,335,336])}
+assert original_counts=={'span_dispositions':115,'omission_dispositions':23,'screen_dispositions':30,'original_errata_candidates':3}
+put(R/'summary.json',{'status':'READY_FOR_INDEPENDENT_REVIEW','producer':'Codex','reconciler_role':'root','mechanical_assembler':'/root/c05_325_327_reconciliation','source_origin_git_commit':ORIGIN,'source_origin_course_boundary':327,'actual_acceptance_baseline':None,'actual_baseline_accepted_through':None,'segments':summary,'totals':totals,'total_spans':63,'total_word_pairs':36,'total_nulls':1,'total_d7':13,'original_dispositions':original_counts,'native_generators':3,'native_resolvers':3,'native_generator_failures':0,'native_resolver_failures':0,'new_original_proposal_generations':0,'new_source_queries':0,'independent_review_claimed':False})
+provenance=read(R/'provenance.json');provenance['status']='PROVISIONAL_ROOT_RECONCILIATION; final native proof passed; independent review required';put(R/'provenance.json',provenance)
+print(json.dumps({'status':'PASS_MECHANICAL_ONLY','totals':totals,'original_dispositions':original_counts,'root_reconciler':'root','independent_review_claimed':False},indent=2))
