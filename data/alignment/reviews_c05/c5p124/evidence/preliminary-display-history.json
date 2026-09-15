@@ -1,0 +1,20 @@
+{
+  "status": "ACTUAL_READ_ONLY_HISTORY",
+  "events": [
+    {
+      "action": "initial inventory receipt status comparison",
+      "result": "AssertionError before writes because older completed receipts use COMPLETE_FULL_OBJECT_READING_AND_EXACT_OWN_REUSE rather than exact COMPLETE",
+      "resolution": "Read actual statuses and used the complete-status prefix with exact current/prior wrapper equality; no source query."
+    },
+    {
+      "action": "screen filename discovery after master-completion receipt write",
+      "result": "FileNotFoundError for guessed tibetan/370/errata-review.json",
+      "resolution": "Used rg --files and read actual five-ground-screens.json; earlier successful receipt remains exact."
+    },
+    {
+      "action": "compact tuple display",
+      "result": "KeyError note at top-level spec after complete370 tuple display",
+      "resolution": "Read actual segments[0] wrapper and displayed remaining371/372 tuples and all six exact notes. No input/output/native change."
+    }
+  ]
+}

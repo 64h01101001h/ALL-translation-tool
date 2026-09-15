@@ -1,0 +1,177 @@
+{
+  "seq": 370,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1752,
+        "course": "C05",
+        "seq": 370,
+        "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+        "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+        "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All three complete source fields and all six physical extents were read or reused by exact prior full-object identity and verified. Source-preparation passed once. The first origin script failed at parse time; successful proposal-origin-attempt02-caller bound immutable363 Git objects without source requery. Both actual origin attempts remain preserved."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1752,
+            6905
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1752,
+            6905
+          ]
+        },
+        {
+          "field": "english",
+          "count": 2,
+          "row_ids": [
+            1752,
+            6905
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json",
+        "../evidence/prior-verse-context-reuse.json"
+      ],
+      "finding": "C16:887 repeats all three complete text fields, including the final motivation sentence. The complete371 opening Tibetan supplies that sentence. Exact physical extents preserve the same split. This establishes the observed row pairing, not an independently collated publication or a particular ingestion mechanism."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "text_search_matches": [
+        {
+          "item_id": "E-201",
+          "course": "C05",
+          "segment": "C05:343",
+          "kind": "TIBETAN_SPELLING",
+          "found": "LUS GZHAN SKYES PHYER RO",
+          "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+          "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+          "severity": "LOW",
+          "confidence": "PROBABLE",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        }
+      ],
+      "current_segment_filed_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register.json"
+      ],
+      "finding": "The unchanged204-entry origin register has no item filed against370–372. The one text-search hit E-201 is filed against343 and cites372 as evidence. Seven complete prior class records, including E-111, were reused by exact same-agent full-object identity; the full current E-201 object was read. Registered classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "NYON MONGS PA directly supports bad thought, DUG GSUM three poisons and GANG RUNG any. The organizational second/component/thinking language is not separately present in the short source. Motivation, wish and kill have no Tibetan in370 but occur in the opening371 clause. No cross-row English exponent is assigned within370. NGO closes the poisons definition, not the displaced final sentence.",
+      "counterevidence": "All glossary, curated and auto-aligned evidence retains its actual tier. Matching text in another course does not independently establish publication, correction or ingestion history. Local translation expansion or compression can require omission without proving an error. No source/master/hgm_gloss change."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 44,
+        "wylie": 42,
+        "english": 182
+      },
+      "utf8_bytes": {
+        "acip": 44,
+        "wylie": 42,
+        "english": 182
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": null,
+      "finding": "The physical English places A third component is the motivation; here, it is the wish to kill. on a separate prose line before the next Tibetan paragraph. The current Tibetan ends after GANG RUNG NGO. All fields are below1500 characters; no cap or broken verse is inferred. The asymmetry is the registered row-boundary spill family, not a new class filing."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The complete short ACIP/Wylie agrees with physical and C16 evidence; the mental-affliction/poison terms and terminal NGO are attested. No malformed spelling is established.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "All printed sentences are grammatical. The final sentence is displaced relative to Tibetan row boundaries rather than misspelled; preserve it exactly.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The three-poison definition is coherent. The extra motivation sentence corresponds to the next Tibetan opening; it is not an unsupported doctrinal claim or a new fact error.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+      "reason": "The motivation sentence and371 Tibetan opening form an observed instance of the registered E-111 row-boundary spill family. Preserve both rows and do not refile the class. The actual production mechanism remains unproved.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The physical paragraph line break and punctuation are preserved. No formatting repair or imaginary translation of the displaced sentence is introduced.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [],
+  "proposed_errata": [],
+  "source_corrections": false
+}

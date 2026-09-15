@@ -1,0 +1,2543 @@
+{
+  "seq": 371,
+  "status": "PROVISIONAL_ROOT_RECONCILIATION",
+  "judgment_by": "root",
+  "original_screens": [
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 0,
+      "original": {
+        "seq": 371,
+        "kind": "TIBETAN_SPELLING",
+        "found": "BSAD PAR 'DOD PA'O",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "BSAD PAR 'DOD PA'O",
+            "source_row": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "occurrences": {
+              "acip": [
+                14
+              ],
+              "wylie": [],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa ni, dug gsum gang rung"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rang gis byas pa'am gzhan byed du 'jug pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "dngos med lus gzhan skyes phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1754,
+                  6907
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "the motivation; here, it is the wish to kill"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "snga dang mnyam du shi ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1725,
+                  1754,
+                  6882,
+                  6907
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:370",
+              "c05:371",
+              "c05:372",
+              "cross-segment",
+              "cross-row",
+              "motivation",
+              "wish to kill",
+              "same-english-two-tibetan"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+            "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 371,
+                "field": "acip",
+                "start": 251563,
+                "bytes": 252,
+                "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 371,
+                "field": "english",
+                "start": 251817,
+                "bytes": 350,
+                "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 71,
+            "material_master_objects": 127,
+            "personally_read_reused_objects": 88,
+            "complete_new_master_objects_read": 39,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 8
+          },
+          "d_defensibility": {
+            "judgment": "The opening motivation predicate is printed completely in371 physical ACIP and C16:888. Exact BSAD PAR lacks a master entry, while BSAD and DOD PA are attested; its inflection and appearance in the previous English row are not a spelling error or authority to move text.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The opening motivation predicate is printed completely in371 physical ACIP and C16:888. Exact BSAD PAR lacks a master entry, while BSAD and DOD PA are attested; its inflection and appearance in the previous English row are not a spelling error or authority to move text.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 1,
+      "original": {
+        "seq": 371,
+        "kind": "ENGLISH_TYPO",
+        "found": "it doesn't matter whether you perform it yourself",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "it doesn't matter whether you perform it yourself",
+            "source_row": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                94
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa ni, dug gsum gang rung"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rang gis byas pa'am gzhan byed du 'jug pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "dngos med lus gzhan skyes phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1754,
+                  6907
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "the motivation; here, it is the wish to kill"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "snga dang mnyam du shi ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1725,
+                  1754,
+                  6882,
+                  6907
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:370",
+              "c05:371",
+              "c05:372",
+              "cross-segment",
+              "cross-row",
+              "motivation",
+              "wish to kill",
+              "same-english-two-tibetan"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+            "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 371,
+                "field": "acip",
+                "start": 251563,
+                "bytes": 252,
+                "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 371,
+                "field": "english",
+                "start": 251817,
+                "bytes": 350,
+                "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 71,
+            "material_master_objects": 127,
+            "personally_read_reused_objects": 88,
+            "complete_new_master_objects_read": 39,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 8
+          },
+          "d_defensibility": {
+            "judgment": "The sentence explicitly contrasts personal performance with getting another to act, then says it is the same. Source GNYIS GANG BYAS KYANG DRA supports that two-way equivalence without an explicit negative particle under contracted does not. Preserve the fluent paraphrase unbanked in that frame instead of inventing a negative-affix source.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The sentence explicitly contrasts personal performance with getting another to act, then says it is the same. Source GNYIS GANG BYAS KYANG DRA supports that two-way equivalence without an explicit negative particle under contracted does not. Preserve the fluent paraphrase unbanked in that frame instead of inventing a negative-affix source.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 2,
+      "original": {
+        "seq": 371,
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "found": "the one who undertakes the deed",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "the one who undertakes the deed",
+            "source_row": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                61
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa ni, dug gsum gang rung"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rang gis byas pa'am gzhan byed du 'jug pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "dngos med lus gzhan skyes phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1754,
+                  6907
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "the motivation; here, it is the wish to kill"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "snga dang mnyam du shi ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1725,
+                  1754,
+                  6882,
+                  6907
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:370",
+              "c05:371",
+              "c05:372",
+              "cross-segment",
+              "cross-row",
+              "motivation",
+              "wish to kill",
+              "same-english-two-tibetan"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+            "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 371,
+                "field": "acip",
+                "start": 251563,
+                "bytes": 252,
+                "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 371,
+                "field": "english",
+                "start": 251817,
+                "bytes": 350,
+                "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 71,
+            "material_master_objects": 127,
+            "personally_read_reused_objects": 88,
+            "complete_new_master_objects_read": 39,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 8
+          },
+          "d_defensibility": {
+            "judgment": "SBYOR BA PO is the actor in the complete local grammar; its literal glossary deed is insufficient to erase the actor distinction. RANG and GZHAN contrast the actors; GZHAN mined a bodhisattva is irrelevant. Contextual agent-noun and causative get/do proposals remain provisional, with this counterevidence explicit.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "SBYOR BA PO is the actor in the complete local grammar; its literal glossary deed is insufficient to erase the actor distinction. RANG and GZHAN contrast the actors; GZHAN mined a bodhisattva is irrelevant. Contextual agent-noun and causative get/do proposals remain provisional, with this counterevidence explicit.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 3,
+      "original": {
+        "seq": 371,
+        "kind": "INGEST_ARTEFACT",
+        "found": "kun slong ni, bsad par",
+        "decision": "OBSERVED_CROSS_ROW_SCOPE_NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "kun slong ni, bsad par",
+            "source_row": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [
+                0
+              ],
+              "english": []
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa ni, dug gsum gang rung"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rang gis byas pa'am gzhan byed du 'jug pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "dngos med lus gzhan skyes phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1754,
+                  6907
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "the motivation; here, it is the wish to kill"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "snga dang mnyam du shi ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1725,
+                  1754,
+                  6882,
+                  6907
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:370",
+              "c05:371",
+              "c05:372",
+              "cross-segment",
+              "cross-row",
+              "motivation",
+              "wish to kill",
+              "same-english-two-tibetan"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+            "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 371,
+                "field": "acip",
+                "start": 251563,
+                "bytes": 252,
+                "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 371,
+                "field": "english",
+                "start": 251817,
+                "bytes": 350,
+                "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 71,
+            "material_master_objects": 127,
+            "personally_read_reused_objects": 88,
+            "complete_new_master_objects_read": 39,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 8
+          },
+          "d_defensibility": {
+            "judgment": "The opening Tibetan block is translated by the final English sentence of370, in both physical source and duplicate C16 row pair. Current371 English begins the undertaking topic. No missing source, fresh ingest corruption or interchangeable heading is inferred; this source block stays unbanked locally without a false absence null.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The opening Tibetan block is translated by the final English sentence of370, in both physical source and duplicate C16 row pair. Current371 English begins the undertaking topic. No missing source, fresh ingest corruption or interchangeable heading is inferred; this source block stays unbanked locally without a false absence null.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "field": "screens",
+      "index": 4,
+      "original": {
+        "seq": 371,
+        "kind": "FORMATTING",
+        "found": "either with some kind of weapon, or poison, or spell",
+        "decision": "NO_NEW_ERRATUM",
+        "five_grounds": {
+          "a_quote": {
+            "found": "either with some kind of weapon, or poison, or spell",
+            "source_row": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "occurrences": {
+              "acip": [],
+              "wylie": [],
+              "english": [
+                264
+              ]
+            }
+          },
+          "b_parallel": {
+            "exact_queries": [
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "acip",
+                "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                "parameters": [
+                  "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                "seq": 371,
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                "parameters": [
+                  "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "targeted_queries": [
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "nyon mongs pa ni, dug gsum gang rung"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "kun slong ni, bsad par 'dod pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "rang gis byas pa'am gzhan byed du 'jug pa"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "dngos med lus gzhan skyes phyir"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1754,
+                  6907
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "english",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "the motivation; here, it is the wish to kill"
+                ],
+                "count": 2,
+                "row_ids": [
+                  1752,
+                  6905
+                ]
+              },
+              {
+                "origin": "ACTUAL_NEW_QUERY",
+                "field": "wylie",
+                "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                "parameters": [
+                  "snga dang mnyam du shi ba"
+                ],
+                "count": 4,
+                "row_ids": [
+                  1725,
+                  1754,
+                  6882,
+                  6907
+                ]
+              }
+            ],
+            "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+            "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+          },
+          "c_registered": {
+            "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+            "register_identity": {
+              "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "repository_relative_path": "docs/errata_register.json",
+              "bytes": 284047,
+              "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+            },
+            "count": 204,
+            "search_terms": [
+              "c05:370",
+              "c05:371",
+              "c05:372",
+              "cross-segment",
+              "cross-row",
+              "motivation",
+              "wish to kill",
+              "same-english-two-tibetan"
+            ],
+            "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+            "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+            "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+            "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+          },
+          "e_counts": {
+            "source_characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "at_1500_cap": false,
+            "complete_physical_extents": [
+              {
+                "seq": 371,
+                "field": "acip",
+                "start": 251563,
+                "bytes": 252,
+                "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "ascii_whitespace_collapse_equals_spine": true
+              },
+              {
+                "seq": 371,
+                "field": "english",
+                "start": 251817,
+                "bytes": 350,
+                "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                "ascii_whitespace_collapse_equals_spine": true
+              }
+            ],
+            "exact_lexical_queries": 71,
+            "material_master_objects": 127,
+            "personally_read_reused_objects": 88,
+            "complete_new_master_objects_read": 39,
+            "new_corpus_queries": 6,
+            "neutral_queries_reused": 9,
+            "complete_corpus_wrappers_read": 8
+          },
+          "d_defensibility": {
+            "judgment": "The three methods and their punctuation are present in physical English/C16:888. NAM and GAM own separate or occurrences; GNYIS counts the two actors and is not assigned the later either introducing methods. Keep full means and enumerative constructions, terminal punctuation and contractions verbatim.",
+            "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+          }
+        }
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The three methods and their punctuation are present in physical English/C16:888. NAM and GAM own separate or occurrences; GNYIS counts the two actors and is not assigned the later either introducing methods. Keep full means and enumerative constructions, terminal punctuation and contractions verbatim.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 0,
+      "original": {
+        "kind": "TIBETAN_SPELLING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "ACIP MTSON and Wylie mtshon are the preserved converted weapon form; the lexical term is attested. Whole PA'AM and final BA'O forms are retained, not normalized.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "ACIP MTSON and Wylie mtshon are the preserved converted weapon form; the lexical term is attested. Whole PA'AM and final BA'O forms are retained, not normalized.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 1,
+      "original": {
+        "kind": "ENGLISH_TYPO",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The self/other contrast and three means are coherent. The repeated pronouns and undertaking words are grammatical, not duplicated-word errors.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The self/other contrast and three means are coherent. The repeated pronouns and undertaking words are grammatical, not duplicated-word errors.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 2,
+      "original": {
+        "kind": "ENGLISH_FACTUAL_ERROR",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "Doing the act personally and inducing another are explicitly equivalent in the source. The English negative does-not-matter paraphrase has that comparison scope, so it is not treated as an omitted source negator or a factual contradiction.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "Doing the act personally and inducing another are explicitly equivalent in the source. The English negative does-not-matter paraphrase has that comparison scope, so it is not treated as an omitted source negator or a factual contradiction.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 3,
+      "original": {
+        "kind": "INGEST_ARTEFACT",
+        "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+        "reason": "This Tibetan motivation opening has its translation in370. This is the complementary half of the same registered spill observation, not a second erratum. No cross-row ranges or source repair are made.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "CHANGE_ADOPTED_EVIDENCE_NO_ERRATUM",
+      "reason": "The complete physical rows and C16 pair preserve the full motivation sentence on opposite sides of the row boundary. Nothing in the pair is missing. E111 establishes a final-verse-syllable spill, so the broader prose-sentence mechanism and class identity remain unproved.",
+      "judgment_by": "root"
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "field": "category_screen",
+      "index": 4,
+      "original": {
+        "kind": "FORMATTING",
+        "decision": "NO_NEW_FILED_FINDING",
+        "reason": "The English comma-separated alternatives and Tibetan conjunctions remain exact. Their distributed correspondence can be omitted without alleging a punctuation defect.",
+        "grounds_considered": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "disposition": "RETAIN_ORIGINAL_NO_FILED_ERRATUM",
+      "reason": "The English comma-separated alternatives and Tibetan conjunctions remain exact. Their distributed correspondence can be omitted without alleging a punctuation defect.",
+      "judgment_by": "root"
+    }
+  ],
+  "complete_original_screen_documents": [
+    {
+      "seq": 371,
+      "angle": "tibetan",
+      "source_file": "five-ground-screens.json",
+      "original": [
+        {
+          "seq": 371,
+          "kind": "TIBETAN_SPELLING",
+          "found": "BSAD PAR 'DOD PA'O",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "BSAD PAR 'DOD PA'O",
+              "source_row": {
+                "id": 1753,
+                "course": "C05",
+                "seq": 371,
+                "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+                "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+              },
+              "occurrences": {
+                "acip": [
+                  14
+                ],
+                "wylie": [],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa ni, dug gsum gang rung"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rang gis byas pa'am gzhan byed du 'jug pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "dngos med lus gzhan skyes phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1754,
+                    6907
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "the motivation; here, it is the wish to kill"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "snga dang mnyam du shi ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1725,
+                    1754,
+                    6882,
+                    6907
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:370",
+                "c05:371",
+                "c05:372",
+                "cross-segment",
+                "cross-row",
+                "motivation",
+                "wish to kill",
+                "same-english-two-tibetan"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+              "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 252,
+                "wylie": 251,
+                "english": 346
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 371,
+                  "field": "acip",
+                  "start": 251563,
+                  "bytes": 252,
+                  "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                  "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 371,
+                  "field": "english",
+                  "start": 251817,
+                  "bytes": 350,
+                  "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                  "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 71,
+              "material_master_objects": 127,
+              "personally_read_reused_objects": 88,
+              "complete_new_master_objects_read": 39,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 8
+            },
+            "d_defensibility": {
+              "judgment": "The opening motivation predicate is printed completely in371 physical ACIP and C16:888. Exact BSAD PAR lacks a master entry, while BSAD and DOD PA are attested; its inflection and appearance in the previous English row are not a spelling error or authority to move text.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 371,
+          "kind": "ENGLISH_TYPO",
+          "found": "it doesn't matter whether you perform it yourself",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "it doesn't matter whether you perform it yourself",
+              "source_row": {
+                "id": 1753,
+                "course": "C05",
+                "seq": 371,
+                "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+                "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  94
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa ni, dug gsum gang rung"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rang gis byas pa'am gzhan byed du 'jug pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "dngos med lus gzhan skyes phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1754,
+                    6907
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "the motivation; here, it is the wish to kill"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "snga dang mnyam du shi ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1725,
+                    1754,
+                    6882,
+                    6907
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:370",
+                "c05:371",
+                "c05:372",
+                "cross-segment",
+                "cross-row",
+                "motivation",
+                "wish to kill",
+                "same-english-two-tibetan"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+              "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 252,
+                "wylie": 251,
+                "english": 346
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 371,
+                  "field": "acip",
+                  "start": 251563,
+                  "bytes": 252,
+                  "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                  "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 371,
+                  "field": "english",
+                  "start": 251817,
+                  "bytes": 350,
+                  "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                  "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 71,
+              "material_master_objects": 127,
+              "personally_read_reused_objects": 88,
+              "complete_new_master_objects_read": 39,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 8
+            },
+            "d_defensibility": {
+              "judgment": "The sentence explicitly contrasts personal performance with getting another to act, then says it is the same. Source GNYIS GANG BYAS KYANG DRA supports that two-way equivalence without an explicit negative particle under contracted does not. Preserve the fluent paraphrase unbanked in that frame instead of inventing a negative-affix source.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 371,
+          "kind": "ENGLISH_FACTUAL_ERROR",
+          "found": "the one who undertakes the deed",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "the one who undertakes the deed",
+              "source_row": {
+                "id": 1753,
+                "course": "C05",
+                "seq": 371,
+                "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+                "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  61
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa ni, dug gsum gang rung"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rang gis byas pa'am gzhan byed du 'jug pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "dngos med lus gzhan skyes phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1754,
+                    6907
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "the motivation; here, it is the wish to kill"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "snga dang mnyam du shi ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1725,
+                    1754,
+                    6882,
+                    6907
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:370",
+                "c05:371",
+                "c05:372",
+                "cross-segment",
+                "cross-row",
+                "motivation",
+                "wish to kill",
+                "same-english-two-tibetan"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+              "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 252,
+                "wylie": 251,
+                "english": 346
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 371,
+                  "field": "acip",
+                  "start": 251563,
+                  "bytes": 252,
+                  "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                  "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 371,
+                  "field": "english",
+                  "start": 251817,
+                  "bytes": 350,
+                  "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                  "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 71,
+              "material_master_objects": 127,
+              "personally_read_reused_objects": 88,
+              "complete_new_master_objects_read": 39,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 8
+            },
+            "d_defensibility": {
+              "judgment": "SBYOR BA PO is the actor in the complete local grammar; its literal glossary deed is insufficient to erase the actor distinction. RANG and GZHAN contrast the actors; GZHAN mined a bodhisattva is irrelevant. Contextual agent-noun and causative get/do proposals remain provisional, with this counterevidence explicit.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 371,
+          "kind": "INGEST_ARTEFACT",
+          "found": "kun slong ni, bsad par",
+          "decision": "OBSERVED_CROSS_ROW_SCOPE_NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "kun slong ni, bsad par",
+              "source_row": {
+                "id": 1753,
+                "course": "C05",
+                "seq": 371,
+                "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+                "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [
+                  0
+                ],
+                "english": []
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa ni, dug gsum gang rung"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rang gis byas pa'am gzhan byed du 'jug pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "dngos med lus gzhan skyes phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1754,
+                    6907
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "the motivation; here, it is the wish to kill"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "snga dang mnyam du shi ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1725,
+                    1754,
+                    6882,
+                    6907
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:370",
+                "c05:371",
+                "c05:372",
+                "cross-segment",
+                "cross-row",
+                "motivation",
+                "wish to kill",
+                "same-english-two-tibetan"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+              "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 252,
+                "wylie": 251,
+                "english": 346
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 371,
+                  "field": "acip",
+                  "start": 251563,
+                  "bytes": 252,
+                  "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                  "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 371,
+                  "field": "english",
+                  "start": 251817,
+                  "bytes": 350,
+                  "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                  "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 71,
+              "material_master_objects": 127,
+              "personally_read_reused_objects": 88,
+              "complete_new_master_objects_read": 39,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 8
+            },
+            "d_defensibility": {
+              "judgment": "The opening Tibetan block is translated by the final English sentence of370, in both physical source and duplicate C16 row pair. Current371 English begins the undertaking topic. No missing source, fresh ingest corruption or interchangeable heading is inferred; this source block stays unbanked locally without a false absence null.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        },
+        {
+          "seq": 371,
+          "kind": "FORMATTING",
+          "found": "either with some kind of weapon, or poison, or spell",
+          "decision": "NO_NEW_ERRATUM",
+          "five_grounds": {
+            "a_quote": {
+              "found": "either with some kind of weapon, or poison, or spell",
+              "source_row": {
+                "id": 1753,
+                "course": "C05",
+                "seq": 371,
+                "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+                "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+              },
+              "occurrences": {
+                "acip": [],
+                "wylie": [],
+                "english": [
+                  264
+                ]
+              }
+            },
+            "b_parallel": {
+              "exact_queries": [
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "acip",
+                  "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+                  "parameters": [
+                    "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+                  "seq": 371,
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+                  "parameters": [
+                    "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                }
+              ],
+              "targeted_queries": [
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "nyon mongs pa ni, dug gsum gang rung"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "kun slong ni, bsad par 'dod pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "rang gis byas pa'am gzhan byed du 'jug pa"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1753,
+                    6906
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "dngos med lus gzhan skyes phyir"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1754,
+                    6907
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "english",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "the motivation; here, it is the wish to kill"
+                  ],
+                  "count": 2,
+                  "row_ids": [
+                    1752,
+                    6905
+                  ]
+                },
+                {
+                  "origin": "ACTUAL_NEW_QUERY",
+                  "field": "wylie",
+                  "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+                  "parameters": [
+                    "snga dang mnyam du shi ba"
+                  ],
+                  "count": 4,
+                  "row_ids": [
+                    1725,
+                    1754,
+                    6882,
+                    6907
+                  ]
+                }
+              ],
+              "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+              "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+            },
+            "c_registered": {
+              "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+              "register_identity": {
+                "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+                "repository_relative_path": "docs/errata_register.json",
+                "bytes": 284047,
+                "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+              },
+              "count": 204,
+              "search_terms": [
+                "c05:370",
+                "c05:371",
+                "c05:372",
+                "cross-segment",
+                "cross-row",
+                "motivation",
+                "wish to kill",
+                "same-english-two-tibetan"
+              ],
+              "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+              "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+              "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+              "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+            },
+            "e_counts": {
+              "source_characters": {
+                "acip": 252,
+                "wylie": 251,
+                "english": 346
+              },
+              "at_1500_cap": false,
+              "complete_physical_extents": [
+                {
+                  "seq": 371,
+                  "field": "acip",
+                  "start": 251563,
+                  "bytes": 252,
+                  "sha256": "b21419b7151039f8aa8e415473ee29bf9e0f83d7494c96215a991eec7578a0b8",
+                  "original_text": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+                  "ascii_whitespace_collapse_equals_spine": true
+                },
+                {
+                  "seq": 371,
+                  "field": "english",
+                  "start": 251817,
+                  "bytes": 350,
+                  "sha256": "253180e7b22cc0bc4d5f1b20d212772d753312ddd8456bd104d6ad6c012b9dc1",
+                  "original_text": "Here are the different aspects of the undertaking. As far as the one who\r\nundertakes the deed, it doesn't matter whether you perform it yourself, or get\r\nsomeone else to do it for you, it's all the same. The essence of the undertaking\r\nis when the deed is initiated, either with some kind of weapon, or poison, or\r\nspell, or whatever the case may be.",
+                  "ascii_whitespace_collapse_equals_spine": true
+                }
+              ],
+              "exact_lexical_queries": 71,
+              "material_master_objects": 127,
+              "personally_read_reused_objects": 88,
+              "complete_new_master_objects_read": 39,
+              "new_corpus_queries": 6,
+              "neutral_queries_reused": 9,
+              "complete_corpus_wrappers_read": 8
+            },
+            "d_defensibility": {
+              "judgment": "The three methods and their punctuation are present in physical English/C16:888. NAM and GAM own separate or occurrences; GNYIS counts the two actors and is not assigned the later either introducing methods. Keep full means and enumerative constructions, terminal punctuation and contractions verbatim.",
+              "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "seq": 371,
+      "angle": "english",
+      "source_file": "errata-review.json",
+      "original": {
+        "seq": 371,
+        "producer": "Codex independent English-first",
+        "status": "PROPOSAL_ONLY",
+        "five_grounds": [
+          {
+            "ground": 1,
+            "name": "exact source and physical reading",
+            "source_record": {
+              "id": 1753,
+              "course": "C05",
+              "seq": 371,
+              "acip": "KUN SLONG NI, BSAD PAR 'DOD PA'O, , SBYOR BA LA SBYOR BA PO NI, RANG GIS BYAS PA'AM GZHAN BYED DU 'JUG PA GNYIS GANG BYAS KYANG 'DRA STE, SBYOR BA'I NGO BO NI MTSON NAM, DUG GAM, RIG SNGAGS KYI SGO NAS SBYOR BA BYAS PA LA SOGS PA GANG YANG RUNG BA'O, ,",
+              "wylie": "kun slong ni, bsad par 'dod pa'o, , sbyor ba la sbyor ba po ni, rang gis byas pa'am gzhan byed du 'jug pa gnyis gang byas kyang 'dra ste, sbyor ba'i ngo bo ni mtshon nam, dug gam, rig sngags kyi sgo nas sbyor ba byas pa la sogs pa gang yang rung ba'o,",
+              "english": "Here are the different aspects of the undertaking. As far as the one who undertakes the deed, it doesn't matter whether you perform it yourself, or get someone else to do it for you, it's all the same. The essence of the undertaking is when the deed is initiated, either with some kind of weapon, or poison, or spell, or whatever the case may be."
+            },
+            "evidence": "../evidence/physical-extents.json",
+            "finding": "All three complete source fields and all six physical extents were read or reused by exact prior full-object identity and verified. Source-preparation passed once. The first origin script failed at parse time; successful proposal-origin-attempt02-caller bound immutable363 Git objects without source requery. Both actual origin attempts remain preserved."
+          },
+          {
+            "ground": 2,
+            "name": "parallel and contextual witnesses",
+            "exact_query_counts": [
+              {
+                "field": "acip",
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "field": "wylie",
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              },
+              {
+                "field": "english",
+                "count": 2,
+                "row_ids": [
+                  1753,
+                  6906
+                ]
+              }
+            ],
+            "evidence": [
+              "../evidence/corpus.json",
+              "../evidence/original-context-rows.json",
+              "../evidence/prior-verse-context-reuse.json"
+            ],
+            "finding": "C16:888 repeats all three complete text fields. The complete preceding370 English ends with the motivation and wish to kill, corresponding to this Tibetan opening. The remaining undertaking paragraph is complete in both current fields; no source text is lost across the two rows. Same-corpus identity is corroboration, not independent publication."
+          },
+          {
+            "ground": 3,
+            "name": "prior register and classes",
+            "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+            "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+            "register_count": 204,
+            "text_search_matches": [
+              {
+                "item_id": "E-201",
+                "course": "C05",
+                "segment": "C05:343",
+                "kind": "TIBETAN_SPELLING",
+                "found": "LUS GZHAN SKYES PHYER RO",
+                "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+                "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+                "severity": "LOW",
+                "confidence": "PROBABLE",
+                "note": "filed from the alignment batch, spine-verified on merge"
+              }
+            ],
+            "current_segment_filed_matches": [],
+            "evidence": [
+              "../evidence/register-material-reuse.json",
+              "../evidence/register.json"
+            ],
+            "finding": "The unchanged204-entry origin register has no item filed against370–372. The one text-search hit E-201 is filed against343 and cites372 as evidence. Seven complete prior class records, including E-111, were reused by exact same-agent full-object identity; the full current E-201 object was read. Registered classes are not refiled."
+          },
+          {
+            "ground": 4,
+            "name": "language and counterevidence",
+            "evidence": [
+              "decisions.json",
+              "../evidence/lexical.json",
+              "../evidence/reading-reuse.json"
+            ],
+            "finding": "SBYOR BA PO is an agent noun locally rendered one who undertakes, with the article and deed object outside. Its glossary deed is counterevidence to that literal glossary assignment, not reason to turn the agent into an object. GZHAN is the other person; its auto-aligned a bodhisattva is rejected. BYED/DU/JUG PA give do/to/get in the causative frame. GNYIS and GANG BYAS KYANG scope over equivalence; the English does-not-matter negative paraphrase supplies no separate Tibetan negation. RIG SNGAGS is a whole spell compound, with no strict English submember. The initiation and inclusive indefinite constructions are kept whole at d3.",
+            "counterevidence": "All glossary, curated and auto-aligned evidence retains its actual tier. Matching text in another course does not independently establish publication, correction or ingestion history. Local translation expansion or compression can require omission without proving an error. No source/master/hgm_gloss change."
+          },
+          {
+            "ground": 5,
+            "name": "measured limits and boundaries",
+            "characters": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "utf8_bytes": {
+              "acip": 252,
+              "wylie": 251,
+              "english": 346
+            },
+            "english_equals_1500": false,
+            "written_verse_token_counts": null,
+            "finding": "The full physical Tibetan starts KUN SLONG NI, BSAD PAR 'DOD PA'O and then introduces undertaking. Its English begins Here are the different aspects of the undertaking. Both complete extents are below1500 characters and the preceding370 contains the displaced motivation English. Physical identity does not identify which extraction or editorial step produced the row boundary."
+          }
+        ],
+        "category_screen": [
+          {
+            "kind": "TIBETAN_SPELLING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "ACIP MTSON and Wylie mtshon are the preserved converted weapon form; the lexical term is attested. Whole PA'AM and final BA'O forms are retained, not normalized.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_TYPO",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The self/other contrast and three means are coherent. The repeated pronouns and undertaking words are grammatical, not duplicated-word errors.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "ENGLISH_FACTUAL_ERROR",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "Doing the act personally and inducing another are explicitly equivalent in the source. The English negative does-not-matter paraphrase has that comparison scope, so it is not treated as an omitted source negator or a factual contradiction.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "INGEST_ARTEFACT",
+            "decision": "KNOWN_REGISTERED_CLASS_NO_NEW_ENTRY",
+            "reason": "This Tibetan motivation opening has its translation in370. This is the complementary half of the same registered spill observation, not a second erratum. No cross-row ranges or source repair are made.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "kind": "FORMATTING",
+            "decision": "NO_NEW_FILED_FINDING",
+            "reason": "The English comma-separated alternatives and Tibetan conjunctions remain exact. Their distributed correspondence can be omitted without alleging a punctuation defect.",
+            "grounds_considered": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ]
+          }
+        ],
+        "source_questions": [],
+        "proposed_errata": [],
+        "source_corrections": false
+      }
+    }
+  ],
+  "original_errata_candidates": [],
+  "original_source_questions": [],
+  "final_source_questions": [],
+  "final_errata": [],
+  "source_corrections": false
+}

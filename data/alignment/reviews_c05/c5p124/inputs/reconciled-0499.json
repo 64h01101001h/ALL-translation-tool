@@ -1,0 +1,20 @@
+{
+  "status": "PRE_HANDOFF_PACKAGING_CORRECTION_NO_SEMANTIC_OR_NATIVE_CHANGE",
+  "original_freeze": {
+    "path": "history/freeze-enumeration-v1/freeze.json",
+    "bytes": 36616,
+    "sha256": "db6bd6c2a3e35fe77ef20f70f93c578508229652c2d489c94730c4ef1c0b62c8"
+  },
+  "cause": "Enumeration excluded every basename freeze.json rather than only the current root manifest. One existing copied preparation manifest was omitted.",
+  "omitted_existing_members": [
+    {
+      "path": "evidence/assembly-preparation/freeze.json",
+      "bytes": 4612,
+      "sha256": "351f5095619b8d4c485f9cc509ad0d302c3e089bc148d0d160b3a9b2e088b5b7"
+    }
+  ],
+  "correction": "Exclude only R/freeze.json; include the nested preparation manifest, original first manifest and this exact correction record. All previous216 frozen members remain byte-identical.",
+  "new_native_runs": 0,
+  "changed_specs_bodies_ranges_native_captures": [],
+  "previous_freeze_was_announced_as_final": false
+}

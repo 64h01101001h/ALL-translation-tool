@@ -1,0 +1,195 @@
+{
+  "seq": 372,
+  "producer": "Codex independent English-first",
+  "status": "PROPOSAL_ONLY",
+  "five_grounds": [
+    {
+      "ground": 1,
+      "name": "exact source and physical reading",
+      "source_record": {
+        "id": 1754,
+        "course": "C05",
+        "seq": 372,
+        "acip": "MTHAR THUG NI, SBYOR BA DE'I RKYEN GYIS PHA ROL PO DE'I TSE'AM, DUS GZHAN GYI TSE SHI BA'O, , DE YANG MDZOD LAS, SNGA DANG MNYAM DU SHI BA LA, , DNGOS MED LUS GZHAN SKYES PHYIR RO, , ZHES GSUNGS PA NI 'DIR YANG 'DRA'O,",
+        "wylie": "mthar thug ni, sbyor ba de'i rkyen gyis pha rol po de'i tshe'am, dus gzhan gyi tshe shi ba'o, , de yang mdzod las, snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro, , zhes gsungs pa ni 'dir yang 'dra'o",
+        "english": "The conclusion occurs when, due to this undertaking of the deed, the other person dies, either at the time of the undertaking, or later on. As the Treasure House of Knowledge says, There is no actual stage for those who die Before or together, for another body's been born. *********"
+      },
+      "evidence": "../evidence/physical-extents.json",
+      "finding": "All three complete source fields and all six physical extents were read or reused by exact prior full-object identity and verified. Source-preparation passed once. The first origin script failed at parse time; successful proposal-origin-attempt02-caller bound immutable363 Git objects without source requery. Both actual origin attempts remain preserved."
+    },
+    {
+      "ground": 2,
+      "name": "parallel and contextual witnesses",
+      "exact_query_counts": [
+        {
+          "field": "acip",
+          "count": 2,
+          "row_ids": [
+            1754,
+            6907
+          ]
+        },
+        {
+          "field": "wylie",
+          "count": 2,
+          "row_ids": [
+            1754,
+            6907
+          ]
+        },
+        {
+          "field": "english",
+          "count": 1,
+          "row_ids": [
+            1754
+          ]
+        }
+      ],
+      "evidence": [
+        "../evidence/corpus.json",
+        "../evidence/original-context-rows.json",
+        "../evidence/prior-verse-context-reuse.json"
+      ],
+      "finding": "C16:889 repeats the complete ACIP/Wylie and English through born. Its English ends with 42 The Motivation for Negative Karma instead of the C05 asterisks, so full English equality is not claimed. The earlier complete C05:343 object was personally read previously and reused by exact identity: its last two verse lines correspond to this quotation, with PHYER versus current PHYIR. Its unquoted earlier and later content does not corroborate the complete372 prose."
+    },
+    {
+      "ground": 3,
+      "name": "prior register and classes",
+      "original_git_object": "1be02f91d0c7546f4997d25cafd19c976ba4db3e:docs/errata_register.json",
+      "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247",
+      "register_count": 204,
+      "text_search_matches": [
+        {
+          "item_id": "E-201",
+          "course": "C05",
+          "segment": "C05:343",
+          "kind": "TIBETAN_SPELLING",
+          "found": "LUS GZHAN SKYES PHYER RO",
+          "expected": "For human review: LUS GZHAN SKYES PHYIR RO is the supported candidate reading. Preserve the source until reviewed.",
+          "evidence": "The exact ACIP343 and physical ASCII read PHYER, faithfully converted as phyer. No exact phyer master/spine entry was returned. PHYIR is the normal reason marker supported by complete lexical records and by the English for another body's been born. C05:372 quotes these same two verse lines with SKYES PHYIR RO and the identical English; C16:889 repeats that later quotation, with different following apparatus. This is a same-line quotation in a different context, not an independently collated corrected publication. Counterevidence: C16:864 repeats all three343 fields exactly, including PHYER; the available physical reading also has it. Therefore a local conversion/ingest defect is not established, and a nonstandard source reading cannot be conclusively excluded. Both spellings are one syllable; the four complete physical verse lines have seven syllables each, so metre does not discriminate. All fields are below1500 characters and physically complete. The origin register has200 records, no direct343 or phyer match. Propose LOW/PROBABLE spelling review, with source/master unchanged and phyer unbanked.",
+          "severity": "LOW",
+          "confidence": "PROBABLE",
+          "note": "filed from the alignment batch, spine-verified on merge"
+        }
+      ],
+      "current_segment_filed_matches": [],
+      "evidence": [
+        "../evidence/register-material-reuse.json",
+        "../evidence/register.json"
+      ],
+      "finding": "The unchanged204-entry origin register has no item filed against370–372. The one text-search hit E-201 is filed against343 and cites372 as evidence. Seven complete prior class records, including E-111, were reused by exact same-agent full-object identity; the full current E-201 object was read. Registered classes are not refiled."
+    },
+    {
+      "ground": 4,
+      "name": "language and counterevidence",
+      "evidence": [
+        "decisions.json",
+        "../evidence/lexical.json",
+        "../evidence/reading-reuse.json"
+      ],
+      "finding": "MTHAR THUG supplies conclusion; RKYEN GYIS supplies due to. The first death concerns the other person and the quoted death predicate belongs to before/together. DE'I TSHE'AM is an anaphoric temporal/disjunctive phrase: the undertaking repetition is licensed by the demonstrative, not by reusing SBYOR BA. DUS GZHAN has direct later on evidence. Current PHYIR is supported and is not the earlier registered PHYER error. LUS owns body before the auxiliary contraction, with no invented possessive. The final NI DIR YANG DRA'O application has no separate English match; As-the-book-says may compress its role, so omission versus implicit application remains unresolved and unbanked.",
+      "counterevidence": "All glossary, curated and auto-aligned evidence retains its actual tier. Matching text in another course does not independently establish publication, correction or ingestion history. Local translation expansion or compression can require omission without proving an error. No source/master/hgm_gloss change."
+    },
+    {
+      "ground": 5,
+      "name": "measured limits and boundaries",
+      "characters": {
+        "acip": 218,
+        "wylie": 219,
+        "english": 283
+      },
+      "utf8_bytes": {
+        "acip": 218,
+        "wylie": 219,
+        "english": 283
+      },
+      "english_equals_1500": false,
+      "written_verse_token_counts": [
+        7,
+        7
+      ],
+      "finding": "The two quoted Tibetan lines each contain seven written syllables: SNGA DANG MNYAM DU SHI BA LA; DNGOS MED LUS GZHAN SKYES PHYIR RO. Their English occupies two physical lines beginning There and Before. Capital Before is lineation. The final nine asterisks form a physical separator, and all fields are below1500 characters. The explicit final application phrase has no separate English line before the separator; that observation alone does not distinguish deliberate compression from omission."
+    }
+  ],
+  "category_screen": [
+    {
+      "kind": "TIBETAN_SPELLING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "The current source has PHYIR, corroborating the earlier E-201 discussion of PHYER at343. E-201 mentions372 as evidence but is not an erratum filed against372. No current spelling correction is proposed.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_TYPO",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Before is a physical verse-line capital, and body's is the grammatical has contraction. The asterisks are an observed separator rather than a misspelled word.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "ENGLISH_FACTUAL_ERROR",
+      "decision": "UNCERTAIN_NO_NEW_FILED_FINDING",
+      "reason": "The death conditions match the quoted source. The final application statement lacks a separate English phrase; implicit citation application versus omission is uncertain, so it remains a source question and unbanked rather than a filed factual correction.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "INGEST_ARTEFACT",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "All complete current fields are below1500 characters and reproduce the physical extents. The differing C16 apparatus shows that only the shared substantive English is corroborated. A deletion or ingestion mechanism for the final application statement is not established.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "kind": "FORMATTING",
+      "decision": "NO_NEW_FILED_FINDING",
+      "reason": "Two physical verse lines and the nine-asterisk separator are preserved. No asterisk is aligned to the unbanked Tibetan application or changed into an English translation.",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "source_questions": [
+    {
+      "found": "ni 'dir yang 'dra'o",
+      "classification": "UNCERTAIN_TRANSLATION_COMPRESSION_OR_OMISSION",
+      "question": "Does the English citation frame convey the final application here also, or was a separate rendering omitted?",
+      "positive_evidence": "The complete Tibetan explicitly states the application, while physical English proceeds from the quoted born to asterisks without a separate application line.",
+      "counterevidence": "As the Treasure House of Knowledge says introduces the quote as authority for this same conclusion, so its application may be implicit. C16 repeats the substantive English, without an independent corrected witness.",
+      "decision": "OMIT_UNBANKED_NO_ERRATUM",
+      "grounds_considered": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "proposed_errata": [],
+  "source_corrections": false
+}

@@ -1,0 +1,1097 @@
+[
+  {
+    "seq": 370,
+    "kind": "TIBETAN_SPELLING",
+    "found": "DUG GSUM GANG RUNG NGO",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "DUG GSUM GANG RUNG NGO",
+        "source_row": {
+          "id": 1752,
+          "course": "C05",
+          "seq": 370,
+          "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+          "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+          "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+        },
+        "occurrences": {
+          "acip": [
+            18
+          ],
+          "wylie": [],
+          "english": []
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung ngo ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kun slong ni, bsad par 'dod pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rang gis byas pa'am gzhan byed du 'jug pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "dngos med lus gzhan skyes phyir"
+            ],
+            "count": 2,
+            "row_ids": [
+              1754,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "the motivation; here, it is the wish to kill"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+        "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+        "register_identity": {
+          "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:370",
+          "c05:371",
+          "c05:372",
+          "cross-segment",
+          "cross-row",
+          "motivation",
+          "wish to kill",
+          "same-english-two-tibetan"
+        ],
+        "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+        "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+        "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+        "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 44,
+          "wylie": 42,
+          "english": 182
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 370,
+            "field": "acip",
+            "start": 251329,
+            "bytes": 44,
+            "sha256": "4783994e7e4e4fdc75c7ee5c28a300c80bd3ba76f688505481e10b423428ead6",
+            "original_text": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 370,
+            "field": "english",
+            "start": 251375,
+            "bytes": 184,
+            "sha256": "b8ff222d4b37e158ce5fbe30c1e0ac322808d5d5a31c2342a77314ca65e94f38",
+            "original_text": "The second component of the thinking is the bad thought involved. In this\r\ncase, it can be any of the three poisons.\r\nA third component is the motivation; here, it is the wish to kill.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "exact_lexical_queries": 71,
+        "material_master_objects": 127,
+        "personally_read_reused_objects": 88,
+        "complete_new_master_objects_read": 39,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_wrappers_read": 8
+      },
+      "d_defensibility": {
+        "judgment": "The complete three-poisons term, indefinite GANG RUNG and terminal NGO are attested. Full physical ACIP and C16:887 agree. No motivation words are present in this Tibetan field; they begin the next row and are not a spelling correction to370.",
+        "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 370,
+    "kind": "ENGLISH_TYPO",
+    "found": "A third component is the motivation; here, it is the wish to kill.",
+    "decision": "NO_NEW_ERRATUM_ADJACENT_ROW_SCOPE",
+    "five_grounds": {
+      "a_quote": {
+        "found": "A third component is the motivation; here, it is the wish to kill.",
+        "source_row": {
+          "id": 1752,
+          "course": "C05",
+          "seq": 370,
+          "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+          "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+          "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            116
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung ngo ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kun slong ni, bsad par 'dod pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rang gis byas pa'am gzhan byed du 'jug pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "dngos med lus gzhan skyes phyir"
+            ],
+            "count": 2,
+            "row_ids": [
+              1754,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "the motivation; here, it is the wish to kill"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+        "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+        "register_identity": {
+          "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:370",
+          "c05:371",
+          "c05:372",
+          "cross-segment",
+          "cross-row",
+          "motivation",
+          "wish to kill",
+          "same-english-two-tibetan"
+        ],
+        "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+        "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+        "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+        "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 44,
+          "wylie": 42,
+          "english": 182
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 370,
+            "field": "acip",
+            "start": 251329,
+            "bytes": 44,
+            "sha256": "4783994e7e4e4fdc75c7ee5c28a300c80bd3ba76f688505481e10b423428ead6",
+            "original_text": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 370,
+            "field": "english",
+            "start": 251375,
+            "bytes": 184,
+            "sha256": "b8ff222d4b37e158ce5fbe30c1e0ac322808d5d5a31c2342a77314ca65e94f38",
+            "original_text": "The second component of the thinking is the bad thought involved. In this\r\ncase, it can be any of the three poisons.\r\nA third component is the motivation; here, it is the wish to kill.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "exact_lexical_queries": 71,
+        "material_master_objects": 127,
+        "personally_read_reused_objects": 88,
+        "complete_new_master_objects_read": 39,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_wrappers_read": 8
+      },
+      "d_defensibility": {
+        "judgment": "The exact sentence is printed in physical English before the next Tibetan paragraph and repeats in C16:887. It translates the opening KUN SLONG NI BSAD PAR DOD PA of371. No spelling or word substitution is warranted; preserve the observed boundary and leave the sentence unbanked locally.",
+        "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 370,
+    "kind": "ENGLISH_FACTUAL_ERROR",
+    "found": "any of the three poisons",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "any of the three poisons",
+        "source_row": {
+          "id": 1752,
+          "course": "C05",
+          "seq": 370,
+          "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+          "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+          "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            90
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung ngo ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kun slong ni, bsad par 'dod pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rang gis byas pa'am gzhan byed du 'jug pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "dngos med lus gzhan skyes phyir"
+            ],
+            "count": 2,
+            "row_ids": [
+              1754,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "the motivation; here, it is the wish to kill"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+        "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+        "register_identity": {
+          "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:370",
+          "c05:371",
+          "c05:372",
+          "cross-segment",
+          "cross-row",
+          "motivation",
+          "wish to kill",
+          "same-english-two-tibetan"
+        ],
+        "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+        "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+        "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+        "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 44,
+          "wylie": 42,
+          "english": 182
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 370,
+            "field": "acip",
+            "start": 251329,
+            "bytes": 44,
+            "sha256": "4783994e7e4e4fdc75c7ee5c28a300c80bd3ba76f688505481e10b423428ead6",
+            "original_text": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 370,
+            "field": "english",
+            "start": 251375,
+            "bytes": 184,
+            "sha256": "b8ff222d4b37e158ce5fbe30c1e0ac322808d5d5a31c2342a77314ca65e94f38",
+            "original_text": "The second component of the thinking is the bad thought involved. In this\r\ncase, it can be any of the three poisons.\r\nA third component is the motivation; here, it is the wish to kill.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "exact_lexical_queries": 71,
+        "material_master_objects": 127,
+        "personally_read_reused_objects": 88,
+        "complete_new_master_objects_read": 39,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_wrappers_read": 8
+      },
+      "d_defensibility": {
+        "judgment": "The short source classifies the bad thought as any of the three poisons. English identifies it as the second thinking component and supplies the next motivation component across the following-row boundary. The sequence agrees with context366/368; no doctrinal/count error is established.",
+        "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 370,
+    "kind": "INGEST_ARTEFACT",
+    "found": "A third component is the motivation",
+    "decision": "OBSERVED_CROSS_ROW_SCOPE_NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "A third component is the motivation",
+        "source_row": {
+          "id": 1752,
+          "course": "C05",
+          "seq": 370,
+          "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+          "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+          "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            116
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung ngo ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kun slong ni, bsad par 'dod pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rang gis byas pa'am gzhan byed du 'jug pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "dngos med lus gzhan skyes phyir"
+            ],
+            "count": 2,
+            "row_ids": [
+              1754,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "the motivation; here, it is the wish to kill"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+        "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+        "register_identity": {
+          "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:370",
+          "c05:371",
+          "c05:372",
+          "cross-segment",
+          "cross-row",
+          "motivation",
+          "wish to kill",
+          "same-english-two-tibetan"
+        ],
+        "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+        "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+        "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+        "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 44,
+          "wylie": 42,
+          "english": 182
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 370,
+            "field": "acip",
+            "start": 251329,
+            "bytes": 44,
+            "sha256": "4783994e7e4e4fdc75c7ee5c28a300c80bd3ba76f688505481e10b423428ead6",
+            "original_text": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 370,
+            "field": "english",
+            "start": 251375,
+            "bytes": 184,
+            "sha256": "b8ff222d4b37e158ce5fbe30c1e0ac322808d5d5a31c2342a77314ca65e94f38",
+            "original_text": "The second component of the thinking is the bad thought involved. In this\r\ncase, it can be any of the three poisons.\r\nA third component is the motivation; here, it is the wish to kill.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "exact_lexical_queries": 71,
+        "material_master_objects": 127,
+        "personally_read_reused_objects": 88,
+        "complete_new_master_objects_read": 39,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_wrappers_read": 8
+      },
+      "d_defensibility": {
+        "judgment": "Physical370 English already contains the motivation sentence before371 Tibetan; C16:887-888 preserve the same placement. This proves a local cross-row correspondence limit, not lost source text, a heading or a newly established parser defect. Preserve both rows and omit the cross-row mapping; no source resegmentation or registry proposal is made.",
+        "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+      }
+    }
+  },
+  {
+    "seq": 370,
+    "kind": "FORMATTING",
+    "found": "poisons. A third component",
+    "decision": "NO_NEW_ERRATUM",
+    "five_grounds": {
+      "a_quote": {
+        "found": "poisons. A third component",
+        "source_row": {
+          "id": 1752,
+          "course": "C05",
+          "seq": 370,
+          "acip": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+          "wylie": "nyon mongs pa ni, dug gsum gang rung ngo ,",
+          "english": "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+        },
+        "occurrences": {
+          "acip": [],
+          "wylie": [],
+          "english": [
+            107
+          ]
+        }
+      },
+      "b_parallel": {
+        "exact_queries": [
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "acip",
+            "sql": "SELECT * FROM corpus_segments WHERE acip=? ORDER BY course,seq",
+            "parameters": [
+              "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE wylie=? ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung ngo ,"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "REUSED_NEUTRAL_CAPTURE_NOT_RERUN",
+            "seq": 370,
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE english=? ORDER BY course,seq",
+            "parameters": [
+              "The second component of the thinking is the bad thought involved. In this case, it can be any of the three poisons. A third component is the motivation; here, it is the wish to kill."
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          }
+        ],
+        "targeted_queries": [
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "nyon mongs pa ni, dug gsum gang rung"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "kun slong ni, bsad par 'dod pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "rang gis byas pa'am gzhan byed du 'jug pa"
+            ],
+            "count": 2,
+            "row_ids": [
+              1753,
+              6906
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "dngos med lus gzhan skyes phyir"
+            ],
+            "count": 2,
+            "row_ids": [
+              1754,
+              6907
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "english",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(english,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "the motivation; here, it is the wish to kill"
+            ],
+            "count": 2,
+            "row_ids": [
+              1752,
+              6905
+            ]
+          },
+          {
+            "origin": "ACTUAL_NEW_QUERY",
+            "field": "wylie",
+            "sql": "SELECT * FROM corpus_segments WHERE course <> 'C13' AND instr(wylie,?)>0 ORDER BY course,seq",
+            "parameters": [
+              "snga dang mnyam du shi ba"
+            ],
+            "count": 4,
+            "row_ids": [
+              1725,
+              1754,
+              6882,
+              6907
+            ]
+          }
+        ],
+        "complete_objects": "../evidence/corpus.json; all eight complete source/master/raw wrappers fully read",
+        "lineage_limit": "C16:887-888 repeat370-371 complete text fields, including the adjacent-row motivation boundary. C16:889 repeats372 Tibetan and current English body with a different appended heading. C05:343/C16:864 quote the same two verse lines but PHYER instead of current PHYIR. Text identity is not independent edition lineage or a corrected publication."
+      },
+      "c_registered": {
+        "source_origin_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+        "register_identity": {
+          "original_git_commit": "1be02f91d0c7546f4997d25cafd19c976ba4db3e",
+          "repository_relative_path": "docs/errata_register.json",
+          "bytes": 284047,
+          "sha256": "f82d8f17e0ac3e71c2b39cb67b823e3a8fea2029c03cc58df875e9b08b315247"
+        },
+        "count": 204,
+        "search_terms": [
+          "c05:370",
+          "c05:371",
+          "c05:372",
+          "cross-segment",
+          "cross-row",
+          "motivation",
+          "wish to kill",
+          "same-english-two-tibetan"
+        ],
+        "complete_matches_file": "../evidence/register.json direct_matches; one complete object E-201 read",
+        "scope": "No shared-word or broad-class match is treated as an identical registered defect; read complete direct matches separately.",
+        "direct_result": "E-201 already records343 PHYER and names current372 PHYIR as a comparison witness. No exact current370/371 defect entry was found by the recorded search; do not treat every adjacency issue as a matching registered heading defect.",
+        "later_baseline_delta": "Actual through369 acceptance is not yet available; no future receipt or register delta invented."
+      },
+      "e_counts": {
+        "source_characters": {
+          "acip": 44,
+          "wylie": 42,
+          "english": 182
+        },
+        "at_1500_cap": false,
+        "complete_physical_extents": [
+          {
+            "seq": 370,
+            "field": "acip",
+            "start": 251329,
+            "bytes": 44,
+            "sha256": "4783994e7e4e4fdc75c7ee5c28a300c80bd3ba76f688505481e10b423428ead6",
+            "original_text": "NYON MONGS PA NI, DUG GSUM GANG RUNG NGO , ,",
+            "ascii_whitespace_collapse_equals_spine": true
+          },
+          {
+            "seq": 370,
+            "field": "english",
+            "start": 251375,
+            "bytes": 184,
+            "sha256": "b8ff222d4b37e158ce5fbe30c1e0ac322808d5d5a31c2342a77314ca65e94f38",
+            "original_text": "The second component of the thinking is the bad thought involved. In this\r\ncase, it can be any of the three poisons.\r\nA third component is the motivation; here, it is the wish to kill.",
+            "ascii_whitespace_collapse_equals_spine": true
+          }
+        ],
+        "exact_lexical_queries": 71,
+        "material_master_objects": 127,
+        "personally_read_reused_objects": 88,
+        "complete_new_master_objects_read": 39,
+        "new_corpus_queries": 6,
+        "neutral_queries_reused": 9,
+        "complete_corpus_wrappers_read": 8
+      },
+      "d_defensibility": {
+        "judgment": "The original physical English has a newline between the poisons sentence and the next motivation sentence, collapsed by the established source convention. Terminal NGO closes the poisons statement, not the displaced wish-to-kill statement. Its null records only affirmative punctuation fusion, with all source wording untouched.",
+        "material": "../evidence/lexical.json complete objects, personally-read-object-reuse.json exact prior provenance, corpus.json complete wrappers and original-decisions.json"
+      }
+    }
+  }
+]

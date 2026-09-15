@@ -1,0 +1,101 @@
+"""Prepare M's literal adaptation of the completed L assembler; no engine runs."""
+import copy, hashlib, json
+from pathlib import Path
+P=Path(__file__).resolve().parent;B=P.parent;A=B.parent
+def read(p):return json.loads(p.read_bytes())
+def pin(p):b=p.read_bytes();return {'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()}
+def put(p,x):assert not p.exists();p.write_text(json.dumps(x,ensure_ascii=False,indent=2)+'\n')
+rp=B/'root-selection-pending-baseline.json'
+assert pin(rp)=={'bytes':25134,'sha256':'496482b217bc1cf12a04d8e1f94efb87a3fd75523d480525f5567c5ad20e4991'}
+root=read(rp);assert root['actual_baseline'] is None and len(root['rulings'])==13
+rules={x['topic']:x['reason']for x in root['rulings']}
+assert pin(B/'root-preliminary-completion-reading.json')=={'bytes':3587,'sha256':'903ee0e26a8c67a0cf69e2e8aa97311116fed079e22cc2da6aa9596ffbd78d00'}
+topics={370:{'p6':'372 negative grammar and punctuation'},371:{'w2':'371 actor and strict member','m3':'371 actor and strict member','w5':'371 alternative performance','p6':'371 alternative performance','w4':'371 causative and means','w7':'371 causative and means','w8':'371 causative and means','p9':'371 causative and means','w10':'371 causative and means','w11':'371 causative and means','w14':'371 causative and means','p15':'371 causative and means','w16':'371 causative and means','p17':'371 causative and means','w18':'371 causative and means','p19':'371 causative and means','f20':'371 initiated event','f21':'371 inclusive ending'},372:{'w3':'372 causal reference','p4':'372 causal reference','f6':'372 temporal anaphora','w8':'372 death and title','w9':'372 death and title','p11':'372 death and title','w12':'372 death and title','w13':'372 death and title','w15':'372 negative grammar and punctuation','p16':'372 negative grammar and punctuation','w17':'372 negative grammar and punctuation','p20':'372 negative grammar and punctuation','p21':'372 negative grammar and punctuation'}}
+exceptions={(370,'tibetan','p1'):([],'370/371 topic particles'),(371,'english','f20'):(['f20'],'371 initiated event'),(371,'tibetan','w2'):(['w2','m3'],'371 actor and strict member'),(371,'tibetan','w4'):(['w5','p6'],'371 alternative performance'),(371,'tibetan','p2'):([],'370/371 topic particles'),(371,'tibetan','f2'):(['f21'],'371 inclusive ending'),(372,'tibetan','w3'):(['w3'],'372 causal reference'),(372,'tibetan','w5'):(['f6'],'372 temporal anaphora'),(372,'tibetan','w7'):(['w8'],'372 death and title'),(372,'tibetan','w13'):(['p16'],'372 negative grammar and punctuation'),(372,'tibetan','w14'):(['w17'],'372 negative grammar and punctuation')}
+omchanges={(370,'english',2):rules['370/371 source boundary'],(371,'english',2):rules['371 initiated event']+' Remove only deed is in the later initiated-event clause from this original omission group. The earlier actor object the deed, is when, articles, comparison, participant and indefinite support remain unbanked.',(371,'tibetan',1):rules['371 alternative performance']+' Whole PA\'AM/or is now included; the other listed topic, case, agentive, actor and equivalence framing remains unbanked.',(371,'tibetan',2):rules['371 inclusive ending']+' The terminal bound ending is now inside the complete closing phrase; KYI, when, either, some kind of and articles remain unbanked.',(371,'tibetan',3):rules['371 inclusive ending'],(372,'tibetan',0):rules['372 temporal anaphora']+' The complete anaphoric/disjunctive phrase and first death predicate with its bound ending are now retained. Topic NI, occurs when, either and the later GYI TSHE support remain unbanked.',(372,'tibetan',1):rules['372 application uncertainty']}
+questionchanges={(372,'english',0):{'disposition':'RETAIN_UNCERTAIN_UNFILED_SOURCE_QUESTION','reason':rules['372 application uncertainty']}}
+screenchanges={(370,'english',3):'370/371 source boundary',(371,'english',3):'370/371 source boundary',(372,'tibetan',1):'372 negative grammar and punctuation',(372,'tibetan',4):'372 application uncertainty'}
+notes={371:'Retain the complete actor with its strict undertaking member, the whole alternative PA\'AM, distinct causative roles and three means. Replace only the English initiated event by the complete SBYOR BA BYAS PA/deed is initiated phrase. Keep the inclusive closing phrase with its bound ending; the displaced motivation opening and uncertain topic grammar remain unbanked.'}
+data={'status':'ROOT_PENDING_SELECTION_MECHANICAL_DATA_ONLY','source_origin':root['source_origin'],'actual_baseline':None,'pending_selection':pin(rp),'final_topics':{str(s):v for s,v in topics.items()},'exception_dispositions':[{'seq':s,'angle':a,'original_id':i,'final_ids':v[0],'root_topic':v[1],'scope':'RATIONALE_CORRECTION_ONLY'if(s,a,i)==(372,'tibetan','w14')else'SELECTION'}for(s,a,i),v in exceptions.items()],'omission_changes':[{'seq':s,'angle':a,'field':'omissions','index':i,'reason':v}for(s,a,i),v in omchanges.items()],'source_screen_changes':[{'seq':s,'angle':a,'index':i,'root_topic':t}for(s,a,i),t in screenchanges.items()],'source_question_changes':[{'seq':s,'angle':a,'index':i,**v}for(s,a,i),v in questionchanges.items()],'native_plan':root['native_plan']}
+put(P/'assembly-data.json',data)
+for n in ['root-selection-pending-baseline.json','root-preliminary-completion-reading.json']:(P/n).write_bytes((B/n).read_bytes())
+# Bind existing complete original intake rather than repeat material queries or copy its tree.
+put(P/'prior-intake.json',{'path':str(B/'assembly-preparation/freeze.json'),**pin(B/'assembly-preparation/freeze.json'),'scope':'Previously verified full312 original members,98 spans,17 omissions,30 screens and one complete English372 question; no new reading claim.'})
+def sig(x):return(x['d'],x['tib'],x['eng'],tuple(x['tib_range']),None if x['eng_range']is None else tuple(x['eng_range']))
+intent=[];dispositions=[];reuse=[]
+source={x['seq']:x for x in read(B/'source.json')}
+for s in [370,371,372]:
+ rows=[]
+ for item in [x for x in root['selected_original_items']if x['seq']==s]:
+  a=item['original_angle'];oid=item['original_id'];sp=read(B/a/str(s)/'spec.json')['segments'][0]['spans'];old=next(x for x in sp if x['id']==oid);expected=copy.deepcopy(old);expected['id']=item['selected_id'];assert expected==item['span']
+  od=read(B/a/str(s)/('decisions.json'if a=='english'else'original-decisions.json'));orig=next(x for x in od['spans'if a=='english'else'decisions']if x['id'if a=='english'else'original_span_id']==oid);ran=orig if a=='english'else orig['intended_ranges'];assert all(item[k]==ran[k]for k in ['tib_range','eng_range'])
+  rows.append({'seq':s,**{k:item['span'][k]for k in ['id','d','tib','eng']},'tib_range':item['tib_range'],'eng_range':item['eng_range']})
+ assert len({x['id']for x in rows})==len(rows)
+ for x in rows:
+  for side,field in [('tib','wylie'),('eng','english')]:
+   ran=x[side+'_range']
+   if ran is None:assert x[side]is None;continue
+   lo,hi=ran;t=source[s][field];assert t[lo:hi]==x[side] and(lo==0 or not t[lo-1].isalpha())and(hi==len(t)or not t[hi].isalpha())
+ finalsig={sig(x):x['id']for x in rows}
+ for a in ['english','tibetan']:
+  doc=read(B/a/str(s)/('decisions.json'if a=='english'else'original-decisions.json'))
+  for i,o in enumerate(doc['spans'if a=='english'else'decisions']):
+   y=o if a=='english'else{**o['original_span'],**o['intended_ranges']};oid=y['id'];e=exceptions.get((s,a,oid));ids=e[0]if e else[finalsig[sig(y)]];assert all(j in [x['id']for x in rows]for j in ids)
+   dispositions.append({'seq':s,'angle':a,'field':'spans'if a=='english'else'decisions','index':i,'original_id':oid,'original':o,'disposition':'ACCEPT'if not e else'CHANGE'if ids else'OMIT','final_ids':ids,'root_topic':e[1]if e else None})
+ if s in [370,372]:
+  es=read(B/'english'/str(s)/'spec.json');assert [x['span']for x in root['selected_original_items']if x['seq']==s]==es['segments'][0]['spans']
+  er=read(B/'english'/str(s)/'resolved-ranges.json');assert[{k:x[k]for k in rows[0]}for x in er]==rows
+  files={}
+  for name in ['spec.json','body.html','resolved-ranges.json']:p=B/'english'/str(s)/name;files[str(p.relative_to(B))]=pin(p)
+  for tool in ['generator','resolver']:
+   d=B/'english/native'/f'{s}-{tool}-v1';assert sorted(p.name for p in d.iterdir())==['execution.json','exit.txt','stderr.bin','stdin.bin','stdout.bin'];assert(d/'stdin.bin').read_bytes()==(B/'english'/str(s)/'spec.json').read_bytes();assert(d/'stdout.bin').read_bytes()==(B/'english'/str(s)/('body.html'if tool=='generator'else'resolved-ranges.json')).read_bytes();assert(d/'stderr.bin').read_bytes()==b''and(d/'exit.txt').read_text()=='0\n'
+   for p in d.iterdir():files[str(p.relative_to(B))]=pin(p)
+  reuse.append({'seq':s,'status':'COMPLETE_ENGLISH_SPEC_NOTE_BODY_RANGES_AND_PAIR_REUSABLE','files':files})
+ intent.extend(rows)
+assert len(intent)==49 and len(dispositions)==98
+put(P/'intended-ranges.json',intent);put(P/'draft-original-dispositions.json',dispositions);put(P/'exact-native-reuse-intention.json',reuse)
+base=A/'C05-367-369/reconciled/helpers/assemble.py';code=base.read_text()
+def replace(old,new):
+ global code
+ assert old in code,old[:100]
+ code=code.replace(old,new)
+replace('Literal L root selections; exact actual366 baseline.','Literal M root selections; actual369 baseline REQUIRED before execution.')
+replace('SEQS=[367,368,369]','SEQS=[370,371,372]')
+start=code.index('PENDING_SELECTION_PIN=');end=code.index('PREPARATION_ONLY=False')
+code=code[:start]+('\n'.join(['PENDING_SELECTION_PIN='+repr(pin(rp)),'ROOT_DECISION_PIN=None','ROOT_RULE_COUNT=13','ACTUAL_BASELINE_PIN=None','ACTUAL_BASELINE_CALLER=None','EXACT_ENGLISH_REUSE=[370,372]','NEW_NATIVE_SEQS=[371]','notes='+repr(notes),'topics='+repr(topics),'exceptions='+repr(exceptions),'omchanges='+repr(omchanges),'questionchanges='+repr(questionchanges),'screenchanges='+repr(screenchanges)])+'\n')+code[end:]
+replace('PREPARATION_ONLY=False','PREPARATION_ONLY=True');replace('Actual366 baseline','Actual369 baseline')
+replace("rules={x['topic']:x['reason']for x in root['rulings']};assert len(rules)==ROOT_RULE_COUNT","rules={x['topic']:x['reason']for x in root['rulings']};assert len(rules)==ROOT_RULE_COUNT\nassert pin(B/'root-selection-pending-baseline.json')==PENDING_SELECTION_PIN\npending=read(B/'root-selection-pending-baseline.json');assert all(root[k]==pending[k]for k in ['rulings','selected_original_items','expected','native_plan'])")
+replace("['course_boundary']==366","['course_boundary']==369")
+replace('# L locked preparation has no speculative root selection file.','# Preserve locked preselection intake and this later pending-root preparation without rewriting either.')
+replace("for n,expected in root['root_reading'].items():assert pin(B/n)==pp(expected);cp(B/n,R/'evidence'/n)","n='root-preliminary-completion-reading.json';assert pin(B/n)==pp(root['root_reading']);cp(B/n,R/'evidence'/n)\nfor n in ['root-selection-pending-baseline.json','preparation-history.json']:cp(B/n,R/'evidence'/n)\nfor p in sorted((B/'assembly-execution-preparation').iterdir()):\n if p.is_file():cp(p,R/'evidence/assembly-execution-preparation'/p.name)")
+start=code.index("for rel,expected in [('semantic-review/evidence/preliminary-reading-completion.json'");end=code.index("identity=B/'semantic-review/native/source-and-original-identity'",start)
+receipt=read(B/'root-preliminary-completion-reading.json')
+needed=['source-identity-results.json','evidence/preliminary-completion-addendum.json','evidence/prior-verse-position-addendum.json']
+code=code[:start]+"for rel,expected in "+repr([('semantic-review/'+n,receipt['files'][n])for n in needed])+":\n p=B/rel;assert pin(p)==expected;cp(p,R/'evidence'/p.name)\n"+code[end:]
+replace("[ACTUAL_BASELINE_CALLER,'source-preparation-caller','proposal-origin-caller']","[ACTUAL_BASELINE_CALLER,'source-preparation-caller','proposal-origin-caller','proposal-origin-attempt02-caller']")
+replace("('english','f1c1b48f8863f2c4efe14d23d124ee7e7b24d8b5624dc0cb62987b6ec54c5525'),('tibetan','fb4d9bcd97324bdf349f73152f40b6ce8ca97137bbb5b0a562437c1ecf0b572b')","('english','3d613634a0a1dcaaa0583d883cb2d58ac39da0edee8f2357cbbf033236e86b93'),('tibetan','44034aa6b5aeb72213dac6fa49ad851f8caeea43b1dc63490dc0ad891a015feb')")
+replace("==272","==312");replace("'for seq in [367,368,369]:'","'for seq in [370,371,372]:'")
+replace("'actual_boundary':366","'actual_boundary':369");replace("'actual_baseline_accepted_through':366","'actual_baseline_accepted_through':369")
+start=code.index('  if adapt:\n');end=code.index("  assert item['span']==expected",start)
+code=code[:start]+"  assert adapt is None, 'No M root span adaptation is selected'\n"+code[end:]
+replace("'; actual baseline366 '","'; actual baseline369 '")
+replace("Original English read-only governance lookup and Tibetan optional-glob/wrong-recorder-path tool failures remain preserved. Both neutral source/origin standard captures passed once.","Original English governance lookup, failed anchor preflight and wording correction, plus Tibetan anchor correction remain preserved. Neutral source preparation passed; first origin syntax failure and successful attempt02 remain separate exact standard captures.")
+start=code.index("   if(seq,a,i)==(369,'tibetan',4)");end=code.index('   screens.append(',start)
+code=code[:start]+"   if(seq,a,i)in screenchanges:why=rules[screenchanges[(seq,a,i)]];action='CHANGE_ADOPTED_EVIDENCE_NO_ERRATUM'\n"+code[end:]
+replace("'final_source_questions':[]","'final_source_questions':[{'original':x['original'],'disposition':x['disposition'],'reason':x['reason']}for x in questions]")
+start=code.index('corrections=[]\n');end=code.index('# Compact exact whole-string identity index;',start)
+code=code[:start]+"cp(B/'assembly-execution-preparation/adopted-correction-intentions.json',R/'evidence/adopted-rationale-corrections.json')\n"+code[end:]
+replace('Scribe fully read all14 exact root rulings and88 selected records, all89 Tibetan span rationales, all19 original omissions,30 category judgments, and original Tibetan notes/reports for literal mapping.','Scribe read all13 exact root rulings and49 selected records, all49 Tibetan span rationales, all17 original omissions,30 category judgments, and original Tibetan notes/reports for literal mapping.')
+compile(code,str(P/'assemble.py.txt'),'exec');(P/'assemble.py.txt').write_text(code)
+put(P/'method-adaptation.json',{'base':{'path':str(base),**pin(base)},'candidate':pin(P/'assemble.py.txt'),'scope':'Batch-specific data/schema adaptation of completed L assembly. PREPARATION_ONLY=True and absent final decision/baseline pins stop before mutation. Not executed; one changed371 native pair is separately gated on explicit root release. Existing package/native methods will be parameterized after actual baseline, without rerunning reused captures.'})
+correction_targets=[(370,'english','decisions.json','/omissions/2/reason','370/371 source boundary'),(370,'english','errata-review.json','/category_screen/3/reason','370/371 source boundary'),(371,'english','errata-review.json','/category_screen/3/reason','370/371 source boundary'),(372,'english','errata-review.json','/five_grounds/1/finding','372 earlier verse position'),(372,'tibetan','original-decisions.json','/decisions/16/rationale','372 negative grammar and punctuation'),(372,'tibetan','five-ground-screens.json','/1/five_grounds/d_defensibility/judgment','372 negative grammar and punctuation'),(372,'tibetan','original-decisions.json','/omissions/1/reason','372 application uncertainty'),(372,'tibetan','five-ground-screens.json','/4/five_grounds/d_defensibility/judgment','372 application uncertainty')]
+corrections=[]
+for s,a,name,pointer,topic in correction_targets:
+ p=B/a/str(s)/name;o=read(p)
+ for key in pointer.strip('/').split('/'):o=o[int(key)]if isinstance(o,list)else o[key]
+ assert isinstance(o,str)
+ if pointer=='/decisions/16/rationale':assert read(p)['decisions'][16]['original_span_id']=='w14'
+ corrections.append({'seq':s,'angle':a,'path':str(p),'file_pin':pin(p),'json_pointer':pointer,'complete_original_string':o,'root_topic':topic,'adopted_reason':rules[topic]})
+put(P/'adopted-correction-intentions.json',{'status':'ROOT_PENDING_RULINGS_LITERAL_TARGETS_ORIGINALS_UNCHANGED','evidence_correction':root['evidence_correction'],'corrections':corrections,'limits':'Original complete notes/reports/screens remain quoted provenance; adopted corrections do not rewrite English370/372 specs/notes/bodies/native captures or the full English372 source question.'})
+put(P/'preparation-proof.json',{'status':'READY_FOR_ACTUAL369_BASELINE_AND_EXPLICIT_ROOT_RELEASE','selected_spans':49,'original_dispositions':98,'omissions':17,'category_screens':30,'questions':1,'whole_english_pair_reuse_intentions':[370,372],'new_native_pairs_required':[371],'native_runs_performed':0,'queries_performed':0,'originals_mutated':False,'W_writes':False,'candidate_compile':'PASS_WITHOUT_EXECUTION','final_reconciliation_freeze_created':False,'future_required':['actual369 baseline.json and successful caller','baseline-bound root-reconciliation-decisions.json and exact pin','explicit root execution dispatch'],'reading_limit':'Mechanical assembly preparation only. Original material reading and root semantic acceptance are not inferred from identity indexes.'})
+print(json.dumps({'status':'PASS_PREPARATION_ONLY','spans':len(intent),'original_dispositions':len(dispositions),'exact_english_pairs':len(reuse),'assembler':pin(P/'assemble.py.txt')},indent=2))

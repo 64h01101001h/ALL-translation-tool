@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "/opt/homebrew/opt/python@3.14/bin/python3.14",
+    "-B",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib,subprocess,datetime\nR=Path.cwd();A=R/'campaign-artifacts';W=R/'campaign-worktree';B=A/'C05-370-372';commit='1be02f91d0c7546f4997d25cafd19c976ba4db3e'\ndef load(p):return json.loads(p.read_text())\ndef pin(p):raw=p.read_bytes();return {'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}\ndef git(*args):return subprocess.check_output(['git',*args],cwd=W)\nassert git('rev-parse',commit+'^{commit}').decode().strip()==commit\nprior=load(A/'C05-367-369/proposal-baseline.json');actual=load(A/'C05-364-366/baseline.json');assert prior['commit']==actual['commit']==commit and prior['course_boundary']==actual['course_boundary']==363\nproof=load(B/'root-preparation-proof.json');source_pins={k:proof[k]for k in prior['source_pins']}\nfor k in ['spine','master','corpus','physical']:assert source_pins[k]==prior['source_pins'][k]\nfor k in ['source','context']:assert source_pins[k]==pin(B/(k+'.json'))\nraw_rows=load(B/'root-preparation-original-rows.json');trim=lambda r:{k:r[k]for k in ('id','course','seq','acip','wylie','english')}\nassert [trim(r)for r in raw_rows]==load(B/'context.json');assert [trim(r)for r in raw_rows if370<=r['seq']<=372]==load(B/'source.json')\ngoverning={}\nfor rel,old in prior['governing_git_pins'].items():\n raw=git('show',commit+':'+rel);p={'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()};assert p=={k:old[k]for k in ['bytes','sha256']};governing[rel]={'original_git_commit':commit,'repository_relative_path':rel,**p}\nout={'status':'PROPOSAL_SOURCE_BASELINE_ONLY; actual landing baseline waits for verified369','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'commit':commit,'course_boundary':363,'proposal_segments':[370,371,372],'source_pins':source_pins,'governing_git_pins':governing,'note':'Explicit verified through363 Git objects are bound while another role owns mutable W production. No mutable governing file or HEAD is used as the source origin; no clean-W claim. Existing once-captured neutral rows and source pins are reused without SQLite, lexical or parallel requery. Future369 acceptance remains separate.','origin_capture_mode':'EXPLICIT_VERIFIED_GIT_COMMIT','verified_boundary_receipts':[pin(A/'C05-367-369/proposal-baseline.json'),pin(A/'C05-364-366/baseline.json')],'neutral_preparation_proof':pin(B/'root-preparation-proof.json'),'new_source_queries':0}\ntarget=B/'proposal-baseline.json';assert not target.exists();target.write_text(json.dumps(out,indent=2)+'\\n');print(json.dumps({**pin(target),'commit':commit,'course_boundary':363,'new_source_queries':0}))\n"
+  ],
+  "cwd": "/Users/adamderickandrade/Documents/ChatGPT/Geshe Michael Roach Tib _ Eng Alignment",
+  "started_at": "2026-09-15T08:27:21.908651+00:00",
+  "environment_overrides": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "GIT_OPTIONAL_LOCKS": "0"
+  },
+  "inherited_environment": true,
+  "stdin_bytes": 0,
+  "recorder_sha256": "687a4644146bf0dc7034a888f1248559b36e73d73c7a295b222f10e04a749075",
+  "finished_at": "2026-09-15T08:27:21.952023+00:00",
+  "wall_seconds": 0.042729999870061874,
+  "exit": 1,
+  "stdout_bytes": 0,
+  "stderr_bytes": 296,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "a41869ef6078b9de16e24c44a8c838cb7da6674ce6ee5fca9045ffc96027581e"
+}
