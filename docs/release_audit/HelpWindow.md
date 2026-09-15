@@ -91,7 +91,7 @@ a missing file is a silent early `return` from `loadChapters`, 34315–34316):
 | `<root>/data/help/STYLE.md` | *(none)* | `true` | 34357–34358 |
 
 All five exist in the repo working tree (`data/help/`). `SOURCES.md` is noted in-code as carrying
-"the hierarchy Geshe Michael ratifies … in his own words" — provenance-sensitive content rendered
+"the hierarchy Geshe Michael ratifies … in Geshe Michael's own words" — provenance-sensitive content rendered
 through a generic Markdown path with no integrity check.
 
 **Network hosts:** none of its own. It *can* open **any** `http`/`https` URL present in the help

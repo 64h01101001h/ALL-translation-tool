@@ -66,7 +66,7 @@ becomes optional, not required.
   span = number of strictly-containing spans. Punctuation (shad) and sentence boundaries cap
   spans exactly as the original's hard barriers did.
 - Corpus pass: match runs of the document against `corpus_segments` (FTS5 seed + verify) so
-  whole passages that HGM translated can be surfaced with his English — the "FROM THIS
+  whole passages that HGM translated can be surfaced with Geshe Michael's English — the "FROM THIS
   GLOSSARY" precedence, powered by the corpus instead of markup.
 
 ### 3. Nested shading (the ask)

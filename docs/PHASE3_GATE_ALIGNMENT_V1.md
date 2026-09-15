@@ -213,7 +213,7 @@ Explicit preconditions, none met today:
    scanned, and a recorded result for C01-C03 retroactively.
 4. The Fable re-audit of all scanned courses (TODO item B), with dispositions
    filed in the ledgers.
-5. GMR's English still byte-exact (Ruling 1); the errata for his text
+5. GMR's English still byte-exact (Ruling 1); the errata for Geshe Michael's text
    (E-numbers in `ERRATA_REGISTER.md`) resolved by his ruling, not by edit.
 6. Rule 10 (`NEVER_BANK_A_FALSEHOOD.md`) applied and each withheld span
    noted on its page.

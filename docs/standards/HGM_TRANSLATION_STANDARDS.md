@@ -4,8 +4,8 @@ gathered from Geshe Michael Roach himself and from the translators of the
 Mixed Nuts translation group. Nothing here is invented: every entry must be
 sourced — who said it, when, where (recording / document / message) — and
 until material arrives, sections stand empty by design. Rule one applies to
-standards exactly as to glosses: we compile his guidance; we never compose
-it in his name.)*
+standards exactly as to glosses: we compile Geshe Michael's guidance; we never compose
+it in Geshe Michael's name.)*
 
 ## How to add a standard
 Each entry follows this form:

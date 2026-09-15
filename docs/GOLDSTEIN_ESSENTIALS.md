@@ -29,7 +29,7 @@ honorific (h.) and non-honorific (nh.)."* This bears directly on the
 high-honorific register design: the multi-level system (ordinary /
 honorific / high honorific) is a SPOKEN phenomenon; for the literary
 corpus a two-level model with marked exceptions may be the honest
-default. **Flagged for Geshe Michael's ruling** — his usage is the
+default. **Flagged for Geshe Michael's ruling** — that usage is the
 binding authority, but Goldstein is the strongest reference datum yet
 on the question.
 

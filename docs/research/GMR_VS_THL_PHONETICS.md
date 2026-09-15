@@ -9,7 +9,7 @@ reproducible from the table.*
 ## Authority note
 
 GMR's convention is the **binding** one for this project's outputs
-(rule 1 analog: his system, his spellings; ruled exceptions like
+(rule 1 analog: Geshe Michael's system and spellings; ruled exceptions like
 *kamdir* overlay the engine). THL Simplified Phonetics ships as a
 labeled **display mode** — the scholarly-web convention a reader may
 know from THL/84000 publications. Neither is "corrected" toward the

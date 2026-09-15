@@ -65,7 +65,7 @@ skill that stands between a student and every manuscript that was never
 block-printed.
 
 The honest design problem: our drills are generated from the corpus and scored
-against Geshe Michael's own text, which is what makes their answers his rather
+against Geshe Michael's own text, which is what makes their answers Geshe Michael's rather
 than ours. A script-reading drill would be scored against *the same syllable
 rendered in another face* — so the answer key is the identity of the syllable,
 which is attested, and the difficulty is entirely in the rendering. That works,

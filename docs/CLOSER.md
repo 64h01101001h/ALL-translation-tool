@@ -297,7 +297,7 @@ produces the candidate; 7–9 accept it; then
   own classes mined for translation METHOD: 407 candidate passages,
   each citable to the second (tools/mine_translation_method.py →
   data/teaching/translation_method.json + the readable digest at
-  docs/research/GMR_TRANSLATION_METHOD.md). Classed by what he is
+  docs/research/GMR_TRANSLATION_METHOD.md). Classed by what Geshe Michael is
   actually doing — ruling a rendering out (32), giving one (20),
   naming a mistranslation (48), saying a thing cannot be rendered (36).
   **29 of them are context-dependent reading rules, which is exactly

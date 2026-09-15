@@ -21,7 +21,7 @@ plus Geshe Michael. Gmail draft created 2026-09-08; Adam reviews and sends.*
 Dear friends,
 
 Over the past weeks I've been building a desktop tool for our translation
-work: it puts Geshe Michael's English equivalents, the whole corpus of his
+work: it puts Geshe Michael's English equivalents, the whole corpus of the
 published translations, the reference dictionaries, the BDRC woodblock
 scans and a translator's drafting bench in one place, and it is about two
 weeks from a first public release.
@@ -87,7 +87,7 @@ Adam
     guarantees would you need to see?
 
 11. **Which of these would you use, and which are noise?** Tick or strike:
-    - click a word, see Geshe Michael's equivalent and every place he used it
+    - click a word, see Geshe Michael's equivalent and every place it appears
     - the outline (sa bcad) of the text extracted automatically
     - quotations from the root text detected and marked
     - the BDRC scan following your cursor page by page

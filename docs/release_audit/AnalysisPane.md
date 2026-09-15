@@ -140,7 +140,7 @@ j += "\"messages\":[{\"role\":\"user\",\"content\":\"" + jsonEscape(prompt.user)
 - `user`: engine-derived evidence followed by the verbatim user text —
   every HGM term anchor (`acip`, `wylie`, `tibetan`, pronunciation, tier, and
   glosses) matched in the passage; every corpus concordance hit including
-  **HGM's Tibetan and his published English** (`"- [" + h.course + ":" + seq +
+  **HGM's Tibetan and Geshe Michael's published English** (`"- [" + h.course + ":" + seq +
   "] T: " + h.wylie + "\n  E: " + h.english`); every reference-library hit as
   `file:line` plus a text snippet — meaning **local filesystem paths from the
   user's library are sent to the API**; and finally:

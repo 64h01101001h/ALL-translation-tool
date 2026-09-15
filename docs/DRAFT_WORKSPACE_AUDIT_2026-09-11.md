@@ -131,7 +131,7 @@ cannot blank them again.
 
 **Where.** `/Users/adamderickandrade/ALL-translation-tool/app/main.cpp:27053-27056`
 
-**What the user sees.** Over the model's prose: "AI coverage diff — model output, labeled AI; the term anchors it cites are engine-verified." A translator reads the second clause as a guarantee that every Tibetan term and every "HGM gloss" appearing inside the AI paragraph was checked against the dictionary. If the model invents a Tibetan headword, or attributes an English equivalent to Geshe Michael Roach that he never used, it arrives under that guarantee — which is exactly the COMPOSE-not-MATCH line rule 1 draws.
+**What the user sees.** Over the model's prose: "AI coverage diff — model output, labeled AI; the term anchors it cites are engine-verified." A translator reads the second clause as a guarantee that every Tibetan term and every "HGM gloss" appearing inside the AI paragraph was checked against the dictionary. If the model invents a Tibetan headword, or attributes an English equivalent to Geshe Michael Roach that Geshe Michael never used, it arrives under that guarantee — which is exactly the COMPOSE-not-MATCH line rule 1 draws.
 
 **Cause.** The anchors are engine-verified on the way IN, not on the way OUT. buildBackTranslationPrompt (core/src/analysis.cpp:277-317) writes the pre-pass anchors into the prompt under the heading "## ENGINE: HGM term anchors (verified)" and the system prompt instructs the model to "never invent English equivalents for terms without HGM glosses" (analysis.cpp:294-296). That is an instruction, not a check. The finished-stream handler does no cross-reference of aiAccum_ against pre.anchors — it html-escapes the text and prints it.
 
@@ -395,7 +395,7 @@ cannot blank them again.
 
 **Where.** `/Users/adamderickandrade/ALL-translation-tool/app/main.cpp:26036, 26063, 26105, 26635, 27184, 27188`
 
-**What the user sees.** Every English quotation in the Evidence Ribbon, the quotation detector and phrase memory stops dead at a fixed character count with no ellipsis and no mark of any kind — so a truncated fragment of his published rendering looks like the whole rendering. Under headings that explicitly attribute it ("the master has translated this clause", "published English:", "Geshe Michael Roach corpus", "84000 rendered a matching passage"), a cut sentence reads as his complete sentence and can be copied into a draft as such.
+**What the user sees.** Every English quotation in the Evidence Ribbon, the quotation detector and phrase memory stops dead at a fixed character count with no ellipsis and no mark of any kind — so a truncated fragment of Geshe Michael's published rendering looks like the whole rendering. Under headings that explicitly attribute it ("the master has translated this clause", "published English:", "Geshe Michael Roach corpus", "84000 rendered a matching passage"), a cut sentence reads as Geshe Michael's complete sentence and can be copied into a draft as such.
 
 **Cause.** These six sites call `QString::left(N).toHtmlEscaped()` directly instead of ux::snip/ux::snipStd, the helper the project added for exactly this after Adam's 2026-08-22 screenshot of an 84000 definition cut off mid-word. showConcordance in the same class already uses it correctly.
 

@@ -267,7 +267,7 @@ years, rebuilt with the same algorithms and its original layout.*
 Type terms into any of the eight "go for" boxes. Choose the
 combiner: **OR** (any term), **AND** (all terms in the same file),
 or **NEAR** with a proximity (all terms within N lines). Check the
-targets: the **HGM aligned corpus** (his English beside the
+targets: the **HGM aligned corpus** (Geshe Michael's English beside the
 Tibetan), the **published apparatus** (all 2,234 footnotes and 705
 bibliography entries), and any folders — **Add / Remove /
 Duplicate** manage the folder list exactly as the original Gofer

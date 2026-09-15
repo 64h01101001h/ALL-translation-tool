@@ -1,6 +1,6 @@
 # Where Geshe Michael teaches translation method
 
-*Machine-located passages from 2800 caption files of his own recorded classes (Diamond Cutter Classics and The Knowledge Base). Backlog #32.*
+*Machine-located passages from 2800 caption files of Geshe Michael's own recorded classes (Diamond Cutter Classics and The Knowledge Base). Backlog #32.*
 
 > **These are candidates, and the recording is the authority.**
 >
@@ -11,7 +11,7 @@
 **407 passages** across 2800 files. Every timecode links to the moment in the recording.
 
 
-## He rules a rendering OUT  ·  32
+## Geshe Michael rules a rendering OUT  ·  32
 
 *The strongest kind of instruction here: not what a word means, but what it must not be called.*
 
@@ -112,9 +112,9 @@
   > which is it's unbelievable it's really unbelievable if we don't translate this in this lifetime it's really stupid okay I'm not pushing you okay what's the name of that
 
 
-## He gives a rendering  ·  20
+## Geshe Michael gives a rendering  ·  20
 
-*"we translate this as…" — his own English, spoken in class.*
+*"we translate this as…" — Geshe Michael's own English, spoken in class.*
 
 - [4:24](https://www.youtube.com/watch?v=-Qw6WsApp1s&t=264s) · -Qw6WsApp1s
   > Emptiness, if we translate it differently, 2,500 pages, it's going to be a big book. If we translate it as carp, it's difficult. There is no other master named Jon and Hamas, and his dates are
@@ -177,7 +177,7 @@
   > you can no matter how much it's um you you have of what you I'm sure nickel is an idiom okay yeah I translate it as things in honors and that's a good translation okay makes me really means fine but it
 
 
-## He prefers one rendering over another  ·  17
+## Geshe Michael prefers one rendering over another  ·  17
 
 - [0:35](https://www.youtube.com/watch?v=0PFREtXwEzI&t=35s) · 0PFREtXwEzI
   > use in normal language. The only thing is refugees, Dahmer refugee. But I think the better translation is protection. In course number two, it's not just about Buddhist refuge, and in legal protection,
@@ -231,7 +231,7 @@
   > mark the differences it would save me many hours of work and you'd get a better translation because it's up to you if you don't want a good translation that's okay I think his approaches even know if it's
 
 
-## He names a mistranslation  ·  48
+## Geshe Michael names a mistranslation  ·  48
 
 - [3:01](https://www.youtube.com/watch?v=0vhel_Hca8c&t=181s) · 0vhel_Hca8c
   > If the body and mind of Michael are unchanging, and by the way, it shades into permanent, right? The way that some people mistranslate the word. It shades into permanent. If it's Michael's permanent body and mind that keep traveling around sansara,
@@ -378,7 +378,7 @@
   > for memorize for the ayah you know it's in the first chapter and people mistranslated as self-knowledge or something like that it doesn't the word does never anything to do with that it means to come down which means memorize
 
 
-## He says a thing is hard or impossible to render  ·  36
+## Geshe Michael says a thing is hard or impossible to render  ·  36
 
 *Often the most useful passages for a working translator: they name the problem rather than paper over it.*
 
@@ -491,7 +491,7 @@
   > Papa or you can say they are Papas who have this super happiness it's a p it's a difficult to translate okay therefore means the first BL SAA level which begins when you see emptiness
 
 
-## He defines a term  ·  45
+## Geshe Michael defines a term  ·  45
 
 - [39:43](https://www.youtube.com/watch?v=-Vaqr-Ov3x4&t=2383s) · -Vaqr-Ov3x4
   > That's not so hard. SBYAR TE SPOGS CHOG BYA SPOGS here, the word SPOGS means, RJES DPAG TSAD MA which means deduction. This is the verb and it's very unusual, so
@@ -629,7 +629,7 @@
   > yeah there must be one of them why my mom told me that the person who taught me the word Saddam means word term John means familiar with like familiar with the term so in Buddhist philosophy the idea of a person who knows what a word
 
 
-## He gives a literal sense  ·  183
+## Geshe Michael gives a literal sense  ·  183
 
 *Usually a step toward a rendering rather than the rendering.*
 
@@ -817,7 +817,7 @@
 *(123 more of this kind in data/teaching/translation_method.json — this digest shows the first 60 so the page stays readable; nothing is discarded.)*
 
 
-## He names the Tibetan for something  ·  27
+## Geshe Michael names the Tibetan for something  ·  27
 
 - [42:29](https://www.youtube.com/watch?v=0lzcGXJT4L0&t=2549s) · 0lzcGXJT4L0
   > it's a very famous word in Hindu yoga schools. It's a very famous idea. In Tibetan it's called GSHIS LUGS Say GSHIS LUGS - [Class in unison] GSHIS LUGS - [GMR] GSHIS LUGS
