@@ -533,7 +533,7 @@ public:
             const QString t7 = out_->toPlainText();
             check(t7.contains("NOT A TRANSLATION"),
                   "step 7 badges a chant transliteration as what it is, not "
-                  "as his translation");
+                  "as Geshe Michael's translation");
             check(!t7.contains("His English. Compare its order"),
                   "and the closing line agrees with the badge above it \u2014 "
                   "there is no order in a chant line to compare step 4 with");
@@ -581,7 +581,7 @@ public:
             const QString f = out_->toPlainText();
             check(!f.contains("Every English word above is"),
                   "the footer does not claim every English word on the page "
-                  "is his \u2014 the page carries PROVISIONAL glosses, which "
+                  "is Geshe Michael's \u2014 the page carries PROVISIONAL glosses, which "
                   "are the machine's match, and engine prose besides");
             check(!f.contains("supplied only the order"),
                   "nor that the engine supplied only the order \u2014 it "
@@ -601,11 +601,11 @@ public:
             walk();
             const QString t = out_->toPlainText();
             check(t.contains("the Victors"),
-                  "step 5 shows his curated gloss for rgyal ba, not the "
+                  "step 5 shows Geshe Michael's curated gloss for rgyal ba, not the "
                   "auto-aligned span that swallows it");
             check(!t.contains("farthest shore"),
                   "and does not prefer a longer PROVISIONAL gloss over a "
-                  "GMR-tier one (rule 1: he is binding, the machine matches)");
+                  "GMR-tier one (rule 1: Geshe Michael is binding, the machine matches)");
             check(!t.contains("sadang lamgyi"),
                   "nor surface an auto-aligned entry whose \"English\" is a "
                   "pronunciation line");
@@ -717,7 +717,7 @@ private:
             "<li><b>what order to read them in</b></li>"
             "<li>what each word means, from Geshe Michael's glossary</li>"
             "<li>those meanings put together in that order</li>"
-            "<li>his own translation, when the passage is in the corpus</li>"
+            "<li>Geshe Michael's own translation, when the passage is in the corpus</li>"
             "</ol>"
             "<p style='padding-top:6px'>Steps 1&ndash;3 and 5 cite their evidence. "
             "Step 4 is the engine's ruling and is labelled as one wherever it "
@@ -768,10 +768,10 @@ private:
         // footer, because it is the line a reader would trust if they trusted
         // anything. Rule 10, on my own summary of my own work.
         h += "<hr><div style='color:#666;font-size:11px;padding:6px 0'>"
-             "No translation here was composed. The Tibetan is his and the "
-             "glosses come from his glossary, each carrying its tier \u2014 and "
-             "where one reads PROVISIONAL it is the machine's match to his "
-             "English, not his own word for this. Everything else above \u2014 "
+             "No translation here was composed. The Tibetan is Geshe Michael's and the "
+             "glosses come from Geshe Michael's glossary, each carrying its tier \u2014 and "
+             "where one reads PROVISIONAL it is the machine's match to Geshe Michael's "
+             "English, not Geshe Michael's own word for this. Everything else above \u2014 "
              "the chunking, the case readings, the verb, the order \u2014 is the "
              "engine's, and each of them says so where it stands.</div>";
         out_->setHtml(h);
@@ -1461,7 +1461,7 @@ private:
             "His glossary words in the engine's order. Not a translation and "
             "not English \u2014 the raw material one is made from."
             "<br>&#10216;angle brackets&#10217; = a word the glossary does not "
-            "have. Where he banked several equivalents this takes the FIRST "
+            "have. Where Geshe Michael banked several equivalents this takes the FIRST "
             "one, which is not always the best: step 5 lists the "
             "alternatives, and choosing between them is your job because "
             "choosing would be composing.";
@@ -1517,7 +1517,7 @@ private:
                                 "This segment's English column holds the "
                                 "chanted transliteration, or a mantra carried "
                                 "over untranslated. It is what the corpus has "
-                                "here \u2014 it is not his English for these "
+                                "here \u2014 it is not Geshe Michael's English for these "
                                 "words, and step 4 has nothing to be checked "
                                 "against.</div>")
                       : QString()) +

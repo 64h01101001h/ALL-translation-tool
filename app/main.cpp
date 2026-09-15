@@ -1955,8 +1955,8 @@ static QString entryHtml(const allcore::Entry& e,
                      .arg((int)ms.size())
                      .arg((int)all.size()) +
                  "<div style='font-size:12px'><i "
-                 "style='color:#78706A'>moments where he says the "
-                 "TIBETAN phrase itself (phonetic match on his "
+                 "style='color:#78706A'>moments where Geshe Michael says the "
+                 "TIBETAN phrase itself (phonetic match on Geshe Michael's "
                  "own convention \u2014 candidates; homophones "
                  "share moments; the recording is the "
                  "authority)</i><br>";
@@ -1987,7 +1987,7 @@ static QString entryHtml(const allcore::Entry& e,
         }
         if (!ms.empty()) {
             h += "<div style='margin-top:4px;font-size:12px'>"
-                 "<span style='color:#7C2D26;font-weight:600'>He "
+                 "<span style='color:#7C2D26;font-weight:600'>Geshe Michael "
                  "teaches this idea</span> <i style='color:#888'>"
                  "(located by the ENGLISH equivalent in the class "
                  "captions \u2014 the recording is the "
@@ -5908,7 +5908,7 @@ static QString paneBlurb(const QString& title) {
         {"Review", "The overseer's bench — a senior translator checking someone else's finished draft."},
         {"Align", "Building tomorrow's dictionary: aligning Tibetan with its English, segment by segment."},
         {"Search", "Geshe Michael's daily search tool for thirty years, rebuilt with the same algorithms and its original layout."},
-        {"Lookup", "The stacked multi-dictionary: his entry first and binding, every other layer labelled reference."},
+        {"Lookup", "The stacked multi-dictionary: Geshe Michael's entry first and binding, every other layer labelled reference."},
         {"Sanskrit", "The whole Sanskrit stack in one workbench: every notation, Whitney's roots, and the Mahavyutpatti bridge to classical Tibetan."},
         {"Convert", "Every writing system, and time itself."},
         {"Analysis", "The full grammatical analysis of a passage. Key-gated, and labelled as machine work."},
@@ -9758,7 +9758,7 @@ public:
         teachBtn->setToolTip(
             "Sweep every term this text contains and list where "
             "Geshe Michael taught each one \u2014 timecoded links "
-            "into the recorded classes, both by his English and by "
+            "into the recorded classes, both by Geshe Michael's English and by "
             "the spoken Tibetan. Machine-located candidates; the "
             "recordings are the authority.");
         auto* glossBtn = new QPushButton("Glossary\u2026");
@@ -10147,7 +10147,7 @@ public:
             "the binding layer; provisional tiers are labeled.");
         showCorpus_->setToolTip(
             "FROM THE CORPUS: real sentences from the aligned "
-            "teachings where this term appears, with his published "
+            "teachings where this term appears, with Geshe Michael's published "
             "English.");
         showSanskrit_->setToolTip(
             "The Sanskrit reference line (comparanda only, never "
@@ -11465,7 +11465,7 @@ public:
                     const auto& m = it->second.front();
                     sec += QString("&nbsp;&nbsp;\u25B6 <a href='%1'>"
                                    "%2</a> @%3 <i style="
-                                   "'color:#888'>(he says the "
+                                   "'color:#888'>(Geshe Michael says the "
                                    "word)</i><br>")
                                .arg(m.url, teachingLabel(m, 56),
                                     teachingStamp(m));
@@ -20510,7 +20510,7 @@ public:
                 analyze();
             }
             check(all.contains("94.4%"),
-                  "and the pane quotes the measured agreement with his own "
+                  "and the pane quotes the measured agreement with Geshe Michael's own "
                   "published readings rather than asserting correctness");
             check(all.contains("PROVISIONAL"),
                   "and the simplified pronunciation is labelled provisional "
@@ -20739,14 +20739,14 @@ private:
                         "FPMT letter values as its base, readings matched from "
                         "Geshe Michael Roach's own published courses over "
                         "them, and Adam's own amendments on top. It agrees "
-                        "with his printed readings on 94.4% of the 5,875 "
+                        "with Geshe Michael's printed readings on 94.4% of the 5,875 "
                         "mantra words in the corpus that carry both the code "
-                        "and his reading. Two amendments stand today: h\u016b\u1e41 "
-                        "reads \u201chung\u201d, which is his own practice "
+                        "and Geshe Michael's reading. Two amendments stand today: h\u016b\u1e41 "
+                        "reads \u201chung\u201d, which is Geshe Michael's own practice "
                         "1,073 segments to 37; and sv\u0101h\u0101 reads "
-                        "\u201csoha\u201d, which appears in <i>none</i> of his "
+                        "\u201csoha\u201d, which appears in <i>none</i> of Geshe Michael's "
                         "published courses, where it is written "
-                        "\u201csva ha\u201d 380 times. On his 662 aligned "
+                        "\u201csva ha\u201d 380 times. On Geshe Michael's 662 aligned "
                         "mantra lines that one amendment is the sole "
                         "difference on 301 of them: without it whole-line "
                         "agreement would be 73.6%, with it 28.1%. It is "
@@ -21737,7 +21737,7 @@ static QString keyBadge(bool inCorpus, const QString& course = QString(),
         "<span style='font-size:12px'>This passage is not in the corpus, so "
         "there is no answer to check against \u2014 only engine guidance. The "
         "engine can see particles, chunk boundaries and a verb; it cannot see "
-        "what the passage MEANS, and it is not his English.</span></div>")
+        "what the passage MEANS, and it is not Geshe Michael's English.</span></div>")
         .arg(mach);
 }
 
@@ -22348,10 +22348,10 @@ public:
         auto* fillB = new QPushButton("Fill my deck from the dictionary\u2026");
         fillB->setToolTip(
             "Adds headwords from the Geshe Michael Roach Dictionary \u2014 the "
-            "layer aligned from his own courses \u2014 into your review deck, "
+            "layer aligned from Geshe Michael's own courses \u2014 into your review deck, "
             "so you are not clicking words one at a time. Everything it adds "
-            "is TENTATIVE: matched from his English, never composed, and "
-            "awaiting his ruling.");
+            "is TENTATIVE: matched from Geshe Michael's English, never composed, and "
+            "awaiting Geshe Michael's ruling.");
         connect(fillB, &QPushButton::clicked, [this] { fillDeckFromLayer(); });
         layout->addWidget(fillB);
         // ⌘+ / ⌘− / ⌘0, the shortcuts every reader already knows. Qt needs both
@@ -22381,21 +22381,21 @@ public:
                          "Particle choice", "Parallel reading",
                          "Vocabulary review (SRS)",
                          "Translate & compare",
-                         "Script \u2014 his own cards (start here)",
-                         "Silent particle \u2014 did he render it?",
-                         "His second thought \u2014 which did he use here?",
+                         "Script \u2014 Geshe Michael's own cards (start here)",
+                         "Silent particle \u2014 did Geshe Michael render it?",
+                         "His second thought \u2014 which did Geshe Michael use here?",
                          "Mixed set \u2014 the category is not given away",
                          "Debate \u2014 which element does the reply attack?",
                          "Peel \u2014 how many pieces does it split into?",
                          "Boundary hunt \u2014 where do the clauses end?",
-                         "Reading order \u2014 which chunk does his English "
+                         "Reading order \u2014 which chunk does Geshe Michael's English "
                          "take first?"});
         row->addWidget(mode_);
         scriptCourse_ = new QComboBox;
         scriptCourse_->setToolTip(
             "Which course's Language Study Guide to drill. Every card is a "
-            "word Geshe Michael Roach put on that course's card, with his own "
-            "pronunciation and his own English.");
+            "word Geshe Michael Roach put on that course's card, with the "
+            "pronunciation and the English Geshe Michael gave it.");
         scriptCourse_->addItem("all courses", QString());
         for (const auto& c : spine_.scriptCardCourses())
             scriptCourse_->addItem(QString::fromStdString(c),
@@ -22618,13 +22618,13 @@ public:
                 newDrill();
                 check(card_.has_value(),
                       "script cards: a beginner drill is available at all "
-                      "(1,308 cards over 17 of his course guides)");
+                      "(1,308 cards over 17 of Geshe Michael's course guides)");
                 if (card_) {
                     check(card_->entry.tibetan_source.empty(),
                           "script cards: the Tibetan is source-attested \u2014 "
                           "never one of the 79,316 generated forms");
                     check(card_->entry.pronunciation_card_attested,
-                          "script cards: the pronunciation is his own, from a "
+                          "script cards: the pronunciation is Geshe Michael's own, from a "
                           "course Language Study Guide");
                     check(card_->options.size() == 4 &&
                               card_->correct >= 0 && card_->correct < 4 &&
@@ -22670,7 +22670,7 @@ public:
                         check(r.contains("PROVISIONAL") && !r.contains("GMR:"),
                               qPrintable(QString("script cards: an auto-aligned "
                                                  "gloss is labelled PROVISIONAL, "
-                                                 "never printed as his own (%1 "
+                                                 "never printed as Geshe Michael's own (%1 "
                                                  "of the cards are)").arg(prov)));
                     }
                 }
@@ -22803,7 +22803,7 @@ public:
                         if (pr.first == key) keyIsHis = true;
                 }
                 check(keyIsHis,
-                      "second thought: the answer is one of his own attested "
+                      "second thought: the answer is one of Geshe Michael's own attested "
                       "renderings");
             }
 
@@ -22897,7 +22897,7 @@ public:
             {
                 struct { int mode; const char* mustSay; const char* mustNotSay; }
                     kKeyClaims[] = {
-                        {0,  "Tibetan, in the order he wrote it", "English for this passage"},
+                        {0,  "Tibetan, in the order Geshe Michael wrote it", "English for this passage"},
                         {1,  "Tibetan for this segment",          "English for this passage"},
                         {11, "alignment of this passage",         "English for this passage"},
                         {12, "Tibetan, and where it is punctuated", "English for this passage"},
@@ -22914,7 +22914,7 @@ public:
                           QString("key badge: mode %1 names what it actually "
                                   "scores").arg(kc.mode).toUtf8().constData());
                     check(!q.contains(kc.mustNotSay),
-                          QString("key badge: mode %1 no longer claims his "
+                          QString("key badge: mode %1 no longer claims Geshe Michael's "
                                   "English is the key when it is not")
                               .arg(kc.mode).toUtf8().constData());
                 }
@@ -22954,8 +22954,8 @@ public:
                 for (int a : readAnswer_) exact << QString::number(a + 1);
                 input_->setText(exact.join(' '));
                 checkDrill();
-                check(result_->toPlainText().contains("That is his order"),
-                      "reading order: his own order scores perfect");
+                check(result_->toPlainText().contains("That is Geshe Michael's order"),
+                      "reading order: Geshe Michael's own order scores perfect");
                 // THE gate. If the answer happens to differ from the written
                 // order, then typing the written order must NOT score perfect
                 // — otherwise the drill is scoring "1 2 3" and teaching
@@ -22970,9 +22970,9 @@ public:
                         written << QString::number(z + 1);
                     input_->setText(written.join(' '));
                     checkDrill();
-                    check(!result_->toPlainText().contains("That is his order"),
+                    check(!result_->toPlainText().contains("That is Geshe Michael's order"),
                           "reading order: typing the WRITTEN order is marked "
-                          "wrong when his order differs \u2014 the drill is "
+                          "wrong when Geshe Michael's order differs \u2014 the drill is "
                           "not quietly scoring 1 2 3");
                 }
             }
@@ -24085,8 +24085,8 @@ private:
                 }
             }
             if (!spTib_.isEmpty())
-                addRadios({"He rendered it in English",
-                           "He did not render it",
+                addRadios({"Geshe Michael rendered it in English",
+                           "Geshe Michael did not render it",
                            "I cannot tell from this alone"}, false);
         }
         if (m == 6) {
@@ -24248,8 +24248,8 @@ private:
                 this, "Fill deck from the dictionary",
                 QString("Add up to %1 headwords from the Geshe Michael Roach "
                         "Dictionary to your review deck?\n\nEvery one is "
-                        "TENTATIVE \u2014 his own English, matched from his "
-                        "courses, never composed, and awaiting his ruling. "
+                        "TENTATIVE \u2014 Geshe Michael's own English, matched from the "
+                        "courses, never composed, and awaiting Geshe Michael's ruling. "
                         "Words already in your deck keep the schedule they "
                         "have.")
                     .arg(have),
@@ -24310,7 +24310,7 @@ private:
         input_->setVisible(m == 0 || m == 12 || m == 13);
         input_->setPlaceholderText(
             m == 12   ? "words each clause ends ON, e.g.  4 9"
-            : m == 13 ? "his reading order, e.g.  2 1 3"
+            : m == 13 ? "Geshe Michael's reading order, e.g.  2 1 3"
                       : "your order, e.g.  C A B  (chunk-order drills)");
         QString h;
         if (m == 0 && order_) {
@@ -24320,7 +24320,7 @@ private:
             // drill, mode 14 — and the badge said "English" here for months.
             h += keyBadge(true,
                           QString::fromStdString(order_->segment.course),
-                          order_->segment.seq, "Tibetan, in the order he wrote it");
+                          order_->segment.seq, "Tibetan, in the order Geshe Michael wrote it");
             h += "<div style='color:#555'>Put these chunks back into the order "
                  "they appear in <b>in the Tibetan</b> (enter letters, e.g. "
                  "<b>C A B</b>). This is Tibetan word order, not the order you "
@@ -24337,7 +24337,7 @@ private:
                  "Geshe Michael\u2019s own English for this very span, not the "
                  "engine\u2019s ruling</div>";
             h += "<div style='color:#555'>These chunks are shown in the order "
-                 "they are <b>written</b>. In what order does his English take "
+                 "they are <b>written</b>. In what order does Geshe Michael's English take "
                  "them? Type the numbers, e.g. <b>2 1 3</b>. From [" +
                  readRef_.toHtmlEscaped() + "]</div><hr>";
             for (int i = 0; i < readKids_.size(); ++i)
@@ -24473,7 +24473,7 @@ private:
                 // rendering, so a word drill here would actively mis-teach.
                 h += QString("<div style='color:%1;font-size:11px;"
                              "padding-top:8px'>Word-level drills are refused in "
-                             "this mode on purpose: his English for a debate "
+                             "this mode on purpose: Geshe Michael's English for a debate "
                              "segment is an expansion with the opponent's turns "
                              "supplied, not a word-for-word rendering.</div>")
                          .arg(muted);
@@ -24484,13 +24484,13 @@ private:
                      QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
                      "'>The alignment evidence is not loaded, so there is "
                      "nothing to ask. Every option in this drill is a rendering "
-                     "he actually wrote; none is invented, so without the "
+                     "Geshe Michael actually wrote; none is invented, so without the "
                      "evidence there is no drill.</div>";
             } else {
                 h += keyBadge(true, stRef_.section(':', 0, 0),
                               stRef_.section(':', 1, 1).toInt());
-                h += "<div style='color:#555'>He renders this term more than "
-                     "one way. Which did he use <b>here</b>?</div><hr>";
+                h += "<div style='color:#555'>Geshe Michael renders this term more than "
+                     "one way. Which did Geshe Michael use <b>here</b>?</div><hr>";
                 h += "<div style='font-size:" + QString::number(px(30)) +
                      "px;padding:6px 0'>" + disp(stWylie_.toStdString()) +
                      "</div>";
@@ -24506,7 +24506,7 @@ private:
                 h += "<div style='color:" +
                      QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
                      "'>The alignment layer is not loaded, so there is nothing "
-                     "to ask. This drill draws only on segments where his "
+                     "to ask. This drill draws only on segments where Geshe Michael's "
                      "English has been aligned word by word \u2014 1,548 of "
                      "them \u2014 and invents nothing outside that.</div>";
             } else {
@@ -24623,8 +24623,8 @@ private:
                      "fill the gap.</div>";
             } else {
                 h += "<div style='color:#555'>How is this read aloud? Every "
-                     "card here is Geshe Michael Roach's own \u2014 his "
-                     "Tibetan, his pronunciation, his English.</div><hr>";
+                     "card here is Geshe Michael Roach's own \u2014 the Tibetan, the "
+                     "pronunciation and the English alike.</div><hr>";
                 h += "<div style='font-size:" + QString::number(px(46)) +
                      "px;padding:10px 0'>" +
                      QString::fromStdString(card_->entry.tibetan).toHtmlEscaped() +
@@ -24649,7 +24649,7 @@ private:
         const QString warn = ux::darkChrome() ? ux::chromeMachine()
                                               : QString(ux::kMachine);
         QString h = right ? "<b style='color:" + act + "'>Correct.</b>"
-                          : "<b style='color:" + warn + "'>Not yet \u2014 he "
+                          : "<b style='color:" + warn + "'>Not yet \u2014 Geshe Michael "
                             "reads it <b>" +
                                 QString::fromStdString(card_->entry.pronunciation)
                                     .toHtmlEscaped() + "</b>.</b>";
@@ -24742,7 +24742,7 @@ private:
                           ? "<div style='color:" +
                                 QString(ux::darkChrome() ? ux::chromeMuted()
                                                          : ux::kMuted) +
-                                ";font-size:11px;padding-top:4px'>This is his "
+                                ";font-size:11px;padding-top:4px'>This is Geshe Michael's "
                                 "English for the WHOLE segment. You reordered "
                                 "one clause of it \u2014 the rest of the "
                                 "English belongs to the clauses around it.</div>"
@@ -24816,12 +24816,12 @@ private:
                         h += "<br><small style='color:" +
                              QString(ux::darkChrome() ? ux::chromeAct()
                                                       : ux::kAct) + "'>" +
-                             mt.join(", ") + " \u2014 his word here, above.</small>";
+                             mt.join(", ") + " \u2014 Geshe Michael's word here, above.</small>";
                     } else {
                         h += "<br><small style='color:" +
                              QString(ux::darkChrome() ? ux::chromeMuted()
                                                       : ux::kMuted) +
-                             "'>None of these appears verbatim in his English "
+                             "'>None of these appears verbatim in Geshe Michael's English "
                              "above.</small>";
                     }
                     h += "</div>";
@@ -24850,11 +24850,11 @@ private:
             for (size_t z = 0; z < readAnswer_.size() && z < given.size(); ++z)
                 if (given[z] == readAnswer_[z]) ++inPlace;
             h += perfect
-                     ? "<b style='color:#3B7A3B'>That is his order.</b>"
+                     ? "<b style='color:#3B7A3B'>That is Geshe Michael's order.</b>"
                      : QString("<b style='color:#B4540A'>%1 of %2 in the right "
                                "place.</b>")
                            .arg(inPlace).arg((int)readAnswer_.size());
-            h += "<div style='padding-top:8px'><b>His order, and his English "
+            h += "<div style='padding-top:8px'><b>His order, and Geshe Michael's English "
                  "for each piece:</b></div>";
             for (size_t z = 0; z < readAnswer_.size(); ++z) {
                 const int k = readAnswer_[z];
@@ -24938,7 +24938,7 @@ private:
                                   .toHtmlEscaped())
                          .arg(bound_->attested[e]
                                   ? "the scribe marked this one"
-                                  : "engine ruling, not his own mark");
+                                  : "engine ruling, not Geshe Michael's own mark");
             if (waived)
                 h += QString("<div style='color:#7A5A00;font-size:12px;"
                              "padding-top:6px'>%1 of your marks sat on an "
@@ -24979,8 +24979,8 @@ private:
             h += "</div>";
             h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
                          "The nesting is the alignment layer's own, TENTATIVE "
-                         "throughout \u2014 machine-matched from his courses "
-                         "and awaiting his ruling.</div>")
+                         "throughout \u2014 machine-matched from Geshe Michael's courses "
+                         "and awaiting Geshe Michael's ruling.</div>")
                      .arg(ux::darkChrome() ? ux::chromeMachine()
                                            : QString(ux::kMachine));
         } else if (m == 10 && dbg_.ok) {
@@ -25017,7 +25017,7 @@ private:
             // ambiguity is NOT resolved. The point of the exercise is that a
             // Tibetan term does not have one English; saying which is "right"
             // in general would teach the opposite.
-            h += "<div style='padding-top:6px'><small>Everything he has been "
+            h += "<div style='padding-top:6px'><small>Everything Geshe Michael has been "
                  "recorded writing for this term, most used first:</small>"
                  "<div style='padding-top:2px'>";
             for (int i = 0; i < stAll_.size() && i < 12; ++i)
@@ -25036,14 +25036,14 @@ private:
             h += "</div></div>";
             h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
                          "None of these is the \u201cright\u201d translation "
-                         "of the term. They are all his, and which one fits "
+                         "of the term. They are all Geshe Michael's, and which one fits "
                          "depends on the passage \u2014 that is the lesson, "
                          "and this drill does not resolve it.</div>")
                      .arg(ux::darkChrome() ? ux::chromeMuted()
                                            : QString(ux::kMuted));
             h += QString("<div style='color:%1;font-size:11px'>TENTATIVE "
-                         "\u2014 machine-aligned from his courses, awaiting "
-                         "his ruling.</div>")
+                         "\u2014 machine-aligned from Geshe Michael's courses, awaiting "
+                         "Geshe Michael's ruling.</div>")
                      .arg(ux::darkChrome() ? ux::chromeMachine()
                                            : QString(ux::kMachine));
         } else if (m == 7 && !spTib_.isEmpty()) {
@@ -25077,21 +25077,21 @@ private:
                          : "<b style='color:#B4540A'>Not here.</b>";
             }
             h += spRendered_
-                     ? "<div style='padding-top:6px'>He rendered it: <b>" +
+                     ? "<div style='padding-top:6px'>Geshe Michael rendered it: <b>" +
                            spEng_.toHtmlEscaped() + "</b></div>"
-                     : "<div style='padding-top:6px'>He rendered it with "
+                     : "<div style='padding-top:6px'>Geshe Michael rendered it with "
                        "<b>no English word at all</b> \u2014 the relation is "
-                       "carried by the shape of his sentence.</div>";
+                       "carried by the shape of Geshe Michael's sentence.</div>";
             h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
-                         "In the aligned layer he leaves case particles "
+                         "In the aligned layer Geshe Michael leaves case particles "
                          "unrendered <b>93.9%%</b> of the time (1,595 of 1,698). "
                          "Your run: %2 right \u00b7 %3 wrong \u00b7 %4 "
                          "abstained.</div>")
                      .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted))
                      .arg(spRight_).arg(spWrong_).arg(spAbstain_);
             h += QString("<div style='color:%1;font-size:11px'>This item is "
-                         "TENTATIVE \u2014 machine-aligned from his courses, "
-                         "awaiting his ruling.</div>")
+                         "TENTATIVE \u2014 machine-aligned from Geshe Michael's courses, "
+                         "awaiting Geshe Michael's ruling.</div>")
                      .arg(ux::darkChrome() ? ux::chromeMachine()
                                            : QString(ux::kMachine));
         } else if (m == 2 && part_) {
@@ -25194,7 +25194,7 @@ private:
                              "</small><div style='color:" +
                              QString(ux::darkChrome() ? ux::chromeMachine()
                                                       : ux::kMachine) +
-                             ";font-size:11px'>He renders this word more than "
+                             ";font-size:11px'>Geshe Michael renders this word more than "
                              "one way. Grade yourself on the SENSE here, not "
                              "on matching one of them \u2014 that difference "
                              "is the lesson.</div></div>";
@@ -26086,7 +26086,7 @@ public:
                                                  "\u2014 the reading "
                                                  "\u201c%1\u201d was NOT "
                                                  "used: it is engine-derived, "
-                                                 "not attested on his cards. "
+                                                 "not attested on Geshe Michael's cards. "
                                                  "Add it yourself if you want "
                                                  "it.")
                                              .arg(QString::fromStdString(pron)));
@@ -27152,7 +27152,7 @@ public:
             // the cut lands on a word boundary rather than mid-word
             const QString textOnly = cut.left(cut.indexOf('<')).trimmed();
             check(longLine.startsWith(textOnly) && !textOnly.isEmpty(),
-                  "abridge: what is shown is a genuine prefix of what he "
+                  "abridge: what is shown is a genuine prefix of what Geshe Michael "
                   "wrote — nothing is paraphrased to make it fit");
             check(!textOnly.isEmpty() && longLine.mid(textOnly.size(), 1) == " ",
                   "abridge: and it breaks at a word boundary, not mid-word");
@@ -27289,17 +27289,17 @@ public:
                   "tests nothing");
             check(a.contains("Not a translation"),
                   "a corpus segment whose English column is a chant "
-                  "transliteration is LABELLED as one, not offered as his "
+                  "transliteration is LABELLED as one, not offered as Geshe Michael's "
                   "English for those words");
             {
                 const int at = a.indexOf("sangye chudang");
                 check(at < 0 ||
                           !a.mid(at, 400).contains("His English for the WHOLE"),
-                      "and the claim that it is his English for the whole "
+                      "and the claim that it is Geshe Michael's English for the whole "
                       "segment is not made over it");
             }
             check(a.contains("Buddha"),
-                  "Evidence Ribbon lists his curated gloss for sangs rgyas — "
+                  "Evidence Ribbon lists Geshe Michael's curated gloss for sangs rgyas — "
                   "the longer auto-aligned span no longer deletes it");
             // The anchor LIST may carry the provisional term too, labelled;
             // that is the honest thing. The SCAFFOLD may not, because the
@@ -27317,11 +27317,11 @@ public:
             const QString chips =
                 (hi >= 0 && hi + 1 < lines.size()) ? lines[hi + 1] : QString();
             check(!chips.isEmpty() && chips.contains("Buddha"),
-                  "the scaffold chip carries his curated gloss for sangs "
+                  "the scaffold chip carries Geshe Michael's curated gloss for sangs "
                   "rgyas, not the longer auto-aligned span around it");
             check(!chips.contains("sangye chudang"),
                   "and never a pronunciation line on the line the translator "
-                  "completes (rule 1: he is binding, the machine matches)");
+                  "completes (rule 1: Geshe Michael is binding, the machine matches)");
         }
         source_->setPlainText("sems can thams cad");
         QTextCursor c(source_->document());
@@ -27844,7 +27844,7 @@ private:
                                                 "an untranslated mantra. It "
                                                 "is shown because it is what "
                                                 "the corpus has here \u2014 "
-                                                "it is not his English for "
+                                                "it is not Geshe Michael's English for "
                                                 "these words.</div>")
                                             .arg(ux::darkChrome()
                                                      ? ux::chromeMachine()
@@ -27915,7 +27915,7 @@ private:
                         h += "<div style='margin-top:6px;color:"
                              "#2E629E'><b>84000 rendered a matching "
                              "passage</b> <small>(CC BY 4.0 — "
-                             "reference only, never his)</small>"
+                             "reference only, never Geshe Michael's)</small>"
                              "</div>";
                         for (const auto& t2 : hits)
                             h += "<div style='font-size:12px;"
@@ -28363,7 +28363,7 @@ private:
         // section. (Draft workspace audit, 2026-09-11.)
         QString h = "<b>Shared apparatus</b> <small>(published and "
                     "GMR-approved material first, then anything still "
-                    "pending his approval; every insertion carries its "
+                    "pending Geshe Michael's approval; every insertion carries its "
                     "citation)</small><br>";
         int found = 0;
         for (int i = 0; i < (int)notesBank_.size() && found < 10; ++i) {
@@ -29109,7 +29109,7 @@ public:
         const auto& n = candBank_[ix];
         insertIntoDraft("[NOTE — PENDING, not GMR-approved: " + n.lemma +
                             ": " + n.text + "]",
-                        "PENDING note (not his)");
+                        "PENDING note (not Geshe Michael's)");
     }
 
     void aiCheck() {
@@ -29254,7 +29254,7 @@ public:
                         "Nothing was compared, so this is not a clean result "
                         "\u2014 it is an empty one. The check only knows terms "
                         "that carry one of Geshe Michael Roach's equivalents; "
-                        "a passage built entirely from words he has not "
+                        "a passage built entirely from words Geshe Michael has not "
                         "glossed gives it nothing to work with.</div>")
                     .arg(ux::darkChrome() ? ux::chromeMachine()
                                           : QString(ux::kMachine)));
@@ -34767,7 +34767,7 @@ private:
                                    "a finding")
                          : "\u201c" + used.toHtmlEscaped() +
                                "\u201d appears in your draft \u2014 "
-                               "attested as one of his renderings for "
+                               "attested as one of Geshe Michael's renderings for "
                                "this term. Whether it is the right "
                                "register HERE, and whether it is even "
                                "the word rendering THIS term, is the "
@@ -48053,7 +48053,7 @@ int main(int argc, char** argv) {
                     "Michael's own attested English. Binding. The "
                     "point of the project."
                     "<br><b style='color:#1E6B4E'>EVIDENCE</b> — "
-                    "the aligned corpus: his translations beside "
+                    "the aligned corpus: Geshe Michael's translations beside "
                     "the Tibetan they translate."
                     "<br><b style='color:#2E629E'>REFERENCE</b> — "
                     "other authorities (84000, Das, Hopkins\u2026). "
