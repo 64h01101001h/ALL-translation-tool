@@ -797,7 +797,7 @@ struct SecondThoughtView: View {
                     }
                     Text("None of these is the right translation of the term. They are all Geshe Michael's, and which one fits depends on the passage — that is the lesson, and this drill does not resolve it.")
                         .font(.system(size: 12)).foregroundColor(c.muted)
-                    Text("TENTATIVE — machine-aligned from Geshe Michael's courses, awaiting his ruling.")
+                    Text("TENTATIVE — machine-aligned from Geshe Michael's courses, awaiting Geshe Michael's ruling.")
                         .font(.system(size: 11)).foregroundColor(c.machine)
                 }
             }.padding(20)
@@ -862,7 +862,7 @@ struct PeelView: View {
                         Text("\(i + 1)  \(p)").font(.system(size: 20))
                             .foregroundColor(c.ink)
                     }
-                    Text("The nesting is the alignment layer's own, TENTATIVE throughout — machine-matched from Geshe Michael's courses and awaiting his ruling.")
+                    Text("The nesting is the alignment layer's own, TENTATIVE throughout — machine-matched from Geshe Michael's courses and awaiting Geshe Michael's ruling.")
                         .font(.system(size: 11)).foregroundColor(c.machine)
                 }
             }.padding(20)
