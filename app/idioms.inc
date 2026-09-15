@@ -93,7 +93,7 @@ inline bool saveTeam(QWidget* parent, const QString& dataRoot, const Register& r
     QJsonObject meta;
     meta["schema"] = "all-idioms/1";
     meta["written"] = QDateTime::currentDateTime().toString(Qt::ISODate);
-    meta["note"] = "The team idiom register. It marks WHICH Tibetan forms are idioms and carries no English of its own — English is Geshe Michael's, shown from his corpus. Forms arrive through the Propose channel (kind: idiom) and carry his ruling.";
+    meta["note"] = "The team idiom register. It marks WHICH Tibetan forms are idioms and carries no English of its own — the English is Geshe Michael's, shown from the corpus. Forms arrive through the Propose channel (kind: idiom) and carry Geshe Michael's ruling.";
     root["meta"] = meta;
     QJsonArray arr;
     for (const Entry& e : reg.all()) {
@@ -170,8 +170,8 @@ public:
         auto* v = new QVBoxLayout(this);
         auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Reference) +
             "The register marks which Tibetan forms are idioms — fixed expressions not to be read word by word. "
-            "It holds no English of its own: the renderings below are Geshe Michael's, fetched from his own courses and counted. "
-            "A new form is a proposal until he rules on it.");
+            "It holds no English of its own: the renderings below are Geshe Michael's, fetched from the courses and counted. "
+            "A new form is a proposal until Geshe Michael rules on it.");
         banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1; background:%2; border:1px solid %3; padding:5px 8px;")
             .arg(ux::chromeInk()).arg(ux::chromePlaque()).arg(ux::chromeRule()); });
         v->addWidget(banner);
@@ -274,9 +274,9 @@ public:
         const long total = spine_.corpusCount(q);
         const auto segs = spine_.corpusSearch(q, "", 8);
         if (segs.empty()) {
-            h += "<div><i>No segment of his courses contains this exact form. That is not evidence against the idiom: the corpus is 42,199 aligned segments of the courses we hold, not everything he has said.</i></div>";
+            h += "<div><i>No segment of Geshe Michael's courses contains this exact form. That is not evidence against the idiom: the corpus is 42,199 aligned segments of the courses we hold, not everything Geshe Michael has said.</i></div>";
         } else {
-            h += QString("<div style='color:#6B5E4E'>%1 segment(s) contain it%2. These are his renderings in their own contexts, not a definition.</div>")
+            h += QString("<div style='color:#6B5E4E'>%1 segment(s) contain it%2. These are Geshe Michael's renderings in their own contexts, not a definition.</div>")
                      .arg(total < 0 ? QString::number(segs.size()) : QString::number(total))
                      .arg(total > (long)segs.size() ? QString(" · showing the first %1").arg(segs.size()) : QString());
             for (const auto& s : segs) {
@@ -303,7 +303,7 @@ public:
         if (w.isEmpty()) { say("Nothing proposed: no Tibetan form was given."); return false; }
         if (const Entry* had = reg_.find(w.toStdString()); had && had->status == Status::Approved) { say("“" + w + "” is already in the register, approved. Nothing was proposed."); return false; }
         const QString eng = forcedEnglish.isEmpty()
-                                ? docprops::askName(this, "Propose an idiom", "The English you have been using for it (optional — it is yours until he rules):", QString())
+                                ? docprops::askName(this, "Propose an idiom", "The English you have been using for it (optional — it is yours until Geshe Michael rules):", QString())
                                 : forcedEnglish;
         const QString ev = forcedEvidence.isEmpty()
                                ? (textName_.isEmpty() ? QString("proposed from the idiom bank") : QString("found in %1").arg(textName_))
@@ -314,7 +314,7 @@ public:
         store.propose(allcore::ProposalKind::Idiom, g_userName.toStdString(), w.toStdString(), eng.toStdString(), "idiom", ev.toStdString(), isoToday().toStdString());
         if (!store.save()) { say("The proposals folder could not be written — nothing was filed."); return false; }
         lastProposed_ = w;
-        say("“" + w + "” was filed for Geshe Michael's ruling" + (eng.isEmpty() ? QString() : QString(", with your English “%1” recorded as yours").arg(eng)) + ". It stays a proposal until he rules.");
+        say("“" + w + "” was filed for Geshe Michael's ruling" + (eng.isEmpty() ? QString() : QString(", with your English “%1” recorded as yours").arg(eng)) + ". It stays a proposal until Geshe Michael rules.");
         return true;
     }
     void pullRulings() {
@@ -324,7 +324,7 @@ public:
         if (!saveTeam(this, dataRoot_, reg_)) { say("The rulings were read but the team register could not be written."); return; }
         hits_ = reg_.findIn(textSyllables_);
         render();
-        say(QString("Brought across %1 approval(s) and %2 decline(s); %3 form(s) were new to the register. %4 proposal(s) are still waiting for his ruling.").arg(S.approved).arg(S.declined).arg(S.added).arg(S.pending));
+        say(QString("Brought across %1 approval(s) and %2 decline(s); %3 form(s) were new to the register. %4 proposal(s) are still waiting for Geshe Michael's ruling.").arg(S.approved).arg(S.declined).arg(S.added).arg(S.pending));
     }
     void copyList() {
         QStringList lines;
@@ -409,7 +409,7 @@ inline int selfTest(QStringList& log, const QString& root, const QString& dataRo
         bool found = false; std::string id;
         for (const auto& p : st.all()) if (p.kind == allcore::ProposalKind::Idiom && p.wylie == "rang lag na yod") { found = true; id = p.id; }
         check(filed && found, "a proposed idiom is filed to the shared folder as an idiom proposal");
-        check(d.statusText().contains("stays a proposal until he rules"), "the translator is told plainly that it is not settled");
+        check(d.statusText().contains("stays a proposal until Geshe Michael rules"), "the translator is told plainly that it is not settled");
         Register r2 = d.reg();
         const RulingSummary before = applyRulings(r2, td);
         check(before.ok && before.approved == 0 && before.pending >= 1, "while it is pending, no ruling is brought across");
@@ -419,7 +419,7 @@ inline int selfTest(QStringList& log, const QString& root, const QString& dataRo
         const RulingSummary after = applyRulings(r3, td);
         const auto* e = r3.find("rang lag na yod");
         check(after.approved == 1 && e && e->status == Status::Approved && e->ruledBy == "Geshe Michael",
-              "his ruling is brought across and the form becomes approved, with his name on it");
+              "Geshe Michael's ruling is brought across and the form becomes approved, with Geshe Michael's name on it");
         QDir(td).removeRecursively();
         g_proposalsDir = keepDir; g_userName = keepUser;
     }
