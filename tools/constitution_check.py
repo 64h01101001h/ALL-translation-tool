@@ -141,9 +141,17 @@ def main():
             f"tools/constitution_baseline.txt in the same commit "
             f"(incident: the --survey modal hang)")
     elif msgbox < R3_BASELINE:
-        with open(baseline_path, "w") as f:
-            f.write(str(msgbox) + "\n")
-        notes.append(f"R3 baseline lowered to {msgbox}")
+        # GATE-4, the same defect G2 was fixed for and R3 was not: the gate
+        # WROTE its own lowered baseline. A check run that edits a tracked file
+        # is two faults at once -- the ratchet tightens with nobody reviewing
+        # the removal, and `git status` is dirty afterwards, which
+        # package_macos.sh reads (REL-1) and answers by renaming the artifact
+        # `-dirty`. A press could be renamed because a gate edited the tree
+        # while judging it. It says so now; the tightening is a person's diff.
+        notes.append(
+            f"R3 baseline has slack: {msgbox} modal sites < baseline "
+            f"{R3_BASELINE} - tighten tools/constitution_baseline.txt "
+            f"in a commit")
 
     # G3 — chrome inks come from tokens, never from a literal (2026-09-09).
     # Adam: "the shading is funky with the night mode. some panels are dark and

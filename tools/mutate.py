@@ -207,11 +207,29 @@ def cmd_selftest():
     src = io.open(p, encoding="utf-8").read()
     if src.count("alpha") != 2:
         bad.append("fixture wrong")
-    # the anchor rule is the one that has actually bitten
-    if src.count("alpha") == 1:
-        bad.append("a doubly-matching anchor must be refused")
     if src.count("beta") != 1:
         bad.append("unique anchor detection")
+
+    # ANCHOR ONCE is the rule this harness exists to enforce, and its
+    # selftest used to be `if src.count("alpha") == 1: bad.append(...)`.
+    # The fixture has TWO alphas, so that asked whether 2 == 1: a line that
+    # can never append, guarding the one failure mode the docstring names
+    # first. Changing the real guard from `n != 1` to `n < 1` -- which makes
+    # the harness silently mutate the FIRST of several matches -- left the
+    # selftest reporting 0 failures.
+    #
+    # So call the thing. mutate() counts the anchor before it copies, writes
+    # or builds anything, and an absolute path_rel passes through
+    # os.path.join untouched, so this never reaches the real tree. rc 3 is
+    # the refusal; rc 1 would be a missing file.
+    if mutate(p, "alpha", "gamma", "no-such-test", "x") != 3:
+        bad.append("a doubly-matching anchor must be REFUSED by mutate(), "
+                   "not silently applied to the first match")
+    if mutate(p, "delta", "gamma", "no-such-test", "x") != 3:
+        bad.append("an anchor matching NOTHING must be refused too -- a "
+                   "stale entry is not a surviving mutant")
+    if io.open(p, encoding="utf-8").read() != "alpha\nbeta\nalpha\n":
+        bad.append("a refused mutation must not have touched the file")
 
     if not objects_for("definitely_not_a_real_file.cpp") == []:
         bad.append("objects_for must return empty for an unknown file")
