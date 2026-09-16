@@ -78,6 +78,10 @@ public:
     struct Cand {
         std::vector<std::string> tokens;
         long long entry_id;
+        // Spine::Headword::tier_rank. Two entries can share one headword; rule
+        // 1 says Geshe Michael's glossary entry wins over the machine's
+        // auto-aligned one, and the index must apply that itself.
+        int tier_rank = 2;
     };
     size_t size() const { return n_; }
 
@@ -89,7 +93,8 @@ public:
                                   const std::string& t2) const;
 
 private:
-    std::unordered_map<std::string, long long> single_;
+    // id + tier_rank: on a duplicate headword the better tier is kept.
+    std::unordered_map<std::string, std::pair<long long, int>> single_;
     std::unordered_map<std::string,
         std::unordered_map<std::string, std::vector<Cand>>> multi_;
     size_t n_ = 0;

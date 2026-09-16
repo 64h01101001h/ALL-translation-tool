@@ -147,9 +147,20 @@ public:
     // Single entry by rowid (empty optional-like: id 0 on miss).
     Entry entryById(long long id) const;
 
-    // (id, acip) for every entry with a non-empty ACIP headword — feeds the
-    // overlay's in-memory first-syllable index.
-    std::vector<std::pair<long long, std::string>> allAcipHeadwords() const;
+    // Every entry with a non-empty ACIP headword — feeds the overlay's
+    // in-memory first-syllable index. tier_rank is the SAME ranking
+    // Spine::lookup orders by (0 curated, 1 glossary, 2 other, 3 auto-aligned),
+    // carried as data so a consumer choosing between two entries for one
+    // headword can apply rule 1 itself instead of trusting the row order it
+    // happens to be handed. Rows arrive in that order too, but no caller
+    // should have to rely on that -- the row order being load-bearing and
+    // invisible is precisely how the omniscience bug lived.
+    struct Headword {
+        long long id;
+        std::string acip;
+        int tier_rank;
+    };
+    std::vector<Headword> allAcipHeadwords() const;
 
 private:
     sqlite3* db_ = nullptr;

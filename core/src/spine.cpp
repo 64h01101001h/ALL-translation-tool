@@ -258,6 +258,16 @@ std::vector<std::string> Spine::scriptCardCourses() const {
     }
 }
 
+// The project's ranking, written once. lookup() orders by it and
+// allAcipHeadwords() both orders by it AND reports it, so the overlay index
+// can rank for itself. Two copies of this string could drift; one cannot.
+static const char* const kTierRankCase =
+    "CASE tier WHEN 'curated' THEN 0 WHEN 'glossary' THEN 1 "
+    "WHEN 'auto-aligned' THEN 3 ELSE 2 END";
+static const char* const kTierOrderSql =
+    " ORDER BY CASE tier WHEN 'curated' THEN 0 WHEN 'glossary' THEN 1 "
+    "WHEN 'auto-aligned' THEN 3 ELSE 2 END, id";
+
 std::vector<Entry> Spine::lookup(const std::string& headword) const {
     try {
     std::vector<Entry> out;
@@ -269,9 +279,7 @@ std::vector<Entry> Spine::lookup(const std::string& headword) const {
     // one, so front() handed back the machine's guess for a core term. Two
     // headwords are affected today; the point is that nothing was stopping it
     // being two hundred after the next ingest.
-    static const char* kTierOrder =
-        " ORDER BY CASE tier WHEN 'curated' THEN 0 WHEN 'glossary' THEN 1 "
-        "WHEN 'auto-aligned' THEN 3 ELSE 2 END, id";
+    static const char* kTierOrder = kTierOrderSql;
     auto collect = [&](const char* sql, const std::string& val) {
         std::string q = std::string("SELECT ") + kEntryCols + " FROM entries " +
                         sql + kTierOrder;
@@ -616,13 +624,17 @@ Entry Spine::entryById(long long id) const {
     }
 }
 
-std::vector<std::pair<long long, std::string>> Spine::allAcipHeadwords() const {
+std::vector<Spine::Headword> Spine::allAcipHeadwords() const {
     try {
-    std::vector<std::pair<long long, std::string>> out;
+    std::vector<Headword> out;
     out.reserve(110000);
-    Stmt s(db_, "SELECT id, acip FROM entries WHERE acip IS NOT NULL AND acip != ''");
+    const std::string q =
+        std::string("SELECT id, acip, ") + kTierRankCase +
+        " FROM entries WHERE acip IS NOT NULL AND acip != ''" + kTierOrderSql;
+    Stmt s(db_, q.c_str());
     while (sqlite3_step(s.p) == SQLITE_ROW)
-        out.emplace_back(sqlite3_column_int64(s.p, 0), columnText(s.p, 1));
+        out.push_back(Headword{sqlite3_column_int64(s.p, 0), columnText(s.p, 1),
+                               sqlite3_column_int(s.p, 2)});
     return out;
     } catch (const std::exception& e) {
         // the db was yanked/replaced under us (the

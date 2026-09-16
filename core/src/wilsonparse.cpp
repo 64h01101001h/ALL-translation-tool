@@ -288,10 +288,16 @@ std::vector<ClauseParse> wilsonParse(const Spine& spine, const OverlayDoc& doc,
                     } else {
                         u.category = "dictionary term";
                     }
-                    if (!e.hgm_gloss.empty()) u.detail = "≡ " + e.hgm_gloss.front();
+                    if (!e.hgm_gloss.empty()) {
+                        u.detail = "≡ " + e.hgm_gloss.front();
+                        u.detail_provisional = e.provisional();
+                    }
                 } else {
                     u.category = "dictionary term";
-                    if (!e.hgm_gloss.empty()) u.detail = "≡ " + e.hgm_gloss.front();
+                    if (!e.hgm_gloss.empty()) {
+                        u.detail = "≡ " + e.hgm_gloss.front();
+                        u.detail_provisional = e.provisional();
+                    }
                 }
                 if (!span.clitic.empty())
                     u.detail += (u.detail.empty() ? "" : " · ") +

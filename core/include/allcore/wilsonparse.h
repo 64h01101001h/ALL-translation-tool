@@ -25,6 +25,13 @@ struct ParseUnit {
     std::string text;          // ACIP as written
     std::string category;      // e.g. "case particle — 3rd (agentive)"
     std::string detail;        // paradigm, tense row, first gloss, agreement…
+    // true when `detail` carries an hgm_gloss from an AUTO-ALIGNED entry --
+    // the machine's match, not Geshe Michael's glossary reading. There was no
+    // field for this, so the Trainer's Wilson layer printed the machine's
+    // English in the same plain grey as a rule-table fact while the gloss
+    // layer forty lines away marked the identical gloss [PROVISIONAL]. A tier
+    // that cannot travel is a tier that cannot be shown.
+    bool detail_provisional = false;
 };
 
 // One tsheg, designated (Wilson's Science of the Dots). Labels follow the
