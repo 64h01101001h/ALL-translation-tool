@@ -8629,6 +8629,38 @@ public:
                     vw->refresh(); int row = -1; for (int i = 0; i < (int)vw->entries().size(); ++i) if (vw->entries()[i].verPath == ents[1].verPath) row = i;
                     check(row >= 0 && !vw->compareWithCurrent(row) && vw->lastMessage().contains("damaged"), "32b a version whose bytes do not match its record is refused, not guessed");
                 }
+                {   // 32c BASENAME COLLISION. The cached window used to be
+                    // matched to the document by its TITLE, which carries only
+                    // the basename, so opening a second file with the same name
+                    // in another folder handed back the FIRST file's window --
+                    // still bound to the first file's path. Restore then wrote
+                    // the first file's archived version over the first file
+                    // while this pane displayed the second, and banked the
+                    // second file's bytes under the first file's identity. Both
+                    // the lost write and the falsified provenance record were
+                    // invisible on screen. Input-center volumes repeat
+                    // basenames as a matter of course.
+                    const QString twinDir = tmpDir + "/twin";
+                    QDir().mkpath(twinDir);
+                    const QString twin = twinDir + "/versions_probe.txt";
+                    check(writeFixture(twin, "a different file, same name\n"),
+                          "32c fixture: a same-named file in another folder");
+                    const QString keptDoc = docFile_;
+                    docFile_ = twin;
+                    openVersions();
+                    auto* vw2 = versionsWindow();
+                    check(vw2 && QFileInfo(vw2->boundPath()).absoluteFilePath() ==
+                                     QFileInfo(twin).absoluteFilePath(),
+                          "32c the Versions window follows the FILE, not the "
+                          "file's name -- a same-named file in another folder "
+                          "never inherits the first file's window, because "
+                          "Restore would overwrite the wrong file on disk");
+                    docFile_ = keptDoc;
+                    if (versionsWin_) { versionsWin_->deleteLater(); versionsWin_ = nullptr; }
+                    QDir(twinDir).removeRecursively();
+                    openVersions();
+                    vw = versionsWindow();
+                }
                 vst.setValue("versions/enabled", false);
                 input_->setPlainText("changed while versions are off\n");
                 const size_t before = allcore::versions::list(vdir2.toStdString()).size();
@@ -8974,7 +9006,9 @@ public:
     // F1: the Versions window for this document (one per pane, modeless)
     void openVersions() {
         if (docFile_.isEmpty()) { if (hint_) hint_->setText("Save the document first: versions are kept per file."); return; }
-        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(docFile_).fileName()) {
+        if (!versionsWin_ ||
+            QFileInfo(versionsWin_->boundPath()).absoluteFilePath() !=
+                QFileInfo(docFile_).absoluteFilePath()) {
             if (versionsWin_) versionsWin_->deleteLater();
             VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = docFile_; h.kind = "document";
             h.currentText = [this] { return input_->toPlainText(); };
@@ -26209,7 +26243,9 @@ public:
     }
     void openVersions() {   // F1
         if (draftPath_.isEmpty()) { if (termLive_) termLive_->setText("Save the draft first: versions are kept per file."); return; }
-        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(draftPath_).fileName()) {
+        if (!versionsWin_ ||
+            QFileInfo(versionsWin_->boundPath()).absoluteFilePath() !=
+                QFileInfo(draftPath_).absoluteFilePath()) {
             if (versionsWin_) versionsWin_->deleteLater();
             VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = draftPath_; h.kind = "draft";
             h.currentText = [this] { return draft_->toPlainText(); };
@@ -39807,7 +39843,9 @@ public:
     }
     void openVersions() {   // F1
         if (path_.isEmpty()) { status_->setText("Save the manuscript first: versions are kept per file."); return; }
-        if (!versionsWin_ || versionsWin_->windowTitle() != "Versions \u2014 " + QFileInfo(path_).fileName()) {
+        if (!versionsWin_ ||
+            QFileInfo(versionsWin_->boundPath()).absoluteFilePath() !=
+                QFileInfo(path_).absoluteFilePath()) {
             if (versionsWin_) versionsWin_->deleteLater();
             VersionsWindow::Hooks h; h.dataRoot = dataRoot_; h.docPath = path_; h.kind = "manuscript";
             h.currentText = [this] { return editor_->toPlainText(); };

@@ -222,6 +222,15 @@ public:
         armed = true;
         ux::onChromeChange(this, [this] { refresh(); });
     }
+    // The pane asks this to decide whether a cached window still belongs to
+    // the document on screen. It used to compare WINDOW TITLES, which carry
+    // only the basename, so two files named S0134I.act in different folders
+    // shared one window -- and Restore then wrote the FIRST file's archived
+    // version over the first file while the pane displayed the second, with
+    // nothing on screen to say a file the user was not looking at had just
+    // been rolled back.
+    const QString& boundPath() const { return h_.docPath; }
+
     void refresh() {
         watchChrome();
         entries_.clear(); table_->clear();
