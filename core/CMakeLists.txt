@@ -684,6 +684,16 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/contrast_check.py
                    ${CMAKE_SOURCE_DIR})
 
+  # The pack tells the phone what its own English is. That sentence read
+  # "Every English line is Geshe Michael Roach's own text from his courses"
+  # while 709 of its entries were machine matches -- a falsehood banked in a
+  # shipped artifact's provenance record, which is the one thing Rule 10
+  # forbids. Nothing checked it because nothing was asked to.
+  add_test(NAME pack_claims
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/pack_claims_check.py
+                   ${CMAKE_SOURCE_DIR})
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still
