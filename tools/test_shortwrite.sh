@@ -59,7 +59,11 @@ echo "  healthy volume -> $out"
 [[ "$out" == CLAIMED=TRUE* ]] && check ok "save() reports TRUE when the bytes really landed" \
                               || check no "save() reports TRUE when the bytes really landed"
 
-rm -f "$MNT/proposals.tsv"
+# The seeded queue STAYS. It is the thing the next step must not damage:
+# a real team's proposals.tsv already on disk when a save runs out of room.
+seed_sum=$(shasum -a 256 "$MNT/proposals.tsv" | awk '{print $1}')
+seed_bytes=$(wc -c < "$MNT/proposals.tsv" | tr -d ' ')
+echo "  seeded queue: ${seed_bytes} bytes, sha ${seed_sum:0:12}"
 
 # --- the real case: fill the volume, leave a hole far too small ---
 dd if=/dev/zero of="$MNT/filler" bs=1024 count=1750 >/dev/null 2>&1
@@ -74,17 +78,34 @@ bytes=$(echo   "$out" | sed -E 's/.*BYTES=(-?[0-9]+).*/\1/')
 
 # Review finding 2026-08-23: asserting only CLAIMED=FALSE let an OPEN
 # failure satisfy this test identically to the short write it exists to
-# catch — if the volume fills completely the probe reports FALSE with
-# BYTES=-1 and the suite goes green while testing the open guard, which
-# was always correct. Demand evidence that bytes actually landed AND
-# that they were cut short.
-if [[ "$claimed" == "FALSE" && "$bytes" -gt 0 ]]; then
-    check ok "save() reports FALSE when the write was cut short (bytes on disk: $bytes)"
-elif [[ "$claimed" == "FALSE" ]]; then
-    check no "the file never OPENED (bytes=$bytes) — this run tested the open guard, not a short write. Retune the dd filler so a hole remains."
-else
+# catch. The evidence demanded then was "bytes actually landed in
+# proposals.tsv" — which only held because save() truncated the real queue
+# and wrote into it. It no longer does: it writes a temporary beside the
+# queue and renames, so a cut-short write leaves proposals.tsv untouched
+# and BYTES is now -1 on the very run that used to prove the point.
+#
+# So the evidence moves, it is not dropped. A hole was deliberately left on
+# the volume, so if free space remains the open CANNOT have failed for want
+# of room — which makes this a genuine short write, exactly as before. What
+# is asserted on top is the property that actually protects the team: the
+# queue that was already on disk is byte-for-byte what it was.
+if [[ "$claimed" != "FALSE" ]]; then
     check no "save() CLAIMED SUCCESS after a short write — only $bytes bytes landed. This is SQA FAIL-2 back again."
+elif [[ "$free_k" -le 0 ]]; then
+    check no "the volume was filled completely (${free_k}K free) — this run tested the open guard, not a short write. Retune the dd filler so a hole remains."
+else
+    check ok "save() reports FALSE when the write was cut short (${free_k}K was free, so the open succeeded)"
 fi
+
+now_sum=$(shasum -a 256 "$MNT/proposals.tsv" 2>/dev/null | awk '{print $1}')
+if [[ "$now_sum" == "$seed_sum" ]]; then
+    check ok "and the queue already on disk is byte-for-byte unchanged — a save that runs out of room does not eat the team's proposals"
+else
+    check no "the team's queue was DAMAGED by a failed save (was ${seed_sum:0:12}, now ${now_sum:-absent}) — a partial TSV reloads as a silently SHORTER queue"
+fi
+
+leftover=$(ls "$MNT"/proposals.tsv.writing 2>/dev/null | wc -l | tr -d ' ')
+[[ "$leftover" == "0" ]] && check ok "no half-written temporary is left behind"                          || check no "a proposals.tsv.writing temporary was left on the volume"
 
 echo "shortwrite: $([[ $fails -eq 0 ]] && echo 'ALL PASS' || echo 'FAIL') ($fails failures)"
 exit $fails
