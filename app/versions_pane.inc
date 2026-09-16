@@ -217,9 +217,15 @@ public:
     QString lastMessage() const { return notice_->text(); }
 
     void watchChrome() {
-        static bool armed = false;
-        if (armed) return;
-        armed = true;
+        // chromeArmed_ is a MEMBER. It was a function-local static, which in a
+        // non-static member function is one flag for the whole class: the
+        // first Versions window of the session armed it, and its ChromeWatch
+        // died with it when the pane rebuilt the window for another document.
+        // Every later window then returned here immediately and installed no
+        // watcher at all, so switching to Night mode left their rows painted
+        // in colours baked at build time -- day-mode error red on night chrome.
+        if (chromeArmed_) return;
+        chromeArmed_ = true;
         ux::onChromeChange(this, [this] { refresh(); });
     }
     // The pane asks this to decide whether a cached window still belongs to
@@ -373,10 +379,20 @@ public:
         const int row = selectedRow(); if (row < 0) { say("Select a version first."); return false; }
         if (ask) name = docprops::askName(this, "Name this Version", "Name (pinned versions are never pruned):", QString::fromStdString(entries_[row].meta.label));
         auto m = entries_[row].meta; m.label = name.toStdString(); m.pinned = true;
-        QFile f(QString::fromStdString(entries_[row].jsonPath));
-        if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) { say("The version record could not be written."); return false; }
+        // This opened the record WriteOnly|Truncate -- destroying it -- and
+        // then discarded what write() returned and never checked close(). On a
+        // full volume or an ejected share it printed "Version named and pinned"
+        // over a .json it had just emptied, and an unreadable record makes the
+        // version unrestorable and invisible to prune(). The version a
+        // translator asked to keep forever was the one the act destroyed.
+        // saveOrWarn writes a temporary and renames, and reports honestly.
         const std::string json = allcore::versions::serializeMeta(m);
-        f.write(json.data(), (qint64)json.size()); f.close();
+        if (!saveOrWarn(this, QString::fromStdString(entries_[row].jsonPath),
+                        QByteArray(json.data(), (int)json.size()),
+                        "The version record")) {
+            say("The version record could not be written. Nothing was changed.");
+            return false;
+        }
         refresh(); say(name.isEmpty() ? "Version pinned." : "Version named and pinned: " + name); return true;
     }
     // Which version first introduced the current line `line1` (1-based).
@@ -424,6 +440,7 @@ private:
     void syncButtons() { const int n = (int)selectedRows().size(); cmpCur_->setEnabled(n == 1); cmpTwo_->setEnabled(n == 2); restore_->setEnabled(n == 1); if (n != 1 && restoreArmed_) { restoreArmed_ = false; restore_->setText("Restore…"); } }
     void say(const QString& m) { notice_->setText(m); }
 
+    bool chromeArmed_ = false;   // per window; see watchChrome()
     Hooks h_;
     QTreeWidget* table_ = nullptr; QComboBox* filter_ = nullptr; QCheckBox* showAuto_ = nullptr; QCheckBox* showElse_ = nullptr;
     QPushButton* cmpCur_ = nullptr; QPushButton* cmpTwo_ = nullptr; QPushButton* restore_ = nullptr; QLabel* notice_ = nullptr;
