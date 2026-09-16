@@ -3456,7 +3456,18 @@ Android arm64 with one query round-trip; (3) a one-screen prototype of
 questionnaire's Q13 answers tell us how much Android matters.
 
 ### Press pipeline defect found 2026-09-08 (FIX before 1.0 press)
-- [ ] **`package_macos.sh` step 7 verify can fail on a healthy image.** A
+- [x] **`package_macos.sh` step 7 verify can fail on a healthy image.** DONE
+      2026-09-16 (commit cb0e4973). (a) was already there — six retries, and
+      `lsof` now names any holder before the word "corrupt" is used; (b) an
+      EXIT trap armed at 6c relaunches the installed app on ANY exit,
+      idempotent with step 8 and passing the exit code through; (c) was
+      already there — busy exits 10, corrupt exits 9, and a busy image is
+      never called corrupt. Gated by `press_relaunch_trap` (ctest), which
+      drives the trap through its three cases with `open` stubbed so it
+      proves the behaviour without spending a press; it also checks the trap
+      is armed AFTER the install, since arming it earlier would relaunch over
+      a refusal that never touched /Applications. Both halves watched failing.
+      Original report follows. A
       `diskimages-helper` left over from `hdiutil create` held the DMG open
       and `hdiutil verify` returned "Resource temporarily unavailable"; the
       script reported "the image is corrupt" (false) and exited 9 AFTER it
