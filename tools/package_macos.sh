@@ -711,6 +711,29 @@ else
 fi
 echo "   installed: $INSTALL/$APPNAME.app ($(date))"
 
+# THE RELAUNCH TRAP. Step 0 quit the translator's app and step 6c has just
+# replaced /Applications, so from here until step 8 the machine has no app
+# running. Every exit between those two points used to leave it that way --
+# and there are several: the two DMG verify outcomes (9 and 10), the ENOSPC
+# refusal, `set -e` on any command in between. 2026-09-08 is the recorded
+# case: exit 9 on a HEALTHY image, after the install, before the relaunch.
+#
+# The trap is idempotent with step 8 on purpose: it relaunches only if the
+# app is not already up, so the normal path is untouched and every abnormal
+# one ends with the translator's app running.
+RELAUNCH_ARMED=1
+relaunch_guard() {
+  local rc=$?
+  [[ ${RELAUNCH_ARMED:-0} == 1 ]] || exit $rc
+  if ! pgrep -x DiamondCutterTranslationTool >/dev/null 2>&1; then
+    echo "   (press is exiting with rc=$rc and no app running - relaunching"
+    echo "    the installed build so the machine is not left without it)"
+    open "$INSTALL/$APPNAME.app" 2>/dev/null || true
+  fi
+  exit $rc
+}
+trap relaunch_guard EXIT
+
 echo "== 7. DMG =="
 mkdir -p "$DIST"
 DMG="$DIST/Diamond-Cutter-Translation-Tool-$VERSION.dmg"
@@ -747,7 +770,23 @@ for attempt in 1 2 3 4 5 6; do
   if echo "$VERR" | grep -qi "temporarily unavailable\|resource busy\|EAGAIN"; then
     echo "   hdiutil verify: image busy (attempt $attempt) - waiting"; sleep 3; continue
   fi
-  echo "DMG VERIFY FAILED - the image is corrupt; press stopped."; echo "$VERR" | tail -3; exit 9
+  # Name who is holding it before calling it corrupt. The 2026-09-08 false
+  # alarm was a leftover diskimages-helper from `hdiutil create`; without
+  # this the operator is told the image is bad and has nothing to check.
+  echo "DMG VERIFY FAILED - the image is corrupt; press stopped."
+  echo "$VERR" | tail -3
+  if command -v lsof >/dev/null 2>&1; then
+    HOLDERS="$(lsof -- "$DMG" 2>/dev/null | tail -n +2 || true)"
+    if [[ -n "$HOLDERS" ]]; then
+      echo "   NOTE: the image is still open by:"
+      echo "$HOLDERS" | awk '{print "     " $1 " (pid " $2 ")"}' | sort -u
+      echo "   A holder means this may be the EAGAIN false alarm, not"
+      echo "   corruption - wait for it to exit and verify by hand."
+    else
+      echo "   (lsof reports no process holding the image)"
+    fi
+  fi
+  exit 9
 done
 [[ $VERIFIED == 1 ]] || { echo "DMG VERIFY NOT POSSIBLE - the image stayed busy for six attempts; run 'hdiutil verify \"$DMG\"' by hand before shipping."; exit 10; }
 echo "   hdiutil verify: image checksums good"

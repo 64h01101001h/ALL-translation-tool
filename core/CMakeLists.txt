@@ -694,6 +694,16 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/pack_claims_check.py
                    ${CMAKE_SOURCE_DIR})
 
+  # A press must never end with the translator's app down. Step 0 quits it and
+  # step 6c replaces /Applications, so every exit in between -- the two DMG
+  # verify outcomes, the disk refusal, set -e on anything -- used to leave the
+  # machine with nothing running. 2026-09-08 is the recorded case: exit 9 on a
+  # HEALTHY image, after the install, before the relaunch, with a message
+  # saying the image was corrupt. Drives the trap through its three cases with
+  # `open` stubbed, so it proves the behaviour without running a press.
+  add_test(NAME press_relaunch_trap
+           COMMAND bash ${CMAKE_SOURCE_DIR}/tools/test_press_relaunch_trap.sh)
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still
