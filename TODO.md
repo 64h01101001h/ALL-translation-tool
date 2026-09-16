@@ -8,6 +8,93 @@
       `docs/SIDECAR_KEYING_DECISION.md`. The check's urgent finding (the
       Manuscript carrying no history at all) was fixed the same day.
 
+# ★★★★★ ADAM 2026-09-16: THE DICTIONARY AND THE CARD LAYERS SHOULD BE
+# HYPERLINKED
+
+Adam's ask, in his words: make the dictionary and the card layers' data
+hyperlinked, "so that references to other entries are easily navigable and
+can give the translator easy access to supporting terms/dictionaries for
+deep research."
+
+- [ ] **Cross-references in a card become links.** Today a card names other
+      terms in prose and the translator has to copy the word out and search
+      for it. Every mention of another headword — in an equivalent, an
+      evidence line, a Lokesh Chandra or 84000 citation, a see-also — should
+      open that entry. The same for the alignment layers: a span's parent,
+      its siblings and its members are already structured data, so moving
+      between them should be a click rather than a re-query.
+      Why it matters: this is the difference between a dictionary you look a
+      word up in and one you can *research* in. It is also the first thing
+      that makes the supporting dictionaries (LC, THL, 84000) genuinely
+      reachable rather than merely present.
+      Not yet scoped. Before any code: decide what counts as a reference
+      (exact headword only, or inflected forms too), what happens when a
+      reference has no entry — the honest answer is to say so, not to guess
+      — and whether links cross tiers (a curated entry pointing into
+      auto-aligned material must not launder the tier).
+
+# ★★★★ ADAM 2026-09-16: FIND THE TIBETAN GRAMMAR BOOKS ON THE DRIVES
+
+- [ ] **Search Adam's hard drives and his laptop for Tibetan grammar books.**
+      They are wanted as material to improve the translation engine. Adam
+      owns *Standard Tibetan Grammar* Volumes 1 and 2 and cannot currently
+      find them on the local drives; there are more titles on a page he
+      referred to.
+      **BLOCKED ON ONE THING: the page never came through.** The message
+      naming it carried no link, so the full list of titles is unknown and
+      only the two volumes above are certain. Ask Adam for it before
+      starting, or the search will be for two books out of an unknown set.
+      When it runs: search the external drives as well as the laptop, match
+      on title and on likely filename spellings, and report what was found
+      AND where, rather than copying anything.
+
+# ★★★★★ RELEASE 1.0 — THE THREE BLOCKERS STILL OPEN (paused 2026-09-16)
+
+Adam asked for the five release-blocking items that were mine. Two are done
+and committed; these three are paused here with what each waits on, because
+none of them can be finished without him.
+
+- [ ] **GitHub hosting: the data-release repo, the manifest, the publish
+      script.** RELEASE_PLAN §3a. The local half is mine and not yet
+      written. The outward half is not: creating `ALL-dictionary-releases`
+      and pushing `main` (the app repo is 213 commits stale) publishes code
+      and data, and that is Adam's call, not something to do on a "keep
+      going". Note the repo has had TWO history rewrites, so the push is a
+      force-push and the rollback mirrors on the 8TB drive are the safety
+      net.
+- [ ] **In-app update check, notification, install.** RELEASE_PLAN §3b. It
+      is buildable now against a fixture manifest, which is how the plan
+      says to test it — but the URL it points at does not exist until the
+      repos above do, so shipping it before them means shipping a check that
+      cannot succeed. That is the defect we just fixed in the OTHER update
+      path; doing it again knowingly would be worse.
+- [ ] **The kReleaseHidden LIST.** The mechanism landed 2026-09-16 and is
+      proved; the list is empty and ships empty. Its contents are
+      dispositions — SHIP / HIDE / CUT / FIX / LABEL — and the plan is
+      explicit that they come from walking the function audit with Adam,
+      pane by pane, in the running app. That walk has not happened: no pane
+      in the 40 files of docs/release_audit/ has a disposition yet. Hiding a
+      pane is now a one-line change, so the walk is the whole remaining
+      cost.
+      Also, the item says "feature guide regenerated" and there is no
+      generator — COMPLETE_FEATURE_GUIDE.md is hand-written and nothing in
+      tools/ references it. Either write the generator or reword the item;
+      it should not sit there implying a tool that does not exist.
+
+# ★★★ OPERATIONS: DISK HEADROOM IS NOW BLOCKING WORK
+
+- [ ] **The machine keeps running out of disk, and it has escalated.**
+      2026-09-16: it refused a press three times, then filled completely and
+      made the shell itself unusable — no command could run, because the
+      harness could not write its own output. Adam cleared it.
+      The recurring consumers are `dist/` (each press adds a ~390 MB DMG and
+      nothing prunes them), `build/whisper_models` (1.6 GB, Adam's lecture
+      transcription model), and Xcode DerivedData from iOS builds.
+      Worth deciding a policy rather than clearing by hand each time: keep
+      the last N DMGs and prune the rest in the press itself, and have the
+      press refuse EARLY with the real number rather than at the DMG step
+      after it has already replaced /Applications.
+
 # ★★★★★ ADAM 2026-09-11 (on a hike): FREQUENCY-ORDERED VOCABULARY —
 # "the first step for people trying to learn how to translate Tibetan"
 
