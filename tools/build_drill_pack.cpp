@@ -177,9 +177,28 @@ int main(int argc, char** argv) {
     std::string out = "{\"meta\":{";
     field(out, "built_by", "allcore, on the Mac; the phone generates nothing");
     field(out, "source", spine.metaValue("source_corpus"));
+    // This said "Every English line is Geshe Michael Roach's own text from
+    // his courses." Measured against the pack it describes, on 2026-09-15:
+    // 6,003 of 7,084 entries are his glossary or curated English, 709 are
+    // AUTO-ALIGNED -- matched from the courses by machine, never composed,
+    // and carried as provisional -- and 372 have no tier at all. 400 entries
+    // carry aligned_eng, which is a machine-cut SPAN of one of his sentences;
+    // some of those spans are not words he ever wrote, e.g. 'da' bar ->
+    // "gressing" (erratum E-183), which is half of "transgressing".
+    //
+    // So the sentence was false for about a tenth of the pack, and it was
+    // false in the pack's own provenance record -- a falsehood banked, which
+    // is the one thing Rule 10 forbids outright. It also said "his courses"
+    // where the project names him.
     field(out, "tier",
-          "Every English line is Geshe Michael Roach's own text from his "
-          "courses. Engine guidance is labeled guidance.");
+          "Most English here is Geshe Michael Roach's own, from Geshe "
+          "Michael's courses. Some is machine-matched to that English and "
+          "never composed; every such entry carries tier=auto-aligned and "
+          "provisional=true, and must be shown as provisional. Entries "
+          "carrying aligned_eng hold a machine-cut span of one of Geshe "
+          "Michael's sentences, which may not be a whole word. Engine "
+          "guidance is "
+          "labeled guidance.");
     field(out, "built_from", stamp);
     out += "\"schema\":1},\"cloze\":[";
 
