@@ -2,6 +2,7 @@
 
 #include <cctype>
 #include <filesystem>
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 
@@ -194,7 +195,21 @@ bool ProposalStore::save() {
                 if (!have) items_.push_back(std::move(d));
             }
     }
-    std::ofstream f(dir_ + "/proposals.tsv", std::ios::trunc);
+    // Write beside the queue, then rename over it. This used to truncate
+    // proposals.tsv IN PLACE, so the short write FAIL-2 already documents --
+    // 16,384 of 123,576 bytes -- did not merely report failure, it left that
+    // truncated file as the team's queue. Reloading it yields a SHORTER queue
+    // that parses perfectly: the proposals past the cut are not corrupt, they
+    // are absent, and nothing on screen says so. For a shared, append-mostly
+    // record of what people have asked Geshe Michael to rule on, silently
+    // losing the tail is the worst available failure.
+    //
+    // rename(2) is atomic within a filesystem, and the temporary is in the
+    // same directory precisely so it is on the same one. A reader during the
+    // write sees either the whole old queue or the whole new one.
+    const std::string finalPath = dir_ + "/proposals.tsv";
+    const std::string tmpPath = finalPath + ".writing";
+    std::ofstream f(tmpPath, std::ios::trunc);
     if (!f) return false;
     f << kHeader << "\n";
     for (const auto& p : items_) {
@@ -218,7 +233,15 @@ bool ProposalStore::save() {
     // (House rule 4: nothing reports success it did not verify.)
     f.flush();
     f.close();
-    return !f.fail();
+    if (f.fail()) {
+        std::remove(tmpPath.c_str());   // never leave a half queue behind
+        return false;
+    }
+    if (std::rename(tmpPath.c_str(), finalPath.c_str()) != 0) {
+        std::remove(tmpPath.c_str());
+        return false;
+    }
+    return true;
 }
 
 std::string ProposalStore::propose(ProposalKind kind,
