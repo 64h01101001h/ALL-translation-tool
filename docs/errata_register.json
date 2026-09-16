@@ -2242,5 +2242,53 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-188",
+  "course": "C01",
+  "segment": "C01:32",
+  "kind": "LAYER_ARTEFACT",
+  "found": "You cannot cut the root of cyclic life",
+  "expected": "mi -> the negation ('not'/the neg- of 'cannot'); nus -> 'can' (able). The two are currently swapped.",
+  "evidence": "Found by the english_cut_mid_word advisory of tools/alignment_invariants.py and read against the segment. C01:32's English reads \"You cannot cut the root of cyclic life\" for Tibetan \"bcad par mi nus\". The bank has s32w11 (d=5, tib 'nus') -> eng 'not' and s32m9 (d=6, tib 'mi') -> eng 'can'. That is an exact INVERSION: 'nus' is the verb of ability (be able / can) and 'mi' is the negative particle. Composed left-to-right the two halves still spell \"cannot\", so no string check can see it -- the fault is only visible to a reader who knows which morpheme means which. The same segment also holds s32m3 (tib 'mi') -> eng null, correctly, for the other negation. A vocabulary card built from s32w11 would teach that 'nus' means 'not'.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-189",
+  "course": "C01",
+  "segment": "C01:111",
+  "kind": "LAYER_ARTEFACT",
+  "found": "you end up outside of both",
+  "expected": "the span 'mi chud pa' banked whole as 'outside' (or 'chud pa' -> 'outside' with the mi morpheme taking eng: null); not a split at the English syllable boundary",
+  "evidence": "Found by the english_cut_mid_word advisory and read against the segment. C01:111 ends \"Try to mix up all the systems, the earlier and the later, and you end up outside of both.\" The bank splits the English word \"outside\" across two links: s111w27 (d=5, tib 'chud pa') -> eng 'side' and s111m19 (d=6, tib 'mi') -> eng 'out'. Neither half is an exponent of its Tibetan. 'chud pa' means to be contained or included in something; 'side' is simply the back half of the English word. 'mi' is the negation, and 'out-' in 'outside' is not a negation morpheme -- this is the same fault as E-183 ('da' bar -> 'gressing'), where the split lands on an English SYLLABLE boundary rather than a morpheme boundary. Note the same segment banks s111m13 (tib 'mi') -> 'not' correctly, so the two 'mi' links in one segment are treated inconsistently.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-190",
+  "course": "C01",
+  "segment": "C01:115",
+  "kind": "LAYER_ARTEFACT",
+  "found": "they have insufficient merit from their past deeds",
+  "expected": "'chung' -> 'insufficient' whole, or eng: null; never 'sufficient'",
+  "evidence": "Found by the english_cut_mid_word advisory and read against the segment. C01:115 reads \"it is only because they have insufficient merit from their past deeds that they think this way\", for Tibetan \"bsod nams kyi bsags rgyab chung bas\" -- literally, their accumulated merit is SMALL. The bank has s115w15 (d=5, tib 'chung') -> eng 'sufficient'. 'chung' means small or little; 'sufficient' is its opposite. The English carries the smallness as a negation internal to the word 'insufficient', and there is no Tibetan negation particle anywhere in the span for the 'in-' to attach to -- the detector found no morpheme link supplying it. So the split invents a negation boundary with no Tibetan counterpart AND assigns the Tibetan word the English of its own antonym. Rated HIGH rather than MEDIUM because, unlike E-183's 'gressing', 'sufficient' is a real English word that reads as a plausible gloss: a card for 'chung' showing 'sufficient' teaches the reverse of the truth and nothing on the card looks wrong.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-191",
+  "course": "C01",
+  "segment": "C01:178",
+  "kind": "LAYER_ARTEFACT",
+  "found": "Sending the uncatchable diamond ahead of you",
+  "expected": "the phrase is already banked correctly at s178w1 ('thebs med' -> 'uncatchable'); the duplicate split across s178w16/s178w17 should not exist",
+  "evidence": "Found by the english_cut_mid_word advisory and read against the segment. C01:178 opens \"Sending the uncatchable diamond ahead of you\". The bank renders that one English word TWICE: correctly as a whole at s178w1 (d=5, tib 'thebs med') -> 'uncatchable', and again split across s178w16 (d=5, tib 'bshol') -> 'catchable' and s178w17 (d=5, tib 'thebs') -> 'un'. The split version is wrong on both halves. 'bshol' means to postpone or put off -- the same segment banks it correctly at s178w14 as 'bring you back' -- and 'thebs' is to be struck or to reach, not a negative prefix. So one English word has two banked derivations, one of which attributes it to two unrelated Tibetan words. Duplicate coverage of a single English span is not covered by any existing invariant; worth a check of its own.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
