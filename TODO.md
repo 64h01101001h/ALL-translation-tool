@@ -422,11 +422,28 @@ before 1.0)
       filter, Tools item and Versions button wait for Adam's Word check on
       docs/release_audit/redline_sample.docx (WordRedline.md §4)
 - [ ] **30 open questions for Adam** are collected at the end of each batch
-      section of the plan; the first six matter before code: the house shad
-      convention, where versions live when the data root is shared, whether
-      canonical library texts may be replaced in bulk, the tracked-changes
-      author string, Word verification for the .docx writer, and whether
-      the Manuscript also gets a plain .docx export
+      section of the plan. FOUR OF THE FIRST SIX WERE RULED 2026-09-16 and
+      are recorded inline in docs/ANALYSIS_SUITE_PLAN.md:
+        - versions live under `<dataRoot>/library/versions/`, shared, with
+          the location still settable (Adam delegated; reasoning in the plan)
+        - bulk Replace in Files over `/library/` is REFUSED OUTRIGHT — a
+          fence, not a warning
+        - tracked changes name the person: "`<Team>` via Diamond Cutter
+          compare" on every mark
+        - the Manuscript DOES get a plain .docx export in this batch,
+          retiring the macOS-only textutil path
+      TWO REMAIN, and neither is a question Adam can simply answer at a desk:
+        - the house shad convention needs the PUBLISHING TEAM's ruling, not
+          Adam's alone (double shad `,,` or `, ,`; shad spacing). Until it is
+          ruled, both Normalize controls stay unchecked and labelled
+          "awaiting the house ruling", and no preset ships.
+        - the Word verification is an ACTION, not a decision: someone opens
+          docs/…/redline_sample.docx in Microsoft Word (version noted) and
+          confirms the marks read "<name> via Diamond Cutter compare",
+          Accept All gives text B, Reject All gives text A. Until that is in
+          the audit row, Save Report…, the Tools item and the Versions
+          button do not ship.
+      The other 24 are not blocking and stay where they are.
 - [ ] **`docs/MAPS_RESEARCH.md`** — the maps study stopped at the session
       limit with 6 of 16 readings done; resume it, then the Map pane
       batches M1–M3 already filed below

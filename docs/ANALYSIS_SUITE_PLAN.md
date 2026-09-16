@@ -2129,6 +2129,11 @@ code and is left untouched.
 
 ## Open questions for Adam
 
+> **FOUR OF THESE WERE RULED 2026-09-16.** Marked inline below. The two that
+> remain are 1 (the house shad convention, which needs the publishing team,
+> not Adam alone) and 2 (the Word verification, which is an action for Adam
+> at a copy of Word, not a decision).
+
 1. **The house shad conventions.** Normalize needs the publishing team's ruling: is the double shad
    written `,,` or `, ,` in ACIP (and `།།` or `༎` in Unicode)? Does a shad follow its syllable with no
    space (`GA,` / `ཀ།`) or one space (`GA ,` / `ཀ །`)? Until you or the team rule, **both controls ship
@@ -2140,21 +2145,50 @@ code and is left untouched.
    *"`<name>` via Diamond Cutter compare"*, Accept All should give text B, Reject All text A. **The
    Save Report… filter, the Tools item and the Versions button do not ship until that check is recorded
    in the audit row.**
-3. **Where document versions live when the data root is a shared Dropbox folder.** This design puts them
+3. **RULED 2026-09-16 — SHARED, and the location stays settable.** Adam
+   delegated this one ("use your best judgment... the most efficient way").
+   Decision: `<dataRoot>/library/versions/`, as §5 proposes. The reasoning:
+   this is a team tool whose deployment model IS a shared data root, and the
+   point of a version history is provenance — who revised what, when. A
+   private Application Support folder loses that on every machine change,
+   which is the one outcome this project refuses everywhere else. The real
+   cost is Dropbox sync traffic, and it is bounded by the caps already
+   proposed (200 versions / 64 MB per document, compressed, oldest pruned)
+   over payloads that are text. The location REMAINS a setting, so an input
+   centre on a slow link can move it local without a rebuild.
+   Original question follows.
+   **Where document versions live when the data root is a shared Dropbox folder.** This design puts them
    under `<dataRoot>/library/versions/` (as §5 proposes), so histories travel with the texts and every
    team member sees them — at the cost of sync traffic. The alternative is each user's private
    Application Support folder: no sync, no shared histories, lost on a machine change. It is a one-line
    switch either way; the defaults (200 versions / 64 MB per document, oldest pruned, compressed) are
    yours to adjust once the location is settled.
-4. **Replace in Files over canonical texts under `/library/`.** As designed they are listed with a badge,
+4. **RULED 2026-09-16 by Adam — REFUSED OUTRIGHT.** Bulk rewriting of
+   `/library/` is not permitted at all; only intake and input-centre folders
+   may be bulk-rewritten. This is a fence, not a warning: the designed guards
+   (unticked, default-off switch, confirmation naming the count) are replaced
+   by a refusal, so the capability cannot be reached by three tired clicks.
+   Original question follows.
+   **Replace in Files over canonical texts under `/library/`.** As designed they are listed with a badge,
    unticked, and gated behind a default-off switch plus a confirmation that names how many are involved.
    Is that enough, or should bulk rewriting of `/library/` be **refused outright**, so only intake and
    input-centre folders can be rewritten in bulk?
-5. **The tracked-changes author string.** Proposed: *"`<Team name>` via Diamond Cutter compare"* on every
+5. **RULED 2026-09-16 by Adam — NAME THE PERSON.** Every mark carries
+   "`<Team name>` via Diamond Cutter compare", plus the untracked provenance
+   paragraph. Geshe Michael sees who made each change on every balloon, which
+   is how this project treats provenance everywhere else.
+   Original question follows.
+   **The tracked-changes author string.** Proposed: *"`<Team name>` via Diamond Cutter compare"* on every
    mark, plus the untracked provenance paragraph. The alternative is a fixed non-personal author
    *"Diamond Cutter compare"* with the runner named only in the paragraph. Word shows the author on every
    balloon, so this is what Geshe Michael reads on every change.
-6. **Should the new OOXML writer also give the Manuscript a plain `.docx` export?** (`docs/CLOSER.md`
+6. **RULED 2026-09-16 by Adam — IN THIS BATCH.** The Manuscript gets a
+   plain `.docx` export from the new OOXML writer, retiring the macOS-only
+   `textutil` RTF path for Word delivery. That matters beyond tidiness: the
+   roadmap calls for Windows and Linux builds for the input centres, and a
+   macOS-only delivery path cannot go there.
+   Original question follows.
+   **Should the new OOXML writer also give the Manuscript a plain `.docx` export?** (`docs/CLOSER.md`
    #49; the research doc assumed it already existed.) Roughly 4 hours on top of F6, and it would retire
    the macOS-only `textutil` RTF path for Word delivery. In or out of this batch?
 7. **Manuscript autosave versions.** Proposed: a single rolling autosave slot per document — each
