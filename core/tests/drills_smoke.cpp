@@ -322,6 +322,31 @@ int main(int argc, char** argv) {
               "not drillable - no drill may print it as his rendering");
     }
 
+    {   // C13:63-82, the documented column offset: Tibetan against another
+        // item's English. The refusal lived inline in the debate loops only --
+        // the desktop's and the pack builder's -- so every other pool drew
+        // from a list that still held them, and 8 of the 20 pass every other
+        // test here. A cloze or trainer card built from one puts a different
+        // text's title on screen under "Geshe Michael Roach's English".
+        allcore::CorpusSegment off;
+        off.id = 2;
+        off.course = "C13";
+        off.acip = "TZAN DAN LJON SHING ,";
+        off.english = "12) The Servant of Gentle Voice (Manjushri)";
+        for (int q : {63, 70, 72, 82}) {
+            off.seq = q;
+            CHECK(!allcore::DrillFactory::isDrillable(off),
+                  "drills: the C13 column-offset window is refused at the one "
+                  "gate every pool asks, not in one pool's loop");
+        }
+        off.seq = 62;   // the segment either side of it is ordinary
+        CHECK(allcore::DrillFactory::isDrillable(off),
+              "drills: and the refusal stops at the window's edge");
+        off.seq = 83;
+        CHECK(allcore::DrillFactory::isDrillable(off),
+              "drills: and at its far edge");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "DRILLS SMOKE FAILED" : "DRILLS SMOKE OK", failures);
     return failures ? 1 : 0;
