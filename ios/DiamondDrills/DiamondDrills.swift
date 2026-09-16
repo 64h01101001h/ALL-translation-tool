@@ -124,11 +124,16 @@ struct SilentSpan: Codable {
     let course: String
     let rendered: Bool
 }
-/// One headword and every rendering he is recorded using for it.
+/// One headword and the renderings Geshe Michael is recorded using for it,
+/// most used first. `renderings` is CAPPED by the builder; `total` is how many
+/// were actually recorded, so the card can say which of the two it is showing
+/// instead of claiming completeness it does not have. Optional so a pack built
+/// before this field still decodes.
 struct SecondThought: Codable {
     let tib: String
     let wylie: String
     let renderings: [Rendering]
+    let total: Int?
 }
 struct Rendering: Codable { let eng: String; let n: Int }
 
@@ -326,6 +331,12 @@ struct WeakSpotsSheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
+                    // This was false for seven of the eleven modes: they
+                    // called record(correct:) only, which moves the done/right
+                    // counters but writes nothing to the skill dictionaries
+                    // weakSpots() reads. The sheet under this line was empty
+                    // or cloze-only while claiming to cover everything. Every
+                    // mode now files its skill, so the sentence is true.
                     Text("Every wrong answer is filed under the skill it reveals. Nothing leaves this phone.")
                         .font(.system(size: 13)).foregroundColor(c.muted)
                     ForEach(deck.weakSpots(), id: \.0) { spot in
@@ -546,7 +557,9 @@ struct ParticleView: View {
             HStack(spacing: 14) {
                 Button(checked ? "New drill" : "Check") {
                     if checked { next(); picked = nil; checked = false }
-                    else if picked != nil { checked = true; deck.record(correct: isRight) }
+                    else if picked != nil { checked = true
+                        deck.record(correct: isRight)
+                        deck.record(skill: "particle", correct: isRight) }
                 }
                 .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
                 .lineLimit(1).fixedSize(horizontal: true, vertical: false)
@@ -666,7 +679,9 @@ struct DebateView: View {
             HStack(spacing: 14) {
                 Button(checked ? "New statement" : "Check") {
                     if checked { next(); picked = nil; checked = false }
-                    else if picked != nil { checked = true; deck.record(correct: picked == answer) }
+                    else if picked != nil { checked = true
+                        deck.record(correct: picked == answer)
+                        deck.record(skill: "debate", correct: picked == answer) }
                 }
                 .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
                 .lineLimit(1).fixedSize(horizontal: true, vertical: false)
@@ -786,7 +801,12 @@ struct SecondThoughtView: View {
                 Text(item.wylie).font(.system(size: 14)).foregroundColor(c.muted)
                 if shown {
                     Divider()
-                    Text("Everything Geshe Michael has been recorded writing for it, most used first:")
+                    // "Everything" was printed over a list the builder caps
+                    // at 12. 'gro ba has 23 recorded renderings, so eleven of
+                    // his were missing under a line asserting there were none.
+                    Text((item.total ?? item.renderings.count) > item.renderings.count
+                         ? "The \(item.renderings.count) Geshe Michael used most often, of \(item.total ?? item.renderings.count) recorded:"
+                         : "Everything Geshe Michael has been recorded writing for it, most used first:")
                         .font(.system(size: 13)).foregroundColor(c.muted)
                     ForEach(Array(item.renderings.enumerated()), id: \.offset) { _, r in
                         HStack {
@@ -829,7 +849,21 @@ struct PeelView: View {
     @Environment(\.colorScheme) private var scheme
     @State private var picked: Int? = nil
     @State private var checked = false
-    private var options: [Int] { Array(max(2, span.pieces.count - 1)...(max(2, span.pieces.count - 1) + 3)) }
+    /// The four counts offered. The run starts at max(2, n-1), so before the
+    /// rotation below the true count could only ever land at index 0 (when
+    /// n == 2) or index 1 (every other n) -- options C and D were correct
+    /// zero times in 250 shipped spans, and tapping the second option without
+    /// reading anything scored 158 of 250. Rotating by a value derived from
+    /// the span keeps the same four numbers and moves the key among all four
+    /// positions, and is stable across re-renders because it is derived, not
+    /// random.
+    private var options: [Int] {
+        let n = span.pieces.count
+        let lo = max(2, n - 1)
+        let base = Array(lo...(lo + 3))
+        let r = abs(span.seq &+ n) % base.count
+        return Array(base[r...] + base[..<r])
+    }
     private var answer: Int { options.firstIndex(of: span.pieces.count) ?? 0 }
 
     var body: some View {
@@ -872,7 +906,9 @@ struct PeelView: View {
             HStack(spacing: 14) {
                 Button(checked ? "Next span" : "Check") {
                     if checked { next(); picked = nil; checked = false }
-                    else if picked != nil { checked = true; deck.record(correct: picked == answer) }
+                    else if picked != nil { checked = true
+                        deck.record(correct: picked == answer)
+                        deck.record(skill: "peel", correct: picked == answer) }
                 }
                 .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
                 .lineLimit(1).fixedSize(horizontal: true, vertical: false)
@@ -957,7 +993,9 @@ struct BoundaryView: View {
             HStack(spacing: 14) {
                 Button(checked ? "Next segment" : "Check") {
                     if checked { next(); marks = []; checked = false }
-                    else { checked = true; deck.record(correct: perfect) }
+                    else { checked = true
+                        deck.record(correct: perfect)
+                        deck.record(skill: "boundary", correct: perfect) }
                 }
                 .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
                 .lineLimit(1).fixedSize(horizontal: true, vertical: false)
@@ -1077,6 +1115,7 @@ struct ReadOrderView: View {
                         next(); picked = []; checked = false
                     } else {
                         checked = true; deck.record(correct: correct)
+                        deck.record(skill: "readorder", correct: correct)
                     }
                 }
                 .font(.system(size: 17, weight: .semibold)).foregroundColor(.white)
@@ -1295,6 +1334,7 @@ struct VocabView: View {
     /// belongs where the scaffold is.
     private func advance(_ knew: Bool) {
         deck.record(correct: knew)
+        deck.record(skill: "vocab", correct: knew)
         revealed = false
         if knew && stage == 0 { stage = 1 } else { stage = 0; next() }
     }
@@ -1562,6 +1602,16 @@ struct DrillView: View {
     @State private var checked = false
     /// One option struck out by the hint, if it was used on this drill.
     @State private var ruledOut: Int? = nil
+
+    /// Every way out of a card clears every per-card piece of state. Two
+    /// hand-written resets had already drifted apart once.
+    private func advance() {
+        next()
+        picked = nil
+        checked = false
+        ruledOut = nil
+        expanded = false
+    }
     /// The skill the draw is aimed at, if any. The phone cannot GENERATE a
     /// targeted drill — the pack is built on the Mac — so it filters the
     /// pre-tagged pack instead, which reaches the same place by the other
@@ -1625,13 +1675,25 @@ struct DrillView: View {
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text(m.wylie).font(.system(size: 15, weight: .semibold))
                                         .foregroundColor(c.ink)
-                                    Text("Geshe Michael Roach has: "
+                                    // The tier belongs on the sentence that
+                                    // names him, not three lines below it.
+                                    // This card used to assert "Geshe Michael
+                                    // Roach has: hundred" for an AUTO-ALIGNED
+                                    // gloss and then deny it further down --
+                                    // the same card both attributing and
+                                    // disclaiming, with the attribution the
+                                    // one carrying his name. TermMeans has
+                                    // carried `provisional` all along.
+                                    Text((m.provisional
+                                          ? "Machine-matched to Geshe Michael's English, PROVISIONAL: "
+                                          : "Geshe Michael Roach has: ")
                                          + (expanded ? m.glosses
                                             : Array(m.glosses.prefix(8)))
                                            .joined(separator: " · ")
                                          + (expanded && m.more > 0
                                             ? " (+\(m.more) more not carried)" : ""))
-                                        .font(.system(size: 14)).foregroundColor(c.muted)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(m.provisional ? c.machine : c.muted)
                                     if !m.used.isEmpty {
                                         Text("\(m.used.joined(separator: ", ")) — Geshe Michael's word here, above.")
                                             .font(.system(size: 13)).foregroundColor(c.act)
@@ -1697,7 +1759,7 @@ struct DrillView: View {
                 // button until its label broke mid-word.
                 HStack(spacing: 14) {
                     Button(checked ? "New drill" : "Check") {
-                        if checked { next(); picked = nil; checked = false; ruledOut = nil; expanded = false }
+                        if checked { advance() }
                         else if picked != nil {
                             checked = true
                             deck.record(correct: isRight)
@@ -1712,7 +1774,15 @@ struct DrillView: View {
                     .cornerRadius(9)
                     .disabled(picked == nil && !checked)
                     if !checked {
-                        Button("Skip") { next(); picked = nil; checked = false }
+                        // advance(), not a second hand-written reset. Skip
+                        // used to clear picked and checked but NOT ruledOut,
+                        // so the "Rule out one" strikethrough -- drawn from
+                        // the OLD card's wrong answers -- was carried onto the
+                        // next card, where it struck out whichever option
+                        // happened to sit at that index. About one time in
+                        // three that is the correct answer, crossed out and
+                        // greyed as already eliminated.
+                        Button("Skip") { advance() }
                             .font(.system(size: 16)).foregroundColor(c.muted)
                     }
                     Spacer()
@@ -1997,10 +2067,18 @@ struct RootView: View {
                         switch kind {
                         case .cloze:
                             if !pack.cloze.isEmpty, dAt < dOrder.count {
+                                // .id keyed on the aim AND the card. Without
+                                // it SwiftUI reuses this view when "train this
+                                // weak spot" replaces the deck, so @State
+                                // picked/checked survive from the card just
+                                // answered and the new drill arrives already
+                                // marked, showing a verdict the learner never
+                                // gave.
                                 DrillView(drill: pack.cloze[dOrder[dAt]],
                                           deck: deck, aim: $aim) {
                                     dAt = (dAt + 1) % max(dOrder.count, 1)
                                 }
+                                .id("\(aim ?? "all")#\(dOrder[dAt])")
                             } else { missing("fill-the-blank drills", c) }
                         case .order:
                             if let a = pack.order, !a.isEmpty {
