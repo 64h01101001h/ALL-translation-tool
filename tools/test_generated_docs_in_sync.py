@@ -57,7 +57,47 @@ def check_errata_register():
                        '(committed %d lines, regenerated %d)'
                        % (min(len(b), len(a)), len(b), len(a)))
 
-CHECKS = [('docs/ERRATA_REGISTER.md', check_errata_register)]
+def check_punchlist():
+    """The punchlist page must match a fresh generation from the three source
+    lists. This is the whole point of the generator: the previous page was a
+    one-off reading that drifted for five days and 139 commits until an item it
+    called release-blocking had been marked DONE in its own source. Editing a
+    source list without regenerating now fails here instead of quietly aging."""
+    out = os.path.join(ROOT, 'docs/RELEASE_PUNCHLIST.md')
+    gen = os.path.join(ROOT, 'tools/build_punchlist.py')
+    spec = importlib.util.spec_from_file_location('build_punchlist', gen)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    before = io.open(out, encoding='utf-8').read()
+    tmp = tempfile.mkdtemp()
+    try:
+        real, mod.PAGE = mod.PAGE, os.path.join(tmp, 'regen.md')
+        real_argv, sys.argv = sys.argv, ['build_punchlist.py', '--emit']
+        buf, real_out = io.StringIO(), sys.stdout
+        sys.stdout = buf
+        try:
+            mod.main()
+        finally:
+            sys.stdout = real_out
+            sys.argv = real_argv
+            mod.PAGE = real
+        after = io.open(os.path.join(tmp, 'regen.md'), encoding='utf-8').read()
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    if before == after:
+        return 'OK', '%d bytes, byte-identical to a fresh generation' % len(before)
+    b, a = before.splitlines(), after.splitlines()
+    for i, (x, y) in enumerate(zip(b, a)):
+        if x != y:
+            return 'DRIFTED', ('first difference at line %d\n     committed: %s'
+                               '\n     regenerated: %s' % (i + 1, x[:110], y[:110]))
+    return 'DRIFTED', ('identical for %d lines, then the files differ in length '
+                       '(committed %d lines, regenerated %d)'
+                       % (min(len(b), len(a)), len(b), len(a)))
+
+
+CHECKS = [('docs/ERRATA_REGISTER.md', check_errata_register),
+          ('docs/RELEASE_PUNCHLIST.md', check_punchlist)]
 
 def main():
     bad = 0
