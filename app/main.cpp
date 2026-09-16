@@ -144,6 +144,7 @@ public:
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
+#include <QSaveFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFileSystemModel>
@@ -3099,7 +3100,7 @@ inline QString str(const QString& key) {
 // W2 (Phase-2 audit): saving user work must never fail silently. One
 // voice for every write failure: names the file, the reason, and that
 // the work on screen is NOT persisted. Harness runs log instead.
-static bool warnWriteFail(QWidget* parent, const QFile& f,
+static bool warnWriteFail(QWidget* parent, const QFileDevice& f,
                           const QString& what) {
     static QSet<QString> warned;   // one modal per failing path —
                                    // repeats log (Space-bar cadence
@@ -3134,15 +3135,28 @@ static bool warnWriteFail(QWidget* parent, const QFile& f,
 // returns true.
 static bool saveOrWarn(QWidget* parent, const QString& path,
                        const QByteArray& body, const QString& what) {
-    QFile f(path);
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    // QSaveFile, not QFile+Truncate. The old idiom emptied the user's file at
+    // OPEN and only then began writing, so every failure it correctly reported
+    // -- full disk, ejected volume, dropped share -- had already destroyed what
+    // was previously on disk. The dialog said "What you see on screen is NOT
+    // saved", which was true and badly incomplete: what was on DISK was gone
+    // too, and that was the copy the user still had.
+    //
+    // QSaveFile writes to a temporary beside the target and renames over it
+    // only once commit() succeeds. A failure anywhere before that leaves the
+    // previous file untouched, so "not saved" now means the file is exactly as
+    // it was. The byte-count and flush checks stay: a short write must not be
+    // renamed into place (ENOSPC after a successful open was bounty #6).
+    QSaveFile f(path);
+    if (!f.open(QIODevice::WriteOnly))
         return warnWriteFail(parent, f, what);
-    if (f.write(body) != body.size() || !f.flush()) {
+    if (f.write(body) != body.size()) {
         const bool r = warnWriteFail(parent, f, what);
-        f.close();
+        f.cancelWriting();
         return r;
     }
-    f.close();
+    if (!f.commit())
+        return warnWriteFail(parent, f, what);
     return true;
 }
 
@@ -19411,6 +19425,53 @@ public:
                 check(!saved,
                       "a read-only DIRECTORY is reported by the app, "
                       "not collapsed onto the drill (FAIL-12)");
+            }
+            // DATA-LOSS: a save that FAILS must leave the previous file
+            // exactly as it was. saveOrWarn used to open with
+            // QIODevice::Truncate, so the user's file was emptied at open and
+            // every honest "could not be written" it then reported was
+            // reporting on a file it had already destroyed. The dialog said
+            // "what you see on screen is NOT saved" -- true, and badly
+            // incomplete, because the copy on disk was gone too.
+            //
+            // The read-only directory is the discriminating case: POSIX needs
+            // directory write permission to create the temporary, but NOT to
+            // open an existing writable file. So the old code sailed through
+            // here and overwrote; the atomic one refuses and leaves the file
+            // whole. That refusal is the deliberate trade -- a rare save that
+            // used to work now fails loudly rather than risking the original.
+            {
+                const QString dir =
+                    QDir::temp().filePath("all_selftest_atomic_dir");
+                QDir(dir).removeRecursively();
+                QDir().mkpath(dir);
+                const QString doc = dir + "/manuscript.txt";
+                {
+                    QFile seed(doc);
+                    seed.open(QIODevice::WriteOnly | QIODevice::Truncate);
+                    seed.write("ORIGINAL WORK");
+                    seed.close();
+                }
+                QFile::setPermissions(
+                    dir, QFileDevice::ReadOwner | QFileDevice::ExeOwner);
+                const bool saved = saveOrWarn(nullptr, doc, "REPLACEMENT",
+                                              "atomic-save probe");
+                QFile::setPermissions(
+                    dir, QFileDevice::ReadOwner | QFileDevice::WriteOwner |
+                             QFileDevice::ExeOwner);
+                QByteArray after;
+                {
+                    QFile back(doc);
+                    if (back.open(QIODevice::ReadOnly)) after = back.readAll();
+                }
+                QDir(dir).removeRecursively();
+                check(!saved,
+                      "atomic save: a write it cannot complete is reported, "
+                      "never claimed");
+                check(after == "ORIGINAL WORK",
+                      "atomic save: and the work already on disk survives the "
+                      "failure untouched -- 'not saved' means the file is as "
+                      "it was, not that it is gone");
             }
             const QString okPath =
                 QDir::temp().filePath("all_selftest_test2_ok.txt");
