@@ -24791,9 +24791,23 @@ private:
                       : QString("<b>GMR:</b> ") + joined) +
                  "</div>";
         }
-        if (progress_)
+        // A drill that was not recorded must not be reported as recorded.
+        // Every write path in Progress returns void after incrementing
+        // write_failures_, and nothing in the app had ever read that counter:
+        // on a full volume, a read-only mount, or with a second copy of the
+        // app holding the lock, the pane showed the score and the session was
+        // simply gone on relaunch, with the user never told.
+        if (progress_) {
+            const int wfBefore = progress_->writeFailures();
             progress_->recordDrill("script", card_->entry.wylie, right,
                                    (long long)time(nullptr));
+            if (progress_->writeFailures() > wfBefore)
+                h += QString("<div style='color:") + ux::chromeError() +
+                     ";padding-top:6px'><b>NOT RECORDED.</b> This answer could "
+                     "not be written to your progress file, so it will not be "
+                     "there when you reopen the app. Check disk space and "
+                     "whether another copy of the app is open.</div>";
+        }
         result_->setHtml(h);
     }
 
@@ -25409,6 +25423,21 @@ private:
         if (lookupBtn_)
             lookupBtn_->setVisible(!lookupWord_.isEmpty() && g_lookupPopup);
         if (ruleOutBtn_) ruleOutBtn_->setVisible(false);   // the answer is out
+        // Every drill branch above records into progress_ and every one of
+        // them returns void, incrementing write_failures_ on failure. Nothing
+        // in the app had ever read that counter, so a full volume, a read-only
+        // mount, or a second copy of the app holding the lock let the pane
+        // show the score while the whole session quietly failed to persist --
+        // gone on relaunch, with the user never told. This is the one place
+        // every branch renders through, so one confession covers them all.
+        if (progress_ && progress_->writeFailures() > seenWriteFailures_) {
+            seenWriteFailures_ = progress_->writeFailures();
+            h += QString("<div style='color:") + ux::chromeError() +
+                 ";padding-top:6px'><b>NOT RECORDED.</b> This answer could not "
+                 "be written to your progress file, so it will not be there "
+                 "when you reopen the app. Check disk space, and whether "
+                 "another copy of the app is open.</div>";
+        }
         result_->setHtml(h);
     }
 
@@ -25540,6 +25569,9 @@ private:
     double zoom_ = QSettings("ALL", "TranslationTool")
                        .value("drills/zoom", 1.0).toDouble();
     QPushButton* check_ = nullptr;
+    // Highest writeFailures() this pane has already confessed to; see the
+    // NOT RECORDED banner at the reveal.
+    int seenWriteFailures_ = 0;
     QTextBrowser* result_ = nullptr;
 };
 

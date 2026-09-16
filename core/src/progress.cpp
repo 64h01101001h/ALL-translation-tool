@@ -46,6 +46,12 @@ Progress::Progress(const std::string& db_path) {
         throw std::runtime_error("cannot open progress db '" + db_path +
                                  "': " + err);
     }
+    // A second copy of the app holding a write lock on the same progress.db
+    // used to make every write fail INSTANTLY: no busy_timeout and no busy
+    // handler were set anywhere in the tree, so SQLITE_BUSY came straight
+    // back and the drill silently recorded nothing. Waiting is the right
+    // answer to a lock that is about to be released.
+    sqlite3_busy_timeout(db_, 3000);
     // WP-15 test hook: a page cap makes real SQLITE_FULL reachable
     // by the battery without filling a disk
     if (const char* cap = std::getenv("ALL_PROGRESS_MAX_PAGES"))
