@@ -813,7 +813,10 @@ private:
         // depends on what it inherits.
         const bool dark = ux::darkChrome();
         const QString ink = dark ? QString("#E8E2D8") : QString("#2B2118");
-        const QString greenBg = dark ? QString("#1E2A1E") : QString("#EDF4ED");
+        // #1C3E24 is the vocabulary's dark-chrome green wash (G1); this
+        // had invented a fourth one, which the gate could not see while
+        // it read main.cpp alone.
+        const QString greenBg = dark ? QString("#1C3E24") : QString("#EDF4ED");
         const QString amberBg = dark ? QString("#2E2118") : QString("#FBF1E8");
         h += "<div style='border-left:3px solid #3B7A3B;padding:6px 10px;"
              "background:" + greenBg + ";color:" + ink + "'>"
@@ -968,7 +971,9 @@ private:
         // the labels sat over the wrong columns, which only showed up on
         // looking at the rendered page.
         {
-            const QString th = "color:#999;font-size:10px;letter-spacing:.06em";
+            // was #999 (2.78:1, the R4 incident ink); kFaint measures 4.66
+            const QString th = QString("color:") + ux::kFaint +
+                               ";font-size:10px;letter-spacing:.06em";
             h += "<tr><td style='" + th + "'></td>"
                  "<td style='" + th + "'>CHUNK</td>"
                  "<td style='" + th + "'>PARTICLE</td>"

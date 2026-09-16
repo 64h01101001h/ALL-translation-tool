@@ -33,6 +33,14 @@ def main():
     # sites the gate never sees. R2 stays main.cpp-only (the flag list lives there).
     inc_files = sorted(glob.glob(os.path.join(root, "app/*.inc")))
     r3_text = main_cpp + "".join(read(p) for p in inc_files)
+    # F1 (2026-09-15 audit): R4 and G1 read main.cpp ALONE, and the app is
+    # main.cpp plus eleven .inc files compiled into it. A forbidden ink or an
+    # unvocabularied green simply had to live in a pane file to be invisible to
+    # the gate that forbids it -- and both were, on the day this was widened.
+    # Keyed by path so the finding still names a file and a line.
+    app_srcs = {"app/main.cpp": main_cpp}
+    for q in inc_files:
+        app_srcs["app/" + os.path.basename(q)] = read(q)
     press = read(os.path.join(root, "tools/package_macos.sh"))
 
     core_srcs = {}
@@ -236,16 +244,17 @@ def main():
     # here rather than by widening that test into a hole.
     import re as _re
     G1_ALLOWED = {"1E6B4E", "2E7D32", "3B7A3B", "5FBF8E", "1C3E24"}
-    for m in _re.finditer(r"#([0-9A-Fa-f]{6})", main_cpp):
-        hx = m.group(1).upper()
-        r, g, b = (int(hx[i:i+2], 16) for i in (0, 2, 4))
-        if g > r and g >= b and g < 0xC8 and hx not in G1_ALLOWED:
-            line = main_cpp[:m.start()].count("\n") + 1
-            fails.append(
-                f"G1 app/main.cpp:{line}: unvocabularied green #{hx} "
-                f"- the green vocabulary is frozen at three named "
-                f"meanings (DATA-12); use a token or add a ruling "
-                f"here")
+    for name, src in app_srcs.items():
+        for m in _re.finditer(r"#([0-9A-Fa-f]{6})", src):
+            hx = m.group(1).upper()
+            r, g, b = (int(hx[i:i+2], 16) for i in (0, 2, 4))
+            if g > r and g >= b and g < 0xC8 and hx not in G1_ALLOWED:
+                line = src[:m.start()].count("\n") + 1
+                fails.append(
+                    f"G1 {name}:{line}: unvocabularied green #{hx} "
+                    f"- the green vocabulary is frozen at three named "
+                    f"meanings (DATA-12); use a token or add a ruling "
+                    f"here")
 
     # G3 — PROVISIONAL never wears error-red (SQA low; the manual
     # promises amber three times). Red says "wrong"; provisional says
@@ -300,13 +309,14 @@ def main():
 
     # R4 — the pre-W5 failing inks may not return as text colors.
     # Incident: captions at 2.78:1 shipped for weeks.
-    for bad in ("color:#9C948A", "color:#8A8A8A", "color:#999;",
-                "color:#999'", "color:#B26B00"):
-        if bad in main_cpp:
-            line = main_cpp[:main_cpp.index(bad)].count("\n") + 1
-            fails.append(
-                f"R4 app/main.cpp:{line}: forbidden ink '{bad}' "
-                f"(failed WCAG AA; use the ux:: tokens — W5)")
+    for name, src in app_srcs.items():
+        for bad in ("color:#9C948A", "color:#8A8A8A", "color:#999;",
+                    "color:#999'", "color:#B26B00"):
+            if bad in src:
+                line = src[:src.index(bad)].count("\n") + 1
+                fails.append(
+                    f"R4 {name}:{line}: forbidden ink '{bad}' "
+                    f"(failed WCAG AA; use the ux:: tokens — W5)")
 
     # R5 — no truncate-rewrite of shared-store TSVs outside the
     # merge-save. Incident: last-writer-wins ate proposals (S1-01).

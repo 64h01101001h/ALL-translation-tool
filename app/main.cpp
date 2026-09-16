@@ -12279,6 +12279,13 @@ private:
         folioOrder_.clear();
         canvasSeq_.clear();
         curFolio_.clear();
+        // folioOcr_ is keyed by the FOLIO LABEL ("94a"), and every volume ever
+        // printed has a 94a. It was the one member of this group that a new
+        // scan target did not clear, so opening a second volume and asking
+        // where a word sits on folio 94a drew the FIRST volume's line and word
+        // geometry over the second volume's page -- highlight boxes over
+        // unrelated syllables, with no sign they came from another book.
+        folioOcr_.clear();
         scanImg_->hide(); scanCap_->hide(); scanNav_->hide();
         {
             const QString curl = bdrcScanUrlChecked(info, dataRoot_);
@@ -43076,7 +43083,15 @@ public:
             "QLabel, QCheckBox, QRadioButton { color: #2B2118; }"
             "QLineEdit { background: #FFFFFF; color: #2B2118; border: 1px solid #C9B992; border-radius: 6px; padding: 5px 8px; }"
             "QListWidget#prefGrid { background: transparent; border: none; }"
-            "QListWidget#prefGrid::item { padding: 6px; border-radius: 8px; }"
+            "QListWidget#prefGrid::item { padding: 6px; border-radius: 8px; "
+            "color: #2B2118; }"   // R9: the grid's ground is the dialog's
+                                  // fixed #F1EBDD, so its ink must be fixed
+                                  // too. Only ::item:selected named a
+                                  // colour, so in Night mode every
+                                  // UNSELECTED page title took the dark
+                                  // palette's white -- #FFFFFF on #F1EBDD,
+                                  // 1.19:1 -- and Preferences became
+                                  // thirteen icons with no readable names.
             "QListWidget#prefGrid::item:hover { background: rgba(154,122,51,0.12); }"
             "QListWidget#prefGrid::item:selected { background: rgba(154,122,51,0.22); color: #2B2118; }");
         auto* outer = new QVBoxLayout(this);
