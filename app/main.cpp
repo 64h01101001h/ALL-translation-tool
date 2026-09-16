@@ -14433,7 +14433,7 @@ private:
                                 .arg(units[d].syls)
                                 .arg(b.meter));
                 it->setData(0, Qt::UserRole, units[d].pos);
-                it->setForeground(0, QColor(0xB4, 0x2A, 0x0A));
+                it->setForeground(0, QColor(ux::chromeMachine()));
             }
         }
         tree->expandAll();
@@ -43770,7 +43770,7 @@ private:
                     auto* hdr = new QListWidgetItem(
                         "— " + c.pane.toUpper() + " —");
                     hdr->setFlags(Qt::NoItemFlags);
-                    hdr->setForeground(QColor("#9A7A33"));
+                    hdr->setForeground(QColor(ux::chromeGold()));
                     results_->addItem(hdr);
                     rows_.push_back({-3, QString()});
                 }

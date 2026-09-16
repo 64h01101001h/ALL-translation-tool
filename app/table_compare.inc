@@ -342,7 +342,7 @@ private:
             if (!show) continue; if (++shown > 5000) break;
             auto* it = new QTreeWidgetItem({st, QString::fromStdString(r.key), r.status == RowStatus::AmbiguousKey ? QString("%1 row(s) left, %2 right — not paired").arg(r.leftDupes).arg(r.rightDupes) : QString("%1 field(s) changed").arg(r.fields.size()), "", ""});
             it->setData(0, Qt::UserRole, (int)i);
-            if (r.status == RowStatus::AmbiguousKey) for (int c = 0; c < 5; ++c) it->setForeground(c, QColor(0x9A, 0x2B, 0x1E));
+            if (r.status == RowStatus::AmbiguousKey) for (int c = 0; c < 5; ++c) it->setForeground(c, QColor(ux::chromeError()));
             for (const auto& fd : r.fields) { auto* ch = new QTreeWidgetItem(it, {"", "", QString::fromStdString(fd.column), QString::fromStdString(fd.left), QString::fromStdString(fd.right)}); if (!fd.addedItems.empty() || !fd.removedItems.empty()) ch->setToolTip(2, "added: " + join(fd.addedItems) + " · removed: " + join(fd.removedItems)); }
             tree_->addTopLevelItem(it);
         }
