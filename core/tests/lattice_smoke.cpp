@@ -269,6 +269,35 @@ int main(int argc, char** argv) {
               "approximating (rule 3)");
     }
 
+    {   // The INDEXED path and rule 1. bestSpan ranks the spans it is given;
+        // it cannot rank a span the lattice never built. HeadwordIndex used to
+        // keep whichever entry for a headword it met FIRST -- rowid order --
+        // so for `dkyil 'khor` it kept entry 375, which carries no gloss at
+        // all, and the glossary entry ("disc") was gone before bestSpan ran.
+        // Spine::lookup had been fixed for this exact fault; the indexed path
+        // never called lookup. Every pane uses the indexed path.
+        auto tierAt = [&](const char* doc, int beg, int end)
+            -> const allcore::Entry* {
+            static allcore::OverlayDoc held;
+            held = allcore::buildOverlay(spine, index, doc);
+            for (const auto& sp : held.spans)
+                if (sp.beg == beg && sp.end == end && sp.entry_ix >= 0)
+                    return &held.entries[sp.entry_ix];
+            return nullptr;
+        };
+        const auto* omni = tierAt("RNAM PA THAMS CAD MKHYEN PA NYID", 0, 7);
+        CHECK(omni && !omni->hgm_gloss.empty(),
+              "indexed: the omniscience span carries a gloss");
+        CHECK(omni && !omni->provisional(),
+              "indexed: and it is his glossary reading, not the auto-aligned "
+              "entry that sits at the lower rowid (rule 1)");
+        const auto* mandala = tierAt("DKYIL 'KHOR", 0, 2);
+        CHECK(mandala && !mandala->hgm_gloss.empty(),
+              "indexed: a headword he HAS glossed never binds to the "
+              "unglossed homograph -- absence of his English must mean "
+              "absence, not a lost race on rowid");
+    }
+
     std::printf("%s (%d failures)\n",
                 failures ? "LATTICE SMOKE FAILED" : "LATTICE SMOKE OK", failures);
     return failures ? 1 : 0;

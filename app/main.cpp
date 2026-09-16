@@ -3842,7 +3842,7 @@ static QWidget* makeLookupPane(allcore::Spine& spine, allcore::RefDict* ref,
         struct Row { QString uni; QString wylie; QCollatorSortKey key; };
         QCollator bo(QLocale("bo"));
         std::vector<Row> rows;
-        for (const auto& [id, acip] : spine.allAcipHeadwords()) {
+        for (const auto& [id, acip, tier] : spine.allAcipHeadwords()) {
             const std::string wylie = allcore::acipToEwts(acip);
             auto [uni, ok] = allcore::wylieToUnicode(wylie);
             QString wy = QString::fromStdString(wylie);
@@ -18288,7 +18288,7 @@ private:
                 return !prog->wasCanceled();
             };
             phase = "dictionary headwords";
-            for (const auto& [id, acip] : heads) {
+            for (const auto& [id, acip, tier] : heads) {
                 auto [uni, ok] =
                     allcore::wylieToUnicode(allcore::acipToEwts(acip));
                 if (ok) seg->addWord(uni);
@@ -22241,6 +22241,15 @@ private:
                                  QString::fromStdString(u.detail)
                                      .left(90)
                                      .toHtmlEscaped() + ")</span>";
+                        // Same badge the gloss layer uses forty lines up. This
+                        // layer printed an auto-aligned gloss in plain grey,
+                        // so with layer 4 off it was the ONLY place the gloss
+                        // appeared and it appeared unmarked -- and with layer
+                        // 4 on the one screen labelled the same gloss
+                        // [PROVISIONAL] in one place and not the other.
+                        if (u.detail_provisional)
+                            h += " <span style='color:#B4540A'>"
+                                 "[PROVISIONAL]</span>";
                         h += "</small><br>";
                     }
                     // the Science of the Dots line: token ·[label] token …
@@ -35973,7 +35982,7 @@ public:
         if (predictBuilt_ || !spine_) return;
         predictBuilt_ = true;
         std::set<QString> words;
-        for (const auto& [id, acip] : spine_->allAcipHeadwords()) {
+        for (const auto& [id, acip, tier] : spine_->allAcipHeadwords()) {
             const QString a =
                 QString::fromStdString(acip).trimmed();
             if (a.isEmpty()) continue;

@@ -209,15 +209,26 @@ HeadwordIndex::HeadwordIndex(const Spine& spine) {
     // keys in WYLIE (the canonical matching space): ACIP headwords go
     // through the proven converter once at build time, so documents in
     // either script match after the same per-token normalization
-    for (auto& [id, acip] : spine.allAcipHeadwords()) {
+    for (auto& hw : spine.allAcipHeadwords()) {
         Cand c;
-        c.entry_id = id;
-        std::istringstream in(acipToEwts(acip));
+        c.entry_id = hw.id;
+        c.tier_rank = hw.tier_rank;
+        std::istringstream in(acipToEwts(hw.acip));
         std::string t;
         while (in >> t) c.tokens.push_back(t);
         if (c.tokens.empty()) continue;
         if (c.tokens.size() == 1) {
-            single_.emplace(c.tokens[0], id);   // first wins on dups
+            // BETTER TIER wins on dups, not first-seen. This used to be
+            // `emplace(tok, id)` -- arrival order, i.e. rowid order -- so
+            // `dkyil 'khor` bound to an entry with no gloss at all while the
+            // glossary entry ("disc / massive disc") was dropped before
+            // bestSpan ever got to see it. Spine::lookup was fixed for this
+            // exact fault; the indexed path never called lookup.
+            auto it = single_.find(c.tokens[0]);
+            if (it == single_.end())
+                single_.emplace(c.tokens[0], std::make_pair(hw.id, hw.tier_rank));
+            else if (hw.tier_rank < it->second.second)
+                it->second = std::make_pair(hw.id, hw.tier_rank);
         } else {
             multi_[c.tokens[0]][c.tokens[1]].push_back(std::move(c));
         }
@@ -227,7 +238,7 @@ HeadwordIndex::HeadwordIndex(const Spine& spine) {
 
 const long long* HeadwordIndex::single(const std::string& tok) const {
     auto it = single_.find(tok);
-    return it == single_.end() ? nullptr : &it->second;
+    return it == single_.end() ? nullptr : &it->second.first;
 }
 
 const std::vector<HeadwordIndex::Cand>* HeadwordIndex::pair(
@@ -259,6 +270,7 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
         // when no exact exists at that (i, len) — mirrors the SQL path exactly
         struct Best {
             long long exact = 0;
+            int exact_tier = 99;   // rule 1: the better tier wins the span
             long long clit = 0;
             std::string clitic;
         };
@@ -293,7 +305,14 @@ OverlayDoc buildOverlay(const Spine& spine, const HeadwordIndex& index,
                 const std::string& cl = cand.tokens[len - 1];
                 Best& b = best[len];
                 if (dl == cl) {
-                    if (!b.exact) b.exact = cand.entry_id;
+                    // was `if (!b.exact)` -- whichever candidate happened to
+                    // be scanned first. For `rnam pa thams cad mkhyen pa nyid`
+                    // that was the auto-aligned entry, so the span carried a
+                    // machine guess where his glossary reading exists.
+                    if (!b.exact || cand.tier_rank < b.exact_tier) {
+                        b.exact = cand.entry_id;
+                        b.exact_tier = cand.tier_rank;
+                    }
                     continue;
                 }
                 if (!b.clit && dl.size() > cl.size() &&

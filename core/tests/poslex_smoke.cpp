@@ -51,6 +51,43 @@ int main(int argc, char** argv) {
         auto cls = allcore::refineClauses(
             doc, allcore::splitClauses(doc.tokens, doc.barrier_after));
         auto parses = allcore::wilsonParse(spine, doc, cls, &pos);
+
+        {   // Rule 1 in the Wilson layer: a gloss that came from an
+            // AUTO-ALIGNED entry must announce itself. ParseUnit had no field
+            // for the tier, so the Trainer printed the machine's English in
+            // the same plain grey as a rule-table fact -- and with the gloss
+            // layer switched off, that unmarked line was the only place the
+            // gloss appeared at all.
+            auto pdoc = allcore::buildOverlay(spine, index, "DKU LA");
+            auto pcls = allcore::refineClauses(
+                pdoc, allcore::splitClauses(pdoc.tokens, pdoc.barrier_after));
+            auto pp = allcore::wilsonParse(spine, pdoc, pcls);
+            bool sawGloss = false, everMarked = false, unmarkedProv = false;
+            for (const auto& cp : pp)
+                for (const auto& un : cp.units) {
+                    if (un.detail.find("\u2261") == std::string::npos) continue;
+                    sawGloss = true;
+                    if (un.detail_provisional) everMarked = true;
+                    // the entry the unit came from decides the truth
+                    for (const auto& sp : pdoc.spans) {
+                        if (sp.beg != un.beg || sp.end != un.end) continue;
+                        if (sp.entry_ix < 0) continue;
+                        const auto& ent = pdoc.entries[sp.entry_ix];
+                        if (ent.provisional() && !ent.hgm_gloss.empty() &&
+                            un.detail.find(ent.hgm_gloss.front()) !=
+                                std::string::npos &&
+                            !un.detail_provisional)
+                            unmarkedProv = true;
+                    }
+                }
+            CHECK(sawGloss, "wilson: the probe passage does carry a gloss");
+            CHECK(everMarked,
+                  "wilson: an auto-aligned gloss is flagged provisional so the "
+                  "Trainer can badge it (rule 1)");
+            CHECK(!unmarkedProv,
+                  "wilson: no provisional gloss reaches the parse line without "
+                  "its tier -- the machine's match never wears his authority");
+        }
         bool sawNa = false, sawUndet = false;
         for (const auto& cp : parses)
             for (const auto& d : cp.dots) {
