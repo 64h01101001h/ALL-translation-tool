@@ -290,13 +290,54 @@ static void fileProposal(QWidget* parent, allcore::ProposalKind kind,
 // handlers must decode or paths/wylie/titles arrive mangled
 // ('%20'). Found via Adam's installed copy: '/Applications/ALL
 // Translation Tool/...' broke every recently-opened link.
-// dotted-version compare for Check for Updates (0.9.0 < 0.10.0)
+// Version compare for Check for Updates. Numeric dotted core first
+// (0.9.0 < 0.10.0), then SemVer pre-release precedence.
+//
+// The pre-release half is not decoration: this project's own version is
+// "1.0.0-rc.1", and the previous comparator split on '.' and ran toInt()
+// over the parts, so "1.0.0-rc.1" became [1, 0, 0, 1] -- "0-rc".toInt() is
+// 0 -- which made the release candidate compare EQUAL to the finished
+// 1.0.0 and GREATER than it on the fourth part. An updater cannot tell a
+// candidate from a release with that, and every version this app has ever
+// had is a candidate.
+//
+// Rule, as SemVer has it: a version WITH a pre-release tag precedes the
+// same core version without one. 1.0.0-rc.1 < 1.0.0.
+// The DMG name the press writes, as one pattern. It lives here rather than
+// inside the updater because the selftest has to check the SAME regex the
+// updater uses: a test that builds its own copy passes while the shipped one
+// is wrong, which is exactly how this defect survived -- the updater matched
+// "ALL-Translation-Tool-<digits>.dmg" and nothing ever compared that against
+// what tools/package_macos.sh produces.
+static const char* const kUpdateDmgPattern =
+    R"(Diamond-Cutter-Translation-Tool-(.+)\.dmg)";
+
 static bool versionLess(const QString& a, const QString& b) {
-    const auto pa = a.split('.'), pb = b.split('.');
+    auto split = [](const QString& v) {
+        const int dash = v.indexOf('-');
+        return QPair<QString, QString>(dash < 0 ? v : v.left(dash),
+                                       dash < 0 ? QString() : v.mid(dash + 1));
+    };
+    const auto sa = split(a), sb = split(b);
+    const auto pa = sa.first.split('.'), pb = sb.first.split('.');
     for (int i = 0; i < qMax(pa.size(), pb.size()); ++i) {
         const int x = i < pa.size() ? pa[i].toInt() : 0;
         const int y = i < pb.size() ? pb[i].toInt() : 0;
         if (x != y) return x < y;
+    }
+    // same core: a pre-release precedes the release it leads to
+    if (sa.second.isEmpty() != sb.second.isEmpty())
+        return !sa.second.isEmpty();
+    if (sa.second == sb.second) return false;
+    // both pre-release: identifier by identifier, numeric when both are
+    const auto ia = sa.second.split('.'), ib = sb.second.split('.');
+    for (int i = 0; i < qMax(ia.size(), ib.size()); ++i) {
+        if (i >= ia.size()) return true;    // shorter precedes
+        if (i >= ib.size()) return false;
+        bool na = false, nb = false;
+        const int x = ia[i].toInt(&na), y = ib[i].toInt(&nb);
+        if (na && nb) { if (x != y) return x < y; }
+        else if (ia[i] != ib[i]) return ia[i] < ib[i];
     }
     return false;
 }
@@ -8225,11 +8266,43 @@ public:
         {
             const bool vc = versionLess("0.9.0", "0.10.0") &&
                             !versionLess("1.0.0", "0.9.9") &&
-                            !versionLess("0.9.0", "0.9.0");
+                            !versionLess("0.9.0", "0.9.0") &&
+                            // PRE-RELEASE, which is what this app actually
+                            // ships: every version it has ever had carries
+                            // "-rc.N". The old comparator split on '.' and
+                            // ran toInt(), so "0-rc" became 0 and the
+                            // candidate compared EQUAL to the release.
+                            versionLess("1.0.0-rc.1", "1.0.0") &&
+                            !versionLess("1.0.0", "1.0.0-rc.1") &&
+                            versionLess("1.0.0-rc.1", "1.0.0-rc.2") &&
+                            versionLess("1.0.0-rc.2", "1.0.1") &&
+                            !versionLess("1.0.0-rc.1", "1.0.0-rc.1");
             log << QString("  [%1] Updates: version comparison "
                            "orders correctly")
                        .arg(vc ? "PASS" : "FAIL");
             if (!vc) ++fails;
+        }
+        {
+            // The updater's filename pattern must match what the press
+            // WRITES. It matched "ALL-Translation-Tool-<digits>.dmg" while
+            // tools/package_macos.sh has always written
+            // "Diamond-Cutter-Translation-Tool-<version>.dmg", so the check
+            // reported "up to date" over a folder of newer builds. These are
+            // real names the press has produced.
+            // the SHIPPED pattern, not a copy of it
+            static const QRegularExpression upre(
+                QString::fromLatin1(kUpdateDmgPattern));
+            const bool m1 = upre.match(
+                "Diamond-Cutter-Translation-Tool-1.0.0-rc.1-dev-4938cc70.dmg")
+                    .hasMatch();
+            const bool m2 = upre.match(
+                "Diamond-Cutter-Translation-Tool-1.0.1.dmg").hasMatch();
+            const bool m3 = !upre.match("ALL-Translation-Tool-1.0.0.dmg")
+                                 .hasMatch();
+            log << QString("  [%1] Updates: the pattern matches the name the "
+                           "press writes, dev suffix and all")
+                       .arg((m1 && m2 && m3) ? "PASS" : "FAIL");
+            if (!(m1 && m2 && m3)) ++fails;
         }
         {
             // x.y.z with an optional pre-release suffix
@@ -47886,8 +47959,16 @@ int main(int argc, char** argv) {
                 st.setValue("app/updatesDir", dir);
             }
             QString best, bestFile;
+            // THE NAME THE PRESS ACTUALLY WRITES. This read
+            // "ALL-Translation-Tool-([0-9.]+)\\.dmg" and
+            // tools/package_macos.sh has always written
+            // "Diamond-Cutter-Translation-Tool-<version>.dmg", so the check
+            // could never match a single file this project has ever
+            // produced -- it reported "you are up to date" over a folder
+            // full of newer builds. The version part is not [0-9.]+ either:
+            // real names carry "-rc.1" and "-dev-<sha>".
             static const QRegularExpression re(
-                "ALL-Translation-Tool-([0-9.]+)\\.dmg");
+                QString::fromLatin1(kUpdateDmgPattern));
             for (const QString& f :
                  QDir(dir).entryList({"*.dmg"}, QDir::Files)) {
                 const auto m = re.match(f);
