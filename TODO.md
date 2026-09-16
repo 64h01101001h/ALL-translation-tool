@@ -35,18 +35,58 @@ deep research."
 
 # ★★★★ ADAM 2026-09-16: FIND THE TIBETAN GRAMMAR BOOKS ON THE DRIVES
 
-- [ ] **Search Adam's hard drives and his laptop for Tibetan grammar books.**
-      They are wanted as material to improve the translation engine. Adam
-      owns *Standard Tibetan Grammar* Volumes 1 and 2 and cannot currently
-      find them on the local drives; there are more titles on a page he
-      referred to.
-      **BLOCKED ON ONE THING: the page never came through.** The message
-      naming it carried no link, so the full list of titles is unknown and
-      only the two volumes above are certain. Ask Adam for it before
-      starting, or the search will be for two books out of an unknown set.
-      When it runs: search the external drives as well as the laptop, match
-      on title and on likely filename spellings, and report what was found
-      AND where, rather than copying anything.
+Source, supplied by Adam 2026-09-16:
+https://pktc.org/tibetan-grammar-references-and-texts/ — the Padma Karpo
+Translation Committee's Tibetan grammar list. Every title below is theirs,
+authored or edited by Tony Duff, paper and e-book.
+
+- [ ] **Search Adam's hard drives and his laptop for these.** Wanted as
+      material to improve the translation engine. Adam owns Volumes I and II
+      and cannot currently find them on the local drives.
+
+      SIX PUBLICATIONS — these are what a file on disk would be:
+        1. Standard Tibetan Grammar: Volume I, The Thirty Verses of Minister
+           Thumi                                          (Adam owns this)
+        2. Standard Tibetan Grammar: Volume II, The Application of Gender
+           Signs                                          (Adam owns this)
+        3. The Great Living Tree Grammars — Yangchen Drubpay Dorje
+        4. Situ's Words — Ngulchu Dharmabhadra
+        5. Essence of Situ's Elegant Thorough Explanation — Khenpo Ngedon
+           Jamyang
+        6. Tibetan Grammar: The Application of Gender Signs Clarified —
+           Yangchen Drubpay Dorje
+
+      EIGHT CONSTITUENT TEXTS, which the page lists separately but which are
+      printed INSIDE the volumes above. Worth knowing before searching: a hit
+      on one of these is most likely a chapter of Volume I, not a file of its
+      own, so a search that only matches these titles can miss the book that
+      contains them and report absence wrongly.
+        - The Root of Grammar, The Thirty Verses — Thumi Sambhota
+        - The Great Living Tree — Yangchen Drubpay Dorje
+        - A Mirror Which Reveals the Difficult Points — Yangchen Drubpay Dorje
+        - A Golden Key of Knowledge — Yangchen Drubpay Dorje
+        - Supreme Expert Situ's Words — Ngulchu Dharmabhadra
+        - The Essence of the Elegant "Thorough Explanation" — Khenpo Ngedon
+          Jamyang
+        - A Beautiful String of Pearls to Adorn the Necks of the Wise —
+          Situ Chokyi Jungney
+        - A New Bud of the Story Of How The Production Places, Producers, And
+          Efforts of Tibetan Letters Are Identified — Yangchen Drubpay Dorje
+
+      How to run it: search the external drives as well as the laptop; match
+      on title AND on likely filename spellings (pktc, duff, "thirty verses",
+      "gender signs", tibetan-grammar); include .pdf, .epub, .mobi, .azw3 and
+      .zip. REPORT what was found and where. Do not copy or move anything.
+
+      ONE THING TO SETTLE BEFORE ANY OF IT REACHES THE ENGINE. These are
+      in-copyright books from a named publisher, and "improve the translation
+      engine" can mean two very different things: a person reading them and
+      encoding the rules they teach, or their text going into the tree. The
+      first needs nothing; the second is a licensing question of exactly the
+      kind this project already handles carefully for dictionaries (see the
+      red-flag licence list and docs/REPO_LICENSING.md). Owning a copy
+      settles the reading, not the redistribution. Ask Adam which he means
+      before any text is ingested.
 
 # ★★★★★ RELEASE 1.0 — THE THREE BLOCKERS STILL OPEN (paused 2026-09-16)
 
