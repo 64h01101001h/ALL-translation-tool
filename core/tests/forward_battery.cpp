@@ -44,7 +44,17 @@ int main(int argc, char** argv) {
     }
     const double pct = total ? 100.0 * agree / total : 0.0;
     // the ratchet floor — raise only, never lower
-    const double kFloor = 99.95;   // measured 100.000% at enactment
+    // Raised 99.95 -> 100.0 on 2026-09-16. The enactment comment already
+    // said "measured 100.000%", so the floor was set 0.05 BELOW what the
+    // port actually achieved -- about seventeen headwords of the sample
+    // could have started disagreeing with the canonical Python and this
+    // gate would still have gone green. The file's own rule is that a fix
+    // may only raise the floor; nothing had raised it to what was measured.
+    //
+    // Exact equality is safe here: the sample is fixed at 35,211 rows, so
+    // full agreement is 35211/35211, which is exactly 100.0, not a rounded
+    // 99.9995. One divergence gives 99.997 and fails.
+    const double kFloor = 100.0;   // measured 100.000%, and now pinned there
     std::printf("forward_battery: %ld/%ld agree (%.3f%%), floor %.2f%%\n",
                 agree, total, pct, kFloor);
     return (total > 30000 && pct >= kFloor) ? 0 : 1;
