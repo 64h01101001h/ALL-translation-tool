@@ -651,7 +651,13 @@ int main(int argc, char** argv) {
                     out += "\"n\":" + std::to_string(rs[z].second);
                     out += "}";
                 }
-                out += "]}";
+                // The list is CAPPED at 12 and the phone printed "Everything
+                // Geshe Michael has been recorded writing for it" over it.
+                // 'gro ba has 23. A learner who named one of the missing 11
+                // was told by a line claiming completeness that it was not his.
+                // Carry the real count so the card can say which it is showing.
+                out += "],\"total\":" + std::to_string(rs.size());
+                out += "}";
                 ++nse;
             }
         }
@@ -1124,9 +1130,24 @@ int main(int argc, char** argv) {
                 // two DISTINCT segments, each carrying his English
                 const allcore::CorpusSegment* a = nullptr;
                 const allcore::CorpusSegment* b2 = nullptr;
+                // The card says "The segment you met it in." It has to be a
+                // segment the word is actually IN. corpusSearch is FTS, and
+                // FTS matches through a normalised column where 'chi and shi
+                // fall together -- so the shipped card for 'chi rgyu ("cause
+                // of death") cited C13:214 and C18:438, whose Tibetan reads
+                // SHI RGYU YIN TE. The word was not there, and the segment
+                // quoted underneath was the one the learner was told they had
+                // met it in. A search hit is a candidate, not an attestation.
+                auto containsHeadword = [&](const allcore::CorpusSegment& h) {
+                    if (h.wylie.find(w) != std::string::npos) return true;
+                    // the segment's ACIP, read back as wylie, must hold it
+                    const std::string he = allcore::acipToEwts(h.acip);
+                    return he.find(w) != std::string::npos;
+                };
                 for (const auto& h : hits) {
                     if (h.english.empty()) continue;
                     if (!allcore::DrillFactory::isDrillable(h)) continue;
+                    if (!containsHeadword(h)) continue;
                     const std::string t = tib(h.acip);
                     if (t.empty() || t.find("\u27e8") != std::string::npos) continue;
                     if (!a) a = &h;
