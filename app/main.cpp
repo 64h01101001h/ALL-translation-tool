@@ -4104,6 +4104,10 @@ private:
                              "analysis again");
             reply_->deleteLater();
             reply_ = nullptr;
+            // The message tells the user to run it again; without this the
+            // button that runs it is still disabled from run(), so the
+            // only remedy offered is the one action the pane forbids.
+            analyze_->setEnabled(true);
             return;
         }
         if (reply_->error() != QNetworkReply::NoError && accum_.empty()) {
@@ -13545,8 +13549,13 @@ private:
         auto loadOv = std::make_shared<std::function<void(int)>>();
         *loadOv = [this, st, loadOv](int from) {
             if (!st->dlg || !st->overview) return;
-            const int upto =
-                std::min(from + 4, (int)st->ovPics.size());
+            // ovPics bounds the loop; folioOrder_ is what gets INDEXED. They
+            // are built together, but the viewer is modeless and outlives a
+            // document change: setScanTarget clears folioOrder_ and refills it
+            // asynchronously from the new text, while ovPics still holds the
+            // old volume's labels. A shorter new list then read off the end.
+            const int upto = std::min({from + 4, (int)st->ovPics.size(),
+                                       (int)folioOrder_.size()});
             for (int i = from; i < upto; ++i) {
                 if (!st->ovPics[i]->text().isEmpty() ||
                     st->ovPics[i]->pixmap().isNull()) {
@@ -13579,7 +13588,12 @@ private:
         auto toOverview = [st, ensureOverview, loadOv, modeChrome] {
             ensureOverview();
             if (st->sa->widget() != st->overview) {
-                st->sa->takeWidget();
+                // takeWidget() DETACHES and returns ownership. Both widgets are
+                // built parentless, so the one swapped out had no owner at all
+                // and simply leaked -- and the overview is the expensive one,
+                // holding a ScanCanvasLabel per folio side with their pixmaps.
+                // Hand it to the dialog, which deletes its children on close.
+                if (QWidget* was = st->sa->takeWidget()) was->setParent(st->dlg);
                 st->sa->setWidget(st->overview);
                 st->overview->show();
                 st->sa->setWidgetResizable(true);
@@ -13590,7 +13604,7 @@ private:
         };
         auto toSingle = [st, render, modeChrome] {
             if (st->sa->widget() != st->img) {
-                st->sa->takeWidget();
+                if (QWidget* was = st->sa->takeWidget()) was->setParent(st->dlg);
                 st->sa->setWidget(st->img);
                 st->img->show();
                 st->sa->setWidgetResizable(false);
@@ -13889,7 +13903,12 @@ private:
         // here by wrapping ensureOverview's product on first climb
         connect(st->crumbWork, &QToolButton::clicked,
                 [this, st, showF] {
-                    for (size_t i = 0; i < st->ovPics.size(); ++i)
+                    // Same pairing as loadOv: ovPics bounds, folioOrder_ is
+                    // indexed, and a document change refills folioOrder_ under
+                    // a viewer that is still holding the old volume's labels.
+                    const size_t lim = std::min(st->ovPics.size(),
+                                                (size_t)folioOrder_.size());
+                    for (size_t i = 0; i < lim; ++i)
                         if (!st->ovPics[i]->onClickAt) {
                             const QString f = folioOrder_[(int)i];
                             st->ovPics[i]->onClickAt =
