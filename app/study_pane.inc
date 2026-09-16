@@ -36,7 +36,7 @@ public:
     public:
         explicit Page(const QString& title, const QString& what, const QString& notYet) : title_(title) {
             auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(6);
-            head_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "<b>" + title + "</b> — " + what); head_->setWordWrap(true); head_->setTextFormat(Qt::RichText); v->addWidget(head_);
+            head_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + "<b>" + title + "</b> — " + what); head_->setWordWrap(true); head_->setTextFormat(Qt::RichText); v->addWidget(head_);
             body_ = new QLabel(notYet); body_->setWordWrap(true); ux::themedStyle(body_, [] { return QString("color:%1;")
             .arg(ux::chromeMuted()); }); v->addWidget(body_);
             v->addStretch(1);
@@ -76,7 +76,7 @@ public:
         gRep->addColumn({btn("Save report…", "The current page's report as Markdown or CSV", [this] { saveReport(); }), btn("Copy", "The current page's report to the clipboard", [this] { copyReport(); })});
         ribbon->finish(); ribbon->attachTo(this);
         // ---- banner
-        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Study measures, counts and matches. It never composes English and never proposes a reading. For what a term means, send it to the Lookup pane.");
+        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + "Study measures, counts and matches. It never composes English and never proposes a reading. For what a term means, send it to the Lookup pane.");
         banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("padding:4px 8px; color:%1; background:%2; border-bottom:1px solid %3;")
             .arg(ux::chromeInk()).arg(ux::chromePlaque()).arg(ux::chromeRule()); }); outer->addWidget(banner);
         // ---- page switcher
@@ -94,7 +94,7 @@ public:
         // ---- refusal strip + status
         refusals_ = new QLabel; refusals_->setWordWrap(true); ux::themedStyle(refusals_, [] { return QString("color:%1; padding:2px 8px;")
             .arg(ux::chromeError()); }); refusals_->setVisible(false); outer->addWidget(refusals_);
-        status_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Choose a text to study."); status_->setTextFormat(Qt::RichText); status_->setWordWrap(true); ux::themedStyle(status_, [] { return QString("padding:3px 8px; color:%1; border-top:1px solid %2;")
+        status_ = new QLabel(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + "Choose a text to study."); status_->setTextFormat(Qt::RichText); status_->setWordWrap(true); ux::themedStyle(status_, [] { return QString("padding:3px 8px; color:%1; border-top:1px solid %2;")
             .arg(ux::chromeInk()).arg(ux::chromeRule()); }); outer->addWidget(status_);
         setFrontAvailable(false);
     }
@@ -160,7 +160,7 @@ public:
 
 private:
     void addPage(Page* p) { auto* sc = new QScrollArea; sc->setWidgetResizable(true); sc->setFrameShape(QFrame::NoFrame); sc->setWidget(p); pages_->addWidget(sc); pageObjs_.push_back(p); }
-    void say(const QString& m) { status_->setText(ux::sourceBadge(ux::Epistemic::Machine) + m.toHtmlEscaped()); }
+    void say(const QString& m) { status_->setText(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + m.toHtmlEscaped()); }
     void pickText() {
         const QString f = safeGetOpenFileName(this, "Choose a text to study", QString(), "Texts (*.txt *.act *.inc *.ace *.acip *.md);;All files (*)");
         if (f.isEmpty()) { say("No text chosen."); return; }

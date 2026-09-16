@@ -142,7 +142,14 @@ inline const char* chromePlaque() { return darkChrome() ? "#33302B" : "#F4EFE4";
 inline const char* chromeRule() { return darkChrome() ? "#4A4A4A" : "#E3DDD0"; }
 
 enum class Epistemic { Binding, Evidence, Reference, Machine, Ai };
-inline QString sourceBadge(Epistemic e) {
+
+// WHICH GROUND this badge is standing on. The distinction is the whole point:
+// a card is cream in every appearance, chrome follows the palette. Defaults to
+// Paper because most badges are spliced into card HTML; the QLabel banners in
+// the idiom, study and table-compare panes pass Chrome.
+enum class Ground { Paper, Chrome };
+
+inline QString sourceBadge(Epistemic e, Ground g = Ground::Paper) {
     const char* txt = nullptr;
     const char* col = nullptr;
     bool solid = false;
@@ -151,7 +158,14 @@ inline QString sourceBadge(Epistemic e) {
     // cream) that is the paper ink; on chrome it is the chrome sibling.
     // The five tiers stay five distinct hues in either case — a badge may
     // change its value, never its identity.
-    const bool onChrome = darkChrome();
+    //
+    // That was always the intent; the predicate was `darkChrome()`, which
+    // asks whether the PALETTE is dark -- a different question from which
+    // ground this badge is on. So in Night mode every badge on a card took
+    // the chrome sibling and landed on cream: EVIDENCE 2.09:1, REFERENCE
+    // 2.06:1, MACHINE 2.44:1, AI 2.34:1. The badges that say whose English
+    // the reader is looking at were the least readable marks on the page.
+    const bool onChrome = (g == Ground::Chrome);
     switch (e) {
         case Epistemic::Binding:
             txt = "GMR"; col = onChrome ? chromeGold() : kGold; solid = true; break;

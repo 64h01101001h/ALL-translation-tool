@@ -168,7 +168,7 @@ public:
         setWindowTitle("Idioms");
         resize(940, 620);
         auto* v = new QVBoxLayout(this);
-        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Reference) +
+        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Reference, ux::Ground::Chrome) +
             "The register marks which Tibetan forms are idioms — fixed expressions not to be read word by word. "
             "It holds no English of its own: the renderings below are Geshe Michael's, fetched from the courses and counted. "
             "A new form is a proposal until Geshe Michael rules on it.");
@@ -252,7 +252,7 @@ public:
         notes << QString("Read from the shipped seed (%1 form(s)) and the team register (%2).").arg(seedN_).arg(teamN_);
         if (!textSyllables_.empty()) notes << QString("%1 occurrence(s) of registered forms in %2. A form the register does not know is not marked — this list is of the idioms the register holds, not of every idiom in the text.").arg(hits_.size()).arg(textName_.isEmpty() ? "the open text" : textName_);
         for (const QString& p : problems_) notes << p;
-        status_->setText(ux::sourceBadge(ux::Epistemic::Reference) + notes.join(" ").toHtmlEscaped());
+        status_->setText(ux::sourceBadge(ux::Epistemic::Reference, ux::Ground::Chrome) + notes.join(" ").toHtmlEscaped());
         if (table_->topLevelItemCount()) { table_->topLevelItem(0)->setSelected(true); showDetail(); } else detail_->clear();
     }
 
@@ -267,7 +267,7 @@ public:
             if (!e->evidence.empty()) h += "<div style='color:#6B5E4E'>put forward because: " + QString::fromStdString(e->evidence).toHtmlEscaped() + "</div>";
             if (!e->proposedBy.empty()) h += "<div style='color:#6B5E4E'>put forward by " + QString::fromStdString(e->proposedBy).toHtmlEscaped() + (e->proposed.empty() ? QString() : " on " + QString::fromStdString(e->proposed)) + "</div>";
             if (!e->ruledBy.empty()) h += "<div style='color:#1E6B4E'>ruled " + QString::fromStdString(allcore::idioms::statusName(e->status)) + " by " + QString::fromStdString(e->ruledBy).toHtmlEscaped() + (e->ruled.empty() ? QString() : " on " + QString::fromStdString(e->ruled)) + (e->note.empty() ? QString() : " — “" + QString::fromStdString(e->note).toHtmlEscaped() + "”") + "</div>";
-            if (e->status == Status::Proposed) h += "<div style='color:#9A7A33'>No ruling yet. Until Geshe Michael rules, this form is a proposal: it is marked in a text as a proposal and is never presented as settled.</div>";
+            if (e->status == Status::Proposed) h += "<div style='color:#82672A'>No ruling yet. Until Geshe Michael rules, this form is a proposal: it is marked in a text as a proposal and is never presented as settled.</div>";
         }
         h += "<hr><div>" + ux::sourceBadge(ux::Epistemic::Binding) + "<b>How Geshe Michael has rendered it</b></div>";
         const std::string q = "\"" + w.toStdString() + "\"";
@@ -282,7 +282,7 @@ public:
             for (const auto& s : segs) {
                 h += "<div style='margin:6px 0'><i style='color:#6B5E4E'>" + QString::fromStdString(s.wylie).left(160).toHtmlEscaped() + "</i><br>" +
                      QString::fromStdString(s.english).left(240).toHtmlEscaped() +
-                     "<span style='color:#8A8074;font-size:11px'> &nbsp;[" + QString::fromStdString(s.course).toHtmlEscaped() + ":" + QString::number(s.seq) + "]</span></div>";
+                     "<span style='color:#6E675D;font-size:11px'> &nbsp;[" + QString::fromStdString(s.course).toHtmlEscaped() + ":" + QString::number(s.seq) + "]</span></div>";
             }
         }
         if (!hits_.empty()) {
@@ -344,7 +344,7 @@ public:
     void setOnlyInText(bool on) { inText_->setChecked(on); }
 
 private:
-    void say(const QString& m) { status_->setText(ux::sourceBadge(ux::Epistemic::Reference) + m.toHtmlEscaped()); }
+    void say(const QString& m) { status_->setText(ux::sourceBadge(ux::Epistemic::Reference, ux::Ground::Chrome) + m.toHtmlEscaped()); }
     QString root_, dataRoot_, textName_, selection_, lastProposed_;
     allcore::Spine& spine_;
     Register reg_;

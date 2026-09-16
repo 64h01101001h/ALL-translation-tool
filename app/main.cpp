@@ -1112,7 +1112,7 @@ static bool markPhraseRulings(const std::vector<std::string>& syls,
 // above separates the zone; 12px of air before it, 4px after.
 static QString zoneLabel(const QString& text) {
     return "<div style='border-top:1px solid #E2DACB;margin-top:12px;"
-           "padding-top:6px;color:#9A7A33;font-size:10px;"
+           "padding-top:6px;color:#82672A;font-size:10px;"
            "letter-spacing:2px;font-weight:600;margin-bottom:4px'>" +
            text + "</div>";
 }
@@ -1162,7 +1162,7 @@ static QString alignCtx(const QString& text, const QString& needle,
     QString h;
     if (b > 0) h += "\u2026";
     h += text.mid(b, at - b).toHtmlEscaped();
-    h += "<b style='color:#B4540A;background:#FBE3C8'>" +
+    h += "<b style='color:#B4540A;background:#FDF3E8'>" +
          text.mid(at, n).toHtmlEscaped() + "</b>";
     h += text.mid(at + n, e - (at + n)).toHtmlEscaped();
     if (e < (int)text.size()) h += "\u2026";
@@ -1703,7 +1703,7 @@ static QString entryHtml(const allcore::Entry& e,
                         "padding:2px 0 2px 8px;margin:6px 0'>" +
                         ux::sourceBadge(ux::Epistemic::Reference) +
                         "<small style="
-                        "'color:#8A7E6E;letter-spacing:1px'>"
+                        "'color:#6E675D;letter-spacing:1px'>"
                         "84000 GLOSSARY · CC BY 4.0 · reference "
                         "only</small>";
             // Adam, 2026-08-22: "some of the 84000 reference data
@@ -1914,7 +1914,7 @@ static QString entryHtml(const allcore::Entry& e,
                           t2 + "'>" + t2.toHtmlEscaped() +
                           "</a> ";
                 }
-                b += "<br><small style='color:#8A7E6E'>attested "
+                b += "<br><small style='color:#6E675D'>attested "
                      "in: " + tl.trimmed() + "</small>";
             }
             b += "</div>";
@@ -9981,7 +9981,7 @@ public:
         QSettings settings("ALL", "TranslationTool");
         ll->addWidget(new QLabel("<b>Display</b>"));
         {
-            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>SCRIPT</span>");
+            auto* eb = new QLabel("<span style='color:#82672A;font-size:10px;letter-spacing:2px;font-weight:600'>SCRIPT</span>");
             eb->setContentsMargins(0, 8, 0, 0);
             ll->addWidget(eb);
         }
@@ -10136,7 +10136,7 @@ public:
             return cb;
         };
         {
-            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>CARD LAYERS</span>");
+            auto* eb = new QLabel("<span style='color:#82672A;font-size:10px;letter-spacing:2px;font-weight:600'>CARD LAYERS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
             ll->addWidget(eb);
         }
@@ -10184,7 +10184,7 @@ public:
             "the machine amber, never entered into the dictionary's "
             "binding gloss.");
         {
-            auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;letter-spacing:2px;font-weight:600'>DOCUMENT MARKS</span>");
+            auto* eb = new QLabel("<span style='color:#82672A;font-size:10px;letter-spacing:2px;font-weight:600'>DOCUMENT MARKS</span>");
             eb->setContentsMargins(0, 8, 0, 0);
             ll->addWidget(eb);
         }
@@ -14500,7 +14500,7 @@ private:
             meterLines[b.meter] += b.last - b.first + 1;
         }
         QString h;
-        h += "<div style='color:#9A7A33;font-size:11px;"
+        h += "<div style='color:#82672A;font-size:11px;"
              "letter-spacing:2px;font-weight:600'>THE SHAPE OF "
              "THIS TEXT</div>";
         QStringList ms;
@@ -14537,7 +14537,7 @@ private:
                                 .arg(censusShare_
                                          [blocks[bi].meter]);
                 h += QString(
-                         "<div style='color:#9A7A33;font-size:"
+                         "<div style='color:#82672A;font-size:"
                          "10px;letter-spacing:2px;font-weight:"
                          "600;margin:14px 0 2px 0'>%1</div>")
                          .arg(head);
@@ -15171,7 +15171,7 @@ private:
                 unresolved.push_back(&c);
         }
         if (!byWork.isEmpty()) {
-            h += QString("<div style='color:#9A7A33;font-size:11px;"
+            h += QString("<div style='color:#82672A;font-size:11px;"
                          "letter-spacing:2px;font-weight:600'>"
                          "TEXTS YOU WILL ENCOUNTER (%1)</div>")
                      .arg(byWork.size());
@@ -15228,7 +15228,7 @@ private:
             }
         }
         if (!unresolved.empty()) {
-            h += QString("<div style='color:#9A7A33;font-size:11px;"
+            h += QString("<div style='color:#82672A;font-size:11px;"
                          "letter-spacing:2px;font-weight:600;"
                          "margin-top:14px'>QUOTATIONS WITHOUT AN "
                          "ANNOUNCED SOURCE (%1)</div>")
@@ -21168,7 +21168,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
     layout->addWidget(cvBanner);
 
     {
-        auto* eb = new QLabel("<span style='color:#9A7A33;font-size:10px;"
+        auto* eb = new QLabel("<span style='color:#82672A;font-size:10px;"
                               "letter-spacing:2px;font-weight:600'>DATES "
                               "— THE TIBETAN CALENDAR</span>");
         eb->setContentsMargins(0, 8, 0, 0);
@@ -22326,7 +22326,7 @@ private:
                         if (hit != g_honorifics->end()) {
                             const QString lvl = hit->second[2];
                             honTag =
-                                " <span style='color:#9A7A33'>(" +
+                                " <span style='color:#82672A'>(" +
                                 QString(lvl == "high"
                                             ? "high hon."
                                         : lvl == "humilific"
@@ -23535,7 +23535,7 @@ public:
                                 : QString());
         }
         QString h;
-        h += "<div style='color:#9A7A33;font-size:11px;"
+        h += "<div style='color:#82672A;font-size:11px;"
              "letter-spacing:2px;font-weight:600'>WHERE YOU "
              "ACTUALLY STRUGGLE</div>";
         long long allMisses = 0;
@@ -23554,7 +23554,7 @@ public:
                  .arg(drillsDone);
         for (const auto& f : fams) {
             if (f.total == 0) continue;
-            h += QString("<div style='color:#9A7A33;font-size:"
+            h += QString("<div style='color:#82672A;font-size:"
                          "10px;letter-spacing:2px;font-weight:"
                          "600;margin-top:10px'>%1 · %2 "
                          "MISS(ES)</div>")
@@ -23620,7 +23620,7 @@ private:
             QString(ux::kMuted);
         const QString act = QString(ux::kAct);
         QString h =
-            "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+            "<div style='color:#82672A;font-size:11px;letter-spacing:2px;"
             "font-weight:600'>WHAT YOU CAN READ NEXT</div>";
         h += QString("<div style='margin:6px 0 10px 0;color:%1;font-size:12px'>"
                      "Your deck against each work's vocabulary. The 95%% and "
@@ -26589,7 +26589,7 @@ public:
     static QString anchorsIdleHtml(bool sourceLoaded,
                                    bool haveClauses = true) {
         const QString head =
-            "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+            "<div style='color:#82672A;font-size:11px;letter-spacing:2px;"
             "font-weight:600'>EVIDENCE RIBBON</div>";
         // TWO ways in, and they are named because only one of them is
         // discoverable. The ribbon also follows the caret — but only the
@@ -26629,7 +26629,7 @@ public:
     // only place their output ever lands, so a reader who has run nothing
     // needs to know what would put something here.
     static QString reportIdleHtml() {
-        return "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
+        return "<div style='color:#82672A;font-size:11px;letter-spacing:2px;"
                "font-weight:600'>APPARATUS &amp; ANALYSIS</div>"
                "<div style='color:#6F6F6F;padding-top:6px'>Output from the "
                "tools on the ribbon above lands here:</div>"
@@ -39703,7 +39703,7 @@ public:
         // the apparatus at composition time (UX P3 ladder)
         auto* pubRow = new QHBoxLayout;
         auto* pubEb = new QLabel(
-            "<span style='color:#9A7A33;font-size:10px;"
+            "<span style='color:#82672A;font-size:10px;"
             "letter-spacing:2px;font-weight:600'>PUBLISH</span>");
         pubRow->addWidget(pubEb);
         auto* bibB = new QPushButton("Compose bibliography entry…");
@@ -43567,7 +43567,7 @@ public:
         outer->setContentsMargins(16, 14, 16, 16);
         outer->setSpacing(10);
         auto* title = new QLabel(
-            "<span style='color:#9A7A33; letter-spacing:2px;"
+            "<span style='color:#82672A; letter-spacing:2px;"
             " font-size:11px'>ASIAN LEGACY LIBRARY</span><br>"
             "<span style='color:#8C2F2B; font-size:22px;"
             " font-weight:600'>Help &amp; Tutorials</span>");
@@ -43585,7 +43585,7 @@ public:
             "h1, h2 { color: #8C2F2B; }"
             "h2 { font-size: 21px; margin-bottom: 4px; }"
             "h3 { color: #5A3B22; }"
-            "a { color: #9A7A33; }"
+            "a { color: #82672A; }"   // kGold: #9A7A33 measured 3.74 on cream
             "strong { color: #5A3B22; }"
             "p, li { font-size: 14px; line-height: 1.45; }"
             "code { background: #F1EBDD; }");
@@ -47802,7 +47802,7 @@ int main(int argc, char** argv) {
                                  ? g_spineForAbout->metaValue(
                                        "release_version")
                                  : std::string("?"))));
-            add("<div style='color:#9A7A33;font-size:13px;"
+            add("<div style='color:#82672A;font-size:13px;"
                 "letter-spacing:3px;margin-top:10px'>"
                 "\u2022 &nbsp;\u2022&nbsp; \u2022</div>");
             add("<div style='font-size:15px;margin-top:6px'>"
@@ -47813,11 +47813,11 @@ int main(int argc, char** argv) {
                 "StaticSky)</div>");
             add("<div style='font-size:13px;margin-top:4px'>for "
                 "<b>Geshe Michael Roach</b>"
-                "<span style='color:#9A7A33'> \u00b7 </span>"
+                "<span style='color:#82672A'> \u00b7 </span>"
                 "the Asian Legacy Library"
-                "<span style='color:#9A7A33'> \u00b7 </span>"
+                "<span style='color:#82672A'> \u00b7 </span>"
                 "Diamond Cutter Classics</div>");
-            add("<div style='color:#9A7A33;font-size:13px;"
+            add("<div style='color:#82672A;font-size:13px;"
                 "letter-spacing:3px;margin-top:8px'>"
                 "\u2022 &nbsp;\u2022&nbsp; \u2022</div>");
             add("<div style='font-family:\"Iowan Old Style\",Georgia,"
@@ -47840,7 +47840,7 @@ int main(int argc, char** argv) {
                         "Help \u25b8 Report a Problem\u2026 opens a message "
                         "with the build already filled in.</span></div>")
                     .arg(kDefectIntake));
-            add("<div style='font-size:10px;color:#8A7A62;"
+            add("<div style='font-size:10px;color:#6E675D;"
                 "margin-top:6px'>Third-party components and data "
                 "sources are credited in OPEN_SOURCE_NOTICES, "
                 "shipped with every release.</div>");

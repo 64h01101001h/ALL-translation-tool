@@ -671,6 +671,19 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/naming_check.py
                    ${CMAKE_SOURCE_DIR})
 
+  # ux_tokens.h quoted its contrast ratios in COMMENTS -- "(AA 4.66)" -- and
+  # claimed "every pair here is asserted on its own ground by the battery".
+  # There was no battery. Documentation does not fail, so sixty-one sites
+  # painted chrome ink on a cream page, the five epistemic badges with them,
+  # and #9A7A33 sat at 3.74 across twenty-three zone headings for months.
+  # This computes the ratios instead of quoting them, against the ground each
+  # ink actually lands on: cards are cream in every appearance, chrome follows
+  # the palette. Baseline is EMPTY -- every ink clears AA on its own merits.
+  add_test(NAME contrast_check
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/contrast_check.py
+                   ${CMAKE_SOURCE_DIR})
+
   # The four suites above check pages for internal well-formedness. None of
   # them ever asked whether the text we SHIPPED still occurs in the text we
   # CLAIM it came from - so a page could be perfectly well-formed and still
