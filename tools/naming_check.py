@@ -78,15 +78,25 @@ def scan(root):
     for p in sorted(glob.glob(os.path.join(root, "docs/**/*.md"),
                               recursive=True)):
         rel = os.path.relpath(p, root)
-        if rel.startswith("docs/digests/"):
-            continue
+        digest = rel.startswith("docs/digests/")
         for i, line in enumerate(io.open(p, encoding="utf-8",
                                          errors="replace"), start=1):
             s = line.rstrip("\n")
             t = s.lstrip()
             if t.startswith(">") or t.startswith("|"):
                 continue          # verbatim transcript, verbatim rulings
-            if NAMES.search(s) and PRON.search(s):
+            # A DIGEST is flagged on the pronoun ALONE. Every digest is about
+            # Geshe Michael from its first line, so requiring his name on the
+            # same line misses most of it -- which is exactly what happened on
+            # 2026-09-16: I wrote digest #8, the gate passed it, and it said
+            # "a word he has glossed" and "only 61 were his" in the document
+            # that goes to leadership. The gate that skips the most visible
+            # artifact is the wrong way round.
+            #
+            # The sent digests are baselined, not edited: they are the record
+            # of what leadership actually received, and rewriting that record
+            # would be a worse fault than the wording.
+            if PRON.search(s) if digest else (NAMES.search(s) and PRON.search(s)):
                 hits.append((rel, i, s.strip()))
     return hits
 
