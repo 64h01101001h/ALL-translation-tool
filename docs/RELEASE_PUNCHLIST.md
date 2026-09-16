@@ -6,6 +6,15 @@ product."* This is that list — one place, built by reading every unchecked
 item in `TODO.md`, `docs/BACKLOG.md` and `docs/OPEN_TASKS_2026-09-10.md` and
 classifying each by what actually stands in its way.
 
+> **Adam, 2026-09-16: come back to this and make sure every loose end is
+> tied up.** Standing instruction, not a dated task. This list is the place
+> that gets checked against reality — and note that it had already gone stale
+> once: it was written 2026-09-11 and 139 commits landed before anyone looked
+> at it again. Two audits closed in that window, so a meaningful share of the
+> 191 items below are done and still showing open. **Re-survey before trusting
+> any count on this page**, and see the note at the foot about making the
+> survey repeatable so this cannot drift a third time.
+
 It is **generated from a survey, not retyped**, so the counts can be trusted
 and the source line is carried on every row. The three source files stay
 where they are; this is the working face of them.
@@ -272,3 +281,25 @@ leaving an item open costs an hour and retiring a live one costs a release.
   <br>The document exists and is substantive, but it has not "landed" in the sense the bullet tracks, and it does not *answer* the third named constraint. docs/THEME_SYSTEM_PLAN.md:8 states its own status: "Status: proposal, awaiting Adam's rulings (§11)" — matching the section header TODO.md:126 "A4. Themes (Adam, 2026-09-09) — IN DESIGN" and the bullet's own words "Design in progress". Constraint 3 ("
 - **STILL OPEN** — (item)
   <br>REFUTED — two named requirements of 9l are demonstrably unshipped. (1) Part (1) explicitly specifies "using native menu roles", whose stated payoff is the macOS services rows (Writing Tools, AutoFill, Dictation, Emoji & Symbols) "for free on text widgets". The Edit menu at app/main.cpp:43739 does the opposite: it hand-rolls every item through a `route(fn)` lambda over `QApplication::focusWidget()`
+
+---
+
+## Why this list went stale, and what would stop it
+
+It was built on 2026-09-11 by an agent survey that read every unchecked item
+in the three source files and classified each one. That was the right shape
+and it produced counts worth trusting **on that day**.
+
+It is not repeatable. There is no generator in `tools/` — nothing reads the
+sources and re-emits this page — so the only way to refresh it is to commission
+the same reading again. 139 commits later, that is exactly where we are: the
+counts on this page describe a tree that no longer exists.
+
+The fix is the same one that worked for the oracle fixtures (`docs/FIXTURES.md`,
+BUILD-7): **a survey nobody can re-run is a number nobody can check.** A
+`tools/build_punchlist.py` that extracts the unchecked items, carries their
+source line, and leaves the human classification in a side file keyed by item
+would make the mechanical half reproducible and leave only the judgement to a
+reader.
+
+Until that exists, treat every count above as of 2026-09-11.
