@@ -51,7 +51,7 @@ root.
 |---|---|---|
 | `build/hgm_spine_v27_2.db` | analysis, botok_tok, colloquial, contractions, drills, engines_battery, gofer, lattice, poslex, qc, quotation, reader, spellcheck, spine, spine_resilience, terminology | `python3 tools/build_spine.py` |
 | `build/sanskrit_reference.tsv` | engines_battery | `python3 tools/build_sanskrit_reference.py` |
-| `build/pron_reference.tsv` | engines_battery | **no generator in this repo** — only `tools/build_teaching_index.py` reads it |
+| `build/pron_reference.tsv` | engines_battery | `python3 tools/build_pron_reference.py` — the canonical `engines/pron_engine.py` output for all 105,576 distinct wylie headwords in the master. Landed 2026-09-16 from a worktree it had been stranded in since 2026-09-10; verified by regenerating over the dump the battery had been using and diffing: identical, byte for byte |
 | `build/forward_reference.tsv` | forward_battery | **no generator in this repo** (emitted by the canonical `ewts_unicode.py` in the data project) |
 | `build/towylie_reference.tsv` | towylie_battery | **no generator in this repo** (emitted by the pyewts oracle run) |
 | `build/weird_top.tsv` | weird_battery | `python3 tools/weirdness_rank.py` |
@@ -60,10 +60,25 @@ root.
 | `build/speak_reference.tsv` | speak_battery | `python3 tools/dump_speak_reference.py` — the Python resolver's answer for all 11,940 distinct syllables in the corpus and dictionary; the C++ port in `allcore::SpeakBank` must reproduce it exactly. Needs the Kawachen audio present (in-house asset, gitignored), and the suite SKIPs without it |
 | `build/ocr_ref` | ocr_smoke | `python3 tools/build_ocr_reference.py <path-to-tibetan-ocr-app-clone>` |
 
-The four **no generator in this repo** rows are the honest state of
+The remaining **no generator in this repo** rows are the honest state of
 BUILD-7: those oracle dumps exist on one laptop and nothing here can
 rebuild them. Committing their generators (or the fixtures themselves,
 strided down to a few thousand rows) is the remaining work.
+
+`build/pron_reference.tsv` came off that list on 2026-09-16. Its
+generator had been WRITTEN on 2026-09-10, specifically to close this gap
+— its own docstring says so — and then never landed in the main tree; it
+sat in a worktree, and `git log --all` had no commit for it anywhere. So
+the gate that proves Rule 2 for the pronunciation engine depended on a
+file no clone could produce. It fails loudly rather than skipping when
+the file is absent, which is the right behaviour and is why this was a
+reproducibility hole rather than a silent pass.
+
+Regenerating it also settled a question worth asking of any fixture: the
+reference could have been a snapshot of the C++ port's OWN output, which
+would make the battery circular and worthless. It is not. The canonical
+Python reproduces it byte for byte across all 105,576 rows, and
+`build/sanskrit_reference.tsv` likewise across 79,452 terms.
 
 ### `data/extracted/` — derived extracts
 
