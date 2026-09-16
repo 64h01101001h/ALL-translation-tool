@@ -20770,8 +20770,8 @@ private:
             {"next", "ACIP next-letter"},
             {"pron", "Simplified pronunciation"},
         };
-        const QString muted = ux::darkChrome() ? ux::chromeMuted() : ux::kMuted;
-        const QString bad = ux::darkChrome() ? ux::chromeError() : ux::kError;
+        const QString muted = ux::kMuted;
+        const QString bad = ux::kError;
         QString h = "<table style='margin-bottom:10px'>";
         QStringList plain;
         for (const Row& r : kRows) {
@@ -20804,7 +20804,7 @@ private:
             "<div style='white-space:pre-wrap;font-size:15px'>";
         if (from_ && from_->currentData().toString() == "acip")
             html = "<div style='color:" +
-                   QString(ux::darkChrome() ? ux::chromeWarn() : ux::kWarn) +
+                   QString(ux::kWarn) +
                    ";padding-bottom:6px'>Tibetanized ACIP separates "
                    "SYLLABLES, not words, so the syllable spacing is kept and "
                    "where one WORD ends cannot be recovered from it. For a "
@@ -20824,8 +20824,7 @@ private:
             if (k != LineKind::Sanskrit) {
                 ++passed;
                 html += "<span style='color:" +
-                        QString(ux::darkChrome() ? ux::chromeMuted()
-                                                 : ux::kMuted) +
+                        QString(ux::kMuted) +
                         "'>" + line.toHtmlEscaped() + "</span><br>";
                 plain << line;
                 continue;
@@ -20835,8 +20834,7 @@ private:
             if (!got) {
                 ++refused;
                 html += "<span style='color:" +
-                        QString(ux::darkChrome() ? ux::chromeError()
-                                                 : ux::kError) +
+                        QString(ux::kError) +
                         "'>" + line.toHtmlEscaped() + "</span><br>";
                 plain << line;
                 problems << QString("line %1: %2")
@@ -20847,8 +20845,7 @@ private:
             ++done;
             if (toKey() == "all") {
                 html += "<div style='color:" +
-                        QString(ux::darkChrome() ? ux::chromeGold()
-                                                 : ux::kGold) +
+                        QString(ux::kGold) +
                         ";padding-top:8px'>" + iast.toHtmlEscaped() +
                         "</div>" + allNotations(iast);
             } else {
@@ -20886,15 +20883,15 @@ private:
                         "<b>simplified</b> line is PROVISIONAL: it only strips "
                         "the diacritical marks, and is shown so it can be "
                         "checked, not relied on.</div>")
-                        .arg(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted);
+                        .arg(ux::kMuted);
         html += QString("<div style='padding-top:10px;color:%1'>%2 line(s) "
                         "converted \u00b7 %3 carried through \u00b7 %4 "
                         "refused</div>")
-                    .arg(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted)
+                    .arg(ux::kMuted)
                     .arg(done).arg(passed).arg(refused);
         if (!problems.isEmpty())
             html += "<div style='color:" +
-                    QString(ux::darkChrome() ? ux::chromeError() : ux::kError) +
+                    QString(ux::kError) +
                     "'>" + problems.join("<br>").toHtmlEscaped() +
                     "<br>Nothing above is guessed.</div>";
         out_->setHtml(html);
@@ -20958,7 +20955,7 @@ private:
                                    "Stopped at character %2: %3, U+%4. Nothing "
                                    "below it is guessed \u2014 correct that "
                                    "character and press Analyze again.</div>")
-                        .arg(ux::darkChrome() ? ux::chromeError() : QString(ux::kError))
+                        .arg(QString(ux::kError))
                         .arg(i + 1).arg(shown.toHtmlEscaped())
                         .arg(static_cast<int>(bad.unicode()), 4, 16, QChar('0'));
                 }
@@ -21845,9 +21842,9 @@ static QString equivalentsOwner(const allcore::TermUse& t) {
 // (Adam's reading-order review, 2026-09-12.)
 static QString keyBadge(bool inCorpus, const QString& course = QString(),
                         int seq = 0, const char* what = "English") {
-    const QString gold = ux::darkChrome() ? ux::chromeGold() : QString(ux::kGold);
+    const QString gold = QString(ux::kGold);
     const QString mach =
-        ux::darkChrome() ? ux::chromeMachine() : QString(ux::kMachine);
+        QString(ux::kMachine);
     if (inCorpus) {
         return QString(
                    "<div style='border-left:3px solid %1;padding:4px 8px;"
@@ -22177,8 +22174,7 @@ private:
                              "then open layer 3. Nothing is scored \u2014 the "
                              "gain is in having committed, not in being "
                              "marked.</small></div>")
-                             .arg(ux::darkChrome() ? ux::chromeGold()
-                                                   : QString(ux::kGold));
+                             .arg(QString(ux::kGold));
                 }
             if (!chunksOn || chunks.empty()) {
                 h += "<span style='font-size:16px'>" +
@@ -23365,9 +23361,9 @@ private:
         if (!script_->isChecked())
             return QString::fromStdString(acipText).toHtmlEscaped();
         const QString muted =
-            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+            QString(ux::kMuted);
         const QString flag =
-            ux::darkChrome() ? ux::chromeMachine() : QString(ux::kMachine);
+            QString(ux::kMachine);
         QString out;
         for (const Piece& p : pieces(acipText)) {
             if (p.kind == Piece::Script) out += p.text.toHtmlEscaped();
@@ -23621,8 +23617,8 @@ private:
                   [](const Row& a, const Row& b) { return a.cov > b.cov; });
 
         const QString muted =
-            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
-        const QString act = ux::darkChrome() ? ux::chromeAct() : QString(ux::kAct);
+            QString(ux::kMuted);
+        const QString act = QString(ux::kAct);
         QString h =
             "<div style='color:#9A7A33;font-size:11px;letter-spacing:2px;"
             "font-weight:600'>WHAT YOU CAN READ NEXT</div>";
@@ -24275,13 +24271,13 @@ private:
         const QString k = segmentKind(seg.course);
         if (k.isEmpty()) return QString();
         return "<div style='display:inline-block;background:" +
-               QString(ux::darkChrome() ? ux::chromePlaque() : "#F4EFE4") +
+               QString("#F4EFE4") +
                ";color:" +
-               QString(ux::darkChrome() ? ux::chromeGold() : ux::kGold) +
+               QString(ux::kGold) +
                ";padding:1px 6px;font-size:10px;letter-spacing:1px;"
                "font-weight:600'>" + k +
                "</div> <span style='color:" +
-               QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+               QString(ux::kMuted) +
                ";font-size:11px'>this is the title of a work, not running "
                "prose \u2014 it reads as a heading</span><br>";
     }
@@ -24301,7 +24297,7 @@ private:
     // than passed off as the parallel.
     QString englishWithSupplied(const std::string& eng) const {
         const QString muted =
-            ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+            QString(ux::kMuted);
         const QString src = QString::fromStdString(eng);
         QString out;
         int depth = 0;
@@ -24333,14 +24329,14 @@ private:
     QString clozeBody() const {
         const QString blank =
             "<b style='color:" +
-            QString(ux::darkChrome() ? ux::chromeMachine() : ux::kMachine) +
+            QString(ux::kMachine) +
             "'>[ \u2026 ]</b>";
         auto clauseOnly = [&](const QString& why) {
             QString h;
             for (const auto& c : cloze_->chunks)
                 h += (c == "[ ... ]" ? blank + "  " : disp(c) + "  ");
             h += "<div style='color:" +
-                 QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                 QString(ux::kMuted) +
                  ";font-size:11px;padding-top:4px'>" + QString(why) + "</div>";
             return h;
         };
@@ -24502,11 +24498,11 @@ private:
         } else if (m == 12) {
             if (!bound_) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>No segment drawn.</div>";
             } else {
                 const QString muted =
-                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                    QString(ux::kMuted);
                 h += kindBadge(bound_->segment);
                 // Boundary positions in the TIBETAN, half of them the
                 // scribe's own shad and half the engine's ruling — which the
@@ -24544,7 +24540,7 @@ private:
         } else if (m == 11) {
             if (peelKids_.isEmpty()) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>No span drawn. Peel reads the alignment layer's own "
                      "nesting \u2014 a span, and the pieces it contains \u2014 "
                      "and builds nothing that is not measured there.</div>";
@@ -24563,21 +24559,20 @@ private:
                      "px;padding:8px 0'>" + disp(peelParent_.toStdString()) +
                      "</div>";
                 h += QString("<div style='color:%1;font-size:12px'>%2</div>")
-                         .arg(ux::darkChrome() ? ux::chromeMuted()
-                                               : QString(ux::kMuted))
+                         .arg(QString(ux::kMuted))
                          .arg(peelRef_.toHtmlEscaped());
             }
         } else if (m == 10) {
             if (!dbg_.ok) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>No formal statement drawn. This drill reads only real "
                      "statements carrying the full CHOS CAN / THAL / PHYIR "
                      "template \u2014 1,089 of them parse \u2014 and builds "
                      "nothing that is not there.</div>";
             } else {
                 const QString muted =
-                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                    QString(ux::kMuted);
                 h += keyBadge(true, QString::fromStdString(dbgSeg_.course),
                               dbgSeg_.seq);
                 if (dbgSeg_.course == "C13")
@@ -24617,7 +24612,7 @@ private:
         } else if (m == 8) {
             if (stWylie_.isEmpty()) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>The alignment evidence is not loaded, so there is "
                      "nothing to ask. Every option in this drill is a rendering "
                      "Geshe Michael actually wrote; none is invented, so without the "
@@ -24631,7 +24626,7 @@ private:
                      "px;padding:6px 0'>" + disp(stWylie_.toStdString()) +
                      "</div>";
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      ";font-size:12px'>" + stWylie_.toHtmlEscaped() +
                      "  \u00b7  " + stRef_.toHtmlEscaped() +
                      QString("  \u00b7  %1 attested renderings")
@@ -24640,7 +24635,7 @@ private:
         } else if (m == 7) {
             if (spTib_.isEmpty()) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>The alignment layer is not loaded, so there is nothing "
                      "to ask. This drill draws only on segments where Geshe Michael's "
                      "English has been aligned word by word \u2014 1,548 of "
@@ -24655,7 +24650,7 @@ private:
                      "px;padding:6px 0'>" + disp(spTib_.toStdString()) +
                      "</div>";
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      ";font-size:12px'>" + spTib_.toHtmlEscaped() +
                      "  \u00b7  " + spRef_.toHtmlEscaped() +
                      "  \u00b7  the alignment layer is TENTATIVE</div>";
@@ -24702,7 +24697,7 @@ private:
                 if (!es.empty() && !es.front().acip.empty())
                     acip = es.front().acip;
                 const QString muted =
-                    ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                    QString(ux::kMuted);
                 // Which of the two questions is being asked. A bare word with
                 // "grade yourself" is where a generic flashcard app is our
                 // equal; the corpus is what we have that it does not.
@@ -24752,7 +24747,7 @@ private:
         } else if (m == 6) {
             if (!card_) {
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>No cards for that course. Every card here is one Geshe "
                      "Michael Roach put on a Language Study Guide, so a course "
                      "without a guide has none \u2014 nothing is invented to "
@@ -24766,7 +24761,7 @@ private:
                      QString::fromStdString(card_->entry.tibetan).toHtmlEscaped() +
                      "</div>";
                 h += "<div style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      ";font-size:" + QString::number(px(14)) + "px'>" +
                      QString::fromStdString(card_->entry.wylie).toHtmlEscaped() +
                      "</div>";
@@ -24781,9 +24776,8 @@ private:
         if (!card_) return;
         const int p = pickedRadio();
         const bool right = (p == card_->correct);
-        const QString act = ux::darkChrome() ? ux::chromeAct() : QString(ux::kAct);
-        const QString warn = ux::darkChrome() ? ux::chromeMachine()
-                                              : QString(ux::kMachine);
+        const QString act = QString(ux::kAct);
+        const QString warn = QString(ux::kMachine);
         QString h = right ? "<b style='color:" + act + "'>Correct.</b>"
                           : "<b style='color:" + warn + "'>Not yet \u2014 Geshe Michael "
                             "reads it <b>" +
@@ -24890,8 +24884,7 @@ private:
                      englishWithSupplied(order_->segment.english) +
                      (partial
                           ? "<div style='color:" +
-                                QString(ux::darkChrome() ? ux::chromeMuted()
-                                                         : ux::kMuted) +
+                                QString(ux::kMuted) +
                                 ";font-size:11px;padding-top:4px'>This is Geshe Michael's "
                                 "English for the WHOLE segment. You reordered "
                                 "one clause of it \u2014 the rest of the "
@@ -24964,13 +24957,11 @@ private:
                         for (const auto& x : t.matched)
                             mt << QString::fromStdString(x).toHtmlEscaped();
                         h += "<br><small style='color:" +
-                             QString(ux::darkChrome() ? ux::chromeAct()
-                                                      : ux::kAct) + "'>" +
+                             QString(ux::kAct) + "'>" +
                              mt.join(", ") + " \u2014 Geshe Michael's word here, above.</small>";
                     } else {
                         h += "<br><small style='color:" +
-                             QString(ux::darkChrome() ? ux::chromeMuted()
-                                                      : ux::kMuted) +
+                             QString(ux::kMuted) +
                              "'>None of these appears verbatim in Geshe Michael's English "
                              "above.</small>";
                     }
@@ -24983,7 +24974,7 @@ private:
                  "</small></div>";
         } else if (m == 13 && !readKids_.isEmpty()) {
             const QString muted =
-                ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                QString(ux::kMuted);
             std::vector<int> given;
             for (const QString& piece :
                  input_->text().split(QRegularExpression("[^0-9]+"),
@@ -25035,7 +25026,7 @@ private:
                                 "answer. That gap is the skill.");
         } else if (m == 12 && bound_) {
             const QString muted =
-                ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted);
+                QString(ux::kMuted);
             // 1-based on screen, 0-based in the key
             std::set<int> given;
             for (const QString& piece :
@@ -25131,8 +25122,7 @@ private:
                          "The nesting is the alignment layer's own, TENTATIVE "
                          "throughout \u2014 machine-matched from Geshe Michael's courses "
                          "and awaiting Geshe Michael's ruling.</div>")
-                     .arg(ux::darkChrome() ? ux::chromeMachine()
-                                           : QString(ux::kMachine));
+                     .arg(QString(ux::kMachine));
         } else if (m == 10 && dbg_.ok) {
             const int pick = pickedRadio();
             h += (pick == dbgCorrect_)
@@ -25174,14 +25164,12 @@ private:
                 h += QString("<div><b>%1</b> <span style='color:%2;font-size:"
                              "11px'>\u00d7%3</span></div>")
                          .arg(stAll_[i].first.toHtmlEscaped())
-                         .arg(ux::darkChrome() ? ux::chromeMuted()
-                                               : QString(ux::kMuted))
+                         .arg(QString(ux::kMuted))
                          .arg(stAll_[i].second);
             if (stAll_.size() > 12)
                 h += QString("<div style='color:%1;font-size:11px'>\u2026 and "
                              "%2 more</div>")
-                         .arg(ux::darkChrome() ? ux::chromeMuted()
-                                               : QString(ux::kMuted))
+                         .arg(QString(ux::kMuted))
                          .arg(stAll_.size() - 12);
             h += "</div></div>";
             h += QString("<div style='color:%1;font-size:11px;padding-top:6px'>"
@@ -25189,13 +25177,11 @@ private:
                          "of the term. They are all Geshe Michael's, and which one fits "
                          "depends on the passage \u2014 that is the lesson, "
                          "and this drill does not resolve it.</div>")
-                     .arg(ux::darkChrome() ? ux::chromeMuted()
-                                           : QString(ux::kMuted));
+                     .arg(QString(ux::kMuted));
             h += QString("<div style='color:%1;font-size:11px'>TENTATIVE "
                          "\u2014 machine-aligned from Geshe Michael's courses, awaiting "
                          "Geshe Michael's ruling.</div>")
-                     .arg(ux::darkChrome() ? ux::chromeMachine()
-                                           : QString(ux::kMachine));
+                     .arg(QString(ux::kMachine));
         } else if (m == 7 && !spTib_.isEmpty()) {
             const int pick = pickedRadio();
             // SCORING, and a deliberate departure from the plan.
@@ -25217,7 +25203,7 @@ private:
             if (pick == 2) {
                 ++spAbstain_;
                 h += "<b style='color:" +
-                     QString(ux::darkChrome() ? ux::chromeMuted() : ux::kMuted) +
+                     QString(ux::kMuted) +
                      "'>Abstained \u2014 neither right nor wrong.</b>";
             } else if (pick >= 0) {
                 const bool said = (pick == 0);
@@ -25237,13 +25223,12 @@ private:
                          "unrendered <b>93.9%%</b> of the time (1,595 of 1,698). "
                          "Your run: %2 right \u00b7 %3 wrong \u00b7 %4 "
                          "abstained.</div>")
-                     .arg(ux::darkChrome() ? ux::chromeMuted() : QString(ux::kMuted))
+                     .arg(QString(ux::kMuted))
                      .arg(spRight_).arg(spWrong_).arg(spAbstain_);
             h += QString("<div style='color:%1;font-size:11px'>This item is "
                          "TENTATIVE \u2014 machine-aligned from Geshe Michael's courses, "
                          "awaiting Geshe Michael's ruling.</div>")
-                     .arg(ux::darkChrome() ? ux::chromeMachine()
-                                           : QString(ux::kMachine));
+                     .arg(QString(ux::kMachine));
         } else if (m == 2 && part_) {
             const int pick = pickedRadio();
             h += (pick == part_->correct)
@@ -25342,8 +25327,7 @@ private:
                              hgmGlossPhraseRaw(es2.front().provisional(),
                                                all.join(" \u00b7 ")) +
                              "</small><div style='color:" +
-                             QString(ux::darkChrome() ? ux::chromeMachine()
-                                                      : ux::kMachine) +
+                             QString(ux::kMachine) +
                              ";font-size:11px'>Geshe Michael renders this word more than "
                              "one way. Grade yourself on the SENSE here, not "
                              "on matching one of them \u2014 that difference "
@@ -25354,8 +25338,7 @@ private:
                                  "padding-top:6px'>your deck: %2 met \u00b7 "
                                  "%3 known here \u00b7 <b>%4 known anywhere"
                                  "</b></div>")
-                             .arg(ux::darkChrome() ? ux::chromeMuted()
-                                                   : QString(ux::kMuted))
+                             .arg(QString(ux::kMuted))
                              .arg(st.met).arg(st.here).arg(st.anywhere);
                 }
                 h += pick == 0 ? "<small style='color:#3B7A3B'>scheduled "
@@ -26585,8 +26568,7 @@ public:
                QString("<span style='color:%1'>\u2026 <small>(shortened to "
                        "fit \u2014 the full line is in the corpus)</small>"
                        "</span>")
-                   .arg(ux::darkChrome() ? ux::chromeMuted()
-                                         : QString(ux::kMuted));
+                   .arg(QString(ux::kMuted));
     }
 
     // The right-hand panes are EMPTY most of the time, and empty is a state
@@ -27980,8 +27962,7 @@ private:
                         h += "<div style='margin-top:6px'><b>this clause "
                              "appears in the corpus</b></div>";
                         const QString muted =
-                            ux::darkChrome() ? ux::chromeMuted()
-                                             : QString(ux::kMuted);
+                            QString(ux::kMuted);
                         int shown = 0;
                         for (const auto& s : segs) {
                             if (shown++ >= 2) break;
@@ -28016,9 +27997,7 @@ private:
                                                 "the corpus has here \u2014 "
                                                 "it is not Geshe Michael's English for "
                                                 "these words.</div>")
-                                            .arg(ux::darkChrome()
-                                                     ? ux::chromeMachine()
-                                                     : QString(ux::kMachine))
+                                            .arg(QString(ux::kMachine))
                                  : partial
                                       ? QString("<div style='color:%1;"
                                                 "font-size:11px'>His English "
@@ -28183,8 +28162,7 @@ private:
                     "and it is empty. Paste the Tibetan first \u2014 this is "
                     "not a finding about your text, it is the absence of "
                     "one.</div>")
-                .arg(ux::darkChrome() ? ux::chromeMachine()
-                                      : QString(ux::kMachine))
+                .arg(QString(ux::kMachine))
                 .arg(QString(what)));
         return false;
     }
@@ -28511,8 +28489,7 @@ private:
                         "%3 bibliography entr(y/ies), plus anything still "
                         "pending approval. Search by a word in the note, the "
                         "lemma, or an ACIP number.</div>")
-                    .arg(ux::darkChrome() ? ux::chromeMuted()
-                                          : QString(ux::kMuted))
+                    .arg(QString(ux::kMuted))
                     .arg(notesBank_.size())
                     .arg(bibBank_.size()));
             return;
@@ -28581,8 +28558,7 @@ private:
                              "font-size:11px;letter-spacing:1.5px;"
                              "font-weight:600'>PENDING \u2014 PROPOSED HERE, "
                              "NOT YET GESHE MICHAEL ROACH'S</div>")
-                         .arg(ux::darkChrome() ? ux::chromeMachine()
-                                               : QString(ux::kMachine));
+                         .arg(QString(ux::kMachine));
             ++candFound;
             h += QString("<div style='margin:6px 0;border-left:3px solid "
                          "#c80;padding-left:6px'><a href='cand:%1'>"
@@ -29402,8 +29378,7 @@ public:
                         "check compares your English against Geshe Michael "
                         "Roach's equivalents for <i>this source</i>, so it "
                         "needs both. %2</div>")
-                    .arg(ux::darkChrome() ? ux::chromeMachine()
-                                          : QString(ux::kMachine),
+                    .arg(QString(ux::kMachine),
                          srcQ.isEmpty()
                              ? (drfQ.isEmpty()
                                     ? "The source box and the draft are both "
@@ -29426,8 +29401,7 @@ public:
                         "that carry one of Geshe Michael Roach's equivalents; "
                         "a passage built entirely from words Geshe Michael has not "
                         "glossed gives it nothing to work with.</div>")
-                    .arg(ux::darkChrome() ? ux::chromeMachine()
-                                          : QString(ux::kMachine)));
+                    .arg(QString(ux::kMachine)));
             return;
         }
         int unmatched = 0, mixed = 0, provisionalUsed = 0;
