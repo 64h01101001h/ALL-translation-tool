@@ -23852,6 +23852,10 @@ private:
                 readPos_ = 0;
                 revealed_ = false;
             } else if (readPos_ < readSegs_.size()) {
+                // A failure here surfaces at the next reveal: the NOT
+                // RECORDED banner compares against seenWriteFailures_, which
+                // is a member of this same pane and only ever grows, so the
+                // confession is one step late but never lost.
                 if (progress_ && !revealed_)
                     progress_->recordSegmentRead(readSegs_[readPos_].id, false,
                                                  (long long)time(nullptr));
@@ -34348,6 +34352,13 @@ private:
     }
 
     void logOpen(const QString& path) {
+        // Deliberately NOT banner-worthy, and the reason is worth stating so
+        // nobody "fixes" it later: this records that a file was opened. It is
+        // telemetry, not the reader's work. Losing it costs a line in the
+        // usage ledger; interrupting someone with NOT RECORDED over it would
+        // teach them to ignore the banner that DOES mean their answers are
+        // being lost. The counter still increments, so Help -> Usage can show
+        // it if that is ever wanted.
         if (progress_)
             progress_->recordDrill("openfile", path.toStdString(), true,
                                    (long long)time(nullptr));
