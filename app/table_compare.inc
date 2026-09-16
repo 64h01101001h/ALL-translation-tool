@@ -110,7 +110,7 @@ class TableComparePage : public QWidget {
 public:
     TableComparePage(ComparePane* owner, const QString& root, allcore::Spine* spine) : QWidget(owner), owner_(owner), root_(root), spine_(spine) {
         auto* v = new QVBoxLayout(this); v->setContentsMargins(6, 4, 6, 4); v->setSpacing(4);
-        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine) + "Table Compare pairs records by a key you choose and lists the fields that differ. Nothing is written. This page compares; it does not merge."); banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1;").arg(ux::chromeInk()); }); v->addWidget(banner);
+        auto* banner = new QLabel(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + "Table Compare pairs records by a key you choose and lists the fields that differ. Nothing is written. This page compares; it does not merge."); banner->setTextFormat(Qt::RichText); banner->setWordWrap(true); ux::themedStyle(banner, [] { return QString("color:%1;").arg(ux::chromeInk()); }); v->addWidget(banner);
         auto* top = new QGridLayout;
         leftEd_ = new QLineEdit; rightEd_ = new QLineEdit; leftEd_->setPlaceholderText("Left table (TSV, CSV or JSON)"); rightEd_->setPlaceholderText("Right table");
         auto* bl = new QPushButton("Browse…"); auto* br = new QPushButton("Browse…");
@@ -304,7 +304,7 @@ public:
 private:
     static QString join(const std::vector<std::string>& v) { QStringList l; for (const auto& s : v) l << QString::fromStdString(s); return l.isEmpty() ? QString("none") : l.join(", "); }
     static QString rowText(const Table& t, int row) { if (row < 0 || row >= (int)t.rows.size()) return {}; QStringList l; for (size_t i = 0; i < t.columns.size() && i < t.rows[row].cells.size(); ++i) l << QString::fromStdString(t.columns[i]) + ": " + QString::fromStdString(t.rows[row].cells[i]); return l.join('\n') + "\n"; }
-    void status(const QString& m) { summary_->setText(ux::sourceBadge(ux::Epistemic::Machine) + m.toHtmlEscaped()); owner_->statusLabel()->setText(m); }
+    void status(const QString& m) { summary_->setText(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + m.toHtmlEscaped()); owner_->statusLabel()->setText(m); }
     void applyPreset() {
         const Preset& pr = preset(); keyBox_->setCurrentText(pr.keyCol); key2Box_->setCurrentText(pr.key2Col); listEd_->setText(pr.listCols);
         formatBox_->setCurrentIndex(pr.format == Format::Csv ? 1 : pr.format == Format::Tsv ? 2 : 0);
@@ -347,7 +347,7 @@ private:
             tree_->addTopLevelItem(it);
         }
         QString sm = summaryFor(*res_); if (shown > 5000) sm += QString(" Showing the first 5,000 of %1 rows in this view.").arg(res_->rows.size());
-        summary_->setText(ux::sourceBadge(ux::Epistemic::Machine) + sm.toHtmlEscaped());
+        summary_->setText(ux::sourceBadge(ux::Epistemic::Machine, ux::Ground::Chrome) + sm.toHtmlEscaped());
         owner_->statusLabel()->setText(sm);
     }
 
