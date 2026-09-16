@@ -8,14 +8,14 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**187 entries**: **134 document errata** (6 HIGH, 71 MEDIUM, 57 LOW), **24 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**191 entries**: **134 document errata** (6 HIGH, 71 MEDIUM, 57 LOW), **24 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 97 |
 | English typo | 24 |
 | Digitisation artefact | 24 |
-| Our banked layer | 12 |
+| Our banked layer | 16 |
 | Formatting | 7 |
 | English factual error | 6 |
 
@@ -217,7 +217,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Defects in OUR OWN banked layer &mdash; 12
+## Defects in OUR OWN banked layer &mdash; 16
 
 *Nothing here is a defect in an ALL document. These are ours, found by checking the shipped layer back against the spine, and they are fixed by re-running pages &mdash; not by anyone at ALL. They are listed so the register is honest about who owns what.*
 
@@ -235,6 +235,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C01:180` | never transgressing | 'da' bar banked whole as "transgressing"; the mi morpheme banked with eng: null | The banked layer splits one English word across two links: s180m4 (d=6, tib 'mi') carries eng 'trans' and s180w9 (d=5, tib "'da' bar") carries eng 'gressing'. Neither half is English. The negation in this sentence is already carried by s180w8, tib 'nam yang' - | CONFIRMED |
 | `C01:170` | a spiritual practice | 'ong rgyu not banked as the bare article; the article belongs to the 'spiritual practice' span, and 'ong rgyu  | s170w7 (d=5, tib "'ong rgyu") carries eng 'a'. The segment's English reads "much less do something that's a spiritual practice"; the article there belongs to 'a spiritual practice', which is already banked at s170w6 (tib 'chos' -> 'spiritual practice'). "'ong  | CONFIRMED |
 | `C01:38` | These instructions were imparted to Ngawang Drakpa | the eng field holds Geshe Michael's English for the span and nothing else; an alignment note belongs in a note | Found by tools/alignment_invariants.py on its first run, by the check that every banked English must occur in the segment's English. The d=1 link s38S carries, inside its eng field, a bracketed editorial annotation: "[FRONT-MATTER BLEED: the corpus English con | CONFIRMED |
+| `C01:32` | You cannot cut the root of cyclic life | mi -> the negation ('not'/the neg- of 'cannot'); nus -> 'can' (able). The two are currently swapped. | Found by the english_cut_mid_word advisory of tools/alignment_invariants.py and read against the segment. C01:32's English reads "You cannot cut the root of cyclic life" for Tibetan "bcad par mi nus". The bank has s32w11 (d=5, tib 'nus') -> eng 'not' and s32m9 | CONFIRMED |
+| `C01:111` | you end up outside of both | the span 'mi chud pa' banked whole as 'outside' (or 'chud pa' -> 'outside' with the mi morpheme taking eng: nu | Found by the english_cut_mid_word advisory and read against the segment. C01:111 ends "Try to mix up all the systems, the earlier and the later, and you end up outside of both." The bank splits the English word "outside" across two links: s111w27 (d=5, tib 'ch | CONFIRMED |
+| `C01:115` | they have insufficient merit from their past deeds | 'chung' -> 'insufficient' whole, or eng: null; never 'sufficient' | Found by the english_cut_mid_word advisory and read against the segment. C01:115 reads "it is only because they have insufficient merit from their past deeds that they think this way", for Tibetan "bsod nams kyi bsags rgyab chung bas" -- literally, their accum | CONFIRMED |
+| `C01:178` | Sending the uncatchable diamond ahead of you | the phrase is already banked correctly at s178w1 ('thebs med' -> 'uncatchable'); the duplicate split across s1 | Found by the english_cut_mid_word advisory and read against the segment. C01:178 opens "Sending the uncatchable diamond ahead of you". The bank renders that one English word TWICE: correctly as a whole at s178w1 (d=5, tib 'thebs med') -> 'uncatchable', and aga | CONFIRMED |
 
 ---
 

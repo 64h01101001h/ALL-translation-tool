@@ -104,6 +104,26 @@ inline const char* chromeGold() {
 // greens keep their own values, and a paper surface still asks for the
 // paper ink. Every pair here is asserted on its own ground by the
 // battery, so a wrong value fails the selftest rather than shipping.
+// WHERE THESE MAY BE USED, and where they may not.
+//
+// Each chromeX() follows the APP PALETTE. That is right for a widget whose
+// ground follows the palette too -- a QLabel, a tree row, a button, anything
+// styled with setStyleSheet or setForeground.
+//
+// It is WRONG for text that will be rendered into a card. QTextBrowser,
+// QTextEdit and QPlainTextEdit are pinned to manuscript cream #FAF6EE in
+// EVERY appearance (see the application stylesheet in main(): "Reading
+// surfaces are manuscript-cream ALWAYS ... night chrome, paper page"). So in
+// Night mode a chromeX() spliced into card HTML paints a chrome-tuned ink on
+// cream. Measured on #FAF6EE: chromeAct 2.09, chromeDoc 2.06, chromeError
+// 2.34, chromeMachine 2.44 -- against an AA floor of 4.5. Sixty-one sites did
+// exactly this until 2026-09-15, including the rule-3 "refused --" flag, which
+// is the one line in the converter whose whole job is to be noticed.
+//
+// For card HTML use the paper tokens (kMuted, kError, kAct, kGold, kWarn,
+// kMachine, kFaint, kSoft). Every one of them clears AA on cream: 4.51 to
+// 14.61, measured.
+//
 // Body text on a chrome plaque. The light value is the one the panes have
 // always used, so Day is unchanged to the pixel; the dark value is its
 // sibling, measured on chrome by the battery like every pair here.
