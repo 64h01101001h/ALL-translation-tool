@@ -3453,7 +3453,30 @@ inline const std::vector<Workflow>& shippedWorkflows() {
     };
     return W;
 }
+// PANES WITHHELD FROM A RELEASE BUILD, in one place, so a pane taken out for
+// 1.0 can come back without archaeology (RELEASE_PLAN_2026-09 section 1.3).
+//
+// IT IS EMPTY, DELIBERATELY. The contents are dispositions -- SHIP / HIDE /
+// CUT / FIX / LABEL -- and the plan is explicit that they are assigned by
+// walking the function audit with Adam, pane by pane, in the running app.
+// That walk has not happened: all 40 files in docs/release_audit/ carry the
+// words only where they explain what they mean, and no pane has been given
+// one. Choosing what to hide is not mine to do, so the mechanism ships wired
+// and proved while the list stays empty.
+//
+// This is NOT the Features preference. That is the translator's own choice,
+// defaults to ON, and Preferences offers a "Show everything again" button.
+// A release-hidden pane is not offered there at all and no setting brings it
+// back -- otherwise "hidden for 1.0" would last until someone opened
+// Preferences.
+static QStringList g_releaseHidden;    // non-const: the selftest drives it
+inline bool releaseHidden(const QString& pane) {
+    return g_releaseHidden.contains(pane);
+}
+
 inline bool featureOn(const QString& kind, const QString& name) {
+    // release beats preference, and beats the default
+    if (kind == "pane" && releaseHidden(name)) return false;
     return QSettings("ALL", "TranslationTool").value("features/" + kind + "/" + name, true).toBool();
 }
 // The idiom bank, opened from wherever the translator is: (text name, whole text, the selection)
@@ -43762,6 +43785,10 @@ public:
                     QString(), Qt::FindDirectChildrenOnly);
             if (auto* inner = innerW) {
                 for (int j = 0; j < inner->count(); ++j) {
+                    // A release-hidden pane must not be findable in Help either:
+                    // its result card offers "open that pane now", and the pane
+                    // is not there to open.
+                    if (releaseHidden(inner->tabText(j))) continue;
                     locs_.push_back({i, inner, j});
                     indexPane(inner->widget(j), inner->tabText(j),
                               (int)locs_.size() - 1);
@@ -46042,7 +46069,9 @@ int main(int argc, char** argv) {
             // feature is still one menu away.
             g_featureList = [] {
                 QList<QPair<QString, QString>> out;
-                for (const auto& f : flatPanes) out.append({f.group, f.title});
+                // a release-hidden pane is not offered to the user at all
+                for (const auto& f : flatPanes)
+                    if (!releaseHidden(f.title)) out.append({f.group, f.title});
                 return out;
             };
             g_applyFeatures = [&tabs] {
@@ -46050,7 +46079,13 @@ int main(int argc, char** argv) {
                 for (const auto& f : flatPanes) if (featureOn("pane", f.title) && featureOn("group", f.group)) ++wanted;
                 const bool refuse = wanted == 0;   // never leave the window with nothing in it
                 for (const auto& f : flatPanes) {
-                    const bool on = refuse || (featureOn("pane", f.title) && featureOn("group", f.group));
+                    // `refuse` is the "never leave the window with nothing in
+                    // it" fallback, which shows everything when the translator
+                    // has switched every pane off. A release-hidden pane must
+                    // not reappear through it, so the guard is outside.
+                    const bool on = !releaseHidden(f.title) &&
+                                    (refuse || (featureOn("pane", f.title) &&
+                                                featureOn("group", f.group)));
                     if (f.btn) f.btn->setVisible(on);
                 }
                 // a pane that has just been hidden must not stay the one on screen
@@ -46709,6 +46744,11 @@ int main(int argc, char** argv) {
             hdr->setEnabled(false);
         }
         for (int pi = 0; pi < g->count(); ++pi) {
+            // A release-hidden pane keeps no menu entry. The Features
+            // preference deliberately DOES keep one -- hiding by choice
+            // never removes a way back -- but hidden for 1.0 must not
+            // leave a "Show pane" command behind that reveals it.
+            if (releaseHidden(g->tabText(pi))) continue;
             QWidget* pane = g->widget(pi);
             QMenu* menu = gm->addMenu(g->tabText(pi));
             QAction* go = menu->addAction("Show pane");
@@ -49008,7 +49048,9 @@ int main(int argc, char** argv) {
                 if (k.startsWith("features/"))
                     featureKeep.insert(k, st.value(k));
             const QList<QPair<QString, QString>> listed = g_featureList ? g_featureList() : QList<QPair<QString, QString>>();
-            fcheck(listed.size() == (int)flatPanes.size() && !listed.isEmpty(), "every pane that exists is offered, so the list cannot drift from the build");
+            int notHidden = 0;
+            for (const auto& f : flatPanes) if (!releaseHidden(f.title)) ++notHidden;
+            fcheck(listed.size() == notHidden && !listed.isEmpty(), "every pane that exists is offered, so the list cannot drift from the build");
             QString probe, probeGroup; QToolButton* probeBtn = nullptr;
             for (const auto& f : flatPanes) if (f.btn && f.group == "Learn") { probe = f.title; probeGroup = f.group; probeBtn = f.btn; break; }
             if (!probe.isEmpty()) {
@@ -49325,6 +49367,42 @@ int main(int argc, char** argv) {
                        .arg(chapters ? "PASS" : "FAIL")
                        .arg(hw.chapterCount());
             if (!chapters) ++fails;
+            {   // RELEASE-HIDDEN panes, proved rather than assumed.
+                // g_releaseHidden is empty in every shipped build -- its
+                // contents are dispositions from the function audit, which is
+                // Adam's to walk -- so without this the mechanism would ship
+                // wired to nothing and never once exercised. Drive it with a
+                // real pane, check the three surfaces that must forget it,
+                // then put it back.
+                const QStringList keepHidden = g_releaseHidden;
+                const int before = hw.indexSize();
+                const auto listedBefore = g_featureList ? g_featureList()
+                                        : QList<QPair<QString, QString>>();
+                g_releaseHidden = QStringList{"Drills"};
+                HelpWindow hidden(&tabs, root, nullptr);
+                const auto listedAfter = g_featureList ? g_featureList()
+                                       : QList<QPair<QString, QString>>();
+                bool stillListed = false;
+                for (const auto& pr : listedAfter)
+                    if (pr.second == "Drills") stillListed = true;
+                bool wasListed = false;
+                for (const auto& pr : listedBefore)
+                    if (pr.second == "Drills") wasListed = true;
+                const bool offPane = !featureOn("pane", "Drills");
+                const bool smaller = hidden.indexSize() < before;
+                g_releaseHidden = keepHidden;
+                const bool restored = featureOn("pane", "Drills");
+                const bool ok = wasListed && !stillListed && offPane &&
+                                smaller && restored;
+                log << QString("  [%1] Release: a hidden pane leaves the "
+                               "Features list (%2 to %3), reports off, and "
+                               "drops out of the Help index (%4 to %5) - and "
+                               "comes back when it is unhidden")
+                           .arg(ok ? "PASS" : "FAIL")
+                           .arg(listedBefore.size()).arg(listedAfter.size())
+                           .arg(before).arg(hidden.indexSize());
+                if (!ok) ++fails;
+            }
             const bool indexed = hw.indexSize() > 150;
             log << QString("  [%1] Help: feature auto-index built "
                            "(%2 entries)")
