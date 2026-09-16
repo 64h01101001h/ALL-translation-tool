@@ -266,7 +266,7 @@ public:
         if (e) {
             if (!e->evidence.empty()) h += "<div style='color:#6B5E4E'>put forward because: " + QString::fromStdString(e->evidence).toHtmlEscaped() + "</div>";
             if (!e->proposedBy.empty()) h += "<div style='color:#6B5E4E'>put forward by " + QString::fromStdString(e->proposedBy).toHtmlEscaped() + (e->proposed.empty() ? QString() : " on " + QString::fromStdString(e->proposed)) + "</div>";
-            if (!e->ruledBy.empty()) h += "<div style='color:#2E5D34'>ruled " + QString::fromStdString(allcore::idioms::statusName(e->status)) + " by " + QString::fromStdString(e->ruledBy).toHtmlEscaped() + (e->ruled.empty() ? QString() : " on " + QString::fromStdString(e->ruled)) + (e->note.empty() ? QString() : " — “" + QString::fromStdString(e->note).toHtmlEscaped() + "”") + "</div>";
+            if (!e->ruledBy.empty()) h += "<div style='color:#1E6B4E'>ruled " + QString::fromStdString(allcore::idioms::statusName(e->status)) + " by " + QString::fromStdString(e->ruledBy).toHtmlEscaped() + (e->ruled.empty() ? QString() : " on " + QString::fromStdString(e->ruled)) + (e->note.empty() ? QString() : " — “" + QString::fromStdString(e->note).toHtmlEscaped() + "”") + "</div>";
             if (e->status == Status::Proposed) h += "<div style='color:#9A7A33'>No ruling yet. Until Geshe Michael rules, this form is a proposal: it is marked in a text as a proposal and is never presented as settled.</div>";
         }
         h += "<hr><div>" + ux::sourceBadge(ux::Epistemic::Binding) + "<b>How Geshe Michael has rendered it</b></div>";
