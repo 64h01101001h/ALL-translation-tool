@@ -36911,6 +36911,13 @@ public:
                     minePos + int(d.text.length()),
                     QTextCursor::KeepAnchor);
                 sel.format.setBackground(QColor(0xF5, 0xC0, 0x66, 150));
+                // SECOND CHANNEL. Amber and green are the classic deuteran
+                // confusion pair, and the wash was the only thing telling the
+                // two kinds apart -- for an operator who cannot separate them
+                // the pane said "22 discrepancies" and then declined to say
+                // which was which. A solid underline here, a wave on the seam.
+                sel.format.setUnderlineStyle(QTextCharFormat::SingleUnderline);
+                sel.format.setUnderlineColor(QColor(0x8C, 0x5A, 0x00));
                 diffSels_.push_back(sel);
                 ++nDisc;
             } else if (d.operation == INSERT) {
@@ -36923,6 +36930,8 @@ public:
                              int(editor_->toPlainText().size())),
                     QTextCursor::KeepAnchor);
                 sel.format.setBackground(QColor(0x9E, 0xD9, 0xA0, 150));
+                sel.format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+                sel.format.setUnderlineColor(QColor(0x1E, 0x6B, 0x4E));
                 diffSels_.push_back(sel);
                 ++nDisc;
             }
@@ -36936,10 +36945,11 @@ public:
             nDisc == 0
                 ? QString("double-keying PASS — your text and the "
                           "partner file match exactly")
-                : QString("%1 discrepancy region(s) — orange = here "
-                          "only, green seam = partner has extra text "
-                          "there. Correct until the texts match "
-                          "exactly (the input-center rule).")
+                : QString("%1 discrepancy region(s) — UNDERLINED "
+                          "(orange) = text only in yours; WAVY seam "
+                          "(green) = partner has extra text there. "
+                          "Correct until the texts match exactly "
+                          "(the input-center rule).")
                       .arg(nDisc));
     }
 
@@ -36954,9 +36964,9 @@ public:
         editor_->setTextCursor(c);
         editor_->ensureCursorVisible();
         editor_->setFocus();
-        status_->setText(QString("discrepancy %1/%2 — orange = "
-                                 "here only, green seam = partner "
-                                 "has extra text")
+        status_->setText(QString("discrepancy %1/%2 — UNDERLINED "
+                                 "(orange) = here only; WAVY seam "
+                                 "(green) = partner has extra text")
                              .arg(diffNavIx_ + 1)
                              .arg(n));
     }
