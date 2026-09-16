@@ -40,7 +40,13 @@ inline QString statusLabel(Status s) {
     return "awaiting Geshe Michael's ruling";
 }
 inline QColor statusColour(Status s) {
-    return s == Status::Approved ? QColor(0x2E, 0x5D, 0x34) : s == Status::Declined ? QColor(0x6B, 0x5E, 0x4E) : QColor(0x9A, 0x7A, 0x33);
+    // Tree rows follow the PALETTE, so these must too. Fixed paper inks on a
+    // dark tree Base measured 2.34 (rejected rows) and 4.44 (pending) -- and
+    // the rejected rows are precisely the ones a person has to read before
+    // deciding. The chrome siblings carry the same three meanings.
+    return s == Status::Approved  ? QColor(ux::chromeAct())
+         : s == Status::Declined  ? QColor(ux::chromeMuted())
+                                  : QColor(ux::chromeGold());
 }
 
 // Read one register file. A file that is absent is not an error (the team

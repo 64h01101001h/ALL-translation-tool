@@ -128,6 +128,37 @@ def main():
                         ", ".join(where[:4]) +
                         (" ..." if len(where) > 4 else "")))
 
+    # 4. literal inks set on WIDGET rows -- setForeground on a tree or list.
+    #    Those follow the palette, so a fixed ink has to clear AA on BOTH
+    #    grounds. This section exists because sections 1-3 read only #RRGGBB
+    #    and the offenders were written QColor(0x9A, 0x2B, 0x1E) -- the same
+    #    colour in a spelling no gate here could see. Rejected patch rows sat
+    #    at 2.34 on dark, and they are exactly the rows a person must read
+    #    before deciding. A theme-aware QColor(ux::chromeX()) is the fix and
+    #    is skipped.
+    fg = re.compile(
+        r"setForeground\s*\([^;]*?QColor\s*\(\s*"
+        r"(?:0x([0-9A-Fa-f]{2})\s*,\s*0x([0-9A-Fa-f]{2})\s*,\s*0x([0-9A-Fa-f]{2})"
+        r'|"(#[0-9A-Fa-f]{6})")')
+    for p2 in files:
+        rel = os.path.relpath(p2, root)
+        for i, line in enumerate(io.open(p2, encoding="utf-8",
+                                         errors="replace"), start=1):
+            if line.lstrip().startswith("//"):
+                continue
+            for m in fg.finditer(line):
+                ink = (m.group(4) if m.group(4)
+                       else "#%s%s%s" % (m.group(1), m.group(2), m.group(3)))
+                for ground, which in ((CHROME_DARK, "dark"),
+                                      (CHROME_LIGHT, "light")):
+                    r = ratio(ink, ground)
+                    if r < AA:
+                        fails.append(
+                            "%s on %s row ground %s = %.2f (AA %.1f) at %s:%d "
+                            "- a fixed ink on a widget that follows the "
+                            "palette; use a ux::chrome sibling"
+                            % (ink, which, ground, r, AA, rel, i))
+
     base_path = os.path.join(root, "tools/contrast_baseline.txt")
     accepted = set()
     if os.path.exists(base_path):

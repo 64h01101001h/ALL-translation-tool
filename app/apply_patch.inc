@@ -205,7 +205,7 @@ public:
             auto* it = new QTreeWidgetItem({"", QString::number(oc.hunkIx + 1), QString::fromStdString(hk.header).trimmed(), placementText(oc), QString::number(hk.aLen), QString::number(hk.bLen)});
             it->setFlags(it->flags() | Qt::ItemIsUserCheckable); it->setCheckState(0, (oc.how == Placement::Rejected && oc.reason == "not selected") ? Qt::Unchecked : Qt::Checked);
             it->setData(0, Qt::UserRole, oc.atLine);
-            if (oc.how == Placement::Rejected) for (int c = 0; c < 6; ++c) it->setForeground(c, QColor(0x9A, 0x2B, 0x1E));
+            if (oc.how == Placement::Rejected) for (int c = 0; c < 6; ++c) it->setForeground(c, QColor(ux::chromeError()));
             table_->addTopLevelItem(it);
         }
         const QString tname = h_.sideText ? h_.sideName : QFileInfo(targetPath()).fileName();
