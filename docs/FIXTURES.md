@@ -52,7 +52,7 @@ root.
 | `build/hgm_spine_v27_2.db` | analysis, botok_tok, colloquial, contractions, drills, engines_battery, gofer, lattice, poslex, qc, quotation, reader, spellcheck, spine, spine_resilience, terminology | `python3 tools/build_spine.py` |
 | `build/sanskrit_reference.tsv` | engines_battery | `python3 tools/build_sanskrit_reference.py` |
 | `build/pron_reference.tsv` | engines_battery | `python3 tools/build_pron_reference.py` — the canonical `engines/pron_engine.py` output for all 105,576 distinct wylie headwords in the master. Landed 2026-09-16 from a worktree it had been stranded in since 2026-09-10; verified by regenerating over the dump the battery had been using and diffing: identical, byte for byte |
-| `build/forward_reference.tsv` | forward_battery | **no generator in this repo** (emitted by the canonical `ewts_unicode.py` in the data project) |
+| `build/forward_reference.tsv` | forward_battery | `python3 tools/build_forward_reference.py` — the canonical `engines/ewts_unicode.py` output over every third master ENTRY at offset 2, wylie sorted, duplicates kept (35,211 rows for 35,207 distinct headwords). Landed 2026-09-16; verified byte for byte against the banked dump |
 | `build/towylie_reference.tsv` | towylie_battery | **no generator in this repo** (emitted by the pyewts oracle run) |
 | `build/weird_top.tsv` | weird_battery | `python3 tools/weirdness_rank.py` |
 | `build/botok_syls_reference.tsv` | botok_smoke | `python3 tools/build_botok_reference.py build/hgm_spine_v27_2.db build/botok_syls_reference.tsv` |
