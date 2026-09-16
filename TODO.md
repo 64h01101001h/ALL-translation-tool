@@ -27,6 +27,19 @@ deep research."
       word up in and one you can *research* in. It is also the first thing
       that makes the supporting dictionaries (LC, THL, 84000) genuinely
       reachable rather than merely present.
+      WHAT ALREADY EXISTS (scouted 2026-09-16, before the work was paused —
+      this makes the item smaller than it reads). The app already has a
+      link-scheme layer: 21 anchorClicked handlers and schemes including
+      `term:`, `card:`, `bdr:`, `das:`, `jae:`, `author:`, `bib:`. And the
+      "see also:" line on a dictionary card is ALREADY linked — app/main.cpp
+      ~1528 emits `<a href='term:…'>` per entry, handled at ~2771, ~3858 and
+      ~10420, which rerun the lookup in place. So the plumbing for
+      entry-to-entry navigation is built and proved; the work is not
+      inventing it. The work is finding which cross-references are still
+      emitted as PLAIN PROSE and routing them through what is already there,
+      plus deciding whether the supporting dictionaries (LC, THL, 84000)
+      deserve their own scheme or reuse `term:`.
+
       Not yet scoped. Before any code: decide what counts as a reference
       (exact headword only, or inflected forms too), what happens when a
       reference has no entry — the honest answer is to say so, not to guess

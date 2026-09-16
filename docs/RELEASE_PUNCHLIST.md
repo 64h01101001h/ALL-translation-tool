@@ -13,66 +13,66 @@ The reading that produced the previous version of this page is kept at `docs/REL
 
 | | item | effort | source |
 |---|---|---|---|
-| 1 | 🚢 No working update channel: the folder check matches a DMG name the press no longer produces, and nothing notifies. | medium | `TODO.md:3216` |
-| 2 | 🚢 GitHub hosting half-built: app repo exists but is 213 commits stale, and no data-release repo, manifest or publish script. | medium | `TODO.md:3339` |
-| 3 | 🚢 In-app update check: fetch the GitHub manifest, notify on the desktop, install via the Import-data-release pipeline | medium | `TODO.md:3341` |
-| 4 | 🚢 Put the HIDE list behind one kReleaseHidden flag and regenerate the feature guide without hidden features | medium | `TODO.md:3351` |
-| 5 | 🚢 Press script still exits at the DMG step with no app relaunched; needs the relaunch trap after step 6c. | small | `TODO.md:3446` |
+| 1 | 🚢 No working update channel: the folder check matches a DMG name the press no longer produces, and nothing notifies. | medium | `TODO.md:3229` |
+| 2 | 🚢 GitHub hosting half-built: app repo exists but is 213 commits stale, and no data-release repo, manifest or publish script. | medium | `TODO.md:3352` |
+| 3 | 🚢 In-app update check: fetch the GitHub manifest, notify on the desktop, install via the Import-data-release pipeline | medium | `TODO.md:3354` |
+| 4 | 🚢 Put the HIDE list behind one kReleaseHidden flag and regenerate the feature guide without hidden features | medium | `TODO.md:3364` |
+| 5 | 🚢 Press script still exits at the DMG step with no app relaunched; needs the relaunch trap after step 6c. | small | `TODO.md:3459` |
 
 ## Release-blocking, and Adam's to do
 
 | | item | effort | source |
 |---|---|---|---|
-| 1 | 🚢 Adam must rule whether the verbose Desktop diagnostic (all settings + lifecycle log) may be handed to a tester. | small | `TODO.md:369` |
-| 2 | 🚢 Batch 4 is built; only Adam's Word check on redline_sample.docx and the three gated Send-to-Word controls remain. | small | `TODO.md:404` |
-| 3 | 🚢 Thirty plan questions for Adam are unanswered; six of them set shipped defaults (shad style, versions location, Word gate). | small | `TODO.md:411` |
-| 4 | 🚢 Adam must rule on supplied articles at span head: strip and re-land every C01 page, or label it a C01-era convention. | large | `TODO.md:501` |
-| 5 | 🚢 Adam must send the drafted 84000 licence email; shipped 84000 glossary/TM data rests on a contradicted licence. | small | `TODO.md:1890` |
-| 6 | 🚢 Adam must upload the input-center conversion standards; roadmap item A, the formatter, cannot be built without them. | small | `TODO.md:2047` |
-| 7 | 🚢 Adam must supply raw input-center document samples; the input-center formatter cannot be built or tested without them. | small | `TODO.md:2052` |
-| 8 | 🚢 Sanskrit/wasur V-cluster and A'A gaps leave 7,655 spine entries showing ⟨flags⟩ instead of Tibetan; fix is data-project side. | medium | `TODO.md:2063` |
-| 9 | 🚢 ALL has still not ruled what the project's own code is released under; the LICENSE file only records the gap. | small | `TODO.md:3176` |
-| 10 | 🚢 The 22-pane walk with Adam has not happened; inventories exist but no SHIP/HIDE/FIX/LABEL dispositions are written. | large | `TODO.md:3337` |
-| 11 | 🚢 The licence decision from ALL is still outstanding, and the source repo is already public without one. | small | `TODO.md:3338` |
-| 12 | 🚢 Fix list from the pane walk, closed by release day 10 — the walk has produced no dispositions yet | large | `TODO.md:3352` |
-| 13 | 🚢 Cut VERSION 1.0.0, run the press, test the DMG on a clean Mac, publish the first GitHub releases | medium | `TODO.md:3353` |
-| 14 | 🚢 Walk the Overlay pane with Adam row by row, starting with a ruling on the Document box | large | `TODO.md:3356` |
+| 1 | 🚢 Adam must rule whether the verbose Desktop diagnostic (all settings + lifecycle log) may be handed to a tester. | small | `TODO.md:382` |
+| 2 | 🚢 Batch 4 is built; only Adam's Word check on redline_sample.docx and the three gated Send-to-Word controls remain. | small | `TODO.md:417` |
+| 3 | 🚢 Thirty plan questions for Adam are unanswered; six of them set shipped defaults (shad style, versions location, Word gate). | small | `TODO.md:424` |
+| 4 | 🚢 Adam must rule on supplied articles at span head: strip and re-land every C01 page, or label it a C01-era convention. | large | `TODO.md:514` |
+| 5 | 🚢 Adam must send the drafted 84000 licence email; shipped 84000 glossary/TM data rests on a contradicted licence. | small | `TODO.md:1903` |
+| 6 | 🚢 Adam must upload the input-center conversion standards; roadmap item A, the formatter, cannot be built without them. | small | `TODO.md:2060` |
+| 7 | 🚢 Adam must supply raw input-center document samples; the input-center formatter cannot be built or tested without them. | small | `TODO.md:2065` |
+| 8 | 🚢 Sanskrit/wasur V-cluster and A'A gaps leave 7,655 spine entries showing ⟨flags⟩ instead of Tibetan; fix is data-project side. | medium | `TODO.md:2076` |
+| 9 | 🚢 ALL has still not ruled what the project's own code is released under; the LICENSE file only records the gap. | small | `TODO.md:3189` |
+| 10 | 🚢 The 22-pane walk with Adam has not happened; inventories exist but no SHIP/HIDE/FIX/LABEL dispositions are written. | large | `TODO.md:3350` |
+| 11 | 🚢 The licence decision from ALL is still outstanding, and the source repo is already public without one. | small | `TODO.md:3351` |
+| 12 | 🚢 Fix list from the pane walk, closed by release day 10 — the walk has produced no dispositions yet | large | `TODO.md:3365` |
+| 13 | 🚢 Cut VERSION 1.0.0, run the press, test the DMG on a clean Mac, publish the first GitHub releases | medium | `TODO.md:3366` |
+| 14 | 🚢 Walk the Overlay pane with Adam row by row, starting with a ruling on the Document box | large | `TODO.md:3369` |
 
 ## Code, unblocked, not release-blocking
 
 | | item | effort | source |
 |---|---|---|---|
 | 1 | Document properties are keyed by bare filename, so same-named files in different folders share one record. | medium | `TODO.md:1` |
-| 2 | Count word frequency honestly across that body, settling the segmenter and denominator question before publishing a number. | medium | `TODO.md:160` |
-| 3 | Profile each word's frequency at every alignment depth, not one number, since compound-only words are a different learning problem. | medium | `TODO.md:166` |
-| 4 | Show how widely each word spreads across individual translations, not only its total count. | medium | `TODO.md:172` |
-| 5 | Build the learner's frequency-ordered list with Adam's recommended memorised core of the top 2,000 then 4,000. | medium | `TODO.md:175` |
-| 6 | Eventually build textual-analysis tools giving the most frequent words across all Buddhist authors and genres, not one translator. | large | `TODO.md:177` |
-| 7 | Highlight matched idioms inline in the Overlay's running text; today they are only listed and counted. | medium | `TODO.md:277` |
-| 8 | Merge the idiom longest-match walk into the Entities Aho-Corasick machine once batch 5 F6 lands; F6 has not landed. | medium | `TODO.md:279` |
-| 9 | Ship a set of cohesive, customisable interface colour themes; only Day/Night exist today and no theme engine is built. | large | `TODO.md:317` |
-| 10 | Audit Night mode and fix the hardcoded light chrome that ignores the palette, before any theme system is built. | medium | `TODO.md:334` |
-| 11 | Compare still lacks an encoding choice, Compare-with-Backup listing, and any warning for an invalid line-filter regex. | medium | `TODO.md:422` |
-| 12 | Design the Sublime-grade text editing model (Phases 1-3) before any code; the 8/28 agent run died and never restarted. | large | `TODO.md:571` |
-| 13 | Two Sanskrit-oracle findings unacted: the ॐ ligature for standalone om, and bare consonant+visarga inputs. | small | `TODO.md:2585` |
-| 14 | Old-Tibetan affixnorm: the da-drag strip is ported and tested; the medial-འ rule is deliberately still unported. | small | `TODO.md:2768` |
-| 15 | Staged extraction of app/main.cpp stalled after two headers; the file has grown to 52,494 lines. | large | `TODO.md:3239` |
-| 16 | No CI anywhere; docs/CI_REQUIREMENTS.md costs it out but the decision to stand it up is still unmade. | medium | `TODO.md:3240` |
-| 17 | Defect-intake address in About plus a redacted diagnostic report — shipped and pinned by selftest checks | small | `TODO.md:3350` |
-| 18 | Project menu with dossier open/switch/recent/save-as/close/edit and folders is built and wired. | small | `TODO.md:3473` |
-| 19 | Help menu already carries documentation/tutorials, Report a Problem defect intake and Data Status. | small | `TODO.md:3474` |
-| 20 | Preferences grid shipped, but the asked-for AI, Tibetan & Sanskrit and Updates pages are still missing. | small | `TODO.md:3475` |
-| 21 | Map pane batch M1 — offline basemap, open-licensed places layer, trilingual search, provenance popups — unstarted. | large | `TODO.md:3534` |
-| 22 | Map pane batch M2 — tradition/role/period layers linked to catalogue texts and persons — unstarted. | medium | `TODO.md:3537` |
-| 23 | Map pane batch M3 — pilgrimage routes, distance tools, GeoJSON export, per-layer SBOM — unstarted. | medium | `TODO.md:3539` |
-| 24 | Remaining style-sheet checks (US spelling, lone digits, stray %, title case, DCC body style) not built. | medium | `TODO.md:3620` |
-| 25 | Compare pane lacks Compare-with-Backup, an encoding choice, and any warning for an invalid regex filter. | medium | `TODO.md:3638` |
-| 26 | Table compare shipped; folio-scan image compare and .docx text-extraction compare still missing. | medium | `TODO.md:3640` |
-| 27 | Study pane batch 5: Repeated Passages, similarity, statistics and entities engines — only the shell and table compare exist | large | `TODO.md:3651` |
-| 28 | References pane: catalogue records, collections, Insert Citation with bibliography, duplicates finder, BibTeX/RIS import | large | `TODO.md:3661` |
-| 29 | Custom pane cursors (vajra/bell, pen nib, hand) with a visible hotspot and a "standard cursors" preference switch | medium | `TODO.md:3676` |
-| 30 | Eight Auspicious Symbols as pane icons, empty-state art and tab icons, drawn in-house or openly licensed with attribution | medium | `TODO.md:3681` |
-| 31 | Build sequenced reading once: the beginner's enormous-glyph reader and Adam's proofreading readback on the same machinery | medium | `TODO.md:3739` |
+| 2 | Count word frequency honestly across that body, settling the segmenter and denominator question before publishing a number. | medium | `TODO.md:173` |
+| 3 | Profile each word's frequency at every alignment depth, not one number, since compound-only words are a different learning problem. | medium | `TODO.md:179` |
+| 4 | Show how widely each word spreads across individual translations, not only its total count. | medium | `TODO.md:185` |
+| 5 | Build the learner's frequency-ordered list with Adam's recommended memorised core of the top 2,000 then 4,000. | medium | `TODO.md:188` |
+| 6 | Eventually build textual-analysis tools giving the most frequent words across all Buddhist authors and genres, not one translator. | large | `TODO.md:190` |
+| 7 | Highlight matched idioms inline in the Overlay's running text; today they are only listed and counted. | medium | `TODO.md:290` |
+| 8 | Merge the idiom longest-match walk into the Entities Aho-Corasick machine once batch 5 F6 lands; F6 has not landed. | medium | `TODO.md:292` |
+| 9 | Ship a set of cohesive, customisable interface colour themes; only Day/Night exist today and no theme engine is built. | large | `TODO.md:330` |
+| 10 | Audit Night mode and fix the hardcoded light chrome that ignores the palette, before any theme system is built. | medium | `TODO.md:347` |
+| 11 | Compare still lacks an encoding choice, Compare-with-Backup listing, and any warning for an invalid line-filter regex. | medium | `TODO.md:435` |
+| 12 | Design the Sublime-grade text editing model (Phases 1-3) before any code; the 8/28 agent run died and never restarted. | large | `TODO.md:584` |
+| 13 | Two Sanskrit-oracle findings unacted: the ॐ ligature for standalone om, and bare consonant+visarga inputs. | small | `TODO.md:2598` |
+| 14 | Old-Tibetan affixnorm: the da-drag strip is ported and tested; the medial-འ rule is deliberately still unported. | small | `TODO.md:2781` |
+| 15 | Staged extraction of app/main.cpp stalled after two headers; the file has grown to 52,494 lines. | large | `TODO.md:3252` |
+| 16 | No CI anywhere; docs/CI_REQUIREMENTS.md costs it out but the decision to stand it up is still unmade. | medium | `TODO.md:3253` |
+| 17 | Defect-intake address in About plus a redacted diagnostic report — shipped and pinned by selftest checks | small | `TODO.md:3363` |
+| 18 | Project menu with dossier open/switch/recent/save-as/close/edit and folders is built and wired. | small | `TODO.md:3486` |
+| 19 | Help menu already carries documentation/tutorials, Report a Problem defect intake and Data Status. | small | `TODO.md:3487` |
+| 20 | Preferences grid shipped, but the asked-for AI, Tibetan & Sanskrit and Updates pages are still missing. | small | `TODO.md:3488` |
+| 21 | Map pane batch M1 — offline basemap, open-licensed places layer, trilingual search, provenance popups — unstarted. | large | `TODO.md:3547` |
+| 22 | Map pane batch M2 — tradition/role/period layers linked to catalogue texts and persons — unstarted. | medium | `TODO.md:3550` |
+| 23 | Map pane batch M3 — pilgrimage routes, distance tools, GeoJSON export, per-layer SBOM — unstarted. | medium | `TODO.md:3552` |
+| 24 | Remaining style-sheet checks (US spelling, lone digits, stray %, title case, DCC body style) not built. | medium | `TODO.md:3633` |
+| 25 | Compare pane lacks Compare-with-Backup, an encoding choice, and any warning for an invalid regex filter. | medium | `TODO.md:3651` |
+| 26 | Table compare shipped; folio-scan image compare and .docx text-extraction compare still missing. | medium | `TODO.md:3653` |
+| 27 | Study pane batch 5: Repeated Passages, similarity, statistics and entities engines — only the shell and table compare exist | large | `TODO.md:3664` |
+| 28 | References pane: catalogue records, collections, Insert Citation with bibliography, duplicates finder, BibTeX/RIS import | large | `TODO.md:3674` |
+| 29 | Custom pane cursors (vajra/bell, pen nib, hand) with a visible hotspot and a "standard cursors" preference switch | medium | `TODO.md:3689` |
+| 30 | Eight Auspicious Symbols as pane icons, empty-state art and tab icons, drawn in-house or openly licensed with attribution | medium | `TODO.md:3694` |
+| 31 | Build sequenced reading once: the beginner's enormous-glyph reader and Adam's proofreading readback on the same machinery | medium | `TODO.md:3752` |
 | 32 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
 | 33 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
 | 34 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
@@ -84,26 +84,26 @@ The reading that produced the previous version of this page is kept at `docs/REL
 
 | | item | effort | source |
 |---|---|---|---|
-| 1 | Gather and normalise the whole known body of Geshe Michael's Tibetan-English translations, not just the aligned corpus. | large | `TODO.md:155` |
-| 2 | The theme-system design has landed as docs/THEME_SYSTEM_PLAN.md and now awaits Adam's rulings in its §11. | small | `TODO.md:324` |
-| 3 | The maps research doc was never written (6 of 16 readings done) and Map pane batches M1-M3 have not started. | large | `TODO.md:417` |
-| 4 | The digest action log has never been rolled into LOG_ARCHIVE.md, which does not exist; LOG.md holds a week of entries. | small | `TODO.md:427` |
-| 5 | Standing reminder to regenerate the Word reference docx; the file is current, but no digest has shipped as .docx since 09-10. | small | `TODO.md:429` |
-| 6 | The reproducible screenshot/chart capture exists but the last five digests shipped with no images at all. | small | `TODO.md:432` |
-| 7 | C04 alignment campaign opening — done: briefs parametrised, 66 pages landed, builder locks C04 complete. | small | `TODO.md:514` |
-| 8 | Stray empty file `0` in the repo root — already deleted; working tree is clean. | small | `TODO.md:582` |
-| 9 | The five-lane master status board — an umbrella index of remaining work, several lanes still genuinely open. | large | `TODO.md:947` |
-| 10 | Mine Monlam word lists into a zhe-sa honorific layer; the verse pane and Wilson tables it cites already ship. | medium | `TODO.md:2506` |
-| 11 | Standing fence against shipping Tshigdzod Chenmo, Golden Mirror, Dungkar et al.; honoured, and should be marked [—]. | small | `TODO.md:2641` |
-| 12 | Done: About box and Help ▸ Report a Problem carry one intake address with a prefilled template, selftest-pinned. | small | `TODO.md:3223` |
-| 13 | Bus factor one: the onboarding doc exists but has never been proven by a second person on a clean machine. | medium | `TODO.md:3230` |
-| 14 | Done: a task-oriented USER_MANUAL plus quick start, FAQ and admin guide ship and are read in the Help window. | small | `TODO.md:3276` |
-| 15 | GitHub main replaced with the current history; the old head is parked as github-main-before-20260908 | small | `TODO.md:3362` |
-| 16 | Push the repo to the 8 TB backup mirror — it is mounted again and its main is 274 commits behind | small | `TODO.md:3366` |
-| 17 | Skeptic pass on the C05:167 English factual error ('three types' vs bzhi) before filing it for Geshe Michael | small | `TODO.md:3379` |
-| 18 | Turn the 'how to start translating Thar lam gsal byed' walkthrough into manual chapter one and a test script | medium | `TODO.md:3386` |
-| 19 | The maps research document — sources, verified licences, pane design — is still unwritten. | medium | `TODO.md:3533` |
-| 20 | Close the fixable slice of the 2.2% read-aloud gap by recording the spya/spyi/spyod pya-to-ca fold in kawachen_labels.json | small | `TODO.md:3732` |
+| 1 | Gather and normalise the whole known body of Geshe Michael's Tibetan-English translations, not just the aligned corpus. | large | `TODO.md:168` |
+| 2 | The theme-system design has landed as docs/THEME_SYSTEM_PLAN.md and now awaits Adam's rulings in its §11. | small | `TODO.md:337` |
+| 3 | The maps research doc was never written (6 of 16 readings done) and Map pane batches M1-M3 have not started. | large | `TODO.md:430` |
+| 4 | The digest action log has never been rolled into LOG_ARCHIVE.md, which does not exist; LOG.md holds a week of entries. | small | `TODO.md:440` |
+| 5 | Standing reminder to regenerate the Word reference docx; the file is current, but no digest has shipped as .docx since 09-10. | small | `TODO.md:442` |
+| 6 | The reproducible screenshot/chart capture exists but the last five digests shipped with no images at all. | small | `TODO.md:445` |
+| 7 | C04 alignment campaign opening — done: briefs parametrised, 66 pages landed, builder locks C04 complete. | small | `TODO.md:527` |
+| 8 | Stray empty file `0` in the repo root — already deleted; working tree is clean. | small | `TODO.md:595` |
+| 9 | The five-lane master status board — an umbrella index of remaining work, several lanes still genuinely open. | large | `TODO.md:960` |
+| 10 | Mine Monlam word lists into a zhe-sa honorific layer; the verse pane and Wilson tables it cites already ship. | medium | `TODO.md:2519` |
+| 11 | Standing fence against shipping Tshigdzod Chenmo, Golden Mirror, Dungkar et al.; honoured, and should be marked [—]. | small | `TODO.md:2654` |
+| 12 | Done: About box and Help ▸ Report a Problem carry one intake address with a prefilled template, selftest-pinned. | small | `TODO.md:3236` |
+| 13 | Bus factor one: the onboarding doc exists but has never been proven by a second person on a clean machine. | medium | `TODO.md:3243` |
+| 14 | Done: a task-oriented USER_MANUAL plus quick start, FAQ and admin guide ship and are read in the Help window. | small | `TODO.md:3289` |
+| 15 | GitHub main replaced with the current history; the old head is parked as github-main-before-20260908 | small | `TODO.md:3375` |
+| 16 | Push the repo to the 8 TB backup mirror — it is mounted again and its main is 274 commits behind | small | `TODO.md:3379` |
+| 17 | Skeptic pass on the C05:167 English factual error ('three types' vs bzhi) before filing it for Geshe Michael | small | `TODO.md:3392` |
+| 18 | Turn the 'how to start translating Thar lam gsal byed' walkthrough into manual chapter one and a test script | medium | `TODO.md:3399` |
+| 19 | The maps research document — sources, verified licences, pane design — is still unwritten. | medium | `TODO.md:3546` |
+| 20 | Close the fixable slice of the 2.2% read-aloud gap by recording the spya/spyi/spyod pya-to-ca fold in kawachen_labels.json | small | `TODO.md:3745` |
 | 21 | Harvest the THL Kangyur/Tengyur catalogue and fold it in only on a verified join, after a licence and terms review | medium | `docs/BACKLOG.md:91` |
 | 22 | Settle attestation vs the Botok vocabulary ladder by measuring their rank correlation first | medium | `docs/BACKLOG.md:200` |
 | 23 | Commit the uncommitted day's work — the tree is clean and the work is in history | small | `docs/OPEN_TASKS_2026-09-10.md:7` |
@@ -112,49 +112,49 @@ The reading that produced the previous version of this page is kept at `docs/REL
 
 | | item | effort | source |
 |---|---|---|---|
-| 1 | Adam adds Ven. Utpala to the calendar invite once she picks a slot; nothing goes out from his account without him. | small | `TODO.md:203` |
-| 2 | After Ven. Utpala's session: write her workflow doc, an editor's-tool plan, and her style rules as House Style switches. | medium | `TODO.md:205` |
-| 3 | Invite keen beginners from the Mixed Nuts lectures to report on the first hour, first-run and the workflow presets. | medium | `TODO.md:214` |
-| 4 | Contact Anatole and other editors for their workflow, reusing the Utpala question set; corrects the Editing preset. | medium | `TODO.md:230` |
-| 5 | Hold a cataloguers' workflow session at the Thursday meeting and write it up; corrects the Cataloguing preset. | medium | `TODO.md:243` |
-| 6 | Hold and write up one-on-one sessions with each of the nine Mixed Nuts translators; guide is written, sessions are not. | large | `TODO.md:258` |
-| 7 | Adam still has to ask Geshe Michael what he himself wants from the research suite; nothing recorded yet. | small | `TODO.md:269` |
-| 8 | Ruling needed: the tokenizer turns folio marker @012a into the word 012a, so markers count as word types. | small | `TODO.md:281` |
-| 9 | Ruling for Adam: should panes hidden in Preferences also disappear from the menus? Today they do not. | small | `TODO.md:290` |
-| 10 | Decide whether individual ribbon groups and buttons should be switchable, not just whole panes and groups. | medium | `TODO.md:293` |
-| 11 | Back burner: ask at first run how the person will work and set the starting layout; needs the interviews first. | medium | `TODO.md:295` |
-| 12 | Editor's-tool candidate list (redline export, queries, consistency report, editor pane); build only what Utpala confirms. | large | `TODO.md:339` |
-| 13 | Preferences shows shortcuts read-only; Adam must decide whether 1.0 needs editable key bindings. | medium | `TODO.md:420` |
-| 14 | Five confirmed C03 alignment defects (5, 15, 40, 77, 46) stay unrepaired pending Adam's ruling. | small | `TODO.md:494` |
-| 15 | Four alignment spec conflicts need Adam's call: epithet-whole vs rule 7, Geshe Michael's idiom vs frame, and two re-keyings. | small | `TODO.md:509` |
-| 16 | Author-portrait visual layer: Adam must scope it and rule on image licensing before any images are fetched. | medium | `TODO.md:573` |
-| 17 | Adam must rule whether ma → "fail to" and ma → "not" inside "cannot" count as a fifth negative-affix form. | small | `TODO.md:579` |
-| 18 | Send the finished errata register to the director and the ACIP/translation maintainers — the document is ready, the send is Adam's. | small | `TODO.md:602` |
-| 19 | Hand the 119 folio-marker collisions to the corpus-builder maintainers as an upstream ingest defect, not a document edit. | small | `TODO.md:606` |
-| 20 | Call out C03:286 to the editors — zhi gnas glossed "insight" instead of "quietude" would teach the opposite meaning. | small | `TODO.md:610` |
-| 21 | Editorial ruling needed: does ALL issue an erratum sheet, correct future printings, or annotate corrections in place? | small | `TODO.md:614` |
-| 22 | Open the source-trust dialog with Geshe Michael to ratify which sources outrank which; the draft hierarchy is ready to send. | medium | `TODO.md:1847` |
-| 23 | Needs Geshe Michael Roach's ruling on the le'ur 'a-chung pronunciation class; app ships a provisional display fix. | small | `TODO.md:1877` |
-| 24 | Footnote/bibliography reuse banks are built; STD-008 still awaits confirmation in Geshe Michael Roach's own words. | small | `TODO.md:1933` |
-| 25 | Get an intact ACIP Release IV manual (or the CD-ROM Briefcat files); this copy lacks the charts and catalogs. | small | `TODO.md:2015` |
-| 26 | Collect more sourced translation standards from Geshe Michael Roach and the Mixed Nuts translators; eleven so far. | medium | `TODO.md:2030` |
-| 27 | Adam's own reference Xcode projects illustrating the overall tool vision have still not been shared. | small | `TODO.md:2055` |
-| 28 | Uppercase-M mantra syllables render final ma not anusvara; the 2,172-row candidate sweep awaits data-project ingest. | small | `TODO.md:2081` |
-| 29 | Dictionary attestation counts predate the v0.29-v0.31 title/subject waves; recount belongs to a data-project session. | medium | `TODO.md:2101` |
-| 30 | Bank the LC pair-selection script so the historical 4,582-pair Sanskrit battery is reproducible; the C++ port already beats it. | small | `TODO.md:2106` |
-| 31 | Ask CIHTS whether Negi's Tibetan-Sanskrit dictionary can be licensed; no draft exists and Adam must send it. | small | `TODO.md:2640` |
-| 32 | The input-center formatter is unbuilt; Geshe Michael's team formatting standards and raw samples never arrived from Adam. | large | `TODO.md:2901` |
-| 33 | Adam's promised honorific-register and grammar books have not arrived, so no register rows or grammar layer were mined. | medium | `TODO.md:2990` |
-| 34 | Read-only Knowledge Base server access from Jamie Plant: the email is drafted but Adam must confirm the address and send. | small | `TODO.md:3009` |
-| 35 | The ASR pilot (ElevenLabs vs AssemblyAI on 10 Tibetan-dense videos) is planned but awaits Adam's go-ahead and account. | medium | `TODO.md:3041` |
-| 36 | Adam has not ruled on archiving captions/audio for the 68 unlisted Geshe Michael recordings before they disappear. | medium | `TODO.md:3065` |
-| 37 | AI Working Glossary stalled at 1,395 entries; Adam must top up API credits, then rerun the builder. | small | `TODO.md:3079` |
-| 38 | Guarded Hugging Face MT lane: wall screen and pilot harness built, but the MITRA download awaits Adam's go. | large | `TODO.md:3086` |
-| 39 | Rotate the Anthropic API keys that were pasted into chat on 2026-09-08 — verifiable only by Adam | small | `TODO.md:3372` |
-| 40 | Send the drafted Mixed Nuts translator questionnaire and feed the answers into the release audit | small | `TODO.md:3381` |
-| 41 | Ask Venerable Utpala which of Geshe Michael's 2017 style rules, dropped in 2023, still hold. | small | `TODO.md:3628` |
-| 42 | Adam to ask Geshe Michael for his own requests for the Textual Research workflow and record the answers before design | small | `TODO.md:3694` |
-| 43 | A spoken-Tibetan trainer, which needs new colloquial recordings and Geshe Michael's call on whose voice and which dialect | large | `TODO.md:3721` |
+| 1 | Adam adds Ven. Utpala to the calendar invite once she picks a slot; nothing goes out from his account without him. | small | `TODO.md:216` |
+| 2 | After Ven. Utpala's session: write her workflow doc, an editor's-tool plan, and her style rules as House Style switches. | medium | `TODO.md:218` |
+| 3 | Invite keen beginners from the Mixed Nuts lectures to report on the first hour, first-run and the workflow presets. | medium | `TODO.md:227` |
+| 4 | Contact Anatole and other editors for their workflow, reusing the Utpala question set; corrects the Editing preset. | medium | `TODO.md:243` |
+| 5 | Hold a cataloguers' workflow session at the Thursday meeting and write it up; corrects the Cataloguing preset. | medium | `TODO.md:256` |
+| 6 | Hold and write up one-on-one sessions with each of the nine Mixed Nuts translators; guide is written, sessions are not. | large | `TODO.md:271` |
+| 7 | Adam still has to ask Geshe Michael what he himself wants from the research suite; nothing recorded yet. | small | `TODO.md:282` |
+| 8 | Ruling needed: the tokenizer turns folio marker @012a into the word 012a, so markers count as word types. | small | `TODO.md:294` |
+| 9 | Ruling for Adam: should panes hidden in Preferences also disappear from the menus? Today they do not. | small | `TODO.md:303` |
+| 10 | Decide whether individual ribbon groups and buttons should be switchable, not just whole panes and groups. | medium | `TODO.md:306` |
+| 11 | Back burner: ask at first run how the person will work and set the starting layout; needs the interviews first. | medium | `TODO.md:308` |
+| 12 | Editor's-tool candidate list (redline export, queries, consistency report, editor pane); build only what Utpala confirms. | large | `TODO.md:352` |
+| 13 | Preferences shows shortcuts read-only; Adam must decide whether 1.0 needs editable key bindings. | medium | `TODO.md:433` |
+| 14 | Five confirmed C03 alignment defects (5, 15, 40, 77, 46) stay unrepaired pending Adam's ruling. | small | `TODO.md:507` |
+| 15 | Four alignment spec conflicts need Adam's call: epithet-whole vs rule 7, Geshe Michael's idiom vs frame, and two re-keyings. | small | `TODO.md:522` |
+| 16 | Author-portrait visual layer: Adam must scope it and rule on image licensing before any images are fetched. | medium | `TODO.md:586` |
+| 17 | Adam must rule whether ma → "fail to" and ma → "not" inside "cannot" count as a fifth negative-affix form. | small | `TODO.md:592` |
+| 18 | Send the finished errata register to the director and the ACIP/translation maintainers — the document is ready, the send is Adam's. | small | `TODO.md:615` |
+| 19 | Hand the 119 folio-marker collisions to the corpus-builder maintainers as an upstream ingest defect, not a document edit. | small | `TODO.md:619` |
+| 20 | Call out C03:286 to the editors — zhi gnas glossed "insight" instead of "quietude" would teach the opposite meaning. | small | `TODO.md:623` |
+| 21 | Editorial ruling needed: does ALL issue an erratum sheet, correct future printings, or annotate corrections in place? | small | `TODO.md:627` |
+| 22 | Open the source-trust dialog with Geshe Michael to ratify which sources outrank which; the draft hierarchy is ready to send. | medium | `TODO.md:1860` |
+| 23 | Needs Geshe Michael Roach's ruling on the le'ur 'a-chung pronunciation class; app ships a provisional display fix. | small | `TODO.md:1890` |
+| 24 | Footnote/bibliography reuse banks are built; STD-008 still awaits confirmation in Geshe Michael Roach's own words. | small | `TODO.md:1946` |
+| 25 | Get an intact ACIP Release IV manual (or the CD-ROM Briefcat files); this copy lacks the charts and catalogs. | small | `TODO.md:2028` |
+| 26 | Collect more sourced translation standards from Geshe Michael Roach and the Mixed Nuts translators; eleven so far. | medium | `TODO.md:2043` |
+| 27 | Adam's own reference Xcode projects illustrating the overall tool vision have still not been shared. | small | `TODO.md:2068` |
+| 28 | Uppercase-M mantra syllables render final ma not anusvara; the 2,172-row candidate sweep awaits data-project ingest. | small | `TODO.md:2094` |
+| 29 | Dictionary attestation counts predate the v0.29-v0.31 title/subject waves; recount belongs to a data-project session. | medium | `TODO.md:2114` |
+| 30 | Bank the LC pair-selection script so the historical 4,582-pair Sanskrit battery is reproducible; the C++ port already beats it. | small | `TODO.md:2119` |
+| 31 | Ask CIHTS whether Negi's Tibetan-Sanskrit dictionary can be licensed; no draft exists and Adam must send it. | small | `TODO.md:2653` |
+| 32 | The input-center formatter is unbuilt; Geshe Michael's team formatting standards and raw samples never arrived from Adam. | large | `TODO.md:2914` |
+| 33 | Adam's promised honorific-register and grammar books have not arrived, so no register rows or grammar layer were mined. | medium | `TODO.md:3003` |
+| 34 | Read-only Knowledge Base server access from Jamie Plant: the email is drafted but Adam must confirm the address and send. | small | `TODO.md:3022` |
+| 35 | The ASR pilot (ElevenLabs vs AssemblyAI on 10 Tibetan-dense videos) is planned but awaits Adam's go-ahead and account. | medium | `TODO.md:3054` |
+| 36 | Adam has not ruled on archiving captions/audio for the 68 unlisted Geshe Michael recordings before they disappear. | medium | `TODO.md:3078` |
+| 37 | AI Working Glossary stalled at 1,395 entries; Adam must top up API credits, then rerun the builder. | small | `TODO.md:3092` |
+| 38 | Guarded Hugging Face MT lane: wall screen and pilot harness built, but the MITRA download awaits Adam's go. | large | `TODO.md:3099` |
+| 39 | Rotate the Anthropic API keys that were pasted into chat on 2026-09-08 — verifiable only by Adam | small | `TODO.md:3385` |
+| 40 | Send the drafted Mixed Nuts translator questionnaire and feed the answers into the release audit | small | `TODO.md:3394` |
+| 41 | Ask Venerable Utpala which of Geshe Michael's 2017 style rules, dropped in 2023, still hold. | small | `TODO.md:3641` |
+| 42 | Adam to ask Geshe Michael for his own requests for the Textual Research workflow and record the answers before design | small | `TODO.md:3707` |
+| 43 | A spoken-Tibetan trainer, which needs new colloquial recordings and Geshe Michael's call on whose voice and which dialect | large | `TODO.md:3734` |
 | 44 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
 | 45 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
 | 46 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
@@ -164,9 +164,9 @@ The reading that produced the previous version of this page is kept at `docs/REL
 
 | | item | effort | source |
 |---|---|---|---|
-| 1 | When BDRC ships its improved OCR models, refresh the bundled PhotiLines/Woodblock models and re-run the OCR selftests. | medium | `TODO.md:1870` |
-| 2 | Das dictionary etext still unobtained: PKTC has not answered, DSAL terms unexamined, OCR route untouched. | medium | `TODO.md:2630` |
-| 3 | Per-dictionary licence verification of the Steinert set is done and documented; verdict is do-not-ingest. | small | `TODO.md:2637` |
+| 1 | When BDRC ships its improved OCR models, refresh the bundled PhotiLines/Woodblock models and re-run the OCR selftests. | medium | `TODO.md:1883` |
+| 2 | Das dictionary etext still unobtained: PKTC has not answered, DSAL terms unexamined, OCR route untouched. | medium | `TODO.md:2643` |
+| 3 | Per-dictionary licence verification of the Steinert set is done and documented; verdict is do-not-ingest. | small | `TODO.md:2650` |
 
 ## Not yet classified
 
@@ -175,8 +175,8 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | | item | source |
 |---|---|---|
 | 1 | Cross-references in a card become links. | `TODO.md:19` |
-| 2 | Search Adam's hard drives and his laptop for these. | `TODO.md:43` |
-| 3 | GitHub hosting: the data-release repo, the manifest, the publish script. | `TODO.md:97` |
-| 4 | In-app update check, notification, install. | `TODO.md:105` |
-| 5 | The kReleaseHidden LIST. | `TODO.md:111` |
-| 6 | The machine keeps running out of disk, and it has escalated. | `TODO.md:126` |
+| 2 | Search Adam's hard drives and his laptop for these. | `TODO.md:56` |
+| 3 | GitHub hosting: the data-release repo, the manifest, the publish script. | `TODO.md:110` |
+| 4 | In-app update check, notification, install. | `TODO.md:118` |
+| 5 | The kReleaseHidden LIST. | `TODO.md:124` |
+| 6 | The machine keeps running out of disk, and it has escalated. | `TODO.md:139` |
