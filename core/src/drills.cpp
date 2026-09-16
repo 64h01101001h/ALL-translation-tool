@@ -139,6 +139,19 @@ bool DrillFactory::isDrillable(const CorpusSegment& seg) {
     std::string c = seg.course;
     for (auto& ch : c) ch = (char)std::toupper((unsigned char)ch);
     if (c.rfind("TITL", 0) == 0 || c == "AUTH" || c == "SUBJ") return false;
+    // C13:63-82 -- the documented column offset. Twenty segments whose Tibetan
+    // is paired with the English of a DIFFERENT catalogue item: C13:72 has the
+    // Tree of Sandalwood against "12) The Servant of Gentle Voice (Manjushri)",
+    // the previous item's title. See docs/upstream/C13_COLUMN_OFFSET.md.
+    //
+    // This refusal existed in exactly two places, both inline in a single
+    // pool's loop: the desktop's debate path and the pack builder's. Every
+    // OTHER draw -- cloze, trainer, order, particle, boundary, vocab -- came
+    // through here, where there was no rule, so 8 of the 20 pass every other
+    // test and were eligible for any of them. A card built from one would put
+    // another text's title on screen under "Geshe Michael Roach's English".
+    // The rule belongs at the one gate every pool already asks.
+    if (c == "C13" && seg.seq >= 63 && seg.seq <= 82) return false;
     // ACIP is written in capitals. A run of lower-case letters in the Tibetan
     // field means the field holds English, not transliteration.
     int lower = 0, upper = 0;

@@ -56,6 +56,22 @@ void field(std::string& o, const char* k, const std::string& v, bool comma = tru
 std::string tib(const std::string& acip) {
     return allcore::acipToTibetanPlain(allcore::acipStripMarkup(acip));
 }
+
+// WYLIE, not ACIP. They are not the same alphabet and the difference is
+// silent: pushing wylie through tib() turns every d into a retroflex
+// (bdag -> བཌག instead of བདག, dang -> ཌཎག, du -> ཌུ) and REFUSES every
+// s-final word outright, so gyis/rdzogs/sangs rgyas came back ⟨flagged⟩ and
+// were dropped -- which looked like scarcity in the bank rather than a bug.
+// The refusals were caught by the ⟨ ⟩ guard. The fabrications were not caught
+// by anything, because they convert "successfully" into a real-looking word
+// that is a different word.
+//
+// This mistake has now been made in four places in this file and fixed in
+// four. It has a name here so the fifth is harder: the headword keys of
+// alignment_evidence_v1.json are wylie, and they go through THIS.
+std::string tibFromWylie(const std::string& wylie) {
+    return allcore::wylieToUnicode(wylie).first;
+}
 // ---------------------------------------------------------------------------
 // A small but CORRECT JSON reader, used only by the reading-order section.
 // The other sections scan for a literal "key":" and stop at the next quote.
@@ -594,11 +610,22 @@ int main(int argc, char** argv) {
                 // collect this headword's renderings
                 std::vector<std::pair<std::string, int>> rs;
                 size_t e = 0;
-                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
-                    const size_t b = e + 8;
-                    const size_t q = arr.find('"', b);
-                    if (q == std::string::npos) break;
-                    std::string eng = arr.substr(b, q - b);
+                // bj::str, not a raw search for the next quote. The bank holds
+                // 194 renderings that CONTAIN a quotation mark -- '"They will
+                // entrap me!"', 'of "true" existence', '"self,"' -- and JSON
+                // escapes them. Reading to the next raw '"' stopped ON THE
+                // ESCAPE, so what got banked was whatever preceded it: a bare
+                // backslash, eight of them in the shipped pack. Those were
+                // then printed under "Everything Geshe Michael has been
+                // recorded writing for it" -- a false claim about his English
+                // manufactured by a parser bug. A correct reader was already
+                // in this file, five hundred lines up; this loop never called
+                // it.
+                while ((e = arr.find("\"eng\":", e)) != std::string::npos) {
+                    size_t rd = e + 6;
+                    std::string eng;
+                    if (!bj::str(arr, rd, eng)) { e += 6; continue; }
+                    const size_t q = rd;
                     int n = 1;
                     const size_t np2 = arr.find("\"n\": ", q);
                     if (np2 != std::string::npos && np2 < q + 300)
@@ -614,7 +641,7 @@ int main(int argc, char** argv) {
                           });
                 if (nse) out += ",";
                 out += "{";
-                field(out, "tib", tib(w));
+                field(out, "tib", tibFromWylie(w));   // w is WYLIE
                 field(out, "wylie", w);
                 out += "\"renderings\":[";
                 for (size_t z = 0; z < rs.size() && z < 12; ++z) {
@@ -955,6 +982,32 @@ int main(int argc, char** argv) {
                     // A card whose answer is 1 2 3 teaches typing 1 2 3. Some
                     // are kept so the learner cannot assume every card
                     // reorders, but the pool is the spans that actually do.
+                    // THE GUARD ABOVE TESTS THE PARENT ONLY, and the parent is
+                    // not what the learner is shown as the key. C02:21's parent
+                    // reads "kyabne konchok sumla chupa bul. A Buddhist Grace I
+                    // offer this To the Teacher..." -- transliteration followed
+                    // by its translation -- so it carries English function
+                    // words and clears the guard comfortably. Its five CHILDREN
+                    // are "kyabne", "konchok", "sumla", "chupa", "bul": pure
+                    // sound, and they are what appears under each Tibetan chunk
+                    // on Check, beneath a badge reading "ATTESTED - the key is
+                    // Geshe Michael's own English for this very span".
+                    //
+                    // Testing each child alone is a no-op: both arms of
+                    // englishIsNotEnglish need four words and these are one
+                    // each. So the children are judged AS A SET, which is how
+                    // the learner reads them -- five words, not one English
+                    // function word among them.
+                    {
+                        std::string kidLine, kidAcip;
+                        for (const BL* k : kids) {
+                            if (!kidLine.empty()) { kidLine += " "; kidAcip += " "; }
+                            kidLine += k->eng;
+                            kidAcip += k->acip;
+                        }
+                        if (allcore::englishIsNotEnglish(kidLine, kidAcip))
+                            continue;
+                    }
                     if (identity && (rrng() % 4)) continue;
                     if (nro) out += ",";
                     out += "{";
@@ -1049,19 +1102,23 @@ int main(int argc, char** argv) {
                 // his most-attested English for it
                 std::string gloss; int best = -1;
                 size_t e = 0;
-                while ((e = arr.find("\"eng\": \"", e)) != std::string::npos) {
-                    const size_t b = e + 8;
-                    const size_t q = arr.find('"', b);
-                    if (q == std::string::npos) break;
+                // Same fault as the 'second' scanner: reading to the next raw
+                // quote truncates any rendering that contains one, and the
+                // vocab card's gloss is the ANSWER. bj::str handles escapes.
+                while ((e = arr.find("\"eng\":", e)) != std::string::npos) {
+                    size_t rd = e + 6;
+                    std::string one;
+                    if (!bj::str(arr, rd, one)) { e += 6; continue; }
+                    const size_t q = rd;
                     int n = 1;
                     const size_t np2 = arr.find("\"n\": ", q);
                     if (np2 != std::string::npos && np2 < q + 300)
                         n = std::atoi(arr.c_str() + np2 + 5);
-                    if (n > best) { best = n; gloss = arr.substr(b, q - b); }
+                    if (n > best && !one.empty()) { best = n; gloss = one; }
                     e = q;
                 }
                 if (gloss.empty()) continue;
-                const std::string wd = tib(w);
+                const std::string wd = tibFromWylie(w);   // w is WYLIE
                 if (wd.find("\u27e8") != std::string::npos) continue;
                 auto hits = spine.corpusSearch("\"" + w + "\"", "", 8);
                 // two DISTINCT segments, each carrying his English
