@@ -19506,11 +19506,17 @@ public:
                 QDir(dir).removeRecursively();
                 QDir().mkpath(dir);
                 const QString doc = dir + "/manuscript.txt";
-                {
+                {   // checked: a seed that fails silently would make the two
+                    // assertions below it vacuous
                     QFile seed(doc);
-                    seed.open(QIODevice::WriteOnly | QIODevice::Truncate);
-                    seed.write("ORIGINAL WORK");
+                    const bool opened =
+                        seed.open(QIODevice::WriteOnly | QIODevice::Truncate);
+                    const bool wrote =
+                        opened && seed.write("ORIGINAL WORK") == 13;
                     seed.close();
+                    check(wrote,
+                          "atomic save: fixture: the work was really on disk "
+                          "before the failing save");
                 }
                 QFile::setPermissions(
                     dir, QFileDevice::ReadOwner | QFileDevice::ExeOwner);
