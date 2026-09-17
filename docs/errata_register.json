@@ -3046,5 +3046,41 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-255",
+  "course": "C05",
+  "segment": "C05:183",
+  "kind": "TIBETAN_SPELLING",
+  "found": "glang lnga brgya 'dod pa la ci byed dris pas",
+  "expected": "glang lnga brgya 'ded pa la ci byed dris pas",
+  "evidence": "Geshe Michael renders this \"He met someone driving a herd of five hundred cattle and asked the man what he planned to do.\" The ACIP of record reads GLANG LNGA BRGYA 'DOD PA. `'dod pa` is glossed in the master dictionary only in the want/desire/assert family (intention, desire, wish, wants, assert, accept) and never as driving; `'ded pa` ('to drive, chase [animals]') is a separate headword and is attested in exactly this sense at TCS09:365 (`bya khra gcig gis bye'u'i khyu chen po 'ded pa ltar`, a single hawk driving a great flock). The story requires a herdsman: the man answers that they are about to castrate the animals. Not CONFIRMED because `glang lnga brgya 'dod pa la` is grammatical as 'to one who wants five hundred cattle' - that reading is simply not the one Geshe Michael translated. Parallel-witness check: C16:762 is byte-identical to this row in BOTH columns (verified by SQL equality on wylie and english), i.e. the same file re-ingested per the C05 course-shape note, so it repeats the reading rather than confirming it; no other row in the 42,199-row corpus carries this clause.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-256",
+  "course": "C05",
+  "segment": "C05:183",
+  "kind": "ENGLISH_TYPO",
+  "found": "King Kanaka had a certain eunuch",
+  "expected": "King Kanika had a certain eunuch",
+  "evidence": "Both Tibetan columns read `rgyal po ka ni ka'i` / RGYAL PO KA NI KA'I, which transliterates Kanika (Skt. Kaniska). Geshe Michael renders this same Tibetan string \"Kanika\" in every other row of the corpus that carries it: C08:356 and C17:445 (`kA ni ka'i springs yig` -> 'the Epistle of Kanika'), C10:206 and C17:620 (`ka ni ka'i spring yig` -> same), and P5:65 and P5:93 (P5 is not an independent witness, but C08/C10/C17 are three separate courses). \"Kanaka\" occurs in the corpus only here, in the byte-identical C16:762 twin, and at ILL:4504-4505, where it renders `ka na ka warma` - Kanaka Varma the translator, an unrelated person - so the English here collides with a different name already in the corpus. Filed MEDIUM rather than LOW because of that collision. Geshe Michael's English stands verbatim on the page; the alignment does not bank `ka ni ka` -> \"Kanaka\".",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-257",
+  "course": "C05",
+  "segment": "C05:183",
+  "kind": "TIBETAN_SPELLING",
+  "found": "snying rdzes de dag de las thar pas byas pas",
+  "expected": "snying rjes de dag de las thar pas byas pas",
+  "evidence": "The ACIP of record reads SNYING RDZES. `snying rdzes` occurs in exactly two rows of the corpus, C05:183 and its byte-identical C16:762 twin (same file re-ingested), so it is a hapax; it is not a headword in the 105,634-entry master dictionary. The dictionary carries `snying rje` -> \"compassion\" and `snying brtse` -> \"compassion, affection\"; the landed alignment bank has 36 links on `snying rje` glossed compassion and none on `snying rdzes`. `snying rjes`, the agentive of snying rje, occurs 14 times in the corpus and is exactly what the clause needs, the eunuch being the agent of `thar pas byas pas`; it is also one letter from the keyed form (rdz for j). Filed at UNCERTAIN because `rdzes` is a LEGAL Tibetan syllable (root rdz is class A in the CC0 syllable data), so this is not the illegal-syllable class, and the `expected` given is inferred from grammar and frequency, not demonstrated from a witness. Geshe Michael renders \"Overcome with compassion\", and the alignment banks `snying rdzes` -> \"compassion\" with this caveat attached, since the form carries no competing sense that a link could corrupt.",
+  "severity": "MEDIUM",
+  "confidence": "UNCERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

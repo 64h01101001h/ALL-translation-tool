@@ -75,7 +75,8 @@ fixed:</p>
 <li>The mark that tells a reader a Sanskrit word is present had stopped
 being produced at all. It was still in our tables; a fix I made the day
 before had made it unreachable. <strong>That one was mine, from the
-previous day, and nothing in 124 automatic checks noticed.</strong></li>
+previous day, and nothing in the entire battery of checks
+noticed.</strong></li>
 <li>A Sanskrit letter was being drawn as a character that does not exist
 in the alphabet. 1,267 dictionary entries.</li>
 <li>A seed syllable used in prayer, <em>bhrūṃ</em>, was coming back
@@ -87,6 +88,59 @@ syllable. The other two had always worked.</li>
 not flag anything, it simply produced something wrong that looked right.
 That is the finding behind the finding, and three new automatic checks
 now exist because of it.</p>
+<h3 id="the-checks-we-built-to-catch-silent-faults-had-never-run">The
+checks we built to catch silent faults had never run</h3>
+<p>Three new checks were written this week, each one because a fault had
+reached the program without anything noticing. Late today, trying to
+verify a single figure for this digest, I found that <strong>none of the
+three had ever run</strong> — not failed, not skipped, simply
+absent.</p>
+<p>The cause is ordinary and worth knowing. Our test runner uses the
+list of checks recorded the last time the project was set up, and that
+was two days earlier; every check written since was invisible to it. The
+same staleness meant the checks that <em>did</em> run were examining a
+two-day-old copy of the program, so three of them reported faults that
+were not real — the old program disagreeing with the corrected
+reference.</p>
+<p>All three of the missing checks pass. Nothing was hiding behind them.
+But for two days this digest’s own figure, “automatic checks, all
+passing”, counted checks that had never executed, and no one could have
+produced that number from the project itself.</p>
+<p>There is a check for this now. It refuses to proceed if the build
+folder is older than the files describing it, or if a check exists that
+nothing runs.</p>
+<h3 id="the-engines-are-fixed-the-dictionary-they-wrote-still-holds-the-old-answers">The
+engines are fixed; the dictionary they wrote still holds the old
+answers</h3>
+<p>Worth being plain about, because it is visible on screen today.
+Fixing an engine does not correct what that engine wrote earlier. The
+spellings in our dictionary were generated once and stored, so the
+corrections described above reach anything rendered from now on and
+reach <strong>nothing already saved</strong>.</p>
+<p>Measured against all 105,634 entries: 97,432 already agree with the
+corrected engine, and <strong>1,946 do not</strong>. They sort into
+three piles, and the sorting is the useful part:</p>
+<ul>
+<li><strong>627 are safe to correct mechanically, 38 of them Geshe
+Michael’s own entries.</strong> These are the words where the old engine
+could not read the spelling and gave up, leaving a typewriter hyphen
+sitting inside the Tibetan — <code>ལོག་ག-ཡེམ</code> rather than
+<code>ལོག་གཡེམ</code>. That one is <em>sexual misconduct</em>, which is
+core vocabulary in this very course. Five of them are in the phone’s
+current practice pack.</li>
+<li><strong>564 must be left alone.</strong> They look wrong to a
+machine and are not: the stored value is a headword followed by its
+variants, and a blanket rebuild would delete the variants.</li>
+<li><strong>755 need a person, 47 of them Geshe Michael’s own.</strong>
+Neither side can be trusted blind — sometimes the stored spelling is
+right and the engine’s reading of it is wrong.</li>
+</ul>
+<p><strong>This is not ours to fix, and we have not touched it.</strong>
+The tool imports the dictionary; it does not own it. What we can hand
+over is the work order, and that is written: every entry listed, with
+its current value, the corrected value, and which of the three piles it
+belongs in. It regenerates from any version of the dictionary, so it
+does not go stale while it waits.</p>
 <h3 id="thirty-seven-things-are-not-faults-and-they-are-now-five-questions">Thirty-seven
 things are not faults, and they are now five questions</h3>
 <p>The other 37 are places where Duff describes Tibetan one way and our
@@ -128,14 +182,19 @@ right ones.</p>
 <h3 id="course-5-alignment-resumed">Course 5 alignment resumed</h3>
 <p>The full-depth reading of Course 5 stopped on 8 September at segment
 165 of 511, at my call, while the app went toward release. It has
-started again. <strong>Segment 171 of 511 now</strong>, two pages done
+started again. <strong>Segment 180 of 511 now</strong>, five pages done
 to the full standard: two independent analysts on each sentence, their
 disagreements settled by a third against the evidence already
 banked.</p>
 <p>On one sentence the two analysts agreed on only 25 of 44 alignments,
-which is what the two-reader method is for. Two proposed alignments were
-<strong>dropped rather than banked</strong> — each would have passed
-every automatic check and still been false.</p>
+which is what the two-reader method is for. Several proposed alignments
+were <strong>dropped rather than banked</strong> — each would have
+passed every automatic check and still been false. On one sentence alone
+there were four.</p>
+<p>The layer has also become old enough to answer questions about
+itself. Two analysts disagreed over how deep one word sat; the
+reconciler found the same clause already read and banked eight sentences
+earlier, and let that settle it rather than argue.</p>
 <h3 id="a-defect-in-geshe-michaels-dictionary-found-by-reading-the-screen">A
 defect in Geshe Michael’s dictionary, found by reading the screen</h3>
 <p>I noticed the program showing the word <em>gus</em> — reverence — as
@@ -190,19 +249,19 @@ the author had failed.</li>
 </tr>
 <tr>
 <td>Course 5 alignment</td>
-<td>171 of 511 segments</td>
+<td>180 of 511 segments</td>
 </tr>
 <tr>
 <td>Attested alignment links banked</td>
-<td>41,970</td>
+<td>42,345</td>
 </tr>
 <tr>
 <td>Source-document defects on record</td>
-<td>250</td>
+<td>254</td>
 </tr>
 <tr>
 <td>Automatic checks, all passing</td>
-<td>124</td>
+<td>125</td>
 </tr>
 <tr>
 <td>Dictionary and corpus data changed</td>
@@ -226,6 +285,12 @@ particle, the students’ vocabulary should win.</li>
 software and the Illuminator disagree about a cluster of letters, and
 our own dictionary has nothing to say — not one of its 105,634 entries
 uses it.</li>
+<li><strong>Who applies the dictionary work order, and when.</strong>
+627 mechanical corrections and 755 that need a reader are sitting ready.
+The corrections cannot land here — the tool imports the dictionary
+rather than owning it — so this needs whoever cuts the next dictionary
+release. Until then the wrong spellings stay on screen, on the desktop
+and on the phone.</li>
 <li><strong>What “all of Geshe Michael’s translations” means.</strong>
 The 42,199 aligned passages are a portion. Establishing what is missing
 needs the organisation’s records, not the program’s.</li>
