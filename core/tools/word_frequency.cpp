@@ -42,26 +42,37 @@
 #include <allcore/engines.h>
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
 #include <fstream>
 #include <map>
 #include <string>
+#include <set>
 #include <vector>
 
 static const std::string TSHEG = "\xe0\xbc\x8b";   // U+0F0B
 static const std::string ACHUNG = "\xe0\xbd\xa0";  // U+0F60
 
 // strip the affix syllable the segmenter identified, restoring a dropped འ
-static std::string lemmaOf(const allcore::botok::SegWord& w) {
-    if (w.affixType.empty()) return w.text;
-    std::string t = w.text;
+// NORMALISE THE TRAILING TSHEG. The segmenter returns the surface text
+// including whatever separator followed it, so དང and དང་ came back as two
+// lemmas — ranks 2 and 3 of the first list, the same word counted twice, its
+// frequency split and the type count inflated. The tsheg is a separator, not
+// part of the word.
+static std::string dropTsheg(std::string t) {
     while (t.size() >= TSHEG.size() &&
            t.compare(t.size() - TSHEG.size(), TSHEG.size(), TSHEG) == 0)
         t.erase(t.size() - TSHEG.size());
+    return t;
+}
+
+static std::string lemmaOf(const allcore::botok::SegWord& w) {
+    if (w.affixType.empty()) return dropTsheg(w.text);
+    std::string t = dropTsheg(w.text);
     const size_t cut = t.rfind(TSHEG);
-    if (cut == std::string::npos) return w.text;   // single syllable: leave it
+    if (cut == std::string::npos) return t;        // single syllable: leave it
     std::string base = t.substr(0, cut);
     if (w.affixAa) base += ACHUNG;
-    return base + TSHEG;
+    return base;
 }
 
 int main(int argc, char** argv) {
@@ -92,19 +103,28 @@ int main(int argc, char** argv) {
         }
     }
     std::map<std::string, long> surf, lem;
+    std::map<std::string, std::set<std::string>> spread;  // lemma -> sources
     long tokens = 0, unmatched = 0, affixed = 0;
     {
         std::ifstream f(corpus);
         std::string line;
         while (std::getline(f, line)) {
             if (line.empty()) continue;
+            // STAGE 4: input may be "SOURCE\tTIBETAN". A term used 400 times in
+            // one text is not the learning priority of one used 400 times
+            // across forty — Adam's point, and the total alone hides it.
+            std::string src;
+            const size_t tab = line.find('\t');
+            if (tab != std::string::npos) { src = line.substr(0, tab); line = line.substr(tab + 1); }
             for (const auto& w : seg.segment(line)) {
                 if (!w.tibetan) continue;
                 if (!w.word) { ++unmatched; continue; }
                 ++tokens;
                 ++surf[w.text];
                 if (!w.affixType.empty()) ++affixed;
-                ++lem[lemmaOf(w)];
+                const std::string L = lemmaOf(w);
+                ++lem[L];
+                if (!src.empty()) spread[L].insert(src);
             }
         }
     }
@@ -141,6 +161,25 @@ int main(int argc, char** argv) {
             std::printf("             top %-6ld lemmas cover %5.1f%% of running text\n",
                         n2, tot ? 100.0 * cum / tot : 0.0);
         }
+    }
+    // STAGE 5: the learner's list itself, when a path is given.
+    if (const char* out = std::getenv("FREQ_LIST_OUT")) {
+        std::vector<std::pair<long, std::string>> v;
+        for (const auto& kv : lem) v.push_back({kv.second, kv.first});
+        std::sort(v.begin(), v.end(), [](const auto& a, const auto& b) {
+            if (a.first != b.first) return a.first > b.first;
+            return a.second < b.second;          // stable, so reruns match
+        });
+        std::ofstream o(out);
+        o << "# rank\tlemma\tcount\tshare_of_tokens\tsources\n";
+        long cum = 0;
+        for (size_t i = 0; i < v.size(); ++i) {
+            cum += v[i].first;
+            o << (i + 1) << "\t" << v[i].second << "\t" << v[i].first << "\t"
+              << (tokens ? (100.0 * cum / tokens) : 0.0) << "\t"
+              << spread[v[i].second].size() << "\n";
+        }
+        std::fprintf(stderr, "   wrote %s (%zu lemmas)\n", out, v.size());
     }
     return 0;
 }
