@@ -40,6 +40,10 @@ import glob, io, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
 import build_alignment_layer as B   # noqa: E402  -- the REAL pattern, not a copy
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from alignment_page_dirs import page_dirs  # discovered, never declared
+
 
 # Deliberately permissive: any span carrying data-d and data-l is an alignment
 # unit, whatever its class list says. If the builder's own SPAN pattern matches
@@ -59,7 +63,7 @@ LOOSE = {
 }
 
 def main():
-    dirs = ['pages', 'pages_c01', 'pages_c03', 'pages_c04']
+    dirs = page_dirs()   # every pages*/ directory, C05 included
     seen = present = npages = apparatus = 0
     other = {'note': 0, 'tree': 0}
     bad = []

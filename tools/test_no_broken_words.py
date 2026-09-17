@@ -16,6 +16,10 @@ listed below by name. Anything else is an accident.
 Run over every page in the project on every build.
 """
 import re, io, os, glob, sys, html as _html
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from alignment_page_dirs import page_dirs  # discovered, never declared
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LET = re.compile(r"[A-Za-z]")
@@ -34,7 +38,13 @@ SPAN = re.compile(r'<span class="u[^"]*" data-d="\d" data-l="(s\d+\w+)"[^>]*>'
 # Both are the same convention seen from opposite ends.
 ALLOWED_SUBWORD = {
     # stem half — the positive word, negation lives elsewhere
-    "n't", "necessary", "sufficient", "changing", "not",
+    #   "definite" — ma nges pa -> "indefinite" at C05:168, where the d=5
+    #   parent carries the whole word and its d=7 member `nges` carries the
+    #   "definite" inside it. Rule 4 requires a member's English to lie inside
+    #   its parent's, so this is the rule being obeyed, not broken. It went
+    #   unseen for weeks because this gate's directory list predated Course 5
+    #   and never looked at pages_c05 at all.
+    "n't", "necessary", "sufficient", "changing", "not", "definite",
     # negative half — the affix itself, owned by the Tibetan negation.
     # Three forms have turned up so far, one per batch, which is why this
     # list is grown deliberately rather than guessed at up front:
@@ -63,7 +73,7 @@ def eng_blocks(page):
 def main():
     bad = []
     n_pages = n_spans = 0
-    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
+    for d in page_dirs():
         for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                d, "*.html"))):
             n_pages += 1

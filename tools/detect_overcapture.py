@@ -31,10 +31,18 @@ FALSIFICATION CRITERIA, FIXED BEFORE THE FIRST RUN:
     the same threshold the numeral gate was held to.
 """
 import json, io, os, re, sys, glob, collections
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from alignment_page_dirs import page_dirs  # discovered, never declared
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LAYER = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
-DIRS = {"C01": "pages_c01", "C02": "pages", "C03": "pages_c03", "C04": "pages_c04"}
+# Discovered, not declared: this map was written before Course 5 had a
+# directory and silently analysed none of it. "pages" is C02 for
+# historical reasons; every other pages_cNN names its own course.
+DIRS = {("C02" if d == "pages" else d.replace("pages_c", "C").upper()): d
+        for d in page_dirs()}
 
 SPAN = re.compile(r'<span class="u[^"]*" data-d="(\d)" data-l="s(\d+)([a-z]+\d*)[^"]*">'
                   r'([^<]*)</span>')

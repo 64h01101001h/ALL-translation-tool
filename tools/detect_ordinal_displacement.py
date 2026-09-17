@@ -22,6 +22,10 @@ FALSIFICATION CRITERIA, FIXED BEFORE THE FIRST RUN:
     the same threshold gates 2 and 3b were held to.
 """
 import re, io, os, glob, sys, json, collections
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from alignment_page_dirs import page_dirs  # discovered, never declared
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPAN = re.compile(r'<span class="u[^"]*" data-d="(\d)" data-l="s(\d+)([a-z]+\d*)[^"]*">'
@@ -37,8 +41,10 @@ ORD = {
 
 def main():
     fires = []
-    for course, sub in (("C01", "pages_c01"), ("C02", "pages"),
-                        ("C03", "pages_c03"), ("C04", "pages_c04")):
+    # Discovered, not declared — this tuple predated Course 5 and analysed
+    # none of it. "pages" is C02 for historical reasons.
+    for sub in page_dirs():
+        course = "C02" if sub == "pages" else sub.replace("pages_c", "C").upper()
         for page in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                   sub, "*.html"))):
             html = io.open(page, encoding="utf-8").read()
