@@ -3118,5 +3118,41 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-261",
+  "course": "C05",
+  "segment": "C05:210",
+  "kind": "TIBETAN_SPELLING",
+  "found": "NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA",
+  "expected": "NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA",
+  "evidence": "SELF-WITNESS: this row's own ACIP (source of record) writes the identical phrase correctly eleven syllables earlier in the SAME SENTENCE — `NUS PA'I SKAD CIG BAR MED PA GANG ZHIG LAS` — and then `NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA`. `bar med pa` ('no interval') is what both the Tibetan syntax and Geshe Michael's English ('the immediate basis') require; `par med pa` is not parsable here. INDEPENDENT WITNESS, CHECKED, AND IT CORRECTS THE READING: the passage is quoted from Tsongkapa's Illumination of the True Thought, carried separately in the spine at ILL:2242, whose ACIP reads `... SKAD CIG PAR {%BAR} MED PA RTEN DU GYUR PA` — the ACIP input editors' own {%X} convention, marking PAR as the keyed error and BAR as the reading. WITNESSES DISCOUNTED: C16:787 is byte-identical to C05:210 in BOTH columns (verified by SQL equality test), i.e. the same course file re-ingested, not an independent edition; P7:3 carries the same English verbatim with only shad placement differing, likewise a re-ingest. Corpus counts across the 42,199-row spine: `skad cig par med pa` in 3 rows (C05:210, C16:787, P7:3 — all this one passage), `skad cig bar med pa` in 4 (the same three plus ILL:2242, each as the FIRST of the two phrases). CAVEAT RECORDED HONESTLY: C05's ACIP carries a brace in exactly one row (C05:6) and NO {%X} correction markers anywhere, so it cannot be shown that this course's keying would have carried the marker had the editor made one; what is shown is that the spelling is wrong and that an independently keyed witness marks it as wrong. The alignment spans this word byte-for-byte per Rule 1 and NULLS its English, so no headword `par med pa` is minted.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-262",
+  "course": "C05",
+  "segment": "C05:213",
+  "kind": "TIBETAN_SPELLING",
+  "found": "RAB TU SKYE BO DE DON MED",
+  "expected": "RAB TU SKYE'O DE DON MED",
+  "evidence": "Three lines of evidence, two of them from outside this row and one from inside it. (1) INDEPENDENT WITNESS WITH THE CLEAN READING: GK:358 carries the same Madhyantavibhaga citation and reads `rab tu skye'o` outright, with no `skye bo` anywhere; its wylie punctuation and its English ('States of consciousness proliferate Where awareness gives an impression Of object, person, and self') both differ from C05:213 throughout, so it is a genuinely independent witness and not a re-ingest. (2) INDEPENDENT WITNESS WITH THE CORRECTION ALREADY MARKED: ILL:2246 carries the same verse and reads `rab tu skye bo {%skye'o}` -- the ACIP correction brace flags this exact string, i.e. an editor of the same passage judged `skye bo` wrong for `skye'o`. Note what this implies: the blockprint behind ILL:2246 does read `skye bo`, so C05:213 may be a faithful keying of a defective source rather than a keying slip; what is missing here is the correction marker ILL:2246 carries. (3) INTERNAL: the prose paraphrase later in THIS SAME ROW restates the verse as `snang ba'i rnam shes skye'o` -- the verb, not the noun `skye bo` (person/being). PARALLEL-WITNESS CHECK AS REQUIRED: the only other carrier of the C05:213 string is C16:790, byte-identical in BOTH columns (verified by SQL), i.e. the same file re-ingested and not an independent witness; it carries the same defect and no correction marker. CONSEQUENCE, recorded here rather than filed separately: Geshe Michael's 'In reality this is not the being' is a reading only available if `skye bo` is taken as the noun, so his English follows the corrupt text faithfully. That is not a translation error and no ENGLISH_FACTUAL_ERROR is filed for it.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-263",
+  "course": "C05",
+  "segment": "C05:213",
+  "kind": "ENGLISH_TYPO",
+  "found": "Master Stiramati also explains the physical faculties",
+  "expected": "Master Sthiramati also explains the physical faculties",
+  "evidence": "`blo brtan` is Sthiramati. The organisation's corpus spells the name with the aspirate in four independent rows -- GK:144, ILL:1814, ILL:2095, and ILL:2247, the last being the SAME PASSAGE independently translated ('Here Master Sthiramati explains that the physical sense powers are the object of perception for the foundation consciousness') -- and without it in two: C05:213 and C15:28, a different passage in a list of masters. (C16:790 is byte-identical to C05:213 in both columns and is a re-ingest, not a third witness.) Filed at LOW/UNCERTAIN, not as a confirmed defect, precisely because C15:28 is independent of this row: the corpus is inconsistent about the name rather than wrong only here, so a reviewer may prefer to dispose of this as a house-style normalisation across C05:213, C16:790 and C15:28. Geshe Michael's English stays verbatim on the page either way.",
+  "severity": "LOW",
+  "confidence": "UNCERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
