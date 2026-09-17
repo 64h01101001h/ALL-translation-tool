@@ -15,7 +15,7 @@ document is making claims its own data does not support.
 This is cheap, exact, and needs no knowledge of the content — which is the
 whole reason it is worth having.
 """
-import filecmp, importlib.util, io, os, shutil, sys, tempfile
+import filecmp, importlib.util, io, os, shutil, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -96,8 +96,43 @@ def check_punchlist():
                        % (min(len(b), len(a)), len(b), len(a)))
 
 
+def check_rebuild_order():
+    """The handoff telling the data project which master entries to rebuild.
+    Its whole argument is that the figures can be re-derived, so a drifted
+    copy is worse than none — it would send someone to rewrite 627 entries on
+    a count that no longer holds. Skips where the master is absent: data/ is
+    gitignored, so a fresh clone has no dictionary and that is not a failure."""
+    out = os.path.join(ROOT, 'docs', 'MASTER_REBUILD_ORDER.md')
+    master = os.path.join(ROOT, 'data', 'hgm_dictionary_v27_2.json.gz')
+    if not os.path.exists(master):
+        return 'OK', 'skipped — no master present (data/ is gitignored)'
+    if not os.path.exists(out):
+        return 'MISSING', 'docs/MASTER_REBUILD_ORDER.md does not exist'
+    before = io.open(out, encoding='utf-8').read()
+    tmp = out + '.regen'
+    r = subprocess.run([sys.executable,
+                        os.path.join(ROOT, 'tools',
+                                     'build_master_rebuild_order.py'),
+                        '--out', tmp],
+                       capture_output=True, text=True, cwd=ROOT)
+    if r.returncode != 0:
+        return 'FAILED', 'generator exited %d: %s' % (r.returncode,
+                                                      r.stderr.strip()[:200])
+    after = io.open(tmp, encoding='utf-8').read()
+    os.remove(tmp)
+    if before == after:
+        return 'OK', '%d bytes, byte-identical to a fresh generation' % len(before)
+    b, a2 = before.split('\n'), after.split('\n')
+    for i, (x, y) in enumerate(zip(b, a2)):
+        if x != y:
+            return 'DRIFTED', ('first difference at line %d\n     committed: %s'
+                               '\n     regenerated: %s' % (i + 1, x[:110], y[:110]))
+    return 'DRIFTED', ('committed %d lines, regenerated %d' % (len(b), len(a2)))
+
+
 CHECKS = [('docs/ERRATA_REGISTER.md', check_errata_register),
-          ('docs/RELEASE_PUNCHLIST.md', check_punchlist)]
+          ('docs/RELEASE_PUNCHLIST.md', check_punchlist),
+          ('docs/MASTER_REBUILD_ORDER.md', check_rebuild_order)]
 
 def main():
     bad = 0
