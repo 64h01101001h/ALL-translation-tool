@@ -140,9 +140,23 @@ def syl_to_uni(syl):
                     if not (i+1 < len(t) and t[i+1] == '+'):
                         expect = False
                 else:
-                    out += CONS.get(v, '')   # suffix
+                    # FINALS FIRST. M and H are anusvara and visarga; tokenize
+                    # emits them as ('C', ch) because they follow a consonant,
+                    # and they are keys of FINALS, not of CONS. CONS.get(v,'')
+                    # therefore returned '' and the mark SILENTLY VANISHED with
+                    # ok=True — b+h+rUM (BHRUM, a seed syllable) came back as
+                    # བྷྲཱུ with no anusvara and nothing flagged. Dropping a
+                    # character quietly is worse than refusing the word.
+                    if v in FINALS:
+                        out += FINALS[v]
+                    elif v in CONS:
+                        out += CONS[v]          # suffix
+                    else:
+                        return None             # rule 3: flag, never drop
             else:
                 if stack:
+                    if stack[0] not in CONS or any(u not in SUB for u in stack[1:]):
+                        return None             # rule 3: flag, never raise
                     out += CONS[stack[0]] + ''.join(SUB[u] for u in stack[1:])
                     stack = []
                 elif not out:
@@ -151,6 +165,8 @@ def syl_to_uni(syl):
                 expect = False
             i += 1
         if stack:
+            if stack[0] not in CONS or any(u not in SUB for u in stack[1:]):
+                return None                     # rule 3: flag, never raise
             out += CONS[stack[0]] + ''.join(SUB[u] for u in stack[1:])
         return out
     # group into CV units: (consonant-cluster, vowel); trailing consonants = suffixes

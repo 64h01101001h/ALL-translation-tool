@@ -248,11 +248,26 @@ bool sylToUni(const string& syl, string& out) {
                     if (!(i + 1 < t.size() && t[i + 1].kind == Token::PLUS))
                         expect = false;
                 } else {
-                    auto it = CONS.find(x.v);
-                    if (it != CONS.end()) out += it->second;
+                    // FINALS FIRST. M and H are anusvara and visarga and are
+                    // keys of FINALS, not CONS, so the CONS-only lookup here
+                    // dropped them SILENTLY while still reporting success —
+                    // b+h+rUM (BHRUM, a seed syllable) came back as བྷྲཱུ with
+                    // no anusvara. Quietly losing a character is worse than
+                    // refusing the word. Parity: engines/ewts_unicode.py.
+                    auto fi = finalsMap().find(x.v);
+                    if (fi != finalsMap().end()) {
+                        out += fi->second;
+                    } else {
+                        auto it = CONS.find(x.v);
+                        if (it == CONS.end()) return false;   // rule 3
+                        out += it->second;
+                    }
                 }
             } else {  // vowel
                 if (!stack.empty()) {
+                    if (!CONS.count(stack[0])) return false;
+                    for (size_t s = 1; s < stack.size(); ++s)
+                        if (!SUB.count(stack[s])) return false;
                     out += CONS.at(stack[0]);
                     for (size_t s = 1; s < stack.size(); ++s) out += SUB.at(stack[s]);
                     stack.clear();
@@ -264,6 +279,9 @@ bool sylToUni(const string& syl, string& out) {
             }
         }
         if (!stack.empty()) {
+            if (!CONS.count(stack[0])) return false;
+            for (size_t s = 1; s < stack.size(); ++s)
+                if (!SUB.count(stack[s])) return false;
             out += CONS.at(stack[0]);
             for (size_t s = 1; s < stack.size(); ++s) out += SUB.at(stack[s]);
         }
