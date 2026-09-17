@@ -195,6 +195,17 @@ bool tokenize(const string& syl, vector<Token>& out) {
 bool nativeOnset(const vector<string>& ons, bool dotted, string& u) {
     const auto& CONS = consMap();
     const auto& SUB = subMap();
+    // RULE 3: FLAG, NEVER THROW. Every lookup below is CONS.at()/SUB.at(), and
+    // tokenize emits the FINALS characters M and H — anusvara and visarga — as
+    // consonant tokens though they are keys of neither map. An invalid
+    // character earlier in a syllable can strand one in onset position.
+    // Throwing was caught by the outer try/catch, which flags the WHOLE input
+    // and echoes the RAW un-normalised string, where every other failure in
+    // this engine flags per syllable. On the 8 corpus rows that reach here the
+    // port therefore refused an entire line that the oracle converts most of.
+    // Returning false puts them back on the same path. Parity: engines/ewts_unicode.py.
+    for (const auto& c : ons)
+        if (!CONS.count(c)) return false;
     const size_t n = ons.size();
     if (n == 1) { u = CONS.at(ons[0]); return true; }
     if (n == 2) {

@@ -768,6 +768,17 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/oracle_fixtures_check.py)
 
+  # Rule 3 has three outcomes, not two: convert, flag, or — the one the rule
+  # does not allow — raise. engines/ewts_unicode.py raised KeyError on 8 corpus
+  # rows where an invalid character stranded an anusvara or visarga in onset
+  # position, while the C++ port caught its own exception and refused the WHOLE
+  # line with the raw string. The two engines disagreed on exactly those rows
+  # and every battery stayed green, because none of them ran the oracle over
+  # the corpus and asked whether it survived.
+  add_test(NAME oracle_never_raises
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_oracle_never_raises.py)
+
   # Every other layer gate reads the LAYER - the artifact that had already
   # lost the data. This one compares the layer's builder against the PAGES,
   # which is the only place a silent parser drop is visible. It found 1,260
