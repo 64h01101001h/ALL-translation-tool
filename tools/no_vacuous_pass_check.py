@@ -37,6 +37,16 @@ SHAPES = {
     "catalog_id_smoke": lambda absent, scratch: [absent],
     "catalog_qc_smoke": lambda absent, scratch: [scratch, absent],
     "shelf_suggest_smoke": lambda absent, scratch: [absent],
+    # Added 2026-09-17, after all three failed rule 2 — they died on a signal
+    # rather than reporting. searchnorm_smoke CHECKed that its lemma fold was
+    # configured, printed [FAIL], and then dereferenced the null it had just
+    # diagnosed: exit 139, and the report it had printed went with it.
+    # spine_smoke and tree_diff_smoke ended on "libc++abi: terminating due to
+    # uncaught exception" and exit 134, the spine constructor throwing a
+    # perfectly good message that nothing caught.
+    "searchnorm_smoke": lambda absent, scratch: [absent],
+    "spine_smoke": lambda absent, scratch: [absent],
+    "tree_diff_smoke": lambda absent, scratch: [absent],
 }
 
 

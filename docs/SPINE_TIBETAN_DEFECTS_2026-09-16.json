@@ -651,5 +651,19 @@
   "why_it_is_not_being_changed": "The difference is syllabification: sa-tva as two units against stva as one stack. Which is right depends on what the source text means by the ACIP STVAm, and this project's own ground truth cannot say — ZERO of the 105,634 master entries touch the cluster, so there is no attested pair to measure against. Changing a canonical engine on one external source, against no internal evidence, is guessing with a citation attached. Filed for a reader with Sanskrit competence, or for Geshe Michael to rule.",
   "reach": "14 corpus segments contain STVAm.",
   "found_by": "the visarga audit's adversarial lens, 2026-09-16; checked against the Illuminator and the master 2026-09-17."
+ },
+ "glossary_first_equivalent_2026-09-17": {
+  "found_by": "Adam, reading the Walkthrough pane: \"Why is GUS being rendered as 'i' here? I've never noticed that GUS can be rendered as 'i'.\"",
+  "what_the_tool_shows": "Step 5 lists GUS as 'i · respect' and step 6, which takes the FIRST equivalent, prints 'i'.",
+  "where_it_comes_from": "The master's own glossary tier: hgm_gloss for 'gus' is ['i','respect'], hgm_evidence {'tier':'glossary','source':'HTG2016'}, status hgm-attested. The tool is showing what it was given, in the order it was given.",
+  "the_scale_measured": "Exactly 10 of 12,004 glossed entries have a single letter or bare morpheme as their FIRST equivalent, and 47 have one anywhere in the list.",
+  "MOST_OF_THEM_ARE_CORRECT": "This is the part worth saying, because the shape looks alarming and mostly is not. 'i' is the English pronoun I, stored lowercase: ngas (Hopkins 'by me'), bdag ('self; I'), rang, nga rang all mean I, so the equivalent is right and only its capital is missing. rnams -> 's' is the English plural for a plural marker; zin nas -> 'ed' is the English past for a completive; yod gyur pa -> \"'s\" is the possessive; bya -> \"'ll\" is defensible because bya is the future stem of byed and 'll is the English future.",
+  "the_two_that_are_wrong": {
+   "gus": "Means respect or reverence — Hopkins gives 'respectfully; respect', and the second equivalent is 'respect'. 'I' does not fit it. Geshe Michael's own English in the corpus reads 'In deepest reverence, expressed through all three doors, I bow to the lotus feet…' (C03:297), so an adjacent first-person pronoun is the likely source. 310 corpus segments carry a standalone gus.",
+   "gis": "The agentive particle — Hopkins '(as instrumental particle) by; by means of'. \"'ll\" does not fit it; 'with', 'by' and 'in', which follow, do."
+  },
+  "the_software_half": "Step 6 takes the first equivalent and says so in its own caption. With a correct list that is a reasonable default; with these two it prints the one equivalent that does not belong. Whether the pane should prefer a longer or more substantive equivalent is a UI ruling for Adam, NOT a silent fix: choosing between Geshe Michael's equivalents is the translator's job, which is why step 5 lists them all.",
+  "lowercase_I": "Worth deciding separately: the pronoun I is stored lowercase throughout, so the pane shows 'i'. That is why the entries look like fragments at a glance. Restoring the capital is a data question, not ours.",
+  "nothing_modified": "No data file was touched. This is a report."
  }
 }
