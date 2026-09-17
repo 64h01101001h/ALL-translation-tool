@@ -308,3 +308,38 @@ TODO.md).
 **Models.** Propose Claude Opus 5 (two angles per row); reconcile and
 refute Claude Fable 5.1 throughout, including the relaunches after the
 2026-09-05 rate-limit kills (95, 99, 101) — never moved off Fable.
+
+## 2026-09-17 evening — 166 to 198, and a gap the gates could not see
+
+Eleven pages landed in one run of the campaign: c5p56 (166-168) through
+c5p66 (196-198). Coverage 165 to **198 of 511**; the bank 41,759 to **43,021
+links across 522 pages**. Every page two independent analysts, reconciled by
+a third against counts re-derived from the bank rather than quoted.
+
+**Errata E-250 to E-258**, nine in all. The three MEDIUM ones at C05:183 and
+E-258 at C05:190 each named their parallel-witness check AND correctly
+discounted C16, whose rows here are byte-identical re-ingests of the same
+file rather than independent witnesses — a distinction earlier batches did
+not always draw. E-256 is the one to remember: Geshe Michael's "King Kanaka"
+renders `ka ni ka`, which he writes "Kanika" in three other courses, and
+"Kanaka" already belongs to Kanaka Varma the translator elsewhere in the
+corpus. The misprint collides with a different real person.
+
+**Span-head licensors added:** `bdag cag gi` -> "our" (C05:182; pronoun plus
+genitive, the C04 `rang re'i` construction) and two more `sogs` -> "and the
+rest" on the established convention.
+
+**THE FINDING OF THE DAY IS NOT IN THE PAGES.** After landing three pages and
+302 links, `test_builder_sees_every_span` reported a total BYTE-IDENTICAL to
+its previous run. Its directory list predated Course 5 and contained no
+`pages_c05`; so did five other tools' lists. **Six gates had never looked at
+a single Course 5 page**, while reporting "across 456 pages" — which is
+exactly pages + c01 + c03 + c04. Widening them fired immediately on c5p56
+(`nges` -> "definite" inside `ma nges pa` -> "indefinite"; rule 4 obeyed, now
+allowed with its reason). `tools/alignment_page_dirs.py` discovers the
+directories now, and `alignment_page_coverage` refuses a gate that covers
+fewer pages than exist.
+
+**Models.** Propose Claude Opus 5 (two angles per row); reconcile Claude
+Opus 5 — the Fable 5.1 reconcilers having failed on a safeguard error on
+2026-09-16, the deviation is recorded rather than quietly absorbed.
