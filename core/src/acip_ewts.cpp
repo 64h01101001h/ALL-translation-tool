@@ -48,14 +48,31 @@ std::string acipToEwts(const std::string& acip) {
         s = o;
     }
 
+    // V is the ACIP code for WA-ZUR, and wa-zur is SUBJOINED: it cannot open
+    // a syllable. A V with a letter before it is wa-zur and becomes EWTS w;
+    // a V that opens a syllable is left alone, so stray Latin in the corpus
+    // is not read as Tibetan. Runs BEFORE the protection markers below, so
+    // the lookbehind still sees a real letter. Parity: engines/hgm_tools.py.
+    {
+        std::string o;
+        for (size_t i = 0; i < s.size(); ++i) {
+            if (s[i] == 'V' && i > 0 && std::isalpha((unsigned char)s[i - 1]))
+                o += 'W';
+            else
+                o += s[i];
+        }
+        s = o;
+    }
+
     // Three ACIP forms this function never learned to read — ported with the
     // Python oracle, 2026-09-09. Adam saw all three sitting untranslated among
     // Tibetan drill options: G-YAS, G-YON and DVAGS. Not display bugs: the
     // engine was handing wylieToUnicode something it correctly refused.
-    //   G-Y  the ACIP disambiguator for ག་ཡ; EWTS writes g.y, not g-y
-    //   V    wa-zur; EWTS writes w (iastToTibetan already patched this at the
-    //        call site, the usual sign that the engine is wrong)
-    //   :    visarga; EWTS writes H
+    //   G-Y  CLOSED 5c3d77f8, at the other end: this still emits g-yon, and
+    //        ewtsToUnicode now reads `-` as the prefix mark it always was.
+    //   V    CLOSED 2026-09-16 — handled just above.
+    //   :    OPEN. visarga; EWTS writes H. Next one to take.
+    // docs/FINDING_ACIP_EWTS_GAPS.md carries the measurements.
     // Protected, so the lowercasing pass below leaves them alone.
     replaceAll(s, "sh", prot("Sh"));
     replaceAll(s, "th", prot("Th"));

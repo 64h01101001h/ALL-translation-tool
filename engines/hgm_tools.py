@@ -7,6 +7,21 @@ def acip_to_ewts(acip):
     long-vowel apostrophe (K'A -> kA) vs achung (BA'I -> ba'i)."""
     s = acip.strip().strip(',').strip()
     s = re.sub(r'\{[a-zA-Z+]+\}', '', s)
+
+    # V is the ACIP code for WA-ZUR, and wa-zur is a SUBJOINED letter: it
+    # cannot open a syllable. So a V with a letter before it is wa-zur and
+    # becomes EWTS w (DVAGS -> dwags, RTZVA -> rtswa, GRVA -> grwa), while a
+    # V that opens a syllable is left exactly as it is — stray Latin in the
+    # corpus ("va", "valid") must not be read aloud as Tibetan, which is a
+    # mistake the pron oracle made once already over 263 syllables.
+    #
+    # Until now V passed through unmapped, producing wylie that is not EWTS
+    # at all: wylie_to_unicode('rtsva') flags, wylie_to_unicode('rtswa') gives
+    # རྩྭ. Measured over the shipped spine, 1,615 segments carry a subjoined V
+    # and NONE of them rendered without a flag; 1,113 do now. Documented as
+    # gap 2 of 3 in docs/FINDING_ACIP_EWTS_GAPS.md. Gap 3, the visarga ':',
+    # is NOT touched here, and GA-YAS is not understood and not guessed at.
+    s = re.sub(r'(?<=[A-Za-z])V', 'W', s)
     s = s.replace('sh','⟦Sh⟧').replace('th','⟦Th⟧')
     for lo,hi in [('t','⟦T⟧'),('d','⟦D⟧'),('n','⟦N⟧'),('s','⟦S⟧'),('m','⟦M⟧')]:
         s = s.replace(lo,hi)
