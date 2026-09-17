@@ -33,6 +33,14 @@ from ewts_unicode import wylie_to_unicode       # noqa: E402
 
 MASTER = os.path.join(ROOT, 'data', 'hgm_dictionary_v27_2.json.gz')
 OUT = os.path.join(ROOT, 'build', 'forward_reference.tsv')
+# --out PATH writes somewhere else. Without it the only way to check
+# this fixture was to OVERWRITE it, which is why a stale dump went
+# unnoticed from 5c3d77f8 until 2026-09-16: the engines were fixed and
+# this file was not regenerated, leaving forward_battery red at 99.367%
+# against a 100% floor. tools/oracle_fixtures_check.py needs this flag.
+if '--out' in sys.argv:
+    OUT = sys.argv[sys.argv.index('--out') + 1]
+
 STRIDE = 3
 OFFSET = 2
 

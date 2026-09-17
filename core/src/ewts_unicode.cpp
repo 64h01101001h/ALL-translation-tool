@@ -191,6 +191,18 @@ bool nativeOnset(const vector<string>& ons, bool dotted, string& u) {
             u = CONS.at(a) + SUB.at(b) + SUB.at(c);
             return true;
         }
+        // WA-ZUR on an already-formed stack: grwa = (ga + subjoined ra) +
+        // subjoined wa. Must precede the prefix rules — 'g' is also a prefix
+        // letter and 'r' takes a subjoined wa, so grwa matched "prefix g +
+        // root r + subjoined w" and came out ག ར ྭ with a FULL ra: adding a
+        // wa-zur to a stack silently unstacked it. Restricted to c == "w";
+        // the general two-subjoin rule is wrong and the canonical battery
+        // said so, turning brlabs from བརླབས (ba PREFIX + ra + subjoined la)
+        // into བྲླབས across 24 ground-truth pairs. Parity: engines/ewts_unicode.py.
+        if (c == "w" && inSet(SUBJOINABLE, b, a) && inSet(SUBJOINABLE, c, a)) {
+            u = CONS.at(a) + SUB.at(b) + SUB.at(c);
+            return true;
+        }
         if (PRE.count(a) && inSet(SUPERSTACK, b, c)) {
             u = CONS.at(a) + CONS.at(b) + SUB.at(c);
             return true;
