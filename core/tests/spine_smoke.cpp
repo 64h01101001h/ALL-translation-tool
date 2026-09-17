@@ -2,6 +2,7 @@
 // does: exact lookups in three scripts, English reverse, corpus NEAR/OR,
 // provenance and tier labels intact. Exit 0 = pass.
 #include <cstdio>
+#include <stdexcept>
 #include <string>
 
 #include "allcore/spine.h"
@@ -18,7 +19,7 @@ static int failures = 0;
         }                                                       \
     } while (0)
 
-int main(int argc, char** argv) {
+static int run(int argc, char** argv) {
     if (argc < 2) {
         std::fprintf(stderr, "usage: spine_smoke <hgm_spine.db>\n");
         return 2;
@@ -135,4 +136,21 @@ int main(int argc, char** argv) {
     std::printf("%s (%d failure%s)\n", failures ? "SMOKE FAILED" : "SMOKE OK",
                 failures, failures == 1 ? "" : "s");
     return failures ? 1 : 0;
+}
+
+// A THROW IS NOT A REPORTED FAILURE. Both of these ended on
+// "libc++abi: terminating due to uncaught exception" and exit 134 when their
+// input was absent — the spine constructor throws std::runtime_error with a
+// perfectly good message, and nothing caught it, so the message went to stderr
+// as a crash rather than to the report as a failure. That is the shape
+// tools/no_vacuous_pass_check.py forbids: die on a signal and the suite cannot
+// tell a refusal from a collapse.
+int main(int argc, char** argv) {
+    try {
+        return run(argc, argv);
+    } catch (const std::exception& e) {
+        std::printf("  [FAIL] %s could not run: %s\n", "spine_smoke", e.what());
+        std::printf("%s: FAIL (could not start)\n", "spine_smoke");
+        return 1;
+    }
 }

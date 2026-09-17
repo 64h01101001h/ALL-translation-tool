@@ -6,6 +6,7 @@
 // Usage: tree_diff_smoke <scratch_dir> [library_subtree]
 #include <chrono>
 #include <cstdio>
+#include <stdexcept>
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -27,7 +28,7 @@ static void put(const fs::path& p, const std::string& body) {
     f << body;
 }
 
-int main(int argc, char** argv) {
+static int run(int argc, char** argv) {
     setvbuf(stdout, nullptr, _IONBF, 0);
     if (argc < 2) {
         std::printf("usage: tree_diff_smoke <scratch>\nFAILURES\n");
@@ -94,4 +95,21 @@ int main(int argc, char** argv) {
 
     std::printf("%s\n", failures ? "FAILURES" : "tree_diff_smoke OK");
     return failures ? 1 : 0;
+}
+
+// A THROW IS NOT A REPORTED FAILURE. Both of these ended on
+// "libc++abi: terminating due to uncaught exception" and exit 134 when their
+// input was absent — the spine constructor throws std::runtime_error with a
+// perfectly good message, and nothing caught it, so the message went to stderr
+// as a crash rather than to the report as a failure. That is the shape
+// tools/no_vacuous_pass_check.py forbids: die on a signal and the suite cannot
+// tell a refusal from a collapse.
+int main(int argc, char** argv) {
+    try {
+        return run(argc, argv);
+    } catch (const std::exception& e) {
+        std::printf("  [FAIL] %s could not run: %s\n", "tree_diff_smoke", e.what());
+        std::printf("%s: FAIL (could not start)\n", "tree_diff_smoke");
+        return 1;
+    }
 }

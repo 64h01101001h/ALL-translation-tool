@@ -824,7 +824,10 @@ if(Python3_FOUND)
                    ${CMAKE_CURRENT_BINARY_DIR}
                    $<TARGET_FILE:catalog_id_smoke>
                    $<TARGET_FILE:catalog_qc_smoke>
-                   $<TARGET_FILE:shelf_suggest_smoke>)
+                   $<TARGET_FILE:shelf_suggest_smoke>
+                   $<TARGET_FILE:searchnorm_smoke>
+                   $<TARGET_FILE:spine_smoke>
+                   $<TARGET_FILE:tree_diff_smoke>)
 endif()
 
 # BUILD-6: the release must be able to say what it was built from.

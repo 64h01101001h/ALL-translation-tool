@@ -57,6 +57,17 @@ int main(int argc, char** argv) {
     }
     configureLemmaFold(argv[1]);
     CHECK(globalLemmaFold() != nullptr, "global fold configured");
+    // ...and then STOP if it is null. The two blocks below dereference it, so
+    // with an unreadable table this binary reported its own failure and then
+    // SEGFAULTED on the next line — losing the report it had just printed, and
+    // dying on a signal where tools/no_vacuous_pass_check.py requires a clean
+    // non-zero exit. A crash is not a reported failure.
+    if (globalLemmaFold() == nullptr) {
+        std::printf("  lemma fold unavailable — the checks that need it were "
+                    "NOT RUN\n");
+        std::printf("searchnorm: FAIL (%d failures)\n", failures);
+        return 1;
+    }
     {
         const auto* v = globalLemmaFold()->fold("bklubs");
         CHECK(v && *v == "klub", "bklubs -> klub (unique present)");
