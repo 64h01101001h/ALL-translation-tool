@@ -175,6 +175,30 @@ deep research."
       — and whether links cross tiers (a curated entry pointing into
       auto-aligned material must not launder the tier).
 
+# ★★★★★ ADAM 2026-09-17: GO THROUGH THE DUFF DECISION BRIEF
+
+- [ ] **Work through `docs/DECISION_BRIEF_DUFF_2026-09-17.md` and rule on each
+      of the five.** The Duff scan read all 1,082 pages of both volumes and
+      confirmed 41 gaps. Four were defects and are fixed. The other 37 are NOT
+      defects — they are places where Duff describes Tibetan one way and our
+      software models it another — and they collapse into five questions.
+      Answering the five closes all 37.
+
+        1. Do we model the Tibetan letter-gender system? (9 findings)
+        2. Is "particle" the wrong word for `tshig.phrad`? (wide UI reach)
+        3. Do we adopt Duff's three-category accessory taxonomy? (7)
+        4. Where Duff gives two readings and we give one, show both? (5)
+        5. Two Sanskrit questions, one a real wrong character we ship.
+
+      Each carries a recommendation and the reasoning, but every one is Adam's
+      call and NOTHING has been implemented. The brief also records what is
+      deliberately NOT on the list — three rules measured and correctly not
+      implemented — so they are not re-raised without new evidence.
+
+      Related and still waiting on Adam: the `stva` cluster disagreement with
+      the Illuminator, which needs a reader because zero of the 105,634 master
+      entries touch it.
+
 # ★★★★★ ADAM 2026-09-16: A COMMON-MISSPELLINGS LAYER, AND NEAR-SPELLING ALTERNATIVES
 
 Adam's request, recorded as given: a common-misspellings modifier — some way of
