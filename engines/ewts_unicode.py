@@ -98,6 +98,15 @@ def tokenize(syl):
 
 def native_onset(ons, dotted):
     """Return unicode for a native Tibetan onset cluster, or None."""
+    # RULE 3: FLAG, NEVER RAISE. Every lookup below indexes CONS or SUB
+    # directly, and tokenize emits ('C', ch) for the FINALS characters M and H
+    # — anusvara and visarga — which are keys of neither. An invalid character
+    # earlier in a syllable can strand one of them in onset position, and the
+    # oracle then raised KeyError on 8 corpus rows where the C++ port returned
+    # a flag. An engine that raises cannot be ported faithfully, and any
+    # Python-side tooling over the corpus dies on those rows.
+    if any(c not in CONS for c in ons):
+        return None
     n = len(ons)
     if n == 1:
         return CONS[ons[0]]
