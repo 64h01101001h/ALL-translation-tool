@@ -1,0 +1,164 @@
+# Diamond Cutter Translation Tool Daily Digest #9 --- Thursday, September 17 2026
+
+*Covers Wednesday the 16th and Thursday the 17th. Two days in one
+digest: the 16th's work went uncovered while the reading below was
+running.*
+
+**Headline.** I had two of Tony Duff's grammar books read cover to cover
+against our software --- 1,082 pages --- and it found four real faults
+in the engines, three of which were the kind nobody can see: the program
+produced confident, plausible Tibetan and was wrong. All four are fixed,
+and the alignment of Course 5 has started again.
+
+## What got done
+
+### Reading the grammar books against our own program
+
+I asked for Tony Duff's *Standard Tibetan Grammar*, both volumes, to be
+read in full and every point in them checked against what our software
+actually does. Every page was read --- not sampled --- and every claim
+was re-checked by a second reader who was told to doubt it. **That
+second pass threw out 177 claims**, which is the number I trust the
+exercise by.
+
+It confirmed 647 places where our program already does the right thing,
+and 41 where it does not. Four of those were faults and are fixed:
+
+- The mark that tells a reader a Sanskrit word is present had stopped
+  being produced at all. It was still in our tables; a fix I made the
+  day before had made it unreachable. **That one was mine, from the
+  previous day, and nothing in 124 automatic checks noticed.**
+- A Sanskrit letter was being drawn as a character that does not exist
+  in the alphabet. 1,267 dictionary entries.
+- A seed syllable used in prayer, *bhrūṃ*, was coming back without the
+  mark over it, and the program reported success.
+- The seed mantra *oṃ āḥ hūṃ* would not render its middle syllable. The
+  other two had always worked.
+
+**Three of those four were silent** --- the program did not flag
+anything, it simply produced something wrong that looked right. That is
+the finding behind the finding, and three new automatic checks now exist
+because of it.
+
+### Thirty-seven things are not faults, and they are now five questions
+
+The other 37 are places where Duff describes Tibetan one way and our
+software models it another. Nothing is broken; something is unmodelled,
+and whether to model it is a decision rather than a repair. Left as a
+list of 37 they read as a mess. They are not: they collapse into **five
+questions**, and answering those five closes all of them. That brief is
+written and waiting for you.
+
+**Three of Duff's rules were measured and deliberately NOT
+implemented**, because doing what the book says would have made the tool
+worse. One example: enforcing the classical rule about which letters may
+end a word would have made the program refuse 175 correct entries ---
+Sanskrit written in Tibetan letters, where the rule does not apply. The
+measurements are recorded so the question is not re-opened without new
+evidence.
+
+### The first step for a beginner, measured at last
+
+On a hike in September I asked for the one thing a beginner needs first:
+being able to tell where one word stops and the next begins. That work
+had been blocked since, because two honest attempts to count word
+frequency had disagreed by two and a half times, and a rule was set that
+no figure could be published until the disagreement was settled.
+
+It is settled, and the answer is measured:
+
+- **The most common 2,000 words cover 76% of everything we hold.** The
+  most common 4,000 cover 86%.
+- **Thirty-two connecting particles alone are a fifth of all running
+  text.** Those are exactly the small words that show a reader where one
+  word ends --- the cheapest thing on the list, and the first thing to
+  teach.
+- The choice that was feared would move the answer moves it by three or
+  four points, not by two and a half times.
+
+I published the first version of these figures and **they were wrong by
+three points**. Two spellings of the same word were being counted
+separately, and it was visible on the first line of output. The page now
+carries the wrong numbers and the reason beside the right ones.
+
+### Course 5 alignment resumed
+
+The full-depth reading of Course 5 stopped on 8 September at segment 165
+of 511, at my call, while the app went toward release. It has started
+again. **Segment 168 of 511 now**, and the first new page is done to the
+full standard: two independent analysts on each sentence, their
+disagreements settled by a third against the evidence already banked.
+
+On one sentence the two analysts agreed on only 25 of 44 alignments,
+which is what the two-reader method is for. Two proposed alignments were
+**dropped rather than banked** --- each would have passed every
+automatic check and still been false.
+
+### A defect in Geshe Michael's dictionary, found by reading the screen
+
+I noticed the program showing the word *gus* --- reverence --- as "i".
+It is not the program's doing: the dictionary itself stores "i" first
+for that word. Measured: of 12,004 entries, ten lead with a single
+letter, and **eight of the ten are correct** --- "i" is the pronoun *I*
+stored in lower case, and several Tibetan particles genuinely correspond
+to English endings. Two are wrong, *gus* among them.
+
+That question also produced a tool: a way to narrow 11,968 entries to 55
+worth a person's eye. Reading those 55 found **ten glosses that do not
+describe their headword**, each confirmed against two independent
+dictionaries.
+
+## Adam's decisions and actions
+
+- Ruled that **Tony Duff's dictionaries are to be trusted above
+  Hopkins**, on reliability and on register --- Hopkins's scholarly
+  English is not the voice this project wants. Recorded, with two things
+  it does not change: Geshe Michael's own English stays binding above
+  every reference work, and trust is not a licence --- the Illuminator
+  is asked for, not yet obtained.
+- Paused release work and directed that the **alignment and the
+  dictionary** are the focus.
+- Found the *gus* defect by using the program.
+- Asked for the grammar books to be searched for on the drives. **They
+  were on the laptop the whole time**, filed under "Tony Bluff" --- a
+  typo in the file name, which is why every search for the author had
+  failed.
+
+## Numbers
+
+  -------------------------------------------- ----------------------
+  Pages of grammar read against the software   1,082
+  Claims discarded by the checking pass        177
+  Places our software was confirmed correct    647
+  Faults found and fixed                       4 (3 of them silent)
+  Questions now waiting on leadership          5
+  Course 5 alignment                           168 of 511 segments
+  Attested alignment links banked              41,869
+  Source-document defects on record            250
+  Automatic checks, all passing                124
+  Dictionary and corpus data changed           **none**
+  -------------------------------------------- ----------------------
+
+## Open questions for leadership
+
+- **The five questions** in the decision brief. The largest: whether we
+  should model the traditional Tibetan account of letter gender, from
+  which the classical grammarians derive tense and other things. We
+  currently use a Western description instead. It is not wrong; it is a
+  different axis.
+- **Whether "particle" is the right word.** Duff argues it mistranslates
+  the Tibetan, which means "phrase linker". My own advice is to find out
+  what Geshe Michael's courses say first: if they say particle, the
+  students' vocabulary should win.
+- **One reading needs a person who knows Sanskrit.** Our software and
+  the Illuminator disagree about a cluster of letters, and our own
+  dictionary has nothing to say --- not one of its 105,634 entries uses
+  it.
+- **What "all of Geshe Michael's translations" means.** The 42,199
+  aligned passages are a portion. Establishing what is missing needs the
+  organisation's records, not the program's.
+
+## Tomorrow
+
+- Continue Course 5, page by page.
+- The five questions, when there are answers.
