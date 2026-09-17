@@ -30,25 +30,43 @@ All three parts are stated because all three move the number.
 
 ## The answer to Adam's question
 
-**Top 2,000 lemmas cover about 70–73% of running text. Top 4,000 cover about
-79–83%.**
+**Top 2,000 lemmas cover about 73–76% of running text. Top 4,000 cover about
+82–86%.**
 
 | top N lemmas | dictionary only | + Monlam |
 |---|---|---|
-| 500 | 51.0% | 49.1% |
-| 1,000 | 62.4% | 59.5% |
-| **2,000** | **73.2%** | **69.8%** |
-| **4,000** | **82.7%** | **79.0%** |
-| 8,000 | 90.5% | 87.1% |
+| 500 | 54.4% | 52.4% |
+| 1,000 | 65.7% | 62.8% |
+| **2,000** | **76.4%** | **72.8%** |
+| **4,000** | **85.5%** | **81.7%** |
+| 8,000 | 92.7% | 89.3% |
 
 | | dictionary only | + Monlam |
 |---|---|---|
 | lexicon forms | 99,588 | 549,419 |
 | word tokens counted | 708,729 | 676,166 |
 | tokens the lexicon did not know | 6,542 | 3,144 |
-| distinct lemmas | 33,121 | 42,681 |
-| lemmas for 50% coverage | 471 | 533 |
-| lemmas for 95% coverage | 13,365 | 18,914 |
+| distinct lemmas | 27,496 | 36,677 |
+| lemmas for 50% coverage | 379 | 425 |
+| lemmas for 95% coverage | 10,555 | 15,335 |
+
+### Corrected 2026-09-17, a few hours after first publication
+
+The first version of this page printed 73.2% and 82.7%, and those were wrong
+— **understated by about three points**, for exactly the kind of reason this
+whole item warns about.
+
+The segmenter returns a token's surface text *including the separator that
+followed it*, so `དང` and `དང་` came back as two different lemmas. They were
+ranks 2 and 3 of the first list: the same word, its 21,707 uses split into
+11,131 and 10,576, with the type count inflated by 5,625 phantom lemmas. The
+tsheg is a separator, not part of the word.
+
+It was visible on the first page of output and I published anyway. That is the
+counting trap in `docs/LEARN_TAB_VISION.md` §2 and in the
+`gmr-translation-style-findings` note, met for the third time in this project,
+and the lesson holds: **read the top of the list before believing the bottom
+of it.**
 
 **The lexicon choice moves the answer by 3–4 points, not by 2.5×.** That is the
 useful result: at Adam's numbers the figure is robust to the one policy choice
@@ -74,6 +92,46 @@ that was feared, so the list can be built without settling which lexicon is
   method, so nothing here reproduces or refutes that pair. What is established
   is that *under a stated policy* the figures are these, and that the lexicon
   is not the 2.5× lever.
+
+## Stage 4: spread, and why the total alone misleads
+
+Adam's framing: *"A term used 400 times in one text is not the same learning
+priority as one used 400 times across forty texts."* The list carries a
+`sources` column — how many of the 75 sources a lemma appears in — and it
+earns its place immediately.
+
+Of the top 2,000 lemmas, **6 appear in three or fewer sources**:
+
+| rank | lemma | uses | sources |
+|---|---|---|---|
+| 1044 | `ཁྱབ་པ་ཁས` | 110 | 3 |
+| 1084 | `རྩ་བར་འདོད་ན` | 106 | 3 |
+| 1543 | `འཇམ་དཔལ` | 72 | 2 |
+| 1686 | `མཐའ་དཔྱོད་` | 65 | 3 |
+| 1733 | `ཟིན་བྲིས` | 63 | 2 |
+| 1907 | `སྨན་གྱི་བླ་` | 56 | 2 |
+
+These look like vocabulary and are genre. `ཁྱབ་པ་ཁས` is debate-logic
+apparatus, `ཟིན་བྲིས` is "notes", `སྨན་གྱི་བླ་` is the Medicine Buddha — each
+frequent because one or two texts use it constantly, not because a reader
+meets it everywhere. 72 of the top 2,000 appear in 60 or more sources, and
+those are the ones a memorised core should be built from.
+
+**The spread column is not decoration.** Ranking by total alone would put all
+six of those in a beginner's first 2,000 words.
+
+## Stage 5: the list
+
+`FREQ_LIST_OUT=<path>` writes it: rank, lemma, count, cumulative share, and
+the source count. 27,496 lemmas under the dictionary policy. It is ordered by
+frequency with ties broken by lemma so that reruns are identical.
+
+**It is not yet a learner's list**, and one thing is deliberately missing: the
+English. Joining these lemmas to `hgm_gloss` is the obvious next step and it
+is also where Rule 1 bites — the list may only ORDER entries that exist, and
+must never manufacture an equivalent for a lemma the dictionary does not
+gloss. A frequent lemma with no `hgm_gloss` has to show as unglossed, not as
+something a machine filled in.
 
 ## What must not be read into it
 
