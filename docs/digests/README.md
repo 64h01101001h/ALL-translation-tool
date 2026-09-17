@@ -62,6 +62,30 @@ further prompting:
 3. **put it in the Gmail drafts folder**, and
 4. **attach the .docx to that draft** where the tooling allows it.
 
+**Step 4 is where it fails, and it fails silently. Measured 2026-09-17.**
+The Gmail connector takes an attachment only as base64 *inline in the tool
+call* - there is no path parameter, nothing that reads the file from disk. So
+the whole file has to be retyped through the model, and a digest `.docx` is
+about 15 KB, or ~20,500 base64 characters. That does not survive the trip.
+Digest #9 was attached twice and truncated both times: first at 9,690
+characters of 20,528, then at ~1,100. Neither attempt reported an error.
+
+**The failure looks exactly like success.** A truncated ZIP still begins with
+the `PK` magic bytes, so `create_draft` accepts it, the draft shows an
+attachment of a plausible size, and Word refuses to open it - at the far end,
+in front of leadership. Worse, `get_draft` does not report a draft's
+attachments *at all* (confirmed against a 36-character attachment that landed
+correctly), so the obvious check says "no attachment" whether one is there or
+not. **The only honest verification is to read back what was actually sent**
+and compare it byte for byte with the file on disk:
+`tools/check_draft_attachment.py`.
+
+So step 4 reads, in practice: attach it only if the base64 verifies; otherwise
+leave the draft clean, hand Adam the `.docx` directly, and say so. An
+unattached draft costs him one drag. A corrupt attachment costs the audience
+the document, and costs us the claim that our artifacts can be trusted - which
+is the one thing this project cannot spend.
+
 He reads and sends. Nothing is ever sent on his behalf — the draft is the
 deliverable, and asking "shall I draft it?" after he has asked for the digest
 is asking twice.
