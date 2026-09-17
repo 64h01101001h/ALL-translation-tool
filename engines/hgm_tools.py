@@ -36,6 +36,43 @@ def acip_to_ewts(acip):
     # local rule can separate them — that needs the caller to stop feeding
     # English through, which is filed separately.
     s = re.sub(r'(?<=[BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz])V', 'W', s)
+    # VISARGA. ACIP writes it ':' and EWTS writes it 'H' — gap 3 of the three
+    # in docs/FINDING_ACIP_EWTS_GAPS.md. Both engines already render hoH as
+    # ཧོཿ, so nothing new is being invented here; the colon simply never
+    # reached them and wylieToUnicode refused the syllable.
+    #
+    # A visarga follows a VOWEL, or the anusvara 'm'. That one restriction is
+    # what separates it from a colon used as punctuation, and the corpus is
+    # unambiguous: of 1,492 colons outside editorial braces, 1,473 follow a
+    # vowel and every one is a mantra syllable (DHARM'A:, HR'I:, SHUDDH'A:,
+    # BHYO:, A'A:), while the 19 that do not include "THE FIRST PATH:",
+    # "The text is saying:", "Includes:", a folio marker [107a]:, an
+    # ERROR_NO_SUCH_ACIP: marker and editorial ':-'. Adding 'm' picks up
+    # HRIm:, AAm: and BAm:, which are an anusvara followed by a visarga.
+    #
+    # EDITORIAL BRACES ARE MASKED. The strip above only removes {TIB}-shaped
+    # blocks; {%Levi: GYIS} and {NOTE TO LO: ...} survive, and their colons
+    # follow vowels too. Nine such blocks carry a colon.
+    #
+    # Protected, because EWTS visarga is an UPPERCASE H and the case-folding
+    # pass below would otherwise turn it into the letter ha.
+    s = ''.join(part if part.startswith('{')
+                else re.sub(r'(?<=[AEIOUaeioum]):', '\x03', part)
+                for part in re.split(r'(\{[^}]*\})', s))
+
+    # A-CHEN'S OWN LONG VOWEL. ACIP marks a long vowel with an apostrophe
+    # before it — K'A is kA, M'A is mA — but the rule below requires a
+    # CONSONANT before the apostrophe, and for a-chen the letter IS the vowel,
+    # so A'A fell through as a'a and rendered ཨའ: a-chen plus an a-chung,
+    # silently, with ok=True. A'A is ཨཱ.
+    #
+    # Only where it OPENS a syllable. Mid-word, vowel-apostrophe-vowel is the
+    # achung particle and must not be touched — PA'AM, SLA'AM, LA'ANG, and
+    # above all PA'I, the genitive, which alone occurs 53,651 times. Measured
+    # on the shipped spine: 724 syllable-initial A'A, every one a mantra
+    # (AOm A'A:H'Um — om ah hum — and A'A LO KE, aloke), against 2,094
+    # mid-word, every one a particle.
+    s = re.sub(r"(?<![A-Za-z])A'A", '⟦A⟧', s)
     s = s.replace('sh','⟦Sh⟧').replace('th','⟦Th⟧')
     for lo,hi in [('t','⟦T⟧'),('d','⟦D⟧'),('n','⟦N⟧'),('s','⟦S⟧'),('m','⟦M⟧')]:
         s = s.replace(lo,hi)
@@ -46,7 +83,12 @@ def acip_to_ewts(acip):
         if ch=='⟦': prot=True; continue
         if ch=='⟧': prot=False; continue
         out.append(ch if prot else ch.lower())
-    return re.sub(r'\s+',' ',''.join(out)).strip()
+    # The visarga sentinel becomes EWTS 'H' only now, after case folding.
+    # It cannot be a ⟦H⟧ protected span: the long-vowel apostrophe rule's
+    # lookbehind class contains the closing marker ⟧ itself, so a protected
+    # visarga reads as a consonant to it and ka:'i came out kaHI — the
+    # genitive 'i swallowed into a long vowel — instead of kaH'i.
+    return re.sub(r'\s+',' ',''.join(out)).strip().replace('\x03','H')
 
 def is_acip_line(l):
     s = l.strip().strip('*#`').strip()

@@ -9,6 +9,8 @@ namespace allcore {
 namespace {
 
 const char OPEN = '\x01', CLOSE = '\x02';
+const char ACHEN_LONG = '\x03';  // stands in for a standalone long a-chen
+const char VISARGA = '\x04';     // stands in for EWTS 'H'; see acipToEwts
 
 void replaceAll(std::string& s, const std::string& from, const std::string& to) {
     size_t pos = 0;
@@ -44,6 +46,57 @@ std::string acipToEwts(const std::string& acip) {
                 if (j < s.size() && s[j] == '}' && j > i + 1) { i = j + 1; continue; }
             }
             o += s[i++];
+        }
+        s = o;
+    }
+
+    // VISARGA: ACIP ':' is EWTS 'H'. It follows a VOWEL or the anusvara 'm',
+    // and that restriction is what separates it from punctuation — "THE FIRST
+    // PATH:", "Includes:", a folio marker [107a]:, editorial ':-'. Editorial
+    // {...} blocks are skipped: the strip above only removes {TIB}-shaped
+    // ones, and {%Levi: GYIS} has a vowel before its colon too. Protected,
+    // because EWTS visarga is an UPPERCASE H and the case-fold below would
+    // otherwise make it the letter ha. Parity: engines/hgm_tools.py.
+    {
+        std::string o;
+        bool inBrace = false;
+        for (size_t i = 0; i < s.size(); ++i) {
+            if (s[i] == '{') inBrace = true;
+            else if (s[i] == '}') inBrace = false;
+            if (s[i] == ':' && !inBrace && i > 0 &&
+                std::string("AEIOUaeioum").find(s[i - 1]) != std::string::npos) {
+                // A SENTINEL, not prot("H"). The long-vowel apostrophe rule
+                // further down has the closing marker ⟧ in its own lookbehind
+                // class, so a protected visarga reads to it as a consonant and
+                // ka:'i came out kaHI — the genitive swallowed into a long
+                // vowel — instead of kaH'i. Expanded after case folding.
+                o += VISARGA;
+            } else {
+                o += s[i];
+            }
+        }
+        s = o;
+    }
+
+    // A-CHEN'S OWN LONG VOWEL. ACIP marks a long vowel with an apostrophe
+    // before it (K'A is kA), but the apostrophe rule further down needs a
+    // CONSONANT before it, and for a-chen the letter IS the vowel — so A'A
+    // fell through as a'a and rendered ཨའ, a-chen plus an a-chung, silently.
+    // A'A is ཨཱ. Only where it OPENS a syllable: mid-word, vowel-apostrophe-
+    // vowel is the achung particle (PA'AM, LA'ANG, and PA'I the genitive,
+    // 53,651 occurrences). Must run AFTER the visarga rule above, so that the
+    // colon in A'A: still sees a vowel before it.
+    {
+        std::string o;
+        for (size_t i = 0; i < s.size();) {
+            const bool atStart =
+                (i == 0) || !std::isalpha((unsigned char)s[i - 1]);
+            if (atStart && s.compare(i, 3, "A'A") == 0) {
+                o += prot("A");
+                i += 3;
+            } else {
+                o += s[i++];
+            }
         }
         s = o;
     }
@@ -115,6 +168,7 @@ std::string acipToEwts(const std::string& acip) {
     for (char c : s) {
         if (c == OPEN) { inProt = true; continue; }
         if (c == CLOSE) { inProt = false; continue; }
+        if (c == VISARGA) { out += 'H'; continue; }   // after folding, so it stays H
         out += inProt ? c : (char)std::tolower((unsigned char)c);
     }
 
@@ -152,6 +206,36 @@ std::string ewtsToAcip(const std::string& ewts) {
         std::string lo(1, (char)std::tolower((unsigned char)*c));
         replaceAll(s, hi, prot(lo));
     }
+    // VISARGA: EWTS uppercase H is visarga and ACIP writes it ':'. It had no
+    // inverse at all, so hoH went to ACIP HOH and came back hoh — the letter
+    // ha. Lowercase h is the letter and is untouched.
+    replaceAll(s, "H", prot(":"));
+    // A-CHEN'S LONG VOWEL. The pass below turns EWTS A into ACIP 'A, which is
+    // right after a consonant (kA -> K'A) and wrong on its own: a standalone
+    // long a-chen is A'A in ACIP, not 'A. Handle that case first.
+    {
+        std::string o;
+        for (size_t i = 0; i < s.size(); ++i) {
+            // Look PAST protection markers for the real preceding letter.
+            // The retroflex pass above has already wrapped N as \x01n\x02, so
+            // the raw s[i-1] of the A in "NA" is a marker byte, not a letter,
+            // and a naive test fired here: ba ra NA si went out as nA'A and
+            // came back Na'a. Vararanasi is not a standalone a-chen.
+            size_t j = i;
+            while (j > 0 && (s[j - 1] == OPEN || s[j - 1] == CLOSE)) --j;
+            const bool standalone =
+                s[i] == 'A' &&
+                (j == 0 || !std::isalpha((unsigned char)s[j - 1]));
+            // A SENTINEL, not the literal A'A. prot() only marks a region;
+            // replaceAll below is a plain string replace and walks straight
+            // through markers, so a literal A'A here would have its own A's
+            // rewritten by the long-vowel pass — which is the same ordering
+            // hazard this file already records for TS/TZ. Expanded at the end.
+            if (standalone) o += ACHEN_LONG;
+            else o += s[i];
+        }
+        s = o;
+    }
     // EWTS long vowels A/I/U (kA -> K'A)
     replaceAll(s, "A", prot("'A"));
     replaceAll(s, "I", prot("'I"));
@@ -166,6 +250,7 @@ std::string ewtsToAcip(const std::string& ewts) {
     for (char c : s) {
         if (c == OPEN) { inProt = true; continue; }
         if (c == CLOSE) { inProt = false; continue; }
+        if (c == ACHEN_LONG) { out += "A'A"; continue; }
         out += inProt ? c : (char)std::toupper((unsigned char)c);
     }
     return out;
