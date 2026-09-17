@@ -755,6 +755,18 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_generated_docs_in_sync.py)
 
+  # The same shape one layer down. generated_docs_in_sync guards the pages;
+  # this guards the ORACLE DUMPS the Rule 2 batteries diff the C++ ports
+  # against. Those dumps are load-bearing proof that can go stale in silence:
+  # 5c3d77f8 fixed the EWTS prefix disambiguator in both engines, correctly
+  # and in parity, and left build/forward_reference.tsv holding the broken
+  # values - forward_battery red at 99.367% against a 100% floor, on a fix
+  # that was right. Nothing could catch it, because all three generators
+  # wrote to one hardcoded path and checking a dump meant overwriting it.
+  add_test(NAME oracle_fixtures_in_sync
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/oracle_fixtures_check.py)
+
   # Every other layer gate reads the LAYER - the artifact that had already
   # lost the data. This one compares the layer's builder against the PAGES,
   # which is the only place a silent parser drop is visible. It found 1,260

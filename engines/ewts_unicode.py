@@ -93,6 +93,23 @@ def native_onset(ons, dotted):
         a, b, c = ons
         if a in SUPERSTACK and b in SUPERSTACK[a] and c in SUBJOINABLE and b in SUBJOINABLE[c]:
             return CONS[a] + SUB[b] + SUB[c]
+        # A ROOT CARRYING TWO SUBJOINED LETTERS, e.g. grwa = ga + subjoined
+        # ra + subjoined wa. This has to be tried BEFORE the prefix rules
+        # below, because 'g' is also a prefix letter and 'r' can take a
+        # subjoined wa, so grwa matched "prefix g + root r + subjoined w"
+        # and came out ག ར ྭ with a FULL ra. Adding a wa-zur to a stack
+        # silently unstacked it: gra was གྲ and grwa was གརྭ.
+        # Specifically WA-ZUR on an already-formed stack: grwa = (ga +
+        # subjoined ra) + subjoined wa. Restricted to c == 'w' on purpose.
+        # The general "root with two subjoined letters" rule is WRONG and
+        # the battery said so: it turned brlabs from བརླབས (ba PREFIX + ra
+        # + subjoined la) into བྲླབས, breaking 24 ground-truth pairs. Wa-zur
+        # is the letter that attaches to a completed stack; r and l in that
+        # position are root relationships, and the prefix rules below handle
+        # them correctly.
+        if (c == 'w' and b in SUBJOINABLE and a in SUBJOINABLE[b]
+                and a in SUBJOINABLE['w']):
+            return CONS[a] + SUB[b] + SUB[c]
         if a in PRE and b in SUPERSTACK and c in SUPERSTACK[b]:
             return CONS[a] + CONS[b] + SUB[c]
         if a in PRE and c in SUBJOINABLE and b in SUBJOINABLE[c]:
