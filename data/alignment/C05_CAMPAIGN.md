@@ -68,6 +68,48 @@ alone has three and an indefinite group also exists, the total cannot be
 three. Geshe Michael's English stays verbatim; the register records it. Open items for Adam
 (agentive "by", "non" subword, tshal pa, seng ldeng E-169, E-157) stand.**
 
+## RESUMED 2026-09-17
+
+**c5p56 (166–168) landed.** 107 spans across three segments; the generator
+exited 0 on the merged spec; coverage 165 → **168/511**; the bank 41,759 →
+41,869 links. `no_supplied_span_head` holds at 0 for `pages_c05` with one new
+licensor, `c5p56/s166w5` — `sogs` owning the closing gesture "and such", the
+identical precedent already at `c5p33/s99w20`.
+
+**MODEL DEVIATION, recorded because the policy is explicit.** Adam's policy
+(2026-09-01) puts RECONCILE on Claude Fable 5.1, because the judgment steps
+decide whether a page lands. All three reconcilers **failed on a Fable 5.1
+safeguard error** — an API refusal, not a content problem — and the page was
+reconciled on **Claude Opus 5** instead. Propose ran on Opus 5 as the policy
+requires. If Fable becomes available again this is a reason to re-reconcile
+c5p56, not an established parity.
+
+The six proposals were recovered from the run journal after the failure rather
+than re-run. That matters: the 166–169 specs lost at the September pause were
+lost exactly this way, in session scratch that did not survive.
+
+**What the two angles were worth.** They disagreed substantially — on 167 only
+25 of 44 spans matched — and the reconciler settled every disagreement against
+the LANDED CORPUS rather than by taste, counting existing links for each
+contested string in `alignment_full_v1.json`. Three rulings worth keeping:
+
+- `zhes` → "that" was **dropped**. The layer has 146 `zhes` links at d=6 with
+  null English and not one on "that"; the complementizer is Geshe Michael's
+  English syntax, not the quotative.
+- `chos` → "something" was **dropped under rule 10**. `chos` is among the most
+  loaded headwords in the lexicon and "something" is a placeholder noun. It
+  would have passed every mechanical check and still been false.
+- `rigs` → "discrete being" was **kept, flagged, and named as the first thing
+  to surrender**. The reconciler found that C05:170 carries the same English
+  over `ris mthun`, so the verse abbreviates for its seven-syllable line; the
+  note names the full term in bold so a harvest cannot read it as a bare
+  lexical equation.
+
+Also checked and **not** filed: the `rigs`/`ris mthun` divergence. The only
+other carrier is C16:753, byte-identical in both columns and therefore the same
+file re-ingested rather than an independent witness — a variant reading can be
+shown, a defect cannot.
+
 ## Queues (wylie / english), C05
 (opened empty)
 
