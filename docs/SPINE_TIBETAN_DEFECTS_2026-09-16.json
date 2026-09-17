@@ -1,689 +1,691 @@
 {
- "found_by": "Comparing the spine's Tibetan against the Illuminator 5.40 archive's hand-keyed Tibetan over 11,952 shared headwords (98.49% agree, 181 disagree), 2026-09-16.",
- "confirmed_defect": {
-  "what": "A literal ASCII HYPHEN-MINUS (U+002D) inside the Tibetan script field.",
-  "why_it_is_certain": "U+002D is not a Tibetan character. The 'g-y' in Wylie is a disambiguation marker separating a ga prefix from a ya root; it must not survive into Unicode. Illuminator writes these correctly. This project's own engine REFUSES the wylie outright: wylie_to_unicode('g-yas') returns the rule-3 flag, so whatever wrote these values was not it.",
-  "total": 664,
-  "binding": 38,
-  "generated_and_flagged": 626,
-  "worst": "The binding ones carry tibetan_source NULL, i.e. they are labelled SOURCE-ATTESTED, so nothing in the app marks them as machine-made or suspect.",
-  "entries": [
-   {
-    "wylie": "gling g-yog",
-    "tibetan": "གླིང་ག-ཡོག",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "subcontinents",
-     "ancillary continents"
-    ],
-    "engine_said_when_filed": "གླིང་⟨g-yog⟩",
-    "engine_says_now": "གླིང་གཡོག",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "'dod pas log par g-yem pa",
-    "tibetan": "འདོད་པས་ལོག་པར་ག-ཡེམ་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "sexual misconduct"
-    ],
-    "engine_said_when_filed": "འདོད་པས་ལོག་པར་⟨g-yem⟩་པ",
-    "engine_says_now": "འདོད་པས་ལོག་པར་གཡེམ་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "nad g-yog",
-    "tibetan": "ནད་ག-ཡོག",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "nursing a sick person"
-    ],
-    "engine_said_when_filed": "ནད་⟨g-yog⟩",
-    "engine_says_now": "ནད་གཡོག",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "rnam g-yeng",
-    "tibetan": "རྣམ་ག-ཡེང",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "distractions"
-    ],
-    "engine_said_when_filed": "རྣམ་⟨g-yeng⟩",
-    "engine_says_now": "རྣམ་གཡེང",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "ma g-yengs",
-    "tibetan": "མ་ག-ཡེངས",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "not distracted"
-    ],
-    "engine_said_when_filed": "མ་⟨g-yengs⟩",
-    "engine_says_now": "མ་གཡེངས",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "ma g-yengs pa",
-    "tibetan": "མ་ག-ཡེངས་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "without distraction",
-     "not distracted"
-    ],
-    "engine_said_when_filed": "མ་⟨g-yengs⟩་པ",
-    "engine_says_now": "མ་གཡེངས་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "mi g-yo",
-    "tibetan": "མི་ག-ཡོ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "unshifting"
-    ],
-    "engine_said_when_filed": "མི་⟨g-yo⟩",
-    "engine_says_now": "མི་གཡོ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "mi g-yo ba",
-    "tibetan": "མི་ག-ཡོ་བ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "unshifting",
-     "do not shift"
-    ],
-    "engine_said_when_filed": "མི་⟨g-yo⟩་བ",
-    "engine_says_now": "མི་གཡོ་བ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "mi g-yo ba'i las",
-    "tibetan": "མི་ག-ཡོ་བའི་ལས",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "unshifting karma",
-     "\"unshifting\" deeds"
-    ],
-    "engine_said_when_filed": "མི་⟨g-yo⟩་བའི་ལས",
-    "engine_says_now": "མི་གཡོ་བའི་ལས",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yab",
-    "tibetan": "ག-ཡབ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "wave"
-    ],
-    "engine_said_when_filed": "⟨g-yab⟩",
-    "engine_says_now": "གཡབ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yab tsam g-yab tsam",
-    "tibetan": "ག-ཡབ་ཙམ་ག-ཡབ་ཙམ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "wave ... around"
-    ],
-    "engine_said_when_filed": "⟨g-yab⟩་ཙམ་⟨g-yab⟩་ཙམ",
-    "engine_says_now": "གཡབ་ཙམ་གཡབ་ཙམ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yam",
-    "tibetan": "ག-ཡམ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "follow"
-    ],
-    "engine_said_when_filed": "⟨g-yam⟩",
-    "engine_says_now": "གཡམ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-ya' dag pa",
-    "tibetan": "ག-ཡའ་དག་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "good, clean"
-    ],
-    "engine_said_when_filed": "⟨g-ya'⟩་དག་པ",
-    "engine_says_now": "གཡའ་དག་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yas",
-    "tibetan": "ག-ཡས",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "right"
-    ],
-    "engine_said_when_filed": "⟨g-yas⟩",
-    "engine_says_now": "གཡས",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yas phyogs",
-    "tibetan": "ག-ཡས་ཕྱོགས",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "a clockwise direction"
-    ],
-    "engine_said_when_filed": "⟨g-yas⟩་ཕྱོགས",
-    "engine_says_now": "གཡས་ཕྱོགས",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yas su",
-    "tibetan": "ག-ཡས་སུ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "on the right side"
-    ],
-    "engine_said_when_filed": "⟨g-yas⟩་སུ",
-    "engine_says_now": "གཡས་སུ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yul ngor",
-    "tibetan": "ག-ཡུལ་ངོར",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "war"
-    ],
-    "engine_said_when_filed": "⟨g-yul⟩་ངོར",
-    "engine_says_now": "གཡུལ་ངོར",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yul ngor spyod pa'i glang po che",
-    "tibetan": "ག-ཡུལ་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "war-elephant"
-    ],
-    "engine_said_when_filed": "⟨g-yul⟩་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
-    "engine_says_now": "གཡུལ་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yeng pa",
-    "tibetan": "ག-ཡེང་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "distracting"
-    ],
-    "engine_said_when_filed": "⟨g-yeng⟩་པ",
-    "engine_says_now": "གཡེང་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yengs",
-    "tibetan": "ག-ཡེངས",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "swayed",
-     "distracted",
-     "distraction"
-    ],
-    "engine_said_when_filed": "⟨g-yengs⟩",
-    "engine_says_now": "གཡེངས",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yengs pa",
-    "tibetan": "ག-ཡེངས་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "distraction",
-     "distracted",
-     "sensation of pleasure"
-    ],
-    "engine_said_when_filed": "⟨g-yengs⟩་པ",
-    "engine_says_now": "གཡེངས་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yem",
-    "tibetan": "ག-ཡེམ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "sex"
-    ],
-    "engine_said_when_filed": "⟨g-yem⟩",
-    "engine_says_now": "གཡེམ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yer bag",
-    "tibetan": "ག-ཡེར་བག",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "anxiety",
-     "feeling of anxiety"
-    ],
-    "engine_said_when_filed": "⟨g-yer⟩་བག",
-    "engine_says_now": "གཡེར་བག",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yel ba",
-    "tibetan": "ག-ཡེལ་བ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "stray"
-    ],
-    "engine_said_when_filed": "⟨g-yel⟩་བ",
-    "engine_says_now": "གཡེལ་བ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo",
-    "tibetan": "ག-ཡོ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "moving"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩",
-    "engine_says_now": "གཡོ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo sgyu",
-    "tibetan": "ག-ཡོ་སྒྱུ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "devious",
-     "deception"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ",
-    "engine_says_now": "གཡོ་སྒྱུ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo sgyu can",
-    "tibetan": "ག-ཡོ་སྒྱུ་ཅན",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "deceitful"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ་ཅན",
-    "engine_says_now": "གཡོ་སྒྱུ་ཅན",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo sgyu byed pa",
-    "tibetan": "ག-ཡོ་སྒྱུ་བྱེད་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "to act in a devious way"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ་བྱེད་པ",
-    "engine_says_now": "གཡོ་སྒྱུ་བྱེད་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo ldan",
-    "tibetan": "ག-ཡོ་ལྡན",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "moving"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་ལྡན",
-    "engine_says_now": "གཡོ་ལྡན",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo pa",
-    "tibetan": "ག-ཡོ་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "shifting"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་པ",
-    "engine_says_now": "གཡོ་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yo ba",
-    "tibetan": "ག-ཡོ་བ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "migrations",
-     "over",
-     "shifting",
-     "affected"
-    ],
-    "engine_said_when_filed": "⟨g-yo⟩་བ",
-    "engine_says_now": "གཡོ་བ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yog",
-    "tibetan": "ག-ཡོག",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "ancillary",
-     "work"
-    ],
-    "engine_said_when_filed": "⟨g-yog⟩",
-    "engine_says_now": "གཡོག",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yogs pa",
-    "tibetan": "ག-ཡོགས་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "covered"
-    ],
-    "engine_said_when_filed": "⟨g-yogs⟩་པ",
-    "engine_says_now": "གཡོགས་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yon",
-    "tibetan": "ག-ཡོན",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "left"
-    ],
-    "engine_said_when_filed": "⟨g-yon⟩",
-    "engine_says_now": "གཡོན",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "g-yon du",
-    "tibetan": "ག-ཡོན་དུ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "to the left side of"
-    ],
-    "engine_said_when_filed": "⟨g-yon⟩་དུ",
-    "engine_says_now": "གཡོན་དུ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "log par g-yem pa",
-    "tibetan": "ལོག་པར་ག-ཡེམ་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "sexual misconduct"
-    ],
-    "engine_said_when_filed": "ལོག་པར་⟨g-yem⟩་པ",
-    "engine_says_now": "ལོག་པར་གཡེམ་པ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "log g-yem",
-    "tibetan": "ལོག་ག-ཡེམ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "wrong sex",
-     "sexual misconduct",
-     "sex"
-    ],
-    "engine_said_when_filed": "ལོག་⟨g-yem⟩",
-    "engine_says_now": "ལོག་གཡེམ",
-    "engine_ok_now": true
-   },
-   {
-    "wylie": "sems g-yengs pa",
-    "tibetan": "སེམས་ག-ཡེངས་པ",
-    "tier": "glossary",
-    "tibetan_source": null,
-    "hgm_gloss": [
-     "distracted"
-    ],
-    "engine_said_when_filed": "སེམས་⟨g-yengs⟩་པ",
-    "engine_says_now": "སེམས་གཡེངས་པ",
-    "engine_ok_now": true
-   }
-  ]
- },
- "disagreement_needing_a_reader": {
-  "what": "Wa-zur written as BA + TSA-PHRU (U+0F39) where Illuminator writes SUBJOINED WA (U+0FAD).",
-  "why_it_is_NOT_filed_as_a_defect": "These headwords spell the sound with 'v' (khva, grva, sasrava), not 'w'. This project's engine refuses every 'v' form and converts every 'w' form, so it did not produce these either. Whether BA+TSA-PHRU is a legitimate convention for Sanskrit /v/ is a Tibetan orthography question, and asserting it is wrong would be guessing. It needs someone who knows the orthography.",
-  "total": 16,
-  "binding": 15,
-  "entries": [
-   {
-    "wylie": "sāsrava",
-    "tibetan": "སཱསྲབ༹",
-    "tier": null,
-    "engine_said_when_filed": "⟨sAsrava⟩",
-    "engine_says_now": "⟨sAsrava⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "khva ta",
-    "tibetan": "ཁབ༹་ཏ",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨khva⟩་ཏ",
-    "engine_says_now": "⟨khva⟩་ཏ",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "grva",
-    "tibetan": "གརབ༹",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨grva⟩",
-    "engine_says_now": "⟨grva⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "gnyen gyi dvang ma",
-    "tibetan": "གཉེན་གྱི་དབ༹ང་མ",
-    "tier": "glossary",
-    "engine_said_when_filed": "གཉེན་གྱི་⟨dvang⟩་མ",
-    "engine_says_now": "གཉེན་གྱི་⟨dvang⟩་མ",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "dvang ba",
-    "tibetan": "དབ༹ང་བ",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨dvang⟩་བ",
-    "engine_says_now": "⟨dvang⟩་བ",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "dvangs",
-    "tibetan": "དབ༹ངས",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨dvangs⟩",
-    "engine_says_now": "⟨dvangs⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "dvangs pa",
-    "tibetan": "དབ༹ངས་པ",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨dvangs⟩་པ",
-    "engine_says_now": "⟨dvangs⟩་པ",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "dmyal ba yi dvags dud 'gro",
-    "tibetan": "དམྱལ་བ་ཡི་དབ༹གས་དུད་འགྲོ",
-    "tier": "glossary",
-    "engine_said_when_filed": "དམྱལ་བ་ཡི་⟨dvags⟩་དུད་འགྲོ",
-    "engine_says_now": "དམྱལ་བ་ཡི་⟨dvags⟩་དུད་འགྲོ",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "rtsva",
-    "tibetan": "རཙབ༹",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨rtsva⟩",
-    "engine_says_now": "⟨rtsva⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "tshva",
-    "tibetan": "ཚབ༹",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨tshva⟩",
-    "engine_says_now": "⟨tshva⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "yi dvags",
-    "tibetan": "ཡི་དབ༹གས",
-    "tier": "glossary",
-    "engine_said_when_filed": "ཡི་⟨dvags⟩",
-    "engine_says_now": "ཡི་⟨dvags⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "yi dvags rnams",
-    "tibetan": "ཡི་དབ༹གས་རྣམས",
-    "tier": "glossary",
-    "engine_said_when_filed": "ཡི་⟨dvags⟩་རྣམས",
-    "engine_says_now": "ཡི་⟨dvags⟩་རྣམས",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "yi dvags mo rnams",
-    "tibetan": "ཡི་དབ༹གས་མོ་རྣམས",
-    "tier": "glossary",
-    "engine_said_when_filed": "ཡི་⟨dvags⟩་མོ་རྣམས",
-    "engine_says_now": "ཡི་⟨dvags⟩་མོ་རྣམས",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "r (aDverb marker)",
-    "tibetan": "ར ༼ཨཌབེ༹རབ་མརྐེར༽",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨r⟩་⟨(aDverb⟩་⟨marker)⟩",
-    "engine_says_now": "⟨r⟩་⟨(aDverb⟩་⟨marker)⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "rva",
-    "tibetan": "རབ༹",
-    "tier": "glossary",
-    "engine_said_when_filed": "⟨rva⟩",
-    "engine_says_now": "⟨rva⟩",
-    "engine_ok_now": false
-   },
-   {
-    "wylie": "lha mi yi dvags",
-    "tibetan": "ལྷ་མི་ཡི་དབ༹གས",
-    "tier": "glossary",
-    "engine_said_when_filed": "ལྷ་མི་ཡི་⟨dvags⟩",
-    "engine_says_now": "ལྷ་མི་ཡི་⟨dvags⟩",
-    "engine_ok_now": false
-   }
-  ]
- },
- "not_done": "NOTHING IN data/ OR THE SPINE HAS BEEN MODIFIED. The dictionary is not mine to edit; this is a report.",
- "downstream": {
-  "checked": "2026-09-16",
-  "ios_pack": {
-   "file": "ios/DiamondDrills/drills.json",
-   "affected_values": [
-    "ག-ཡོ་བ",
-    "ག-ཡོ་སྒྱུ",
-    "རྣམ་ག-ཡེང",
-    "ལོག་ག-ཡེམ",
-    "སེམས་ག-ཡེངས་པ"
-   ],
-   "note": "IT TRAVELLED. These are on the phone today: a student studying these cards sees Tibetan with a Roman hyphen in it."
+  "found_by": "Comparing the spine's Tibetan against the Illuminator 5.40 archive's hand-keyed Tibetan over 11,952 shared headwords (98.49% agree, 181 disagree), 2026-09-16.",
+  "confirmed_defect": {
+    "what": "A literal ASCII HYPHEN-MINUS (U+002D) inside the Tibetan script field.",
+    "why_it_is_certain": "U+002D is not a Tibetan character. The 'g-y' in Wylie is a disambiguation marker separating a ga prefix from a ya root; it must not survive into Unicode. Illuminator writes these correctly. This project's own engine REFUSES the wylie outright: wylie_to_unicode('g-yas') returns the rule-3 flag, so whatever wrote these values was not it.",
+    "total": 664,
+    "binding": 38,
+    "generated_and_flagged": 626,
+    "worst": "The binding ones carry tibetan_source NULL, i.e. they are labelled SOURCE-ATTESTED, so nothing in the app marks them as machine-made or suspect.",
+    "entries": [
+      {
+        "wylie": "gling g-yog",
+        "tibetan": "གླིང་ག-ཡོག",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "subcontinents",
+          "ancillary continents"
+        ],
+        "engine_said_when_filed": "གླིང་⟨g-yog⟩",
+        "engine_says_now": "གླིང་གཡོག",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "'dod pas log par g-yem pa",
+        "tibetan": "འདོད་པས་ལོག་པར་ག-ཡེམ་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "sexual misconduct"
+        ],
+        "engine_said_when_filed": "འདོད་པས་ལོག་པར་⟨g-yem⟩་པ",
+        "engine_says_now": "འདོད་པས་ལོག་པར་གཡེམ་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "nad g-yog",
+        "tibetan": "ནད་ག-ཡོག",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "nursing a sick person"
+        ],
+        "engine_said_when_filed": "ནད་⟨g-yog⟩",
+        "engine_says_now": "ནད་གཡོག",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "rnam g-yeng",
+        "tibetan": "རྣམ་ག-ཡེང",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "distractions"
+        ],
+        "engine_said_when_filed": "རྣམ་⟨g-yeng⟩",
+        "engine_says_now": "རྣམ་གཡེང",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "ma g-yengs",
+        "tibetan": "མ་ག-ཡེངས",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "not distracted"
+        ],
+        "engine_said_when_filed": "མ་⟨g-yengs⟩",
+        "engine_says_now": "མ་གཡེངས",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "ma g-yengs pa",
+        "tibetan": "མ་ག-ཡེངས་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "without distraction",
+          "not distracted"
+        ],
+        "engine_said_when_filed": "མ་⟨g-yengs⟩་པ",
+        "engine_says_now": "མ་གཡེངས་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "mi g-yo",
+        "tibetan": "མི་ག-ཡོ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "unshifting"
+        ],
+        "engine_said_when_filed": "མི་⟨g-yo⟩",
+        "engine_says_now": "མི་གཡོ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "mi g-yo ba",
+        "tibetan": "མི་ག-ཡོ་བ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "unshifting",
+          "do not shift"
+        ],
+        "engine_said_when_filed": "མི་⟨g-yo⟩་བ",
+        "engine_says_now": "མི་གཡོ་བ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "mi g-yo ba'i las",
+        "tibetan": "མི་ག-ཡོ་བའི་ལས",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "unshifting karma",
+          "\"unshifting\" deeds"
+        ],
+        "engine_said_when_filed": "མི་⟨g-yo⟩་བའི་ལས",
+        "engine_says_now": "མི་གཡོ་བའི་ལས",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yab",
+        "tibetan": "ག-ཡབ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "wave"
+        ],
+        "engine_said_when_filed": "⟨g-yab⟩",
+        "engine_says_now": "གཡབ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yab tsam g-yab tsam",
+        "tibetan": "ག-ཡབ་ཙམ་ག-ཡབ་ཙམ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "wave ... around"
+        ],
+        "engine_said_when_filed": "⟨g-yab⟩་ཙམ་⟨g-yab⟩་ཙམ",
+        "engine_says_now": "གཡབ་ཙམ་གཡབ་ཙམ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yam",
+        "tibetan": "ག-ཡམ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "follow"
+        ],
+        "engine_said_when_filed": "⟨g-yam⟩",
+        "engine_says_now": "གཡམ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-ya' dag pa",
+        "tibetan": "ག-ཡའ་དག་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "good, clean"
+        ],
+        "engine_said_when_filed": "⟨g-ya'⟩་དག་པ",
+        "engine_says_now": "གཡའ་དག་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yas",
+        "tibetan": "ག-ཡས",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "right"
+        ],
+        "engine_said_when_filed": "⟨g-yas⟩",
+        "engine_says_now": "གཡས",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yas phyogs",
+        "tibetan": "ག-ཡས་ཕྱོགས",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "a clockwise direction"
+        ],
+        "engine_said_when_filed": "⟨g-yas⟩་ཕྱོགས",
+        "engine_says_now": "གཡས་ཕྱོགས",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yas su",
+        "tibetan": "ག-ཡས་སུ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "on the right side"
+        ],
+        "engine_said_when_filed": "⟨g-yas⟩་སུ",
+        "engine_says_now": "གཡས་སུ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yul ngor",
+        "tibetan": "ག-ཡུལ་ངོར",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "war"
+        ],
+        "engine_said_when_filed": "⟨g-yul⟩་ངོར",
+        "engine_says_now": "གཡུལ་ངོར",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yul ngor spyod pa'i glang po che",
+        "tibetan": "ག-ཡུལ་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "war-elephant"
+        ],
+        "engine_said_when_filed": "⟨g-yul⟩་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
+        "engine_says_now": "གཡུལ་ངོར་སྤྱོད་པའི་གླང་པོ་ཆེ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yeng pa",
+        "tibetan": "ག-ཡེང་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "distracting"
+        ],
+        "engine_said_when_filed": "⟨g-yeng⟩་པ",
+        "engine_says_now": "གཡེང་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yengs",
+        "tibetan": "ག-ཡེངས",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "swayed",
+          "distracted",
+          "distraction"
+        ],
+        "engine_said_when_filed": "⟨g-yengs⟩",
+        "engine_says_now": "གཡེངས",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yengs pa",
+        "tibetan": "ག-ཡེངས་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "distraction",
+          "distracted",
+          "sensation of pleasure"
+        ],
+        "engine_said_when_filed": "⟨g-yengs⟩་པ",
+        "engine_says_now": "གཡེངས་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yem",
+        "tibetan": "ག-ཡེམ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "sex"
+        ],
+        "engine_said_when_filed": "⟨g-yem⟩",
+        "engine_says_now": "གཡེམ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yer bag",
+        "tibetan": "ག-ཡེར་བག",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "anxiety",
+          "feeling of anxiety"
+        ],
+        "engine_said_when_filed": "⟨g-yer⟩་བག",
+        "engine_says_now": "གཡེར་བག",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yel ba",
+        "tibetan": "ག-ཡེལ་བ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "stray"
+        ],
+        "engine_said_when_filed": "⟨g-yel⟩་བ",
+        "engine_says_now": "གཡེལ་བ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo",
+        "tibetan": "ག-ཡོ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "moving"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩",
+        "engine_says_now": "གཡོ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo sgyu",
+        "tibetan": "ག-ཡོ་སྒྱུ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "devious",
+          "deception"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ",
+        "engine_says_now": "གཡོ་སྒྱུ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo sgyu can",
+        "tibetan": "ག-ཡོ་སྒྱུ་ཅན",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "deceitful"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ་ཅན",
+        "engine_says_now": "གཡོ་སྒྱུ་ཅན",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo sgyu byed pa",
+        "tibetan": "ག-ཡོ་སྒྱུ་བྱེད་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "to act in a devious way"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་སྒྱུ་བྱེད་པ",
+        "engine_says_now": "གཡོ་སྒྱུ་བྱེད་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo ldan",
+        "tibetan": "ག-ཡོ་ལྡན",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "moving"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་ལྡན",
+        "engine_says_now": "གཡོ་ལྡན",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo pa",
+        "tibetan": "ག-ཡོ་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "shifting"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་པ",
+        "engine_says_now": "གཡོ་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yo ba",
+        "tibetan": "ག-ཡོ་བ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "migrations",
+          "over",
+          "shifting",
+          "affected"
+        ],
+        "engine_said_when_filed": "⟨g-yo⟩་བ",
+        "engine_says_now": "གཡོ་བ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yog",
+        "tibetan": "ག-ཡོག",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "ancillary",
+          "work"
+        ],
+        "engine_said_when_filed": "⟨g-yog⟩",
+        "engine_says_now": "གཡོག",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yogs pa",
+        "tibetan": "ག-ཡོགས་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "covered"
+        ],
+        "engine_said_when_filed": "⟨g-yogs⟩་པ",
+        "engine_says_now": "གཡོགས་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yon",
+        "tibetan": "ག-ཡོན",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "left"
+        ],
+        "engine_said_when_filed": "⟨g-yon⟩",
+        "engine_says_now": "གཡོན",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "g-yon du",
+        "tibetan": "ག-ཡོན་དུ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "to the left side of"
+        ],
+        "engine_said_when_filed": "⟨g-yon⟩་དུ",
+        "engine_says_now": "གཡོན་དུ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "log par g-yem pa",
+        "tibetan": "ལོག་པར་ག-ཡེམ་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "sexual misconduct"
+        ],
+        "engine_said_when_filed": "ལོག་པར་⟨g-yem⟩་པ",
+        "engine_says_now": "ལོག་པར་གཡེམ་པ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "log g-yem",
+        "tibetan": "ལོག་ག-ཡེམ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "wrong sex",
+          "sexual misconduct",
+          "sex"
+        ],
+        "engine_said_when_filed": "ལོག་⟨g-yem⟩",
+        "engine_says_now": "ལོག་གཡེམ",
+        "engine_ok_now": true
+      },
+      {
+        "wylie": "sems g-yengs pa",
+        "tibetan": "སེམས་ག-ཡེངས་པ",
+        "tier": "glossary",
+        "tibetan_source": null,
+        "hgm_gloss": [
+          "distracted"
+        ],
+        "engine_said_when_filed": "སེམས་⟨g-yengs⟩་པ",
+        "engine_says_now": "སེམས་གཡེངས་པ",
+        "engine_ok_now": true
+      }
+    ]
   },
-  "alignment_bank": {
-   "file": "data/alignment/alignment_full_v1.json",
-   "affected": 0,
-   "note": "Clean. The bank keys on ACIP and carries its own Tibetan, so it did not inherit the spine's."
+  "disagreement_needing_a_reader": {
+    "what": "Wa-zur written as BA + TSA-PHRU (U+0F39) where Illuminator writes SUBJOINED WA (U+0FAD).",
+    "why_it_is_NOT_filed_as_a_defect": "These headwords spell the sound with 'v' (khva, grva, sasrava), not 'w'. This project's engine refuses every 'v' form and converts every 'w' form, so it did not produce these either. Whether BA+TSA-PHRU is a legitimate convention for Sanskrit /v/ is a Tibetan orthography question, and asserting it is wrong would be guessing. It needs someone who knows the orthography.",
+    "total": 16,
+    "binding": 15,
+    "entries": [
+      {
+        "wylie": "sāsrava",
+        "tibetan": "སཱསྲབ༹",
+        "tier": null,
+        "engine_said_when_filed": "⟨sAsrava⟩",
+        "engine_says_now": "⟨sAsrava⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "khva ta",
+        "tibetan": "ཁབ༹་ཏ",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨khva⟩་ཏ",
+        "engine_says_now": "⟨khva⟩་ཏ",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "grva",
+        "tibetan": "གརབ༹",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨grva⟩",
+        "engine_says_now": "⟨grva⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "gnyen gyi dvang ma",
+        "tibetan": "གཉེན་གྱི་དབ༹ང་མ",
+        "tier": "glossary",
+        "engine_said_when_filed": "གཉེན་གྱི་⟨dvang⟩་མ",
+        "engine_says_now": "གཉེན་གྱི་⟨dvang⟩་མ",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "dvang ba",
+        "tibetan": "དབ༹ང་བ",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨dvang⟩་བ",
+        "engine_says_now": "⟨dvang⟩་བ",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "dvangs",
+        "tibetan": "དབ༹ངས",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨dvangs⟩",
+        "engine_says_now": "⟨dvangs⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "dvangs pa",
+        "tibetan": "དབ༹ངས་པ",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨dvangs⟩་པ",
+        "engine_says_now": "⟨dvangs⟩་པ",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "dmyal ba yi dvags dud 'gro",
+        "tibetan": "དམྱལ་བ་ཡི་དབ༹གས་དུད་འགྲོ",
+        "tier": "glossary",
+        "engine_said_when_filed": "དམྱལ་བ་ཡི་⟨dvags⟩་དུད་འགྲོ",
+        "engine_says_now": "དམྱལ་བ་ཡི་⟨dvags⟩་དུད་འགྲོ",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "rtsva",
+        "tibetan": "རཙབ༹",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨rtsva⟩",
+        "engine_says_now": "⟨rtsva⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "tshva",
+        "tibetan": "ཚབ༹",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨tshva⟩",
+        "engine_says_now": "⟨tshva⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "yi dvags",
+        "tibetan": "ཡི་དབ༹གས",
+        "tier": "glossary",
+        "engine_said_when_filed": "ཡི་⟨dvags⟩",
+        "engine_says_now": "ཡི་⟨dvags⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "yi dvags rnams",
+        "tibetan": "ཡི་དབ༹གས་རྣམས",
+        "tier": "glossary",
+        "engine_said_when_filed": "ཡི་⟨dvags⟩་རྣམས",
+        "engine_says_now": "ཡི་⟨dvags⟩་རྣམས",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "yi dvags mo rnams",
+        "tibetan": "ཡི་དབ༹གས་མོ་རྣམས",
+        "tier": "glossary",
+        "engine_said_when_filed": "ཡི་⟨dvags⟩་མོ་རྣམས",
+        "engine_says_now": "ཡི་⟨dvags⟩་མོ་རྣམས",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "r (aDverb marker)",
+        "tibetan": "ར ༼ཨཌབེ༹རབ་མརྐེར༽",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨r⟩་⟨(aDverb⟩་⟨marker)⟩",
+        "engine_says_now": "⟨r⟩་⟨(aDverb⟩་⟨marker)⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "rva",
+        "tibetan": "རབ༹",
+        "tier": "glossary",
+        "engine_said_when_filed": "⟨rva⟩",
+        "engine_says_now": "⟨rva⟩",
+        "engine_ok_now": false
+      },
+      {
+        "wylie": "lha mi yi dvags",
+        "tibetan": "ལྷ་མི་ཡི་དབ༹གས",
+        "tier": "glossary",
+        "engine_said_when_filed": "ལྷ་མི་ཡི་⟨dvags⟩",
+        "engine_says_now": "ལྷ་མི་ཡི་⟨dvags⟩",
+        "engine_ok_now": false
+      }
+    ]
+  },
+  "not_done": "NOTHING IN data/ OR THE SPINE HAS BEEN MODIFIED. The dictionary is not mine to edit; this is a report.",
+  "downstream": {
+    "checked": "2026-09-16",
+    "ios_pack": {
+      "file": "ios/DiamondDrills/drills.json",
+      "affected_values": [
+        "ག-ཡོ་བ",
+        "ག-ཡོ་སྒྱུ",
+        "རྣམ་ག-ཡེང",
+        "ལོག་ག-ཡེམ",
+        "སེམས་ག-ཡེངས་པ"
+      ],
+      "note": "IT TRAVELLED. These are on the phone today: a student studying these cards sees Tibetan with a Roman hyphen in it."
+    },
+    "alignment_bank": {
+      "file": "data/alignment/alignment_full_v1.json",
+      "affected": 0,
+      "note": "Clean. The bank keys on ACIP and carries its own Tibetan, so it did not inherit the spine's."
+    }
+  },
+  "resolution_2026-09-16": {
+    "hyphen_defect": "CAUSE FIXED IN THE ENGINE, DATA UNCHANGED. The engine no longer refuses these: '-' is the older Wylie/ACIP spelling of the prefix mark EWTS writes '.', and both are read now (5c3d77f8). 38 of the 38 sampled entries recorded here render correctly today; 0 still do not, and those carry a SEPARATE unreadable token (a '~~' corpus placeholder, or 'lva'), which is flagged rather than guessed at. The 664 stored Tibetan values still hold a literal U+002D and are still wrong; correcting them is the data project's, not this repo's — CLAUDE.md: the app imports a release, it does not own the data.",
+    "wa_zur_v": "RESOLVED, AND IT WAS NOT WHAT THIS FILE GUESSED. This section said the difference needed a reader because the headwords spell the sound with 'v'. They do, and 'v' is simply not EWTS: V is the ACIP code for wa-zur, and acip_to_ewts was passing it through unmapped, so the derived wylie was never valid in the first place. Fixed in both engines 2026-09-16 — a V with a letter before it becomes 'w'; a V that opens a syllable is left alone. Measured on the spine: 1,615 segments carry a subjoined V, none rendered without a flag, 1,113 do now; corpus-wide 35,791 -> 36,904 of 42,199. This is gap 2 of docs/FINDING_ACIP_EWTS_GAPS.md. The stored Tibetan for these headwords still spells wa-zur as BA + TSA-PHRU where Illuminator writes SUBJOINED WA, and that remains a data question for the data project. WHAT THIS DOES NOT FIX, stated plainly: all 16 of the entries listed above STILL flag, and correctly so. Their stored wylie is 'grva', 'dvangs', 'rtsva' — 'v' baked into the master's wylie column by the old converter — and 'v' is not EWTS, so refusing it is the engine doing its job. The fix converts ACIP as it is read, which is what the corpus, the Overlay and the drill pack go through; it cannot reach a column that was already written. Those 16 headwords need the data project to re-derive their wylie.",
+    "still_open": "Gap 3, the visarga ':', is untouched. GA-YAS is still not understood and still not guessed at. A separate defect surfaced while measuring: engines/ewts_unicode.py RAISES KeyError on 8 spine rows where an invalid character strands a Sanskrit final in onset position, while the C++ port correctly flags them — the oracle is the broken one, and any Python-side tooling over the corpus dies on those rows.",
+    "note": "engine_says values in the sections above were recorded before the fixes and have been re-run; each entry now carries engine_said_when_filed alongside engine_says_now."
+  },
+  "stva_cluster_2026-09-17": {
+    "what": "Our engine and the Illuminator disagree on the Sanskrit stva cluster, and our own ground truth is silent.",
+    "ours": "wylie_to_unicode('stwaM') gives སྟྭཾ = 0F66 0F9F 0FAD 0F7E — sa with a SUBJOINED ta, then wa-zur. One stack.",
+    "illuminator": "Writes སཏྭ = 0F66 0F4F 0FAD — sa FULL, then ta with wa-zur — in all 10 of its records for the cluster, including bodhi satva, stva re, dgra stva, satva. Its own transliteration of སཏྭ is 'stva', so it maps the same input string to a different rendering.",
+    "why_it_is_not_being_changed": "The difference is syllabification: sa-tva as two units against stva as one stack. Which is right depends on what the source text means by the ACIP STVAm, and this project's own ground truth cannot say — ZERO of the 105,634 master entries touch the cluster, so there is no attested pair to measure against. Changing a canonical engine on one external source, against no internal evidence, is guessing with a citation attached. Filed for a reader with Sanskrit competence, or for Geshe Michael to rule.",
+    "reach": "14 corpus segments contain STVAm.",
+    "found_by": "the visarga audit's adversarial lens, 2026-09-16; checked against the Illuminator and the master 2026-09-17."
+  },
+  "glossary_first_equivalent_2026-09-17": {
+    "found_by": "Adam, reading the Walkthrough pane: \"Why is GUS being rendered as 'i' here? I've never noticed that GUS can be rendered as 'i'.\"",
+    "what_the_tool_shows": "Step 5 lists GUS as 'i · respect' and step 6, which takes the FIRST equivalent, prints 'i'.",
+    "where_it_comes_from": "The master's own glossary tier: hgm_gloss for 'gus' is ['i','respect'], hgm_evidence {'tier':'glossary','source':'HTG2016'}, status hgm-attested. The tool is showing what it was given, in the order it was given.",
+    "the_scale_measured": "24 of 12,004 glossed entries lead with a single character (the earlier figure of 10 counted single LETTERS and missed the punctuation leads). 22 of the 24 are correct and are untouched.",
+    "MOST_OF_THEM_ARE_CORRECT": "This is the part worth saying, because the shape looks alarming and mostly is not. 'i' is the English pronoun I, stored lowercase: ngas (Hopkins 'by me'), bdag ('self; I'), rang, nga rang all mean I, so the equivalent is right and only its capital is missing. rnams -> 's' is the English plural for a plural marker; zin nas -> 'ed' is the English past for a completive; yod gyur pa -> \"'s\" is the possessive; bya -> \"'ll\" is defensible because bya is the future stem of byed and 'll is the English future.",
+    "the_two_that_are_wrong": {
+      "gus": "Means respect or reverence — Hopkins gives 'respectfully; respect', and the second equivalent is 'respect'. 'I' does not fit it. Geshe Michael's own English in the corpus reads 'In deepest reverence, expressed through all three doors, I bow to the lotus feet…' (C03:297), so an adjacent first-person pronoun is the likely source. 310 corpus segments carry a standalone gus.",
+      "gis": "The agentive particle — Hopkins '(as instrumental particle) by; by means of'. \"'ll\" does not fit it; 'with', 'by' and 'in', which follow, do."
+    },
+    "the_software_half": "SUPERSEDED 2026-09-17, and the way it was superseded is the lesson. This read 'a UI ruling for Adam, NOT a silent fix' -- and then the ruling was never put in front of him. It sat here, in a file only TODO.md references, and nothing on screen changed. He said so: 'i'm still seeing GUS rendered as \"i\"'. A finding filed where the person who must rule on it will not see it is a finding that does not exist.",
+    "lowercase_I": "Worth deciding separately: the pronoun I is stored lowercase throughout, so the pane shows 'i'. That is why the entries look like fragments at a glance. Restoring the capital is a data question, not ours.",
+    "nothing_modified": "No data file was touched. This is a report.",
+    "fixed_2026-09-17": "allcore's loader (core/src/spine.cpp, demoteKnownArtifacts) moves gus->'i' and gis->\"'ll\" out of the headline slot. NOTHING IS DELETED: both are kept, moved to the back of hgm_gloss, and still listed in step 5. Done at the LOADER because nine call sites take hgm_gloss.front() as the meaning of a word, so a fix in the walkthrough pane would have left eight of them showing it -- and because the iOS drill pack is built from the same allcore and inherits it. Proved by core/tests/gloss_demotion_smoke.cpp, which also pins the four that must NOT move.",
+    "why_a_sweep_was_refused": "Three mechanical rules were tested and all three would have made the tool worse. 'Prefer the longer equivalent' renders bdag as 'some non-existent \"self.\"'. 'Demote single characters' breaks bdag, rang, ngas, nga rang (all genuinely 'I') and rnams ('s' for a plural marker). Ranking by corpus attestation cannot help at all here: gus has ZERO aligned links, so there is no evidence to rank its equivalents with, while bdag's 'i' is attested 12 times. Only a reading separates gus from bdag, which is why the table is two rows long and each row cites Hopkins plus corpus counts."
+  },
+  "gloss_audit_shortlist_2026-09-17": {
+    "how_it_was_produced": "tools/gloss_audit_against_illuminator.py narrowed 11,968 glossed headwords to 55 candidates — those whose FIRST equivalent is entirely closed-class where the Illuminator's are content words. I then read all 55 and checked each against Hopkins, which is carried in the spine, so every line below has two independent sources against it rather than one.",
+    "CONFIRMED_BY_THREE_SOURCES": {
+      "srab pa": "ours 's their' — a fragment. Hopkins: 'smooth; to diminish; thin out; fine; thin'. Illuminator: 'to make thinner'.",
+      "bsgo ba": "ours 'us to do' — a fragment, and it reads like a slice of '…told us to do…'. Hopkins: '{PH}command; order'. Illuminator: 'instruction, advice'.",
+      "'dus pa": "ours 'this is'. Hopkins: 'included; assembled; collected; aggregation'. Illuminator: 'that which has congregated'.",
+      "rgyud bla ma": "ours leads with 'it'. Hopkins: \"[Maitreya's] Great Vehicle Treatise on the Sublime Continuum\". Illuminator: 'the highest continuum, uttaratantra'. Our OWN later equivalents ('higher line') are right; it is the first that is wrong, and the first is what the Walkthrough prints.",
+      "tshod": "ours 'there, question'. Hopkins: '{PH}amount; quantity'. Illuminator: 'measurement'.",
+      "bag": "ours 'any'. Hopkins: 'meal; barley; flour; {PH}attention; care; caution'. Illuminator: 'anxiety over a particular issue, consternation'."
+    },
+    "LIKELY_two_sources_only": {
+      "aa ma": "ours 'she'. No Hopkins. Illuminator: 'mother'. Note the master ALSO carries 'a ma' as a separate headword with Hopkins 'mother [term of address]' and no hgm_gloss — so this looks like a spelling variant that collected a stray equivalent.",
+      "nyes med": "ours 'is not' — a fragment. Illuminator: 'faultless, without fault, blameless'.",
+      "thob skal": "ours 'at all'. Illuminator: 'lot, allotment, share'.",
+      "gsum cha": "ours 'three of the'. Illuminator: 'a third' — gsum cha is one third, and 'three of the' inverts it."
+    },
+    "A_DEMONSTRATED_FALSE_POSITIVE_worth_keeping": "bam. Ours says 'or'; the Illuminator says 'lifeless, rotten, putrid'; and HOPKINS AGREES WITH US — 'and; or; particle indicating question'. The Illuminator is describing a different word that is spelled the same. This is the tool's main failure mode caught in the act, and it is why the 55 are candidates and not findings: shing is 'and/or' and also 'tree', nas is 'from' and also barley, la and ka and ga are particles and also letter names. Roughly 40 of the 55 are this, or are the Illuminator's example sentences ('that boy threw a stone' for des).",
+    "what_this_does_NOT_say": "It does not say what the equivalents should be. hgm_gloss is binding and these are Geshe Michael's own glossary entries; replacing one is his ruling or the data project's, never this repo's and never a machine's. What is established is that ten of them do not describe the headword, on the agreement of two independent reference dictionaries.",
+    "scale": "10 of 11,968 glossed headwords, found from 55 machine-narrowed candidates."
   }
- },
- "resolution_2026-09-16": {
-  "hyphen_defect": "CAUSE FIXED IN THE ENGINE, DATA UNCHANGED. The engine no longer refuses these: '-' is the older Wylie/ACIP spelling of the prefix mark EWTS writes '.', and both are read now (5c3d77f8). 38 of the 38 sampled entries recorded here render correctly today; 0 still do not, and those carry a SEPARATE unreadable token (a '~~' corpus placeholder, or 'lva'), which is flagged rather than guessed at. The 664 stored Tibetan values still hold a literal U+002D and are still wrong; correcting them is the data project's, not this repo's — CLAUDE.md: the app imports a release, it does not own the data.",
-  "wa_zur_v": "RESOLVED, AND IT WAS NOT WHAT THIS FILE GUESSED. This section said the difference needed a reader because the headwords spell the sound with 'v'. They do, and 'v' is simply not EWTS: V is the ACIP code for wa-zur, and acip_to_ewts was passing it through unmapped, so the derived wylie was never valid in the first place. Fixed in both engines 2026-09-16 — a V with a letter before it becomes 'w'; a V that opens a syllable is left alone. Measured on the spine: 1,615 segments carry a subjoined V, none rendered without a flag, 1,113 do now; corpus-wide 35,791 -> 36,904 of 42,199. This is gap 2 of docs/FINDING_ACIP_EWTS_GAPS.md. The stored Tibetan for these headwords still spells wa-zur as BA + TSA-PHRU where Illuminator writes SUBJOINED WA, and that remains a data question for the data project. WHAT THIS DOES NOT FIX, stated plainly: all 16 of the entries listed above STILL flag, and correctly so. Their stored wylie is 'grva', 'dvangs', 'rtsva' — 'v' baked into the master's wylie column by the old converter — and 'v' is not EWTS, so refusing it is the engine doing its job. The fix converts ACIP as it is read, which is what the corpus, the Overlay and the drill pack go through; it cannot reach a column that was already written. Those 16 headwords need the data project to re-derive their wylie.",
-  "still_open": "Gap 3, the visarga ':', is untouched. GA-YAS is still not understood and still not guessed at. A separate defect surfaced while measuring: engines/ewts_unicode.py RAISES KeyError on 8 spine rows where an invalid character strands a Sanskrit final in onset position, while the C++ port correctly flags them — the oracle is the broken one, and any Python-side tooling over the corpus dies on those rows.",
-  "note": "engine_says values in the sections above were recorded before the fixes and have been re-run; each entry now carries engine_said_when_filed alongside engine_says_now."
- },
- "stva_cluster_2026-09-17": {
-  "what": "Our engine and the Illuminator disagree on the Sanskrit stva cluster, and our own ground truth is silent.",
-  "ours": "wylie_to_unicode('stwaM') gives སྟྭཾ = 0F66 0F9F 0FAD 0F7E — sa with a SUBJOINED ta, then wa-zur. One stack.",
-  "illuminator": "Writes སཏྭ = 0F66 0F4F 0FAD — sa FULL, then ta with wa-zur — in all 10 of its records for the cluster, including bodhi satva, stva re, dgra stva, satva. Its own transliteration of སཏྭ is 'stva', so it maps the same input string to a different rendering.",
-  "why_it_is_not_being_changed": "The difference is syllabification: sa-tva as two units against stva as one stack. Which is right depends on what the source text means by the ACIP STVAm, and this project's own ground truth cannot say — ZERO of the 105,634 master entries touch the cluster, so there is no attested pair to measure against. Changing a canonical engine on one external source, against no internal evidence, is guessing with a citation attached. Filed for a reader with Sanskrit competence, or for Geshe Michael to rule.",
-  "reach": "14 corpus segments contain STVAm.",
-  "found_by": "the visarga audit's adversarial lens, 2026-09-16; checked against the Illuminator and the master 2026-09-17."
- },
- "glossary_first_equivalent_2026-09-17": {
-  "found_by": "Adam, reading the Walkthrough pane: \"Why is GUS being rendered as 'i' here? I've never noticed that GUS can be rendered as 'i'.\"",
-  "what_the_tool_shows": "Step 5 lists GUS as 'i · respect' and step 6, which takes the FIRST equivalent, prints 'i'.",
-  "where_it_comes_from": "The master's own glossary tier: hgm_gloss for 'gus' is ['i','respect'], hgm_evidence {'tier':'glossary','source':'HTG2016'}, status hgm-attested. The tool is showing what it was given, in the order it was given.",
-  "the_scale_measured": "Exactly 10 of 12,004 glossed entries have a single letter or bare morpheme as their FIRST equivalent, and 47 have one anywhere in the list.",
-  "MOST_OF_THEM_ARE_CORRECT": "This is the part worth saying, because the shape looks alarming and mostly is not. 'i' is the English pronoun I, stored lowercase: ngas (Hopkins 'by me'), bdag ('self; I'), rang, nga rang all mean I, so the equivalent is right and only its capital is missing. rnams -> 's' is the English plural for a plural marker; zin nas -> 'ed' is the English past for a completive; yod gyur pa -> \"'s\" is the possessive; bya -> \"'ll\" is defensible because bya is the future stem of byed and 'll is the English future.",
-  "the_two_that_are_wrong": {
-   "gus": "Means respect or reverence — Hopkins gives 'respectfully; respect', and the second equivalent is 'respect'. 'I' does not fit it. Geshe Michael's own English in the corpus reads 'In deepest reverence, expressed through all three doors, I bow to the lotus feet…' (C03:297), so an adjacent first-person pronoun is the likely source. 310 corpus segments carry a standalone gus.",
-   "gis": "The agentive particle — Hopkins '(as instrumental particle) by; by means of'. \"'ll\" does not fit it; 'with', 'by' and 'in', which follow, do."
-  },
-  "the_software_half": "Step 6 takes the first equivalent and says so in its own caption. With a correct list that is a reasonable default; with these two it prints the one equivalent that does not belong. Whether the pane should prefer a longer or more substantive equivalent is a UI ruling for Adam, NOT a silent fix: choosing between Geshe Michael's equivalents is the translator's job, which is why step 5 lists them all.",
-  "lowercase_I": "Worth deciding separately: the pronoun I is stored lowercase throughout, so the pane shows 'i'. That is why the entries look like fragments at a glance. Restoring the capital is a data question, not ours.",
-  "nothing_modified": "No data file was touched. This is a report."
- },
- "gloss_audit_shortlist_2026-09-17": {
-  "how_it_was_produced": "tools/gloss_audit_against_illuminator.py narrowed 11,968 glossed headwords to 55 candidates — those whose FIRST equivalent is entirely closed-class where the Illuminator's are content words. I then read all 55 and checked each against Hopkins, which is carried in the spine, so every line below has two independent sources against it rather than one.",
-  "CONFIRMED_BY_THREE_SOURCES": {
-   "srab pa": "ours 's their' — a fragment. Hopkins: 'smooth; to diminish; thin out; fine; thin'. Illuminator: 'to make thinner'.",
-   "bsgo ba": "ours 'us to do' — a fragment, and it reads like a slice of '…told us to do…'. Hopkins: '{PH}command; order'. Illuminator: 'instruction, advice'.",
-   "'dus pa": "ours 'this is'. Hopkins: 'included; assembled; collected; aggregation'. Illuminator: 'that which has congregated'.",
-   "rgyud bla ma": "ours leads with 'it'. Hopkins: \"[Maitreya's] Great Vehicle Treatise on the Sublime Continuum\". Illuminator: 'the highest continuum, uttaratantra'. Our OWN later equivalents ('higher line') are right; it is the first that is wrong, and the first is what the Walkthrough prints.",
-   "tshod": "ours 'there, question'. Hopkins: '{PH}amount; quantity'. Illuminator: 'measurement'.",
-   "bag": "ours 'any'. Hopkins: 'meal; barley; flour; {PH}attention; care; caution'. Illuminator: 'anxiety over a particular issue, consternation'."
-  },
-  "LIKELY_two_sources_only": {
-   "aa ma": "ours 'she'. No Hopkins. Illuminator: 'mother'. Note the master ALSO carries 'a ma' as a separate headword with Hopkins 'mother [term of address]' and no hgm_gloss — so this looks like a spelling variant that collected a stray equivalent.",
-   "nyes med": "ours 'is not' — a fragment. Illuminator: 'faultless, without fault, blameless'.",
-   "thob skal": "ours 'at all'. Illuminator: 'lot, allotment, share'.",
-   "gsum cha": "ours 'three of the'. Illuminator: 'a third' — gsum cha is one third, and 'three of the' inverts it."
-  },
-  "A_DEMONSTRATED_FALSE_POSITIVE_worth_keeping": "bam. Ours says 'or'; the Illuminator says 'lifeless, rotten, putrid'; and HOPKINS AGREES WITH US — 'and; or; particle indicating question'. The Illuminator is describing a different word that is spelled the same. This is the tool's main failure mode caught in the act, and it is why the 55 are candidates and not findings: shing is 'and/or' and also 'tree', nas is 'from' and also barley, la and ka and ga are particles and also letter names. Roughly 40 of the 55 are this, or are the Illuminator's example sentences ('that boy threw a stone' for des).",
-  "what_this_does_NOT_say": "It does not say what the equivalents should be. hgm_gloss is binding and these are Geshe Michael's own glossary entries; replacing one is his ruling or the data project's, never this repo's and never a machine's. What is established is that ten of them do not describe the headword, on the agreement of two independent reference dictionaries.",
-  "scale": "10 of 11,968 glossed headwords, found from 55 machine-narrowed candidates."
- }
 }

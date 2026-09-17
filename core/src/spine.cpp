@@ -3,7 +3,10 @@
 
 #include <sqlite3.h>
 
+#include <algorithm>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 namespace allcore {
 namespace {
@@ -11,6 +14,65 @@ namespace {
 std::string columnText(sqlite3_stmt* s, int col) {
     const unsigned char* t = sqlite3_column_text(s, col);
     return t ? reinterpret_cast<const char*>(t) : "";
+}
+
+// RULE 1 AND THIS TABLE. hgm_gloss is binding, and NOTHING HERE DELETES OR
+// REWRITES IT: every equivalent the master carries is still present, still
+// counted, still shown. What this does is move an equivalent OUT OF THE
+// HEADLINE SLOT when a reader has established it does not belong to that
+// headword -- because nine call sites take hgm_gloss.front() as "the"
+// meaning, and for these two headwords the front one is an artifact.
+//
+// Adam, reading the walkthrough pane: "Why is GUS being rendered as 'i'
+// here? I've never noticed that GUS can be rendered as 'i'." It was measured
+// and reported and NOT fixed, and he said so again: "i'm still seeing GUS
+// rendered as 'i'." Fixing it in the pane would have left the other eight
+// call sites showing it, which is the inversion class this repo keeps
+// finding; the loader is the one place that reaches all of them, and the iOS
+// drill pack, which is built from this same allcore.
+//
+// THE BAR FOR A ROW HERE is a named external authority plus corpus evidence,
+// recorded in docs/SPINE_TIBETAN_DEFECTS_2026-09-16.json. It is deliberately
+// tiny and it is NOT a place to tidy the dictionary. All 24 entries that lead
+// with a single character were read: 22 are CORRECT and are untouched --
+// bdag, rang, ngas and nga rang all mean "I" and keep it (bdag's "i" is
+// attested six times in the aligned corpus), rnams -> "s" is the English
+// plural standing for a plural marker, and the sentence-final particles
+// really do correspond to a full stop in Geshe Michael's English.
+struct GlossDemotion {
+    const char* wylie;
+    const char* gloss;
+};
+const GlossDemotion kGlossDemotions[] = {
+    // gus means respect or reverence -- Hopkins "respectfully; respect" --
+    // and the entry's own second equivalent is "respect". 310 corpus segments
+    // carry a standalone gus and not one aligns it to a first-person pronoun;
+    // the aligned bank has no link on gus at all. The "i" most plausibly came
+    // from an adjacent "I" in a line such as C03:297, "In deepest reverence,
+    // expressed through all three doors, I bow to the lotus feet".
+    {"gus", "i"},
+    // gis is the agentive particle -- Hopkins "(as instrumental particle) by;
+    // by means of". "'ll" is an English future contraction and cannot render
+    // an instrumental; "with", "by" and "in", which follow it in this same
+    // entry, can.
+    {"gis", "'ll"},
+};
+
+// Moves a demoted equivalent to the BACK of the list. Never removes one, and
+// never empties an entry: a headword whose only equivalent is the demoted one
+// keeps it, because showing a doubted gloss beats showing nothing and
+// inventing the alternative would be composing.
+void demoteKnownArtifacts(const std::string& wylie,
+                          std::vector<std::string>& gs) {
+    if (gs.size() < 2) return;
+    for (const auto& d : kGlossDemotions) {
+        if (wylie != d.wylie) continue;
+        auto it = std::find(gs.begin(), gs.end(), d.gloss);
+        if (it == gs.end() || it + 1 == gs.end()) continue;
+        std::string g = std::move(*it);
+        gs.erase(it);
+        gs.push_back(std::move(g));
+    }
 }
 
 // Minimal JSON string-array parser for the columns build_spine.py writes
@@ -119,6 +181,7 @@ Entry Spine::entryFromRow(void* stmt) const {
     e.sanskrit_reference = columnText(s, 7);
     e.hopkins_reference = columnText(s, 8);
     e.hgm_gloss = jsonStringArray(columnText(s, 9));
+    demoteKnownArtifacts(e.wylie, e.hgm_gloss);
     e.tier = columnText(s, 10);
     e.status = columnText(s, 11);
     e.flags = jsonStringArray(columnText(s, 12));

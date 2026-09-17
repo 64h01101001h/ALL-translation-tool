@@ -165,6 +165,17 @@ target_link_libraries(table_conformance PRIVATE allcore)
 add_test(NAME table_conformance
          COMMAND table_conformance ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
 
+# 2026-09-17: nine call sites take hgm_gloss.front() as "the" meaning of a
+# word, and for two headwords the front one is an artifact -- gus -> "i",
+# gis -> "'ll". The loader demotes those two out of the headline slot without
+# deleting them. This proves the two that move, the four that must NOT move,
+# and that nothing is ever removed, which rule 1 makes the important half.
+add_executable(gloss_demotion_smoke tests/gloss_demotion_smoke.cpp)
+target_link_libraries(gloss_demotion_smoke PRIVATE allcore)
+add_test(NAME gloss_demotion
+         COMMAND gloss_demotion_smoke ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db)
+set_tests_properties(gloss_demotion PROPERTIES SKIP_RETURN_CODE 77)
+
 add_executable(cases_smoke tests/cases_smoke.cpp)
 target_link_libraries(cases_smoke PRIVATE allcore)
 add_test(NAME cases_smoke COMMAND cases_smoke)
