@@ -68,6 +68,53 @@ alone has three and an indefinite group also exists, the total cannot be
 three. Geshe Michael's English stays verbatim; the register records it. Open items for Adam
 (agentive "by", "non" subword, tshal pa, seng ldeng E-169, E-157) stand.**
 
+## The agentive "by", measured 2026-09-17 — Adam to rule
+
+This has blocked a reconciler three times now, most recently on C05:172, where
+it was deliberately left null rather than settled in passing. It was recorded
+as a **conflict** between two rulings (C05:27 banked `gyis` → "by"; C05:28
+nulled `kyis` because "the 'by' belongs to the passive frame"). Measured across
+the whole bank, **it is not a conflict — it is one policy applied case by
+case**, and the numbers say so.
+
+**The population is much smaller than it looks.** 608 links in the bank have a
+bare agentive particle as their whole span. Of those, **329 sit in a segment
+whose English contains no "by" at all** — there is nothing to link to, so rule
+5 forces the null. They were never in dispute. The real population is the 243
+where a "by" was actually available:
+
+| of the 243 agentives with a "by" available | count |
+|---|---|
+| linked to it | 37 |
+| nulled | 206 |
+| linked to something else ("through", "because", "with") | 13 |
+
+**The genitive is the control, and it behaves identically.** 1,381 bare
+genitive particles: 93% nulled, 7% given an English exponent, the commonest
+being "of" (62) — the exact same shape as the agentive. So the bank already
+treats both relational particles the same way: null by default, linked when
+Geshe Michael's English visibly carries the relation. Nobody decided that; it
+emerged. That is worth knowing before it is overturned.
+
+**What is actually at stake.** Nothing in the dictionary. These are d=6
+particles and d=6 does not enter the headword harvest, so no equivalent is
+created or lost either way. The stake is page-to-page consistency, and the
+answer to a student who clicks the particle and asks what it means.
+
+**My recommendation, for Adam to accept or overturn in one line:** keep the
+present practice and write it down — *link the agentive to "by" only when that
+"by" governs the very agent the particle marks, and null it otherwise.* The
+argument against ("the 'by' belongs to the English passive, not to the
+particle") proves too much: by that reasoning the genitive could never be
+linked to "of" either, and the bank links it 62 times without anyone objecting.
+The argument for is rule 5's own test — does this morpheme have an exponent in
+the English? When Geshe Michael wrote "by", it does.
+
+**What must NOT be done:** a sweep. There is no mechanical way to tell the 37
+from the 206, because the question is whether a particular "by" governs a
+particular agent, and that is a reading. Anyone changing this should change the
+rule going forward and leave the 42,345 banked links alone.
+
 ## RESUMED 2026-09-17
 
 **c5p56 (166–168) landed.** 107 spans across three segments; the generator

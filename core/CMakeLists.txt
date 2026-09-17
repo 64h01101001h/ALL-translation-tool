@@ -874,6 +874,26 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/kawachen_index.py --check)
   set_tests_properties(kawachen_index PROPERTIES SKIP_RETURN_CODE 77)
+
+  # 2026-09-17: the suite list ctest runs is the one written at CONFIGURE
+  # time, and nothing noticed when a build directory fell behind the CMake
+  # files describing it. cmake-build-release was configured on the 15th;
+  # core/CMakeLists.txt was edited on the 17th; the three suites added in
+  # between were invisible to `ctest -N` - not failing, not skipped, absent.
+  # They were oracle_fixtures_in_sync, oracle_never_raises and
+  # press_relaunch_trap: the gates written that same week because three
+  # defects had shipped in silence. All three passed the moment they were
+  # run by hand, so nothing was hiding - but for two days the digest told
+  # leadership "124 automatic checks, all passing" while three of the 124
+  # had never executed anywhere.
+  #
+  # This refuses on a build directory older than the CMake files, and on any
+  # suite that is declared but that no build directory registers. Both are
+  # "not run is not passed" wearing a build-system hat.
+  add_test(NAME checks_registered
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/count_checks.py --gate
+                   --build ${CMAKE_BINARY_DIR})
 endif()
 
 # the iOS drill pack (path A): every drill generated on the Mac by the same
