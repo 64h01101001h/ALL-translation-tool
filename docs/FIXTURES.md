@@ -116,3 +116,43 @@ Inside the test binary, an absent fixture is a **failure**, not a
 `[SKIP]` that returns 0. Whether the suite runs at all is a
 configure-time decision; by the time the binary starts, the data is
 supposed to be there.
+
+---
+
+## Which of these are actually committed — checked 2026-09-17
+
+The roots above say `.gitignore` excludes `build/`, `library/` and
+`data/extracted/`, and a reader takes from that that the fixtures listed here
+will be absent from a fresh clone. **Eight of the 23 paths named in this file
+are committed anyway**, forced in past the ignore rules:
+
+`build/forward_reference.tsv` · `build/towylie_reference.tsv` ·
+`build/weird_top.tsv` · `data/das/` · `data/extracted/` ·
+`data/extracted/apparatus_bibliography.json` ·
+`data/extracted/work_subjects.tsv` · `data/teaching/`
+
+So the batteries that consume them RUN on a fresh clone rather than skipping,
+which is the opposite of what this page implied. Re-derive the list with:
+
+    git ls-files --error-unmatch <path>
+
+### `towylie_reference.tsv`: not circular as far as can be shown, and frozen
+
+Its own header records the provenance — *"pyewts.toWylie reference fixtures
+(OpenPecha/pyewts master, Apache-2.0)"*, over the master's tibetan column plus
+a strided sample of 84000 TM native unicode — so the expected values come from
+a third-party implementation and not from our port.
+
+**But it matches 109,490 of 109,490 rows, 100.000%**, and that is the exact
+shape a fixture snapshotted from the port under test would have. The two
+cannot be told apart from inside this repository, because pyewts is not
+installed here and regenerating is the only test that would separate them.
+
+What can be said: the round-trip half of the same battery reads 4,875/5,000,
+so the battery is not passing everything put in front of it; and the fixture's
+attribution is recorded in the file rather than asserted here. What cannot be
+said is that the 100% has been independently reproduced. Anyone who installs
+pyewts should regenerate and diff — that single act settles it.
+
+This is BUILD-7 for this fixture: no generator in the repo, so it is frozen at
+whatever it was, and the only proof for that engine rests on it.
