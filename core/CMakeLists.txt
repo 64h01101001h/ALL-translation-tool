@@ -915,6 +915,22 @@ if(Python3_FOUND)
   # runtime allows because it wraps the body in an async function. It now
   # mimics the runtime, and is mutation-tested against both an unterminated
   # string and a TypeScript annotation.
+  # 2026-09-17: every gate over the alignment pages carried its own hardcoded
+  # directory list, and each list predated Course 5. SIX of them analysed NONE
+  # of its 66 pages -- for weeks -- while reporting "across 456 pages", which
+  # is exactly pages + c01 + c03 + c04 and reads as complete. The builder knew
+  # about C05 because somebody remembered to add it; nothing made forgetting
+  # fail. Widening them found a real span in c5p56 that no gate had ever seen.
+  #
+  # This checks the OUTCOME, not the source. A first version scanned for
+  # hardcoded literals and cried wolf on a ratchet baseline and two lines
+  # deriving a course code from a discovered name -- and a gate that fires on
+  # correct code gets switched off. So it runs the page gates and compares
+  # what each actually covered against how many pages exist.
+  add_test(NAME alignment_page_coverage
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/alignment_page_dirs.py --gate)
+
   add_test(NAME workflow_scripts_parse
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_workflow_scripts_parse.py)

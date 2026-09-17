@@ -15,6 +15,10 @@ whose closing tag falls between two letters of the same syllable, unless
 what follows is a legitimate Wylie suffix the campaign splits on purpose.
 """
 import re, io, os, glob, sys
+import sys as _sys, os as _os
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from alignment_page_dirs import page_dirs  # discovered, never declared
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LET = re.compile(r"[A-Za-z]")
@@ -59,7 +63,7 @@ STEM_OK = {"sgo", "de", "rim pa", "phyi ma", "thar pa", "gzhi", "don",
 def main():
     bad = []
     n_pages = n_spans = 0
-    for d in ("pages_c01", "pages", "pages_c03", "pages_c04"):
+    for d in page_dirs():
         for f in sorted(glob.glob(os.path.join(ROOT, "data", "alignment",
                                                d, "*.html"))):
             n_pages += 1
