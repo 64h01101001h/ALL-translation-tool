@@ -6,7 +6,12 @@ set(_bat_count 0)
 foreach(_f core/CMakeLists.txt app/CMakeLists.txt ocr/CMakeLists.txt)
   if(EXISTS "${CMAKE_SOURCE_DIR}/${_f}")
     file(READ "${CMAKE_SOURCE_DIR}/${_f}" _bat_txt)
-    string(REGEX MATCHALL "add_test\\(" _bat_hits "${_bat_txt}")
+    # 2026-09-17: this matched a bare `add_test(` and so counted the string
+    # wherever it appeared - including inside a COMMENT. One sentence of prose
+    # describing the gate pushed the written census to 126 against 125
+    # registered, and the BUILD-19 comparison refused to configure a tree in
+    # which nothing at all was wrong. Requiring NAME counts declarations only.
+    string(REGEX MATCHALL "add_test\\([ \t\r\n]*NAME" _bat_hits "${_bat_txt}")
     list(LENGTH _bat_hits _bat_n)
     math(EXPR _bat_count "${_bat_count} + ${_bat_n}")
     set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS

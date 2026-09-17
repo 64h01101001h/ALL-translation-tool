@@ -75,23 +75,38 @@ Be explicit about which tree you ran.
 
 ## Tests
 
+> **Build before you test, or use `tools/verify.sh`, which does.** `ctest`
+> runs the suite list **and the binaries** recorded the last time the tree was
+> configured. On 2026-09-17 `cmake-build-release` had been configured two days
+> earlier: three suites written since were invisible to `ctest -N` — not
+> failing, not skipped, absent — and the batteries that did run were examining
+> two-day-old objects, so `engines_battery` and `forward_battery` reported
+> divergences that vanished the moment the tree was rebuilt. A green `ctest`
+> is a claim about what was compiled, not about what is in the repository.
+
 ```bash
+cmake -S . -B build && cmake --build build -j8   # FIRST — see the note above
 ctest --test-dir build -N                 # list all suites
 ctest --test-dir build -j8 --output-on-failure
 ctest --test-dir build -N -LE fixture     # the clean-checkout gate
 ctest --test-dir build -R layer_matches_spine     # one gate by name
 ```
 
-**Verified 2026-09-11:** `100% tests passed out of 115`, 312.81 s.
-Slowest: `app_selftest` 263 s, `drills_smoke` 35 s, `gauntlet_walk` 14 s.
+**How many suites are there?** Ask, do not read:
 
-- **115** suites total · **51** carry the `fixture` label (they SKIP without the
-  data) · **64** run on a clean checkout.
-- A missing fixture registers an honest **SKIP naming the file**, not a failure.
+```bash
+python3 tools/count_checks.py             # declared, registered, and the gap
+python3 tools/count_checks.py --log <ctest output>   # and judge a run
+```
 
-> **Stale numbers to ignore:** `README.md` and `docs/DEVELOPER_ONBOARDING.md`
-> both say "86 suites"; `docs/FIXTURES.md` says "37 of 73". The real count is
-> **115**. These were found stale on 2026-09-11.
+This paragraph used to carry the number, and the number was wrong three times
+running — `README.md` and `docs/DEVELOPER_ONBOARDING.md` said 86, `docs/FIXTURES.md`
+said "37 of 73", this file said 115, and a digest told leadership 124 while
+three of those had never executed anywhere. There is no count written here
+now, on purpose. The suites guarded by `if(Python3_FOUND)` and by fixture
+availability mean the honest answer depends on how *your* tree is configured,
+which is exactly what `count_checks.py` reports. A missing fixture registers an
+honest **SKIP naming the file**, never a failure.
 
 ### Two gates that are not ctest suites
 
