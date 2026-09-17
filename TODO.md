@@ -218,8 +218,22 @@ the 2010s, or 2020 onward.
       one score would destroy the distinction Adam is asking for.
 
       THINGS TO SETTLE BEFORE ANY CODE:
-        - Where do the dates come from? ACI course dates are recorded outside
-          this repo; `HTG2016` is the only code that carries its own year.
+        - Where do the dates come from? SEARCHED 2026-09-16, so this does
+          not need doing twice. They are NOT in this repo: `corpus_segments`
+          has no date column, no entry carries a date field, and `HTG2016` is
+          the only one of the 75 source codes that embeds a year in its own
+          name. Nothing on the drives holds a course-date table either — the
+          ACIP master catalogues found on the Desktop date the TIBETAN
+          originals, not the translations. So the dates have to come from
+          ALL's own course records, which is a question for Adam.
+
+          AND A FALSE LEAD, SO NOBODY SPENDS A DAY ON IT: 19 of the 75 codes
+          contain a year somewhere in their text, and every one checked is a
+          CONTENT date, not a translation date — Trijang Rinpoche's dates
+          (1901-1981), a 1988 colophon by Sermey Geshe Lobsang Tharchin, a
+          CBETA edition stamp. Harvesting years out of the corpus would
+          produce a period layer that is confidently wrong, which is worse
+          than none at all.
           The dates must be sourced and attributed, not estimated — an
           invented date is a banked falsehood (Rule 10), and a period filter
           built on guessed dates would be worse than none.
