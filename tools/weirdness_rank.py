@@ -78,7 +78,10 @@ for eid, wylie, tib, acip, pron, gloss, flags in rows:
 
 scored.sort(reverse=True)
 top = scored[:1000]
-with open("build/weird_top.tsv", "w") as f:
+# argv[2] writes elsewhere. Without it the only way to check this fixture
+# was to OVERWRITE it, which is how a stale dump hides.
+_out = sys.argv[2] if len(sys.argv) > 2 else "build/weird_top.tsv"
+with open(_out, "w") as f:
     for score, eid, w, why in top:
         if "\t" in w or "\n" in w:
             continue
