@@ -16,6 +16,39 @@ hand-keyed Tibetan against the spine's, over 11,952 shared headwords —
 Full detail, every affected entry: `docs/SPINE_TIBETAN_DEFECTS_2026-09-16.json`.
 NOTHING HAS BEEN MODIFIED. The dictionary is not mine to edit.
 
+- [x] **THE CAUSE IS FIXED 2026-09-16 (commit 5c3d77f8).** It was not a
+      data-entry error: `engines/ewts_unicode.py` accepted only EWTS's
+      PERIOD disambiguator (`g.yog`) and not the older Wylie/ACIP HYPHEN
+      (`g-yog`) that the master is written with, so all 641 g-y entries came
+      back as rule-3 refusals and whatever built their Tibetan fell back to
+      passing the wylie through verbatim. Both engines now accept either
+      mark; the canonical battery is unchanged (26,062 / 99.03%), `gyog` and
+      `g-yog` still resolve differently, Illuminator independently agrees,
+      and forward_battery still reads 100.000% after 216 of its rows moved
+      from refusal to correct Tibetan.
+
+- [ ] **THE DATA IS STILL WRONG UNTIL THE MASTER IS REBUILT.** Fixing the
+      engine does not retroactively fix `data/hgm_dictionary_v27_2.json.gz`,
+      which was built with the broken one. The 664 bad values are still in
+      it, 38 of them binding and labelled source-attested, and five are
+      still on the phone in `ios/DiamondDrills/drills.json`.
+      **This repo must not fix it here.** CLAUDE.md: the app imports a
+      release and never owns the data; do not fork it. So this is a HANDOFF
+      to the data project — rebuild the master's `tibetan` field with the
+      corrected engine and cut a release. When that release lands, rebuild
+      the spine, rebuild the drill pack, and re-press, or the phone keeps
+      the old values.
+
+- [ ] **NEW DEFECT, found while testing the wa-zur question: adding a
+      wa-zur after a stack breaks the stack.**
+        `gra`  -> `གྲ`  (0F42 0FB2) correct, subjoined RA
+        `grwa` -> `གརྭ` (0F42 0F62 0FAD) WRONG, full RA
+      Illuminator has `གྲྭ`. This is independent of the hyphen fix and was
+      NOT fixed, because it is a real stacking defect in the canonical
+      engine and deserves its own battery run rather than being folded into
+      an unrelated change. It is why the v->w normalisation below was not
+      applied.
+
 - [ ] **664 spine entries hold a literal ASCII HYPHEN-MINUS (U+002D) inside
       the Tibetan script field**, e.g. `gling g-yog` stored as `གླིང་ག-ཡོག`.
       U+002D is not a Tibetan character; the `g-y` in Wylie is a
