@@ -451,6 +451,13 @@ int main(int argc, char** argv) {
     }
 
     // ---- Battery C: pronounce vs the canonical Python reference dump ----
+    // NOT RUN IS NOT PASSED. These three blocks were gated on argc alone,
+    // so an invocation with fewer arguments dropped the pron and sanskrit
+    // parity proofs -- the core of the rule 2 evidence -- in total silence,
+    // and such a run stayed green except by the accident of an unrelated
+    // check failing. An absent path is a reported failure now.
+    if (argc <= 2)
+        CHECK(false, "battery C: a pron reference path was given");
     if (argc > 2) {
         FILE* f = std::fopen(argv[2], "r");
         if (!f) {
@@ -565,6 +572,8 @@ int main(int argc, char** argv) {
     }
 
     // ---- Battery F: sanskrit full diff vs the Python oracle (LC terms) ----
+    if (argc <= 3)
+        CHECK(false, "battery F: a sanskrit reference path was given");
     if (argc > 3) {
         FILE* f = std::fopen(argv[3], "r");
         if (!f) {
@@ -669,6 +678,8 @@ int main(int argc, char** argv) {
               "G: letter guide covers the diacritics present");
     }
     // Battery G2: devanagari round-trip over the full LC term set
+    if (argc <= 3)
+        CHECK(false, "battery G2: a sanskrit reference path was given");
     if (argc > 3) {
         FILE* f = std::fopen(argv[3], "r");
         if (f) {
