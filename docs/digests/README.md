@@ -52,6 +52,20 @@ The first four went out before the numbering existed. They are numbered
 retroactively in the ledger so that #5 lands where Adam said it should; their
 sent subject lines are **not** rewritten, because they are already delivered.
 
+### STANDING ORDER (Adam, 2026-09-17): "generate the digest" means all of it
+
+When Adam asks for the digest, he is asking for the whole thing without
+further prompting:
+
+1. write it,
+2. build the `.docx` (via `tools/build_digest.sh`, never pandoc directly),
+3. **put it in the Gmail drafts folder**, and
+4. **attach the .docx to that draft** where the tooling allows it.
+
+He reads and sends. Nothing is ever sent on his behalf — the draft is the
+deliverable, and asking "shall I draft it?" after he has asked for the digest
+is asking twice.
+
 ### Recipients and cover note
 
 Recipients: Geshe Michael Roach
