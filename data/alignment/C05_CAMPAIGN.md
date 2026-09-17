@@ -55,7 +55,17 @@ a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,
 banked; when the campaign resumes, re-propose from 166 unless that scratch is
 still present. Errata E-178–E-182 (rows 153/155/158/160) were filed before the
 pause; the C05:167 ENGLISH_FACTUAL_ERROR ("three types" vs `bzhi`) passed its
-reconciler but has NOT had a skeptic pass and is NOT filed. Open items for Adam
+reconciler but has NOT had a skeptic pass and is NOT filed.**
+
+**SKEPTIC PASS DONE 2026-09-17, and it CONFIRMS. Filed as E-250.** The
+Tibetan reads `las de la bzhi ste` — four — then divides into `gnyis`
+(definite / indefinite) and closes `nges pa'i las rnam pa gsum` (the
+definite are three). Four is three plus one and the Tibetan is consistent.
+The English is not, and it fails on its own terms before the Tibetan is
+consulted: "three types" in total, then "grouped into two", then "the
+'definite' group is of three different types". If the definite subgroup
+alone has three and an indefinite group also exists, the total cannot be
+three. Geshe Michael's English stays verbatim; the register records it. Open items for Adam
 (agentive "by", "non" subword, tshal pa, seng ldeng E-169, E-157) stand.**
 
 ## Queues (wylie / english), C05
