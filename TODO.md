@@ -175,6 +175,69 @@ deep research."
       — and whether links cross tiers (a curated entry pointing into
       auto-aligned material must not launder the tier).
 
+# ★★★★★ ADAM 2026-09-16: A COMMON-MISSPELLINGS LAYER, AND NEAR-SPELLING ALTERNATIVES
+
+Adam's request, recorded as given: a common-misspellings modifier — some way of
+looking at spellings that are close but just off — so the translator is
+NOTIFIED of possible alternative spellings rather than left to wonder why a
+term will not resolve.
+
+- [ ] **Build it on the Illuminator's own misspelling entries, which already
+      exist and are authoritative.** Measured 2026-09-16 against the
+      Illuminator 2016 archive Adam supplied (30,194 records). Tony Duff names
+      that dictionary as the companion to his grammar volumes (Standard
+      Tibetan Grammar Vol II p.213), so this is PKTC's own judgement, not ours.
+
+      **477 of the 30,194 records flag a spelling problem.** Parsed into
+      wrong -> right pairs and STRATIFIED, because the strata are the whole
+      design problem:
+
+        TIER A — 76 pairs. The entire entry is an unhedged note and nothing
+                 else, e.g. `kun du` whose complete definition reads "Common
+                 mis-spelling of ཀུན་ཏུ་ q.v." Safe to surface as a
+                 correction. 30 of the 76 occur in our material, across 162
+                 corpus segments.
+        TIER B — 10 pairs. Sole sense but HEDGED: "Sometimes seen as a
+                 mis-spelling of…". Surface as a possibility, never as a fact.
+                 5 occur here, 61 segments.
+        TIER C — 52 pairs. **THE WORD IS ALSO LEGITIMATE.** `rig` reads
+                 "1) From the verb རིག་པ་ 2) Common mis-spelling of རིགས་";
+                 `dka' ba` ("difficult") and `khru` ("cubit") are ordinary
+                 words carrying a minor misspelling sense. **These must never
+                 be flagged blindly.** A naive extraction produced 2,138 hits
+                 on `rtsa` — a 1,754-character entry with many senses — and
+                 both `rig`->`rigs` AND `rigs`->`rig`, which is self-
+                 contradictory and is how you can tell the extraction is
+                 wrong. Any implementation that loses this distinction will
+                 tell a translator that ordinary words are errors, which is
+                 worse than saying nothing.
+
+      ALREADY TRUE AND WORTH KNOWING: seven Tier-A misspellings are HEADWORDS
+      IN OUR OWN MASTER — kun du, ston ka, kun da, skams pa, ngur smig,
+      'jigs lta, phri ba — so the dictionary currently offers entries for
+      spellings PKTC calls mistakes. `kun du bzang po` is a separate entry
+      from `kun tu bzang po` (Samantabhadra, glossed "all good") and carries
+      NO gloss at all, and `wylie_variants` — populated on 105,211 of 105,634
+      entries — records no tu/du alternation anywhere.
+
+      DESIGN CONSTRAINTS, before any code:
+        - This is REFERENCE, not correction. The tool must never rewrite a
+          translator's text, and must never imply the source document is
+          wrong without saying who says so. Attribute every suggestion to the
+          Illuminator by name.
+        - Rule 3 applies: where the evidence is hedged, the interface must be
+          hedged. Tier B is "possibly", never "should be".
+        - Rule 1 is untouched by this — a spelling alternative is not an
+          English equivalent and must never promote anything into hgm_gloss.
+        - "Close in spelling but just off" also implies EDIT-DISTANCE
+          suggestions for terms that simply fail to resolve. That is a
+          different mechanism from the Illuminator list and needs its own
+          decision: what distance, over which headword set, and how to avoid
+          burying the reader in near-misses. The Illuminator list is the
+          evidence-backed half and should land first.
+        - Relates to the hyperlinked-dictionary item and to the wylie_variants
+          mechanism that already exists and is already populated.
+
 # ★★★★★ ADAM 2026-09-16: DATE GESHE MICHAEL'S TRANSLATIONS, AND LET THE READER FILTER BY PERIOD
 
 Adam's reasoning, recorded as given. Geshe Michael has been translating for

@@ -56,7 +56,13 @@ std::string acipToEwts(const std::string& acip) {
     {
         std::string o;
         for (size_t i = 0; i < s.size(); ++i) {
-            if (s[i] == 'V' && i > 0 && std::isalpha((unsigned char)s[i - 1]))
+            // The preceding letter must be a CONSONANT: wa-zur subjoins to a
+            // consonant and cannot attach to a vowel. "A letter" alone was a
+            // Rule 3 regression — the acip column also holds ALL-CAPS English,
+            // and EVERY became EWERY -> ཨེཝེརཡ where it had honestly flagged.
+            if (s[i] == 'V' && i > 0 &&
+                std::string("BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz")
+                        .find(s[i - 1]) != std::string::npos)
                 o += 'W';
             else
                 o += s[i];

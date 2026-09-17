@@ -109,7 +109,15 @@ def classify(reg, rows):
             t['ours (describe the layer, not a document)'] += 1
             continue
         sid = (e.get('segment') or '').strip()
-        m = re.fullmatch(r'([A-Z]\d\d):(\d+)', sid)
+        # The old pattern here was [A-Z]\d\d, which matches C01..C18 and
+        # nothing else — 19 of the spine's 75 course codes. Every entry citing
+        # AK, ILL, GIE, SVN, SSL, OSE, P1..P10, TCS.., Sunlight or TITL* fell
+        # into 'not-a-single-segment-citation' and its quote was NEVER CHECKED,
+        # which is the worst kind of pass: a tick that means "not examined".
+        # It held at a ceiling of 5 only because no entry had yet cited one.
+        # Widening it is a strengthening, not a loosening — a code that does
+        # not exist now lands in SEGMENT-GONE, whose ceiling is 0.
+        m = re.fullmatch(r'([A-Za-z][A-Za-z0-9_]*):(\d+)', sid)
         if not m:
             t['not-a-single-segment-citation'] += 1
             bad['not-a-single-segment-citation'].append((e.get('item_id'), sid))

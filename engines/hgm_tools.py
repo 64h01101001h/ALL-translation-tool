@@ -21,7 +21,21 @@ def acip_to_ewts(acip):
     # and NONE of them rendered without a flag; 1,113 do now. Documented as
     # gap 2 of 3 in docs/FINDING_ACIP_EWTS_GAPS.md. Gap 3, the visarga ':',
     # is NOT touched here, and GA-YAS is not understood and not guessed at.
-    s = re.sub(r'(?<=[A-Za-z])V', 'W', s)
+    # ...and the letter before it must be a CONSONANT, because wa-zur
+    # subjoins to a consonant and cannot attach to a vowel. The first version
+    # of this rule said only "a letter before it" and that was a Rule 3
+    # REGRESSION, caught by audit the same day: the acip column also holds
+    # ALL-CAPS ENGLISH (292 rows — "DIAMOND MOUNTAIN UNIVERSITY", "THE THIRD
+    # PATH: CORRECT VIEW"), and is_acip_line cannot see it because it only
+    # tests an uppercase ratio. EVERY became EWERY -> ཨེཝེརཡ and DIVISIONS
+    # became དིཝིསིོནས, turning an honest ⟨every⟩ flag into confident
+    # nonsense. Requiring a consonant keeps all real wa-zur (DVAGS, GRVA,
+    # RTZVA, KVA, ZHVA, TSVA, SV'AH'A, TV'A) and rejects EVERY, DIVISIONS,
+    # ACHIEVE, UNIVERSITY, INDIVIDUAL, GIVEN, LIVES, DEVELOPING, ACTIVITY.
+    # SERVANT and ADVANCE still leak: rv and dv ARE wa-zur sequences, so no
+    # local rule can separate them — that needs the caller to stop feeding
+    # English through, which is filed separately.
+    s = re.sub(r'(?<=[BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz])V', 'W', s)
     s = s.replace('sh','⟦Sh⟧').replace('th','⟦Th⟧')
     for lo,hi in [('t','⟦T⟧'),('d','⟦D⟧'),('n','⟦N⟧'),('s','⟦S⟧'),('m','⟦M⟧')]:
         s = s.replace(lo,hi)
