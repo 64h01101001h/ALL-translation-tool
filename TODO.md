@@ -39,15 +39,59 @@ NOTHING HAS BEEN MODIFIED. The dictionary is not mine to edit.
       the spine, rebuild the drill pack, and re-press, or the phone keeps
       the old values.
 
-- [ ] **NEW DEFECT, found while testing the wa-zur question: adding a
-      wa-zur after a stack breaks the stack.**
-        `gra`  -> `གྲ`  (0F42 0FB2) correct, subjoined RA
-        `grwa` -> `གརྭ` (0F42 0F62 0FAD) WRONG, full RA
-      Illuminator has `གྲྭ`. This is independent of the hyphen fix and was
-      NOT fixed, because it is a real stacking defect in the canonical
-      engine and deserves its own battery run rather than being folded into
-      an unrelated change. It is why the v->w normalisation below was not
-      applied.
+- [x] **FIXED 2026-09-16 (e2f341b1): adding a wa-zur after a stack broke the
+      stack.** `grwa` gave `གརྭ` with a full-size RA where every source has
+      `གྲྭ`. The onset had no rule for a root already carrying a subjoined
+      letter taking a wa-zur on top of it, so `grwa` matched "prefix g + root
+      r + subjoined w" and the stack came apart.
+      Written first as the general case — a root with two subjoined letters —
+      and the canonical battery REFUSED it, 26,062 down to 26,054: it turned
+      `brlabs` from `བརླབས` into `བྲླབས` across 24 ground-truth pairs, because
+      `b` is a prefix there. Restricted to wa-zur, the letter that attaches to
+      a completed stack, the battery goes the other way: **26,078 (99.09%),
+      240 mismatches, 16 pairs better than it started.**
+
+- [x] **FIXED 2026-09-16 (d07b363e): the wa-zur `v` question, and it was not
+      what it looked like.** These headwords spell the sound with `v` (`grva`,
+      `dvangs`, `rtsva`), and `v` is simply not EWTS — `V` is the ACIP code
+      for wa-zur and `acip_to_ewts` was passing it through unmapped, so the
+      derived wylie was never valid. A `V` with a letter before it now becomes
+      `w`; a `V` that opens a syllable is left alone, because wa-zur is
+      subjoined and stray Latin in the corpus must not be read as Tibetan.
+      **1,615 spine segments carry a subjoined `V` and NONE rendered without a
+      flag; 1,113 do now.** Corpus-wide 35,791 -> 36,904 of 42,199 segments
+      render. Closes gap 2 of three in `docs/FINDING_ACIP_EWTS_GAPS.md`. It
+      could not have landed before the stacking fix above, which `GRVA` ->
+      `grwa` depends on.
+
+- [ ] ★★★ **The 16 wa-zur headwords still flag, and correctly.** Their stored
+      wylie holds the `v` the old converter baked in, and the engine is right
+      to refuse it. The fix converts ACIP as it is READ — the corpus, the
+      Overlay, the drill pack — and cannot reach a column already written.
+      Same handoff as the hyphen values above: the data project re-derives
+      their wylie. Their stored Tibetan also spells wa-zur as BA + TSA-PHRU
+      where Illuminator writes SUBJOINED WA — a second question, same handoff.
+
+- [ ] ★★★ **Gap 3 of three is still open: the visarga `:`.** `A'A:`, `HO:`,
+      `DZA:` come out `a'a:`, `ho:` and are refused. EWTS writes visarga `H`,
+      and both engines already render `hoH` -> `ཧོཿ`, so this is the same
+      shape as the `V` fix just landed and is the next one to take. `GA-YAS`
+      remains not understood and not guessed at.
+
+- [ ] ★★★★ **The canonical Python ORACLE is the broken one on 8 spine rows.**
+      `engines/ewts_unicode.py` RAISES `KeyError` where an invalid character
+      strands a Sanskrit final in onset position (`...ho: dza:hUM baM...`),
+      while the C++ port correctly returns a flag. Not an app crash — the app
+      runs the port — but it is a Rule 2 parity break with the authority on
+      the wrong side, and any Python-side tooling over the corpus dies on
+      those rows. Rule 3 says flag, never guess; raising is neither.
+
+- [ ] ★★★ **`pron_reference.tsv` and `sanskrit_reference.tsv` are untracked
+      AND nothing in the build regenerates them**, yet `engines_battery` reads
+      both by absolute path. A fresh clone has no dumps and no step that makes
+      them, so the battery proving two engine ports has nothing to read. The
+      generators exist now and take `--out`; they need wiring into the build,
+      or tracking the way `forward_reference.tsv` is.
 
 - [ ] **664 spine entries hold a literal ASCII HYPHEN-MINUS (U+002D) inside
       the Tibetan script field**, e.g. `gling g-yog` stored as `གླིང་ག-ཡོག`.
