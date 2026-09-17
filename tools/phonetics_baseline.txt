@@ -1,0 +1,37 @@
+# Rulings on pairs that tools/test_no_phonetics_in_layer.py flags as a gloss
+# that merely transcribes its own Tibetan. Each line: <tib> TAB <eng> TAB
+# <ruling>. A pair that is NOT listed here fails the gate, which is the point:
+# the old gate compared a SHARE against a 2% ceiling, passed at 0.08%, and
+# never said which twelve it was letting through. A ratchet set twenty-five
+# times above the measurement leaves room for ~280 more to arrive unremarked.
+#
+# Read before adding. Three of the original twelve were not phonetic at all --
+# the detector matches when the gloss merely STARTS WITH the phonetic reading,
+# so "summoned" matched su-, "cherishes" matched che-, and "long" matched
+# itself. Most of the rest are ordinary English loanwords that any reader of
+# these courses expects. Only a gloss that a reader could not use as English
+# is real pollution.
+
+# ENGLISH LOANWORDS. These are the English words, not transcriptions standing
+# in for them; each is in general English use and is what Geshe Michael writes.
+bla ma	lama	loanword: "lama" is English, and is Geshe Michael's own word
+bla ma	lamas	loanword: plural of the above
+bla ma	lama's	loanword: possessive of the above
+dge bshes	geshe	loanword: "geshe" is the title in English throughout these courses
+gu ru	guru	loanword: "guru" is English
+ma Ni	mani	loanword: the mani mantra is named this in English
+
+# SANSKRIT TITLES carried into English scholarship, not Tibetan phonetics.
+kA ri kA	karika	Sanskrit term of art; standard in English writing on these texts
+ko ShA	kosha	Sanskrit; this course IS the Abhidharmakosha, named so in English
+
+# DETECTOR FALSE POSITIVES. The gloss is ordinary English that happens to
+# begin with the syllable the phonetic engine produces.
+bsus	summoned	false positive: phonetic "su" is a prefix of "summoned"
+gces	cherishes	false positive: phonetic "che" is a prefix of "cherishes"
+long	long	false positive: the English word and the phonetic coincide
+
+# GENUINE TRANSCRIPTION, kept only because it is Geshe Michael's verbatim text
+# (rule 10: never bank a falsehood, and never silently improve his English).
+# If the dictionary ever harvests this one, it needs a real gloss.
+dbo	wo	transcription: `dbo` is a month/letter name; "wo" is its sound, not English

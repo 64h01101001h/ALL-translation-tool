@@ -228,7 +228,24 @@ python3 "$ROOT/tools/shot_diff.py" "$ROOT/build/blessed_shots" "$SHOTS_TMP" || {
   echo "VISUAL REGRESSION - press stopped. Re-bless only if the change is intentional."; exit 7; }
 
 echo "== 3. staging =="
-rm -rf "$STAGE"
+# 2026-09-17: this was a bare `rm -rf "$STAGE"` and it FAILED the press with
+# "Directory not empty" -- which rm -rf is not supposed to be able to say.
+# The cause is a race, not a permissions problem: rm -rf unlinks the contents
+# and then removes the directory, and Finder recreates .DS_Store in between if
+# anyone has dist/ open in a window. The press had already cleared its load
+# gate and its visual diff; it died on a dotfile.
+#
+# Retry once, then assert. `set -e` would have aborted on the first failure,
+# so the retry has to be guarded, and the assert has to be explicit rather
+# than trusting the second attempt silently.
+rm -rf "$STAGE" 2>/dev/null || { sleep 1; rm -rf "$STAGE" 2>/dev/null || true; }
+if [ -e "$STAGE" ]; then
+  echo "press: could not clear $STAGE -- something is writing into it while"
+  echo "  the press runs (a Finder window on dist/ recreates .DS_Store). Close"
+  echo "  it and press again; the contents are:"
+  ls -la "$STAGE"
+  exit 1
+fi
 mkdir -p "$STAGE"
 cp -R "$APP" "$STAGE/$APPNAME.app"
 

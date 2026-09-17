@@ -86,6 +86,20 @@ unattached draft costs him one drag. A corrupt attachment costs the audience
 the document, and costs us the claim that our artifacts can be trusted - which
 is the one thing this project cannot spend.
 
+**THE DRAFT MUST BE RIGHT THE FIRST TIME. Learned the hard way 2026-09-17.**
+A draft edited through the API does NOT reach a Gmail compose window that is
+already open. Adam opened digest #9 within minutes of its creation; every
+later correction — replacing the attachment, then removing it — went to the
+stored draft and never to his screen. At 20:40 he sent what his window held:
+the ORIGINAL state, carrying the truncated .docx and four figures that had
+moved while the digest sat.
+
+So: assemble everything, verify everything, and create the draft ONCE. Do not
+create a draft intending to fix it afterwards, and do not refresh its figures
+in place — if the numbers have moved, say so in chat and build a fresh draft
+rather than editing under him. The edit you cannot see him not receiving is
+the one that gets sent.
+
 He reads and sends. Nothing is ever sent on his behalf — the draft is the
 deliverable, and asking "shall I draft it?" after he has asked for the digest
 is asking twice.

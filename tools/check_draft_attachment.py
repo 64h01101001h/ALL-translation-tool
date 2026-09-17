@@ -22,10 +22,18 @@ transcript, which is what this reads. A file that "looks attached" and will
 not open is worse than no attachment: it fails at the far end, in front of
 whoever the digest went to.
 
+THE BODY HAS THE SAME PROBLEM. The draft's text is retyped through the model
+too, and a digest body runs to ~13,000 characters - larger than the payload
+that truncated. A dropped or altered sentence in prose is worse than a broken
+attachment, because it does not look broken: it goes out over Adam's name to
+leadership reading it as his words. So --body checks the text the same way,
+against the file it was built from.
+
 Usage:
     python3 tools/check_draft_attachment.py <transcript.jsonl> <file> [...]
+    python3 tools/check_draft_attachment.py <transcript.jsonl> --body <file>
 
-Exit 0 only if some payload in the transcript matches a named file exactly.
+Exit 0 only if what was sent matches the named file exactly.
 """
 import base64
 import hashlib
@@ -33,6 +41,56 @@ import io
 import json
 import os
 import sys
+
+
+def bodies(transcript):
+    """Every draft body handed to a draft tool, in order."""
+    out = []
+    with io.open(transcript, encoding="utf-8", errors="replace") as fh:
+        for line in fh:
+            if '"body"' not in line:
+                continue
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            msg = rec.get("message") or {}
+            for c in msg.get("content") or []:
+                if not isinstance(c, dict) or c.get("type") != "tool_use":
+                    continue
+                if "draft" not in (c.get("name") or ""):
+                    continue
+                b = (c.get("input") or {}).get("body")
+                if isinstance(b, str) and b:
+                    out.append((c.get("name"), b))
+    return out
+
+
+def check_body(transcript, path):
+    want = io.open(path, encoding="utf-8").read()
+    sent = bodies(transcript)
+    print("draft bodies found in transcript: %d" % len(sent))
+    print("the file on disk: %d characters" % len(want))
+    if not sent:
+        print("  nothing was ever sent")
+        return 1
+    tool, got = sent[-1]
+    # Trailing whitespace is not a difference worth failing on; a dropped
+    # sentence is. Compare the text proper.
+    a, b = got.rstrip(), want.rstrip()
+    if a == b:
+        print("  the last body (%s): %d chars, IDENTICAL" % (tool, len(got)))
+        return 0
+    k = 0
+    lim = min(len(a), len(b))
+    while k < lim and a[k] == b[k]:
+        k += 1
+    print("  the last body (%s): %d chars, DIVERGES after %d of %d"
+          % (tool, len(got), k, len(b)))
+    print("  file has : %r" % b[k:k + 90])
+    print("  sent has : %r" % a[k:k + 90])
+    print("  do not treat this draft as the digest")
+    return 1
 
 
 def payloads(transcript):
@@ -69,6 +127,8 @@ def main(argv):
         sys.stderr.write(__doc__)
         return 2
     transcript, files = argv[1], argv[2:]
+    if files and files[0] == "--body":
+        return check_body(transcript, files[1])
     sent = payloads(transcript)
     print("attachment payloads found in transcript: %d" % len(sent))
     if not sent:

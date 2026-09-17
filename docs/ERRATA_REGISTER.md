@@ -8,13 +8,13 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**254 entries**: **162 document errata** (6 HIGH, 72 MEDIUM, 84 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**257 entries**: **165 document errata** (6 HIGH, 75 MEDIUM, 84 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 123 |
+| Tibetan spelling | 125 |
 | Digitisation artefact | 59 |
-| English typo | 25 |
+| English typo | 26 |
 | Our banked layer | 16 |
 | English factual error | 7 |
 | Formatting | 7 |
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 72 entries
+## Medium severity &mdash; 75 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -114,6 +114,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:57` | bcas shes kyi mtshan nyid du 'jog | bcad shes kyi mtshan nyid du 'jog | ACIP column (source of record) reads BCAS SHES here while the same row reads BCAD SHES five words earlier for the same term (both rendered 'recollection'); independent witnesses of the term spell it bcad shes: C04:48, SVN:1202. C16:533/540 are the same file re | CONFIRMED |
 | `C05:115` | gnas skabs na yo dang sa so, | gnas skabs na yod pa'i phyir (exact wording of the tail NOT settled - see evidence) | ACIP (source of record) ends `GNAS SKABS NA YO DANG SA SO, ,`. `yo`, `dang`, `sa`, `so` are each legal syllables, but the sequence is not a Tibetan clause and the English reads 'rather, it is present during periods when ... the mind is functioning', i.e. an ex | PROBABLE |
 | `C05:167` | Now there are three types of deeds which lead to a future experience through a process of ripening.  (ACIP source: rnam smin myong 'gyur gyi las de la | Now there are four types of deeds which lead to a future experience through a process of ripening. | The Tibetan reads 'rnam smin myong 'gyur gyi las de la BZHI ste' — bzhi is four — and the passage then divides them: 'de la yang nges pa dang ma nges pa'i las GNYIS las' (two groups, definite and indefinite) and closes 'nges pa'i las rnam pa GSUM yod pa'i phyi | CONFIRMED |
+| `C05:183` | glang lnga brgya 'dod pa la ci byed dris pas | glang lnga brgya 'ded pa la ci byed dris pas | Geshe Michael renders this "He met someone driving a herd of five hundred cattle and asked the man what he planned to do." The ACIP of record reads GLANG LNGA BRGYA 'DOD PA. `'dod pa` is glossed in the master dictionary only in the want/desire/assert family (i | PROBABLE |
+| `C05:183` | King Kanaka had a certain eunuch | King Kanika had a certain eunuch | Both Tibetan columns read `rgyal po ka ni ka'i` / RGYAL PO KA NI KA'I, which transliterates Kanika (Skt. Kaniska). Geshe Michael renders this same Tibetan string "Kanika" in every other row of the corpus that carries it: C08:356 and C17:445 (`kA ni ka'i spring | PROBABLE |
+| `C05:183` | snying rdzes de dag de las thar pas byas pas | snying rjes de dag de las thar pas byas pas | The ACIP of record reads SNYING RDZES. `snying rdzes` occurs in exactly two rows of the corpus, C05:183 and its byte-identical C16:762 twin (same file re-ingested), so it is a hapax; it is not a headword in the 105,634-entry master dictionary. The dictionary c | UNCERTAIN |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -338,7 +341,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 162 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 165 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 59 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
