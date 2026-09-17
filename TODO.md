@@ -175,6 +175,69 @@ deep research."
       — and whether links cross tiers (a curated entry pointing into
       auto-aligned material must not launder the tier).
 
+# ★★★★★ ADAM 2026-09-16: DATE GESHE MICHAEL'S TRANSLATIONS, AND LET THE READER FILTER BY PERIOD
+
+Adam's reasoning, recorded as given. Geshe Michael has been translating for
+forty-odd years, and the corpus this project uses spans the early 1990s ACI
+courses through to the present day — close to thirty years of it. Geshe
+Michael matured as a translator across that span, and Adam has heard Geshe
+Michael say directly that things once translated one way would not be
+translated that way now. So a rendering drawn from a 1993 course and a
+rendering from 2016 are not equally current, and nothing in the tool says
+which is which. Adam wants the later work to be distinguishable, and wants
+periods switchable on and off — in the card layer and in plain output alike,
+so a reader can ask for the ACI courses of the 1990s, or the early 2000s, or
+the 2010s, or 2020 onward.
+
+- [ ] **Scope and build the period layer.** Not yet designed. What is already
+      known, measured 2026-09-16 against `data/hgm_dictionary_v27_2.json.gz`:
+
+      THE DATA IS ALREADY SHAPED FOR THIS, which is the good news.
+        - 12,004 entries carry `hgm_gloss`, the binding layer.
+        - 7,980 of them are tier `glossary` and every one cites a SINGLE
+          source, `HTG2016` — a 2016 artifact. Two thirds of the binding
+          glosses are therefore already dated, to one year, and it is a late
+          year. That is Geshe Michael's mature register.
+        - 3,910 `auto-aligned` and 114 `curated` carry `source: null` and are
+          undated. These are drawn from the corpus.
+        - `corpus_occurrences.courses` lists which sources each entry appears
+          in, across **66 distinct course codes** (C01..C18 are the ACI
+          courses; AK, GIE, ILL, OSE, MB2, DDA, DTE, P1..P10, TCS.., SOS,
+          SPF, Sunlight and others are separate works).
+
+      SO THE WORK IS BOUNDED. Dating 66 source codes is a table of 66 rows
+      that a person can check, not an annotation of 12,004 glosses. Every
+      gloss then inherits a period from the sources it is attested in, the
+      same way it already inherits a tier.
+
+      THE DESIGN POINT WORTH KEEPING: period is a SECOND AXIS alongside tier,
+      not a replacement for it. Tier says how the English was established —
+      curated, glossary, machine-matched. Period says when Geshe Michael
+      wrote it. A curated 1994 gloss and an auto-aligned 2016 gloss are
+      differently trustworthy along different axes, and collapsing them into
+      one score would destroy the distinction Adam is asking for.
+
+      THINGS TO SETTLE BEFORE ANY CODE:
+        - Where do the dates come from? ACI course dates are recorded outside
+          this repo; `HTG2016` is the only code that carries its own year.
+          The dates must be sourced and attributed, not estimated — an
+          invented date is a banked falsehood (Rule 10), and a period filter
+          built on guessed dates would be worse than none.
+        - A term attested in courses spanning 1993 to 2016 has a RANGE, not a
+          date. Decide what the card shows for a range, and what a period
+          filter does with one — include, exclude, or mark as spanning.
+        - What the filter does when a period has no rendering at all. The
+          honest answer is to say so, not to fall back silently to another
+          period, which would show a 1993 rendering under a 2020 heading.
+        - Adam's separate phrasing, "maybe errors or periods or points within
+          Geshe Michael's life": a period tag is NOT a correctness judgement
+          and must not read as one. Nothing here may imply that an earlier
+          rendering is wrong. Only Geshe Michael can rule that, and
+          `hgm_gloss` stays binding until Geshe Michael does.
+
+      Relates to the successor-dictionary intent and to the hyperlinked
+      dictionary item above; both would want this axis.
+
 # ★★★★ ADAM 2026-09-16: FIND THE TIBETAN GRAMMAR BOOKS ON THE DRIVES
 
 Source, supplied by Adam 2026-09-16:
