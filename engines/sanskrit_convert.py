@@ -21,7 +21,7 @@ IAST_CONS = ['kṣ','tr','jñ',  # convenience digraphs handled via cluster logi
 IAST_VOW = ['ai','au','a','ā','i','ī','u','ū','ṛ','ṝ','ḷ','ḹ','e','o']
 FINAL = {'ṃ':'m','ḥ':':','ṁ':'m'}
 
-C_ACIP = {'k':'K','kh':'KH','g':'G','gh':'GH','ṅ':'NG','c':'TZ','ch':'TSH','j':'DZ','jh':'DZH',
+C_ACIP = {'k':'K','kh':'KH','g':'G','gh':'GH','ṅ':'NG','c':'TZ','ch':'TS','j':'DZ','jh':'DZH',
           'ñ':'NY','ṭ':'t','ṭh':'th','ḍ':'d','ḍh':'dh','ṇ':'n','t':'T','th':'TH','d':'D','dh':'DH',
           'n':'N','p':'P','ph':'PH','b':'B','bh':'BH','m':'M','y':'Y','r':'R','l':'L','v':'W',
           'ś':'SH','ṣ':'sh','s':'S','h':'H'}
