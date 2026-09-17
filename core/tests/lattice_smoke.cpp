@@ -262,7 +262,7 @@ int main(int argc, char** argv) {
               "bestSpan: a GMR tier beats an auto-aligned span even when the "
               "auto-aligned one covers MORE of the line (rule 1)");
         CHECK(e.wylie == "rgyal ba",
-              "bestSpan: and the span it returns is his curated one, not the "
+              "bestSpan: and the span it returns is Geshe Michael's curated one, not the "
               "four-token auto-aligned span that swallows it");
         CHECK(d.bestSpan({}) < 0,
               "bestSpan: nothing in, -1 out -- the caller flags rather than "
@@ -289,12 +289,12 @@ int main(int argc, char** argv) {
         CHECK(omni && !omni->hgm_gloss.empty(),
               "indexed: the omniscience span carries a gloss");
         CHECK(omni && !omni->provisional(),
-              "indexed: and it is his glossary reading, not the auto-aligned "
+              "indexed: and it is Geshe Michael's glossary reading, not the auto-aligned "
               "entry that sits at the lower rowid (rule 1)");
         const auto* mandala = tierAt("DKYIL 'KHOR", 0, 2);
         CHECK(mandala && !mandala->hgm_gloss.empty(),
-              "indexed: a headword he HAS glossed never binds to the "
-              "unglossed homograph -- absence of his English must mean "
+              "indexed: a headword Geshe Michael HAS glossed never binds to the "
+              "unglossed homograph -- absence of that English must mean "
               "absence, not a lost race on rowid");
     }
 

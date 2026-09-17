@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
                   "Trainer can badge it (rule 1)");
             CHECK(!unmarkedProv,
                   "wilson: no provisional gloss reaches the parse line without "
-                  "its tier -- the machine's match never wears his authority");
+                  "its tier -- the machine's match never wears Geshe Michael's authority");
         }
         bool sawNa = false, sawUndet = false;
         for (const auto& cp : parses)

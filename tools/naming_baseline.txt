@@ -90,3 +90,33 @@ e7ec985faae2b92c  docs/digests/LOG.md:566  silent particle, his second thought, 
 f3aafb51f9599011  docs/digests/README.md:88  The digest is **Adam's report of Adam's work**, sent from his account.
 172a360547b8551f  docs/digests/README.md:92  as if it happened outside his direction, which is false: nothing in a
 968cec6ee79313b9  docs/digests/README.md:93  digest happened outside his instruction. Decisions appear as "Decisions I
+
+# ---------------------------------------------------------------------------
+# core/ came under this gate on 2026-09-17. It had never been scanned — the
+# whole library and its 124 batteries sat outside the file list — and eight
+# real violations were in there, now named: "every drill carries his English",
+# "it is his glossary reading", "battery I covers his mantra corpus", and the
+# rest. The lines below are the ones that are NOT Geshe Michael, each read in
+# context before it was ruled.
+
+# A stopword list. These are the English pronouns themselves, as data.
+0585296ac8b944f2  core/src/chantline.cpp:34  "not","you","we","they","he","she","his","her","its","their","our",
+
+# The 1st Dalai Lama, found by the phonetic spelling of that name.
+fad7ba2bc369d862  core/tests/authorsearch_smoke.cpp:93  "the 1st Dalai Lama is found from his English phonetic name");
+
+# CSV parser fixtures. The string is a quoting torture test; the pronoun is
+# there to be parsed, not to refer to anybody.
+ddaa25f51683079a  core/tests/table_smoke.cpp:24  "a,b,c\n1,\"b,with,commas\",\"he said \"\"hi\"\"\"\n");
+e21c8ca31e52c367  core/tests/table_smoke.cpp:31  "he said \"hi\""}),
+
+# Sentences fed to glossMatches to prove a gloss does NOT match inside a longer
+# word or across a boundary. They are English prose specimens, and naming Geshe
+# Michael inside one would put a false attribution in a test.
+39c24cce8ebf8f2e  core/tests/terminology_smoke.cpp:136  CHECK(!allcore::glossMatches("mind", "he reminded them of the vow"),
+5cbfd7016ed7e441  core/tests/terminology_smoke.cpp:140  CHECK(!allcore::glossMatches("one", "he was honest about it"),
+3544f5f3645a9ed9  core/tests/terminology_smoke.cpp:165  CHECK(allcore::glossMatches("good deeds", "his good deeds ripen"),
+
+# 1419 is Tsongkapa's passing, not Geshe Michael's — the test converts that
+# year to earth-pig.
+27237f3101f6b49f  core/tests/tibcal_smoke.cpp:45  "1419 (his passing) = earth-pig");

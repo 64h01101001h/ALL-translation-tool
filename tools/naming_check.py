@@ -61,6 +61,15 @@ def scan(root):
     code("app/main.cpp", "//")
     code("app/*.inc", "//")
     code("ios/**/*.swift", "//")
+    # core/ was outside this gate entirely until 2026-09-17, and the whole
+    # library and its 124 batteries sat in the blind spot. Eight violations
+    # were there: "every drill carries his English", "it is his glossary
+    # reading", "battery I covers his mantra corpus". Same test as above —
+    # STRINGS only, not comments — because a CHECK message is read by a person
+    # when it fails, and a gloss label in the library can reach the screen.
+    code("core/src/*.cpp", "//")
+    code("core/include/allcore/*.h", "//")
+    code("core/tests/*.cpp", "//")
 
     # tools/ prints messages a human reads when a gate fails, and carries
     # docstrings that explain the rules. Same standard, narrower test: both the
