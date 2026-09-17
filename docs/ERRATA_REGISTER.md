@@ -8,13 +8,13 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**250 entries**: **158 document errata** (6 HIGH, 72 MEDIUM, 80 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**254 entries**: **162 document errata** (6 HIGH, 72 MEDIUM, 84 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 120 |
+| Tibetan spelling | 123 |
 | Digitisation artefact | 59 |
-| English typo | 24 |
+| English typo | 25 |
 | Our banked layer | 16 |
 | English factual error | 7 |
 | Formatting | 7 |
@@ -121,7 +121,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 80 entries
+## Low severity &mdash; 84 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -173,6 +173,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:158` | sdug bsdal | sdug bsngal | ACIP source of record reads SDUG BSDAL (wylie sdug bsdal); the corpus reads sdug bsngal on 1,139 other rows and sdug bsdal nowhere else. The parallel witness for this passage (C05:149 shares the root-verse line, C16:745 is the byte-identical re-ingest) offers  | CONFIRMED |
 | `C05:160` | min chad | man chad | ACIP of this row: "BSAM GTAN BZHI PA'I 'OG GSUM PA MIN CHAD NA'ANG". GMR renders "the third on down", i.e. man chad ("from X on down"). Corpus over 42,199 rows: ' man chad' 62 rows; ' min chad' 3 rows -- this row plus ILL:1737 ('rtag min chad min') and ILL:174 | PROBABLE |
 | `C05:160` | rnam par smin ba'i | rnam par smin pa'i | ACIP of this row: "RNAM PAR SMIN BA'I LAS YOD PA'I PHYIR". After suffix -n the nominaliser is pa; the same row writes 'smin par' correctly nine words later. Corpus: 'smin pa' 258 rows; 'smin ba' 4 rows, but the other three (C05:463, C16:973, TCS10:265) are all | PROBABLE |
+| `C05:172` | In the hells through there are only three projections of virtuous types of deeds that are possible. | In the hells though there are only three projections of virtuous types of deeds that are possible. | The clause opens 'on kyang dmyal ba na ni (ACIP 'ON KYANG DMYAL BA NA NI), the concessive 'however / though', so the word standing over 'on kyang is 'though'; 'through' leaves the English ungrammatical and renders nothing in the Tibetan. PARALLEL WITNESS CHECK | CONFIRMED |
+| `C05:172` | las 'phen pa du yod cin, | las 'phen pa du yod cing, | ACIP, the source of record, reads '... LAS 'PHEN PA DU YOD CIN,'. The imperfective clause connective after a d suffix is cing; cin is not a form. Corpus counts run against the spine: wylie like '% cin,%' matches 1 row (this one) against 453 rows for wylie like | CONFIRMED |
+| `C05:174` | brtan pa'i 'phags pas des skyes nas myong 'gyur du ma zad | brtan pa'i 'phags pas der skyes nas myong 'gyur du ma zad | ACIP, the source of record, reads "'PHAGS PAS DES SKYES NAS" and so agrees with the wylie, so the row is internally consistent; the emendation rests on the slot. WITHIN THIS SEGMENT: Geshe Michael renders the word "after being reborn there" — a locative — and  | PROBABLE |
+| `C05:178` | phung bo | phung po | Intra-row, re-derived from the spine at reconcile time. This segment writes the same word twice in exactly parallel phrases -- `las sog pa'i gnas skabs kyi phung bo dang` and `rnam smin myong ba'i gnas skabs kyi phung po gnyis` -- twenty syllables apart, and t | PROBABLE |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:247` | de dang , der yod med rnam pa kun du mtshungs sam mi mtshungs  (ACIP source: DE DANG , DER YOD MED RNAM PA KUN DU MTSUNGS SAM MI MTSUNGS ZHE) | de dang , der yod med rnam pa kun tu mtshungs sam mi mtshungs | Three independent authorities agree, and none of them is inference of mine. (1) Tony Duff, Standard Tibetan Grammar Vol I p.79: the re-suffixed da of kun/shin/'on is invisible in new orthography but still present, and "the presence of re-suffixed da letter on  | CONFIRMED |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
@@ -334,7 +338,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 158 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 162 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 59 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
