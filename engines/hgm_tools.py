@@ -35,7 +35,13 @@ def acip_to_ewts(acip):
     # SERVANT and ADVANCE still leak: rv and dv ARE wa-zur sequences, so no
     # local rule can separate them — that needs the caller to stop feeding
     # English through, which is filed separately.
-    s = re.sub(r'(?<=[BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz])V', 'W', s)
+    # '+' is ACIP's explicit-stack mark, and a wa-zur subjoined to a stack sits
+    # behind one: T+V'Am is the same word as tV'Am, which renders ཊྭཱཾ, and it
+    # was flagging ⟨T+vAM⟩ because the lookbehind saw the '+' and not the
+    # consonant in front of it. 12 corpus segments spell it that way against 40
+    # the other. Look past any run of '+'.
+    s = re.sub(r'(?<=[BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz])\+*V', 
+               lambda m: m.group(0)[:-1] + 'W', s)
     # VISARGA. ACIP writes it ':' and EWTS writes it 'H' — gap 3 of the three
     # in docs/FINDING_ACIP_EWTS_GAPS.md. Both engines already render hoH as
     # ཧོཿ, so nothing new is being invented here; the colon simply never
