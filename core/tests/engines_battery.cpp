@@ -302,6 +302,53 @@ int main(int argc, char** argv) {
                     leaked, sizeof(kMustRefuse) / sizeof(*kMustRefuse));
         CHECK(leaked == 0,
               "the engine refuses English instead of rendering it as Tibetan");
+
+        // ---- Battery E: every vowel in the table must be REACHABLE. ----
+        // A table entry the tokenizer can never reach is a capability that
+        // silently does not exist. VOW["-i"] and VOW["-I"] are the reversed
+        // gi-gu U+0F80 — Sanskrit vocalic ri and li, which Duff (Standard
+        // Tibetan Grammar Vol I p.301) says "is not used as part of the native
+        // Tibetan lettering set at all" and is therefore a diagnostic that
+        // Sanskrit is present. Teaching the tokenizer to accept '-' as the
+        // prefix disambiguator made both unreachable: r-i came back རི with
+        // the ORDINARY gi-gu, ok=true, nothing flagged. It stayed that way for
+        // a day because no test asked what the engine produced, only whether
+        // it produced something.
+        // Expected values are given as CODEPOINTS and encoded here, because
+        // hand-written UTF-8 escapes are a way to fail the wrong thing: my
+        // first attempt wrote U+0FB1 for U+0F71 and the test blamed the engine.
+        auto utf8 = [](std::initializer_list<unsigned> cps) {
+            std::string o;
+            for (unsigned c : cps) {           // every one of these is U+0F00..U+0FFF
+                o += (char)(0xE0 | (c >> 12));
+                o += (char)(0x80 | ((c >> 6) & 0x3F));
+                o += (char)(0x80 | (c & 0x3F));
+            }
+            return o;
+        };
+        struct VowCase { const char* wylie; std::string want; };
+        const VowCase kVowels[] = {
+            {"r-i", utf8({0x0F62, 0x0F80})},          // རྀ
+            {"l-i", utf8({0x0F63, 0x0F80})},          // ལྀ
+            {"r-I", utf8({0x0F62, 0x0F71, 0x0F80})},  // རཱྀ
+        };
+        long vowBad = 0;
+        for (const auto& v : kVowels) {
+            const auto r = allcore::wylieToUnicode(v.wylie);
+            if (!r.second || r.first != v.want) {
+                ++vowBad;
+                std::printf("     UNREACHABLE: %s -> %s (wanted %s)\n",
+                            v.wylie, r.first.c_str(), v.want.c_str());
+            }
+        }
+        std::printf("  E: reversed gi-gu reachable: %ld of %zu wrong\n", vowBad,
+                    sizeof(kVowels) / sizeof(*kVowels));
+        CHECK(vowBad == 0,
+              "the reversed gi-gu vowels are reachable, not just tabulated");
+        // and the prefix disambiguator it shares a character with still works
+        CHECK(allcore::wylieToUnicode("g-yas").first !=
+                  allcore::wylieToUnicode("gyas").first,
+              "g-yas and gyas still resolve differently");
     }
 
     // ---- Battery B: wylieToUnicode over the 26,318 ground-truth pairs ----

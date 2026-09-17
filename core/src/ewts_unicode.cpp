@@ -137,7 +137,27 @@ bool tokenize(const string& syl, vector<Token>& out) {
         // master dictionary writes it. Ported from engines/ewts_unicode.py
         // 2026-09-16 — the canonical Python accepts both, and rule 2 says
         // this must reproduce it exactly.
-        if (ch == '.' || ch == '-') { out.push_back({Token::DOT, "."}); ++i; continue; }
+        if (ch == '.' || ch == '-') {
+            // '-i' and '-I' are VOWELS — the reversed gi-gu U+0F80, for
+            // Sanskrit vocalic ri and li. Treating '-' as the prefix mark made
+            // those table entries unreachable and r-i came back རི with the
+            // ordinary gi-gu, silently. No prefix disambiguator is ever
+            // followed by a vowel. Parity: engines/ewts_unicode.py.
+            std::string dv;
+            for (const auto& k : VOW_KEYS)
+                if (!k.empty() && k[0] == '-' && syl.compare(i, k.size(), k) == 0) {
+                    dv = k;
+                    break;
+                }
+            if (!dv.empty()) {
+                out.push_back({Token::V, dv});
+                i += dv.size();
+                continue;
+            }
+            out.push_back({Token::DOT, "."});
+            ++i;
+            continue;
+        }
         if (ch == 'M' || ch == 'H') {
             out.push_back({Token::C, string(1, ch)});
             ++i;

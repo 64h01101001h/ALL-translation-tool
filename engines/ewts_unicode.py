@@ -56,7 +56,20 @@ def tokenize(syl):
         # U+002D sitting inside Tibetan script in 664 entries -- 38 of them
         # binding and labelled source-attested. Accepting both spellings of
         # one mark fixes the cause rather than the symptom.
-        if ch in '.-': out.append('.'); i += 1; continue
+        # ...but '-i' and '-I' are VOWELS, not a disambiguator: the reversed
+        # gi-gu, U+0F80, which EWTS writes r-i for Sanskrit vocalic ri and l-i
+        # for vocalic li. Duff, Standard Tibetan Grammar Vol I p.301: "The
+        # reversed gi.gu mark is not used as part of the native Tibetan
+        # lettering set at all." Accepting '-' as the prefix mark above made
+        # VOW['-i'] and VOW['-I'] UNREACHABLE — r-i came back རི with the
+        # ordinary gi-gu instead of རྀ, silently, with ok=True. Try the vowel
+        # keys first; no prefix disambiguator is ever followed by a vowel.
+        if ch in '.-':
+            dv = next((v for v in VOW_KEYS
+                       if v.startswith('-') and syl.startswith(v, i)), None)
+            if dv:
+                out.append(('V', dv)); i += len(dv); continue
+            out.append('.'); i += 1; continue
         if ch in FINALS:
             out.append(('C', ch)); i += 1; continue
         v = next((v for v in VOW_KEYS if syl.startswith(v, i)), None)
