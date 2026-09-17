@@ -3094,5 +3094,29 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-259",
+  "course": "C05",
+  "segment": "C05:205",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "where there are many lions or leopards or other dangerous animals",
+  "expected": "tigers, not leopards - the Tibetan of this row is `stag` (ACIP STAG), and `gzig`, the ordinary word for leopard, does not occur in the row",
+  "evidence": "This row's wylie/ACIP reads `seng ge dang stag la sogs pa dang` / SENG GE DANG STAG LA SOGS PA DANG. Parallel witnesses checked FIRST: C09:162, C16:783 and C17:509 carry this passage byte-identical in both columns (the same file re-ingested, so none is an independent witness), and those four rows are the ONLY occurrences of the string 'leopard' in all 42,199 corpus rows. Against them, 21 rows pair `stag` with 'tiger', including the SAME collocation at C11:257 - `seng ge dang , stag dang , khyi dang` rendered 'beings who are lions, or tigers' - and TCS10:69 `stag sham` under 'a loincloth of tiger skin'. COUNTER-EVIDENCE recorded: the dictionary's binding hgm_gloss for `stag` is [\"leopards\"], but that gloss (tier glossary, HTG2016) is derived from this passage alone - it is the only place the word 'leopards' occurs - so it is not independent of the reading it would license; and Lokesh Chandra lists dvipin (leopard) beside vyaghra and shardula for `stag`, so 'leopards' is a possible sense rather than an impossible one. Confidence is therefore PROBABLE, not CONFIRMED. Reported, never corrected: Geshe Michael's English stands verbatim and the `stag` span was left unbanked rather than enter stag=\"leopards\" into the layer, on the `seng ldeng`/'sandalwood' precedent (E-169).",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-260",
+  "course": "C05",
+  "segment": "C05:206",
+  "kind": "ENGLISH_TYPO",
+  "found": "are actually nice, and happiness;",
+  "expected": "are actually nice, and happy;",
+  "evidence": "This segment's own wylie reads 'mchog tu gtsang ba dang bde bar snang ba' - two dang-coordinated complements of snang ba ('appear'): [appear] supremely clean AND happy. The English renders the first complement with the adjective 'nice' and then switches to the noun 'happiness', so the clause fails on its own terms ('things ... are actually nice, and happiness'). Parallel witnesses checked by SQL on both columns: C05:206, C09:163, C16:784, C17:510 carry this sentence, wylie identical apart from a trailing shad. C09:163 (Course IX, running page '69') and C17:510 (Course XVII, running page '14') are separate source files and BOTH read 'are actually nice, and happy'. C16:784 reads 'happiness' like C05:206, but C16 is registered in C05_CAMPAIGN.md as the same file re-ingested and is not an independent witness. Published reading is 'happy' by 2 independent witnesses to 1 non-independent agreement.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
