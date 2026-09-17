@@ -4,15 +4,25 @@ Found while generating the iOS drill pack. Fixed one at a time, each with its
 battery, because this is a canonical engine and Rule 2 says a change to it
 ships with proof behind it or not at all.
 
-## Status, 2026-09-16 — two closed, one open
+## Status, 2026-09-17 — ALL THREE CLOSED
 
 | Gap | State |
 |---|---|
 | `G-Y` disambiguator | **Closed** (5c3d77f8), though not where this note expected. `acip_to_ewts` still emits `g-yon`; what changed is that `ewts_unicode` now READS it — `-` is the older Wylie/ACIP spelling of the same prefix mark EWTS writes `.`, so both are accepted and `g-yon` renders གཡོན. 641 master entries had been keeping a literal hyphen inside their Tibetan. |
 | Wazur `V` | **Closed** (2026-09-16). `V` is the ACIP code for wa-zur, and wa-zur is subjoined, so a `V` with a letter before it becomes EWTS `w` and a `V` that opens a syllable is left alone — stray Latin in the corpus must not be read as Tibetan. Measured over the shipped spine: 1,615 segments carry a subjoined `V`, **none** of them rendered without a flag, and 1,113 do now. Corpus-wide the pipeline goes 35,791 → 36,904 of 42,199 segments rendering (84.8% → 87.5%). |
-| Visarga `:` | **Open.** `A'A:`, `HO:`, `DZA:` still produce `a'a:`, `ho:`, which `wylieToUnicode` refuses. EWTS writes visarga `H`, and both engines already render `hoH` → ཧོཿ correctly, so this is the same shape as the `V` fix and is the next one to take. |
+| Visarga `:` | **Closed** (2026-09-17). A visarga follows a vowel or the anusvara `m`, and that restriction is the whole rule: 1,473 of the 1,492 colons outside editorial braces follow a vowel and every one is a mantra syllable, while the 19 that do not are English headings, `Includes:`, a folio marker and editorial `:-`. Braces are masked — `{%Levi: GYIS}` has a vowel before its colon too. |
+| *(fourth, found while closing the third)* | **Closed** (2026-09-17). `A'A` is a-chen's own long vowel and was falling through as `a'a` → ཨའ, a-chen plus an a-chung, **silently, with ok=true**. Restricted to syllable-initial, because mid-word the same shape is the achung particle — `PA'I`, the genitive, occurs 53,651 times. |
 
 `GA-YAS` and friends remain **not covered and not guessed at**.
+
+### What closing the last two was worth
+
+`AOm A'A: H'Um` is the seed mantra om ah hum. The engine had always rendered
+ཨོཾ and ཧཱུཾ and had always known that EWTS `AH` is ཨཱཿ — only the middle
+syllable failed, and it needed both fixes. Corpus rendering went 36,800 →
+37,238 of 42,199. In `sanskrit_reference.tsv`, **3,847 terms went from no
+Tibetan at all to a rendering and zero went the other way**; terms the
+converter cannot render fell from 9,862 to 6,015.
 
 ### What the wa-zur fix had to wait for
 
