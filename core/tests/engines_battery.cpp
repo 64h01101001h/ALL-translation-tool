@@ -107,10 +107,19 @@ static std::vector<std::string> shadSegments(const std::string& tib) {
     return segs;
 }
 
-// Measured floor for battery A2, raised only with evidence. 36,904 of 42,199
-// on 2026-09-16, up from 35,791 before ACIP V was read as wa-zur: +1,113
-// segments that had been showing a reader ⟨dvags⟩ where Tibetan belongs.
-static const long RENDER_FLOOR = 36904;
+// Measured floor for battery A2. 35,791 before ACIP V was read as wa-zur.
+// It read 36,904 for a few hours on 2026-09-16 and that number was WRONG: the
+// first version of the V rule required only "a letter" before the V, and the
+// acip column also holds ALL-CAPS ENGLISH, so EVERY became EWERY -> ཨེཝེརཡ and
+// about 104 English rows were counted as successes for rendering nonsense
+// instead of flagging. Requiring a consonant before the V fixed that, and the
+// floor came DOWN to 36,800 as a result.
+//
+// A floor is only lowered when the number it held was false, and this one was.
+// Read that as the warning it is: A2 counts "did not flag", which is not the
+// same as "rendered Tibetan" — that is why REFUSAL BATTERY D now sits beside
+// it. Honest gain over the pre-fix baseline is +1,009, not +1,113.
+static const long RENDER_FLOOR = 36800;
 
 int main(int argc, char** argv) {
     if (argc < 2) {
@@ -175,6 +184,16 @@ int main(int argc, char** argv) {
         // ACIP, a separate defect. Ratchet — it may fall, never rise.
         CHECK(other <= 154,
               "every acipToEwts disagreement is the wa-zur fix or a known marker");
+        // The wa-zur bucket has to be bounded too. It was not, and that is a
+        // real hole: `match` and `other` were counted while `wazur` absorbed
+        // any number of segments, so a LOOSENED rule launders its damage into
+        // the bucket labelled "the known correction" and battery A still says
+        // PASS. It happened — DIVISIONS, INDIVIDUAL, ACHIEVE, EVERY, GIVEN,
+        // LIVES, DEVELOPING and ACTIVITY sat in here filed as wa-zur fixes.
+        // 1,414 measured 2026-09-16 with the consonant-guarded rule; a ratchet
+        // that may fall, never rise.
+        CHECK(wazur <= 1414,
+              "the wa-zur bucket has not grown — a loosened rule cannot hide in it");
         CHECK(match + wazur + other == total, "battery A classifies every segment");
 
         // A2 — the ratchet that actually locks the fix in. Battery A above
@@ -200,6 +219,36 @@ int main(int argc, char** argv) {
                     rendered, seen, seen ? 100.0 * rendered / seen : 0);
         CHECK(rendered >= RENDER_FLOOR,
               "the ACIP->EWTS->Tibetan pipeline renders at least as much as before");
+
+        // ---- Battery D: REFUSAL. What the engine must NOT render. ----
+        // Every other battery here asks "did it convert?". None of them fails
+        // when the engine converts something it should have REFUSED, and that
+        // is the direction rule 3 actually protects: a conversion that cannot
+        // be done is flagged, never approximated. The gap was not theoretical
+        // — a V rule requiring only "a letter" before it turned EVERY into
+        // ཨེཝེརཡ and DIVISIONS into དིཝིསིོནས, and battery A2 counted both as
+        // successes because A2 counts "did not flag", not "rendered Tibetan".
+        //
+        // These strings are English. There is no reading of them that is
+        // Tibetan, so wylieToUnicode must return ok=false for every one.
+        static const char* kMustRefuse[] = {
+            "EVERY", "DIVISIONS", "ACHIEVE", "UNIVERSITY", "INDIVIDUAL",
+            "GIVEN", "LIVES", "DEVELOPING", "ACTIVITY", "THE VOWS",
+            "DIAMOND MOUNTAIN UNIVERSITY", "THE THIRD PATH: CORRECT VIEW",
+        };
+        long leaked = 0;
+        for (const char* e : kMustRefuse) {
+            const auto r = allcore::wylieToUnicode(allcore::acipToEwts(e));
+            if (r.second) {
+                ++leaked;
+                std::printf("     LEAKED: %s -> %s (claimed ok)\n", e,
+                            r.first.c_str());
+            }
+        }
+        std::printf("  D: refusal battery: %ld of %zu English strings leaked\n",
+                    leaked, sizeof(kMustRefuse) / sizeof(*kMustRefuse));
+        CHECK(leaked == 0,
+              "the engine refuses English instead of rendering it as Tibetan");
     }
 
     // ---- Battery B: wylieToUnicode over the 26,318 ground-truth pairs ----
