@@ -890,6 +890,25 @@ if(Python3_FOUND)
   # This refuses on a build directory older than the CMake files, and on any
   # suite that is declared but that no build directory registers. Both are
   # "not run is not passed" wearing a build-system hat.
+  # 2026-09-17: the C05 alignment workflow lived only in one session's scratch
+  # directory and hardcoded that session's path, so it could not run anywhere
+  # else. Landing it in the repo was the fix -- except the landed copy had a
+  # multi-line string pasted into a single-quoted literal and would not parse.
+  # It was committed and pushed, and surfaced only when the next batch was
+  # launched from it. Nothing read .claude/ ; this does.
+  #
+  # The check itself had to be proved twice. Run against the .js file, node
+  # returns SUCCESS WITHOUT PARSING when it sees `export` -- so the first
+  # version passed a file with a deliberate syntax error. Run as plain ESM, it
+  # rejected the real script over its top-level `return`, which the workflow
+  # runtime allows because it wraps the body in an async function. It now
+  # mimics the runtime, and is mutation-tested against both an unterminated
+  # string and a TypeScript annotation.
+  add_test(NAME workflow_scripts_parse
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_workflow_scripts_parse.py)
+  set_tests_properties(workflow_scripts_parse PROPERTIES SKIP_RETURN_CODE 77)
+
   add_test(NAME checks_registered
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/count_checks.py --gate
