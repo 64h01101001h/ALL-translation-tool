@@ -87,3 +87,48 @@ websites. Everything divides into four lanes:
   Mirror, Tshigdzod) — derivative infringement, and beneath us.
 - Shipping "everyone-has-it" files without a license.
 - Letting any AI text near Geshe Michael's tier.
+
+---
+
+## Adam's ruling on source trust, 2026-09-17
+
+> "I'd also like to begin considering the two Tony Duff dictionaries as being
+> highly trustworthy. I almost appreciate and trust Tony Duff's work more than
+> Jeffrey Hopkins. Hopkins can use overly scholastic language at times, which
+> isn't necessarily the approach or tone that I'd like to take."
+
+**What this changes.** Among REFERENCE sources, Duff now outranks Hopkins —
+both on reliability and, explicitly, on register. Hopkins's scholastic English
+is not the house voice. Where the two disagree as comparanda, Duff's reading
+carries the greater weight, and where a tone has to be chosen for our own
+English, Hopkins is not the model.
+
+It also ratifies what the tooling had already started doing. The Illuminator
+has been used as an AUDIT ORACLE since 2026-09-16 — 98.49% agreement with the
+spine over 11,952 shared headwords, with the 181 disagreements resolving as
+the spine's — and it is what settled `kun du` as a misspelling of `kun tu`
+rather than a variant. Duff's own grammar volumes drove the audit at
+`docs/AUDIT_2026-09-17_DUFF_GRAMMAR.md`, and Volume II p.213 names the
+Illuminator as its companion, so the two are one body of work.
+
+**What this does NOT change, and both matter.**
+
+*Rule 1 is untouched.* `hgm_gloss` is binding and everything else is reference
+comparanda. Duff does not enter it, any more than Hopkins does. Trusting a
+reference source more does not promote it into Geshe Michael's tier — the
+machine may MATCH his English, never compose it, and that applies to a
+dictionary's English exactly as it applies to a machine's.
+
+*The licensing position is unchanged and still open.* This page already
+classes Duff as **copyrighted, licensable — ask; pay if reasonable**, lists
+the Illuminator under *licensed crowns (asked)*, and forbids paraphrasing it
+under **Never**. A ruling about trust is not a licence. Using it as an oracle
+— comparing against it, and citing it — is a different act from shipping or
+paraphrasing its definitions, and only the first is open to us today. The
+Illuminator is not a layer in the app and should not become one until the
+per-seat licence is actually in hand.
+
+**Open, for Adam:** whether the Hopkins reference toggle — `app/main.cpp`,
+"Hopkins reference", currently defaulting OFF — should stay as it is, be
+relabelled to signal its register, or eventually sit beside a licensed Duff
+layer. Not changed here; it is a UI ruling.
