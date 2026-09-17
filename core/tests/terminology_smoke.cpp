@@ -94,12 +94,12 @@ int main(int argc, char** argv) {
         }
         CHECK(sr && sr->tier == "curated",
               "a curated term survives a longer auto-aligned container "
-              "(rule 1: his English outranks the machine's match)");
+              "(rule 1: Geshe Michael's English outranks the machine's match)");
         CHECK(ch && ch->tier == "curated",
               "and so does the second one");
         CHECK(sr && !sr->matched.empty() && ch && !ch->matched.empty(),
               "and both are reported as RENDERED, because the draft uses "
-              "his equivalents verbatim -- the old report called this an "
+              "Geshe Michael's equivalents verbatim -- the old report called this an "
               "unmatched term");
     }
 

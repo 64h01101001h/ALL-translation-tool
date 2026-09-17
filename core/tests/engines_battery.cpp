@@ -728,7 +728,7 @@ int main(int argc, char** argv) {
         std::FILE* f = path ? std::fopen(path, "rb") : nullptr;
         if (!f) {
             std::printf("  I: evidence file missing — SKIPPED\n");
-            CHECK(false, "battery I: his mantra evidence is present");
+            CHECK(false, "battery I: Geshe Michael's mantra evidence is present");
         } else {
             char line[4096];
             long total = 0, agree = 0;
@@ -761,15 +761,15 @@ int main(int argc, char** argv) {
                 for (auto& c : want) c = (char)std::tolower((unsigned char)c);
                 if (ok && got == want) agree += n;
                 else if (misses.size() < 6)
-                    misses.push_back(col[0] + " -> he writes \"" + want +
+                    misses.push_back(col[0] + " -> Geshe Michael writes \"" + want +
                                      "\", we produce \"" + got + "\"");
             }
             std::fclose(f);
             const double rate = total ? 100.0 * agree / total : 0;
-            std::printf("  I: ALL pronunciation vs his own readings: %ld/%ld "
+            std::printf("  I: ALL pronunciation vs Geshe Michael's own readings: %ld/%ld "
                         "(%.1f%%)\n", agree, total, rate);
             for (auto& m : misses) std::printf("     %.110s\n", m.c_str());
-            CHECK(total > 5000, "battery I covers his mantra corpus");
+            CHECK(total > 5000, "battery I covers Geshe Michael's mantra corpus");
             CHECK(rate >= 94.0,
                   "the ALL standard agrees with Geshe Michael Roach's own "
                   "published readings (floor 94%, ratchet upward only)");

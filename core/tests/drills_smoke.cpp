@@ -221,7 +221,7 @@ int main(int argc, char** argv) {
         CHECK(valid == made,
               "boundary: every end is a real, ascending, non-final position "
               "and no unscored position is also in the key");
-        CHECK(keyed == made, "boundary: every drill carries his English");
+        CHECK(keyed == made, "boundary: every drill carries Geshe Michael's English");
         CHECK(unpunct == 0,
               "boundary: the default draw is the punctuated pool only");
     }
@@ -309,7 +309,7 @@ int main(int argc, char** argv) {
                   "The definition of an apparent refuge is this.", ""),
               "chantline: ordinary English is NOT caught");
         CHECK(!allcore::englishIsNotEnglish("Buddha, Dharma, Sangha.", ""),
-              "chantline: a short list of his terms is not caught either - "
+              "chantline: a short list of Geshe Michael's terms is not caught either - "
               "the four-word floor is what keeps it off them");
         allcore::CorpusSegment chant;
         chant.id = 1;
@@ -319,7 +319,7 @@ int main(int argc, char** argv) {
         chant.english = "sashi pukyi jukshing metok tram,";
         CHECK(!allcore::DrillFactory::isDrillable(chant),
               "drills: a segment whose English is its own pronunciation is "
-              "not drillable - no drill may print it as his rendering");
+              "not drillable - no drill may print it as Geshe Michael's rendering");
     }
 
     {   // C13:63-82, the documented column offset: Tibetan against another
