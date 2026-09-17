@@ -131,7 +131,13 @@ bool tokenize(const string& syl, vector<Token>& out) {
     while (i < syl.size()) {
         char ch = syl[i];
         if (ch == '+') { out.push_back({Token::PLUS, "+"}); ++i; continue; }
-        if (ch == '.') { out.push_back({Token::DOT, "."}); ++i; continue; }
+        // '.' is EWTS's prefix disambiguator (g.yog = ga PREFIX + ya ROOT,
+        // as against gyog = ga + SUBJOINED ya, a different word). '-' is the
+        // same mark in the older Wylie/ACIP convention, which is how the
+        // master dictionary writes it. Ported from engines/ewts_unicode.py
+        // 2026-09-16 — the canonical Python accepts both, and rule 2 says
+        // this must reproduce it exactly.
+        if (ch == '.' || ch == '-') { out.push_back({Token::DOT, "."}); ++i; continue; }
         if (ch == 'M' || ch == 'H') {
             out.push_back({Token::C, string(1, ch)});
             ++i;

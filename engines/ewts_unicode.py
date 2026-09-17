@@ -47,7 +47,16 @@ def tokenize(syl):
     while i < len(syl):
         ch = syl[i]
         if ch == '+': out.append('+'); i += 1; continue
-        if ch == '.': out.append('.'); i += 1; continue
+        # '.' is EWTS's prefix disambiguator (g.yog = ga PREFIX + ya ROOT,
+        # as against gyog = ga + SUBJOINED ya -- a different word).
+        # '-' is the same mark in the older Wylie/ACIP convention, and the
+        # master dictionary is written that way: all 641 of its g-y entries
+        # came through here as a refusal, and whatever built their Tibetan
+        # fell back to passing the wylie through verbatim, leaving a literal
+        # U+002D sitting inside Tibetan script in 664 entries -- 38 of them
+        # binding and labelled source-attested. Accepting both spellings of
+        # one mark fixes the cause rather than the symptom.
+        if ch in '.-': out.append('.'); i += 1; continue
         if ch in FINALS:
             out.append(('C', ch)); i += 1; continue
         v = next((v for v in VOW_KEYS if syl.startswith(v, i)), None)
