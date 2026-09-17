@@ -120,7 +120,12 @@ using Table = std::vector<std::pair<std::u32string, std::u32string>>;
 const Table& C_ACIP() {
     static const Table t = {
         {U"k", U"K"}, {U"kh", U"KH"}, {U"g", U"G"}, {U"gh", U"GH"},
-        {U"ṅ", U"NG"}, {U"c", U"TZ"}, {U"ch", U"TSH"}, {U"j", U"DZ"},
+        {U"ṅ", U"NG"}, {U"c", U"TZ"},
+        // ACIP already spells tsha "TS"; "TSH" round-tripped back through
+        // acipToEwts as tsh+h and rendered ཚྷ — tsha with a subjoined ha, a
+        // letter that does not exist. Duff, Standard Tibetan Grammar Vol I
+        // p.306: Sanskrit c/ch/j take the tsa-section letters, so cha is ཚ.
+        {U"ch", U"TS"}, {U"j", U"DZ"},
         {U"jh", U"DZH"}, {U"ñ", U"NY"}, {U"ṭ", U"t"}, {U"ṭh", U"th"},
         {U"ḍ", U"d"}, {U"ḍh", U"dh"}, {U"ṇ", U"n"}, {U"t", U"T"},
         {U"th", U"TH"}, {U"d", U"D"}, {U"dh", U"DH"}, {U"n", U"N"},
