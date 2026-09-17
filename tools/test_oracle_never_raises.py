@@ -30,7 +30,28 @@ sys.path.insert(0, os.path.join(ROOT, "engines"))
 SPINE = os.path.join(ROOT, "build", "hgm_spine_v27_2.db")
 
 
+def _spine_usable(path):
+    """Present is not enough: sqlite3.connect CREATES the file, so the first
+    check to run leaves an empty database behind and every later one finds it
+    'there'. That is how all five of these went from a clean skip to an
+    unhandled OperationalError on a fresh clone. Ask for the table."""
+    import os as _os
+    import sqlite3 as _sq
+    if not _os.path.exists(path):
+        return False
+    try:
+        con = _sq.connect("file:%s?mode=ro" % path, uri=True)
+        con.execute("SELECT 1 FROM corpus_segments LIMIT 1").fetchone()
+        con.close()
+        return True
+    except Exception:
+        return False
+
+
 def main():
+    if not _spine_usable(SPINE):
+        print("  SKIPPED: no usable spine at %s — build/ is gitignored, so a\n             fresh clone has none. NOT a pass: nothing was checked." % SPINE)
+        return 77
     if not os.path.exists(SPINE):
         print("  [SKIP] no spine at %s — build/ is gitignored" % SPINE)
         return 0

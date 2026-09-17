@@ -874,3 +874,21 @@ endif()
 # allcore the desktop uses, so the phone inherits its fixes and its refusals
 add_executable(build_drill_pack ${CMAKE_SOURCE_DIR}/tools/build_drill_pack.cpp)
 target_link_libraries(build_drill_pack PRIVATE allcore)
+
+  # These six read the spine (or the master) by a path hardcoded inside the
+  # script, so the add_test command cannot name it and ctest cannot see the
+  # dependency. On a fresh clone build/ and data/ are absent and all six ended
+  # on an unhandled sqlite3.OperationalError — a failure that says the code is
+  # broken when the truth is that nothing was checked. They return 77 now.
+  #
+  # Their own guard had to get harder too: os.path.exists is not enough,
+  # because sqlite3.connect CREATES the file, so the first script to run left
+  # an empty database behind and every later one found it "present". The guard
+  # asks for the table.
+  set_tests_properties(errata_name_their_witnesses
+                       errata_quotes_hold
+                       evidence_matches_spine
+                       layer_matches_spine
+                       oracle_never_raises
+                       generated_docs_in_sync
+                       PROPERTIES SKIP_RETURN_CODE 77)

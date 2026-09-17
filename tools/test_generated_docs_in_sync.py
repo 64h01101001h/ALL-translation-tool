@@ -105,7 +105,7 @@ def check_rebuild_order():
     out = os.path.join(ROOT, 'docs', 'MASTER_REBUILD_ORDER.md')
     master = os.path.join(ROOT, 'data', 'hgm_dictionary_v27_2.json.gz')
     if not os.path.exists(master):
-        return 'OK', 'skipped — no master present (data/ is gitignored)'
+        return 'SKIPPED', 'no master present (data/ is gitignored)'
     if not os.path.exists(out):
         return 'MISSING', 'docs/MASTER_REBUILD_ORDER.md does not exist'
     before = io.open(out, encoding='utf-8').read()
@@ -135,15 +135,32 @@ CHECKS = [('docs/ERRATA_REGISTER.md', check_errata_register),
           ('docs/MASTER_REBUILD_ORDER.md', check_rebuild_order)]
 
 def main():
+    # "in sync" is a CLAIM. A check that could not run has not made it, and
+    # saying so in the same words as a check that did is how a tick comes to
+    # mean "not examined". SKIPPED prints as itself, is counted, and is named
+    # again in the summary; only a real failure is a failure.
     bad = 0
+    skipped = 0
     for name, fn in CHECKS:
         status, detail = fn()
         if status == 'OK':
             print('in sync: %s — %s' % (name, detail))
+        elif status == 'SKIPPED':
+            skipped += 1
+            print('SKIPPED (NOT verified): %s — %s' % (name, detail))
         else:
             bad += 1
             print('FAIL %s: %s\n     %s' % (name, status, detail))
-    return 1 if bad else 0
+    if skipped:
+        print('%d of %d generated document(s) could NOT be checked'
+              % (skipped, len(CHECKS)))
+    if bad:
+        return 1
+    # every check skipped means the run proved nothing — ctest's skip code, so
+    # it reads as skipped rather than as a pass.
+    if skipped == len(CHECKS):
+        return 77
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main())
