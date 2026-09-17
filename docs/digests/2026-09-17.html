@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Diamond Cutter Translation Tool Daily Digest #9 — Thursday, September 17 2026</title>
+  <style>
+
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+  <style type="text/css">body{max-width:62em;margin:2.5em auto;padding:0 1.5em;font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:1.05em;line-height:1.55;color:#222}
+
+h1,h2,h3,h4{text-align:center}
+h1{font-size:1.7em;line-height:1.25;margin:0 0 1.2em}
+h2{font-size:1.3em;margin:2.4em 0 0.9em;padding-top:0.6em;border-top:1px solid #e3ddd0}
+p{margin:0 0 1em}
+ul,ol{margin:0.6em 0 1.2em;padding-left:1.6em}
+li{margin:0.45em 0}
+li>p{margin:0.3em 0}
+figure{margin:2em 0 2.2em;text-align:center}
+img{max-width:100%;height:auto;border:1px solid #ddd;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+figcaption{color:#555;font-size:0.92em;line-height:1.45;margin:0.7em auto 0;max-width:52em;text-align:center}
+table{border-collapse:collapse;margin:1.4em 0 2em}
+th,td{padding:0.45em 0.9em;border-bottom:1px solid #e3ddd0;text-align:left;vertical-align:top}
+th{background:#f4efe4}
+strong{color:#111}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Diamond Cutter Translation Tool Daily Digest #9 —
+Thursday, September 17 2026</h1>
+</header>
+<h1 id="diamond-cutter-translation-tool-daily-digest-9-thursday-september-17-2026">Diamond
+Cutter Translation Tool Daily Digest #9 — Thursday, September 17
+2026</h1>
+<p><em>Covers Wednesday the 16th and Thursday the 17th. Two days in one
+digest: the 16th’s work went uncovered while the reading below was
+running.</em></p>
+<p><strong>Headline.</strong> I had two of Tony Duff’s grammar books
+read cover to cover against our software — 1,082 pages — and it found
+four real faults in the engines, three of which were the kind nobody can
+see: the program produced confident, plausible Tibetan and was wrong.
+All four are fixed, and the alignment of Course 5 has started again.</p>
+<h2 id="what-got-done">What got done</h2>
+<h3 id="reading-the-grammar-books-against-our-own-program">Reading the
+grammar books against our own program</h3>
+<p>I asked for Tony Duff’s <em>Standard Tibetan Grammar</em>, both
+volumes, to be read in full and every point in them checked against what
+our software actually does. Every page was read — not sampled — and
+every claim was re-checked by a second reader who was told to doubt it.
+<strong>That second pass threw out 177 claims</strong>, which is the
+number I trust the exercise by.</p>
+<p>It confirmed 647 places where our program already does the right
+thing, and 41 where it does not. Four of those were faults and are
+fixed:</p>
+<ul>
+<li>The mark that tells a reader a Sanskrit word is present had stopped
+being produced at all. It was still in our tables; a fix I made the day
+before had made it unreachable. <strong>That one was mine, from the
+previous day, and nothing in 124 automatic checks noticed.</strong></li>
+<li>A Sanskrit letter was being drawn as a character that does not exist
+in the alphabet. 1,267 dictionary entries.</li>
+<li>A seed syllable used in prayer, <em>bhrūṃ</em>, was coming back
+without the mark over it, and the program reported success.</li>
+<li>The seed mantra <em>oṃ āḥ hūṃ</em> would not render its middle
+syllable. The other two had always worked.</li>
+</ul>
+<p><strong>Three of those four were silent</strong> — the program did
+not flag anything, it simply produced something wrong that looked right.
+That is the finding behind the finding, and three new automatic checks
+now exist because of it.</p>
+<h3 id="thirty-seven-things-are-not-faults-and-they-are-now-five-questions">Thirty-seven
+things are not faults, and they are now five questions</h3>
+<p>The other 37 are places where Duff describes Tibetan one way and our
+software models it another. Nothing is broken; something is unmodelled,
+and whether to model it is a decision rather than a repair. Left as a
+list of 37 they read as a mess. They are not: they collapse into
+<strong>five questions</strong>, and answering those five closes all of
+them. That brief is written and waiting for you.</p>
+<p><strong>Three of Duff’s rules were measured and deliberately NOT
+implemented</strong>, because doing what the book says would have made
+the tool worse. One example: enforcing the classical rule about which
+letters may end a word would have made the program refuse 175 correct
+entries — Sanskrit written in Tibetan letters, where the rule does not
+apply. The measurements are recorded so the question is not re-opened
+without new evidence.</p>
+<h3 id="the-first-step-for-a-beginner-measured-at-last">The first step
+for a beginner, measured at last</h3>
+<p>On a hike in September I asked for the one thing a beginner needs
+first: being able to tell where one word stops and the next begins. That
+work had been blocked since, because two honest attempts to count word
+frequency had disagreed by two and a half times, and a rule was set that
+no figure could be published until the disagreement was settled.</p>
+<p>It is settled, and the answer is measured:</p>
+<ul>
+<li><strong>The most common 2,000 words cover 76% of everything we
+hold.</strong> The most common 4,000 cover 86%.</li>
+<li><strong>Thirty-two connecting particles alone are a fifth of all
+running text.</strong> Those are exactly the small words that show a
+reader where one word ends — the cheapest thing on the list, and the
+first thing to teach.</li>
+<li>The choice that was feared would move the answer moves it by three
+or four points, not by two and a half times.</li>
+</ul>
+<p>I published the first version of these figures and <strong>they were
+wrong by three points</strong>. Two spellings of the same word were
+being counted separately, and it was visible on the first line of
+output. The page now carries the wrong numbers and the reason beside the
+right ones.</p>
+<h3 id="course-5-alignment-resumed">Course 5 alignment resumed</h3>
+<p>The full-depth reading of Course 5 stopped on 8 September at segment
+165 of 511, at my call, while the app went toward release. It has
+started again. <strong>Segment 168 of 511 now</strong>, and the first
+new page is done to the full standard: two independent analysts on each
+sentence, their disagreements settled by a third against the evidence
+already banked.</p>
+<p>On one sentence the two analysts agreed on only 25 of 44 alignments,
+which is what the two-reader method is for. Two proposed alignments were
+<strong>dropped rather than banked</strong> — each would have passed
+every automatic check and still been false.</p>
+<h3 id="a-defect-in-geshe-michaels-dictionary-found-by-reading-the-screen">A
+defect in Geshe Michael’s dictionary, found by reading the screen</h3>
+<p>I noticed the program showing the word <em>gus</em> — reverence — as
+“i”. It is not the program’s doing: the dictionary itself stores “i”
+first for that word. Measured: of 12,004 entries, ten lead with a single
+letter, and <strong>eight of the ten are correct</strong> — “i” is the
+pronoun <em>I</em> stored in lower case, and several Tibetan particles
+genuinely correspond to English endings. Two are wrong, <em>gus</em>
+among them.</p>
+<p>That question also produced a tool: a way to narrow 11,968 entries to
+55 worth a person’s eye. Reading those 55 found <strong>ten glosses that
+do not describe their headword</strong>, each confirmed against two
+independent dictionaries.</p>
+<h2 id="adams-decisions-and-actions">Adam’s decisions and actions</h2>
+<ul>
+<li>Ruled that <strong>Tony Duff’s dictionaries are to be trusted above
+Hopkins</strong>, on reliability and on register — Hopkins’s scholarly
+English is not the voice this project wants. Recorded, with two things
+it does not change: Geshe Michael’s own English stays binding above
+every reference work, and trust is not a licence — the Illuminator is
+asked for, not yet obtained.</li>
+<li>Paused release work and directed that the <strong>alignment and the
+dictionary</strong> are the focus.</li>
+<li>Found the <em>gus</em> defect by using the program.</li>
+<li>Asked for the grammar books to be searched for on the drives.
+<strong>They were on the laptop the whole time</strong>, filed under
+“Tony Bluff” — a typo in the file name, which is why every search for
+the author had failed.</li>
+</ul>
+<h2 id="numbers">Numbers</h2>
+<table>
+<tbody>
+<tr>
+<td>Pages of grammar read against the software</td>
+<td>1,082</td>
+</tr>
+<tr>
+<td>Claims discarded by the checking pass</td>
+<td>177</td>
+</tr>
+<tr>
+<td>Places our software was confirmed correct</td>
+<td>647</td>
+</tr>
+<tr>
+<td>Faults found and fixed</td>
+<td>4 (3 of them silent)</td>
+</tr>
+<tr>
+<td>Questions now waiting on leadership</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Course 5 alignment</td>
+<td>168 of 511 segments</td>
+</tr>
+<tr>
+<td>Attested alignment links banked</td>
+<td>41,869</td>
+</tr>
+<tr>
+<td>Source-document defects on record</td>
+<td>250</td>
+</tr>
+<tr>
+<td>Automatic checks, all passing</td>
+<td>124</td>
+</tr>
+<tr>
+<td>Dictionary and corpus data changed</td>
+<td><strong>none</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="open-questions-for-leadership">Open questions for
+leadership</h2>
+<ul>
+<li><strong>The five questions</strong> in the decision brief. The
+largest: whether we should model the traditional Tibetan account of
+letter gender, from which the classical grammarians derive tense and
+other things. We currently use a Western description instead. It is not
+wrong; it is a different axis.</li>
+<li><strong>Whether “particle” is the right word.</strong> Duff argues
+it mistranslates the Tibetan, which means “phrase linker”. My own advice
+is to find out what Geshe Michael’s courses say first: if they say
+particle, the students’ vocabulary should win.</li>
+<li><strong>One reading needs a person who knows Sanskrit.</strong> Our
+software and the Illuminator disagree about a cluster of letters, and
+our own dictionary has nothing to say — not one of its 105,634 entries
+uses it.</li>
+<li><strong>What “all of Geshe Michael’s translations” means.</strong>
+The 42,199 aligned passages are a portion. Establishing what is missing
+needs the organisation’s records, not the program’s.</li>
+</ul>
+<h2 id="tomorrow">Tomorrow</h2>
+<ul>
+<li>Continue Course 5, page by page.</li>
+<li>The five questions, when there are answers.</li>
+</ul>
+</body>
+</html>
