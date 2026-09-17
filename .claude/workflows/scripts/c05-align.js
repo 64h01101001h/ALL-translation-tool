@@ -142,9 +142,9 @@ const reconciled = await parallel(SEQS.map(seq => () => {
     'cannot be made to pass honestly, DROP IT: rule 10 outranks coverage.\n\n' +
     'SETTLE DISAGREEMENTS AGAINST THE LANDED CORPUS, not by taste: count the existing\n' +
     'links for a contested Tibetan string in ' + ROOT + '/data/alignment/alignment_full_v1.json\n' +
-    'and let precedent decide. Say what you counted. Do not trust any total
-quoted to you - including by this prompt - count the file yourself; the bank
-grows every page and a stale total is how a wrong precedent gets justified.\n\n' +
+    'and let precedent decide. Say what you counted. Do not trust any total\n' +
+    'quoted to you - INCLUDING BY THIS PROMPT - count the file yourself; the bank\n' +
+    'grows every page, and a stale total is how a wrong precedent gets justified.\n\n' +
     'ALSO FLAG, for the lander: any d=5 or d=7 span whose English begins with\n' +
     'the/a/an/and/or/his/our/your/I/you - it will trip the no_supplied_span_head gate\n' +
     'and needs a licensor in data/alignment/span_head_allow.json naming the Tibetan\n' +
