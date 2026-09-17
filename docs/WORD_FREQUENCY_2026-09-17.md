@@ -133,6 +133,49 @@ must never manufacture an equivalent for a lemma the dictionary does not
 gloss. A frequent lemma with no `hgm_gloss` has to show as unglossed, not as
 something a machine filled in.
 
+## The finding that matters most: 32 particles are a fifth of everything
+
+Classifying the top 2,000 lemmas with our own `classifyParticle` — a closed,
+documented list, not a guess — splits them sharply:
+
+| | count | share of ALL running text |
+|---|---|---|
+| **particles** | **32** | **19.1%** |
+| everything else | 1,968 | 57.2% |
+
+Thirty-two items buy a fifth of every text we hold. The top ten by use are
+`དང` (21,707), `ལ` (16,960), `ནི` (11,375), `ཀྱི` (9,117), `དེ` (7,188),
+`གྱི` (7,182), `ན` (5,054), `དུ` (4,771), `ལས` (4,737), `ཞེས` (4,681).
+
+**This is Adam's own pedagogy falling out of the measurement.** His hike
+framing was that word identification comes first — *"when you can look at any
+given paragraph… and you can tell the individual words, well, then you can
+start to decipher connecting particles and reading order"*. These 32 are
+precisely the boundary markers that let a reader do that, and they are the
+cheapest thing on the list by a wide margin.
+
+It also sharpens the caution below. A list ordered by raw frequency puts these
+32 at the very top, which is right for identification and wrong for
+vocabulary: knowing `དང` is not knowing a word in the sense a learner means.
+The two should be taught as two things, and the app must not present one
+ordering as though it served both purposes.
+
+## Gloss coverage of the top 2,000
+
+| | count |
+|---|---|
+| matched a master headword AND carry `hgm_gloss` | 1,799 |
+| matched a headword but carry no gloss | 157 |
+| no master headword at all | 44 |
+
+The 44 are mostly grammatical: `པའི`, `བ`, `པར`, `བའི` are nominaliser and
+case forms the segmenter matched as standalone tokens, plus `ཨོཾ`. They argue
+for the same split as above rather than for new dictionary entries.
+
+**Rule 1 governs what happens next.** The join may only ORDER entries that
+exist. A frequent lemma the dictionary does not gloss shows as unglossed — 157
+of the top 2,000 do — and nothing fills that in.
+
 ## What must not be read into it
 
 **The list is a recommendation, not a syllabus.** It says what is common.
