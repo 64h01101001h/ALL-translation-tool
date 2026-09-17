@@ -109,6 +109,10 @@ was missing is any statement of its limit, which is what this entry is.
 
 ## Open, and genuinely design questions
 
+**These are now written up as five decisions in
+`docs/DECISION_BRIEF_DUFF_2026-09-17.md`.** 37 findings, five questions;
+answering them resolves all of it. The summary below stays as the index.
+
 Not defects. Each would change what our grammar layer *models*, and that is
 Adam's call rather than a battery's.
 
