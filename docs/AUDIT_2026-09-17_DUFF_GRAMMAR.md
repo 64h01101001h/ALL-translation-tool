@@ -14,9 +14,21 @@ its cited page was dropped rather than softened. Every claim about our code
 was tested by running the engines, not by reading them.
 
 **Coverage.** All 1,082 pages of both volumes, in 27 contiguous ranges, each
-range read page by page. 893 agents; one was lost to a safeguard flag on a
-verification task (V1 p.761) and that page's findings are therefore
-unverified rather than confirmed — named here so the gap is visible.
+range read page by page. 893 agents; one verification task was lost to a
+safeguard flag, and its finding was **recovered from the run journal and
+verified by hand instead**, so coverage is complete. That finding was V1 p.759
+on the generality term `gang`: the quote is on the page —
+
+> "Initial to the expression of some name / The first having the second
+> connected / Becomes the encompassing generality itself."
+
+— and `isPronoun` in `wilsonparse.cpp` does contain `GANG`. The concern was
+that Duff's two compound forms would be parsed as two tokens "unless the spine
+happens to carry the compound as an entry". It does, for both: `gang zhig` is
+glossed "a person / something / who…" and `gang dag` "who / that / those who",
+with 535 and 323 corpus occurrences. They resolve lexically, which is the
+right outcome and the same one reached for `shin tu` at V1 p.454. Downgraded
+from PARTIAL to resolved.
 
 **Outcome.** 1,242 findings. **177 were refuted by verification and
 discarded.** 647 confirmed that our code already does the thing correctly.
