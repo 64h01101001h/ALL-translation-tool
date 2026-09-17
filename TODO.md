@@ -8,6 +8,58 @@
       `docs/SIDECAR_KEYING_DECISION.md`. The check's urgent finding (the
       Manuscript carrying no history at all) was fixed the same day.
 
+# ★★★★★ 2026-09-16: CORRUPT TIBETAN IN 38 BINDING SPINE ENTRIES
+
+Found by using the Illuminator 5.40 archive as an audit oracle: its
+hand-keyed Tibetan against the spine's, over 11,952 shared headwords —
+98.49% agree, 181 disagree, and the disagreements are the SPINE's.
+Full detail, every affected entry: `docs/SPINE_TIBETAN_DEFECTS_2026-09-16.json`.
+NOTHING HAS BEEN MODIFIED. The dictionary is not mine to edit.
+
+- [ ] **664 spine entries hold a literal ASCII HYPHEN-MINUS (U+002D) inside
+      the Tibetan script field**, e.g. `gling g-yog` stored as `གླིང་ག-ཡོག`.
+      U+002D is not a Tibetan character; the `g-y` in Wylie is a
+      disambiguation marker separating a ga prefix from a ya root and must
+      not survive into Unicode.
+      **626 are tagged `generated-ewts-v27-1`, so they are at least honest
+      about being machine-made. THE OTHER 38 ARE THE PROBLEM: they are
+      `glossary` tier, they carry a binding `hgm_gloss`, and their
+      `tibetan_source` is NULL — which means they are labelled
+      SOURCE-ATTESTED.** Nothing in the app marks them as suspect, because
+      nothing knows they are. Their glosses are ordinary vocabulary a
+      translator would meet: "sexual misconduct", "nursing a sick person",
+      "distractions", "not distracted".
+      Not produced by our own engine: `wylie_to_unicode("g-yas")` REFUSES
+      and returns the rule-3 flag ⟨g-yas⟩. So something else wrote these,
+      and finding what is part of the fix — otherwise the next ingest
+      reintroduces them.
+      Whoever fixes this decides two things: the correct Unicode for each
+      (Illuminator has it, and the engine refuses rather than guessing), and
+      whether the 38 should have been `generated-*` all along, because a
+      wrong value labelled source-attested is worse than a wrong value
+      labelled generated.
+
+- [ ] **16 entries write wa-zur as BA + TSA-PHRU (U+0F39) where Illuminator
+      writes SUBJOINED WA (U+0FAD)** — 15 of them binding. FILED AS A
+      DISAGREEMENT, NOT A DEFECT, deliberately: these headwords spell the
+      sound with `v` (`khva`, `grva`, `sāsrava`) rather than `w`, our engine
+      refuses every `v` form and converts every `w` form, and whether
+      BA+TSA-PHRU is a legitimate convention for Sanskrit /v/ is a Tibetan
+      orthography question. Asserting it is wrong would be guessing.
+      **Needs a reader who knows the orthography** — not a code change.
+
+- [ ] **IT TRAVELLED TO THE PHONE. Checked 2026-09-16.** Five distinct
+      values in the shipped `ios/DiamondDrills/drills.json` carry the
+      hyphen: `རྣམ་ག-ཡེང`, `ག-ཡོ་སྒྱུ`, `ག-ཡོ་བ`, `ལོག་ག-ཡེམ` and one more.
+      A student studying those cards sees Tibetan script with a Roman
+      hyphen in it. The pack is rebuilt from the spine, so fixing the spine
+      and rebuilding clears them — no separate fix, but the pack must be
+      rebuilt and re-pressed once the spine is corrected, or the phone keeps
+      the old values.
+      **`data/alignment/` is CLEAN — 0 affected.** It keys on ACIP and
+      carries its own Tibetan rather than inheriting the spine's, which is
+      why it escaped.
+
 # ★★★★★ ADAM 2026-09-16: THE DICTIONARY AND THE CARD LAYERS SHOULD BE
 # HYPERLINKED
 
