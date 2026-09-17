@@ -4,6 +4,12 @@
 # and flip USE_SYSTEM_SQLITE off.
 option(USE_SYSTEM_SQLITE "Link the system sqlite3 library" ON)
 
+# word_frequency — a measuring instrument, not a test. See its header for the
+# segmentation policy it states; docs/LEARN_TAB_VISION.md forbids printing any
+# coverage figure without one.
+add_executable(word_frequency tools/word_frequency.cpp)
+target_link_libraries(word_frequency PRIVATE allcore)
+
 add_library(allcore STATIC
   src/tibdisplay.cpp
   src/spine.cpp
