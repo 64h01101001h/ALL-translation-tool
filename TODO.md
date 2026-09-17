@@ -515,7 +515,26 @@ a beginner, and this is the item that earns it.
       body of his translation work, gathered and normalised. The corpus we
       hold is a subset; the first task is to establish what "all" actually
       means and what is missing from it.
-- [ ] **2. Word frequency across that whole body**, counted honestly. The
+- [x] **2. DONE 2026-09-17** — `docs/WORD_FREQUENCY_2026-09-17.md`. The
+      segmenter question is settled: SegTrie's maximal match, battery-proven
+      against the ported botok path, lexicon named per run, LEMMA as the unit.
+      Top 2,000 lemmas cover 76.4% of running text, top 4,000 cover 85.5%; the
+      lexicon choice moves it 3-4 points, not the 2.5x that was feared.
+      **32 particles alone are 19.1% of all running text.** Corrected once, in
+      public, after a trailing-tsheg split understated the first figures by
+      three points.
+- [x] **4. DONE 2026-09-17** — spread is in the list and earns its place: 6 of
+      the top 2,000 lemmas appear in 3 or fewer of the 75 sources.
+- [x] **5. DONE 2026-09-17** — the list exists, 27,496 lemmas, with rank,
+      count, cumulative share and source count. 1,799 of the top 2,000 carry
+      `hgm_gloss`; 157 match a headword with no gloss and show as unglossed.
+- [ ] **3. BLOCKED on the alignment campaign, not on Adam.** The depth profile
+      is computable but the layer covers C01-C05 only — 1,893 of 42,199
+      segments, 4.5%. A pilot confirms the metric is real: the median term has
+      88% of its links at one depth, so the value is in the minority that vary
+      (`sogs` mostly inside larger units, `ni` always standalone). Revisit when
+      C06-C18 lands.
+- [ ] **2-original. Word frequency across that whole body**, counted honestly. The
       counting trap is already on record (memory: gmr-translation-style-findings
       — a frequency figure was invalidated by its own counting method once)
       and §2 of docs/LEARN_TAB_VISION.md flags that two passes differed by
