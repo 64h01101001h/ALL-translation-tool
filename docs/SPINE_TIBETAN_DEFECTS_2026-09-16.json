@@ -665,5 +665,25 @@
   "the_software_half": "Step 6 takes the first equivalent and says so in its own caption. With a correct list that is a reasonable default; with these two it prints the one equivalent that does not belong. Whether the pane should prefer a longer or more substantive equivalent is a UI ruling for Adam, NOT a silent fix: choosing between Geshe Michael's equivalents is the translator's job, which is why step 5 lists them all.",
   "lowercase_I": "Worth deciding separately: the pronoun I is stored lowercase throughout, so the pane shows 'i'. That is why the entries look like fragments at a glance. Restoring the capital is a data question, not ours.",
   "nothing_modified": "No data file was touched. This is a report."
+ },
+ "gloss_audit_shortlist_2026-09-17": {
+  "how_it_was_produced": "tools/gloss_audit_against_illuminator.py narrowed 11,968 glossed headwords to 55 candidates — those whose FIRST equivalent is entirely closed-class where the Illuminator's are content words. I then read all 55 and checked each against Hopkins, which is carried in the spine, so every line below has two independent sources against it rather than one.",
+  "CONFIRMED_BY_THREE_SOURCES": {
+   "srab pa": "ours 's their' — a fragment. Hopkins: 'smooth; to diminish; thin out; fine; thin'. Illuminator: 'to make thinner'.",
+   "bsgo ba": "ours 'us to do' — a fragment, and it reads like a slice of '…told us to do…'. Hopkins: '{PH}command; order'. Illuminator: 'instruction, advice'.",
+   "'dus pa": "ours 'this is'. Hopkins: 'included; assembled; collected; aggregation'. Illuminator: 'that which has congregated'.",
+   "rgyud bla ma": "ours leads with 'it'. Hopkins: \"[Maitreya's] Great Vehicle Treatise on the Sublime Continuum\". Illuminator: 'the highest continuum, uttaratantra'. Our OWN later equivalents ('higher line') are right; it is the first that is wrong, and the first is what the Walkthrough prints.",
+   "tshod": "ours 'there, question'. Hopkins: '{PH}amount; quantity'. Illuminator: 'measurement'.",
+   "bag": "ours 'any'. Hopkins: 'meal; barley; flour; {PH}attention; care; caution'. Illuminator: 'anxiety over a particular issue, consternation'."
+  },
+  "LIKELY_two_sources_only": {
+   "aa ma": "ours 'she'. No Hopkins. Illuminator: 'mother'. Note the master ALSO carries 'a ma' as a separate headword with Hopkins 'mother [term of address]' and no hgm_gloss — so this looks like a spelling variant that collected a stray equivalent.",
+   "nyes med": "ours 'is not' — a fragment. Illuminator: 'faultless, without fault, blameless'.",
+   "thob skal": "ours 'at all'. Illuminator: 'lot, allotment, share'.",
+   "gsum cha": "ours 'three of the'. Illuminator: 'a third' — gsum cha is one third, and 'three of the' inverts it."
+  },
+  "A_DEMONSTRATED_FALSE_POSITIVE_worth_keeping": "bam. Ours says 'or'; the Illuminator says 'lifeless, rotten, putrid'; and HOPKINS AGREES WITH US — 'and; or; particle indicating question'. The Illuminator is describing a different word that is spelled the same. This is the tool's main failure mode caught in the act, and it is why the 55 are candidates and not findings: shing is 'and/or' and also 'tree', nas is 'from' and also barley, la and ka and ga are particles and also letter names. Roughly 40 of the 55 are this, or are the Illuminator's example sentences ('that boy threw a stone' for des).",
+  "what_this_does_NOT_say": "It does not say what the equivalents should be. hgm_gloss is binding and these are Geshe Michael's own glossary entries; replacing one is his ruling or the data project's, never this repo's and never a machine's. What is established is that ten of them do not describe the headword, on the agreement of two independent reference dictionaries.",
+  "scale": "10 of 11,968 glossed headwords, found from 55 machine-narrowed candidates."
  }
 }
