@@ -182,9 +182,61 @@ https://pktc.org/tibetan-grammar-references-and-texts/ — the Padma Karpo
 Translation Committee's Tibetan grammar list. Every title below is theirs,
 authored or edited by Tony Duff, paper and e-book.
 
-- [ ] **Search Adam's hard drives and his laptop for these.** Wanted as
-      material to improve the translation engine. Adam owns Volumes I and II
-      and cannot currently find them on the local drives.
+- [x] **SEARCHED 2026-09-16. Volumes I and II are on the laptop, and the
+      reason they could not be found is a typo in the filename: they are
+      filed as "Tony BLUFF", not Duff.** The embedded PDF metadata is
+      correct — Title "Standard Tibetan Grammar Volume I", Author "Lotsawa
+      Tony Duff" — so every search for Duff missed them and every search for
+      the title would have found them.
+
+        ~/Documents/Standard Tibetan Grammar - Volume 1 [The Thirty Verses of
+          Minister Thumi] - Tony Bluff.pdf                          2.5M, 2016
+        ~/Documents/Standard Tibetan Grammar - Volume 2 [The Application of
+          Gender Signs of Minister Thumi] - Tony Bluff.pdf          932K, 2016
+        (duplicates of both in ~/Library/.../iCloud~com~apple~iBooks/Documents/)
+
+      Method, so this can be repeated: Spotlight is NOT sufficient — it
+      indexes the 8TB drive incompletely (47 pdfs indexed against 55 found by
+      a direct walk) and the boot volume's index is read-only. The result
+      above came from `find` over `/` and `/Volumes/Oct2024(8TB)` by name.
+
+      NOT on any drive: the other four PKTC publications (Great Living Tree,
+      Situ's Words, Essence of Situ's Elegant Explanation, the Guidance
+      volume). Only `Duff, Tony - Gampopa's Mahamudra.pdf` besides the two.
+
+- [ ] ★★★★★ **THE BIGGER FIND: the Tibetan texts those books translate are
+      already here, in ACIP, and are directly usable by the engines.**
+      `library/sungbum/Sungbum/GSUM RTAGS_GRAMMAR/` holds 20 texts, 240K,
+      under the Geshe Michael alignment library (sungbum 4,535 files / 266M,
+      tengyur 3,439 / 247M, kangyur 1,009 / 124M). Among them:
+
+        S06389I  The Thirty Verses AND the Application of Sign Letters — the
+                 root of all classical grammar. This is what Duff Volume I
+                 and II TRANSLATE.
+        S06388M  Situ's Words — PKTC list item 4, untranslated here.
+        S06390I  The Brother of the Middle Line (refutation, Norbu Ketaka)
+        S12416E  The Mallika — metaphors in the two grammar classics
+        S12069E  Construction and Declension in Tibetan, Chahar Geshe
+        S06370MO2  **Application of Prefix Letters to Single and STACKED Main
+                 Letters** — this is literally the orthographic question
+                 behind the brl-vs-grw stacking fix of 2026-09-16.
+        S06370MO1  Gender of selected Tibetan letters
+        S06370MO4  The pa/ba suffix syllables
+        S06370MO0  Which case applies with las and nas
+        S06370MN9  The locative, with worked examples
+        S06398M  Declensions of neuter words with final vowels
+        S06369M65  sdeb sbyor — proper combinations of letters in words
+
+      The original page SCANS of S06388 and S06389 are in the Dropbox at
+      `Tohoku Completion Project/.../DNGUL CHU DHARMA BHADRA/`.
+
+      WHY THIS MATTERS MORE THAN THE PDFs: the engine's orthography rules
+      (prefix vs superscript vs subjoined, gender signs, case particles) are
+      exactly what these texts specify, and they are in ACIP, which the
+      project's own engines already read. An English translation has to be
+      interpreted; these can be parsed. Scope before coding — decide what a
+      rule extracted from a grammar text would even be allowed to do, given
+      Rule 3. Nothing here may become a guess.
 
       SIX PUBLICATIONS — these are what a file on disk would be:
         1. Standard Tibetan Grammar: Volume I, The Thirty Verses of Minister
