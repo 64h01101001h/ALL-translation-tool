@@ -113,9 +113,14 @@ std::string acipToEwts(const std::string& acip) {
             // consonant and cannot attach to a vowel. "A letter" alone was a
             // Rule 3 regression — the acip column also holds ALL-CAPS English,
             // and EVERY became EWERY -> ཨེཝེརཡ where it had honestly flagged.
-            if (s[i] == 'V' && i > 0 &&
+            // Look past any run of '+', ACIP's explicit-stack mark: a wa-zur
+            // subjoined to a stack sits behind one, and T+V'Am is the same
+            // word as tV'Am. Parity: engines/hgm_tools.py.
+            size_t p = i;
+            while (p > 0 && s[p - 1] == '+') --p;
+            if (s[i] == 'V' && p > 0 &&
                 std::string("BCDGHJKLMNPRSTVWYZbcdghjklmnprstvwyz")
-                        .find(s[i - 1]) != std::string::npos)
+                        .find(s[p - 1]) != std::string::npos)
                 o += 'W';
             else
                 o += s[i];

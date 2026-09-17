@@ -122,7 +122,9 @@ static std::vector<std::string> shadSegments(const std::string& tib) {
 // it. Honest gain over the pre-fix baseline is +1,009, not +1,113.
 // Raised to 37,238 on 2026-09-17 when ACIP ':' was read as the visarga and
 // A'A as a-chen's own long vowel: +438. The floor may only rise from here.
-static const long RENDER_FLOOR = 37238;
+// 37,254 on 2026-09-17: +16 when the wa-zur rule learned to look past ACIP's
+// explicit-stack mark, so T+V'Am reads as the same word as tV'Am.
+static const long RENDER_FLOOR = 37254;
 
 int main(int argc, char** argv) {
     if (argc < 2) {
@@ -185,10 +187,17 @@ int main(int argc, char** argv) {
                     r += 'A';
                     i += 2;
                 } else if (want[i] == 'v' && i > 0 &&
-                           std::string("bcdghjklmnprstvwyz")
-                                   .find((char)std::tolower(
-                                       (unsigned char)want[i - 1])) !=
-                               std::string::npos) {
+                           [&] {
+                               // look past '+', the explicit-stack mark, as
+                               // the engine does: t+va is a wa-zur too
+                               size_t k = i;
+                               while (k > 0 && want[k - 1] == '+') --k;
+                               return k > 0 &&
+                                      std::string("bcdghjklmnprstvwyz")
+                                              .find((char)std::tolower(
+                                                  (unsigned char)want[k - 1])) !=
+                                          std::string::npos;
+                           }()) {
                     // only after a consonant, as the engine does — wa-zur
                     // subjoins. A word-initial v stays: vaM is not waM.
                     r += 'w';
