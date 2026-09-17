@@ -123,7 +123,8 @@ add_test(NAME engines_battery
          COMMAND engines_battery ${CMAKE_SOURCE_DIR}/build/hgm_spine_v27_2.db
                  ${CMAKE_SOURCE_DIR}/build/pron_reference.tsv
                  ${CMAKE_SOURCE_DIR}/build/sanskrit_reference.tsv
-                 ${CMAKE_SOURCE_DIR}/data/pronunciation/gmr_mantra_evidence.csv)
+                 ${CMAKE_SOURCE_DIR}/data/pronunciation/gmr_mantra_evidence.csv
+                 ${CMAKE_SOURCE_DIR}/data/spellcheck)
 
 # The Kawachen audio bank: a C++ resolver must agree with the Python
 # prototype it was ported from, syllable for syllable, over the whole corpus.
