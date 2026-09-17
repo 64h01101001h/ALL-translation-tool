@@ -110,6 +110,33 @@ other carrier is C16:753, byte-identical in both columns and therefore the same
 file re-ingested rather than an independent witness — a variant reading can be
 shown, a defect cannot.
 
+**c5p57 (169–171) landed**, same standard, reconciled on Opus for the same
+reason. 98 spans; coverage **171/511**; bank 41,970 links; span-head gate still
+0 for `pages_c05` with no new licensor needed.
+
+Two rulings worth keeping, both of them rule 10 in action:
+
+- On 169 the analysts split on `ma` → "neither". The reconciler settled it
+  against **c5p56, landed an hour earlier** — C05:168 carries the identical
+  construction, `de gnyis ka ma nges pa` under "**neither** ripening itself nor
+  its timing is definite", and its landed spans null both `gnyis ka` and
+  `ma nges pa`. Same campaign, adjacent page, same shape, already ruled. The
+  campaign is now building on its own precedent rather than re-deciding.
+- On 170 it refused `mi 'phen` → "do not", which passes every mechanical check:
+  *"the 'do' of 'do not' is the English pro-verb standing in for the elided
+  'project a discrete being', not an exponent of `'phen`. Banking it keys a
+  projecting verb to a dummy auxiliary."* Split instead — `mi` → "not", `'phen`
+  nulled, "do" left unwrapped as supplied syntax.
+
+**tools/land_alignment_page.py** was written here and used to land this page.
+Page assembly was six manual steps from the reconcilers' specs — merge,
+generate, wrap with a hand-typed title, register in the builder, add licensors,
+rebuild — and doing them by hand is how a page number gets mistyped or a
+registration forgotten. It refuses non-contiguous segments, refuses a spec
+whose seq does not match its filename, stops on a generator refusal, and
+reports every span the span-head gate will want a licensor for BEFORE the gate
+runs. Validated by reproducing c5p56 exactly, licensor included.
+
 ## Queues (wylie / english), C05
 (opened empty)
 
