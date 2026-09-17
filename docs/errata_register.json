@@ -2998,5 +2998,53 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "Geshe Michael's English stays VERBATIM in the corpus and in every layer — this records the defect, it does not correct it. Filed while resuming the C05 campaign at its paused point. Witness C16:754 named 2026-09-17 after errata_name_their_witnesses refused the entry for naming none."
+ },
+ {
+  "item_id": "E-251",
+  "course": "C05",
+  "segment": "C05:172",
+  "kind": "ENGLISH_TYPO",
+  "found": "In the hells through there are only three projections of virtuous types of deeds that are possible.",
+  "expected": "In the hells though there are only three projections of virtuous types of deeds that are possible.",
+  "evidence": "The clause opens 'on kyang dmyal ba na ni (ACIP 'ON KYANG DMYAL BA NA NI), the concessive 'however / though', so the word standing over 'on kyang is 'though'; 'through' leaves the English ungrammatical and renders nothing in the Tibetan. PARALLEL WITNESS CHECK: none. english like '%In the hells through%' returns C05:172 alone; english like '%hells though%' returns nothing anywhere in the 42,199-row spine; wylie like '%kyang dmyal ba na ni dge ba%' returns C05:172 alone. So there is no published reading elsewhere to defer to and no C16/C15/P1 re-ingest of this row. The landed layer carries 'on kyang -> \"though\" twice (c4p37/s111w1, c5p32/s95w28) and \"nonetheless\" once (c3p70/s206w16), and \"through\" never. Consequence for the alignment: 'on kyang is banked with eng=null rather than linked to the misprint (rule 10).",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-252",
+  "course": "C05",
+  "segment": "C05:172",
+  "kind": "TIBETAN_SPELLING",
+  "found": "las 'phen pa du yod cin,",
+  "expected": "las 'phen pa du yod cing,",
+  "evidence": "ACIP, the source of record, reads '... LAS 'PHEN PA DU YOD CIN,'. The imperfective clause connective after a d suffix is cing; cin is not a form. Corpus counts run against the spine: wylie like '% cin,%' matches 1 row (this one) against 453 rows for wylie like '% cing,%'. PARALLEL WITNESS CHECK: none — wylie like \"%las 'phen pa du yod%\" returns only C05:165 and C05:172, and C05:165 breaks off at 'du yod gnyis' before the connective, so neither C16 nor P1 offers an independent reading of this word. The span quotes it as printed (p3 tib=\"cin\").",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-253",
+  "course": "C05",
+  "segment": "C05:174",
+  "kind": "TIBETAN_SPELLING",
+  "found": "brtan pa'i 'phags pas des skyes nas myong 'gyur du ma zad",
+  "expected": "brtan pa'i 'phags pas der skyes nas myong 'gyur du ma zad",
+  "evidence": "ACIP, the source of record, reads \"'PHAGS PAS DES SKYES NAS\" and so agrees with the wylie, so the row is internally consistent; the emendation rests on the slot. WITHIN THIS SEGMENT: Geshe Michael renders the word \"after being reborn there\" — a locative — and 'phags pas already carries the agentive in the same clause, so des would double it. NEIGHBOURING SEGMENTS: C05:173 is the same sentence about the byis pa and reads \"'dod chags dang bral ba'i sa der skyes nas myong 'gyur gyi las mi byed de\"; C05:175 reads \"'dod rtser skyes nas\"; the root verse this commentary unpacks, C05:171, reads \"byis pa der skyes\". All three put a locative in exactly this slot. PARALLEL WITNESS CHECKED, NONE EXISTS: LIKE queries over the whole spine for wylie \"sa bar pa bdun\", \"'phags pas des skyes nas\", \"lan grangs gzhan du'ang\", for acip \"'PHAGS PAS DES\", and for english \"the seven levels between\" and \"in any other life beyond the next\" each return C05:174 alone. C16, which shares 263 byte-identical rows with C05, does not carry this row, so there is no independent second copy. The link des = \"there\" was NOT banked (rule 10): the particle is nulled on the page and the reading is recorded here instead.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-254",
+  "course": "C05",
+  "segment": "C05:178",
+  "kind": "TIBETAN_SPELLING",
+  "found": "phung bo",
+  "expected": "phung po",
+  "evidence": "Intra-row, re-derived from the spine at reconcile time. This segment writes the same word twice in exactly parallel phrases -- `las sog pa'i gnas skabs kyi phung bo dang` and `rnam smin myong ba'i gnas skabs kyi phung po gnyis` -- twenty syllables apart, and the ACIP source of record carries the same split (grep of the acip field returns PHUNG BO then PHUNG PO). PARALLEL-WITNESS CHECK RUN AND REPORTED: this passage appears nowhere else in the 42,199-row corpus. `select course,seq ... where wylie like '%ris mthun gcig kho na yin pa%'` returns C05:178 alone, and `... where english like '%counted but a single discrete being%'` likewise returns C05:178 alone, so the 263 byte-identical C16 re-ingest rows do NOT cover this row and there is no published reading to compare. Corpus-wide the ratio is decisive: 772 rows contain `phung po`; exactly two contain `phung bo` -- this row and TCS17:366 (`chos kyi phung bo brgyad khri bzhi stong`), an unrelated passage on a different subject, therefore not a witness to this sentence. Two isolated occurrences against 772 is a keying slip, not an attested variant orthography. The span is banked verbatim on the defective spelling; nothing was corrected.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
