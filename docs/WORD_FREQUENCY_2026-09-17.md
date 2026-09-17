@@ -176,6 +176,40 @@ for the same split as above rather than for new dictionary entries.
 exist. A frequent lemma the dictionary does not gloss shows as unglossed — 157
 of the top 2,000 do — and nothing fills that in.
 
+## Stage 3: blocked on the alignment campaign, and a pilot that says it is worth waiting for
+
+Adam's framing: *"a word that is common only inside compounds is a different
+learning problem from one that is common standing alone."* The alignment layer
+records a depth on every link, so the profile is computable — **over 4.5% of
+the corpus.**
+
+`data/alignment/alignment_full_v1.json` holds 41,759 links across depths 1–7,
+but only for **C01–C05: 1,893 of the 42,199 corpus segments.** A depth profile
+built on that would describe five courses and be read as describing the
+corpus. It is not published, and the number that would be printed is not
+printed.
+
+**The pilot, labelled as one.** One question is answerable on a sample —
+whether depth discriminates at all — and it does, for a minority:
+
+| term | total links | profile |
+|---|---|---|
+| `ni` | 366 | depth 6: 366 — *always standalone* |
+| `dang` | 763 | 6: 751, 7: 12 |
+| `sogs` | 212 | **5: 136**, 6: 71, 7: 5 — *mostly inside larger units* |
+| `yin` | 293 | 5: 146, 6: 142 — *evenly split* |
+| `mi` | 263 | 5: 69, 6: 108, 7: 86 — *spread across three* |
+
+Across the 294 terms with 20 or more links, **the median term has 88% of its
+links at a single depth.** So for most words the profile says nothing a total
+does not. The value is entirely in the minority — `sogs`, `yin`, `mi` — and
+those are precisely Adam's case: a word met mostly inside a compound is a
+different learning problem from one met alone.
+
+**Verdict: the metric is real and the data is not there yet.** It needs the
+C06–C18 alignment campaign, which is already a standing mandate. Revisit when
+coverage is materially above 4.5%.
+
 ## What must not be read into it
 
 **The list is a recommendation, not a syllabus.** It says what is common.
