@@ -27,6 +27,16 @@ CONS_KEYS = sorted(CONS, key=len, reverse=True)
 VOW_KEYS = sorted(VOW, key=len, reverse=True)
 
 PRE = set("g d b m '".split())
+# The ten suffixes of NATIVE Tibetan name formation (Duff, Standard Tibetan
+# Grammar Vol I p.284, in his order). DELIBERATELY NOT ENFORCED HERE, and the
+# reason matters: this converter also carries Sanskrit written in Tibetan
+# letters, where those rules do not hold. Enforcing the ten would newly refuse
+# paN, tIk and utp la — 175 master headwords — every one of them a correct
+# transliteration. Legality is a SEPARATE question and has its own home in
+# allcore::SyllableChecker (core/include/allcore/spellcheck.h), which uses the
+# CC0 spellchecker data's per-stack suffix classes rather than a flat ten and
+# correctly calls kak, kat, kap and kach illegal while this converter renders
+# them. Kept as the reference inventory, referenced by engines_battery.
 SUFF = set("g ng d n b m ' r l s".split())
 SUBJOINABLE = {'y':set('k kh g p ph b m h'.split()),
                'r':set('k kh g t th d p ph b m s h'.split()),

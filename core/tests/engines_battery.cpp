@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "allcore/engines.h"
+#include "allcore/spellcheck.h"
 #include "allcore/sanskrit.h"
 
 static int failures = 0;
@@ -345,6 +346,42 @@ int main(int argc, char** argv) {
                     sizeof(kVowels) / sizeof(*kVowels));
         CHECK(vowBad == 0,
               "the reversed gi-gu vowels are reachable, not just tabulated");
+
+        // The division of labour between converting and judging, pinned.
+        // Duff Vol I p.291 gives the rules for valid NATIVE name formation and
+        // our converter does not enforce them — correctly, because it also
+        // carries Sanskrit in Tibetan letters, where they do not hold.
+        // Enforcing them would newly refuse paN, tIk and utp la. Legality
+        // belongs to SyllableChecker, and this asserts both halves still do
+        // their own job: the converter renders, the checker refuses.
+        {
+            if (argc < 6) {
+                std::printf("  E2: skipped — no spellcheck dir given as argv[5]\n");
+            } else {
+            allcore::SyllableChecker chk(argv[5]);
+            long wrong = 0;
+            for (const char* w : {"kak", "kat", "kap", "kach", "kazh"}) {
+                if (!allcore::wylieToUnicode(w).second) {
+                    ++wrong;
+                    std::printf("     converter should render %s and did not\n", w);
+                }
+                if (chk.legalWylie(w)) {
+                    ++wrong;
+                    std::printf("     checker should refuse %s and did not\n", w);
+                }
+            }
+            for (const char* w : {"kag", "kang", "kas", "kar"}) {
+                if (!chk.legalWylie(w)) {
+                    ++wrong;
+                    std::printf("     checker should accept %s and did not\n", w);
+                }
+            }
+            std::printf("  E2: converter renders / checker judges: %ld wrong\n", wrong);
+            CHECK(wrong == 0,
+                  "the converter renders non-native syllables and the "
+                  "spellchecker is what refuses them");
+            }
+        }
         // and the prefix disambiguator it shares a character with still works
         CHECK(allcore::wylieToUnicode("g-yas").first !=
                   allcore::wylieToUnicode("gyas").first,
