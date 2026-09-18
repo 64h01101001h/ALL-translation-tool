@@ -84,7 +84,7 @@ a clean run as a failure. Six in a day is a pattern, not luck.
 
 **Claim.** The manifest can NEVER report a clean git tree — the `"clean"` literal in build_manifest.py is unreachable dead code — and the shipped dist/stage/BUILD_MANIFEST.json carries the resulting falsehood right now. The gate makes zero assertions about product.git_commit or product.git_tree.
 
-**Disposition.** STILL OPEN 2026-09-18.
+**Disposition.** CLOSED 2026-09-18, both parts as proposed. (a) probe() takes allow_empty=True, used for `git status --porcelain`, whose EMPTY OUTPUT IS THE ANSWER. (b) The fixture source is a real `git init` repo now, and the gate asserts the sha shape, `clean` on the committed tree, and `DIRTY` after touching a file. Mutation-proved in BOTH directions: reverting probe() fails the clean assertion, and hard-coding "clean" fails the dirty one — the second matters, because without it a gate that always says clean passes the first.
 
 **Proposed fix.** Two parts. (a) Fix the tool: give probe() an `allow_empty=True` mode, or special-case `git status --porcelain` so empty output means clean — e.g. run it directly rather than through probe(). (b) Add gate assertions: build the fixture source as a real `git init` repo, assert product.git_tree == "clean" with no changes, then touch a file and assert it becomes "DIRTY", and assert product.git_commit matches ^[0-9a-f]{40}$.
 
@@ -203,11 +203,11 @@ a clean run as a failure. Six in a day is a pattern, not luck.
 ## Counts
 
 - CRITICAL: 4 claims — **4 closed**, 0 open
-- HIGH: 13 claims — **8 closed**, 5 open
+- HIGH: 13 claims — **9 closed**, 4 open
 
-The five still open, so they can be found without reading the page:
-build_manifest's unreachable `"clean"` literal; the untested .framework
+The four still open, so they can be found without reading the page:
+the untested .framework
 indexing branch; vuln_check's untested `classify()`; Rule 1 unpinned for
 `osv_query_one()`; and constitution_check's three `--static` sub-checks with
-no negative fixture. All five are *cannot-fail* or *blind-spot*, none is a
+no negative fixture. All four are *cannot-fail* or *blind-spot*, none is a
 wrong answer being produced today.

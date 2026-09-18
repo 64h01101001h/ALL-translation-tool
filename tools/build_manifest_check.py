@@ -69,6 +69,21 @@ def build_fake_world(tmp):
     os.makedirs(src)
     with open(os.path.join(src, "VERSION"), "w") as f:
         f.write("9.9.9-fixture\n")
+    # A REAL git repo, because the manifest records git_commit and git_tree
+    # and neither was ever asserted. The `git_tree = "clean"` branch was
+    # unreachable dead code for as long as the manifest existed -- probe()
+    # turned `git status --porcelain`'s empty output into "NOT RECORDED:
+    # printed nothing" -- and the shipped dist/stage/BUILD_MANIFEST.json
+    # carried that falsehood while this gate reported no failures. It is
+    # asserted both ways below: clean here, DIRTY after a touch.
+    def git(*a):
+        subprocess.run(["git", "-C", src] + list(a), capture_output=True,
+                       text=True, check=True)
+    git("init", "-q")
+    git("-c", "user.name=fixture", "-c", "user.email=fixture@localhost",
+        "add", "VERSION")
+    git("-c", "user.name=fixture", "-c", "user.email=fixture@localhost",
+        "commit", "-q", "-m", "fixture")
     return app, src
 
 
@@ -133,6 +148,33 @@ def main(argv):
         check(man["product"]["press_mode"] == "market",
               "the press mode is recorded (team vs market ship different "
               "payloads)")
+
+        # --- the provenance of the SOURCE, both ways ----------------------
+        commit = man["product"]["git_commit"]
+        check(bool(re.fullmatch(r"[0-9a-f]{40}", commit)),
+              "the manifest records the source commit as a real sha (%s)"
+              % commit[:50])
+        check(man["product"]["git_tree"] == "clean",
+              "a CLEAN source tree is recorded as clean — the branch that "
+              "was unreachable while probe() read empty output as a failed "
+              "probe (got %r)" % man["product"]["git_tree"])
+        # ... and a dirty one as dirty. Same fixture, one touched file.
+        with open(os.path.join(src, "VERSION"), "a") as f:
+            f.write("touched\n")
+        out2 = os.path.join(tmp, "out2")
+        subprocess.run(
+            [sys.executable, tool, "--bundle", app, "--out", out2,
+             "--source", src, "--brew-prefix", os.path.join(tmp, "brew"),
+             "--mode", "market"], capture_output=True, text=True)
+        p2 = os.path.join(out2, "BUILD_MANIFEST.json")
+        dirty = "NOT WRITTEN"
+        if os.path.exists(p2):
+            with open(p2, encoding="utf-8") as f:
+                dirty = json.load(f)["product"]["git_tree"]
+        check(dirty == "DIRTY",
+              "a MODIFIED source tree is recorded as DIRTY (got %r) — "
+              "without this the clean assertion above passes on a gate that "
+              "always says clean" % dirty)
 
         # --- BUILD-1: the architecture and floor are in the record --------
         arch = man.get("architecture", {})

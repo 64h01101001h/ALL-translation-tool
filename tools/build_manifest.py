@@ -41,8 +41,18 @@ import sys
 UNMAPPED = "UNMAPPED"
 
 
-def probe(cmd, pattern=None, cwd=None):
-    """Run a version probe. Returns the value, or 'NOT RECORDED: <why>'."""
+def probe(cmd, pattern=None, cwd=None, allow_empty=False):
+    """Run a version probe. Returns the value, or 'NOT RECORDED: <why>'.
+
+    allow_empty is for the one probe whose EMPTY OUTPUT IS THE ANSWER:
+    `git status --porcelain` prints nothing when the tree is clean. Without
+    it, empty became "NOT RECORDED: ... printed nothing", the `git_tree =
+    "clean"` branch below was unreachable dead code, and every manifest ever
+    pressed from a clean tree said the opposite of the truth -- the shipped
+    dist/stage/BUILD_MANIFEST.json carried that falsehood when this was
+    found. A probe that cannot express "nothing, and that means yes" turns a
+    provenance record into a guess.
+    """
     try:
         proc = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd,
                               timeout=30)
@@ -57,6 +67,8 @@ def probe(cmd, pattern=None, cwd=None):
             return "NOT RECORDED: %s matched no version in its output" % (
                 " ".join(cmd))
         return m.group(1)
+    if allow_empty:
+        return text
     first = text.splitlines()[0].strip() if text else ""
     return first or "NOT RECORDED: %s printed nothing" % " ".join(cmd)
 
@@ -208,7 +220,8 @@ def main(argv=None):
     git_commit = git_dirty = "NOT RECORDED: no source tree given"
     if source:
         git_commit = probe(["git", "-C", source, "rev-parse", "HEAD"])
-        status = probe(["git", "-C", source, "status", "--porcelain"])
+        status = probe(["git", "-C", source, "status", "--porcelain"],
+                       allow_empty=True)
         if status.startswith("NOT RECORDED"):
             git_dirty = status
         else:
