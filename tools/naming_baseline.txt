@@ -186,3 +186,10 @@ cf3b5e0302d816d4  docs/digests/LOG.md:270  - His iPhone (བདེ་མཆོ�
 784f1e0f2e186877  docs/digests/README.md:85  unattached draft costs him one drag. A corrupt attachment costs the audience
 408b882484f6c836  docs/digests/README.md:100  rather than editing under him. The edit you cannot see him not receiving is
 ef715fbd0bfa204e  docs/digests/README.md:130  attached (or Adam attaches anything over ~40 KB himself).
+
+# The gate audit's own report on naming_check. These two lines QUOTE the
+# pronoun pattern and the finding about it -- they are the gate's subject
+# matter being described, exactly like the gate's own help text above.
+# Rewriting them would destroy the record of what was wrong.
+4e4240a2193ae972  docs/GATE_AUDIT_2026-09-17.md:33  **Claim.** PRON = r"\b(his|he|He)\b" is case-sensitive and omits His, him, Him, himself, Himself. The gate is therefore blind to the exact phrase Adam
+2bc2b40a7d68b859  docs/GATE_AUDIT_2026-09-17.md:91  **Proposed fix.** Narrow the exclusion from data/ to the parts that actually carry source English (data/alignment/, the dictionary, the corpus) and ad
