@@ -601,7 +601,7 @@ static void showOcrModelManager(QWidget* parent,
     pickRow->addWidget(pick, 1);
     v->addLayout(pickRow);
     auto* note = new QLabel(
-        "<small style='color:#777'>The picked model is used by the "
+        "<small style='color:#6F6F6F'>The picked model is used by the "
         "next Run OCR / OCR pre-fill (models reload on the spot). "
         "The bundled Woodblock model remains the fallback whenever "
         "the pick is missing.</small>");
@@ -1499,7 +1499,7 @@ static QString entryHtml(const allcore::Entry& e,
                     if (!a.pos.isEmpty())
                         b += "<span style='color:#A33;'>&lt;" +
                              a.pos.toHtmlEscaped() +
-                             "&gt;</span> <small style='color:#777'>"
+                             "&gt;</span> <small style='color:#6F6F6F'>"
                              "(" + a.posSrc.toHtmlEscaped() +
                              ")</small> ";
                     if (!a.senses.isEmpty()) {
@@ -1531,7 +1531,7 @@ static QString entryHtml(const allcore::Entry& e,
                         b.chop(3);
                         b += "</small>";
                     }
-                    b += "<br><small style='color:#777'>[" +
+                    b += "<br><small style='color:#6F6F6F'>[" +
                          a.model.toHtmlEscaped() + " · " +
                          a.date.toHtmlEscaped() + " · from " +
                          a.grounded.toHtmlEscaped() +
@@ -2030,7 +2030,7 @@ static QString entryHtml(const allcore::Entry& e,
         if (!ms.empty()) {
             h += "<div style='margin-top:4px;font-size:12px'>"
                  "<span style='color:#7C2D26;font-weight:600'>Geshe Michael "
-                 "teaches this idea</span> <i style='color:#888'>"
+                 "teaches this idea</span> <i style='color:#6F6F6F'>"
                  "(located by the ENGLISH equivalent in the class "
                  "captions \u2014 the recording is the "
                  "authority)</i> <small style='color:#78706A'>" +
@@ -2058,7 +2058,7 @@ static QString linkOutHtml(const std::string& wylie) {
     // external class carries the outward mark so a reader knows a
     // click leaves the app before clicking
     QString h =
-        "<div style='color:#777;font-size:11px;margin-top:6px'>search "
+        "<div style='color:#6F6F6F;font-size:11px;margin-top:6px'>search "
         "elsewhere <i>(external sites \u2197, links only)</i>: ";
     h += "<a href='https://84000.co/search?query=" + q + "'>84000</a> · ";
     h += "<a href='https://library.bdrc.io/search?q=%22" + q +
@@ -2496,7 +2496,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                                  .replace("|", "·")
                                  .toHtmlEscaped();
                     if (!r->classUncertain.empty())
-                        h += " <small style='color:#777'>(also? " +
+                        h += " <small style='color:#6F6F6F'>(also? " +
                              QString::fromStdString(r->classUncertain)
                                  .replace("|", "·")
                                  .toHtmlEscaped() +
@@ -2508,7 +2508,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                              "</b>";
                     if (!r->dcsClasses.empty() &&
                         r->dcsClasses != "—")
-                        h += " · <small style='color:#777'>corpus: " +
+                        h += " · <small style='color:#6F6F6F'>corpus: " +
                              QString::fromStdString(r->dcsClasses)
                                  .toHtmlEscaped() +
                              "</small>";
@@ -2524,7 +2524,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                     // link-out (path verified live 2026-08-14);
                     // Apte id shown labeled — no unverified URL
                     if (!r->dcsFreq.empty() && r->dcsFreq != "0")
-                        h += " · <small style='color:#777'>DCS " +
+                        h += " · <small style='color:#6F6F6F'>DCS " +
                              QString::fromStdString(r->dcsFreq)
                                  .toHtmlEscaped() +
                              "×" +
@@ -2563,7 +2563,7 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                              QString::fromStdString(r->grammarSecs)
                                  .left(160)
                                  .toHtmlEscaped() +
-                             " <span style='color:#777'>(✦ "
+                             " <span style='color:#6F6F6F'>(✦ "
                              "specific · ⚠ exception)"
                              "</span></small>";
                     if (!r->sectionRefs.empty()) {
@@ -2586,13 +2586,13 @@ static QString lookupResultsHtml(allcore::Spine& spine,
                             topics += t2.toHtmlEscaped() + " · ";
                         }
                         if (!topics.isEmpty())
-                            h += "<br><small style='color:#777'>"
+                            h += "<br><small style='color:#6F6F6F'>"
                                  "Grammar by topic: " +
                                  topics + "</small>";
                     }
                     h += "</div>";
                 }
-                h += "<div style='font-size:11px;color:#777'>read "
+                h += "<div style='font-size:11px;color:#6F6F6F'>read "
                      "the Grammar itself: <a href='https://archive."
                      "org/details/sanskritgrammari00whituoft'>"
                      "archive.org scan (public domain)</a></div>";
@@ -11550,7 +11550,7 @@ public:
             return score;
         };
         QString h =
-            "<i style='color:#888'>Candidates located from class "
+            "<i style='color:#6F6F6F'>Candidates located from class "
             "captions, ranked by context fit (moments mentioning "
             "other terms of this text rank first); click a link and "
             "the recording itself teaches.</i><hr>";
@@ -11613,7 +11613,7 @@ public:
                     const auto& m = it->second.front();
                     sec += QString("&nbsp;&nbsp;\u25B6 <a href='%1'>"
                                    "%2</a> @%3 <i style="
-                                   "'color:#888'>(Geshe Michael says the "
+                                   "'color:#6F6F6F'>(Geshe Michael says the "
                                    "word)</i><br>")
                                .arg(m.url, teachingLabel(m, 56),
                                     teachingStamp(m));
@@ -12419,7 +12419,7 @@ private:
                                 "encyclopedias/literary/canons/kt/"
                                 "catalog.php#cat=d/%1\">THL Degé "
                                 "catalog: D.%1</a> <span "
-                                "style='color:#777;font-size:11px'>"
+                                "style='color:#6F6F6F;font-size:11px'>"
                                 "(Toh %2 · verified title "
                                 "concordance)</span>")
                             .arg(d)
@@ -12441,7 +12441,7 @@ private:
                                 "encyclopedias/literary/canons/kt/"
                                 "catalog.php#cat=h/%1\">THL Lhasa "
                                 "catalog: H.%1</a> <span "
-                                "style='color:#777;font-size:11px'>"
+                                "style='color:#6F6F6F;font-size:11px'>"
                                 "(KL %2 · verified title "
                                 "concordance)</span>")
                             .arg(h)
@@ -14801,7 +14801,7 @@ private:
         lab->installEventFilter(d);
         v->addWidget(lab, 1);
         v->addWidget(new QLabel(
-            "<small style='color:#777'>gold = on the dominant meter "
+            "<small style='color:#6F6F6F'>gold = on the dominant meter "
             "\u00b7 vermilion = off the meter \u00b7 grey = prose "
             "\u00b7 pale = blank \u00b7 green tick = quote "
             "announcement (\u2026zhes/ces + speech verb). One column "
@@ -18542,7 +18542,7 @@ private:
         bool first = true;
         for (const auto& w : segmenter_->segment(uni)) {
             QString txt = QString::fromStdString(w.text).toHtmlEscaped();
-            if (!first) h += " <span style='color:#AAA'>·</span> ";
+            if (!first) h += " <span style='color:#6F6F6F'>·</span> ";
             first = false;
             if (w.tibetan && w.word) {
                 h += "<span style='color:#1E4E6B'>" + txt + "</span>";
@@ -18561,7 +18561,7 @@ private:
             } else if (w.tibetan) {  // honest: not in the lexicon
                 h += "<span style='color:#B4540A'>⟨" + txt + "⟩</span>";
             } else {
-                h += "<span style='color:#888'>" + txt + "</span>";
+                h += "<span style='color:#6F6F6F'>" + txt + "</span>";
             }
         }
         h += "</span></div><hr>";
@@ -18600,7 +18600,7 @@ public:
         QString h =
             "<hr><div style='font-size:12px;color:#7C2D26;"
             "font-weight:600;letter-spacing:.06em'>TIBETAN NAMED IN "
-            "THIS NOTE</div><div style='font-size:12px;color:#888'>"
+            "THIS NOTE</div><div style='font-size:12px;color:#6F6F6F'>"
             "<i>machine-located &mdash; from the note's own words, "
             "or (labeled) where Geshe Michael Roach's own English equivalent is "
             "exactly this lemma &mdash; candidates, "
@@ -18614,7 +18614,7 @@ public:
                          "font-weight:600;letter-spacing:.06em;"
                          "margin-top:8px'>WHERE HIS PUBLISHED "
                          "ENGLISH USES THIS LEMMA (same work)</div>"
-                         "<div style='font-size:12px;color:#888'><i>"
+                         "<div style='font-size:12px;color:#6F6F6F'><i>"
                          "the passage, not a term equivalence "
                          "&mdash; read the Tibetan yourself</i>"
                          "</div>";
@@ -18644,7 +18644,7 @@ public:
             h += "<b>" + a.wylie.toHtmlEscaped() + "</b>";
             if (a.asWritten.trimmed().compare(a.wylie,
                                               Qt::CaseInsensitive) != 0)
-                h += " <span style='color:#888;font-size:12px'>(written "
+                h += " <span style='color:#6F6F6F;font-size:12px'>(written "
                      "&ldquo;" + a.asWritten.toHtmlEscaped() +
                      "&rdquo;)</span>";
             // body excerpts get ellipses; complete evidence
@@ -18820,7 +18820,7 @@ private:
             detail_->setHtml(
                 QString("<h3>Footnote %1</h3><div style="
                         "'color:#7A5A00'><b>%2</b></div><div "
-                        "style='color:#777;font-size:12px'>%3"
+                        "style='color:#6F6F6F;font-size:12px'>%3"
                         "</div><hr><div style='font-size:15px'>"
                         "%4</div>")
                     .arg(n.num)
@@ -18831,7 +18831,7 @@ private:
         } else if (g_appBib) {
             const auto& b = (*g_appBib)[i];
             detail_->setHtml(
-                QString("<h3>%1</h3><div style='color:#777;"
+                QString("<h3>%1</h3><div style='color:#6F6F6F;"
                         "font-size:12px'>%2 · %3</div><hr>"
                         "<div style='font-size:15px'>%4</div>")
                     .arg(b.id.toHtmlEscaped(),
@@ -20059,7 +20059,7 @@ private:
         results_->setHtml("<i>searching\u2026</i>");
         inner_->setCurrentIndex(2);
         QCoreApplication::processEvents();
-        QString h = QString("<div style='color:#777'>query: <code>%1"
+        QString h = QString("<div style='color:#6F6F6F'>query: <code>%1"
                             "</code></div><hr>")
                         .arg(q.toHtmlEscaped());
         int total = 0;
@@ -20226,7 +20226,7 @@ private:
                 h += "<div style='margin:3px 0'><a href='" +
                      QUrl::fromLocalFile(f).toString() + "'>" +
                      fi.fileName().toHtmlEscaped() +
-                     "</a> <small style='color:#777'>" +
+                     "</a> <small style='color:#6F6F6F'>" +
                      fi.path().toHtmlEscaped() + "</small></div>";
             }
             h += "<hr>";
@@ -21033,7 +21033,7 @@ private:
             note = " <small>(from ACIP input-code)</small>";
         }
         auto row = [](const QString& k, const QString& v) {
-            return "<tr><td style='color:#777;padding-right:12px'>" + k +
+            return "<tr><td style='color:#6F6F6F;padding-right:12px'>" + k +
                    "</td><td>" + v + "</td></tr>";
         };
         // Adam, 2026-09-09: he pasted a verse and four rows showed a bare
@@ -21111,7 +21111,7 @@ private:
         }
         const QString q = QString::fromUtf8(QUrl::toPercentEncoding(
             QString::fromStdString(iast)));
-        h += "<div style='color:#777;font-size:11px;margin-top:8px'>"
+        h += "<div style='color:#6F6F6F;font-size:11px;margin-top:8px'>"
              "search elsewhere: <a href='https://www.sanskrit-lexicon."
              "uni-koeln.de/scans/MWScan/2020/web/webtc/indexcaller.php?"
              "key=" + q + "&input=SLP1&output=IAST'>Monier-Williams "
@@ -21697,7 +21697,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                 h += "<tr><td><b>THL phonetics</b></td>"
                      "<td style='font-size:15px'>" +
                      QString::fromStdString(thl).toHtmlEscaped() +
-                     " <small style='color:#777'>(Germano &amp; "
+                     " <small style='color:#6F6F6F'>(Germano &amp; "
                      "Tournadre, THL)</small></td></tr>";
             }
             if (rev.warns > 0 ||
@@ -21708,7 +21708,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                          "engine cannot read as Tibetan — escaped, "
                          "never guessed</i></td></tr>")
                          .arg(rev.warns);
-            h += "<tr><td></td><td><i style='color:#777;font-size:"
+            h += "<tr><td></td><td><i style='color:#6F6F6F;font-size:"
                  "11px'>reverse engine: pyewts-parity port, proven "
                  "100.000% on 109,490 fixtures — edit the Tibetan "
                  "above and this card follows live</i></td></tr>";
@@ -21757,7 +21757,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
             row("simplified pron.",
                 QString::fromStdString(allcore::iastToPronunciation(t)),
                 "font-size:16px");
-            h += "<tr><td></td><td><i style='color:#777;font-size:11px'>"
+            h += "<tr><td></td><td><i style='color:#6F6F6F;font-size:11px'>"
                  "IPA follows the standard Classical-Sanskrit mapping; the "
                  "simplified style follows the ACIP pronunciation standard "
                  "(Release IV manual, banked in docs/standards)</i></td></tr>";
@@ -21769,7 +21769,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
                     h += "<b>" + QString::fromStdString(letter).toHtmlEscaped() +
                          "</b> — " + QString::fromUtf8(hint).toHtmlEscaped() +
                          "<br>";
-                h += "<i style='color:#777;font-size:11px'>letter guide per "
+                h += "<i style='color:#6F6F6F;font-size:11px'>letter guide per "
                      "the FPMT transliteration standard</i></td></tr>";
             }
             h += "</table>";
@@ -21861,7 +21861,7 @@ static QWidget* makeConvertPane(allcore::Mvp* mvp,
         h += "<tr><td><b>THL phonetics</b></td>"
              "<td style='font-size:15px'>" +
              QString::fromStdString(thl).toHtmlEscaped() +
-             " <small style='color:#777'>(Germano &amp; Tournadre, "
+             " <small style='color:#6F6F6F'>(Germano &amp; Tournadre, "
              "THL)</small></td></tr>";
         h += "</table>";
         if (mvp) h += mvpHtml(mvp->byWylie(wylie));
@@ -22239,7 +22239,7 @@ private:
         for (const auto& cl : clauses_) {
             ++cn;
             h += QString("<div style='margin:10px 0;padding:8px;border-left:"
-                         "3px solid #7F77DD'><small style='color:#777'>clause "
+                         "3px solid #7F77DD'><small style='color:#6F6F6F'>clause "
                          "%1</small><br>").arg(cn);
             auto chunks = allcore::chunkClause(doc_, cl);
             auto verb = allcore::spotVerb(doc_, chunks);
@@ -22456,7 +22456,7 @@ private:
                              "</b> — " +
                              QString::fromStdString(u.category).toHtmlEscaped();
                         if (!u.detail.empty())
-                            h += " <span style='color:#777'>(" +
+                            h += " <span style='color:#6F6F6F'>(" +
                                  QString::fromStdString(u.detail)
                                      .left(90)
                                      .toHtmlEscaped() + ")</span>";
@@ -22505,7 +22505,7 @@ private:
                                  .toHtmlEscaped() + "</small></div>";
                 } else {
                     h += "<div style='margin-top:4px'><small style="
-                         "'color:#777'>not in the corpus — the Analysis pane "
+                         "'color:#6F6F6F'>not in the corpus — the Analysis pane "
                          "can give an AI reading (labeled AI)</small></div>";
                 }
             }
@@ -24576,7 +24576,7 @@ private:
                 h += QString("<div style='font-size:%1px'><b>%2)</b> %3</div>")
                          .arg(px(21)).arg(i + 1)
                          .arg(disp(readKids_[i].toStdString()));
-            h += "<div style='color:#888;padding-top:6px;font-size:11px'>"
+            h += "<div style='color:#6F6F6F;padding-top:6px;font-size:11px'>"
                  "Clause order is almost never inverted \u2014 5% of 972 "
                  "measured pairs. Inside a clause it is a different story, "
                  "which is what this drills.</div>";
@@ -25391,7 +25391,7 @@ private:
                             matched * 2 >= (int)rep.terms.size(),
                         (long long)time(nullptr));
             } else {
-                h += "<small style='color:#777'>write your translation above "
+                h += "<small style='color:#6F6F6F'>write your translation above "
                      "before checking — the comparison is the exercise.</small>";
             }
         } else if (m == 4 && !vocab_.empty()) {
@@ -25446,7 +25446,7 @@ private:
                                : "<small style='color:#B4540A'>will retry "
                                  "soon</small>";
             } else if (pick < 0) {
-                h += "<small style='color:#777'>grade yourself (pick one) to "
+                h += "<small style='color:#6F6F6F'>grade yourself (pick one) to "
                      "schedule the next review</small>";
             }
         }
@@ -26138,7 +26138,14 @@ public:
         // Half a fix reads exactly like the whole one until you launch the
         // app and look. (Draft workspace audit 2026-09-11.)
         termLive_->setText("terminology check: waiting for a source");
-        termLive_->setStyleSheet("font-size:11px;color:#777");
+        // G3: this was `color:#777` and G3 could not see it -- its pattern,
+        // like contrast_check's, matched only SIX hex digits, so the app's
+        // 18th hardcoded chrome colour hid behind CSS shorthand while the
+        // baseline said 17. Routed through a token, which is what the rule
+        // asks for and what makes it follow Day/Night.
+        ux::themedStyle(termLive_, [] {
+            return QString("font-size:11px;color:%1").arg(ux::chromeMuted());
+        });
         termLive_->setWordWrap(true);
         draftCol->addWidget(termLive_);
         termTimer_ = new QTimer(this);
@@ -27795,7 +27802,7 @@ private:
             }
             h += QString("<div style='margin:4px 0'><a href='c:%1' "
                          "style='text-decoration:none'><small style="
-                         "'color:#777'>clause %2</small> %3</a></div>")
+                         "'color:#6F6F6F'>clause %2</small> %3</a></div>")
                      .arg(i)
                      .arg(i + 1)
                      .arg(text.toHtmlEscaped());
@@ -27888,7 +27895,7 @@ private:
                 if (terms[k] == spanIx) return hues[k % 4];
             return nullptr;
         };
-        QString h = QString("<div style='color:#777'>anchors — clause %1"
+        QString h = QString("<div style='color:#6F6F6F'>anchors — clause %1"
                             "</div>").arg(ci + 1);
         // the clause itself in script, terms banded in their hues
         {
@@ -28019,7 +28026,7 @@ private:
                     QString piece = "<span style='white-space:nowrap'>" +
                                     pre + chipFor(chunks[cix]);
                     if (chunks[cix].role && *chunks[cix].role)
-                        piece += " <small style='color:#777'>" +
+                        piece += " <small style='color:#6F6F6F'>" +
                                  QString(chunks[cix].role)
                                      .toHtmlEscaped() +
                                  "</small>";
@@ -28027,7 +28034,7 @@ private:
                     parts << piece;
                 }
                 h += "<hr><div><b>scaffold</b> <small style="
-                     "'color:#777'>— attested glosses in Wilson "
+                     "'color:#6F6F6F'>— attested glosses in Wilson "
                      "reading order; arrange and complete yourself "
                      "(nothing composed; ⟨…⟩ unattested, "
                      "<span style='color:#B4540A'>?</span> provisional)"
@@ -28213,7 +28220,7 @@ private:
                          : QString::number(total) + " corpus hit(s)") +
                     "</div>";
         // the cap, disclosed: what is on screen, and what is not
-        h += "<div style='color:#777;font-size:11px'>showing " +
+        h += "<div style='color:#6F6F6F;font-size:11px'>showing " +
              QString::number(showing) +
              (total > showing
                   ? " of " + QString::number(total) +
@@ -28224,7 +28231,7 @@ private:
                              : QString())
                   : QString()) +
              "</div>";
-        h += "<div style='color:#777;font-size:11px'>by course, over the " +
+        h += "<div style='color:#6F6F6F;font-size:11px'>by course, over the " +
              QString::number(fetched) + " fetched" +
              (total > fetched ? QString(" — NOT all %1").arg(total)
                               : QString()) +
@@ -28296,7 +28303,7 @@ private:
                              .arg(abridged(
                                  QString::fromStdString(node.heading), 90))
                              .arg(node.announced > 0
-                                      ? QString(" <small style='color:#777'>"
+                                      ? QString(" <small style='color:#6F6F6F'>"
                                                 "(→ %1 parts)</small>")
                                             .arg(node.announced)
                                       : QString());
@@ -28324,7 +28331,7 @@ private:
         QString h = "<div><b>Structural units — bam po / le'u</b></div>";
         h += QString("<div style='color:#555'>%1 syllables · shloka "
                      "<i>estimate</i> %2 · bampo <i>estimate</i> %3 "
-                     "<small style='color:#777'>(30-syllable prose shloka, "
+                     "<small style='color:#6F6F6F'>(30-syllable prose shloka, "
                      "300-shloka bampo — edition-dependent estimates, not "
                      "counts)</small></div><hr>")
                  .arg(st.syllables)
@@ -28335,12 +28342,12 @@ private:
                          "(written in the text — authoritative)</div>")
                      .arg(st.bampos.size());
             if (st.preamble_syllables > 0)
-                h += QString("<div style='color:#777'>preamble before "
+                h += QString("<div style='color:#6F6F6F'>preamble before "
                              "first marker: %1 syllables</div>")
                          .arg(st.preamble_syllables);
             for (const auto& m : st.bampos)
                 h += QString("<div style='margin-left:14px'>%1%2 "
-                             "<small style='color:#777'>%3 syllables"
+                             "<small style='color:#6F6F6F'>%3 syllables"
                              "</small>%4</div>")
                          .arg(m.number > 0
                                   ? QString("<b>bam po %1</b>").arg(m.number)
@@ -28381,19 +28388,19 @@ private:
         if (v.is_verse)
             h += QString("<div style='color:#3B7A3B'>verse detected — "
                          "%1-syllable meter, %2 line(s), %3 irregular</div>"
-                         "<div style='color:#777;font-size:11px'>register "
+                         "<div style='color:#6F6F6F;font-size:11px'>register "
                          "note: verse translates differently than prose "
                          "(single-register warnings apply)</div>")
                      .arg(v.meter)
                      .arg(v.lines.size())
                      .arg(v.irregular_count);
         else
-            h += QString("<div style='color:#777'>no dominant meter — reads "
+            h += QString("<div style='color:#6F6F6F'>no dominant meter — reads "
                          "as prose (%1 line(s))</div>")
                      .arg(v.lines.size());
         h += "<hr>";
         for (const auto& l : v.lines)
-            h += QString("<div%1><small style='color:#777'>%2 · %3 syl</small> "
+            h += QString("<div%1><small style='color:#6F6F6F'>%2 · %3 syl</small> "
                          "%4</div>")
                      .arg(l.irregular
                               ? " style='background:#FDEEDC'"
@@ -28414,14 +28421,14 @@ private:
         auto v = allcore::analyzeVerse(src);
         QString h = "<div><b>Verse reading order</b></div>";
         if (!v.is_verse) {
-            h += "<div style='color:#777'>no dominant meter — this reads "
+            h += "<div style='color:#6F6F6F'>no dominant meter — this reads "
                  "as prose; use the Trainer's reading order instead.</div>";
             report_->setHtml(h);
             return;
         }
         auto stanzas = allcore::groupStanzas(v, src);
         h += QString("<div style='color:#3B7A3B'>%1-syllable verse · %2 "
-                     "reading unit(s)</div><div style='color:#777;"
+                     "reading unit(s)</div><div style='color:#6F6F6F;"
                      "font-size:11px'>Read each stanza as ONE unit, not "
                      "line by line: the meter moves words out of their "
                      "prose order, and case particles are often dropped "
@@ -28433,7 +28440,7 @@ private:
         for (const auto& st : stanzas) {
             ++sn;
             h += QString("<div style='margin-top:8px'><b>Stanza %1</b> "
-                         "<small style='color:#777'>(lines %2–%3%4)"
+                         "<small style='color:#6F6F6F'>(lines %2–%3%4)"
                          "</small></div>")
                      .arg(sn)
                      .arg(st.first_line)
@@ -28620,7 +28627,7 @@ private:
                 continue;
             ++found;
             h += QString("<div style='margin:6px 0'><a href='note:%1'>"
-                         "[insert]</a> <b>%2</b> <small style='color:#777'>"
+                         "[insert]</a> <b>%2</b> <small style='color:#6F6F6F'>"
                          "(%3, n.%4)</small><br><small>%5</small></div>")
                      .arg(i)
                      .arg(n.lemma.toHtmlEscaped())
@@ -28637,7 +28644,7 @@ private:
             ++bibFound;
             h += QString("<div style='margin:6px 0'><a href='bib:%1'>"
                          "[insert entry]</a> <b>bibliography %2</b> "
-                         "<small style='color:#777'>(%3%4)</small><br>"
+                         "<small style='color:#6F6F6F'>(%3%4)</small><br>"
                          "<small>%5</small></div>")
                      .arg(i)
                      .arg(b.id.toHtmlEscaped())
@@ -28661,8 +28668,8 @@ private:
                          .arg(QString(ux::kMachine));
             ++candFound;
             h += QString("<div style='margin:6px 0;border-left:3px solid "
-                         "#c80;padding-left:6px'><a href='cand:%1'>"
-                         "[insert]</a> <b>%2</b> <b style='color:#c80'>"
+                         "#935800;padding-left:6px'><a href='cand:%1'>"
+                         "[insert]</a> <b>%2</b> <b style='color:#935800'>"
                          "⚠ PENDING — not GMR-approved</b><br>"
                          "<small>%3</small></div>")
                      .arg(i)
@@ -28842,7 +28849,7 @@ public:
                     continue;
                 ++recs;
                 h += QString("<br><a href='note:%1'>[insert footnote: "
-                             "%2]</a> <small style='color:#777'>(%3, "
+                             "%2]</a> <small style='color:#6F6F6F'>(%3, "
                              "n.%4)</small>")
                          .arg(i)
                          .arg(n.lemma.toHtmlEscaped())
@@ -29673,7 +29680,7 @@ public:
                         hh += "<div style='margin:4px 0'><i>" +
                               lw.toHtmlEscaped() + "</i> — “" +
                               le.toHtmlEscaped() +
-                              "” <small style='color:#777'>(" +
+                              "” <small style='color:#6F6F6F'>(" +
                               fn.toHtmlEscaped() + ")</small></div>";
                     }
                 }
@@ -31739,12 +31746,12 @@ public:
                 const auto p = it.value();
                 QString h =
                     "<hr><div><b>PERSON</b> <small style='color:"
-                    "#777'>(catalog author \u2014 People layer)"
+                    "#6F6F6F'>(catalog author \u2014 People layer)"
                     "</small></div><div style='margin:4px 0'><b>" +
                     it.key().toHtmlEscaped() + "</b>";
                 const QString dates = p.value("dates").toString();
                 if (!dates.isEmpty())
-                    h += " <small style='color:#777'>(" +
+                    h += " <small style='color:#6F6F6F'>(" +
                          dates.toHtmlEscaped() + ")</small>";
                 for (const auto& cv :
                      p.value("candidates").toArray()) {
@@ -31766,7 +31773,7 @@ public:
                         h += " \u00b7 <a href='" + tolPage +
                              "'>Treasury of Lives</a>";
                         if (tolViaWd)
-                            h += " <small style='color:#777'>"
+                            h += " <small style='color:#6F6F6F'>"
                                  "(matched via Wikidata)</small>";
                     } else if (!tol.isEmpty()) {
                         // Known to TOL, but no page of theirs is
@@ -31779,7 +31786,7 @@ public:
                                  "'>search Treasury of Lives</a>";
                     }
                 }
-                h += "<br><small style='color:#777'>works in your "
+                h += "<br><small style='color:#6F6F6F'>works in your "
                      "Library: see the text's card in Read \u2192 "
                      "Library</small></div>";
                 return h;
@@ -33426,7 +33433,7 @@ private:
             auto* h = new QHBoxLayout;
             auto* lbl = new QLabel(
                 QString("<b>%1</b> \u2014 %2 \u00b7 %3 \u00b7 %4"
-                        "<br><small style='color:#777'>%5</small>")
+                        "<br><small style='color:#6F6F6F'>%5</small>")
                     .arg(row.name.toUpper())
                     .arg(row.date.isEmpty() ? "date unknown"
                                             : row.date)
@@ -33896,9 +33903,9 @@ private:
              author.toHtmlEscaped() + "</b>";
         const QString dates = p.value("dates").toString();
         if (!dates.isEmpty())
-            h += " <small style='color:#777'>(" +
+            h += " <small style='color:#6F6F6F'>(" +
                  dates.toHtmlEscaped() + ")</small>";
-        h += " <small style='color:#777'>(author)</small>";
+        h += " <small style='color:#6F6F6F'>(author)</small>";
         if (!auth.isEmpty()) {
             // the authoritative tier: a PER-TEXT link, not a name
             // match — the ACIP<->BDRC catalog work (BDRC + ACIP)
@@ -33937,7 +33944,7 @@ private:
                     h += " \u00b7 <a href='" + tolPage +
                          "'>Treasury of Lives biography</a>";
                     if (tolViaWd)
-                        h += " <small style='color:#777'>"
+                        h += " <small style='color:#6F6F6F'>"
                              "(matched via Wikidata)</small>";
                 } else if (!tol.isEmpty()) {
                     const QString sq = tolSearchUrl(author);
@@ -34055,14 +34062,14 @@ private:
                  "syllable-legality first-pass QC</div>";
         h += "<div style='margin:3px 0'><a href='survey:" +
              anchorEnc(path) +
-             "'>Translator's survey…</a> <small style='color:#777'>"
+             "'>Translator's survey…</a> <small style='color:#6F6F6F'>"
              "(coverage · unknown vocabulary · quotations · "
              "structure · difficulty)</small></div>";
         auto acip = allcore::decodeAcipFilename(path.toStdString());
         const QString etitle = englishTitle(fi.fileName());
         if (!etitle.isEmpty())
             h += "<div style='margin-top:2px'><i>" + etitle.toHtmlEscaped() +
-                 "</i> <small style='color:#777'>(catalog title)</small>"
+                 "</i> <small style='color:#6F6F6F'>(catalog title)</small>"
                  "</div>";
         {
             QRegularExpression re("^([A-Za-z]+)0*(\\d+)");
@@ -34074,7 +34081,7 @@ private:
             if (!subj.isEmpty())
                 h += "<div><span style='font-size:13px'>" +
                      subj.toHtmlEscaped() +
-                     "</span> <small style='color:#777'>(subject, "
+                     "</span> <small style='color:#6F6F6F'>(subject, "
                      "Sungbum catalog)</small></div>";
             if (m.hasMatch())
                 h += vinayaBannerHtml(m.captured(1).toUpper() +
@@ -34086,7 +34093,7 @@ private:
             if (!r6.isEmpty())
                 h += "<div style='font-size:12px'>" +
                      r6.toHtmlEscaped() +
-                     " <small style='color:#777'>(subject, ACIP "
+                     " <small style='color:#6F6F6F'>(subject, ACIP "
                      "Release 6)</small></div>";
         }
         {
@@ -34103,7 +34110,7 @@ private:
             if (!acip.part.empty())
                 h += " part " + QString::fromStdString(acip.part);
             if (!acip.subNumber.empty())
-                h += " <small style='color:#777'>(sub-number " +
+                h += " <small style='color:#6F6F6F'>(sub-number " +
                      QString::fromStdString(acip.subNumber)
                          .toHtmlEscaped() +
                      ", toolchain grammar)</small>";
@@ -34128,7 +34135,7 @@ private:
                 h += "<hr><pre style='white-space:pre-wrap;font-size:12px'>" +
                      QString::fromUtf8(f.read(700)).toHtmlEscaped() + "…</pre>";
         }
-        h += "<div style='margin-top:6px;color:#777'><small>double-click to "
+        h += "<div style='margin-top:6px;color:#6F6F6F'><small>double-click to "
              "open in the Overlay</small></div>";
         info_->setHtml(h);
     }
@@ -34863,7 +34870,7 @@ private:
                                       ordinary.toHtmlEscaped() + ")") +
                            (domain.isEmpty()
                                 ? QString()
-                                : " <small style='color:#777'>" +
+                                : " <small style='color:#6F6F6F'>" +
                                       domain.toHtmlEscaped() +
                                       "</small>") +
                            " — check that the English carries the "
@@ -35046,7 +35053,7 @@ private:
         QString h = QString(
             "<div><b>Reviewer's report</b> — %1 term(s) anchored · %2 "
             "unmatched · %3 provisional-supported · %4 shared-English "
-            "collapse(s)</div><div style='color:#777;font-size:12px'>"
+            "collapse(s)</div><div style='color:#6F6F6F;font-size:12px'>"
             "flags are attention guidance, not errors; the reviewer "
             "decides</div><hr>")
                         .arg(rep.terms.size())
@@ -38897,7 +38904,7 @@ private:
             if (p.proposer != g_userName.toStdString()) continue;
             ++n;
             static const char* colors[] = {"#B4540A", "#1E6B4E",
-                                           "#8C2F2B", "#777777"};
+                                           "#8C2F2B", "#6F6F6F"};
             const char* col = colors[int(p.status)];
             h += QString("<div style='margin:6px 0'>"
                          "<span style='color:%1'><b>%2</b></span> · "
@@ -39198,7 +39205,7 @@ private:
         const QString want =
             filter_ ? filter_->currentData().toString() : QString();
         QString h = QString("<div><b>%1 pending</b> · signed in as %2"
-                            "</div><div style='color:#777;font-size:12px'>"
+                            "</div><div style='color:#6F6F6F;font-size:12px'>"
                             "%3</div><hr>")
                         .arg(store.pendingCount())
                         .arg(g_userName.isEmpty() ? "(unnamed)"
@@ -39548,7 +39555,7 @@ private:
             h += QString("<div style='margin:7px 0;padding:5px;"
                          "border-left:3px solid %1'>"
                          "<b style='color:%1'>%2</b> · %3 <b>%4</b>%5"
-                         "<br><small style='color:#777'>proposed by %6 "
+                         "<br><small style='color:#6F6F6F'>proposed by %6 "
                          "(%7) · ruled by <b>%8</b>, %9%10</small></div>")
                      .arg(app ? "#1E6B4E"
                               : p.status ==
@@ -40748,7 +40755,7 @@ public:
         auto* outer = new QVBoxLayout(this);
         auto* banner = new QLabel(
             "<b>Cataloging — intake</b> &nbsp;<span style="
-            "'color:#777'>the uncataloged material on the left, where "
+            "'color:#6F6F6F'>the uncataloged material on the left, where "
             "it is going on the right. What is already identifiable, "
             "what needs a cataloger. Nothing is written to the "
             "official catalog from here — suggestions route through "
@@ -40942,7 +40949,7 @@ public:
         connect(qcB, &QPushButton::clicked, [this] {
             if (intake_->root().isEmpty()) {
                 info_->setHtml(
-                    "<div style='color:#777'>Choose the intake "
+                    "<div style='color:#6F6F6F'>Choose the intake "
                     "folder first \u2014 QC runs over the intake "
                     "tree.</div>");
                 return;
@@ -40952,7 +40959,7 @@ public:
         connect(wsB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty()) {
                 info_->setHtml(
-                    "<div style='color:#777'>Click a file first "
+                    "<div style='color:#6F6F6F'>Click a file first "
                     "\u2014 the worksheet describes one text.</div>");
                 return;
             }
@@ -40963,7 +40970,7 @@ public:
             if (lastFile_.isEmpty() || intake_->root().isEmpty() ||
                 !lastFile_.startsWith(intake_->root())) {
                 info_->setHtml(
-                    "<div style='color:#777'>Select a file in the "
+                    "<div style='color:#6F6F6F'>Select a file in the "
                     "INTAKE tree first \u2014 the handoff moves "
                     "intake material onto a destination shelf.</div>");
                 return;
@@ -41067,7 +41074,7 @@ public:
             const QString L = intake_->root(), R = dest_->root();
             if (L.isEmpty() || R.isEmpty()) {
                 info_->setHtml(
-                    "<div style='color:#777'>Point both trees at "
+                    "<div style='color:#6F6F6F'>Point both trees at "
                     "folders first \u2014 the diff compares the "
                     "left (intake) root against the right "
                     "(destination) root.</div>");
@@ -41107,7 +41114,7 @@ public:
         connect(splitB, &QPushButton::clicked, [this] {
             if (lastFile_.isEmpty()) {
                 info_->setHtml(
-                    "<div style='color:#777'>Click a file in either "
+                    "<div style='color:#6F6F6F'>Click a file in either "
                     "tree first \u2014 then Suggest splits scans it "
                     "for text boundaries.</div>");
                 return;
@@ -41266,7 +41273,7 @@ public:
                      QString::fromStdString(r.meta_filename)
                          .toHtmlEscaped() +
                      "</b> carries the rest:</span><br><span "
-                     "style='color:#777'>" +
+                     "style='color:#6F6F6F'>" +
                      QString::fromStdString(r.meta_content)
                          .toHtmlEscaped() + "</span>";
             preview->setText(t);
@@ -41381,7 +41388,7 @@ public:
         }
         QString h =
             "<h3>Register loaded (read-only)</h3>"
-            "<div style='color:#777'>" + path.toHtmlEscaped() +
+            "<div style='color:#6F6F6F'>" + path.toHtmlEscaped() +
             "</div>" +
             QString("<div style='margin:6px 0'><b>%1</b> issued "
                     "number(s) \u00b7 <b>%2</b> cataloged in the "
@@ -41390,7 +41397,7 @@ public:
                 .arg(n)
                 .arg(cataloged)
                 .arg(absent.size());
-        h += "<div style='color:#777;font-size:11px'>The three states "
+        h += "<div style='color:#6F6F6F;font-size:11px'>The three states "
              "are independent: a number can be issued without the "
              "input existing, and input can exist without being "
              "cataloged (session 1: works cited in bibliographies got "
@@ -41402,7 +41409,7 @@ public:
             size_t shown = 0;
             for (const auto* e : absent) {
                 if (shown++ >= 100) {
-                    h += QString("<li style='color:#777'>\u2026 and "
+                    h += QString("<li style='color:#6F6F6F'>\u2026 and "
                                  "%1 more</li>")
                              .arg(absent.size() - 100);
                     break;
@@ -41525,7 +41532,7 @@ public:
         dlg.resize(720, 640);
         auto* outerL = new QVBoxLayout(&dlg);
         auto* legend = new QLabel(
-            "<span style='color:#777'>The team's live 52-column "
+            "<span style='color:#6F6F6F'>The team's live 52-column "
             "schema. Prefilled values are machine suggestions from "
             "the filename, the title page, and the colophon "
             "candidates \u2014 verify everything. Saved as a sidecar "
@@ -41748,7 +41755,7 @@ public:
             size_t shown = 0;
             for (const auto& s2 : v) {
                 if (shown++ >= 150) {
-                    h += QString("<li style='color:#777'>\u2026 and "
+                    h += QString("<li style='color:#6F6F6F'>\u2026 and "
                                  "%1 more</li>")
                              .arg(v.size() - 150);
                     break;
@@ -41761,7 +41768,7 @@ public:
         };
         QString h =
             "<h3>Tree comparison</h3>"
-            "<div style='color:#777'>LEFT " + L.toHtmlEscaped() +
+            "<div style='color:#6F6F6F'>LEFT " + L.toHtmlEscaped() +
             " \u00b7 RIGHT " + R.toHtmlEscaped() +
             "</div>" +
             QString("<div style='margin:6px 0'><b>%1</b> left \u00b7 "
@@ -41775,7 +41782,7 @@ public:
                 .arg(d.renamed.size())
                 .arg(d.removed.size())
                 .arg(d.added.size());
-        h += "<div style='color:#777;font-size:11px'>Content matched "
+        h += "<div style='color:#6F6F6F;font-size:11px'>Content matched "
              "by size + sampled bytes (first/last 4 KB), not full "
              "reads \u2014 confirm a difference by opening the "
              "files. Nothing was changed by this comparison.</div>";
@@ -41787,7 +41794,7 @@ public:
             size_t shown = 0;
             for (const auto& [a, b] : d.renamed) {
                 if (shown++ >= 100) {
-                    h += QString("<li style='color:#777'>\u2026 and "
+                    h += QString("<li style='color:#6F6F6F'>\u2026 and "
                                  "%1 more</li>")
                              .arg(d.renamed.size() - 100);
                     break;
@@ -41818,7 +41825,7 @@ public:
             "<h3>Title workbench</h3>"
             "<div style='font-family:Palatino'><b>" +
             tib.toHtmlEscaped() + "</b></div>" +
-            QString("<div style='color:#777'>Matched against %1 "
+            QString("<div style='color:#6F6F6F'>Matched against %1 "
                     "published title pairs. <b>The machine attests; "
                     "you compose.</b> Nothing below is a machine "
                     "translation \u2014 every English line is a "
@@ -41846,7 +41853,7 @@ public:
         }
         if (!w.fragments.empty()) {
             h += QString("<div style='margin-top:8px'><b>Attested "
-                         "phrases</b> <span style='color:#777'>\u2014 "
+                         "phrases</b> <span style='color:#6F6F6F'>\u2014 "
                          "%1% of the title's syllables covered</span>"
                          "</div>")
                      .arg(qRound(w.coverage * 100));
@@ -41881,7 +41888,7 @@ public:
                  "machine.</div>";
         }
         if (w.whole.empty() && w.fragments.empty())
-            h += "<div style='margin-top:8px;color:#777'>Nothing in "
+            h += "<div style='margin-top:8px;color:#6F6F6F'>Nothing in "
                  "the published record matches \u2014 an honest "
                  "blank. This title needs the translator from "
                  "scratch.</div>";
@@ -41931,12 +41938,12 @@ public:
                    "circulate.</div>";
         return QString(
                    "<h3>ASCII catalog list written</h3>"
-                   "<div style='color:#777'>%1</div>"
+                   "<div style='color:#6F6F6F'>%1</div>"
                    "<div style='margin:6px 0'><b>%2</b> file(s) listed "
                    "\u00b7 %3 cataloged by name \u00b7 %4 uncataloged "
                    "\u00b7 %5 title(s) read from the text (marked "
                    "T*)</div>"
-                   "<div style='color:#777'>The list answers Geshe "
+                   "<div style='color:#6F6F6F'>The list answers Geshe "
                    "Michael's session-3 ask \u2014 \u201cwe don't "
                    "have a separate list of what's in the "
                    "folders\u201d \u2014 in the St. Petersburg "
@@ -42025,7 +42032,7 @@ public:
         constexpr qint64 kCap = 32 * 1024 * 1024;
         const QByteArray sniff = f.read(4096);
         if (sniff.contains('\0'))
-            return "<div style='color:#777'>Not a text file \u2014 "
+            return "<div style='color:#6F6F6F'>Not a text file \u2014 "
                    "nothing to split.</div>";
         f.seek(0);
         const std::string doc = f.read(kCap).toStdString();
@@ -42034,7 +42041,7 @@ public:
             "<h3>Suggested splits</h3>"
             "<div style='color:#6F6F6F;font-size:11px'>" +
             QFileInfo(path).fileName().toHtmlEscaped() + "</div>" +
-            "<div style='color:#777'>Candidate text boundaries, with "
+            "<div style='color:#6F6F6F'>Candidate text boundaries, with "
             "evidence \u2014 <b>nothing is cut</b>. The house method "
             "applies: work in a chop copy, never the mother copy; "
             "verify each boundary in the text; don't split what the "
@@ -42061,7 +42068,7 @@ public:
             const double pct =
                 doc.empty() ? 0.0 : 100.0 * c.offset / doc.size();
             h += QString("<tr><td valign='top'><b>%1</b></td>"
-                         "<td valign='top' style='color:#777'>"
+                         "<td valign='top' style='color:#6F6F6F'>"
                          "%2%3<br>%4% in</td><td>")
                      .arg(seg)
                      .arg(c.folio.empty()
@@ -42237,7 +42244,7 @@ public:
         const auto r = allcore::auditPresence(cited, have);
         QString h =
             "<h3>Bibliography audit</h3>"
-            "<div style='color:#777'>Geshe Michael's first job to the "
+            "<div style='color:#6F6F6F'>Geshe Michael's first job to the "
             "cataloging class (Dec 22, 2025): every ACIP number cited "
             "in the published bibliographies must exist in the "
             "database. This checks the citations against <b>" +
@@ -42253,7 +42260,7 @@ public:
                  .arg(r.present)
                  .arg(r.missing);
         h += "<div style='margin:4px 0'><a href='exportmissing:'>"
-             "Export missing list\u2026</a> <span style='color:#777'>"
+             "Export missing list\u2026</a> <span style='color:#6F6F6F'>"
              "\u2014 the field-coded handout for the witness hunt "
              "(number, citing volume, citation, search link).</span>"
              "</div>";
@@ -42291,7 +42298,7 @@ public:
                                           : QString());
                 if (!wlink.isEmpty()) h += " " + wlink;
                 h += (it != firstCite.end()
-                          ? "<div style='color:#777;font-size:11px'>" +
+                          ? "<div style='color:#6F6F6F;font-size:11px'>" +
                                 it->second.text.toHtmlEscaped() +
                                 "\u2026</div>"
                           : QString()) +
@@ -42302,7 +42309,7 @@ public:
         if (r.missing == 0)
             h += "<div style='color:#2E7D32'>Every cited work is "
                  "present in this library.</div>";
-        h += "<div style='color:#777;margin-top:8px'>Missing works "
+        h += "<div style='color:#6F6F6F;margin-top:8px'>Missing works "
              "are candidates for the intake workflow: locate a "
              "witness, input, propose, approve. Nothing here writes "
              "anything.</div>";
@@ -42332,7 +42339,7 @@ public:
             titleHint.toStdString());
         QString h =
             "<h3>Where might this belong?</h3>"
-            "<div style='color:#777'>No shelf is selected in the "
+            "<div style='color:#6F6F6F'>No shelf is selected in the "
             "destination tree. These are SUGGESTIONS from the tree's "
             "own contents \u2014 measured on held-out files, the "
             "right shelf leads this list about 31% of the time and "
@@ -42341,7 +42348,7 @@ public:
             "\u2014 the choice is yours. Click a shelf to select "
             "it, then Move to shelf\u2026 again.</div>";
         if (sug.empty())
-            return h + "<div style='margin-top:6px;color:#777'>The "
+            return h + "<div style='margin-top:6px;color:#6F6F6F'>The "
                        "destination tree offers no signal for this "
                        "file \u2014 shelve it by your own reading."
                        "</div>";
@@ -42370,7 +42377,7 @@ public:
             allcore::qcDuplicateTitles(root.toStdString());
         QString h =
             "<h3>Intake QC</h3>"
-            "<div style='color:#777'>" + root.toHtmlEscaped() +
+            "<div style='color:#6F6F6F'>" + root.toHtmlEscaped() +
             " \u2014 two lanes; every flag is a question with its "
             "evidence, never a verdict. Nothing is changed.</div>";
         h += QString("<div style='margin-top:8px'><b>Title vs "
@@ -42402,7 +42409,7 @@ public:
         for (const auto& m : flags) {
             h += "<div style='margin-top:4px'><b>" +
                  QString::fromStdString(m.file).toHtmlEscaped() +
-                 "</b><div style='color:#777;font-size:11px'>its "
+                 "</b><div style='color:#6F6F6F;font-size:11px'>its "
                  "English \u201c" +
                  QString::fromStdString(m.own_eng).toHtmlEscaped() +
                  "\u201d matches <i>" +
@@ -42426,7 +42433,7 @@ public:
             h += "<div style='margin-top:4px'><span style="
                  "'font-family:Palatino'>" +
                  QString::fromStdString(g.title_norm).toHtmlEscaped() +
-                 "</span><div style='color:#777;font-size:11px'>" +
+                 "</span><div style='color:#6F6F6F;font-size:11px'>" +
                  QString::number(g.members.size()) + " files \u2014 " +
                  QString::fromStdString(g.verdict).toHtmlEscaped() +
                  "</div><ul style='margin:2px 0'>";
@@ -42508,14 +42515,14 @@ public:
         QString h = "<hr><div style='color:#8C2F2B'><b>SUGGESTED "
                     "IDENTITY</b></div>";
         if (!t.found) {
-            h += "<div style='color:#777'>No title page in the "
+            h += "<div style='color:#6F6F6F'>No title page in the "
                  "opening of this file &mdash; it begins mid-text. "
                  "The machine has nothing to go on here; this one "
                  "needs a cataloger's eye.</div>";
             return h;
         }
         h += QString("<div style='margin:4px 0'><b>Title read from "
-                     "the text</b> <span style='color:#777'>(%1 "
+                     "the text</b> <span style='color:#6F6F6F'>(%1 "
                      "rule)</span><br><span style='font-family:"
                      "Palatino'>%2</span></div>")
                  .arg(t.rule == "bod-skad-du"
@@ -42525,14 +42532,14 @@ public:
                           .simplified()
                           .toHtmlEscaped());
         if (!t.sanskrit.empty())
-            h += QString("<div style='color:#777'>Sanskrit side of "
+            h += QString("<div style='color:#6F6F6F'>Sanskrit side of "
                          "the head: %1</div>")
                      .arg(QString::fromStdString(t.sanskrit)
                               .simplified()
                               .toHtmlEscaped());
         const auto& bank = titleBank();
         const auto cands = allcore::suggestIdentity(t, bank, 5);
-        h += QString("<div style='color:#777;margin-top:6px'>matched "
+        h += QString("<div style='color:#6F6F6F;margin-top:6px'>matched "
                      "against %1 known titles</div>")
                  .arg(bank.size());
         if (cands.empty()) {
@@ -42544,7 +42551,7 @@ public:
             return h;
         }
         h += "<div style='margin-top:6px'><b>Candidates</b> "
-             "<span style='color:#777'>&mdash; machine suggestions, "
+             "<span style='color:#6F6F6F'>&mdash; machine suggestions, "
              "not catalog entries. Nothing below is filed until a "
              "cataloger approves it.</span></div>"
              "<table cellpadding='4' style='margin-top:4px'>";
@@ -42552,7 +42559,7 @@ public:
             h += QString("<tr><td valign='top'><b>%1%</b></td>"
                          "<td valign='top'><b>%2</b></td><td>"
                          "<span style='font-family:Palatino'>%3</span>"
-                         "%4<div style='color:#777;font-size:11px'>%5 "
+                         "%4<div style='color:#6F6F6F;font-size:11px'>%5 "
                          "of %6 title syllables shared &middot; %7 "
                          "&middot; %8</div></td></tr>")
                      .arg(qRound(c.score * 100))
@@ -42589,7 +42596,7 @@ public:
         h += "</table>";
         h += QString("<div style='margin:6px 0'><a href='proposeid:%1"
                      "'>Propose this identity\u2026</a> <span style="
-                     "'color:#777'>files a catalog-identity proposal "
+                     "'color:#6F6F6F'>files a catalog-identity proposal "
                      "in the team channel \u2014 the authority rules; "
                      "approvals export as candidates for the data "
                      "project; the app never writes the catalog."
@@ -42603,7 +42610,7 @@ public:
                 cf.readAll().toStdString());
             if (!spans.empty()) {
                 h += "<div style='margin-top:8px;color:#8C2F2B'><b>"
-                     "COLOPHON CANDIDATES</b> <span style='color:#777'>"
+                     "COLOPHON CANDIDATES</b> <span style='color:#6F6F6F'>"
                      "\u2014 the author comes from the colophon, never "
                      "from the collection or a catalog. A translation "
                      "credit names the translator, NOT the author."
@@ -42693,7 +42700,7 @@ private:
                  QString::fromStdString(inf.collection)
                      .toHtmlEscaped() +
                  " " + QString::fromStdString(inf.number) +
-                 "</b></div><div style='color:#777'>" +
+                 "</b></div><div style='color:#6F6F6F'>" +
                  QString::fromStdString(inf.status).toHtmlEscaped() +
                  (inf.language.empty()
                       ? QString()
@@ -42790,7 +42797,7 @@ private:
                                    .arg(scan.slash_terminated)
                                    .arg(anchorEnc(path));
                     if (!sig.isEmpty())
-                        h += "<div style='color:#777;font-size:11px;"
+                        h += "<div style='color:#6F6F6F;font-size:11px;"
                              "margin:4px 0'>PROVENANCE: " +
                              sig.join(" \u00b7 ") + "</div>";
                 }
@@ -42807,7 +42814,7 @@ private:
             constexpr qint64 kTextCap = 20 * 1024 * 1024;
             const QByteArray sniff = f.read(4096);
             if (sniff.contains('\0')) {
-                h += QString("<hr><div style='color:#777'>Not a "
+                h += QString("<hr><div style='color:#6F6F6F'>Not a "
                              "text file (%1 KB) — no preview.</div>")
                          .arg(fi.size() / 1024);
             } else {
@@ -42876,7 +42883,7 @@ public:
         const QString root = catalogOfficialRoot();
         if (root.isEmpty()) {
             info_->setHtml(
-                "<div style='color:#777'>Choose the official "
+                "<div style='color:#6F6F6F'>Choose the official "
                 "library folder first — the roster lives inside "
                 "it, on the team's shared Dropbox folder.</div>");
             return;
@@ -42884,7 +42891,7 @@ public:
         auto roster = catalogRosterLoad(root);
         if (roster.isEmpty()) {
             info_->setHtml(
-                "<div style='color:#777'>No roster yet. "
+                "<div style='color:#6F6F6F'>No roster yet. "
                 "<b>Team…</b> creates the first admin entry "
                 "(that should be Adam).</div>");
             return;
@@ -42941,14 +42948,14 @@ public:
     bool requireLogin() {
         if (catalogOfficialRoot().isEmpty()) {
             info_->setHtml(
-                "<div style='color:#777'>Choose the official "
+                "<div style='color:#6F6F6F'>Choose the official "
                 "library folder first (the team's shared Dropbox "
                 "folder).</div>");
             return false;
         }
         if (g_catalogUser.isEmpty()) {
             info_->setHtml(
-                "<div style='color:#777'>Sign in first — the "
+                "<div style='color:#6F6F6F'>Sign in first — the "
                 "cataloging workflow is in-house only, and every "
                 "action carries its actor's name.</div>");
             return false;
@@ -42991,14 +42998,14 @@ public:
         const QString root = catalogOfficialRoot();
         if (root.isEmpty()) {
             info_->setHtml(
-                "<div style='color:#777'>Choose the official "
+                "<div style='color:#6F6F6F'>Choose the official "
                 "library folder first.</div>");
             return;
         }
         auto roster = catalogRosterLoad(root);
         const bool bootstrap = roster.isEmpty();
         if (!bootstrap && !catalogRoleHas("admin")) {
-            info_->setHtml("<div style='color:#777'>Only an admin "
+            info_->setHtml("<div style='color:#6F6F6F'>Only an admin "
                            "manages the roster.</div>");
             return;
         }
@@ -43964,7 +43971,7 @@ private:
             h += "<p><a href='chapter:" + chapterName +
                  "'>Read the full " + chapterName.toHtmlEscaped() +
                  " tutorial \u2192</a></p>";
-        h += "<p style='color:#777'>Tip: every button is also in the "
+        h += "<p style='color:#6F6F6F'>Tip: every button is also in the "
              "menu bar under its pane\u2019s menu \u2014 and the "
              "Mac\u2019s Help-menu search can point an arrow at "
              "it.</p>";

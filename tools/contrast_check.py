@@ -40,6 +40,11 @@ AA = 4.5
 
 def lum(h):
     h = h.lstrip("#")
+    # CSS shorthand: #777 IS #777777. Without this the three-digit inks that
+    # the widened patterns now see would be parsed as if the first two
+    # characters were a red channel and the rest garbage.
+    if len(h) == 3:
+        h = "".join(ch * 2 for ch in h)
     c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
     c = [(x / 12.92 if x <= 0.03928 else ((x + 0.055) / 1.055) ** 2.4)
          for x in c]
@@ -91,8 +96,14 @@ def main():
     # toolbar is deliberately dark. Judging those against cream produced four
     # false alarms on the first run, and a gate that cries wolf gets switched
     # off. So: the ink must sit inside an html style= attribute.
-    style = re.compile(r"color:\s*(#[0-9A-Fa-f]{6})")
-    bg = re.compile(r"background:\s*(#[0-9A-Fa-f]{6})")
+    # 2026-09-17, gate audit: these required EXACTLY six hex digits, so every
+    # CSS shorthand ink was invisible -- 217 sites in app/, of which 150 sit
+    # below AA 4.5 on this app's own paper (#FAF6EE), measured. The bulk is
+    # #777 at 4.15 (117 sites) and #888 at 3.29 (26). This is the same shape
+    # the file already records for itself: "a value wearing a different
+    # notation", and the third instance found in one day.
+    style = re.compile(r"color:\s*(#(?:[0-9A-Fa-f]{3}){1,2})(?![0-9A-Fa-f])")
+    bg = re.compile(r"background:\s*(#(?:[0-9A-Fa-f]{3}){1,2})(?![0-9A-Fa-f])")
     SHEET = re.compile(r"setStyleSheet|\"Q[A-Za-z]+\s*[{:]|^\s*\"\s*[a-z-]+:\s")
     seen = {}
     files = [os.path.join(root, "app/main.cpp")]
