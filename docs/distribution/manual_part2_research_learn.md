@@ -97,6 +97,13 @@ noble truth territory.
    footnote about the truth of suffering is worth knowing about.)
 7. Press **Find**.
 
+Folder results roll up **per file**, TibetDoc-style: each file
+shows its hit count and first matching line, sorted by count —
+and clicking the file name opens it in the Overlay **at the first
+hit**, reading cursor placed on the line. The classic
+search-locations workflow: survey where a term lives across a
+whole collection, then step into any witness in one click.
+
 The pane switches to the **Search Results** tab by itself. What you
 see, top to bottom:
 
@@ -108,7 +115,7 @@ see, top to bottom:
 - under the corpus heading, the hits themselves: each begins with a
   small `[course:line]` citation, then the Tibetan in wylie with
   *the master's English in italics beside it*. This is the point of
-  the tool — his attested renderings, in context, never composed;
+  the tool — those attested renderings, in context, never composed;
 - under the apparatus heading, matching footnotes ("note 156 — …"
   with its source book) and bibliography entries;
 - under each folder heading, file hits as `filename:line` with the
@@ -139,25 +146,41 @@ with all eight boxes, the combiner, the proximity, and the fold mode
 restored — press Find and it runs. **Delete** removes the selected
 saved search. Saved searches persist across restarts.
 
+
+### The Citation web
+
+**Citation web…** answers a question scholars usually spend months
+on: which works quote which? Every exact Tibetan passage shared
+between two courses of the aligned corpus becomes an edge — the
+list shows every connected pair with its shared-passage count;
+click a pair to read examples with the master's published English
+from both sides. Attested reuse only (no fuzzy matching, seven
+syllables or more), rebuilt from the corpus per release. The
+heaviest edges are discoveries in themselves: a commentary and its
+root text, a prayer book and the sadhana it feeds.
+
 ### Searching the Library, and searching the whole Mac
 
-Two more reaches, both restated from honest sources:
+Two more reaches, both in the Search Setting tab's source list:
 
-- **search the Library** points the folder search at your installed
-  Library (the 2,700+ texts of ACIP Release 6). The Library carries
-  a prebuilt full-text index, so answers come back instantly instead
-  of file-crawling; after you install new texts, refresh the index
-  with **Read → Library → Update search index** (a full rebuild of
-  all 8.68 million lines takes under two minutes).
-- **Search this Mac (Spotlight)** extends the hunt to everything on
-  the machine — every text, PDF, and Word file macOS has indexed.
-  Your query is stripped to plain phrases and searched *as typed*
-  AND *as Tibetan script*, converted through the proven wylie and
-  ACIP chains, since files on disk may be in any of the three. The
-  results list the matching documents with their locations; click
-  one to open it in its default application. (If Spotlight's index
-  skips a volume or file type, the pane says so rather than
-  pretending completeness.)
+- **The library folder row** (checked by default) searches your
+  installed Library (the current public collection releases (8,986 texts)). The
+  Library carries a prebuilt full-text index, so answers come back
+  instantly instead of file-crawling; after you install new texts,
+  refresh the index with **Read → Library → Update search index**
+  (a full rebuild of all 14.1 million lines takes under two
+  minutes).
+- **This Mac (Spotlight)** — an opt-in source row — extends the
+  hunt to everything on the machine: every text, PDF, and Word
+  file macOS has indexed. Each of your terms is searched *as
+  typed* AND *as Tibetan script*, converted through the proven
+  wylie and ACIP chains, since files on disk may be in any of the
+  three. (NEAR has no meaning outside the corpus, so Spotlight
+  simply looks for each term.) The results list the matching
+  documents with their locations; click one to open it in its
+  default application. (If Spotlight's index skips a volume or
+  file type, the pane says so rather than pretending
+  completeness.)
 
 ---
 
@@ -181,26 +204,41 @@ always know how your match was found:
 2. **Tibetan script**: paste བསོད་ནམས་ — same result.
 3. **ACIP**: type `BSOD NAMS` (uppercase input is auto-detected as
    ACIP) — same result.
+**⌘D — the floating dictionary window.** Select a word or phrase
+in ANY text surface — the Manuscript, a draft, the Input editor,
+even another pane's results — and press **⌘D** (or View → Look Up
+Selection). The full Lookup stack answers in a floating card that
+stays above your work: every match lane, every layer, the q.v.
+links following inside the card, and the propose/promote actions
+one click away. TibetDoc's dictionary window, reborn app-wide.
+
 4. **A pronunciation in the master's convention**: type `jangchub`.
    There is no headword spelled that way, so the pane matches by
    sound and finds *byang chub*, with the green note "matched by
    **pronunciation** (GMR convention) — no exact headword for
    'jangchub'".
-5. **A community spelling**: type `gonpa`. The colloquial register
+5. **The authority's ruled form**: when a pronunciation ruling has
+   been approved (say *kamdir* for *skabs 'dir*), typing the RULED
+   form finds its entry even though the release index only knows
+   the engine's baseline — noted as "matched by the authority's
+   **ruled pronunciation** ⟪ruled⟫". Rulings reach every surface:
+   the whole-text pronunciation view, the entry card's pron line
+   (green ⟪ruled⟫ tag), and search.
+6. **A community spelling**: type `gonpa`. The colloquial register
    widens the search and finds *dgon pa*, noting "matched by
    **colloquial pronunciation** (community usage register)". The
    register only widens lookup — the GMR convention stays canonical.
-6. **English, in reverse**: type an English word (say `suffering`)
+7. **English, in reverse**: type an English word (say `suffering`)
    and the results end with an **English → Tibetan** section from
    the HGM reverse index: each Tibetan candidate with its
    pronunciation and its tier label — `[HGM (curated)]`,
    `[HGM (glossary)]`, or a red `[PROVISIONAL]` for auto-aligned
    matches, which are candidates, not rulings.
 
-7. **Affix-stripping fallback**: type `po'i`. There is no such
+8. **Affix-stripping fallback**: type `po'i`. There is no such
    headword, so the pane strips the affixed particle and shows
    *po*, with the note "no entry for 'po'i' — showing **po**
-   (affixed particle stripped)". Nothing is silently substituted —
+   (affixed particle stripped; standalone *ba/bo* folds to *pa/po*; and an unambiguous past/future/imperative verb form folds to its present stem from the CC0 verb bank — every fallback is labeled in green above the results, never silent)". Nothing is silently substituted —
    the note is always there.
 
 ### Reading a result card
@@ -225,11 +263,12 @@ carries, where the data exists:
   page-finding is approximate. Public domain, clearly a reference,
   never HGM material;
 - **"Geshe Michael teaching this term"** — up to three timecoded
-  links into his recorded classes, machine-located from class
+  links into the recorded classes, machine-located from class
   captions; the label says so, and the recording is the authority.
   Non-English sessions are tagged with their language;
-- **"He says this word"** — moments where he speaks the Tibetan
-  itself, matched phonetically on his own convention. Labeled as
+- **"Geshe Michael says this word"** — moments where Geshe Michael
+  speaks the Tibetan itself, matched phonetically on the GMR
+  convention. Labeled as
   candidates; homophones share moments;
 - the pronunciation (GMR convention), with ⟪card⟫ marking
   card-attested phonetics, and an **"also heard:"** line listing
@@ -285,6 +324,14 @@ On the left side of the pane:
    the right-hand pane, exactly as if you had typed it.
 
 ---
+
+**Local dictionaries (StarDict)** — point Lookup at a folder of
+StarDict dictionaries (.ifo/.idx/.dict, the format GoldenDict
+and most shared Tibetan dictionaries use) and they join your
+results as a clearly labeled **LOCAL DICTIONARIES ·
+USER-SUPPLIED** layer. Queries match as typed, as wylie, and as
+Tibetan script. Their licenses remain their own; nothing is
+redistributed.
 
 ## Sanskrit
 
@@ -447,6 +494,13 @@ auto-detected by the shape of what you type:
    list with element-animal names and any intercalary month marked
    ᵢ.
 
+A Tibetan year given in a text converts to a western **month
+span** too: type the year name plus a month — `me bya 6 m3` — and
+every matching year shows that Tibetan month's western start and
+end dates (true Phugpa, the published-almanac standard; proven
+2015–2035, earlier years computed by the same grub-rtsis
+arithmetic with historical practice honestly caveated).
+
 7. **A month's day table.** Type `2012 m3` (or `2012 m3i` for the
    intercalary third month, where one exists) for all thirty lunar
    days with their western dates, chad and lhag days annotated —
@@ -459,11 +513,20 @@ date and it refuses rather than guesses — year-level questions
 
 ---
 
+**TISE keys in Convert** — the de-facto Wylie-keyboard
+conventions work in the Input box: `*` joins syllables with the
+non-breaking tsheg (༌) and `_` inserts a non-breaking space —
+useful when preparing text whose line breaks must not fall at
+those joints. The markers are display conveniences; the canonical
+converter never sees them.
+
 ## Analysis
 
 *Research → Analysis. The full eighteen-section grammatical analysis
-of a passage. One of only two features in the app that touch the
-network.*
+of a passage. One of the app's few network-touching features — the
+others are the Draft pane's AI back-check, the Overlay's BDRC scan
+viewer, and the Scan pane's OCR-model downloads; everything else
+runs fully offline.*
 
 ### What it is, and what it costs
 
@@ -525,7 +588,7 @@ Provenance is labeled inside the report itself: engine-derived
 sections are marked verified; model-drafted sections are marked as
 the model's; and the style-rephrase section (17) always carries its
 own banner — **"AI imitation — NOT HGM text"** — because the machine
-may match the master's English, never compose it in his name.
+may match the master's English, never compose it in that name.
 
 ### The QC panel, and saving
 
@@ -614,7 +677,7 @@ it. Take them in the intended order:
 
 5. **5 · answer key** — THE ANSWER KEY, and the pane's honesty
    pivot: wherever this clause exists in Geshe Michael's aligned
-   corpus, his own English appears in a green block with its
+   corpus, Geshe Michael's own English appears in a green block with its
    `[course:line]` citation — "HGM: …". The machine never invents
    answers: if the clause is not in the corpus, the layer says "not
    in the corpus — the Analysis pane can give an AI reading
@@ -636,6 +699,13 @@ master's, 6 when you want the full grammatical accounting.
 ---
 
 ## Drills
+
+**My weak spots…** — the miss taxonomy. Every wrong drill answer
+is filed under the skill it reveals — a particle family, a cloze
+sentence role, a reading-order step, a vocabulary item — and this
+report names them all, with counts and the drill that trains
+each. Wrong answers are never wasted here. The record is local
+(progress.db); nothing leaves your machine.
 
 *Learn → Drills. Exercises that write themselves from the corpus —
 every exercise comes from a real corpus segment, so every answer is
@@ -692,7 +762,7 @@ explanation *from the classical particle tables* (why this suffix
 takes this variant), and HGM's English for the segment.
 
 **Parallel reading.** Read a course straight through, segment by
-segment, revealing his English only when you need it. Pick the
+segment, revealing Geshe Michael's English only when you need it. Pick the
 course in the drop-down that appears. Each exercise shows one
 Tibetan segment with its citation. If you can read it, press **New
 drill** to move on — that counts as a clean read. If you need the
@@ -711,7 +781,7 @@ words join the deck.
 **Translate & compare.** The capstone: an unseen, level-appropriate
 corpus segment appears with its citation. Write your own translation
 in the draft box below it — *before* revealing anything — then press
-**Check / Reveal**. His rendering appears beside yours, along with a
+**Check / Reveal**. The master's rendering appears beside yours, along with a
 terminology comparison of your draft against the established
 equivalents. Nothing grades your style; the master's version
 teaches.

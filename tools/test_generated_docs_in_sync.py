@@ -129,10 +129,38 @@ def check_rebuild_order():
                                '\n     regenerated: %s' % (i + 1, x[:110], y[:110]))
     return 'DRIFTED', ('committed %d lines, regenerated %d' % (len(b), len(a2)))
 
+def check_manual_parts():
+    """The three distribution manual parts are the canonical manual's `# PART`
+    sections. Nothing derived them, so nothing kept them: when the generator
+    was written they had been frozen since 22 August while the manual moved,
+    still advertising a smaller app and telling the reader to open a pane
+    ("Input -> Scan") that had been renamed weeks earlier. The press already
+    gates the OTHER copy of the manual because those two drifted 58 lines in a
+    day; this closes the same hole one file over."""
+    gen = os.path.join(ROOT, 'tools', 'gen_manual_parts.py')
+    r = subprocess.run([sys.executable, gen, '--check'],
+                       capture_output=True, text=True, cwd=ROOT)
+    if r.returncode == 0:
+        import importlib.util as _iu
+        spec = _iu.spec_from_file_location('_gmp', gen)
+        mod = _iu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        n = sum(len(io.open(os.path.join(ROOT, 'docs/distribution', f),
+                            encoding='utf-8').read().split('\n'))
+                for f in mod.PARTS)
+        return 'OK', ('3 parts, %d lines, byte-identical to a fresh split of '
+                      'data/help/USER_MANUAL.md' % n)
+    out = (r.stdout + r.stderr).strip()
+    if 'REFUSED' in out:
+        return 'FAILED', out[:300]
+    return 'DRIFTED', (out[:300] + '\n     regenerate: python3 '
+                       'tools/gen_manual_parts.py')
+
 
 CHECKS = [('docs/ERRATA_REGISTER.md', check_errata_register),
           ('docs/RELEASE_PUNCHLIST.md', check_punchlist),
-          ('docs/MASTER_REBUILD_ORDER.md', check_rebuild_order)]
+          ('docs/MASTER_REBUILD_ORDER.md', check_rebuild_order),
+          ('docs/distribution/manual_part*.md', check_manual_parts)]
 
 def main():
     # "in sync" is a CLAIM. A check that could not run has not made it, and

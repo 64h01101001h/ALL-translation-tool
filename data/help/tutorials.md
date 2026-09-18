@@ -4,7 +4,7 @@
 
 **What this app is.** One window, six workflow tabs, seventeen
 working areas ("panes"), one shared dictionary: 105,634 entries anchored to
-Geshe Michael Roach's English, plus his aligned corpus of tens of
+Geshe Michael Roach's English, plus an aligned corpus of tens of
 thousands of passages. Everything runs offline except two
 clearly-marked features (the Analysis pane's AI report, and the
 woodblock images from BDRC).
@@ -96,9 +96,9 @@ counterpart, community pronunciations ("also heard"), published
 footnotes that deal with this term, timecoded links to Geshe
 Michael TEACHING the term in recorded classes (machine-located from
 captions — the recording is the authority; non-English sessions
-tagged), a "He says this word" tier locating moments where he
-speaks the Tibetan itself (matched phonetically on his own
-convention — candidates; homophones share moments), your own per-text glossary
+tagged), a "Geshe Michael says this word" tier locating moments where
+Geshe Michael speaks the Tibetan itself (matched phonetically on the
+GMR convention — candidates; homophones share moments), your own per-text glossary
 (editable in place), and links out to 84000/BDRC/Lotsawa House, and a "Das 1902"
 reference link that opens Sarat Chandra Das's dictionary INSIDE the
 app at (approximately) the entry's page — public domain, clearly a
@@ -187,7 +187,7 @@ checkboxes: (1) clause and phrase boundaries; (2) each particle's
 grammatical role; (3) suggested reading order — find the verb first
 (from the dictionary's own tense evidence, or honestly marked
 unverified); (4) vocabulary with quality tiers; (5) THE ANSWER KEY —
-Geshe Michael's own English wherever the passage exists in his
+Geshe Michael's own English wherever the passage exists in that
 corpus (the machine never invents answers); (6) the full Wilson
 parse — every unit designated, case numbers assigned by verb class,
 every syllable dot named per the Science of the Dots.
@@ -200,9 +200,9 @@ every syllable dot named per the Science of the Dots.
 every answer is Geshe Michael's own text.
 
 **Use.** Pick a drill type from the dropdown: restore a scrambled
-clause; fill the blank given his English; choose the correct particle
+clause; fill the blank given the English; choose the correct particle
 variant (explained from the classical tables); parallel reading
-(reveal his English only when needed); review. "New drill" generates
+(reveal the English only when needed); review. "New drill" generates
 the next one. Progress is tracked per word and adapts.
 
 **SCANS (left column).** "Follow along in scans" (for recognized
@@ -289,7 +289,7 @@ Word or Pages. The SEARCH SIDEBAR speaks the full Gofer grammar
 (bden pa · stong OR bden · "sdug bsngal" NEAR/5 "bden pa") over the
 aligned corpus; every result shows the master's English beside the
 Tibetan, and "insert" places that English at your cursor — matched
-from his corpus, never composed. The pane reopens your last
+from Geshe Michael's corpus, never composed. The pane reopens your last
 manuscript on launch.
 
 ## Draft
@@ -306,7 +306,7 @@ script with each established term banded in a color, and below, each
 term's entry chipped in the SAME color — which English goes with
 which Tibetan reads by color. Click a term for its corpus
 concordance. Select Tibetan and press "Phrase memory" to see every
-prior rendering (his corpus, binding; plus Align-pane harvests,
+prior rendering (Geshe Michael's corpus, binding; plus Align-pane harvests,
 labeled PENDING).
 
 **The evidence follows your cursor.** Once a source is loaded, just
@@ -315,7 +315,7 @@ panel fills for that clause with zero clicks: its terms, a
 SCAFFOLD of the master's attested glosses arranged in Wilson
 reading order (labeled; ⟨…⟩ marks unattested pieces, ? marks
 provisional — nothing is ever composed for you), a note when the
-master has translated that exact clause (with his English), and a
+master has translated that exact clause (with the published English), and a
 quotation alert when the clause quotes the canon.
 
 **The live terminology guard.** As you type your English, a quiet
@@ -397,7 +397,8 @@ algorithms, original layout.
 **Use.** Type terms into any of the eight "go for" boxes. Choose the
 combiner: OR (any term), AND (all terms in the same file), or NEAR
 with a proximity (all terms within N lines). Check the targets to
-search: the HGM ALIGNED CORPUS (his translations beside the Tibetan),
+search: the HGM ALIGNED CORPUS (Geshe Michael's translations beside the
+Tibetan),
 the PUBLISHED APPARATUS (all 2,234 footnotes + 705 bibliography
 entries), THIS MAC (Spotlight — opt-in: every indexed document on
 the machine, each term searched as typed and as Tibetan script;
@@ -633,12 +634,12 @@ When you want the carving itself: SCANS → "Find scans on BDRC…".
    the color-linked anchors; "Phrase memory" before you invent any
    rendering — Geshe Michael may already have one.
 3. Research → Search (Gofer): NEAR-search terms you're unsure of, to
-   see his English in context.
+   see Geshe Michael's English in context.
 4. Translate → Draft → EVIDENCE: "Check terminology" against your
    English; PUBLISH: footnotes and bibliography, then RTF export.
 5. Write the running prose in Translate → Manuscript — the Gofer
    sidebar keeps the corpus beside the page, and "insert" places
-   his attested English at the cursor.
+   the attested English at the cursor.
 6. Hand the draft to a senior: Translate → Review — register
    warnings, honorific advisories, provisional-gloss cautions.
 
@@ -677,7 +678,7 @@ Convert.
 
 ## Concepts
 
-**Tiers.** curated (hand-verified) > glossary (from his glossaries) >
+**Tiers.** curated (hand-verified) > glossary (from the glossaries) >
 provisional (machine-aligned; amber-tinted everywhere it appears).
 
 **Registers.** The honorific register has four levels (per Tournadre):

@@ -1,15 +1,15 @@
 # Sources & Trust — how this tool ranks what it shows you
 
 *Status: PROPOSED hierarchy, awaiting Holy Geshe Michael's
-ratification. This pane will carry his rulings — and his reasons,
-in his own words — as they are given. Until then, what follows is
+ratification. This pane will carry those rulings — and their reasons,
+in Geshe Michael's own words — as they are given. Until then, what follows is
 how the tool already behaves.*
 
 ## The rule above every tier
 
 **Geshe Michael's English equivalents are binding; everything else
-is reference.** The machine may MATCH his words from evidence; it
-may never COMPOSE words in his name. No lower tier is ever
+is reference.** The machine may MATCH those words from evidence; it
+may never COMPOSE words in Geshe Michael's name. No lower tier is ever
 promoted automatically — promotion is a human act through the
 Propose → Approval lane.
 
@@ -18,11 +18,11 @@ Propose → Approval lane.
 What it looks like on your cards: the **≡ equivalence lines**, and
 the green **⟪ruled⟫** mark.
 
-1. His published equivalents (curated).
-2. His glossary-sourced equivalents (labeled tier).
-3. His live rulings — these override every display (for example:
+1. Geshe Michael's published equivalents (curated).
+2. Geshe Michael's glossary-sourced equivalents (labeled tier).
+3. Geshe Michael's live rulings — these override every display (for example:
    *tsema namdrel*; *le'ur*).
-4. His recorded teachings — the recordings themselves are the
+4. Geshe Michael's recorded teachings — the recordings themselves are the
    authority; transcripts and indexes only help you FIND the
    moment.
 
@@ -31,9 +31,9 @@ the green **⟪ruled⟫** mark.
 What it looks like: the red **PROVISIONAL (auto-aligned)** label;
 the violet **AI-drafted** block.
 
-5. Auto-aligned glosses — machine-matched from his corpus,
+5. Auto-aligned glosses — machine-matched from Geshe Michael's corpus,
    plausible but unreviewed.
-6. Working-Glossary AI drafts — screened against his published
+6. Working-Glossary AI drafts — screened against Geshe Michael's published
    corpus so they can never quietly copy it; promoted only by
    human review.
 
@@ -74,21 +74,21 @@ What it looks like: the quiet grey reference zone.
 
 *(Note: the tier order above mixes licensing with trust — the
 licensing is ours to track; the TRUST ordering across all of it is
-his to give, and will govern what you see first.)*
+Geshe Michael's to give, and will govern what you see first.)*
 
-- When his published gloss and his spoken gloss differ, which
+- When Geshe Michael's published gloss and spoken gloss differ, which
   governs the card?
 - The relative order within Tier III.
-- Any source he would strike from view entirely.
+- Any source Geshe Michael would strike from view entirely.
 - The 'a-chung pronunciation class (le'ur / le'u).
 - Whether the imperial Sanskrit rules govern where they diverge
   from the ACIP code.
 
-*When his answers arrive, each tier here gains a "WHY — in his
-words" line, the ratified version becomes STD-009, and the tool is
+*When those answers arrive, each tier here gains a "WHY — in Geshe
+Michael's words" line, the ratified version becomes STD-009, and the tool is
 audited against it.*
 
 - **Across tiers:** Lokesh Chandra or Das first, and why? Where
   does the Mahāvyutpatti truly stand? Jäschke vs Das?
 - **And the open door:** which sources and reference materials
-  does he feel we should ADD that the tool does not yet carry?
+  does Geshe Michael feel we should ADD that the tool does not yet carry?

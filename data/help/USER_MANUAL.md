@@ -375,8 +375,9 @@ of the phrase chain. Reading it top to bottom:
   machine-aligned and looks provisional (amber) wherever it
   appears.
 - **Geshe Michael's English** (the binding layer) and, with
-  "corpus usage" on, his **actual renderings course by course** —
-  the concordance of how HE rendered this word across his corpus.
+  "corpus usage" on, the **actual renderings course by course** —
+  the concordance of how Geshe Michael rendered this word across
+  that corpus.
 - **Reference definitions**, each clearly labeled as reference —
   never presented as HGM material.
 - **Sanskrit equivalences** (Mahāvyutpatti bridge), if toggled on.
@@ -399,13 +400,13 @@ of the phrase chain. Reading it top to bottom:
   gloss — both labeled with their derived register.
 - **Published footnotes** that deal with this term.
 - **"Geshe Michael teaching this term"** — timecoded links that
-  open his recorded classes at the moment he teaches the term.
+  open the recorded classes at the moment Geshe Michael teaches the term.
   These are moments where Geshe Michael says the Tibetan phrase itself (phonetic match; machine-located from class captions: candidates. **The
   recording is the authority**, always; non-English sessions are
   tagged so you are not surprised.
-- **"He says this word"** — a second tier locating moments where
-  he speaks the Tibetan itself, matched phonetically on his own
-  convention. Candidates; homophones share moments — the card says
+- **"Geshe Michael says this word"** — a second tier locating moments
+  where Geshe Michael speaks the Tibetan itself, matched phonetically
+  on the GMR convention. Candidates; homophones share moments — the card says
   so.
 - **"Das 1902 · ~p.N (reference)"** — a link that opens Sarat
   Chandra Das's 1902 dictionary INSIDE the app at approximately
@@ -550,8 +551,8 @@ pace, so outline → passage → carving is one click.
 loaded and the app sweeps every term the text contains and reports
 where Geshe Michael taught each one — a dialog titled "Teachings
 for this text — machine-located; the recordings are the
-authority", listing timecoded class links per term, both by his
-English and by the spoken Tibetan. This is the translator's
+authority", listing timecoded class links per term, both by Geshe
+Michael's English and by the spoken Tibetan. This is the translator's
 companion sheet: print-worthy preparation for translating the
 text. Terms with no located moments say so honestly — the index
 grows as more classes are indexed.
@@ -1201,14 +1202,14 @@ hides it; it is on by default.
    it came from in italics, the Tibetan line, and **the master's
    English in bold** beneath it, each with an **insert** link.
 4. Click **insert** — that English is placed at your cursor in the
-   manuscript. **Matched from his corpus, never composed**: the
-   sidebar can only give you sentences he actually wrote.
+   manuscript. **Matched from Geshe Michael's corpus, never composed**:
+   the sidebar can only give you sentences Geshe Michael actually wrote.
 5. If a query is malformed, the sidebar says "Query not
    understood" and why — it never silently searches something
    else.
 
 *Worked example:* type `bden pa` ("truth") and press Find in
-corpus. Hits arrive with his English bold beside each Tibetan
+corpus. Hits arrive with Geshe Michael's English bold beside each Tibetan
 line. Click **insert** under the rendering you want and it drops
 into your manuscript at the cursor.
 
@@ -1288,7 +1289,7 @@ anchors panel fills for that clause automatically —
   chunk with no attested gloss; a red **?** marks a provisional
   one. The scaffold arranges the master's own words — it never
   composes English for you;
-- **"the master has translated this clause"** with his published
+- **"the master has translated this clause"** with the published
   English, whenever the exact clause exists in the aligned corpus;
 - a **quotation** alert with source and published English when the
   clause quotes the canon (seven syllables or more, attested only).
@@ -1313,7 +1314,8 @@ is ever auto-corrected; the full detail stays one press away.
 1. Select any Tibetan in the source box.
 2. Press **Phrase memory** (under the EVIDENCE heading).
 3. *What you see:* how many prior renderings of those words exist —
-   the measured count of segments from **his corpus (binding)** —
+   the measured count of segments from **Geshe Michael's corpus
+   (binding)** —
    and the opening twelve of them, plus any matches from the Align
    pane's harvest, which are translator-authored and **labeled
    PENDING**. When the corpus holds more than are listed, the card
@@ -1665,7 +1667,7 @@ see, top to bottom:
 - under the corpus heading, the hits themselves: each begins with a
   small `[course:line]` citation, then the Tibetan in wylie with
   *the master's English in italics beside it*. This is the point of
-  the tool — his attested renderings, in context, never composed;
+  the tool — those attested renderings, in context, never composed;
 - under the apparatus heading, matching footnotes ("note 156 — …"
   with its source book) and bibliography entries;
 - under each folder heading, file hits as `filename:line` with the
@@ -1813,11 +1815,12 @@ carries, where the data exists:
   page-finding is approximate. Public domain, clearly a reference,
   never HGM material;
 - **"Geshe Michael teaching this term"** — up to three timecoded
-  links into his recorded classes, machine-located from class
+  links into the recorded classes, machine-located from class
   captions; the label says so, and the recording is the authority.
   Non-English sessions are tagged with their language;
-- **"He says this word"** — moments where he speaks the Tibetan
-  itself, matched phonetically on his own convention. Labeled as
+- **"Geshe Michael says this word"** — moments where Geshe Michael
+  speaks the Tibetan itself, matched phonetically on the GMR
+  convention. Labeled as
   candidates; homophones share moments;
 - the pronunciation (GMR convention), with ⟪card⟫ marking
   card-attested phonetics, and an **"also heard:"** line listing
@@ -2137,7 +2140,7 @@ Provenance is labeled inside the report itself: engine-derived
 sections are marked verified; model-drafted sections are marked as
 the model's; and the style-rephrase section (17) always carries its
 own banner — **"AI imitation — NOT HGM text"** — because the machine
-may match the master's English, never compose it in his name.
+may match the master's English, never compose it in that name.
 
 ### The QC panel, and saving
 
@@ -2226,7 +2229,7 @@ it. Take them in the intended order:
 
 5. **5 · answer key** — THE ANSWER KEY, and the pane's honesty
    pivot: wherever this clause exists in Geshe Michael's aligned
-   corpus, his own English appears in a green block with its
+   corpus, Geshe Michael's own English appears in a green block with its
    `[course:line]` citation — "HGM: …". The machine never invents
    answers: if the clause is not in the corpus, the layer says "not
    in the corpus — the Analysis pane can give an AI reading
@@ -2311,7 +2314,7 @@ explanation *from the classical particle tables* (why this suffix
 takes this variant), and HGM's English for the segment.
 
 **Parallel reading.** Read a course straight through, segment by
-segment, revealing his English only when you need it. Pick the
+segment, revealing Geshe Michael's English only when you need it. Pick the
 course in the drop-down that appears. Each exercise shows one
 Tibetan segment with its citation. If you can read it, press **New
 drill** to move on — that counts as a clean read. If you need the
@@ -2330,7 +2333,7 @@ words join the deck.
 **Translate & compare.** The capstone: an unseen, level-appropriate
 corpus segment appears with its citation. Write your own translation
 in the draft box below it — *before* revealing anything — then press
-**Check / Reveal**. His rendering appears beside yours, along with a
+**Check / Reveal**. The master's rendering appears beside yours, along with a
 terminology comparison of your draft against the established
 equivalents. Nothing grades your style; the master's version
 teaches.
@@ -3103,7 +3106,7 @@ and a near whole-title match surfaces for about 62%.
 
 Session 3's live problem: Geshe Michael's copy of the database and
 the team's master copy "have diverged from each other probably" —
-and the task he set was to compare the two trees and list the
+and the task Geshe Michael set was to compare the two trees and list the
 differences. **Compare trees…** runs that comparison between
 whatever the two browsers are pointed at: left (intake) root
 against right (destination) root, recursively.
@@ -3920,7 +3923,7 @@ in any form — *bsod nams*, *BSOD NAMS*, *merit*, or *sunam* — and
 one list answers from every source at once:
 
 - **📖 dictionary** rows with the binding gloss and its tier;
-- **🔁 English reverse** rows (your English → his Tibetan);
+- **🔁 English reverse** rows (your English → the matching Tibetan);
 - **🗣 phonetics** rows through the GMR-convention fold;
 - **📜 corpus** rows with the master's published English;
 - **🎧 teaching** rows that open the recording at the timecode;
