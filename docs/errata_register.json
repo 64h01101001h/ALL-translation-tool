@@ -3166,5 +3166,53 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-265",
+  "course": "C05",
+  "segment": "C05:235",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "could never Disappear, even in conceptions?",
+  "expected": "a rendering of `gsal mi 'gyur` in the direction of 'become clear / come to light' -- the closing line asks how what was imputed out of ignorance could FAIL TO BECOME EVIDENT, not how it could fail to vanish",
+  "evidence": "This row's own wylie closes `mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, ,` and its ACIP (source of record) reads `JI LTA BUR NA GSAL MI 'GYUR`. `gsal` is 'be clear / become manifest' -- all 3 links on `gsal` in the alignment bank read 'clear' or 'aware', and nothing in the disappear family -- and `mi 'gyur` negates the becoming. INDEPENDENT WITNESS: ILL:2676 and SVN:1076 carry this same quatrain (wylie differing only at `gyur na ni`/`gyur pa na` and `mi 'gyur`/`mi gyur`, edition variants in the citation) and Geshe Michael renders the closing line 'Since all the mistaken Imaginations of failing To understand things Were brought to light?' -- the opposite direction. ILL and SVN share byte-identical English, so they are ONE independent witness, not two. NOT AN INDEPENDENT WITNESS: C16:812 repeats 'could never Disappear' but is the same file re-ingested (byte-identical wylie; English differs only at conceptions/projections). The C05 wording also stacks 'never' on 'Dis-', leaving the rhetorical question without a determinate sense. CAUTION RECORDED: the sense Geshe Michael reaches is compatible with the verse's point (what ignorance fabricated goes away when ignorance ends), so this may be a deliberately loose rendering rather than a slip; hence PROBABLE, not CONFIRMED. His English stays verbatim on the page either way, and `gsal` and `mi 'gyur` are nulled in the spec so 'Disappear' never enters the bank as an equivalent.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-266",
+  "course": "C05",
+  "segment": "C05:236",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "when you finally stopped your mistaken states of mind, they would never disappear, although they should have.",
+  "expected": "The wylie/ACIP of this row reads `gsal du 'gro dgos kyi, ldog par mi 'gyur ro` (ACIP: GSAL DU 'GRO DGOS KYI, LDOG PAR MI 'GYUR RO) - 'they would have to go on becoming MANIFEST, but would not be reversed'. The obligation carried by `dgos` sits on BECOMING CLEAR (`gsal du 'gro`); the English moves it onto DISAPPEARING ('although they should have' = 'should have disappeared') and leaves `gsal du 'gro` with no exponent at all. `dgos` -> 'should' and `kyi` -> 'although' are rendered, but relocated onto the opposite proposition.",
+  "evidence": "Confirmable from this row's own two columns: the English contains no word standing over `gsal` (clear/manifest) or `'gro` (go on, come to be), and the only modal of obligation in it, 'should', governs an elided 'disappeared', which is the contrary of what `gsal du 'gro dgos` requires. PARALLEL WITNESSES CHECKED BY THE RECONCILER AGAINST THE SPINE, not taken from the proposals: `select course,seq from corpus_segments where wylie like '%gsal du ''gro dgos kyi%'` returns C05:236, C16:813, ILL:2677, P7:10. C16:813 is BYTE-IDENTICAL to C05:236 in BOTH columns (same file re-ingested; NOT an independent witness). P7:10 carries the same English but its segment ends at 'they would never disappear,' and does not contain the clause at issue; also not independent. ILL:2677 carries the identical Tibetan (prefixed `zhes gsungs te,`, single closing shad instead of the `, ,` lineation) with a genuinely INDEPENDENT English: 'In that case, if we were able to correct our error, the truth would have to be brought to light. But in the opposite case, it would not.' - the obligation there sits on the manifesting, exactly as the Tibetan has it. So the Tibetan reading is established and uncorrupted, and the sole independent rendering in the 42,199-row corpus disagrees with C05:236's English. This is a rendering divergence, not an ingest defect. Filed PROBABLE rather than CONFIRMED because a reader could hold that 'although they should have' is a free gloss of the absurdity rather than an attempted rendering of `gsal du 'gro dgos`. The `, ,` before `zhes pa'i` is the registered verse-lineation double shad and is NOT filed; neither column is at the 1,500-character cap, so E-107 does not apply.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-267",
+  "course": "C05",
+  "segment": "C05:237",
+  "kind": "TIBETAN_SPELLING",
+  "found": "sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de",
+  "expected": "sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de",
+  "evidence": "ACIP of record reads ... SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE. The word for 'common, shared, collective' is thun mong. Counted in the spine this session: `thun mang` occurs in exactly TWO rows in the whole corpus -- C05:237 and C16:814 -- and those two rows are byte-identical in BOTH columns (SQL equality on wylie and on english both return 1), so C16 is the same file re-ingested and is NOT an independent witness. `thun mong` occurs in 610 rows. The INDEPENDENT witness is ILL:2680, which carries this very sentence from `snod kyi 'jig rten` to `mthar thug pa'o` in a different translation and reads `thun mong ba'i las kyis`, rendered there as 'the communal karma they have accumulated'. Geshe Michael renders the word here as 'collective', which is thun mong; thun mang would be 'many sessions'. No registered class applies: no {SHl} drop, no fused footnote number, no folio splice, no following-section heading, and the English is 710 characters so the 1,500-char cap (E-107) does not bite.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-268",
+  "course": "C05",
+  "segment": "C05:240",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "where it says that there is no great master of all things, and no great maker of all things",
+  "expected": "The Tibetan is the standard Ten-Levels pair `byed pa po dang tshor ba po med pa` - 'there is no one who acts and no one who experiences'. The second conjunct must render `tshor ba po`, the one who FEELS/experiences. As printed both conjuncts are agent-words ('master', 'maker'), so the experiencer has dropped out of the English and the agent is stated twice.",
+  "evidence": "THIS SEGMENT: wylie `byed pa po dang tshor ba po med pa zhes gsungs pa`; ACIP (source of record) `BYED PA PO DANG TSOR BA PO MED PA ZHES GSUNGS PA`. The converter in engines/hgm_tools.py maps `TSOR BA PO` -> `tshor ba po`, so the Tibetan itself carries no spelling defect and the divergence is in the English alone. PARALLEL WITNESSES CHECKED BEFORE FILING: C16:817 is byte-identical to C05:240 in BOTH columns (verified by SQL equality on wylie and on english) - the same file re-ingested, NOT an independent witness, so this is the published reading and not a corruption of this row. ILL:2687 carries a wylie byte-identical to the whole second half of this segment (`de ltar na sa bcu par byed pa po dang tshor ba po med pa zhes gsungs pa la brten nas, tsam gyi sgras byed pa po gzhan 'gog par bstan la`) with an INDEPENDENT Geshe Michael English: 'based on the statement in The Ten Levels that there is no creator, and no one who has feelings-the term \"only\" is meant to deny any other creator of things.' ILL:2633 renders the same pair 'there is no agent, and no one who has feelings'. No other course carries the string. The independent witness is what makes this CONFIRMED rather than a style call.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
