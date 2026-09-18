@@ -6889,7 +6889,7 @@ public:
             check(provRow.contains("pillar") &&
                       provRow.contains("PROVISIONAL"),
                   "teachings report tags an auto-aligned gloss "
-                  "PROVISIONAL beside the recording of him saying it");
+                  "PROVISIONAL beside the recording of Geshe Michael saying it");
             check(bindRow.contains("merit") &&
                       !bindRow.contains("PROVISIONAL"),
                   "teachings report leaves a curated gloss untagged "
@@ -22611,7 +22611,7 @@ public:
                          "Translate & compare",
                          "Script \u2014 Geshe Michael's own cards (start here)",
                          "Silent particle \u2014 did Geshe Michael render it?",
-                         "His second thought \u2014 which did Geshe Michael use here?",
+                         "Second thought \u2014 which did Geshe Michael use here?",
                          "Mixed set \u2014 the category is not given away",
                          "Debate \u2014 which element does the reply attack?",
                          "Peel \u2014 how many pieces does it split into?",
@@ -25095,8 +25095,8 @@ private:
                      : QString("<b style='color:#B4540A'>%1 of %2 in the right "
                                "place.</b>")
                            .arg(inPlace).arg((int)readAnswer_.size());
-            h += "<div style='padding-top:8px'><b>His order, and Geshe Michael's English "
-                 "for each piece:</b></div>";
+            h += "<div style='padding-top:8px'><b>Geshe Michael's order, and the "
+                 "English for each piece:</b></div>";
             for (size_t z = 0; z < readAnswer_.size(); ++z) {
                 const int k = readAnswer_[z];
                 const bool got = z < given.size() && given[z] == k;
@@ -28100,7 +28100,7 @@ private:
                                             .arg(QString(ux::kMachine))
                                  : partial
                                       ? QString("<div style='color:%1;"
-                                                "font-size:11px'>His English "
+                                                "font-size:11px'>Geshe Michael's English "
                                                 "for the WHOLE of that "
                                                 "segment \u2014 your clause "
                                                 "is about %2%% of it, so most "

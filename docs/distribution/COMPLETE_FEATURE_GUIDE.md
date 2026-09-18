@@ -15,7 +15,7 @@ search box that finds any button and shows where it lives.*
 **The three rules.** Everything in this guide obeys three commitments
 you will see restated pane by pane, because they are the design:
 
-1. **Geshe Michael's English is the binding layer.** His equivalents
+1. **Geshe Michael's English is the binding layer.** These equivalents
    are the authority everywhere; all other scholarship appears as
    clearly-labeled reference. The machine may *match* his English
    from his own corpus; it never composes English in his name.

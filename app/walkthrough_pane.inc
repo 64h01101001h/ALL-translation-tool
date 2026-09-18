@@ -1222,7 +1222,7 @@ private:
         h += step(4, "What order to read them in");
         h += "<div style='color:#B4540A;font-size:11px;padding:0 0 4px 0'>"
              "neither column is established at this level \u2014 the engine "
-             "matched him " + QString::number(walk::kClauseEngine) +
+             "matched Geshe Michael " + QString::number(walk::kClauseEngine) +
              "% and the written order " + QString::number(walk::kClausePlain) +
              "% of " + QString::number(walk::kClauseSpans) +
              " aligned spans, and with only " +
@@ -1463,7 +1463,7 @@ private:
         // the right one — was buried in the middle.
         QString note =
             "<div style='color:#666;font-size:11px;padding-top:5px'>"
-            "His glossary words in the engine's order. Not a translation and "
+            "Geshe Michael's glossary words in the engine's order. Not a translation and "
             "not English \u2014 the raw material one is made from."
             "<br>&#10216;angle brackets&#10217; = a word the glossary does not "
             "have. Where Geshe Michael banked several equivalents this takes the FIRST "
@@ -1541,8 +1541,8 @@ private:
                               "those, so there is nothing here to check step 4 "
                               "against — the same position as a clause the "
                               "corpus does not have at all.</div>")
-                    : QString("<div style='color:#666;font-size:11px'>His "
-                              "English. Compare its order with step 4 — "
+                    : QString("<div style='color:#666;font-size:11px'>Geshe "
+                              "Michael's English. Compare its order with step 4 — "
                               "where they differ, one of them is telling you "
                               "something.</div>")) +
                "</div>";
