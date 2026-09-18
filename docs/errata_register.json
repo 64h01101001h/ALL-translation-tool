@@ -3238,5 +3238,17 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-271",
+  "course": "C05",
+  "segment": "C05:268",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "If the glass of liquid were sweet, cool water taken from the world of humans",
+  "expected": "clear, cool water -- the Tibetan of this line is `chu dvangs shing bsil ba` (ACIP: CHU DVANGS SHING BSIL BA), water that is clear and cool. `mngar ba` ('sweet') does not occur anywhere in this line's wylie or ACIP.",
+  "evidence": "Geshe Michael renders the full three-adjective formula himself seventeen rows earlier in the same passage. C05:251 reads `mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo` and his English is 'Humans look at the same thing and perceive it as water--sweet, clear, and cool.', so mngar ba='sweet', dvangs pa='clear', bsil ba='cool'. At C05:268 only two of the three Tibetan adjectives are present (dvangs, bsil ba) and the English keeps 'sweet' and 'cool', i.e. it carries the first adjective of the triad across and drops the one actually written. The master agrees: dvangs pa -> ['clear','clarity'], mngar ba -> ['sweet']. PARALLEL WITNESSES CHECKED BY SQL: the English string is byte-identical at C15:413, C16:844 and C18:1127, and P7:23 is an independent re-ingest that still reads 'sweet, cool water'; the wylie `chu dvangs shing bsil ba nas blangs na` is identical at C15:413, C16:844 and C18:1127. So this is the PUBLISHED reading everywhere, not an ingest corruption of this row -- a translation-level substitution, recorded here and never corrected on the page. Not a registered class ({SHl} drop, fused footnote number, folio-in-caption, following-heading, 1500-char cap all checked and none apply; the English is 436 chars). In the spec `dvangs` is nulled so that 'sweet' never enters the bank as its equivalent. Same shape as E-169.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
