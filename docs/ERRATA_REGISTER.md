@@ -8,15 +8,15 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**271 entries**: **177 document errata** (6 HIGH, 81 MEDIUM, 90 LOW), **61 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**273 entries**: **178 document errata** (6 HIGH, 82 MEDIUM, 90 LOW), **62 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 129 |
-| Digitisation artefact | 61 |
+| Digitisation artefact | 62 |
 | English typo | 29 |
 | Our banked layer | 16 |
-| English factual error | 12 |
+| English factual error | 13 |
 | Formatting | 7 |
 
 ---
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 81 entries
+## Medium severity &mdash; 82 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -123,6 +123,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:236` | when you finally stopped your mistaken states of mind, they would never disappear, although they should have. | The wylie/ACIP of this row reads `gsal du 'gro dgos kyi, ldog par mi 'gyur ro` (ACIP: GSAL DU 'GRO DGOS KYI, L | Confirmable from this row's own two columns: the English contains no word standing over `gsal` (clear/manifest) or `'gro` (go on, come to be), and the only modal of obligation in it, 'should', governs an elided 'disappeared', which is the contrary of what `gsa | PROBABLE |
 | `C05:237` | sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de | sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de | ACIP of record reads ... SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE. The word for 'common, shared, collective' is thun mong. Counted in the spine this session: `thun mang` occurs in exactly TWO rows in the whole corpus -- C05:237 an | CONFIRMED |
 | `C05:240` | where it says that there is no great master of all things, and no great maker of all things | The Tibetan is the standard Ten-Levels pair `byed pa po dang tshor ba po med pa` - 'there is no one who acts a | THIS SEGMENT: wylie `byed pa po dang tshor ba po med pa zhes gsungs pa`; ACIP (source of record) `BYED PA PO DANG TSOR BA PO MED PA ZHES GSUNGS PA`. The converter in engines/hgm_tools.py maps `TSOR BA PO` -> `tshor ba po`, so the Tibetan itself carries no spel | CONFIRMED |
+| `C05:272` | In the spring is hot | In the summer is hot | `sos ka` is the hot season (Skt. grisma), and the couplet's whole force is the seasonal inversion against `dgun` (winter): the moon burns in the hot season, the sun freezes in the cold one. Geshe Michael himself renders this IDENTICAL verse line 'Even the ligh | PROBABLE |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -227,7 +228,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Digitisation artefacts &mdash; 61
+## Digitisation artefacts &mdash; 62
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -264,6 +265,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:592` | gcig bsdus pa, lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa | The block 'lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa' should  | ACIP source of record carries the same repeat: '...GCIG BSDUS PA, LAGS KYANG , ,RJE THUB PA'I DBANG PO'I GSUNG RAB KUN, ,DON MA TSANG MED PAR GCIG BSDUS PA,'. P1:153 has the identical duplication but is the same text re-ingested (same lineage, not independent) | CONFIRMED |
 | `C05:251` | KHRUS BYED DO, , DER 'JUG | KHRUS BYED DO, , DER 'JUG GO, | Confirmable from this row's own text: the row's other two verbs both carry their finals ('thung ngo , , and khrus byed do, ,) while the third, der 'jug, ends bare with no shad; and the row's English renders that third verb complete -- 'and they swim in it.' -- | CONFIRMED |
 | `C05:252` | GO,NAM MKHA' MTHA' YAS SKYE MCHED | NAM MKHA' MTHA' YAS SKYE MCHED | ILL:2332 carries the whole passage in ONE row and reads "... khrus byed do, ,'thung ngo der 'jug go ,nam mkha' ..." - the verb 'jug go intact, the next sentence beginning at nam mkha'. P5:125 likewise ends "... 'thung ngo khrus byed do der 'jug go" and P5:126  | CONFIRMED |
+| `C05:275` | a belief of the [non- Buddhist] Numerist School | a belief of the [non-Buddhist] Numerist School | Hyphen-plus-space line-break signature, the same registered artefact class already carried in the register at C01:355 ("cause-and- effect"), C01:379 ("oh-so- vivid"), C01:380 ("non- existence") and C03:144 ("cross- legged"). A parallel witness was checked BEFO | CONFIRMED |
 | `C05:65` | Where does the word "knowledge" [Sanskrit: abhidharma] come from? A phenomenon [dharma] is that which possesses [dhr�] a nature. And knowledge brings  | ... A phenomenon [dharma] is that which possesses [dhṛ] a nature. ... (the bracketed Sanskrit root is dhṛ, 'to | English field of C05:65 contains exactly one U+FFFD (hex EFBFBD) inside the bracket '[dhr�]'. The parallel C16:703 (same file re-ingested, not independent) carries the identical byte, so the loss predates the spine ingest. Class is spine-wide: 73 corpus_segmen | CONFIRMED |
 | `C09:139` | THE DEDICATION OF MERIT `, DANG PO NI, | (no ACIP — this is an English heading) | The ACIP column of this segment holds ENGLISH PROSE, not Tibetan transliteration. engines/hgm_tools.is_acip_line() admitted it at ingest because its only test is an uppercase ratio above 0.6, and a heading in capitals passes. Measured 2026-09-17 over all 42,19 | CONFIRMED |
 | `C09:188` | IDENTIFICATION OF WHAT IS GOING TO BE EXPLAINED | (no ACIP — this is an English heading) | The ACIP column of this segment holds ENGLISH PROSE, not Tibetan transliteration. engines/hgm_tools.is_acip_line() admitted it at ingest because its only test is an uppercase ratio above 0.6, and a heading in capitals passes. Measured 2026-09-17 over all 42,19 | CONFIRMED |
@@ -355,8 +357,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 177 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 178 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 61 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 62 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.

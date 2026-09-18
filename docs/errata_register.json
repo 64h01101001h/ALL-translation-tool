@@ -3250,5 +3250,29 @@
   "severity": "LOW",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-272",
+  "course": "C05",
+  "segment": "C05:272",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "In the spring is hot",
+  "expected": "In the summer is hot",
+  "evidence": "`sos ka` is the hot season (Skt. grisma), and the couplet's whole force is the seasonal inversion against `dgun` (winter): the moon burns in the hot season, the sun freezes in the cold one. Geshe Michael himself renders this IDENTICAL verse line 'Even the light of the moon Is hot, in the summer' at ILL:2342, glosses it in his own prose at ILL:2343 as 'the touch of moonlight in the summer feels ... unbearably hot', and renders `sos ka'i nyi ma` as 'the summer sun' at ILL:1490. Parallel witnesses to THIS row: C15:417, C18:1131 and P7:26 are byte-identical in both columns (same file re-ingested, NOT independent witnesses), so 'In the spring' is the published reading here and not an ingest corruption. It is also a CONSISTENT rendering choice - 'the moon in springtime' at C05:271, 'in the season of spring' at Sunlight:664 and SPF:433 - i.e. the same shape as E-169 (`seng ldeng` -> 'sandalwood'), which is why confidence is PROBABLE rather than CONFIRMED. Dictionary consequence, not actionable in this repo: entries.hgm_gloss for `sos ka` is [\"spring\"] at glossary tier, which can only have been derived from these very rows - flag to docs/MASTER_REBUILD_ORDER.md with the E-169 group. In this spec `sos ka`, `dus` and `su` are all nulled so 'spring' never enters the bank.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-273",
+  "course": "C05",
+  "segment": "C05:275",
+  "kind": "INGEST_ARTEFACT",
+  "found": "a belief of the [non- Buddhist] Numerist School",
+  "expected": "a belief of the [non-Buddhist] Numerist School",
+  "evidence": "Hyphen-plus-space line-break signature, the same registered artefact class already carried in the register at C01:355 (\"cause-and- effect\"), C01:379 (\"oh-so- vivid\"), C01:380 (\"non- existence\") and C03:144 (\"cross- legged\"). A parallel witness was checked BEFORE filing, as the brief requires, and it is genuinely independent: C15:420 carries this same passage with BYTE-IDENTICAL wylie (575 chars) and BYTE-IDENTICAL ACIP, and its English differs from C05:275 at exactly one character position out of 1,041 — it reads \"[non-Buddhist]\" closed up (verified by difflib: a single space deletion at offset 388). C15 is a separate course file, not the C16 re-ingest of C05. Corpus-wide the spaced form \"non- Buddhist\" occurs in only 4 rows (C05:254, C05:275, C15:399, C16:830) against 20+ rows with the closed form, including C05:243, C05:254, C05:280 and C05:361 in this same course. The Tibetan gives no reading either way: the bracket is Geshe Michael's editorial gloss and has no Tibetan under it. Geshe Michael's English stays verbatim on the page; the register carries the defect.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
