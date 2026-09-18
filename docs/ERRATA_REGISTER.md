@@ -8,16 +8,16 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**296 entries**: **200 document errata** (7 HIGH, 92 MEDIUM, 101 LOW), **63 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**298 entries**: **202 document errata** (7 HIGH, 93 MEDIUM, 102 LOW), **63 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 143 |
+| Tibetan spelling | 144 |
 | Digitisation artefact | 63 |
 | English typo | 31 |
 | English factual error | 17 |
 | Our banked layer | 16 |
-| Formatting | 9 |
+| Formatting | 10 |
 
 ---
 
@@ -45,7 +45,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 | `C05:324` | for virtue of the formless realm | for virtue of the realm of form | This segment's own Tibetan reads `gzugs kyi dge ba la 'dun pa` and its ACIP reads GZUGS KYI DGE BA LA 'DUN PA. `gzugs` is form; neither column carries a negation. The formless realm is `gzugs med`, which Geshe Michael renders 'formless' consistently elsewhere  | CONFIRMED |
 
-## Medium severity &mdash; 92 entries
+## Medium severity &mdash; 93 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -135,6 +135,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:342` | arises from a view about the virtues and non-virtues that are all part of names and forms in general | the Tibetan is `ming gzugs kyis bsdus pa'i dge mi dge MED PAR lta ba las byung ba'i phyir` -- the view is that | Reconciler re-derived every claim below from the spine on 2026-09-18. NOT AN INGEST DROP: the ACIP column, the source of record, reads `MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR` -- `MED PAR` is present in both the wylie and the | PROBABLE |
 | `C05:343` | DNGOS MED LUS GZHAN SKYES PHYER RO | DNGOS MED LUS GZHAN SKYES PHYIR RO | PARALLEL WITNESS CHECKED AND FOUND, INTERNAL TO THIS COURSE. The reason-postposition phyir is misspelled phyer in line 2 of this root verse, in both the ACIP (source of record) and the wylie. Three independent checks. (1) INTERNAL, SAME SEGMENT: line 3 of this | CONFIRMED |
 | `C05:344` | mtshan bsnun | mtshon bsnun | The idiom is mtshon bsnun, 'to strike/stab with a weapon'. The master glosses mtshon as ['rain of spears','various kinds of blades','weapons','weapon','swords','uses','taking'] and mtshan as ['night','reason','nights','name','features','title','known as','sexu | PROBABLE |
+| `C05:352` | srid mo | sring mo | Both analysts filed this and the reconciler re-derived it from the spine. In the kinship list `rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du`, Geshe Michael's English at this row names the word: "his mother, or sister". `sring mo` IS a headword  | PROBABLE |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -142,7 +143,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 101 entries
+## Low severity &mdash; 102 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -217,6 +218,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:348` | gthu dang 'jab bus bdag gir byed | mthu dang 'jab bus bdag gir byed | The ACIP of this same row (source of record) reads ',GTHU DANG 'JAB BUS BDAG GIR BYED,', so this is source keying, not an EWTS-conversion artefact. GTHU is not a legal Tibetan syllable: the prefix GA attaches only to C, NY, T, D, N, TS, ZH, Z, Y, SH and S, nev | PROBABLE |
 | `C05:349` | gzhan bsad pa'o | gzhan gsad pa'o | This row re-quotes the Abhidharmakosha IV root line inside Gendun Drup's commentary, and the ACIP (source of record) reads GZHAN BSAD PA'O. Every witness to the verse itself reads the FUTURE stem gsad: C05:348 (the verse row in this same course) has 'ma nor ba | UNCERTAIN |
 | `C05:350` | no "actual- commission" stage of an act occurs | no "actual-commission" stage of an act occurs | THIS SEGMENT CARRIES BOTH SPELLINGS: its first sentence has 'actual- commission' (hyphen + space) and its second has 'actual-commission' (closed up), so the contrast is internal to the row and needs no external comparison. Hyphen-plus-space is the digitisation | PROBABLE |
+| `C05:357` | tshig,tshig | tshig, ,tshig | This row is a root verse and nine of its ten verse-line boundaries are keyed as the double shad ', ,' (phyir, ,nyon / snyan pa, ,nyon / nyid, ,gzhan / mongs, ,kha / bzhin, ,bstan / sems ni, ,log / chags, ,gnod / sdang ba, ,dge / lta ba, ,log par). The boundary | PROBABLE |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
 | `C05:71` | srid pa'i rgya mcho 'dir 'khyam | srid pa'i rgya mtsho 'dir 'khyam | ACIP verbatim: "NYON MONGS PAS KYANG 'JIG RTEN PA RNAMS SRID PA'I RGYA MCHO 'DIR 'KHYAM STE". This is NOT the TS = tsha keying convention (C04 ledger, MTSAMS/MTSAN): under that convention mtsho keys as MTSO, and the corpus has 503 rows with ACIP `RGYA MTSO` an | CONFIRMED |
@@ -380,7 +382,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 200 document errata above. Start with the 7 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 202 document errata above. Start with the 7 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 63 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

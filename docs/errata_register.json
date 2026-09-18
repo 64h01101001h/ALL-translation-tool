@@ -3550,5 +3550,29 @@
   "severity": "LOW",
   "confidence": "UNCERTAIN",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-297",
+  "course": "C05",
+  "segment": "C05:352",
+  "kind": "TIBETAN_SPELLING",
+  "found": "srid mo",
+  "expected": "sring mo",
+  "evidence": "Both analysts filed this and the reconciler re-derived it from the spine. In the kinship list `rang gi ma dang srid mo dang pha ma bdun rgyud tshun chad du`, Geshe Michael's English at this row names the word: \"his mother, or sister\". `sring mo` IS a headword in the 105,634-entry master; `srid mo` is NOT a headword anywhere in it, and 12 corpus rows spell \"sister\" `sring mo`. The only other `srid mo` strings in all 42,199 rows are C03:433 and P1:78, both `lan gnyis tsam 'thob pa srid mod` -- the unrelated verb form `srid mod`, checked character by character. PARALLEL WITNESS CHECKED AND REJECTED AS INDEPENDENT: C16:873 carries this row's wylie and ACIP BYTE-IDENTICALLY (verified by SQL equality against C05:352) and also reads SRID MO, but the C05 course-shape note records C16 as the same file re-ingested (263 byte-identical rows), so it is one witness, not two; its English column differs, so it is not a published-reading confirmation either. The ACIP, the source of record, also reads SRID MO, so the slip is upstream of our ingest. The defect is a dropped NG, the same shape as the registered C05:24 `mtshung med` case; `srid` is a legal syllable, so no spellchecker catches it. Geshe Michael's English stays verbatim on the page; the span is nulled so that \"sister\" never enters the bank keyed to the misspelling.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-298",
+  "course": "C05",
+  "segment": "C05:357",
+  "kind": "FORMATTING",
+  "found": "tshig,tshig",
+  "expected": "tshig, ,tshig",
+  "evidence": "This row is a root verse and nine of its ten verse-line boundaries are keyed as the double shad ', ,' (phyir, ,nyon / snyan pa, ,nyon / nyid, ,gzhan / mongs, ,kha / bzhin, ,bstan / sems ni, ,log / chags, ,gnod / sdang ba, ,dge / lta ba, ,log par). The boundary between the first and second lines has lost its space and its second shad: 'sems kyi tshig,tshig rtsub po'. PARALLEL WITNESS CHECKED. TCS02:74 carries the same verse and is an INDEPENDENTLY KEYED witness -- its wylie differs from this row elsewhere (it reads 'nyon mongs can gye sems' where this row reads 'gyi', and it stops after 'bstan bcos ngan bzhin') -- and it keys this same boundary as 'sems kyi tshig, ,tshig rtsub po', with the double shad. C16:875 is byte-identical to C05:357 in BOTH columns, i.e. the same file re-ingested, and is NOT an independent witness. C05:340 quotes neighbouring lines of the same chapter but does not carry this boundary. No other carrier exists in the 42,199 rows. Geshe Michael Roach's English is unaffected and no span on this page crosses the boundary.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
