@@ -39,7 +39,16 @@ ALLOW = os.path.join(ALIGN, "span_head_allow.json")
 # gate -- the exact shape found twice elsewhere today (a battery floor set
 # under its own measured value, a ceiling twenty-five times above it).
 # A ratchet is only a ratchet if it sits ON the measurement.
-BASELINE = {"pages_c01": 1631, "pages": 48, "pages_c03": 578}   # frozen 2026-09-04; c03 613->603 after the audit repairs the same day
+BASELINE = {"pages_c01": 1631, "pages": 47, "pages_c03": 578}   # frozen 2026-09-04; c03 613->603 after the audit repairs the same day
+# 2026-09-18: "pages" was 48 here and MEASURED 47 -- one unit of silent
+# regression room, set by me in 1990ee5b, the commit whose whole subject
+# was this gate being blind. data/alignment/pages/ has not changed since,
+# and a worktree at that commit measures 47 too, so the slack was there
+# from the moment it was written. A ratchet frozen above its measurement
+# is the defect the audit found in forward_battery (floor 99.95% over a
+# measured 100.000%) and in no_phonetics_in_layer (2% ceiling over 0.08%).
+# The SLACK CHECK below exists so the next one says so instead of waiting
+# to be noticed.
 # CLASS LICENSOR, added 2026-09-17. 20 of the 24 pages_c05 entries in
 # span_head_allow.json said the identical thing: `sogs` / `la sogs pa` owns
 # its closing gesture -- "and the rest", "and so on", "and the like", "or the
@@ -139,6 +148,16 @@ def main():
                 fail = True
                 print("SUPPLIED SPAN HEAD ratchet broken in %s: %d > baseline %d"
                       % (d, len(hits), BASELINE[d]))
+            elif len(hits) < BASELINE[d]:
+                # A baseline above its measurement is regression room nobody
+                # granted. Say it, and say it as a FAILURE: a note would be
+                # read as passing, and this one sat unread for a day.
+                fail = True
+                print("SUPPLIED SPAN HEAD baseline has SLACK in %s: measured "
+                      "%d, baseline %d. Tighten BASELINE to %d in a commit — "
+                      "%d span(s) could regress in silence."
+                      % (d, len(hits), BASELINE[d], len(hits),
+                         BASELINE[d] - len(hits)))
             else:
                 print("%-10s %4d function-word-initial d5/d7 spans (baseline %d)"
                       % (d, len(hits), BASELINE[d]))
