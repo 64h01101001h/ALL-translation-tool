@@ -8,15 +8,15 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**264 entries**: **172 document errata** (6 HIGH, 77 MEDIUM, 89 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**268 entries**: **176 document errata** (6 HIGH, 81 MEDIUM, 89 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 128 |
+| Tibetan spelling | 129 |
 | Digitisation artefact | 59 |
 | English typo | 29 |
 | Our banked layer | 16 |
-| English factual error | 8 |
+| English factual error | 11 |
 | Formatting | 7 |
 
 ---
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 77 entries
+## Medium severity &mdash; 81 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -119,6 +119,10 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:183` | snying rdzes de dag de las thar pas byas pas | snying rjes de dag de las thar pas byas pas | The ACIP of record reads SNYING RDZES. `snying rdzes` occurs in exactly two rows of the corpus, C05:183 and its byte-identical C16:762 twin (same file re-ingested), so it is a hapax; it is not a headword in the 105,634-entry master dictionary. The dictionary c | UNCERTAIN |
 | `C05:190` | RJES TZONG KHA PA CHEN POS BRTZOMS PA'I LAM RIM CHEN MO LAS, | RJE TZONG KHA PA CHEN POS BRTZOMS PA'I LAM RIM CHEN MO LAS, | The opening syllable is RJES where the honorific is RJE, 'Lord'. Geshe Michael's English for this very row renders it 'composed by Lord Tsongkapa (1357-1419)'; RJES is a different word, 'after, in the wake of'. The agentive is already carried by CHEN POS at th | CONFIRMED |
 | `C05:213` | RAB TU SKYE BO DE DON MED | RAB TU SKYE'O DE DON MED | Three lines of evidence, two of them from outside this row and one from inside it. (1) INDEPENDENT WITNESS WITH THE CLEAN READING: GK:358 carries the same Madhyantavibhaga citation and reads `rab tu skye'o` outright, with no `skye bo` anywhere; its wylie punct | CONFIRMED |
+| `C05:235` | could never Disappear, even in conceptions? | a rendering of `gsal mi 'gyur` in the direction of 'become clear / come to light' -- the closing line asks how | This row's own wylie closes `mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, ,` and its ACIP (source of record) reads `JI LTA BUR NA GSAL MI 'GYUR`. `gsal` is 'be clear / become manifest' -- all 3 links on `gsal` in the alignment bank read 'clear | PROBABLE |
+| `C05:236` | when you finally stopped your mistaken states of mind, they would never disappear, although they should have. | The wylie/ACIP of this row reads `gsal du 'gro dgos kyi, ldog par mi 'gyur ro` (ACIP: GSAL DU 'GRO DGOS KYI, L | Confirmable from this row's own two columns: the English contains no word standing over `gsal` (clear/manifest) or `'gro` (go on, come to be), and the only modal of obligation in it, 'should', governs an elided 'disappeared', which is the contrary of what `gsa | PROBABLE |
+| `C05:237` | sems nyid kyis bsags pa'i thun mang ba'i las kyis 'god pa ste skyed de | sems nyid kyis bsags pa'i thun mong ba'i las kyis 'god pa ste skyed de | ACIP of record reads ... SEMS NYID KYIS BSAGS PA'I THUN MANG BA'I LAS KYIS 'GOD PA STE SKYED DE. The word for 'common, shared, collective' is thun mong. Counted in the spine this session: `thun mang` occurs in exactly TWO rows in the whole corpus -- C05:237 an | CONFIRMED |
+| `C05:240` | where it says that there is no great master of all things, and no great maker of all things | The Tibetan is the standard Ten-Levels pair `byed pa po dang tshor ba po med pa` - 'there is no one who acts a | THIS SEGMENT: wylie `byed pa po dang tshor ba po med pa zhes gsungs pa`; ACIP (source of record) `BYED PA PO DANG TSOR BA PO MED PA ZHES GSUNGS PA`. The converter in engines/hgm_tools.py maps `TSOR BA PO` -> `tshor ba po`, so the Tibetan itself carries no spel | CONFIRMED |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -348,7 +352,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 172 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 176 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 59 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
