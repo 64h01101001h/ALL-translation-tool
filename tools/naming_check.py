@@ -34,8 +34,26 @@ import re
 import sys
 
 NAMES = re.compile(r"Geshe Michael|\bGMR\b|\bHGM\b")
-PRON = re.compile(r"\b(his|he|He)\b")
-IN_STRING = re.compile(r'"[^"]*\b(his|he|He)\b')
+# WIDENED 2026-09-17. This was r"\b(his|he|He)\b" -- lowercase "his", but NOT
+# capital "His". So the gate was blind to the exact phrase Adam's ruling
+# forbids whenever it opened a sentence, and five LIVE user-facing strings
+# said it while the gate reported "all ruled on": the walkthrough pane's own
+# caption ("His glossary words in the engine's order"), its step-4 line ("the
+# engine matched him 51%"), "His English for the WHOLE of that segment", and
+# the iOS drill's failure branch ("His order is ...").
+#
+# The shape is worth noting: in two of those places the SUCCESS branch already
+# read "That is Geshe Michael's order" while the FAILURE branch beside it read
+# "His order is". The earlier naming sweep fixed what the gate could see and
+# left what it could not, which is how a gate's blind spot becomes the
+# codebase's blind spot.
+#
+# him/Him/himself/Himself are included too: "the recording of him saying it"
+# is the same substitution. Not case-insensitive wholesale -- "(?i)he" would
+# match "HE" inside constants and every "He" that opens a sentence about
+# somebody else, and a gate that cries wolf gets switched off.
+PRON = re.compile(r"\b(his|His|he|He|him|Him|himself|Himself)\b")
+IN_STRING = re.compile(r'"[^"]*\b(his|His|he|He|him|Him|himself|Himself)\b')
 
 
 def key(path, text):

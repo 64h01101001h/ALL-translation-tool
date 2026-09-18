@@ -420,7 +420,7 @@ enum DrillKind: String, CaseIterable, Identifiable {
     case script = "Script cards"
     case debate = "Debate"
     case silent = "Silent particle"
-    case second = "His second thought"
+    case second = "Second thought"
     case peel = "Peel"
     case boundary = "Boundary hunt"
     case vocab = "Known here / known anywhere"
@@ -1092,7 +1092,7 @@ struct ReadOrderView: View {
                 if checked {
                     Text(correct
                          ? "That is Geshe Michael's order."
-                         : "His order is \(item.answer.map { String($0 + 1) }.joined(separator: " ")) — yours was \(picked.map { String($0 + 1) }.joined(separator: " ")).")
+                         : "Geshe Michael's order is \(item.answer.map { String($0 + 1) }.joined(separator: " ")) — yours was \(picked.map { String($0 + 1) }.joined(separator: " ")).")
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(correct ? c.act : c.machine)
                     EnglishHint(text: item.parentEng, ink: c)

@@ -26,7 +26,7 @@ the input centers always have — and, throughout, teaching.
 Three commitments govern every feature, and are worth stating before
 any feature is:
 
-1. **Geshe Michael's English is the binding layer.** His equivalents,
+1. **Geshe Michael's English is the binding layer.** These equivalents,
    established across decades of teaching, are the authority in every
    pane. All other scholarship — and there is a great deal of it
    integrated — appears only as clearly-labeled reference, never
