@@ -93,11 +93,23 @@ def main():
             continue
         withwit += 1
         named = set(CITE.findall((e.get('evidence') or '') + ' ' + (e.get('note') or '')))
-        if not named:
+        # 2026-09-17, gate audit: this checked only `if not named` -- that the
+        # evidence contains SOME citation, not that it names the WITNESS. The
+        # docstring above promises the stronger thing ("the evidence must NAME
+        # IT by course:seq") and two spec documents quote this suite's pass
+        # line as fact. 19 of 93 with-witness entries satisfied it while
+        # naming no actual witness, 15 of them riding on one boilerplate
+        # paragraph copied into many entries -- and in one cluster the sole
+        # citation is named IN THAT PARAGRAPH as a COUNTEREXAMPLE.
+        #
+        # A citation to a course that does not exist would have passed. The
+        # sets are intersected now, which is what the promise always was.
+        want = {'%s:%d' % o for o in others}
+        if not (named & want):
             silent.append((e['item_id'], e['segment'], e.get('confidence'),
                            ['%s:%d' % o for o in others[:4]], longest[:60]))
     if silent:
-        print('FAIL %d erratum/errata have a parallel witness and name none:'
+        print('FAIL %d erratum/errata have a parallel witness and name no ACTUAL witness:'
               % len(silent))
         for iid, sid, conf, o, q in silent:
             print('      %s %-12s %-9s witness at %s' % (iid, sid, conf, o))
