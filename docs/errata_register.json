@@ -3274,5 +3274,53 @@
   "severity": "LOW",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-274",
+  "course": "C05",
+  "segment": "C05:280",
+  "kind": "FORMATTING",
+  "found": "[The point seems to be that",
+  "expected": "[Translator's note: The point seems to be that",
+  "evidence": "The closing bracketed paragraph of this row has NO Tibetan behind it -- the wylie ends at 'mi rigs pa'i phyir' and the bracket is the translator's own gloss -- but nothing in the C05 English labels it as such, so a reader or a harvester can take it for translated text. PARALLEL WITNESS CHECKED AND IT IS NOT IDENTICAL, so this is a genuine variant rather than the published reading re-ingested: C15:425 carries this passage with wylie byte-identical to C05:280 (636 chars, compared byte for byte and equal) while the English differs in exactly ONE place -- a difflib opcode walk returns a single insert, C05 '[The point' against C15 \"[Translator's note: The point\". P7:29 is a third carrier, damaged at the other end (it deletes 'jealousy. ' outright), so it is evidence about P7. DIRECTION IS NOT DETERMINABLE from two copies: C05 may simply be the edition that drops the label rather than a copy that lost it, hence UNCERTAIN. Re-verified independently 2026-09-17 against the spine before filing. NOT FILED alongside it, having been checked: 'khyod kyi nad lnga', where an agentive would be expected -- all three carriers read 'kyi', so it is the transmitted text; and the wylie dropping a final shad the ACIP carries, which is a course-wide ingest normalisation rather than a defect of this row.",
+  "severity": "LOW",
+  "confidence": "UNCERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-275",
+  "course": "C05",
+  "segment": "C05:239",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "It's like the hells, and the heavens above, And swords, and jewels, and trees in the world.",
+  "expected": "A rendering in which the hells, the heavens above and the world are the PLACES, not further items of the simile: the wylie is `sems dmyal mtho ris 'jig rten du, , mtshon dang rin chen shing bzhin no` - 'just as weapons and jewel-trees [arise] in the hells, the high realms and the world'.",
+  "evidence": "Two marks in this segment's own wylie point the other way. (1) `du` after `'jig rten` is a locative governing the whole preceding series `sems dmyal mtho ris 'jig rten`; the English turns all three into conjuncts of the simile and attaches 'in the world' to 'trees' alone. (2) There is exactly one `dang`, between `mtshon` and `rin chen shing`, so the Tibetan has two conjuncts; the English has three ('swords, and jewels, and trees'), which additionally splits `rin chen shing` (jewel-trees) into two items. PARALLEL WITNESSES CHECKED BY THE RECONCILER, not taken from the proposals: a SELECT on equality of the whole wylie field and of the whole english field each returns exactly C05:239 and C16:816, so C16 is byte-identical in both columns - the published reading, and per the standing C05 caution the same file re-ingested, NOT an independent witness. ILL:2684 IS independent: same verse, near-identical wylie (`ji skad du, ,sems can las kyi dbang gis ri, ,nag po'i dus su skyes te dper, ,sems dmyal mtho ris 'jig rten du, ,mtshon dang rin chen shing bzhin no, zhes gsungs so`), and it renders the three nouns as locations - 'It was just the same As how weapons And trees made of jewel Appear in the realms Of hell and the higher births.' ILL:2685 independently renders the following commentary sentence. PROBABLE rather than CONFIRMED because the English as it stands is doctrinally true on its own terms - the hells and heavens are themselves karma-made - so a reader is misled about the sentence's structure, not about the doctrine. Geshe Michael's English stays verbatim on the page; the word-level spans (mtshon->swords, rin chen->jewels, shing->trees) are true of each word in isolation and are unaffected. RECOVERED 2026-09-17: the reconciler reported this in its workflow result and never wrote 239-errata.json, so the landing loop -- which reads files -- skipped it silently. Both marks re-verified against the spine before filing: the wylie reads `sems dmyal mtho ris 'jig rten du` with the locative `du` after `'jig rten`, and the row contains exactly ONE `dang`, between `mtshon` and `rin chen shing`.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-276",
+  "course": "C05",
+  "segment": "C05:170",
+  "kind": "TIBETAN_SPELLING",
+  "found": "LAS GANG GIS RIS MTHUN 'PHAN ZHE NA",
+  "expected": "LAS GANG GIS RIS MTHUN 'PHEN ZHE NA",
+  "evidence": "Confirmed from this row alone: the ACIP (source of record) spells the SAME verb, with the SAME object RIS MTHUN, three times in one sentence -- 'PHAN once and 'PHEN twice: 'LAS GANG GIS RIS MTHUN 'PHAN ZHE NA', 'GSUM GYIS RIS MTHUN NI 'PHEN PAR BYED KYI', 'RIS MTHUN MI 'PHEN TE'. The wylie column agrees with the ACIP, so this is the source reading and not a converter slip. 'phen pa is the present stem ('phangs past, 'phang future); 'phan is not in the paradigm. WITNESS SEARCH: the only other carrier of this sentence is C16:757, byte-identical in wylie AND ACIP (its English differs only by the trailing fused section heading), and C05_CAMPAIGN.md records 263 byte-identical C16 rows -- the same file re-ingested, NOT an independent witness. COUNTER-EVIDENCE TESTED AND SET ASIDE: ' 'phan ' occurs in 26 corpus rows against 203 for ' 'phen ', but on inspection 24 of the 26 are a different word entirely -- 'phan = ritual pennant (TCS04/07/08/09/10, ''phan rtse gsum pa'), the place name ''phan yul' (TCS07:616, TCS13:405), and ''phan pa' = benefit (C08:339, C14:80, C17:428, C18:822, P4:9, P5:35). The only hit that is this verb is SSL:163 'mda' 'phan pa' (shoot an arrow), a single instance in an unrelated text as likely to be the same defect as evidence of a variant stem. Correct spellings elsewhere in this course: C05:395 'SKYE BA GCIG KHO NA 'PHEN NAM', C05:402 'LAS GCIG GIS 'PHANGS PA'I RIS MTHUN PA'I SKYE BA'. NOT FILED from this row: the trailing heading '55 Deeds Projected for Different Realms and Beings' (registered following-heading class; C16:757 carries a DIFFERENT heading there, '19 Deeds that Definitely Ripen', which confirms the class rather than a defect); the missing final shad where the ACIP has one (systematic across C05:166-175, converter behaviour); the rigs / ris mthun divergence with C05:166 (c5p56 already ruled it a variant reading). English side: no typo or factual error found; the row is 441 characters, well under the 1,500 cap (E-107). RECOVERED 2026-09-17: reported in the reconciler's workflow result but never written to its errata.json, so the landing loop -- which reads files -- skipped it in silence. Re-verified against the spine before filing.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-277",
+  "course": "C05",
+  "segment": "C05:187",
+  "kind": "TIBETAN_SPELLING",
+  "found": "'BRAS BU 'BRAL DU MYONG BAR 'GYUR TE,",
+  "expected": "'BRAS BU 'PHRAL DU MYONG BAR 'GYUR TE,",
+  "evidence": "Re-derived by the reconciler from the spine, not taken from either proposal. INTRA-PASSAGE WITNESSES, four, all in the same run and all carrying the identical formula: C05:185 (the root verse this commentary unpacks) 'bras bu 'phral du myong bar 'gyur; C05:186 ... phan gnod byas pas 'bras bu 'phral du myong bar 'gyur te; C05:188, this row's structural twin word for word from `las langs ma thag pa la phan gnod byas pas` onward, 'bras bu 'phral du myong bar 'gyur te; C05:189 'bras bu 'phral du myong bar mi 'gyur te. CORPUS COUNT (sqlite over all 42,199 rows): wylie like '%''phral du myong%' returns 8 rows; wylie like '%''bral du myong%' returns exactly 2, C05:187 and C16:766. PARALLEL-WITNESS CHECK RUN AND REPORTED: C16:766 tests byte-identical to C05:187 in BOTH the wylie and the english column (SQL equality on both = 1), i.e. the same file re-ingested under another course label and NOT an independent witness -- the C16/C05 relationship the campaign already records (263 byte-identical shared rows). SEMANTICS AGREE WITH THE WITNESSES: 'phral du is 'right away'; 'bral is 'separated from', which cannot be what Geshe Michael's 'a quick result' renders. ENGLISH SIDE UNAFFECTED -- Geshe Michael translated the correct word -- so the defect is in the Tibetan input only, and the alignment banks 'bral as a NULL with the defect named rather than hanging 'quick' on it (Rule 10). RECOVERED 2026-09-17: reported in the reconciler's workflow result but never written to its errata.json, so the landing loop -- which reads files -- skipped it in silence. Re-verified against the spine before filing.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]

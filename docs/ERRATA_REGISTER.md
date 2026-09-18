@@ -8,16 +8,16 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**273 entries**: **178 document errata** (6 HIGH, 82 MEDIUM, 90 LOW), **62 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**277 entries**: **182 document errata** (6 HIGH, 83 MEDIUM, 93 LOW), **62 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 129 |
+| Tibetan spelling | 131 |
 | Digitisation artefact | 62 |
 | English typo | 29 |
 | Our banked layer | 16 |
-| English factual error | 13 |
-| Formatting | 7 |
+| English factual error | 14 |
+| Formatting | 8 |
 
 ---
 
@@ -44,7 +44,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
 
-## Medium severity &mdash; 82 entries
+## Medium severity &mdash; 83 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -117,6 +117,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:183` | glang lnga brgya 'dod pa la ci byed dris pas | glang lnga brgya 'ded pa la ci byed dris pas | Geshe Michael renders this "He met someone driving a herd of five hundred cattle and asked the man what he planned to do." The ACIP of record reads GLANG LNGA BRGYA 'DOD PA. `'dod pa` is glossed in the master dictionary only in the want/desire/assert family (i | PROBABLE |
 | `C05:183` | King Kanaka had a certain eunuch | King Kanika had a certain eunuch | Both Tibetan columns read `rgyal po ka ni ka'i` / RGYAL PO KA NI KA'I, which transliterates Kanika (Skt. Kaniska). Geshe Michael renders this same Tibetan string "Kanika" in every other row of the corpus that carries it: C08:356 and C17:445 (`kA ni ka'i spring | PROBABLE |
 | `C05:183` | snying rdzes de dag de las thar pas byas pas | snying rjes de dag de las thar pas byas pas | The ACIP of record reads SNYING RDZES. `snying rdzes` occurs in exactly two rows of the corpus, C05:183 and its byte-identical C16:762 twin (same file re-ingested), so it is a hapax; it is not a headword in the 105,634-entry master dictionary. The dictionary c | UNCERTAIN |
+| `C05:187` | 'BRAS BU 'BRAL DU MYONG BAR 'GYUR TE, | 'BRAS BU 'PHRAL DU MYONG BAR 'GYUR TE, | Re-derived by the reconciler from the spine, not taken from either proposal. INTRA-PASSAGE WITNESSES, four, all in the same run and all carrying the identical formula: C05:185 (the root verse this commentary unpacks) 'bras bu 'phral du myong bar 'gyur; C05:186 | CONFIRMED |
 | `C05:190` | RJES TZONG KHA PA CHEN POS BRTZOMS PA'I LAM RIM CHEN MO LAS, | RJE TZONG KHA PA CHEN POS BRTZOMS PA'I LAM RIM CHEN MO LAS, | The opening syllable is RJES where the honorific is RJE, 'Lord'. Geshe Michael's English for this very row renders it 'composed by Lord Tsongkapa (1357-1419)'; RJES is a different word, 'after, in the wake of'. The agentive is already carried by CHEN POS at th | CONFIRMED |
 | `C05:213` | RAB TU SKYE BO DE DON MED | RAB TU SKYE'O DE DON MED | Three lines of evidence, two of them from outside this row and one from inside it. (1) INDEPENDENT WITNESS WITH THE CLEAN READING: GK:358 carries the same Madhyantavibhaga citation and reads `rab tu skye'o` outright, with no `skye bo` anywhere; its wylie punct | CONFIRMED |
 | `C05:235` | could never Disappear, even in conceptions? | a rendering of `gsal mi 'gyur` in the direction of 'become clear / come to light' -- the closing line asks how | This row's own wylie closes `mi shes pa las kun brtags par, , ji lta bur na gsal mi 'gyur, ,` and its ACIP (source of record) reads `JI LTA BUR NA GSAL MI 'GYUR`. `gsal` is 'be clear / become manifest' -- all 3 links on `gsal` in the alignment bank read 'clear | PROBABLE |
@@ -131,7 +132,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 90 entries
+## Low severity &mdash; 93 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -183,6 +184,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:158` | sdug bsdal | sdug bsngal | ACIP source of record reads SDUG BSDAL (wylie sdug bsdal); the corpus reads sdug bsngal on 1,139 other rows and sdug bsdal nowhere else. The parallel witness for this passage (C05:149 shares the root-verse line, C16:745 is the byte-identical re-ingest) offers  | CONFIRMED |
 | `C05:160` | min chad | man chad | ACIP of this row: "BSAM GTAN BZHI PA'I 'OG GSUM PA MIN CHAD NA'ANG". GMR renders "the third on down", i.e. man chad ("from X on down"). Corpus over 42,199 rows: ' man chad' 62 rows; ' min chad' 3 rows -- this row plus ILL:1737 ('rtag min chad min') and ILL:174 | PROBABLE |
 | `C05:160` | rnam par smin ba'i | rnam par smin pa'i | ACIP of this row: "RNAM PAR SMIN BA'I LAS YOD PA'I PHYIR". After suffix -n the nominaliser is pa; the same row writes 'smin par' correctly nine words later. Corpus: 'smin pa' 258 rows; 'smin ba' 4 rows, but the other three (C05:463, C16:973, TCS10:265) are all | PROBABLE |
+| `C05:170` | LAS GANG GIS RIS MTHUN 'PHAN ZHE NA | LAS GANG GIS RIS MTHUN 'PHEN ZHE NA | Confirmed from this row alone: the ACIP (source of record) spells the SAME verb, with the SAME object RIS MTHUN, three times in one sentence -- 'PHAN once and 'PHEN twice: 'LAS GANG GIS RIS MTHUN 'PHAN ZHE NA', 'GSUM GYIS RIS MTHUN NI 'PHEN PAR BYED KYI', 'RIS | PROBABLE |
 | `C05:172` | In the hells through there are only three projections of virtuous types of deeds that are possible. | In the hells though there are only three projections of virtuous types of deeds that are possible. | The clause opens 'on kyang dmyal ba na ni (ACIP 'ON KYANG DMYAL BA NA NI), the concessive 'however / though', so the word standing over 'on kyang is 'though'; 'through' leaves the English ungrammatical and renders nothing in the Tibetan. PARALLEL WITNESS CHECK | CONFIRMED |
 | `C05:172` | las 'phen pa du yod cin, | las 'phen pa du yod cing, | ACIP, the source of record, reads '... LAS 'PHEN PA DU YOD CIN,'. The imperfective clause connective after a d suffix is cing; cin is not a form. Corpus counts run against the spine: wylie like '% cin,%' matches 1 row (this one) against 453 rows for wylie like | CONFIRMED |
 | `C05:174` | brtan pa'i 'phags pas des skyes nas myong 'gyur du ma zad | brtan pa'i 'phags pas der skyes nas myong 'gyur du ma zad | ACIP, the source of record, reads "'PHAGS PAS DES SKYES NAS" and so agrees with the wylie, so the row is internally consistent; the emendation rests on the slot. WITHIN THIS SEGMENT: Geshe Michael renders the word "after being reborn there" — a locative — and  | PROBABLE |
@@ -192,9 +194,11 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:210` | NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA | NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA | SELF-WITNESS: this row's own ACIP (source of record) writes the identical phrase correctly eleven syllables earlier in the SAME SENTENCE — `NUS PA'I SKAD CIG BAR MED PA GANG ZHIG LAS` — and then `NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA`. `bar med pa` ('no | CONFIRMED |
 | `C05:213` | Master Stiramati also explains the physical faculties | Master Sthiramati also explains the physical faculties | `blo brtan` is Sthiramati. The organisation's corpus spells the name with the aspirate in four independent rows -- GK:144, ILL:1814, ILL:2095, and ILL:2247, the last being the SAME PASSAGE independently translated ('Here Master Sthiramati explains that the phy | UNCERTAIN |
 | `C05:222` | is no longer a thing that can have any affect on anything | is no longer a thing that can have any effect on anything | Homophone slip in Geshe Michael's English: after the determiner "any", in an object-noun slot, English requires the noun "effect"; "affect" is the verb. The Tibetan it renders, `las zhig pa yang dngos por med pas`, says only that a perished deed is not a funct | CONFIRMED |
+| `C05:239` | It's like the hells, and the heavens above, And swords, and jewels, and trees in the world. | A rendering in which the hells, the heavens above and the world are the PLACES, not further items of the simil | Two marks in this segment's own wylie point the other way. (1) `du` after `'jig rten` is a locative governing the whole preceding series `sems dmyal mtho ris 'jig rten`; the English turns all three into conjuncts of the simile and attaches 'in the world' to 't | PROBABLE |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:247` | de dang , der yod med rnam pa kun du mtshungs sam mi mtshungs  (ACIP source: DE DANG , DER YOD MED RNAM PA KUN DU MTSUNGS SAM MI MTSUNGS ZHE) | de dang , der yod med rnam pa kun tu mtshungs sam mi mtshungs | Three independent authorities agree, and none of them is inference of mine. (1) Tony Duff, Standard Tibetan Grammar Vol I p.79: the re-suffixed da of kun/shin/'on is invisible in new orthography but still present, and "the presence of re-suffixed da letter on  | CONFIRMED |
 | `C05:268` | If the glass of liquid were sweet, cool water taken from the world of humans | clear, cool water -- the Tibetan of this line is `chu dvangs shing bsil ba` (ACIP: CHU DVANGS SHING BSIL BA),  | Geshe Michael renders the full three-adjective formula himself seventeen rows earlier in the same passage. C05:251 reads `mi rnams kyis ni mngar ba dang , dvangs pa dang , bsil ba'i chur rtogs shing 'thung ngo` and his English is 'Humans look at the same thing | PROBABLE |
+| `C05:280` | [The point seems to be that | [Translator's note: The point seems to be that | The closing bracketed paragraph of this row has NO Tibetan behind it -- the wylie ends at 'mi rigs pa'i phyir' and the bracket is the translator's own gloss -- but nothing in the C05 English labels it as such, so a reader or a harvester can take it for transla | UNCERTAIN |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
 | `C05:68` | mngon ba sde bdun po | mngon pa sde bdun po | ACIP (source of record): 'MNGON BA SDE BDUN PO'. The same row spells the word 'mngon pa'i mdzod' two words later, and the surrounding rows read 'mngon pa'. 'mngon ba' occurs in only 3 of 42,199 rows: C05:68, C16:706 (byte-identical re-ingest of the same file,  | PROBABLE |
 | `C05:71` | srid pa'i rgya mcho 'dir 'khyam | srid pa'i rgya mtsho 'dir 'khyam | ACIP verbatim: "NYON MONGS PAS KYANG 'JIG RTEN PA RNAMS SRID PA'I RGYA MCHO 'DIR 'KHYAM STE". This is NOT the TS = tsha keying convention (C04 ledger, MTSAMS/MTSAN): under that convention mtsho keys as MTSO, and the corpus has 503 rows with ACIP `RGYA MTSO` an | CONFIRMED |
@@ -357,7 +361,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 178 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 182 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 62 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
