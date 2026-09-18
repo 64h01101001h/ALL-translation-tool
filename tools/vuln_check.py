@@ -66,13 +66,52 @@ def read_components(tsv_path):
     return out
 
 
+# HOMEBREW NAMES ARE NOT UPSTREAM NAMES. Measured 2026-09-17 by querying OSV
+# under both spellings for every component in the shipped manifest:
+#
+#   openssl@3    3.6.3        0 as queried    300 as "openssl"
+#   jpeg-turbo   3.2.0        0               26  as "libjpeg-turbo"
+#   little-cms2  2.19         0               3   as "lcms2"
+#   icu4c@78     78.3         0               2   as "icu"
+#   webp         1.6.0        0               2   as "libwebp"
+#   abseil       20260107.1   0               1   as "abseil-cpp"
+#
+# 334 candidate advisories the scan had never asked about, printed as clean --
+# and openssl is the docstring's own worked example. OSV has no Homebrew
+# ecosystem, so the match is by NAME, and a name it does not recognise returns
+# an empty list that is indistinguishable from good news.
+#
+# These are CANDIDATES needing triage, not confirmed vulnerabilities: name
+# matching sweeps in advisories filed against other distributions' packaging
+# and against older versions. That is what --triage exists for. The defect is
+# that the question was never asked, not that the answer is bad.
+ALIAS = {
+    "openssl@3": "openssl",
+    "jpeg-turbo": "libjpeg-turbo",
+    "little-cms2": "lcms2",
+    "webp": "libwebp",
+    "abseil": "abseil-cpp",
+}
+
+
+def upstream(name):
+    """The name OSV knows. icu4c@78 -> icu, and any @-suffixed formula loses
+    its version suffix, which is Homebrew packaging rather than identity."""
+    if name in ALIAS:
+        return ALIAS[name]
+    base = name.split("@")[0]
+    if base == "icu4c":
+        return "icu"
+    return base
+
+
 def query_osv(components, timeout=90, endpoint=OSV):
     """Returns (results, error). error is a string, or None on success.
 
     A non-None error means the question was not answered. The caller
     must not present that as a clean result.
     """
-    queries = [{"package": {"name": n}, "version": v}
+    queries = [{"package": {"name": upstream(n)}, "version": v}
                for n, v in components]
     body = json.dumps({"queries": queries})
     try:
@@ -99,6 +138,29 @@ def query_osv(components, timeout=90, endpoint=OSV):
     return res, None
 
 
+# A DURABLE GUARD WAS ATTEMPTED HERE AND DOES NOT EXIST. The ALIAS map above
+# is a hardcoded list, and a hardcoded list is the shape that failed six other
+# gates in this repository on the same day -- right until a component arrives
+# under a name nobody thought of, then silently wrong in the direction of good
+# news. So the intended backstop was: if a component returns zero candidates,
+# ask OSV whether it knows that name AT ALL, and treat "never heard of it" as
+# an unanswered question rather than a clean result.
+#
+# OSV CANNOT ANSWER THAT QUESTION. Measured 2026-09-17: a name-only query is
+# rejected outright --
+#     {"package": {"name": "openssl"}}          -> HTTP 400 Bad Request
+#     {"package": {"name": "openssl"}, "version": "3.6.3"} -> 300 vulns
+# -- so there is no way to distinguish "this name has no advisories" from
+# "this name is not indexed". The first draft of the guard posted a single
+# query to the BATCH endpoint, read the missing "vulns" key as False, and
+# would have flagged every component as unrecognised: a gate that cries wolf,
+# which is how gates get switched off.
+#
+# What is left instead is transparency, which cannot be wrong: the scan prints
+# the name it ACTUALLY QUERIED whenever that differs from the manifest name,
+# so a reader sees `openssl@3 -> openssl` and would notice a bad mapping. The
+# selftest pins the six known aliases offline.
+
 def report(components, results):
     rows = []
     for (name, version), r in zip(components, results):
@@ -119,6 +181,17 @@ def report(components, results):
         print("  %4d  %-22s %-14s %s%s"
               % (n, name[:22], version[:14], ", ".join(ids[:3]),
                  " ..." if n > 3 else ""))
+    renamed = [(n, upstream(n)) for n, _ in components if upstream(n) != n]
+    if renamed:
+        print()
+        print("  %d component(s) were queried under their UPSTREAM name, "
+              "because" % len(renamed))
+        print("  OSV does not index Homebrew formula names (measured "
+              "2026-09-17:")
+        print("  openssl@3 returned 0, openssl returned 300):")
+        for hb, up in renamed:
+            print("     %-22s queried as %r" % (hb[:22], up))
+    return 0
     if not rows:
         print("  no candidates returned for any component")
     return total
@@ -302,6 +375,7 @@ def cmd_triage_all(tsv_path, limit=40):
 
 
 def cmd_selftest():
+
     """Pin the two honesty rules. No network."""
     bad = []
     import tempfile
@@ -313,6 +387,20 @@ def cmd_selftest():
     comps = read_components(tsv)
     if comps != [("openssl", "3.0.0"), ("brotli", "1.2.0")]:
         bad.append("component parsing")
+
+    # 2026-09-17: pin the Homebrew->upstream mapping, offline. Measured
+    # against live OSV that day: the Homebrew spelling returned 0 for all six
+    # while the upstream spelling returned 300/26/3/2/2/1 -- 334 candidate
+    # advisories the scan had never asked about, printed as clean. openssl is
+    # this file's own worked example, and it was the worst of them.
+    for hb, want in (("openssl@3", "openssl"), ("icu4c@78", "icu"),
+                     ("jpeg-turbo", "libjpeg-turbo"), ("little-cms2", "lcms2"),
+                     ("abseil", "abseil-cpp"), ("webp", "libwebp"),
+                     ("freetype", "freetype")):
+        if upstream(hb) != want:
+            bad.append("upstream(%r) = %r, expected %r - the Homebrew "
+                       "spelling is not what OSV indexes"
+                       % (hb, upstream(hb), want))
 
     # rule 1: a failed query must never be reported as clean.
     # Forced by an unresolvable endpoint - NOT by timeout=0, which
