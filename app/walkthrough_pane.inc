@@ -992,7 +992,7 @@ private:
             if (cr.cases.size() == 3 && cr.cases[0] == 2) sawLaGroup = true;
             QString caseCell;
             if (!cr.known()) {
-                caseCell = "<span style='color:#aaa'>not a case</span>";
+                caseCell = "<span style='color:#6F6F6F'>not a case</span>";
             } else if (cr.ambiguous()) {
                 // The particle cannot choose, but the VERB often can, and
                 // wilsonParse has been resolving exactly this for far longer
@@ -1008,7 +1008,7 @@ private:
                 const auto nar = allcore::narrowLaDon(chunks[i].marker, verb.cls);
                 if (nar.narrowed()) {
                     caseCell = "<b>" + walk::ord(nar.cases[0]) +
-                               "</b> <span style='color:#888;font-size:11px'>" +
+                               "</b> <span style='color:#6F6F6F;font-size:11px'>" +
                                QString(cr.family).toHtmlEscaped() + "</span>";
                     note("<b>" + walk::ord(nar.cases[0]) +
                          "</b> narrowed by the VERB, not the particle: " +
@@ -1022,7 +1022,7 @@ private:
                     // a guess (rule 3); printing all three with the reason is
                     // what the grammar supports.
                     caseCell = "<b style='color:#B4540A'>" + nums +
-                               "</b> <span style='color:#888;font-size:11px'>" +
+                               "</b> <span style='color:#6F6F6F;font-size:11px'>" +
                                QString(cr.family).toHtmlEscaped() + "</span>";
                     note("<b style='color:#B4540A'>" + nums + "</b> the <i>" +
                          QString(cr.family) + "</i> particles decline into any "
@@ -1031,7 +1031,7 @@ private:
                 }
             } else {
                 caseCell = "<b>" + walk::ord(cr.cases.front()) +
-                           "</b> <span style='color:#888;font-size:11px'>" +
+                           "</b> <span style='color:#6F6F6F;font-size:11px'>" +
                            QString(cr.family).toHtmlEscaped() + "</span>";
                 note("<b>" + walk::ord(cr.cases.front()) + "</b> " +
                      QString(cr.gloss).toHtmlEscaped() +
@@ -1076,13 +1076,13 @@ private:
                            : clsTrans ? QString("object of the transitive verb")
                                       : QString("complement / subject material"))
                     : QString(chunks[i].role).toHtmlEscaped();
-            h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
+            h += "<tr><td style='color:#6F6F6F'>[" + QString::number(i + 1) +
                  "]</td><td style='font-family:monospace'>" + row1Text +
                  "</td><td>" +
                  (chunks[i].marker.empty()
-                      ? QString("<span style='color:#888'>no particle</span>")
+                      ? QString("<span style='color:#6F6F6F'>no particle</span>")
                       : "<b>" + walk::esc(chunks[i].marker) + "</b>" +
-                            (chunks[i].marker_fused ? " <span style='color:#888'>"
+                            (chunks[i].marker_fused ? " <span style='color:#6F6F6F'>"
                                                       "(fused)</span>"
                                                     : QString())) +
                  "</td><td>" + caseCell + "</td><td>" +
@@ -1091,15 +1091,15 @@ private:
                  // every row except the predicate slot, which the case tables
                  // cannot name. Keep that one, drop the rest.
                  (row1Role.contains("predicate")
-                      ? "<div style='color:#888;font-size:11px'>" + row1Role +
+                      ? "<div style='color:#6F6F6F;font-size:11px'>" + row1Role +
                             "</div>"
                       : QString()) +
                  "</td></tr>";
             if (splittable)
-                h += "<tr><td style='color:#888'>[" + QString::number(i + 1) +
+                h += "<tr><td style='color:#6F6F6F'>[" + QString::number(i + 1) +
                      "b]</td><td style='font-family:monospace'>" +
                      walk::slice(doc, verb.tok, chunks[i].end) +
-                     "</td><td><span style='color:#aaa'>—</span></td><td>" +
+                     "</td><td><span style='color:#6F6F6F'>—</span></td><td>" +
                      // This asserted INTRANSITIVITY whenever Wilson's tables
                      // did not have the verb — a positive false claim, not an
                      // omission. On "bdag gis sems bskyed" the pane printed
@@ -1233,8 +1233,8 @@ private:
         // Both orders, side by side. Showing only the engine's would be
         // presenting the weaker of two measured options as the answer.
         h += "<table cellspacing='0' cellpadding='4' style='margin:2px 0'>"
-             "<tr><td style='color:#888;font-size:11px'><b>the engine says</b>"
-             "</td><td style='color:#888;font-size:11px'><b>as written "
+             "<tr><td style='color:#6F6F6F;font-size:11px'><b>the engine says</b>"
+             "</td><td style='color:#6F6F6F;font-size:11px'><b>as written "
              "(the simpler bet)</b></td></tr><tr><td valign='top'>";
         std::vector<std::pair<int, int>> ordered;   // (order, chunk)
         for (size_t i = 0; i < plan.size(); ++i)
@@ -1249,7 +1249,7 @@ private:
                  QString(plan[ix].how).toHtmlEscaped() + "</td></tr>";
         for (size_t i = 0; i < plan.size(); ++i)
             if (plan[i].order == 0)
-                h += "<tr><td style='color:#888'>&mdash;</td><td "
+                h += "<tr><td style='color:#6F6F6F'>&mdash;</td><td "
                      "style='font-family:monospace'>" +
                      walk::slice(doc, chunks[i].beg, chunks[i].end) +
                      "</td><td style='color:#666'>" +
@@ -1296,7 +1296,7 @@ private:
                        "<span style='color:#666;font-size:11px'>(marked by a "
                        "syntactic particle, not by a case \u2014 this verb's "
                        "class is what says so)</span>";
-            return "<span style='color:#888'>not a case particle \u2014 see "
+            return "<span style='color:#6F6F6F'>not a case particle \u2014 see "
                    "the note</span>";
         }
         // Collect over every case the particle admits: a la don chunk is
@@ -1312,7 +1312,7 @@ private:
                 if (!seen) fs.push_back(f);
             }
         if (fs.empty())
-            return "<span style='color:#888'>fills no slot of its own — it "
+            return "<span style='color:#6F6F6F'>fills no slot of its own — it "
                    "joins this noun to the next</span>";
         QString out;
         for (size_t i = 0; i < fs.size(); ++i)
@@ -1387,7 +1387,7 @@ private:
                 ? " <span style='color:#B4540A;font-size:11px'>[PROVISIONAL "
                   "\u2014 auto-aligned]</span>"
                 : e.tier.empty()
-                      ? QString(" <span style='color:#888;font-size:11px'>"
+                      ? QString(" <span style='color:#6F6F6F;font-size:11px'>"
                                 "[no tier recorded]</span>")
                       : " <span style='color:#3B7A3B;font-size:11px'>[GMR " +
                             walk::esc(e.tier) + "]</span>";
@@ -1408,7 +1408,7 @@ private:
                       const std::vector<std::pair<int, int>>& ordered) {
         provisional_ = 0;
         if (ordered.empty())
-            return body("<span style='color:#888'>the engine gave no chunk its "
+            return body("<span style='color:#6F6F6F'>the engine gave no chunk its "
                         "own number, so there is no order to put together.</span>");
         QString line;
         for (const auto& [ord, ix] : ordered) {
@@ -1455,7 +1455,7 @@ private:
                 if (ent.provisional()) ++provisional_;
                 t = doc.spans[best].end;
             }
-            line += (line.isEmpty() ? "" : " <span style='color:#888'>|</span> ") + piece;
+            line += (line.isEmpty() ? "" : " <span style='color:#6F6F6F'>|</span> ") + piece;
         }
         // One line, then the two caveats that actually change what a reader
         // should do. The old version was a five-sentence paragraph in which
@@ -1486,12 +1486,12 @@ private:
         try {
             hits = spine_.corpusSearch(fts, "", 3);
         } catch (...) {
-            return body("<span style='color:#888'>the corpus could not be "
+            return body("<span style='color:#6F6F6F'>the corpus could not be "
                         "searched for this clause.</span>");
         }
         if (hits.empty())
             return body(
-                "<span style='color:#888'>this clause is not in the corpus.</span>"
+                "<span style='color:#6F6F6F'>this clause is not in the corpus.</span>"
                 "<div style='color:#666;font-size:11px;padding-top:4px'>Which "
                 "means step 4 has nothing to be checked against here. That is "
                 "the ordinary case for new material, and the reason step 4 is "

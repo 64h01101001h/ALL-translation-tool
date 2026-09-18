@@ -160,7 +160,16 @@ def main():
     # cannot follow an appearance change, because there is nothing to follow.
     # The pane files are at zero and stay there; app/main.cpp carries a
     # baseline that may fall and may never rise.
-    lit = re.compile(r'setStyleSheet\("[^"]*#[0-9A-Fa-f]{6}')
+    # 2026-09-17: this matched only SIX hex digits, so a chrome colour written
+    # as CSS shorthand was invisible to G3 -- app/main.cpp's 18th hardcoded
+    # stylesheet colour hid behind `color:#777` while the baseline said 17.
+    # Found only because widening contrast_check's identical blind spot
+    # rewrote that literal to six digits and G3 noticed a "new" one. Two rules
+    # in two files with the same notation gap, which is the lesson this repo
+    # already records: ask what SPELLINGS a value can wear, not only what
+    # files it can hide in.
+    lit = re.compile(
+        r'setStyleSheet\("[^"]*#(?:[0-9A-Fa-f]{3}){1,2}(?![0-9A-Fa-f])')
     inc_lit = sum(len(lit.findall(read(os.path.join(root, "app", f))))
                   for f in sorted(os.listdir(os.path.join(root, "app")))
                   if f.endswith(".inc"))
