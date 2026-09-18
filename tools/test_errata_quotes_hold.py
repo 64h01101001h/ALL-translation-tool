@@ -36,6 +36,13 @@ SPINE = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
 # Measured 2026-08-28 over 91 entries: 84 carry a single-segment citation and
 # every fragment of all 84 is present. The other 7 are 4 UNVERIFIED rows and
 # 3 class entries that cite an extent rather than one segment.
+# not-a-single-segment-citation moved 5 -> 10 on 2026-09-17, and it is a
+# RE-BASE rather than slack: five LAYER_ARTEFACT rows that cite an extent
+# ("class entry (29 fields)", "C01:45, C01:38") were previously hidden by a
+# skip keyed on KIND, so the ceiling was set while they were invisible. They
+# are a real and permanent category -- an extent cannot be quote-checked
+# against one segment -- and the seven CHECKABLE rows the same fix exposed
+# are now checked and pass.
 CEILING = {
     'QUOTE-NOT-AT-SEGMENT': 0,   # a stale quote. Never raise this.
     'SEGMENT-GONE': 0,           # cites a segment the spine no longer has
@@ -49,7 +56,7 @@ CEILING = {
     # segments end at exactly 1,500 characters because engines/hgm_tools.py
     # caps the English at [:1500]). It cites an extent, not a segment, and it
     # is OURS, so no spine quote can hold for it; it is named in the output.
-    'not-a-single-segment-citation': 5,
+    'not-a-single-segment-citation': 10,
 }
 # 3, not 8. The first draft used 8 and threw away '[33}', '[17]' and
 # 'krma pa' as unparseable - the SHORTEST errata are the most checkable,
@@ -59,7 +66,26 @@ CEILING = {
 # not a string in the spine, so checking it there is a category error. The
 # witness gate already skipped this kind; this one did not, and the two must
 # agree. They are counted and named in the output rather than quietly dropped.
-SKIP_KINDS = ('LAYER_ARTEFACT',)
+# 2026-09-17, gate audit: this was SKIP_KINDS = ('LAYER_ARTEFACT',), an
+# exemption keyed on KIND when the rationale is about SHAPE. The comment below
+# states the mechanism exactly -- a mapping "x -> y" is by construction not a
+# string in the spine -- but keying it on kind swept in every later row filed
+# under the same label. Measured: 16 LAYER_ARTEFACT rows, of which only FOUR
+# are mappings. Five more cite an extent rather than a segment and are skipped
+# by that rule anyway. The remaining SEVEN (E-183/184/187/188/189/190/191) are
+# ordinary single-segment English quotes that were inheriting an exemption
+# written 17 days before they existed, and a stale quote on any of them
+# produced byte-identical passing output.
+#
+# It matters because build_errata_register.py renders LAYER_ARTEFACT into the
+# SHIPPED docs/ERRATA_REGISTER.md, whose section 1 asserts of every entry that
+# "the quoted strings were retrieved from the spine, not from a note". The
+# gate meant to keep that promise true was skipping the rows it is made about.
+#
+# So: skip the SHAPE. A `found` carrying the mapping arrow is not a spine
+# string; anything else is checked like any other row.
+SKIP_KINDS = ()
+MAPPING = (' -> ', ' → ')
 MIN_FRAG = 3
 TR = str.maketrans({'‘': "'", '’': "'", '“': '"', '”': '"',
                     '–': '-', '—': '-', '\xa0': ' '})
@@ -105,7 +131,7 @@ def classify(reg, rows):
     seg = {(c, s): (w or '', e or '', a or '') for c, s, w, e, a in rows}
     t, bad = Counter(), defaultdict(list)
     for e in reg:
-        if e.get('kind') in SKIP_KINDS:
+        if e.get('kind') in SKIP_KINDS or any(m in str(e.get('found') or '') for m in MAPPING):
             t['ours (describe the layer, not a document)'] += 1
             continue
         sid = (e.get('segment') or '').strip()
