@@ -3478,5 +3478,77 @@
   "severity": "MEDIUM",
   "confidence": "PROBABLE",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-291",
+  "course": "C05",
+  "segment": "C05:343",
+  "kind": "TIBETAN_SPELLING",
+  "found": "DNGOS MED LUS GZHAN SKYES PHYER RO",
+  "expected": "DNGOS MED LUS GZHAN SKYES PHYIR RO",
+  "evidence": "PARALLEL WITNESS CHECKED AND FOUND, INTERNAL TO THIS COURSE. The reason-postposition phyir is misspelled phyer in line 2 of this root verse, in both the ACIP (source of record) and the wylie. Three independent checks. (1) INTERNAL, SAME SEGMENT: line 3 of this very row spells the same particle correctly - the wylie reads 'dmag la sogs par don gcig phyir'. (2) INTERNAL, SAME COURSE: the same root-verse line is quoted a second time inside Course V at C05:372, introduced by 'de yang mdzod las,', where the wylie reads 'snga dang mnyam du shi ba la, , dngos med lus gzhan skyes phyir ro' - phyir, not phyer. C05:343 and C05:372 are different rows of the same course quoting one line, so this is an internal witness, not a re-ingest. C16:864 is byte-identical to C05:343 (carries PHYER) and C16:889 is byte-identical to C05:372 (carries phyir); C16 is the same file re-ingested and is NOT an independent witness either way - it mirrors the split rather than resolving it, exactly as the C05 campaign note predicts. (3) LEXICAL: 'phyer' is not a headword in the 105,634-entry master (select count(*) from entries where wylie='phyer' returns 0) and occurs in exactly two rows of the 42,199-row corpus, C05:343 and its C16 re-ingest. 'phyir' is the reason postposition ('because of, for'), which both the sense and Geshe Michael's rendering 'for another body's been born' require. Geshe Michael's English is unaffected and stays verbatim. The alignment span is banked at d=6, the particle layer, which the dictionary harvest does not read, so the misspelling cannot enter the bank as a headword.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-292",
+  "course": "C05",
+  "segment": "C05:344",
+  "kind": "TIBETAN_SPELLING",
+  "found": "mtshan bsnun",
+  "expected": "mtshon bsnun",
+  "evidence": "The idiom is mtshon bsnun, 'to strike/stab with a weapon'. The master glosses mtshon as ['rain of spears','various kinds of blades','weapons','weapon','swords','uses','taking'] and mtshan as ['night','reason','nights','name','features','title','known as','sexual organ','organ'] -- 'weapon' is not among the mtshan senses. Geshe Michael's English for this very phrase reads 'takes a weapon and delivers a blow'. PARALLEL-WITNESS CHECK DONE by SQL over all 42,199 corpus rows: 'mtshon bsnun' occurs at C05:459, C05:460, C11:140, C12:110, C16:969, C16:970, C18:247, GK:192, GK:363 and GK:364 (GK:364 carries an in-corpus editorial correction of exactly this collocation, 'mtshon ba snun {%mtshon bsnun}'). 'mtshan bsnun' occurs only at C05:344, C05:462 and their C16 twins C16:865 and C16:972; C16:865 was verified byte-identical to C05:344 in BOTH the wylie and the english column by SQL equality, so it is the same file re-ingested and NOT an independent witness. The ACIP, the source of record, reads MTSAN BSNUN at both C05 rows and MTSON BSNUN at C05:459/460 in this same file. Confidence is PROBABLE rather than CONFIRMED because the wrong spelling occurs twice in this file (344 and 462) against two correct occurrences (459, 460), so it is a repeated keying slip rather than a single stroke. mtshan is nulled in the spec so that 'weapon' never enters the bank keyed to the corrupt form.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-293",
+  "course": "C05",
+  "segment": "C05:348",
+  "kind": "TIBETAN_SPELLING",
+  "found": "gthu dang 'jab bus bdag gir byed",
+  "expected": "mthu dang 'jab bus bdag gir byed",
+  "evidence": "The ACIP of this same row (source of record) reads ',GTHU DANG 'JAB BUS BDAG GIR BYED,', so this is source keying, not an EWTS-conversion artefact. GTHU is not a legal Tibetan syllable: the prefix GA attaches only to C, NY, T, D, N, TS, ZH, Z, Y, SH and S, never to THA. The expected reading is mthu, 'force, power', which is what Geshe Michael's English on this row renders ('by means of force or stealth'). INTERNAL WITNESS: the First Dalai Lama's commentary on this very verse, at C05:351, unpacks the stealing line as `gzhan gyi nor mthu dbang cha dang 'jab bus ma tshor bar bdag gir byed pa'o` and Geshe Michael renders it 'whether it be by means of superior force or by stealth' -- the same force/stealth pair, spelled mthu. PARALLEL-WITNESS CHECK RUN THREE WAYS. (a) `wylie like '%gthu%'` over the whole spine returns exactly two rows, C05:348 and C16:869, and C16:869 is byte-identical to C05:348 in BOTH columns, i.e. the same file re-ingested and not an independent witness (C05_CAMPAIGN.md records C16 as sharing 263 byte-identical rows). (b) The same root verse arrives through a separate ingest at TCS02:72, whose wylie and ACIP read `gathu` / `GATHU` -- also an illegal syllable, and a DIFFERENT corruption, which is evidence of a damaged shared source rather than of a house variant. (c) `wylie like '%mthu dang%''jab%'` returns no rows, so there is no corrected published reading in the spine to defer to either. CAVEAT, stated because it cuts against the filing: the master dictionary carries `gthu` as its own headword with hgm_gloss [\"force\"] at GLOSSARY tier, so an ACI course glossary has already absorbed this spelling -- almost certainly from this verse, since the same master glosses `mthu` separately as [\"strength\", \"power\", \"potent\", \"ability\"]. Nothing false is banked either way: the page quotes the wylie verbatim as `gthu` and links it to 'force', which is what the glossary itself says.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-294",
+  "course": "C05",
+  "segment": "C05:349",
+  "kind": "TIBETAN_SPELLING",
+  "found": "gzhan bsad pa'o",
+  "expected": "gzhan gsad pa'o",
+  "evidence": "This row re-quotes the Abhidharmakosha IV root line inside Gendun Drup's commentary, and the ACIP (source of record) reads GZHAN BSAD PA'O. Every witness to the verse itself reads the FUTURE stem gsad: C05:348 (the verse row in this same course) has 'ma nor bar ni gzhan gsad pa'o', and TCS02:72 carries the same verse line and also reads 'gzhan gsad pa'o'. TCS02:72 is an independent keying, not a re-ingest - it spells the next line 'gathu' where C05:348 spells 'gthu'. C16:870 is byte-identical to this row in BOTH columns (same file re-ingested) and is therefore not a witness; there is no independent witness to this commentary row at all. Caveat keeping this UNCERTAIN: gsad (future) and bsad (past) are both legal stems of gsod pa, C05:447 ('gzhan bsad pa la sogs pas') and C05:453 ('gzhan bsad pa dang') use bsad correctly in prose in this same course, and a commentary running a verse line into its own prose may legitimately normalise the stem. What is demonstrable is an internal inconsistency in how Course V quotes one verse line one segment apart; that it is a keying defect rather than the blockprint's own variation is only probable.",
+  "severity": "LOW",
+  "confidence": "UNCERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-295",
+  "course": "C05",
+  "segment": "C05:350",
+  "kind": "FORMATTING",
+  "found": "no \"actual- commission\" stage of an act occurs",
+  "expected": "no \"actual-commission\" stage of an act occurs",
+  "evidence": "THIS SEGMENT CARRIES BOTH SPELLINGS: its first sentence has 'actual- commission' (hyphen + space) and its second has 'actual-commission' (closed up), so the contrast is internal to the row and needs no external comparison. Hyphen-plus-space is the digitisation signature of a hyphenated line break, the same class already filed at C01:355 'cause-and- effect', C01:379 'oh-so- vivid', C01:380 'non- existence', C03:144 'cross- legged' and C05:275 'non- Buddhist'. PARALLEL WITNESS CHECKED: corpus-wide the spaced form occurs in 4 rows (C05:350, C05:369, C16:871, C16:886) and the closed form in 3 (C05:350, C16:871, TCS02:72). The only other carriers are C16:871 and C16:886, and C16:871 is BYTE-IDENTICAL to C05:350 in BOTH the wylie and the English (verified by SQL equality) -- the same file re-ingested, NOT an independent witness. No independent printing was found, so this stays PROBABLE rather than CONFIRMED. Geshe Michael's English stays verbatim on the page; the register carries the defect.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-296",
+  "course": "C05",
+  "segment": "C05:346",
+  "kind": "TIBETAN_SPELLING",
+  "found": "dmag la sogs ba byas nas",
+  "expected": "dmag la sogs pa byas nas",
+  "evidence": "ONE ROW, TWO SPELLINGS OF ONE PHRASE. C05:346 writes `dmag la sogs ba byas nas` at its opening and `dmag la sogs par gsod pa'i don gcig` twenty words later -- the same phrase, ba and then pa. Geshe Michael renders them 'a war or similar activity' and '(or whatever activity it may be)', so the two are the same phrase in the English too. CONFIDENCE IS UNCERTAIN ON PURPOSE, AND THE REASON IS THE INTERESTING PART. `la sogs pa` runs 1,608 corpus rows across 61 courses; `la sogs ba` runs 4 -- C05:346, its byte-identical C16 re-ingest at C16:867, and TCS04PrayerBook:124 and TCS13:881. Those last two are genuinely independent documents, and I read both rather than trusting the LIKE match -- TCS04PrayerBook:124 reads `lha mo tsa rtsi ka la sogs ba rnams kyis` and TCS13:881 reads `zhes bya ba la sogs ba lugs ldog tu`, so the spelling is ATTESTED OUTSIDE this row and cannot be called a keying error on the evidence available. It is filed as a recorded variant, not as a fault. WHAT IS CERTAIN, AND IS WHY THIS IS WORTH BANKING AT ALL: the master carries `la sogs ba` as its OWN glossary-tier headword, status 'hgm-attested (not in Great Dictionary)', hgm_gloss ['or similar'], and its recorded corpus_occurrences are exactly those four segments ({'courses': ['C05','C16','TCS04PrayerBook','TCS13'], 'n_segments': 4}). Its sibling `la sogs pa` is hgm-attested with 888 segments across 54 courses and means the same thing. So a four-occurrence orthographic variant has minted a near-duplicate dictionary headword scaffolded from its own occurrences -- the same shape as E-289 (`ma byin lan`), found here by running E-289's own test rather than by accident. The difference matters and is recorded: `ma byin lan` had no witness outside its row and its clone; this one has two. NO SPAN WAS CHANGED. The alignment quotes the wylie as written, per the verbatim rule, and both spellings carry the standing sogs licensor (c5p116/s346w2, c5p116/s346w15).",
+  "severity": "LOW",
+  "confidence": "UNCERTAIN",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
