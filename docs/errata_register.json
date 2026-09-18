@@ -3442,5 +3442,41 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-288",
+  "course": "C05",
+  "segment": "C05:334",
+  "kind": "ENGLISH_TYPO",
+  "found": "the their individual definitions",
+  "expected": "their individual definitions",
+  "evidence": "Doubled determiner: 'the their'. THE DEFECT IS CERTAIN - the string is not English and fails on its own terms before the Tibetan is consulted. THE REPAIR IS NOT DECIDED: either a stray 'the' before 'their' (the expected value given here, the minimal edit), or a mis-keying of 'then', since the sentence is a first/.../finally series ('We present first ... , [then] their individual definitions, and finally ...'). The Tibetan second item is bare so so'i mtshan nyid, which carries no exponent that chooses between the two repairs. PARALLEL WITNESS CHECKED: 'the their individual definitions' occurs in exactly 2 of the 42,199 corpus rows, C05:334 and C16:859; C05_CAMPAIGN.md records C16 as the same file re-ingested (263 byte-identical rows) and so NOT an independent witness - the two rows differ only in the glued heading's page number, 73 vs 36. 'then their individual' occurs 0 times in the corpus. No C15/C18/C09/C17 row carries the sentence. So the string is attested once, in one source.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-289",
+  "course": "C05",
+  "segment": "C05:335",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ma byin lan",
+  "expected": "ma byin len",
+  "evidence": "The fourth non-virtue is ma byin len, 'taking what is not given'. Gendun Drup's own prose restatement of this same root verse, two rows later at C05:337, reads 'log par g-yem pa brnab sems ma byin len gsum' - the identical three-item list - and C05:374 reads 'ma byin len dang log g-yem dang brnab sems'. Across the whole spine the spelling 'ma byin len' appears in 14 rows and 7 courses; 'ma byin lan' appears in exactly 2, this row and C16:860, which is byte-identical to it in all three columns (wylie, english and acip, verified by SQL equality) and is therefore the same file re-ingested, not an independent witness. The ACIP, which is the source of record, reads MA BYIN LAN, so the defect is in the keying and not in the wylie conversion. NOTE ON THE MASTER, because it is the trap here: the master does carry 'ma byin lan' as its own glossary-tier headword (id 24456, hgm_gloss ['stealing'], status 'hgm-attested (not in Great Dictionary)'), and both proposing analysts cleared the row on that basis. That clearance is circular - the entry's own recorded corpus_occurrences are exactly ['C05','C16'], n_segments 2, i.e. this row and its clone, so the headword was scaffolded FROM the defect. The comparison entry 'ma byin len' (id 13823) carries Sanskrit adattadana/adattadana, a Hopkins gloss, and 13 segments across 7 courses. The consequence is live: the defect has already minted a phantom master headword. Geshe Michael's English ('Stealing') is correct either way and is untouched; the alignment span quotes the wylie as written, per the verbatim rule.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-290",
+  "course": "C05",
+  "segment": "C05:342",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "arises from a view about the virtues and non-virtues that are all part of names and forms in general",
+  "expected": "the Tibetan is `ming gzugs kyis bsdus pa'i dge mi dge MED PAR lta ba las byung ba'i phyir` -- the view is that the virtue and non-virtue subsumed under name and form DO NOT EXIST. `med par` has no exponent in the English: \"a view about the virtues and non-virtues\" carries no negation, and a view merely about virtue and non-virtue is not itself a non-virtue at all.",
+  "evidence": "Reconciler re-derived every claim below from the spine on 2026-09-18. NOT AN INGEST DROP: the ACIP column, the source of record, reads `MING GZUGS KYIS BSDUS PA'I DGE MI DGE MED PAR LTA BA LAS BYUNG BA'I PHYIR` -- `MED PAR` is present in both the wylie and the ACIP, so the negation is in the Tibetan and missing only from the English. PARALLEL-WITNESS CHECK, RUN AND EMPTY: `wylie like '%cha gsum pa%gzhi ni ming dang gzugs%'` returns C05:342 alone; `english like '%a view about the virtues and non-virtues%'` returns C05:342 alone; `wylie like '%dge mi dge med par lta ba%'` returns C05:342 alone. C16, which re-ingests 263 byte-identical rows of this file, does not carry this row, so there is no second reading and no published variant to defer to. INTERNAL WITNESS, same course and same text: C05:362 reads `dge ba dang mi dge ba med par lta ba ni log par lta ba'o` and Geshe Michael renders it \"And mistaken view is the idea that neither virtue nor non-virtue even exists\" -- the identical construction, with the negation rendered. DOCTRINAL COROBORATION, offered as support only: the non-virtue of the third division under discussion is log par lta ba, whose standard definition is precisely the denial that virtue and non-virtue exist, so the negation is the load-bearing word of the clause. `med` is nulled in the spec, so nothing enters the bank from it and Geshe Michael's English stands verbatim.",
+  "severity": "MEDIUM",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
