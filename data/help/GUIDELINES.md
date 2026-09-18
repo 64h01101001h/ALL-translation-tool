@@ -220,9 +220,10 @@ treats pronunciation as derived data with an authority lane:
   other layers are reference comparanda, each under its own
   license lane (ingest / link-out / never ship), each attributed.
 - **AI never touches Geshe Michael's words.** Machine work may
-  MATCH his published English from corpus evidence, never COMPOSE
-  or edit it. AI-drafted reference entries live in their own tier,
-  under an unmistakable banner, suppressed wherever he speaks.
+  MATCH Geshe Michael's published English from corpus evidence, never
+  COMPOSE or edit it. AI-drafted reference entries live in their own
+  tier, under an unmistakable banner, suppressed wherever Geshe
+  Michael speaks.
 
 What THL's catalogs add to the reference picture:
 

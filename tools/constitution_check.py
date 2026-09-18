@@ -130,9 +130,19 @@ def main():
     if os.path.exists(baseline_path):
         R3_BASELINE = int(read(baseline_path).strip())
     if R3_BASELINE is None:
-        with open(baseline_path, "w") as f:
-            f.write(str(msgbox) + "\n")
-        notes.append(f"R3 baseline installed: {msgbox} modal sites")
+        # GATE-4, the third and last site. G2 and G3 were fixed for this in
+        # August and R3 was left behind: the gate used to WRITE
+        # tools/constitution_baseline.txt at whatever the current count was
+        # and exit 0. Two faults in one branch -- the ratchet re-installs
+        # itself at a number nobody reviewed, and a check run leaves
+        # `git status` dirty, which package_macos.sh reads (REL-1) and
+        # answers by renaming the artifact `-dirty`. A press could be
+        # renamed because a gate edited the tree while judging it.
+        # Installing a first baseline is a person's one-line commit.
+        fails.append(
+            "R3 baseline file missing (tools/constitution_baseline.txt) - "
+            "the modal-site census has no ratchet to check against; commit "
+            "the baseline (the gate no longer installs it itself, GATE-4)")
     elif msgbox > R3_BASELINE:
         fails.append(
             f"R3 app/main.cpp: modal call sites grew "
@@ -436,10 +446,19 @@ def main():
             if "|| true" in ln or "||true" in ln:
                 continue
             live += 1
-        if rel_sh and live == 0:
+        # A MISSING tools/release.sh is a FAIL, not a pass. `rel_sh and`
+        # made deleting the file disarm all three release-ritual rules
+        # silently -- precisely the defect STATIC-3/L3 was fixed for
+        # ("deleting the very file L3 exists to police left the gate
+        # printing all rules hold with exit 0"), repeated thirty lines
+        # below the shell_verdict code that closed it. G2/G3 fail on a
+        # missing baseline; L2/L3 fail on a missing subprocess; C2 now
+        # fails on a missing release.sh.
+        if live == 0:
             fails.append(
                 f"C2 tools/release.sh: the {label} ('{gate}') has no "
-                f"live invocation - deleted or disarmed; the release "
+                f"live invocation - the file is missing, or the gate "
+                f"was deleted or disarmed; the release "
                 f"ritual must keep its gates (REL-5, the MEM-5 decay "
                 f"mode)")
     for gate, label in (("ctest", "battery gate"),

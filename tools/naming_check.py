@@ -13,8 +13,14 @@ scripts. It was reverted wholesale. This gate exists so the rule survives
 without anyone reaching for that regex again.
 
 What it will NOT look at, ever:
-  - anything under data/ -- the dictionary and the alignment bank carry Geshe
-    Michael's own English and are nobody's to edit
+  - the SOURCE MATERIAL under data/ -- the dictionary, the corpus and the
+    alignment bank carry Geshe Michael's own English and are nobody's to edit.
+    NOT the whole of data/, which is what the exclusion used to say: data/help/
+    is hand-written help prose that app/main.cpp loads into the Help window and
+    shows to the user, and the blanket exclusion hid 53 pronoun lines in it --
+    more than the whole rest of the tree. The gate that skips what the user
+    reads is the wrong way round, the same fault the digest rule below was
+    written for.
   - quoted source: '>' blocks and table rows in docs are verbatim transcript
     and verbatim rulings; the pronouns inside them belong to whoever the
     speaker was talking about
@@ -124,6 +130,26 @@ def scan(root):
             # of what leadership actually received, and rewriting that record
             # would be a worse fault than the wording.
             if PRON.search(s) if digest else (NAMES.search(s) and PRON.search(s)):
+                hits.append((rel, i, s.strip()))
+
+    # data/help/*.md is SHIPPED PROSE, not source material: app/main.cpp
+    # loadChapters() reads tutorials.md, USER_MANUAL.md and GUIDELINES.md into
+    # the Help window. Flagged on the PRONOUN ALONE, for the digest's reason --
+    # these pages are about Geshe Michael from their first line, so requiring
+    # the name on the same line finds almost none of it. Measured when this
+    # landed: name+pronoun would have caught 3 of 53. SOURCES.md alone had 16
+    # the narrow rule could not see, starting with a sentence whose name is on
+    # line 3 and whose three pronouns are on lines 4 and 5.
+    for p in sorted(glob.glob(os.path.join(root, "data/help/**/*.md"),
+                              recursive=True)):
+        rel = os.path.relpath(p, root)
+        for i, line in enumerate(io.open(p, encoding="utf-8",
+                                         errors="replace"), start=1):
+            s = line.rstrip("\n")
+            t = s.lstrip()
+            if t.startswith(">") or t.startswith("|"):
+                continue
+            if PRON.search(s):
                 hits.append((rel, i, s.strip()))
     return hits
 

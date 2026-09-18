@@ -112,6 +112,25 @@ line never lights up by accident.
 The display follows the source file's own line breaks and blank
 lines — the text is never re-flowed.
 
+
+### Reading with the keyboard
+
+Once any phrase is lit, the arrow keys become the reading
+controls:
+
+- **→ / ←** — walk the highlight through the text, phrase by
+  phrase: at each stop the longest phrase the dictionary knows
+  lights up, exactly as if you had clicked there. Stops with no
+  dictionary phrase (bare particles) still show their card and the
+  walk continues.
+- **↓** — step down the nesting chain in place (same as clicking
+  again).
+- **↑** — climb back up to the longer phrase.
+
+The card follows every move, and the view scrolls to keep the
+highlight visible. Until something is highlighted, the arrows keep
+their ordinary text-caret behavior.
+
 ### The Display panel (left column, under "Display")
 
 Every choice here is remembered across sessions.
@@ -147,7 +166,9 @@ on or off (defaults in parentheses):
 | **grammar marks & particle notes** (on) | particle roles, suffix-agreement lines, fused-particle notes on the card AND the dotted-amber marks in the document |
 | **Sanskrit reference** (off) | Sanskrit equivalences (Mahāvyutpatti) on the card |
 | **Hopkins reference** (off) | the Hopkins reference layer on the card |
-| **reference dictionaries (LC/TD/THL)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
+| **84000 glossary (CC BY)** (on) | the 84000 translation glossary block on the card — reference only, clearly labeled, with its link back to the original entry and (since the 2026-08-20 merge of 84000's official live glossary) "attested in" links to the published works that carry the term |
+| **Das 1902 / Jäschke 1881 page links** (on) | the "open the page scan" links into Das's 1902 and Jäschke's 1881 dictionaries (both public domain), shown with the other reference material — Jäschke opens at letter-section accuracy (±page) |
+| **reference dictionaries (LC/TD/THL/OT/IW)** (on) | the Lokesh Chandra / TibetanDictionary / THL reference stacks on the card |
 | **Botok segmentation (reference)** (off) | an independent segmenter's reading of the clicked spot, labeled reference-only |
 | **unattested-word hints (segmenter + Monlam)** (off) | hints in the document for words no list attests |
 
@@ -158,6 +179,39 @@ rebuild the display — and they restore your card afterward.
 
 Below the toggles a hint line reminds you: "Click a shaded word to
 see its context; click again to cycle."
+
+
+Choosing **Pronunciation (GMR)** renders the ENTIRE text as
+phonetics in Geshe Michael's convention — the same battery-proven
+engine the cards use, applied with its own word segmentation, so
+syllables that merge into one spoken word render once (*bsod
+nams* = **sunam**, never "so nam"; *skabs 'dir* = **kabdir**) and
+junction sound changes are correct. Clicking and the arrow keys
+work exactly as in the other modes (a merged word answers for its
+first syllable). Anything the engine cannot pronounce appears in
+⟨angle brackets⟩ rather than being dropped or guessed.
+
+**Pronunciation (THL)** renders the text in the THL Simplified
+Phonetic Transcription (Germano & Tournadre, THL) — the scholarly
+standard used across the Tibetan & Himalayan Library. The engine
+was implemented rule-for-rule from THL's published standard and is
+proven against the standard's own complete example battery (139
+cases, including its 19-word exception list) on every build. It
+renders per syllable in THL's own interim machine convention:
+word-final é and the *ba*→*wa* rule apply only where word
+boundaries are certain, and unresolvable syllables appear in
+⟨angle brackets⟩ — never guesses. GMR remains the binding spoken
+convention of this project; the THL mode is a labeled scholarly
+reference.
+
+**Approved rulings override the engine.** When the authority
+approves a pronunciation proposal (the 205-row prenasal register is
+seeded in the Approval queue — its first row is Geshe Michael's own
+*kamdir* for *skabs 'dir*), the ruling becomes a live layer over
+the engine: the display says **kamdir** where the engine alone
+would say *kabdir*, from the next launch. The canonical engine is
+never modified — rulings are data, each with who ruled and when.
+
 
 ### The card — what you get when you click
 
@@ -172,8 +226,9 @@ of the phrase chain. Reading it top to bottom:
   machine-aligned and looks provisional (amber) wherever it
   appears.
 - **Geshe Michael's English** (the binding layer) and, with
-  "corpus usage" on, his **actual renderings course by course** —
-  the concordance of how HE rendered this word across his corpus.
+  "corpus usage" on, the **actual renderings course by course** —
+  the concordance of how Geshe Michael rendered this word across
+  that corpus.
 - **Reference definitions**, each clearly labeled as reference —
   never presented as HGM material.
 - **Sanskrit equivalences** (Mahāvyutpatti bridge), if toggled on.
@@ -189,18 +244,20 @@ of the phrase chain. Reading it top to bottom:
 - **Verb tense paradigms**, where the dictionary has tense
   evidence.
 - **Expansions of abbreviations**: orthographic abbreviations
-  (bskungs yig, from the TibSchol/rKTs table, CC0 — "reference;
+  (bskungs yig, from the TibSchol table, CC0, and the rKTs
+  Abbreviations list, CC BY 4.0 — each expansion names its
+  attesting table — "reference;
   not a typo") and bsdus-tshig contractions with their shared
   gloss — both labeled with their derived register.
 - **Published footnotes** that deal with this term.
 - **"Geshe Michael teaching this term"** — timecoded links that
-  open his recorded classes at the moment he teaches the term.
-  These are machine-located from class captions: candidates. **The
+  open the recorded classes at the moment Geshe Michael teaches the term.
+  These are moments where Geshe Michael says the Tibetan phrase itself (phonetic match; machine-located from class captions: candidates. **The
   recording is the authority**, always; non-English sessions are
   tagged so you are not surprised.
-- **"He says this word"** — a second tier locating moments where
-  he speaks the Tibetan itself, matched phonetically on his own
-  convention. Candidates; homophones share moments — the card says
+- **"Geshe Michael says this word"** — a second tier locating moments
+  where Geshe Michael speaks the Tibetan itself, matched phonetically
+  on the GMR convention. Candidates; homophones share moments — the card says
   so.
 - **"Das 1902 · ~p.N (reference)"** — a link that opens Sarat
   Chandra Das's 1902 dictionary INSIDE the app at approximately
@@ -276,20 +333,92 @@ never edits the texts itself. When the authority **DECLINES** one,
 the form has been ruled VALID, and the app stops doubting it —
 everywhere, for the whole team, from the next launch on.
 
+**Verse meter…** — syllable-count analysis of the document.
+Sustained runs of shad-delimited lines on one odd count (7, 9,
+11…) are reported as verse blocks; lines off the count are
+flagged in red for YOUR judgment — an extra syllable from a
+keying slip and one from poetic license look identical to
+arithmetic, so the tool never decides which. Click any block or
+flagged line to jump there.
+
+**Text DNA (structure strip)…** — the whole text's shape in one
+picture: each source line is one colored column — gold on the
+dominant meter, vermilion for a verse line off the meter, grey for
+prose, pale for blank, with a green tick over lines carrying a
+quote announcement (…*zhes/ces* + a speech verb). The summary line
+gives the counts; hover for any line's number and syllables; click
+anywhere and the document jumps there. Pure measurement — the
+strip shows only what the syllable arithmetic and the quote
+grammar actually found.
+
+**Prose & prayer reader (syllable counts)…** — the whole
+document, line by line, every line carrying its syllable count
+in a bracket at the left margin. This is the structural view:
+verse blocks appear grouped under their meter heading
+(**7-SYLLABLE VERSE**), on-meter counts show in green, an
+off-meter line shows its arithmetic in red (`8 ≠ 7`), and prose
+stretches are labeled and left plain with grey counts. The
+summary line at the top gives the shape of the text at a glance —
+how many lines, how many in verse, on which meters (7s and 9s
+dominate the Tengyur). Tap any line to jump to it in the
+document. The reader is **live**: keep it open while you edit and
+the counts re-tally as you type — watching the count is itself a
+way of learning the structure. Even-count **song meters (mgur —
+6 or 8 syllables)** group too, under a stricter rule so prose
+cannot masquerade as song, and their headings say SONG METER
+(MGUR). Each meter heading also tells you how common that meter
+is **across the whole installed canon** — a census over all
+14 million lines of the Kangyur, Tengyur, and Sungbum found
+333,802 verse lines, of which the classic 7-syllable meter
+carries 61%, the 5-syllable 15%, the 9-syllable 8.5%, and the
+6-syllable song meter 6% — so the reader can tell you when a
+text is written in something rare.
+
+**Citations & quotations…** — the upfront citation work, done
+for you. The moment you open a text, the hint line tells you how
+many quotations it carries and how many cited sources resolved to
+works in your Library. The button builds the full report: **TEXTS
+YOU WILL ENCOUNTER**, each with a direct open-in-Library link and,
+beneath it, every quotation from your document — clickable both
+into *your* text and, where the exact phrasing was found, **into
+the cited source at its line**. Quotations whose source isn't
+announced get a one-click hunt across the whole Library.
+**Export quotations & bibliography document…** compiles
+everything — full quotations grouped under their works with file
+paths and located lines — into a side document you can save.
+Detection is heuristic (…*zhes/ces* + a speech verb; *zhes bya
+ba* namings excluded) and everything says so: verify before
+publication.
+
+**Outline (sa bcad)…** — the text's own structural outline,
+extracted from its enumeration grammar (…*la gnyis* opens a
+division; *dang po*, *gnyis pa*… are its headings). The tree is
+machine-derived and heuristic — honestly incomplete where the
+text's phrasing departs from the classic formulas. Click any
+heading to jump the document there; the scan follow-along keeps
+pace, so outline → passage → carving is one click.
+
 **Teachings for this text…** (button). Press it with a document
 loaded and the app sweeps every term the text contains and reports
 where Geshe Michael taught each one — a dialog titled "Teachings
 for this text — machine-located; the recordings are the
-authority", listing timecoded class links per term, both by his
-English and by the spoken Tibetan. This is the translator's
+authority", listing timecoded class links per term, both by Geshe
+Michael's English and by the spoken Tibetan. This is the translator's
 companion sheet: print-worthy preparation for translating the
 text. Terms with no located moments say so honestly — the index
 grows as more classes are indexed.
 
-### SCANS (left column, under the gold SCANS heading)
+### SCANS (the viewer lives here; the one-shot tools moved to Read → Scans)
 
 This is the one Overlay feature that touches the network (BDRC's
 public image servers).
+
+**THL Degé catalog link** — when the open text is a Degé Kangyur
+file (KD…), a link appears under the scans button: **THL Degé
+catalog: D.NNN**. It maps your text's Tohoku number to THL's own
+catalog number through the 919-entry verified title concordance —
+never by assuming the numbers are equal (they drift). Texts the
+concordance could not match honestly get no link.
 
 **Follow along in scans (BDRC)** — the main button. Its label
 depends on what the app knows:
@@ -302,6 +431,13 @@ depends on what the app knows:
   keeps pace. The current line is banded on the image, its
   placement honestly approximate. Folio-to-image mapping comes
   from BDRC's own IIIF manifest labels — nothing is guessed.
+- Sungbum texts: over 500 collected-works texts across some
+  thirty authors now map straight to their own scans (title-
+  matched links; the tier is recorded per text). Where the
+  archive's manifest carries no folio labels (common for
+  collected-works volumes), the viewer POSITION-MAPS your
+  keying's own @folio sequence onto the pages in order — labeled
+  as such, with ◀ ▶ to nudge if the alignment drifts a page.
 - If no catalog mapping exists, the button reads **Find scans on
   BDRC (title search)…** and opens a dialog instead:
   1. The query box is pre-filled with the text's own opening line
@@ -315,6 +451,49 @@ depends on what the app knows:
      automatically — and the link is remembered for this text, so
      next time the button goes straight to Follow along.
 
+**Right-click in the document box — the folio jump menu.** The
+top of the context menu identifies where you are — **folio 94a ·
+line 3/7** — read from the text's own @folio markers and the
+input centers' preserved line breaks (exact counting, never a
+guess). Below it:
+
+- **Show this folio in the scan panel** — turns the follow-along
+  viewer to that side.
+- **Open this folio in the Input workflow** — downloads that one
+  folio image if needed (it lands in the offline store, below) and
+  opens it in the Input pane's scan viewer, switching you there —
+  ready to key or compare against the carving.
+- **Locate selection on the woodblock…** — opens the full scan
+  viewer on that folio with your **highlighted words boxed on the
+  carving itself** (OCR word boxes, used only to locate — the
+  recognized text is never shown as text). The line you were in is
+  banded for context, the result is reported beside the breadcrumb
+  ("2 of 2 words located…"), and any word OCR could not find on
+  that side is named there, never silently dropped. All the
+  viewer's tools (zoom, pan, adjust, thumbnails) work on the
+  highlighted page.
+- **Download all N folio scans (offline + Input)…** — fetches the
+  whole volume into `library/scans/<work>/` as folio-named files
+  (`094a.jpg`). From then on the follow-along works offline, and
+  **Open scan folder…** in the Input workflow opens the volume in
+  folio order. Strongly recommended when you start working with a
+  new text — the app suggests it as soon as the scans are linked.
+- **Compare with the eKangyur / eTengyur edition (Toh N)…** —
+  Degé Kangyur (KD) and Degé Tengyur (TD) texts: your document (converted through the proven
+  ACIP→Unicode chain) is collated against the same text in the
+  Esukhia eKangyur, a Public-Domain e-text of the entire Degé
+  Kangyur installed alongside the app. Red = a reading only in
+  your keying, green = only in the eKangyur; a numbered apparatus
+  lists the sites. Differences are witness readings for YOUR
+  judgment — the tool never auto-corrects either side.
+- **Export folio-faithful text files…** — splits the document at
+  its @folio markers into one text file per woodblock side
+  (`001a.txt`, `001b.txt`…), named to sit beside the downloaded
+  scans — an OCR-ready keying/comparison set that can never
+  disagree with the markers it came from.
+- **Copy location** — puts `work · folio · line` on the clipboard
+  for notes or citations.
+
 **◀ folio / folio ▶** — page through the scans by hand, one folio
 side at a time.
 
@@ -324,6 +503,41 @@ app runs recognition on the current folio image and draws a box
 around **the very word under your cursor, on the woodblock
 itself**. Recognition is used only to LOCATE — never as text.
 
+**Scan viewer (window)…** — the full viewer in its own window,
+modeled closely on BDRC's own BUDA viewer, with its two levels:
+
+*Single-image level.* Left: a collapsible thumbnail rail, one
+entry per folio side (`94a · img.12`), the current side marked in
+red. Pages already downloaded or viewed get their thumbnails
+instantly; the rest fill in on their own from small BDRC preview
+images, fetched politely one at a time — the rail becomes complete
+without downloading the volume. Center: the page on a white sheet over a dark canvas.
+Direct manipulation, exactly as on BDRC: **click the page to zoom
+in at that spot**, **drag to pan**, **pinch (trackpad) or
+⌘-scroll to zoom at the pointer** — plain scrolling still pans.
+Bottom toolbar, left to right: **⬇ Download images** (the whole
+volume into the offline store), **Go to** (a dropdown listing
+every image in the volume — pick one, or type a folio like `94a`
+or an image number and press Return), **◀ / ▶** with the current
+position between them, pan arrows, **⊖ / ⊕** zoom with a percent
+box (**Fit** sizes the page to the window), **⤢ full screen**,
+**◐** brightness/contrast/invert (display-only — the scan file is
+never altered; invert helps faint carvings), and **ⓘ** the scan's
+identity, license, and attribution. Keyboard: **⌘→ / ⌘←** turn
+folios, **⌘+ / ⌘−** zoom, **⌘0** fits the page.
+
+*Whole-work level.* The top of the window is a **breadcrumb**:
+`▤ work | folio 94a`. Click the work name and the canvas becomes
+one continuous scroll of **every folio side in the volume**, each
+captioned, downloaded pages shown full width (pages not yet
+downloaded say so — ⬇ Download images fills them in). Click any
+page (or the folio crumb) to drop back to the single-image level
+on that side. Here a **Show e-text** toggle appears: under every
+folio image, the input centers' own keying of that side, split
+from the loaded document's @folio markers — scan and e-text
+scrolling together, side by side. Also reachable from the
+document box's right-click menu.
+
 **Illustration gallery (cached scans)** — searches this volume's
 already-downloaded pages for woodblock miniatures and diagrams and
 shows the crops as a gallery. Candidates only, machine-found,
@@ -332,14 +546,44 @@ are searched (pages cache as you view them in Follow along). If no
 volume is linked yet, the app tells you to link one first (Follow
 along / Search BDRC).
 
-*Worked example:* Read → Library → double-click **KD0016** (the
-Diamond Cutter). Press **Follow along in scans (BDRC)** — the
+**Four-layer view (this folio)…** — the folio you are reading in
+four synchronized layers: the woodblock scan on top; beneath it a
+line table with the OCR reading (machine-derived review material,
+clearly labeled; absent when the models are not installed), the
+e-text exactly as the input centers keyed it, and the master's
+published English wherever that exact line is attested in the
+aligned corpus. Click any row and its band lights on the carving —
+with the OCR's real line geometry when available, uniform
+arithmetic (labeled approximate) when not.
+
+**Illustration gallery (whole volume)…** — the same candidate
+search over the ENTIRE linked volume: every folio side BDRC lists
+is fetched (reduced size, cached under the volume's own folder,
+with a progress bar and a Stop button; already-cached pages are
+not refetched), then all of them are searched. Fetch failures and
+early stops are reported in the gallery title, never hidden.
+
+*Worked example:* Read → Library → open the Kangyur folder
+**7. SHER PHYIN SNA TSOGS** → VOL 1 (KA) → double-click
+**KL00016E — the Diamond Cutter**. Press **Follow along in scans
+(bdr:MW26071_0018)** — the number differs from the file's KL16 on
+purpose: the app routes Lhasa texts through a verified title
+concordance, because BDRC's part numbers follow the Lhasa (H)
+catalog, not ACIP's KL numbers. The
 woodblock pages open beneath the text. Click into different parts
 of the document box and watch the folio image turn to follow your
 cursor. Press **locate word (OCR)** and the word at your cursor is
 boxed on the carving.
 
-### FORMAT & EXPORT (left column, under the gold heading)
+**English on the carving (hover).** Once locate-word has run on a
+side, hovering any word *on the woodblock image* shows a small tip:
+the OCR-read wylie and Geshe Michael's English for that word (when
+the dictionary carries it). The tip always says what it is —
+OCR-read from the carving, review material, never text. Hovering
+never starts an OCR run by itself; the boxes come from the
+locate-word pass you already ran.
+
+### FORMAT & EXPORT — MOVED: these tools now live in Read → Export
 
 - **Prepare for translation (Mixed Nuts)…** — runs Geshe Michael's
   demonstrated translation-preparation format on the loaded text:
@@ -354,17 +598,116 @@ boxed on the carving.
   converter could not prove is wrapped in visible markers instead
   of being silently approximated, and the first few are listed.
 
+
+### The Pecha Maker
+
+**Make pecha (PDF)…** turns the loaded document into an authentic
+long-format pecha — the TibetDoc workflow, rebuilt native and
+crash-free:
+
+1. Load any text (Library double-click or paste) and press the
+   button under FORMAT & EXPORT.
+2. Choose the page — **traditional pecha (42 × 9 cm)**, wide
+   (45 × 10 cm), A4 landscape, or the **Degé woodblock measure
+   (68 × 10 cm)** — the lines per side (5–9; seven is the
+   classical look), and the **rule weight** (Fine, Classic,
+   Bold — the page furniture). The **classical opening** option
+   sets the first two text sides at 5 lines with larger letters,
+   as in the great woodblock editions (per THL's Degé
+   documentation). For verse texts, **verse lineation** keeps the
+   poet's own lines: each source line becomes a pecha line and a
+   blank line becomes a stanza gap — off by default, since prose
+   pechas flow continuously.
+3. Choose the **print layout**: native folio sheets at true size
+   for a print shop; **two-up on A4 / US Letter with cut
+   marks** — two folio sides per office sheet, corner ticks to
+   trim on, each side labeled; **three-up on A4** — three folio
+   strips per sheet, the classic office pecha layout; or the
+   **A5 booklet** — sides imposed in saddle-stitch order, two
+   rotated pages per A4 face with a dashed fold line and the
+   duplex instruction (flip on the short edge) printed on the
+   first sheet, short runs padded with blanks to a multiple of
+   four. Lines justify the **traditional way** (v4, from the
+   W3C/r12a layout rules): a line ending in a tsheg pads with
+   repeated tshegs to the margin, exactly as woodblocks do; and
+   when a lone final syllable wraps onto a new line, its shad is
+   set as the **rin chen spungs shad ༑** — the classical optical
+   signal, recomputed automatically on every reflow. Lines ending in a double shad justify the second classical way: the gap stretches so the closing shad sits flush at the margin. The sbrul
+   shad ༈ travels in an unbreakable block. Office layouts can open with a
+   **cover sheet** — a framed label page carrying the title,
+   volume letter, folio count, and date — the handling page a
+   print partner or a shelf needs.
+4. Optionally give the pecha its traditional dress:
+   - **Ornamental title folio (1a)** — type the title in wylie or
+     Tibetan; it is set centered in a double ornamental frame on
+     the first side, and the text begins on 1b, as in a woodblock
+     print.
+   - **Margin title (ya-yig)** and **volume letter** — a short
+     title and the volume letter (ka, kha, …) join the folio
+     numeral in the rotated recto margin.
+   - **Head mark ༄༅། ། (yig mgo)** opens the text.
+5. Optionally check the interlinear lines:
+   - **Phonetics under each segment** — Geshe Michael's
+     convention, through the same battery-proven engine as the
+     cards.
+   - **English where the corpus attests the exact segment** — a
+     segment gets its English beneath it ONLY when that whole
+     segment exists in the aligned corpus of published
+     translations. The line is a verbatim match; nothing is ever
+     machine-composed, and unattested segments simply show no
+     English. (A selftest proves this end-to-end on every build.)
+6. **Preview…** shows the whole pecha in the viewer before you
+   commit; **Make PDF…** writes it. All options are remembered
+   for next time.
+
+**Batch mode** (Export → *Batch: folder of texts → pecha set…*)
+turns every text file in a chosen folder — ACIP or wylie — into
+its own pecha PDF in an output folder, using your saved options.
+Wylie files convert through the round-trip-proven engine;
+per-text dress (title folio, margin title) stays off in batch,
+since a saved title would be wrong on every other text. It needs
+no loaded document.
+
+Every folio side is framed with the traditional double rule and
+carries its Tibetan folio numeral, rotated on the recto margin as
+in a woodblock print. The script runs through the battery-proven
+conversion chain in your chosen typeface; any syllable the engine
+cannot convert appears as ⟨wylie⟩ — flagged, never guessed. The
+PDF prints at 300 dpi.
+
 ### Resuming work
 
-The Overlay restores your session on every normal launch: same
-file, same scroll position, same cursor. Quit mid-sentence and the
-app reopens exactly there.
+The Overlay restores your session on every normal launch: same document, same scroll, same cursor — and now the same highlight: the span that was lit when you left (including which rung of the nest) lights again on reopen. Your position is also autosaved a few seconds after every cursor move, so even a crash or force-quit loses almost nothing.
 
 
 ## Library
 
+**Keeping the collections current.** Library → **Maintenance… →
+Check for collection updates…** asks asianlegacylibrary.org for
+the official Kangyur / Tengyur / Sungbum releases, shows each
+one's date and size against what this machine has installed
+(release fingerprints are remembered), and offers **Download &
+install…** right in the app — confirm, watch the progress, and
+the collection unpacks exactly as a manual install would. Your
+own materials and working folders are never touched; run "Update
+search index" afterward.
+
+**Importing a new data release.** When the HGM data project
+publishes a new release package (a folder holding
+`hgm_dictionary_v*.json.gz`, and optionally a new parallel corpus
+and reverse index), Library → **Maintenance… → Import data
+release…** and choose the folder. The tool shows what it found —
+the newest version of each file wins — copies the files into the
+data area, rebuilds the spine database with the canonical builder,
+and switches to the new spine on the next launch. Nothing is
+switched if the build fails; the app keeps running on the current
+spine throughout. After restarting, use Approval → **Regenerate
+registers** to re-fold the approved layer onto the fresh release.
+
+
 *Where: Read → Library. The preserved canon on your own disk —
-2,716 texts and 8.68 million lines of ACIP Release 6, plus your
+8,986 texts and 14.1 million lines of the current public
+Kangyur, Tengyur, and Sungbum releases, plus your
 own materials.*
 
 ### The layout
@@ -434,6 +777,32 @@ filtered browse instead. Clear everything and the panel returns to
 - Files from `ocr_out` carry the amber **ocr-derived** warning —
   unverified review material.
 
+
+### The Translator's survey
+
+Three ways in: the visible **Survey…** button in the Library's
+control row, **Maintenance… → Translator's survey (selected
+text)**, and the info panel's **Translator's survey…** link — all
+three read the selected text. The survey answers the
+questions asked before a translation is assigned or begun — from
+the text itself, deterministically:
+
+- **Dictionary coverage** per token, by tier: curated, glossary,
+  PROVISIONAL (amber), reference-only, uncovered.
+- **Top unknown forms** with counts — the vocabulary work ahead.
+- **Canonical quotations** (seven syllables or more, attested
+  only) with the master's published English.
+- **Structure**: explicit bam po / le'u markers, plus the
+  30-syllable-shloka size ESTIMATE, labeled as such.
+- **Form**: verse (with dominant meter and irregular-line count)
+  or prose.
+- **A difficulty ESTIMATE with its formula printed** — uncovered%
+  plus half the provisional% — so you can weigh it yourself.
+
+**Save as Markdown…** writes the report for a team lead's
+assignment discussion. A full volume takes a few seconds; Stop
+abandons cleanly.
+
 ### The maintenance buttons
 
 - **Install collection ZIP…** — installs the canon. Download the
@@ -444,9 +813,9 @@ filtered browse instead. Clear everything and the panel returns to
 - **Import my materials…** — brings your own texts into
   `library/my_materials` (.docx, .txt, .acip, .act, .md, .rtf;
   Word documents convert automatically).
-- **Send to OCR…** — routes a scan image to the Input → Scan pane
+- **Maintenance… → Send to OCR** — routes a scan image to the Input → Scan pane
   for recognition.
-- **Legacy font rescue (UTFC)…** — converts documents typed in
+- **Maintenance… → Legacy font rescue (UTFC)** — converts documents typed in
   pre-Unicode Tibetan fonts of the 1990s (TibetanMachineWeb,
   LTibetan, Sambhota…) to proper Unicode Tibetan, via the
   Universal Tibetan Font Converter run as a separate external
@@ -455,14 +824,188 @@ filtered browse instead. Clear everything and the panel returns to
   appears in the output the app warns you the source encoding was
   probably wrong (wrong guesses produce garbage, not silent
   errors).
-- **Update search index** — refreshes the full-text index that
+- **Maintenance… → Legacy font rescue (py-tiblegenc)** — a second
+  rescue engine covering **28+ encodings through 70 font tables**
+  (the Dedris/Sambhota families and the TibetanMachine range).
+  One-time setup: `bash tools/setup_tiblegenc.sh`. Pick the source
+  font, pick the file, save the rescued Unicode — the engine's own
+  report (including anything it could not map) is shown for
+  review. A rescue is a per-glyph mapping, never blind trust.
+- **Maintenance… → Update search index** — refreshes the full-text index that
   Research → Search's "search the Library" uses. The report counts
   files added / updated / removed / unchanged; a full build
-  indexes all 8.68 million lines in under two minutes, and after
+  indexes all 14.1 million lines in under two minutes, and after
   it the Search pane answers from the index instantly.
 
 
+## Files
+
+*Where: Read → Files. A dual-pane file browser built into the
+app — browse your whole disk side by side, and everything you
+open routes straight into the right pane of the Tool.*
+
+### The layout
+
+Two independent browser panels sit side by side, with the **Drop
+Stack** shelf on the far right. Each panel has:
+
+- **Tabs** along its top — press **+** to open another tab at the
+  current location; close any tab with its ✕ (the last tab
+  stays).
+- **Breadcrumbs** under the tabs — the path as clickable
+  segments; click any ancestor to jump straight up to it.
+- **The file listing** — folders always sort above files; click
+  a column header to re-sort. The left panel starts in your
+  Library folder, the right in your home folder.
+
+### Moving around
+
+- **Double-click a folder** to enter it; use the breadcrumbs to
+  climb back out.
+- **Double-click a file** and it opens in the *right place*:
+  Tibetan text files (.txt/.act/.inc/.acip/.md) open in the
+  Overlay; images (.png/.jpg/.tif…) open in the Input pane's
+  scan viewer; everything else opens in its own Mac
+  application.
+- **hidden files** (top-left toggle) shows dotfiles in both
+  panels.
+
+### Copying and moving between the panes
+
+Select files in one panel (⌘-click and ⇧-click select several;
+**quick select** below grabs whole patterns), then use **Copy →
+/ ← Copy / Move → / ← Move**: everything selected goes to the
+folder the *other* panel is showing. Folders copy and move too,
+recursively. Existing files are never overwritten — collisions
+are skipped and reported.
+
+### Quick select
+
+Type a pattern in the **quick select** box (`*.act`, `S01*`, or
+a full regular expression) and press Return: every matching name
+in the active panel is selected at once, ready to copy, move,
+batch-rename, or trash together.
+
+### Batch rename
+
+Select files, press **Batch rename…**: type find/replace (tick
+**regex** for patterns), watch the live preview of every
+old → new name, then Apply. A rename that would collide with an
+existing name is skipped — nothing is ever overwritten.
+
+### Compare panes
+
+**Compare panes…** reports the two shown folders against each
+other: files only on the left, only on the right, and same-name
+files whose sizes differ. (This level only; subfolders are not
+descended.)
+
+### Sync folders
+
+**Sync folders…** synchronizes the two shown folders — built for
+double-keying partners exchanging work. Choose the direction
+(left → right, right → left, or two-way where the newer copy
+wins) and read the **full plan first**: every row says what would
+be copied and whether it replaces an older copy. Nothing moves
+until you press Apply, and sync **never deletes** anything.
+
+### Commander keys (opt-in)
+
+The **Commander keys** toggle turns on the classic
+Total-Commander function keys for those who grew up with them:
+**F3/F4** open · **F5** copy to the other pane · **F6** move ·
+**F7** new folder · **F8** move to Trash. It is strictly opt-in
+and never replaces normal Mac behavior; renaming in place (click
+the name, or F2) works regardless. The choice is remembered.
+
+### Sync browsing (opt-in)
+
+With **sync browsing** on, entering a folder in one panel also
+enters the same-named folder in the other panel when it exists —
+made for walking two parallel trees side by side (an original
+and its double-keyed copy, two editions of a collection).
+
+### Remote connections
+
+The **Connections** button reaches servers: **FTP, FTPS, WebDAV
+(http/https), and SFTP**. Save a profile (name, protocol, host,
+user, start path) — **passwords are never stored**: you are asked
+when you connect, and the answer lives only until the window
+closes. SFTP authenticates with your SSH keys (~/.ssh) instead.
+Once connected: browse folders, double-click to enter,
+**Download into the active pane** — files or **whole folders,
+recursively** — and **Upload the active pane's selected files
+or whole folders** (the folder structure is recreated on the
+server).
+The conflict rule is yours to choose per batch: **skip existing**
+(the default — never touches what you have), **keep both**
+(the new copy arrives renamed), or **overwrite** (explicit,
+never silent). Every operation is written to the Activity log
+with its result, honestly including failures.
+
+### Workspaces
+
+The **Workspaces** menu saves your entire layout — every tab in
+both panels — under a name, and restores it in one click. Keep
+one workspace per project (a text and its scans side by side, a
+double-keying pair, a comparison set) and switch between them
+instantly. Delete from the same menu.
+
+### Finder tags
+
+Right-click any file: the menu shows its **Finder tags**, so a
+tagging system you maintain in the Finder stays visible here.
+(Finder remains the editor for tags.)
+
+### Favorites and Terminal
+
+**Favorites** saves locations: add either panel's current folder,
+jump back with one click, remove from the same menu. **Terminal**
+opens Terminal.app at the active panel's folder (also on every
+file's right-click menu).
+
+### ZIP and TAR archives
+
+Double-click a .zip, .tar, .tgz, or .tar.gz and it opens as a
+browsable list *without extracting anything*. From there: **Extract selected & open**
+(pulls just those entries to a scratch folder and opens them with
+the usual smart routing) or **Extract all into the other pane**
+(never overwrites existing files).
+
+### Tabs remember themselves
+
+Both panels' tabs — and the folder each one was showing — are
+restored exactly on the next launch.
+
+### The Drop Stack
+
+The shelf on the right is for *gathering*: right-click any file
+or folder in a listing and choose **Add to Drop Stack** to park
+it there while you collect a project's materials from all over
+the disk. The stack **persists across sessions** — quit and
+relaunch, and your gathered pile is still there. Double-click a
+stacked item to open it (with the same smart routing);
+right-click for Open / Remove / Clear.
+
+### Right-click, anywhere
+
+Every file row offers: **Add to Drop Stack** · **Open** (smart
+routing) · **Reveal in Finder** · **Open in Terminal here** ·
+**Move to Trash** (recoverable from the macOS Trash, always).
+
+*Phases 1–2 of the file-browser programme (Path Finder ×
+ForkLift × Commander One feature study —
+docs/design/FILE_BROWSER_PLAN.md). Still scheduled: tags,
+workspaces, folder synchronization, ⌘K file targets, and remote
+connections (SFTP/FTP).*
+
 ## Manuscript
+
+> **House styles (2026-08-20).** The Manuscript bar is now a ribbon
+> with a **HOUSE STYLES** gallery — Body, Heading, Section, Verse,
+> Colophon — each button previewing its own look. Select paragraphs
+> and click: the style applies (indent, weight, size, italics per
+> the published books' grammar) and the RTF export carries it.
 
 *Where: Translate → Manuscript. The writing surface — the
 manuscript itself, with the corpus one keystroke away.*
@@ -510,14 +1053,14 @@ hides it; it is on by default.
    it came from in italics, the Tibetan line, and **the master's
    English in bold** beneath it, each with an **insert** link.
 4. Click **insert** — that English is placed at your cursor in the
-   manuscript. **Matched from his corpus, never composed**: the
-   sidebar can only give you sentences he actually wrote.
+   manuscript. **Matched from Geshe Michael's corpus, never composed**:
+   the sidebar can only give you sentences Geshe Michael actually wrote.
 5. If a query is malformed, the sidebar says "Query not
    understood" and why — it never silently searches something
    else.
 
 *Worked example:* type `bden pa` ("truth") and press Find in
-corpus. Hits arrive with his English bold beside each Tibetan
+corpus. Hits arrive with Geshe Michael's English bold beside each Tibetan
 line. Click **insert** under the rendering you want and it drops
 into your manuscript at the cursor.
 
@@ -540,6 +1083,8 @@ Two levels split by a draggable divider:
   under their gold heading; (2) the report panel where results
   render.
 
+> **The ladder (2026-08-12):** the Draft is the WORKBENCH — understand and gather evidence; press **Send to Manuscript →** to carry your draft to the writing surface, where the PUBLISH tools (bibliography, footnotes) now live.
+
 ### Loading and working clause by clause
 
 1. Paste the Tibetan source (ACIP or wylie — auto-detected) into
@@ -552,10 +1097,14 @@ Two levels split by a draggable divider:
    which English goes with which Tibetan reads by color. Only
    established equivalents appear; the pane never writes English
    for you.
-4. Click any term in the anchors panel for its **full corpus
-   concordance** — every corpus segment containing it, with Geshe
-   Michael's English beside each. A "back" link returns to the
-   clause's anchors.
+4. Click any term in the anchors panel for its **corpus
+   concordance** — the card first states how many corpus segments
+   contain the term (the measured total, never a page count), then
+   shows the opening few with Geshe Michael's English beside each.
+   When more exist than the card can list, it says how many are
+   being shown and how many there are, and the per-course breakdown
+   beneath says which rows it was computed over. Narrow the term to
+   reach the rest. A "back" link returns to the clause's anchors.
 5. On an anchor's **technical spelling** link, a click inserts the
    apparatus form at your draft cursor — the pronunciation
    spelling plus "(technical spelling: …)" — the published house
@@ -567,14 +1116,61 @@ press Load source, click the second clause. The anchors panel
 shows *sems can* banded in one hue with its English chip in the
 same hue. Click *sems can* to see its corpus concordance.
 
+Below the corpus hits, the concordance shows **84000 Translation
+Memory comparanda** — up to five aligned Tibetan–English segments
+from 84000's published canon translations (400,745 segments across
+388 Kangyur/Tengyur texts, CC BY 4.0 per 84000's own Terms of Use;
+ingested 2026-08-20). Each carries its Tohoku number, Degé folio
+where the source records it, and a link to the full translation at
+84000.co. These are *published-translation comparanda, reference
+only* — another team's renderings beside Geshe Michael's, never
+mixed with them. The first concordance click after an update
+builds the search index (a few seconds); after that it's instant.
+
+
+### The Evidence Ribbon — the evidence follows your cursor
+
+Once a source is loaded you never need to click a clause row again:
+click or arrow **into any clause of the source box itself** and the
+anchors panel fills for that clause automatically —
+
+- its established terms, color-banded as always;
+- a **scaffold**: the master's attested glosses arranged in
+  Wilson reading order, ready to arrange and complete. ⟨…⟩ marks a
+  chunk with no attested gloss; a red **?** marks a provisional
+  one. The scaffold arranges the master's own words — it never
+  composes English for you;
+- **"the master has translated this clause"** with the published
+  English, whenever the exact clause exists in the aligned corpus;
+- a **quotation** alert with source and published English when the
+  clause quotes the canon (seven syllables or more, attested only).
+
+Everything in the ribbon is deterministic evidence — the same
+anchors, corpus, and quotation machinery as the buttons, now
+arriving unasked, about the clause you are working on.
+
+
+### The live terminology guard
+
+As you type in the draft box, a quiet status line underneath keeps
+score — the same deterministic checker as **Check terminology**,
+running on a typing pause: **green** when every established term
+in the source has a rendering in your English and no two Tibetan
+terms share one English word; **amber** with counts (and the first
+offender) when something needs attention. Advisory only — nothing
+is ever auto-corrected; the full detail stays one press away.
+
 ### Phrase memory — before you invent any rendering
 
 1. Select any Tibetan in the source box.
 2. Press **Phrase memory** (under the EVIDENCE heading).
-3. *What you see:* every prior rendering of those words — segments
-   from **his corpus (binding)**, plus any matches from the Align
+3. *What you see:* how many prior renderings of those words exist —
+   the measured count of segments from **Geshe Michael's corpus
+   (binding)** —
+   and the opening twelve of them, plus any matches from the Align
    pane's harvest, which are translator-authored and **labeled
-   PENDING**. The beginnings of a Project translation memory,
+   PENDING**. When the corpus holds more than are listed, the card
+   says how many. The beginnings of a Project translation memory,
    built only from attested work.
 
 The working translator's habit: Phrase memory before inventing —
@@ -592,6 +1188,23 @@ Geshe Michael may already have a rendering.
   300-shloka bampo).
 - **Verse meter** — names the meter of verse passages and flags
   broken lines.
+- **Compose bibliography entry…** now emits the **Diamond Cutter
+  Classics templates exactly**: en dashes in date and folio
+  ranges, house sentence spacing, and — with the **Sanskrit
+  work** checkbox — the full canonical citation down to volume,
+  section, collection, and edition, reproducing the guide's own
+  Dharmakīrti example structurally.
+- **House style check…** — checks your English draft against the
+  **Diamond Cutter Classics style guide's** mechanical rules:
+  straight vs. curly quotes, `--` where an em dash belongs,
+  hyphens in number ranges (en dash territory), ampersands in
+  serial lists, era style (500bc, no space), and the house
+  word-use list (accurate perception, mindstream, the Jewel of
+  Realizations, and the rest). Findings are **flags, never
+  auto-fixes** — the guide itself forbids blind Replace All.
+  Click a finding to jump to it. The full guide lives in Help
+  under the **Style:** chapters, with the editor's original
+  banked in the repository.
 - **Verse reading order** — stanza-by-stanza reading guidance with
   the verb named. Verse does not read line by line: the meter
   forces the poet to displace words and drop understood particles,
@@ -634,13 +1247,39 @@ Geshe Michael may already have a rendering.
   for the publishing workflow. Text between \*asterisks\* becomes
   italic (STD-004: name-parts woven into a verse are italicized in
   the English).
-- **AI back-check (API, labeled AI)** — one of the app's two
-  network features. Produces a coverage report only — omissions
+- **AI back-check (API, labeled AI)** — one of the app's few
+  network-touching features (see the Analysis chapter for the full
+  list). Produces a coverage report only — omissions
   and additions between source and draft — and is **forbidden by
   construction to retranslate**. Output is banner-labeled AI. The
   button is disabled (with a tooltip saying why) unless an
   ANTHROPIC_API_KEY is configured.
 
+
+### The Apparatus pane — the published bank itself
+
+The **Apparatus** pane (same Translate group) is the bank the
+search box reaches: all 2,234 published footnotes and the
+bibliography, scrollable and searchable, official tier only —
+what shipped in the released volumes, nothing pending.
+
+Under a footnote's text you may see **TIBETAN NAMED IN THIS
+NOTE** — the Tibetan term(s) the note is talking about, each in
+Tibetan script with its wylie and the evidence it was located
+from. These are **machine-located candidates, never a ruling**:
+either the note itself quotes the Tibetan in its own body (the
+evidence line shows that sentence), or — added 2026-08-20 —
+Geshe Michael's own English equivalent for a dictionary entry is
+exactly this footnote's lemma (the evidence names the gloss, its
+tier, and marks PROVISIONAL tiers plainly). A third route (also
+2026-08-20) adds **passage evidence** for notes from the three
+published single-book sources: where the lemma appears verbatim in
+the published English of the note's *own work* (the aligned corpus
+carries each book under one course), the matching passages appear
+under "WHERE HIS PUBLISHED ENGLISH USES THIS LEMMA" — explicitly
+the passage, never a term equivalence; you read the Tibetan
+yourself. 444 of the 2,234 notes carry candidates today; the rest
+stay honestly bare rather than guessed at.
 
 ## Review
 

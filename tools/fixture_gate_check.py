@@ -43,8 +43,36 @@ def check(cond, msg):
         failures += 1
 
 
+def strip_cmake_comments(text):
+    """Blank out `#`-to-end-of-line outside quotes, keeping line structure.
+
+    A literal `add_test(` inside a COMMENT used to start a parenthesis-balanced
+    block that ran to end of file, because the comment's paren never closes.
+    app/CMakeLists.txt acquired exactly such a comment on 2026-09-17 and the
+    gate silently lost all six app suites from that line down, deriving one
+    phantom suite instead. A parser that can swallow a whole directory without
+    saying so is the cannot-fail shape, one layer below the gate.
+    """
+    out = []
+    for line in text.split("\n"):
+        q = None
+        cut = len(line)
+        for i, ch in enumerate(line):
+            if q:
+                if ch == q:
+                    q = None
+            elif ch in "\"'":
+                q = ch
+            elif ch == "#":
+                cut = i
+                break
+        out.append(line[:cut])
+    return "\n".join(out)
+
+
 def add_test_blocks(text):
     """Yield the source text of each add_test(...) call, parens balanced."""
+    text = strip_cmake_comments(text)
     i = 0
     while True:
         j = text.find("add_test(", i)
@@ -78,11 +106,20 @@ def derive(src):
             continue
         with open(path, encoding="utf-8") as f:
             text = f.read()
+        # THE PARSE MUST ACCOUNT FOR EVERY DECLARATION. Counting the blocks
+        # the balanced scan yields against the `add_test(... NAME x)` lines a
+        # plain regex sees closes the class rather than this instance: any
+        # future construct the scanner cannot walk shows up as a number
+        # mismatch instead of as a suite that quietly stops being checked.
+        declared = len(re.findall(r"(?m)^\s*add_test\(\s*(?:\n\s*)?NAME\b",
+                                  strip_cmake_comments(text)))
+        found = 0
         for block in add_test_blocks(text):
             m = re.search(r"NAME\s+(\S+)", block)
             if not m:
                 continue
             suite = m.group(1)
+            found += 1
             need.setdefault(suite, set())
             for tok in re.split(r"\s+", block[block.find("(") + 1:-1].strip()):
                 if not tok.startswith("${CMAKE_SOURCE_DIR}"):
@@ -90,6 +127,12 @@ def derive(src):
                 rel = tok[len("${CMAKE_SOURCE_DIR}"):].lstrip("/")
                 if rel and under_untracked(rel):
                     need[suite].add(rel)
+        if found != declared:
+            sys.exit("REFUSED: %s declares %d add_test(...NAME ...) suite(s) "
+                     "and the parser walked %d. The parse is losing "
+                     "declarations; fix strip_cmake_comments/add_test_blocks "
+                     "before trusting any claim below." % (name, declared,
+                                                           found))
     return need
 
 
