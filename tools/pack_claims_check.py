@@ -51,10 +51,31 @@ def main():
 
     counts = {"auto-aligned": 0, "glossary": 0, "curated": 0}
     bad_auto, bad_gmr, aligned = [], [], 0
+    # 2026-09-17, gate audit: `t in counts` silently ignored every other tier
+    # value, and THAT DISARMED THE WHOLE LOAD-BEARING ARM. Mutation-proven on
+    # a copy of the shipped pack: renaming 751 values from "auto-aligned" to
+    # "auto_aligned" made this gate print "0 auto-aligned (all marked
+    # provisional)" and exit green, while 751 machine-matched entries rode
+    # along unchecked for the provisional flag and the meta claim went
+    # unverified. That is precisely the 2026-09-15 falsehood re-shipping --
+    # the pack asserting "Every English line is Geshe Michael Roach's own
+    # text" over entries that are machine matches.
+    #
+    # A tier this gate does not recognise is not a tier it may ignore.
+    unknown = {}
 
     def visit(o):
         nonlocal aligned
         t, p = o.get("tier"), o.get("provisional")
+        # Only ENTRIES have a tier that means a tier. meta.tier is the claim
+        # SENTENCE about the pack as a whole, and the first draft of this
+        # check flagged it -- a gate that fires on the correct object is how
+        # gates get switched off. An entry is a node that carries a headword
+        # or its English alongside the tier.
+        is_entry = any(k in o for k in
+                       ("wylie", "tib", "gloss", "glosses", "used", "aligned_eng"))
+        if is_entry and isinstance(t, str) and t and t not in counts:
+            unknown[t] = unknown.get(t, 0) + 1
         if isinstance(t, str) and t in counts:
             counts[t] += 1
             if t == "auto-aligned" and p is not True:
@@ -79,6 +100,15 @@ def main():
 
     # 3. the sentence must not claim more than the pack contains
     low = claim.lower()
+    if unknown:
+        fails.append(
+            "%d entr(ies) carry a tier this gate does not recognise: %s. "
+            "An unrecognised tier is counted NOWHERE, which skips the "
+            "provisional check, the meta.tier check and the absolutes check "
+            "all at once - rename it back or teach this gate the new name"
+            % (sum(unknown.values()),
+               ", ".join("%r x%d" % kv for kv in sorted(unknown.items())[:4])))
+
     machine = counts["auto-aligned"]
     for a in ABSOLUTES:
         if a in low and machine:
