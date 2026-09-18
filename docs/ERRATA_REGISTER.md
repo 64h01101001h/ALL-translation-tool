@@ -8,15 +8,15 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**279 entries**: **184 document errata** (6 HIGH, 84 MEDIUM, 94 LOW), **62 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**281 entries**: **186 document errata** (7 HIGH, 85 MEDIUM, 94 LOW), **62 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
-| Tibetan spelling | 131 |
+| Tibetan spelling | 132 |
 | Digitisation artefact | 62 |
 | English typo | 30 |
+| English factual error | 16 |
 | Our banked layer | 16 |
-| English factual error | 15 |
 | Formatting | 8 |
 
 ---
@@ -31,7 +31,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## High severity &mdash; 6 entries
+## High severity &mdash; 7 entries
 
 *Would mislead a reader who has no other cue in front of them.*
 
@@ -43,8 +43,9 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:339` | mthar mal rim rang la gcig tu dril te | mthar lam rim rang la gcig tu dril te | The term is lam rim, the Steps of the path. 'mal' is bedding or a couch and forms no compound with 'rim' that could take 'rang la gcig tu dril te nyams su len' - 'join into one within our own lives and put into practice'. The English of this very segment rende | CONFIRMED |
 | `C03:39` | acip: ,SIL SNYAN RNAMS DANG BYUNG PA GDUGS MCHOG DANG ,   \|   wylie: ,sil snyan rnams dang byung pa gdugs mchog dang , | byug pa | seg_hint 39 is CORRECT. Three independent proofs: (1) the note's own claim checks out — C03:38, the glossary segment immediately preceding, spells it right and defines it: "byug pa ni spos zhim po'i lde gu'o" (byug pa = thick fragrant unguent); (2) this segmen | CONFIRMED |
 | `C04:29` | lkog 'gyur la gsar du bslu ba'i shes pa | lkog 'gyur la gsar du mi bslu ba'i shes pa | ACIP reads 'LKOG 'GYUR LA GSAR DU BSLU BA'I SHES PA' (source). An inference is by definition a NON-deceiving (mi bslu ba) fresh awareness; as written the definition of inference by convention says 'deceiving'. INTERNAL witness: the parallel definition of scrip | PROBABLE |
+| `C05:324` | for virtue of the formless realm | for virtue of the realm of form | This segment's own Tibetan reads `gzugs kyi dge ba la 'dun pa` and its ACIP reads GZUGS KYI DGE BA LA 'DUN PA. `gzugs` is form; neither column carries a negation. The formless realm is `gzugs med`, which Geshe Michael renders 'formless' consistently elsewhere  | CONFIRMED |
 
-## Medium severity &mdash; 84 entries
+## Medium severity &mdash; 85 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -126,6 +127,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:240` | where it says that there is no great master of all things, and no great maker of all things | The Tibetan is the standard Ten-Levels pair `byed pa po dang tshor ba po med pa` - 'there is no one who acts a | THIS SEGMENT: wylie `byed pa po dang tshor ba po med pa zhes gsungs pa`; ACIP (source of record) `BYED PA PO DANG TSOR BA PO MED PA ZHES GSUNGS PA`. The converter in engines/hgm_tools.py maps `TSOR BA PO` -> `tshor ba po`, so the Tibetan itself carries no spel | CONFIRMED |
 | `C05:272` | In the spring is hot | In the summer is hot | `sos ka` is the hot season (Skt. grisma), and the couplet's whole force is the seasonal inversion against `dgun` (winter): the moon burns in the hot season, the sun freezes in the cold one. Geshe Michael himself renders this IDENTICAL verse line 'Even the ligh | PROBABLE |
 | `C05:306` | [Master Dharmakirti's] | [Master Chandrakirti's] | The bracketed attribution names the wrong author for the verse quoted immediately after it in this same row ("Identical to the case of someone where his sense power has a cataract, Is the mind of a craving spirit as well, which sees a stream of water as pus"). | CONFIRMED |
+| `C05:322` | CHOS BZOD PA ZHI DANG | CHOS BZOD PA BZHI DANG | The numeral 'four' has lost its b- prefix. The ACIP, which is the source of record, reads CHOS BZOD PA ZHI DANG and the wylie reads 'chos bzod pa zhi dang'. ZHI on its own is a legal syllable (zhi ba, 'peace/pacified') and so passes every mechanical check, whi | CONFIRMED |
 | `C05:39` | ston pa bnas drug pa | ston pa gnas drug pa | ACIP source of record reads 'STON PA BNAS DRUG PA'; the parallel units in the same segment read 'gnas bdun pa' and 'gnas brgyad pa', and the segment opens with 'gnas phyi ma gsum' (the chapters). The only other witness, C16:688, is byte-identical (same file re | CERTAIN |
 | `C05:63` | exist only in the desire realm and are absent from the higher two | (for GMR's ruling; English is never edited) The Tibetan reads `'dod pa dang bsam gtan dang po na yod kyi gnyis | Own row, wylie: `'dod pa dang bsam gtan dang po na yod kyi gnyis pa yan chad na med de`; ACIP (source of record) agrees: `'DOD PA DANG BSAM GTAN DANG PO NA YOD KYI GNYIS PA YAN CHAD NA MED DE`. `bsam gtan dang po` = first concentration level; `gnyis pa yan cha | PROBABLE |
 | `C05:73` | sangs rgyas lam brten par | sangs rgyas la ma brten par | ACIP source of record reads SANGS RGYAS LAM BRTEN PAR. GMR's English for this stretch is 'would have been unable to make the first descriptions ... had they not relied upon the Buddha': a counterfactual negation on the reliance, which requires 'la ma brten par | PROBABLE |
@@ -363,7 +365,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 184 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 186 document errata above. Start with the 7 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 62 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

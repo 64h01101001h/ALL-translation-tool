@@ -3346,5 +3346,29 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-280",
+  "course": "C05",
+  "segment": "C05:322",
+  "kind": "TIBETAN_SPELLING",
+  "found": "CHOS BZOD PA ZHI DANG",
+  "expected": "CHOS BZOD PA BZHI DANG",
+  "evidence": "The numeral 'four' has lost its b- prefix. The ACIP, which is the source of record, reads CHOS BZOD PA ZHI DANG and the wylie reads 'chos bzod pa zhi dang'. ZHI on its own is a legal syllable (zhi ba, 'peace/pacified') and so passes every mechanical check, which is why it survived ingest, but it yields no reading here. Three lines of evidence, all internal to this row. (1) Geshe Michael's English for this very phrase renders it as a numeral: 'the four instants known as \"the mastery of phenomena\"'. (2) The arithmetic is inside the sentence: four chos bzod pa plus 'dod chags dang bral ba'i bar chad med lam brgyad, the eight uninterrupted paths, is exactly the rnam pa bcu gnyis, 'the twelve types', that the same sentence names. (3) The same technical set is spelled correctly elsewhere in the corpus: GIE:1232 reads 'bzod pa bzhi chos can, spong ba'i lam yin te, bar chad med pa'i lam gyi rnam pa yin pa'i phyir'. PARALLEL-WITNESS CHECK, run against all 42,199 corpus rows and returning nothing: C05:322 is the ONLY row carrying 'chos bzod pa' in its wylie, the only row carrying ''dod nyon spong', the only row whose English carries 'mastery of phenomena', and the only row whose English carries 'act to bring black deeds'. C16, which re-ingests much of C05's prose byte-identically, has no twin of this row, so there is no witness to compare against at all -- the defect can be argued only from the row's own English and its own arithmetic, and it is. 'chos bzod pa bzhi' occurs in no row anywhere. Nor is this a house spelling: 107 other C05 rows contain 'bzhi' spelled correctly, so this is an isolated prefix drop. RECORDED, NOT CORRECTED: the wylie stays verbatim and the span 'zhi' is nulled in the spec so that 'zhi' never enters the bank carrying the value 'four'.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-281",
+  "course": "C05",
+  "segment": "C05:324",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "for virtue of the formless realm",
+  "expected": "for virtue of the realm of form",
+  "evidence": "This segment's own Tibetan reads `gzugs kyi dge ba la 'dun pa` and its ACIP reads GZUGS KYI DGE BA LA 'DUN PA. `gzugs` is form; neither column carries a negation. The formless realm is `gzugs med`, which Geshe Michael renders 'formless' consistently elsewhere (65 corpus rows pair `gzugs med` with 'formless'). The doctrine is settled inside the same sentence: the path in question is 'free of desire for the fourth level of concentration', the summit of the FORM realm, and C05:318 states that 'Virtue taken in by the realm of form represents a type of deed which is white and also ripens into something white'. Ending white deeds is therefore ending form-realm virtue. The root verse this row comments on, C05:321, reads 'White by the final uninterrupted arising, Free of desire for the concentration'; the parallel case at C05:323 is built identically off `'dod pa'i dge ba la 'dun pa` -> 'it eliminates desire-realm virtue by means of eliminating the aspiration, or the desire, for it', naming the realm from the genitive exactly as here. PARALLEL WITNESS CHECKED, NONE FOUND: `select course,seq from corpus_segments where english like '%for virtue of the formless realm%'` returns C05:324 alone; `where wylie like '%gzugs kyi dge ba la ''dun pa%'` returns C05:324 alone; `where english like '%white deeds are brought to an end%'` returns C05:324 alone. The 263 byte-identical C16 rows do not carry this passage, so there is no published reading either defending or contradicting it. Geshe Michael's English stands verbatim on the page; the spec nulls `gzugs` so that neither 'form' nor 'formless' enters the bank as an equivalent. RECOVERED 2026-09-18: reported in the reconciler's workflow result and never written to its errata.json, so the landing loop -- which reads files -- would have skipped it in silence; caught by tools/check_errata_landed.py. Re-verified independently before filing: this row's wylie reads `gzugs kyi dge ba la 'dun pa` with NO `med` anywhere in either column, 65 corpus rows pair `gzugs med` with 'formless', and C05:318 states that virtue of the realm of FORM is the white deed.",
+  "severity": "HIGH",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
