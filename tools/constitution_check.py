@@ -455,6 +455,35 @@ def main():
             if "|| true" in line or "|| :" in line:
                 disarmed.append(ln)
                 continue
+            # 2026-09-17, gate audit: the line being clean of "|| true" is
+            # NOT enough. Every real gate in this press is written as
+            #     X || { echo "..."; exit N; }
+            # or  if ! X; then echo "..."; exit N; fi
+            # so the invocation can stay pristine while the HANDLER stops
+            # terminating. Mutation-proven: removing `exit 7` from the
+            # visual-regression handler left shot_diff.py invoked, the line
+            # unchanged, and this check printing "all rules hold" -- a press
+            # that would ship over a visual regression with the constitution
+            # gate blessing it. That is the BUILD-10 lesson one level down:
+            # the first hardening looked at the line, so the next decay moved
+            # off the line.
+            #
+            # So: when an invocation attaches a handler, the handler must
+            # terminate. A BARE invocation needs nothing extra -- the press
+            # runs under `set -euo pipefail`, so its failure stops the press
+            # on its own.
+            tail = "\n".join(press.splitlines()[ln - 1:ln + 11])
+            handler = None
+            if "|| {" in line or line.rstrip().endswith("||"):
+                end = tail.find("}")
+                handler = tail[:end if end > 0 else len(tail)]
+            elif _re2.search(r"\bif\s+!", line):
+                end = tail.find("fi")
+                handler = tail[:end if end > 0 else len(tail)]
+            if handler is not None and not _re2.search(
+                    r"\b(exit|die|fail)\b", handler):
+                disarmed.append(ln)
+                continue
             live += 1
         if live == 0:
             detail = (f" (found only disarmed invocation(s) at line(s) "
