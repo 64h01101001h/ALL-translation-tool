@@ -3370,5 +3370,77 @@
   "severity": "HIGH",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-282",
+  "course": "C05",
+  "segment": "C05:325",
+  "kind": "INGEST_ARTEFACT",
+  "found": ",'DOD PA LAS SKYES GZHAN DKAR",
+  "expected": ",'DOD PA LAS SKYES GZHAN DKAR GNAG,,",
+  "evidence": "The root-verse row ends one syllable short of its own metre and with no closing shad. Provable from C05:325 alone: the first three padas each run to seven syllables (GZHAN NI DMYAL BA MYONG 'GYUR DANG = 7; 'DOD GZHAN MYONG 'GYUR GNYIS SU RIG = 7; GZHAN NI MTHONG BAS SPANG BYA GNAG = 7) while the fourth, ,'DOD PA LAS SKYES GZHAN DKAR, runs to six and terminates the field without a shad. Geshe Michael's English for that same line in this same row reads 'White and black, others that come from desire.' -- so the syllable he rendered as the second 'black' has no counterpart anywhere in this row's Tibetan. The missing syllable is GNAG (or NAG): the commentary that quotes this very verse back, C05:326, carries the complete reading `'dod pa las skyes pa gzhan dkar gnag gnyis ka'i las su 'dod do`, rendered 'both white and black'; and C05:326 opens `[iv.249-52] gngsde pa gzhan ni ...`, where the orphan letters `gng` precede `sde pa gzhan ni` -- consistent with the syllable having been mangled across the 325/326 row boundary rather than dropped outright. The truncation is confirmed; the reconstruction in `expected` is inferred from C05:326 and from the English, not read off this row. PARALLEL-WITNESS SEARCH RUN BEFORE FILING AND FOUND NOTHING: wylie like '%mthong bas spang bya gnag%' returns C05:325 alone, wylie like '%las skyes gzhan dkar%' returns C05:325 alone, english like '%White and black, others that come from desire%' returns C05:325 alone -- so this row is not among the 263 C16 rows byte-identical to C05 and has no independent witness in the spine. Not one of the registered classes: the following-heading class appears on C05:324 ('65 Other Views on the Black and White') and on C05:326, but 325 is clean in both columns. The wylie field is 137 characters and the ACIP 138, nowhere near the E-107 1,500-character ingest cap.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-283",
+  "course": "C05",
+  "segment": "C05:328",
+  "kind": "TIBETAN_SPELLING",
+  "found": "MDO LAS SROG GCOD BA GSUM STE,",
+  "expected": "MDO LAS SROG GCOD PA GSUM STE,",
+  "evidence": "Verbatim in this segment's ACIP (source of record) and agreeing in the wylie field ('mdo las srog gcod ba gsum ste,'), so it is not a wylie-conversion slip and not a registered ingest class. Orthographic rule: after a DA suffix the nominaliser is PA, not BA. Counts re-derived from the spine at reconcile time: 267 rows read 'gcod pa', 3 read 'gcod ba'. The strongest witness is local - the SAME commentary two rows later writes the same word correctly twice, C05:329 'mdo las gsungs pa ni srog gcod pa lta bu'i sbyor ba rtsa ba gsum las skyes pa la dgongs so' and C05:330 'srog gcod pa'i sbyor ba 'dod chags las skyes pa ni', both continuing this very discussion of the three killings and the three roots. PARALLEL WITNESS CHECKED, and it is the reason this is PROBABLE rather than CONFIRMED: C16:853 carries this row byte-identically in wylie, english and acip, but that is the same file re-ingested and is not an independent witness; AK:28 IS independent (a different text, 'nag po yod pa'i mdo') and its ACIP carries BOTH readings in one row - 'SROG GCOD PA LA BSTEN CING' and, later in the same row, 'SROG GCOD BA NI NYUNG ZHING CHUNG YANG'. So the BA spelling is attested outside this file. It is filed anyway because AK:28 is internally inconsistent in exactly the same way, which is the same argument the three landed records of this class rest on (E-115 'RNAM PAR DAG BA', E-159 'mngon ba sde bdun po', E-182 'rnam par smin ba'i'), and because a reader of this page should know the standard spelling. Nothing on the page turns on it: the span is cut at 'srog gcod' and the 'ba' is nulled, so no equivalent enters the bank either way. Geshe Michael's English, 'three types of killing', is unaffected.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-284",
+  "course": "C05",
+  "segment": "C05:330",
+  "kind": "TIBETAN_SPELLING",
+  "found": "ZHE SNGANG LAS SKYES PA NI DGRA BO GSOD PA LTA BU'O",
+  "expected": "ZHE SDANG LAS SKYES PA NI DGRA BO GSOD PA LTA BU'O",
+  "evidence": "The ACIP (source of record) reads ZHE SNGANG and the wylie column agrees, `zhe sngang`. The passage is the standard triad of root poisons and the other two members are spelt correctly in this same sentence, `'dod chags` and `gti mug`; the second member is `zhe sdang`, which Geshe Michael renders here as 'dislike'. The decisive witness is inside the same text: C05:331, the very next segment, runs the identical three-root frame for stealing and reads `zhe sdang las skyes pa ni dgra bo'i nor rku ba lta bu` -- same particle chain, same `dgra bo`, correctly spelt. Counted in this spine: 136 rows carry `zhe sdang`; `zhe sngang` occurs in exactly two rows, C05:330 and C16:855, and those two rows were verified byte-identical in ALL THREE columns (wylie, english, acip) by SQL comparison, i.e. C16 is the same file re-ingested and is NOT an independent witness. This is a single defective reading, not a published variant. The link is withheld in the spec (span w18 nulled) so that `zhe sngang` cannot enter the dictionary layer as a headword for 'dislike'.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-285",
+  "course": "C05",
+  "segment": "C05:330",
+  "kind": "TIBETAN_SPELLING",
+  "found": "BSOD NAMS KYI BLOS PHAM SOGS GSOD PA LTA BU'O",
+  "expected": "BSOD NAMS KYI BLOS PHA MA SOGS GSOD PA LTA BU'O",
+  "evidence": "The ACIP reads BLOS PHAM SOGS and the wylie column agrees, `blos pham sogs gsod pa`. Geshe Michael's English for the clause is 'would be where you kill someone like your father or mother out of some meritorious intent', and `pha ma` is exactly 'father or mother' -- the alignment bank pairs `pha ma` with the string 'father or mother' 3 times and with 'parents' twice (counted in data/alignment/alignment_full_v1.json, 49,039 links). `pham` is a different word ('defeat') and yields no reading here; the classical Abhidharma example of killing under `gti mug` is killing one's aged parents believing it sends them to a better birth, which is what the English says. The defect is a lost inter-syllable space: PHA MA read as PHAM. PARALLEL-WITNESS CHECK: `PHAM SOGS` occurs in exactly two rows of this spine, C05:330 and C16:855, verified byte-identical in wylie, english and acip -- the same file re-ingested, not an independent witness. The correct form `pha ma sogs` occurs at C10:407, C17:732, ILL:163 and ILL:2845. The link is withheld in the spec (span w27 nulled) so that `pham` cannot enter the dictionary layer as a headword for 'father or mother'.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-286",
+  "course": "C05",
+  "segment": "C05:331",
+  "kind": "TIBETAN_SPELLING",
+  "found": "'DOD CHAGS LAS SKYES BA NI",
+  "expected": "'DOD CHAGS LAS SKYES PA NI",
+  "evidence": "Within this one row the same verb-plus-nominaliser is written three times in three exactly parallel clauses: 'DOD CHAGS LAS SKYES BA NI (first limb), ZHE SDANG LAS SKYES PA NI (second), GTI MUG LAS SKYES PA NI (third). After a SA suffix the Tibetan nominaliser is PA, not BA, so the first limb is the odd one out both on orthography and on the row's own internal usage. Counted in the spine at merge time: 'las skyes ba' occurs in exactly 2 rows, C05:331 and C16:856, while 'las skyes pa' occurs in 150. PARALLEL WITNESS CHECKED: C16:856 is the only other witness and its wylie AND english are both byte-identical to this row (verified by SQL equality on both columns); per the C05 course-shape note C16 is the same file re-ingested and is NOT an independent witness, so it neither confirms a published reading nor rules out an input-time slip. No independent witness exists. Geshe Michael's English is unaffected ('coming from desire') and is left verbatim.",
+  "severity": "LOW",
+  "confidence": "PROBABLE",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-287",
+  "course": "C05",
+  "segment": "C05:326",
+  "kind": "TIBETAN_SPELLING",
+  "found": "GNGSDE PA GZHAN NI",
+  "expected": "SDE PA GZHAN NI",
+  "evidence": "The ACIP (source of record) opens this row '[IV.249-52] GNGSDE PA GZHAN NI DMYAL BA MYONG BAR...'. GNGSDE is not a decomposable Tibetan syllable sequence: 'gngs' has no legal onset stack and carries no vowel, so the fragment is fused to the front of SDE. The SAME ROW writes the identical phrase correctly at its second school, 'YANG SDE PA GZHAN NI MTHONG BAS SPANG BAR BYA BA'I LAS DE...', and Geshe Michael renders the two alike ('certain other groups' / 'Still other groups'), so the intended reading is SDE PA GZHAN NI. The minimal repair is to drop the fused GNGS; what those letters were meant to be is not recoverable from this row. PARALLEL-WITNESS CHECK, run by me against all 42,199 corpus_segments rows: wylie LIKE '%gngs%' returns C05:326 alone; acip LIKE '% GNGS%' returns C05:326 alone; english LIKE '%Still other groups assert%' returns C05:326 alone; english LIKE '%are to be understood as the two%' returns C05:326 alone; wylie LIKE '%sde pa gzhan ni mthong bas spang%' returns C05:326 alone. The 263 byte-identical C16 rows therefore do NOT cover this passage and there is no published reading anywhere in the spine to compare against. A one-off, not a converter class. Consequence for the bank: 'gngsde pa' is left entirely unspanned (not even nulled), so no impossible string enters the dictionary layer, and Geshe Michael's first 'groups' is left unwrapped. RECOVERED 2026-09-18 by tools/check_errata_landed.py: reported in the reconciler's workflow result and never written to disk. Re-verified before filing -- the ACIP and wylie of C05:326 both open '[iv.249-52] gngsde pa gzhan ni'. PAIRS WITH E-282 at C05:325, which ends one syllable short of its metre with no closing shad: the orphaned `gng` here is the head of that missing GNAG, so ONE row-boundary accident produced both defects and each is the other's best evidence.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
