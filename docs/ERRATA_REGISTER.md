@@ -8,12 +8,12 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**268 entries**: **176 document errata** (6 HIGH, 81 MEDIUM, 89 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**270 entries**: **176 document errata** (6 HIGH, 81 MEDIUM, 89 LOW), **61 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 129 |
-| Digitisation artefact | 59 |
+| Digitisation artefact | 61 |
 | English typo | 29 |
 | Our banked layer | 16 |
 | English factual error | 11 |
@@ -226,7 +226,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ---
 
-## Digitisation artefacts &mdash; 59
+## Digitisation artefacts &mdash; 61
 
 *These are fixed **upstream in the data pipeline**, not by editing a document, and go to a different person. Two are class entries carrying a measured extent rather than one row per instance.*
 
@@ -261,6 +261,8 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C03:499` | THOGBYE BRAG TU RANG RANG GIS SO THAR | BYE BRAG TU RANG RANG GIS SO THAR (with THOG restored to the end of C03:498, '...LEGS PAR BSRUNG BA'I THOG') | This segment's ACIP (source of record) opens 'THOGBYE BRAG TU' and its wylie 'thogbye brag tu'; 'thogbye' is not a Tibetan syllable. Verified by re-query: C03:498 ends '...mi dge bcu spong gi tshul khrims legs par bsrung ba'i' (no thog). Independent parallel w | CONFIRMED |
 | `C03:513` | SECRET STEPS FOR THOSE OF GREATER CAPACITY | (no ACIP — this is an English heading) | The ACIP column of this segment holds ENGLISH PROSE, not Tibetan transliteration. engines/hgm_tools.is_acip_line() admitted it at ingest because its only test is an uppercase ratio above 0.6, and a heading in capitals passes. Measured 2026-09-17 over all 42,19 | CONFIRMED |
 | `C03:592` | gcig bsdus pa, lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa | The block 'lags kyang , ,rje thub pa'i dbang po'i gsung rab kun, ,don ma tshang med par gcig bsdus pa' should  | ACIP source of record carries the same repeat: '...GCIG BSDUS PA, LAGS KYANG , ,RJE THUB PA'I DBANG PO'I GSUNG RAB KUN, ,DON MA TSANG MED PAR GCIG BSDUS PA,'. P1:153 has the identical duplication but is the same text re-ingested (same lineage, not independent) | CONFIRMED |
+| `C05:251` | KHRUS BYED DO, , DER 'JUG | KHRUS BYED DO, , DER 'JUG GO, | Confirmable from this row's own text: the row's other two verbs both carry their finals ('thung ngo , , and khrus byed do, ,) while the third, der 'jug, ends bare with no shad; and the row's English renders that third verb complete -- 'and they swim in it.' -- | CONFIRMED |
+| `C05:252` | GO,NAM MKHA' MTHA' YAS SKYE MCHED | NAM MKHA' MTHA' YAS SKYE MCHED | ILL:2332 carries the whole passage in ONE row and reads "... khrus byed do, ,'thung ngo der 'jug go ,nam mkha' ..." - the verb 'jug go intact, the next sentence beginning at nam mkha'. P5:125 likewise ends "... 'thung ngo khrus byed do der 'jug go" and P5:126  | CONFIRMED |
 | `C05:65` | Where does the word "knowledge" [Sanskrit: abhidharma] come from? A phenomenon [dharma] is that which possesses [dhr�] a nature. And knowledge brings  | ... A phenomenon [dharma] is that which possesses [dhṛ] a nature. ... (the bracketed Sanskrit root is dhṛ, 'to | English field of C05:65 contains exactly one U+FFFD (hex EFBFBD) inside the bracket '[dhr�]'. The parallel C16:703 (same file re-ingested, not independent) carries the identical byte, so the loss predates the spine ingest. Class is spine-wide: 73 corpus_segmen | CONFIRMED |
 | `C09:139` | THE DEDICATION OF MERIT `, DANG PO NI, | (no ACIP — this is an English heading) | The ACIP column of this segment holds ENGLISH PROSE, not Tibetan transliteration. engines/hgm_tools.is_acip_line() admitted it at ingest because its only test is an uppercase ratio above 0.6, and a heading in capitals passes. Measured 2026-09-17 over all 42,19 | CONFIRMED |
 | `C09:188` | IDENTIFICATION OF WHAT IS GOING TO BE EXPLAINED | (no ACIP — this is an English heading) | The ACIP column of this segment holds ENGLISH PROSE, not Tibetan transliteration. engines/hgm_tools.is_acip_line() admitted it at ingest because its only test is an uppercase ratio above 0.6, and a heading in capitals passes. Measured 2026-09-17 over all 42,19 | CONFIRMED |
@@ -354,6 +356,6 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 **Document editors.** The 176 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
-**Data-pipeline maintainers.** The 59 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
+**Data-pipeline maintainers.** The 61 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 
 **Director.** The standing policy question: does ALL issue an erratum sheet, correct future printings, or annotate in place? The scan preserves everything verbatim either way &mdash; this is an editorial decision, not a technical one.
