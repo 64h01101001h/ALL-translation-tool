@@ -30,6 +30,9 @@ SPINE = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
     ROOT, 'build/hgm_spine_v27_2.db')
 
 # Measured 2026-08-28 over 24,088 field-checks on 5,097 headwords.
+BENIGN = {'eng EXACT', 'tib EXACT', 'acip EXACT', 'eng builder-join',
+          'tib builder-join', 'acip builder-join', 'eng fold-only',
+          'tib fold-only', 'acip fold-only'}
 CEILING = {
     'eng NOT-IN-SEGMENT': 0,
     'tib NOT-IN-SEGMENT': 0,
@@ -125,6 +128,20 @@ def main():
         'select course,seq,wylie,english,acip from corpus_segments'))
     checked, t, bad = classify(evid, rows)
     fail = False
+    # EVERY CLASS IS EITHER BENIGN OR CAPPED. builder-join is the BUILDER's
+    # own " ... " convention for one headword with two exponents on a page, so
+    # it is benign by design and named here rather than left implicit. Anything
+    # else that appears in the tally has no ceiling, and an uncapped class is
+    # an unbounded one: it can grow to any size while the gate prints a pass,
+    # which is the same fault as a ceiling set above its measurement, one level
+    # up. A new verdict string now has to be classified by a person.
+    unknown = sorted(c for c in t
+                     if c not in CEILING and c not in BENIGN)
+    if unknown:
+        fail = True
+        print('UNCAPPED CLASS(ES) %s: tallied but neither benign nor under a '
+              'ceiling. Add each to CEILING (with the measured count) or to '
+              'BENIGN (with the reason it is not a defect).' % unknown)
     for cls, cap in CEILING.items():
         n = t.get(cls, 0)
         if n > cap:
@@ -132,6 +149,19 @@ def main():
             print('FAIL %s: %d > ceiling %d' % (cls, n, cap))
             for r in bad[cls][:10]:
                 print('     ', r)
+        elif cap and n < cap:
+            # A CEILING ABOVE ITS MEASUREMENT IS REGRESSION ROOM NOBODY
+            # GRANTED. 2026-09-18: test_no_supplied_span_head was carrying one
+            # unit of it, set by me in the very commit that fixed that gate's
+            # blindness, and it printed as a pass for a day. The audit found
+            # the same shape twice more (forward_battery's floor under its own
+            # measured value; no_phonetics_in_layer at 0.08% against a 2%
+            # ceiling, twenty-five times headroom). A ceiling only ratchets if
+            # something makes it follow the measurement down.
+            fail = True
+            print('SLACK %s: measured %d, ceiling %d. Tighten the ceiling to '
+                  '%d in a commit -- %d more could land in silence.'
+                  % (cls, n, cap, n, cap - n))
     if fail:
         return 1
     print('evidence matches spine: %d headwords, %d field-checks, '
