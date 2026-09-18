@@ -3322,5 +3322,29 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-278",
+  "course": "C05",
+  "segment": "C05:298",
+  "kind": "ENGLISH_TYPO",
+  "found": "less that what they really are",
+  "expected": "less than what they really are",
+  "evidence": "The comparative \"less\" requires \"than\"; \"less that what\" is not possible English. Parallel-witness check run by me over all 42,199 spine rows: \"less that what\" occurs in exactly two rows, C05:298 and P7:39; \"less than what they really\" occurs in exactly one, C15:443. I diffed C05:298 against C15:443 character by character: the wylie columns are byte-identical (460 chars each) and the English columns are both 718 characters and differ at exactly ONE offset, 558, 't' against 'n' — C15:443 reads \"would have to be less than what they really are\". A re-ingest of the same file could not differ in exactly one function word and match in all 717 other characters, so C15:443 is an independent witness to the published reading and the C05 copy carries a mis-set 'than'. P7:39 is NOT counted as a witness: it is a sibling re-ingest of the same file family (wylie re-keyed with the shads stripped and 'yi dwags' for 'yi dvags') and inherits the reading. C16 has no copy of this row. Geshe Michael's English is left verbatim on the page; skur ba is nulled at both occurrences, so no span rests on the defective clause. Separate note for the dictionary work order, not part of this record: the master's hgm_gloss list for 'skur ba' already carries the mis-set fragment \"less that what they really\", which looks like an auto-aligned slice of this very row.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-279",
+  "course": "C05",
+  "segment": "C05:306",
+  "kind": "ENGLISH_FACTUAL_ERROR",
+  "found": "[Master Dharmakirti's]",
+  "expected": "[Master Chandrakirti's]",
+  "evidence": "The bracketed attribution names the wrong author for the verse quoted immediately after it in this same row (\"Identical to the case of someone where his sense power has a cataract, Is the mind of a craving spirit as well, which sees a stream of water as pus\"). Geshe Michael himself attributes that verse to Chandrakirti at C05:247 -- '[from Entering the Middle Way, by Master Chandrakirti (650 AD)]' followed by the identical English line -- and the same attribution recurs at C15:393, C16:823, C18:1116 and P5:122. PARALLEL-WITNESS CHECK on this row: C15:451 is byte-identical to C05:306 in BOTH columns and P7:45 is English-identical (its wylie differs only in shad/comma placement); per the C05 campaign note those are the same file re-ingested and are NOT independent witnesses, so nothing in the corpus supports the Dharmakirti reading and this is the published English rather than an ingest corruption. Geshe Michael's English stays verbatim on the page; the span is left unwrapped and nothing about the attribution enters the bank.",
+  "severity": "MEDIUM",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
