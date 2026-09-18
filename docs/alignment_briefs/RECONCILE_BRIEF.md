@@ -125,6 +125,22 @@ reading, not a corruption here. Say what you checked even when you found nothing
 Write the surviving records to <YOUR_DIR>/errata.json as a JSON list, each record with
 keys: seq, kind (TIBETAN_SPELLING|ENGLISH_TYPO|ENGLISH_FACTUAL_ERROR|INGEST_ARTEFACT|FORMATTING),
 found, expected, evidence, severity (HIGH|MEDIUM|LOW), confidence (CONFIRMED|PROBABLE|UNCERTAIN).
+
+**`found` MUST BE A VERBATIM SUBSTRING of that segment's own wylie, ACIP or
+English — nothing else.** Not a description of the defect, not a quote with a
+parenthetical gloss appended, not text from a neighbouring row. Put every word
+of explanation in `evidence`, which is free prose and is where it belongs.
+
+`tools/merge_errata.py` refuses anything else, and it is right to: a register
+whose quotes cannot be found in the documents they cite is worth nothing to
+the people who will act on it. It refused FOUR entries on 2026-09-17 alone,
+every one of them a real finding wrapped in prose —
+
+    REFUSED  quoted text "NUS PA'I SKAD CIG PAR MED PA ... (wy" is not in
+             the spine at this segment — misquoted or mis-cited
+
+— and each had to be re-filed by hand. The finding survives that; the time
+does not. Write the quote as the document has it, and say why underneath.
 An empty list is the normal outcome. Write it even when empty.
 
 DELIVERABLES in <YOUR_DIR>:  spec.json (exit 0 proven), body.html, errata.json, report.md

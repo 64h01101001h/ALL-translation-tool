@@ -3214,5 +3214,29 @@
   "severity": "MEDIUM",
   "confidence": "CONFIRMED",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-269",
+  "course": "C05",
+  "segment": "C05:251",
+  "kind": "INGEST_ARTEFACT",
+  "found": "KHRUS BYED DO, , DER 'JUG",
+  "expected": "KHRUS BYED DO, , DER 'JUG GO,",
+  "evidence": "Confirmable from this row's own text: the row's other two verbs both carry their finals ('thung ngo , , and khrus byed do, ,) while the third, der 'jug, ends bare with no shad; and the row's English renders that third verb complete -- 'and they swim in it.' -- so the segment's English covers a Tibetan verb whose terminative fell into the next row. External check: the split is byte-identical in C15:396/397, C16:827/828 and C18:1119/1120, which are re-ingests of the same source file and therefore NOT independent witnesses to the reading -- they show only that the line-breaking is the shared file's. The phrase is whole in two other ingests: ILL:2332, an independently translated witness of the same Abhidharmakosha passage, reads '... khrus byed do, ,'thung ngo der 'jug go ,nam mkha' mtha' yas ...'; and P5:125 (same text re-ingested, corroborative only) reads '... khrus byed do der 'jug go' with P5:126 opening cleanly. Effect on the alignment: the third verb has no spannable ending, so 'jug is aligned bare while 'thung ngo and khrus byed do keep theirs. Same class as the filed E-111 (C03:440/441, one word offset across a row boundary) -- that is a filed erratum, not a do-not-file registered class.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-270",
+  "course": "C05",
+  "segment": "C05:252",
+  "kind": "INGEST_ARTEFACT",
+  "found": "GO,NAM MKHA' MTHA' YAS SKYE MCHED",
+  "expected": "NAM MKHA' MTHA' YAS SKYE MCHED",
+  "evidence": "ILL:2332 carries the whole passage in ONE row and reads \"... khrus byed do, ,'thung ngo der 'jug go ,nam mkha' ...\" - the verb 'jug go intact, the next sentence beginning at nam mkha'. P5:125 likewise ends \"... 'thung ngo khrus byed do der 'jug go\" and P5:126 opens cleanly at \"nam mkha' mtha' yas skye mched la snyoms ...\"; P7:15 also opens at \"nam mkha'\". P5:126's English is byte-identical to C05:252's (verified by SQL equality), so the English column is unaffected by the split. The other carriers of the C05 string (C15:397, C16:828, C18:1120) are byte-identical in BOTH columns, i.e. the same file re-ingested, and are NOT independent witnesses; they show the same split. ILL:2332 and the P-series rows are separate transcriptions (ILL reads \"zhes bshad do\" where C05 reads \"zhes gsungs pa'i phyir\"; P5 reads \"dwangs pa\" for C05's \"dvangs pa\"). A sweep of all 511 C05 rows for a row opening with a bare final particle (go/ngo/do/ro/'o/to/no/so/mo/lo followed by a shad) returns exactly two: 252 and 494 (\"go,de la nye ba la sbyin pa ni, ...\", whose predecessor C05:493 ends \"... sbyin pa mchog\"). Rare, so a defect rather than a convention. Not one of the registered classes: not the {SHl} drop, not a fused footnote number, not a folio marker, not a following heading, not E-071, not the 1,500-char cap. No characters are lost; only the row boundary is misplaced.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
