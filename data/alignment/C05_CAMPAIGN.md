@@ -65,8 +65,84 @@ The English is not, and it fails on its own terms before the Tibetan is
 consulted: "three types" in total, then "grouped into two", then "the
 'definite' group is of three different types". If the definite subgroup
 alone has three and an indefinite group also exists, the total cannot be
-three. Geshe Michael's English stays verbatim; the register records it. Open items for Adam
-(agentive "by", "non" subword, tshal pa, seng ldeng E-169, E-157) stand.**
+three. Geshe Michael's English stays verbatim; the register records it.
+
+**Those open items were worked through on 2026-09-17 and four of the five
+closed without needing a ruling** — the sections below carry the evidence.
+`tshal pa` -> "thorn" is confirmed by the master, by Geshe Michael's own
+English at both rows, and kept. The "non" subword turns out to be a question
+with identical answers either way, because the flag never reaches the bank.
+E-169 `seng ldeng` is recorded and has no action available in this repo. The
+agentive "by" is measured and reduced to a one-line ruling. E-157 remains.**
+
+## `tshal pa` -> "thorn" — CLOSED 2026-09-17, kept, no re-cut
+
+Kept at C05:92 and 95 "with a caveat", and listed as an OPEN ITEM FOR ADAM:
+**if ruled false, re-cut 92/95.** It is not false. Three independent
+confirmations:
+
+- The master glosses `tshal pa` as exactly `["thorn"]`, at GLOSSARY tier.
+- Geshe Michael's own English says the word at both rows -- C05:92 "was
+  pricked by the sandalwood thorn", C05:95 "the prick of His foot by the
+  sandalwood thorn". The link is attested in his text, not inferred.
+- The Tibetan is `seng ldeng gi tshal pa zug pa` in both, the same phrase.
+
+The caveat presumably came from `tshal` alone meaning grove/forest
+(`["tree grove","forest","grove"]`) and thorn normally being `tsher ma`
+(`["spines","thorn","thorns"]`). But `tshal pa` is its own headword with its
+own gloss, and the compound is not the sum of its parts.
+
+**Disposition: kept, no re-cut, item closed.**
+
+## E-169 `seng ldeng` -> "sandalwood" — recorded; nothing to change here
+
+Filed LOW/PROBABLE as ENGLISH_FACTUAL_ERROR and confirmed by a skeptic pass:
+`seng ldeng` is khadira, Acacia catechu, not sandalwood (which is `tsan dan`),
+and Geshe Michael renders the same word "Khadira" at C08:215. He renders it
+"sandalwood" at both C05:92 and C05:95, so within Course V it is a consistent
+rendering choice rather than a slip.
+
+Nothing in this repository changes: his English stays verbatim on the page,
+and `seng ldeng` is nulled in the spec so "sandalwood" never enters the bank
+as an equivalent. **The one live thread is not ours:** the master already
+carries `hgm_gloss ["khadira trees","sandalwood"]` on `seng ldeng` from
+earlier auto-alignment. That belongs with the 755 entries in
+`docs/MASTER_REBUILD_ORDER.md` that need a reader, alongside the same shape
+found at E-259, where the master's binding gloss for `stag` is `["leopards"]`
+while 21 corpus rows pair `stag` with "tiger".
+
+**Disposition: recorded, no action available in this repo, flagged to the
+dictionary work order.**
+
+## The "non" subword — CLOSED 2026-09-17, no ruling needed
+
+This stood as an OPEN ITEM FOR ADAM: `ma yin pa` / `mi` -> "non" inside
+hyphenated "non-virtuous" and "non-merit" is banked at d=7 **without** the
+subword flag, and "non" is outside the four listed negative-affix forms
+(n't, un, im, less). The question was whether to admit it as a fifth form.
+
+**Measured, and the answer is that both choices produce identical output, so
+there is nothing to rule on.** The `subword` flag lives only in the SPEC. It
+is consumed by `gen_alignment_page.py`'s `find_word`, where its single effect
+is to permit a match inside a word rather than at a word boundary. It is
+**not carried into the bank**: a link's keys are `case, course, d, eng, id,
+page, seg, tib, tib_acip`, and `subword` is not among them — 0 of 43,727
+links carry it. Nothing downstream — not the dictionary layer, not the app,
+not the phone — ever sees it.
+
+And "non" does not need the permission in the first place. In "non-virtuous"
+the hyphen IS a word boundary, so `find_word` matches it normally and
+`no_broken_words` does not flag it. Adding "non" to ALLOWED_SUBWORD would be
+inert.
+
+For the record, "non" behaves exactly like the four listed forms otherwise —
+8 links on `ma yin pa`, `ma`, `mi`, `min`, `ma yin`, the same negation family
+those four sit on (un 50, n't 31, less 20, im 15, on `mi`/`med`/`ma`). The
+difference is orthographic, not grammatical: the four are fused to their stem
+and "non" is hyphenated, which is precisely why one needs the flag and the
+other does not.
+
+**Disposition: closed, no change made, no ruling required.**
 
 ## The agentive "by", measured 2026-09-17 — Adam to rule
 
