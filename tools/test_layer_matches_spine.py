@@ -30,6 +30,7 @@ SPINE = sys.argv[2] if len(sys.argv) > 2 else os.path.join(
 
 # Measured 2026-08-28 over 42,648 fields. Each is a legacy defect with an errata
 # row; the ceiling stops the class SPREADING while the rows are worked off.
+BENIGN = {'EXACT', 'builder-join'}
 CEILING = {
     'punct-or-hyphen-normalised': 29,   # legacy C01/C02 silently repaired source punctuation
     'annotation-in-verbatim-field': 2,  # project commentary stored in a verbatim field
@@ -113,6 +114,20 @@ def main():
         'select course,seq,wylie,english from corpus_segments'))
     checked, tally, rec = classify(layer, rows)
     fail = False
+    # EVERY CLASS IS EITHER BENIGN OR CAPPED. builder-join is the BUILDER's
+    # own " ... " convention for one headword with two exponents on a page, so
+    # it is benign by design and named here rather than left implicit. Anything
+    # else that appears in the tally has no ceiling, and an uncapped class is
+    # an unbounded one: it can grow to any size while the gate prints a pass,
+    # which is the same fault as a ceiling set above its measurement, one level
+    # up. A new verdict string now has to be classified by a person.
+    unknown = sorted(c for c in tally
+                     if c not in CEILING and c not in BENIGN)
+    if unknown:
+        fail = True
+        print('UNCAPPED CLASS(ES) %s: tallied but neither benign nor under a '
+              'ceiling. Add each to CEILING (with the measured count) or to '
+              'BENIGN (with the reason it is not a defect).' % unknown)
     for cls, cap in CEILING.items():
         n = tally.get(cls, 0)
         if n > cap:
@@ -120,6 +135,19 @@ def main():
             print(f'FAIL {cls}: {n} > ceiling {cap}')
             for r in rec[cls][:10]:
                 print('     ', r)
+        elif cap and n < cap:
+            # A CEILING ABOVE ITS MEASUREMENT IS REGRESSION ROOM NOBODY
+            # GRANTED. 2026-09-18: test_no_supplied_span_head was carrying one
+            # unit of it, set by me in the very commit that fixed that gate's
+            # blindness, and it printed as a pass for a day. The audit found
+            # the same shape twice more (forward_battery's floor under its own
+            # measured value; no_phonetics_in_layer at 0.08% against a 2%
+            # ceiling, twenty-five times headroom). A ceiling only ratchets if
+            # something makes it follow the measurement down.
+            fail = True
+            print('SLACK %s: measured %d, ceiling %d. Tighten the ceiling to '
+                  '%d in a commit -- %d more could land in silence.'
+                  % (cls, n, cap, n, cap - n))
     if fail:
         return 1
     pct = 100.0 * tally['EXACT'] / checked

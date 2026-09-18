@@ -39,7 +39,13 @@ EVID = sys.argv[3] if len(sys.argv) > 3 else os.path.join(
 CEILING = {
     'INVENTED-BY-THE-VIEW': 0,        # neither banked nor a trim of a banked
     'phonetics-leaked-into-depth-5': 0,
-    'trimmed (trim_glued)': 40,       # 27 measured 2026-08-28
+    # 27 measured 2026-08-28, ceiling set at 40, MEASURES 40 TODAY: the
+    # class used every unit of the headroom it was granted, silently,
+    # over three weeks. That is the harm the SLACK check below exists to
+    # prevent -- it cannot fire here, because the slack is already spent.
+    # The ceiling is now exactly at the measurement, so the next trimmed
+    # row fails and has to be looked at.
+    'trimmed (trim_glued)': 40,
 }
 
 def payload(html):
@@ -95,6 +101,19 @@ def main():
             print('FAIL %s: %d > ceiling %d' % (cls, n, cap))
             for r in (bad if cls == 'INVENTED-BY-THE-VIEW' else both)[:10]:
                 print('     ', r)
+        elif cap and n < cap:
+            # A CEILING ABOVE ITS MEASUREMENT IS REGRESSION ROOM NOBODY
+            # GRANTED. 2026-09-18: test_no_supplied_span_head was carrying one
+            # unit of it, set by me in the very commit that fixed that gate's
+            # blindness, and it printed as a pass for a day. The audit found
+            # the same shape twice more (forward_battery's floor under its own
+            # measured value; no_phonetics_in_layer at 0.08% against a 2%
+            # ceiling, twenty-five times headroom). A ceiling only ratchets if
+            # something makes it follow the measurement down.
+            fail = True
+            print('SLACK %s: measured %d, ceiling %d. Tighten the ceiling to '
+                  '%d in a commit -- %d more could land in silence.'
+                  % (cls, n, cap, n, cap - n))
     if fail:
         return 1
     total = t['exact'] + t['trimmed (trim_glued)']
