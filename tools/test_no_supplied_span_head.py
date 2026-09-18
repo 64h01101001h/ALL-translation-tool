@@ -53,9 +53,61 @@ BASELINE = {"pages_c01": 1631, "pages": 48, "pages_c03": 578}   # frozen 2026-09
 # very same id and licenses the span only when that side is the sogs family.
 # A span that merely begins with "and" gets no free pass.
 SOGS = re.compile(r'^(?:la\s+)?sogs(?:\s+pa)?$')
+
+# SECOND CLASS LICENSOR, 2026-09-17. Widening FN to catch bare function-word
+# spans surfaced 73 of them, and READING them is what made the fix usable:
+# most are a pronoun rendering a pronoun, or the disjunctive particle
+# rendering "or". `bdag`/`bdag gis`/`ngas`/`nga` -> "I" (20 spans),
+# `khyod`/`khyed`/`rang nyid`/`rang` -> "you" (12), `'am` -> "or" (4),
+# `kho bos`/`rang gi` -> "our". That is the word's own meaning, not English
+# the translator supplied -- the same argument already accepted per-span for
+# `bdag cag gi` -> "our" at c5p61.
+#
+# DELIBERATELY NARROW. It licenses only pronouns and the disjunctive, and
+# only when the English is the matching pronoun or "or". It does NOT license
+# "the", "a" or "his", because that is exactly where the real defects sit:
+# `lam` -> "the", `lugs` -> "the", `tshe` -> "the", `ston pa` -> "his".
+# Licensing by class must never be licensing by convenience.
+PRONOUN = re.compile(
+    r"^(?:bdag|nga|khyod|khyed|rang|kho bo|bdag cag|'o skol|rang re|rang nyid)"
+    r"(?:\s+(?:cag|nyid|re|phyogs))?(?:\s*(?:'i|s|gi|gis|gyi|gyis|kyi|kyis))?$")
+PRONOUN_ENG = {"I", "you", "You", "our", "Our", "your", "Your",
+               "my", "My", "we", "We"}
+DISJUNCT = re.compile(r"^(?:&#x27;|')?am$")
+
+
+def licensed_by_class(tibs, eng):
+    """The Tibetan word itself is the licensor, checked against the span's
+    own other column -- never assumed from the English alone."""
+    for t in tibs:
+        if SOGS.match(t):
+            return True
+        if DISJUNCT.match(t) and eng.strip() in ("or", "Or"):
+            return True
+        if PRONOUN.match(t) and eng.strip() in PRONOUN_ENG:
+            return True
+    return False
 ID = re.compile(r'data-l="(s\d+\w+)"[^>]*>([^<]*)')
 
-FN = r'(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) '
+# The trailing space was a blind spot, found 2026-09-17 by auditing the gate
+# against the question "can it fail?". It required a space AFTER the function
+# word, so a span whose English is EXACTLY the function word -- `>the</span>`
+# -- did not match. That is not an edge case; it is the PUREST form of the
+# defect this gate exists to catch, a d=5 span carrying nothing but an article
+# the translator supplied. 73 such spans were invisible across the pages.
+#
+# Reading them is what makes the fix safe rather than noisy: most are correct.
+# `bdag`/`bdag gis`/`ngas`/`nga` -> "I" (20), `khyod`/`khyed`/`rang nyid` ->
+# "you" (12), `'am` -> "or" (4), `dang bcas pa` -> "and", `gcig` -> "a",
+# `rang gi` -> "our". A pronoun rendering a pronoun is the word's own meaning,
+# not supplied English. A handful are not: `lam` -> "the", `lugs` -> "the",
+# `tshe` -> "the", `ston pa` -> "his". Those are named in
+# docs/SPAN_HEAD_BARE_REVIEW.md for a reader; they are in shipped C01/C03
+# pages, which the campaign ratchets rather than re-cuts.
+#
+# (?=[ <]) matches the function word followed by a space OR by the element
+# close, which is the whole point.
+FN = r'(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You)(?=[ <])'
 PAT = re.compile(r'<span class="u[^"]*" data-d="([57])" data-l="(s\d+\w+)">'
                  r'(?:<span class="u[^"]*" data-d="7" data-l="s\d+\w+">)?' + FN)
 
@@ -78,8 +130,9 @@ def main():
                 key = "%s/%s" % (page, m.group(2))
                 if key in allow.get(d, {}):
                     continue
-                if any(SOGS.match(t) for t in texts.get(m.group(2), [])):
-                    continue          # class licensor: see SOGS above
+                tibs = texts.get(m.group(2), [])
+                if licensed_by_class(tibs, m.group(0).split(">")[-1]):
+                    continue          # class licensor: see above
                 hits.append((page, m.group(2), m.group(1)))
         if d in BASELINE:
             if len(hits) > BASELINE[d]:
