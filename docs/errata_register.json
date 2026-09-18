@@ -3154,5 +3154,17 @@
   "severity": "LOW",
   "confidence": "UNCERTAIN",
   "note": "filed from the alignment batch, spine-verified on merge"
+ },
+ {
+  "item_id": "E-264",
+  "course": "C05",
+  "segment": "C05:222",
+  "kind": "ENGLISH_TYPO",
+  "found": "is no longer a thing that can have any affect on anything",
+  "expected": "is no longer a thing that can have any effect on anything",
+  "evidence": "Homophone slip in Geshe Michael's English: after the determiner \"any\", in an object-noun slot, English requires the noun \"effect\"; \"affect\" is the verb. The Tibetan it renders, `las zhig pa yang dngos por med pas`, says only that a perished deed is not a functioning thing (it cannot act as a cause) -- so no Tibetan word is at risk either way and the alignment wraps no span over \"affect\". PARALLEL WITNESS CHECKED: `english like '%any affect on anything%'` returns exactly two rows corpus-wide, C05:222 and C16:799; C16 is the same file re-ingested (263 byte-identical rows with C05, per C05_CAMPAIGN.md) and so is NOT an independent witness. This is therefore not a published variant reading. The wider check `english like '% affect %'` returns 33 rows; every other one is the verb, except ILL:1493 (\"the adverse affect of sleep\"), which is the same slip in a different row and would be its own record. Not one of the registered do-not-file classes: no {SHl} drop, no fused footnote number, no folio splice, no following-heading glue; the English is 386 characters so the 1,500-char ingest cap (E-107) is not in play.",
+  "severity": "LOW",
+  "confidence": "CONFIRMED",
+  "note": "filed from the alignment batch, spine-verified on merge"
  }
 ]
