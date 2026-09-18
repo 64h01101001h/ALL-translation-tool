@@ -8,13 +8,13 @@
 
 Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source and Geshe Michael Roach's facing English &mdash; recorded as a by-product of a machine alignment campaign reading the courses segment by segment. **Every entry has been checked against the corpus database** (42,199 segments, spine `hgm_spine_v27_2.db`): the quoted strings were retrieved from the spine, not from a note, and each citation was re-derived rather than trusted.
 
-**263 entries**: **171 document errata** (6 HIGH, 77 MEDIUM, 88 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
+**264 entries**: **172 document errata** (6 HIGH, 77 MEDIUM, 89 LOW), **59 digitisation artefacts**, 16 observations checked and closed as *not* errata, and 1 that could not be verified.
 
 | Kind | n |
 |---|---|
 | Tibetan spelling | 128 |
 | Digitisation artefact | 59 |
-| English typo | 28 |
+| English typo | 29 |
 | Our banked layer | 16 |
 | English factual error | 8 |
 | Formatting | 7 |
@@ -126,7 +126,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:89` | Neither of the purpose of its ultimate purpose subsumes the other | Neither the purpose nor its ultimate purpose subsumes the other | Own row: wylie 'dgos pa dang dgos pa'i dgos pa ni ngo bo tha dad yin te' (ACIP DGOS PA DANG DGOS PA'I DGOS PA NI ...) coordinates the two terms with dang; the English 'Neither of the purpose of its ultimate purpose' is ungrammatical ('Neither of X of Y'), the  | PROBABLE |
 | `C05:92` | dug 'das | dug mdas (dug mda' + instrumental -s) | Wylie and ACIP agree on 'DAS, so this is the keyed reading, not a converter artefact. 'das (pass/beyond) yields no sense after dug (poison) before bkrongs pa (was killed); GMR's own English, 'died from a wound inflicted by a poisoned arrow', is the internal wi | PROBABLE |
 
-## Low severity &mdash; 88 entries
+## Low severity &mdash; 89 entries
 
 | Citation | What it says | Should say | Evidence | Confidence |
 |---|---|---|---|---|
@@ -186,6 +186,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 | `C05:206` | are actually nice, and happiness; | are actually nice, and happy; | This segment's own wylie reads 'mchog tu gtsang ba dang bde bar snang ba' - two dang-coordinated complements of snang ba ('appear'): [appear] supremely clean AND happy. The English renders the first complement with the adjective 'nice' and then switches to the | CONFIRMED |
 | `C05:210` | NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA | NUS PA'I SKAD CIG BAR MED PA RTEN DU GYUR PA | SELF-WITNESS: this row's own ACIP (source of record) writes the identical phrase correctly eleven syllables earlier in the SAME SENTENCE — `NUS PA'I SKAD CIG BAR MED PA GANG ZHIG LAS` — and then `NUS PA'I SKAD CIG PAR MED PA RTEN DU GYUR PA`. `bar med pa` ('no | CONFIRMED |
 | `C05:213` | Master Stiramati also explains the physical faculties | Master Sthiramati also explains the physical faculties | `blo brtan` is Sthiramati. The organisation's corpus spells the name with the aspirate in four independent rows -- GK:144, ILL:1814, ILL:2095, and ILL:2247, the last being the SAME PASSAGE independently translated ('Here Master Sthiramati explains that the phy | UNCERTAIN |
+| `C05:222` | is no longer a thing that can have any affect on anything | is no longer a thing that can have any effect on anything | Homophone slip in Geshe Michael's English: after the determiner "any", in an object-noun slot, English requires the noun "effect"; "affect" is the verb. The Tibetan it renders, `las zhig pa yang dngos por med pas`, says only that a perished deed is not a funct | CONFIRMED |
 | `C05:24` | mtshung med | mtshungs med | ACIP source of record reads MTSUNG MED (no final S). The epithet is standardly mtshungs med; the spine has 13 rows with 'mtshungs med' and this is the only row with 'mtshung med'. No parallel witness of this row exists (wylie 'mtshung med lcang skya' occurs on | PROBABLE |
 | `C05:247` | de dang , der yod med rnam pa kun du mtshungs sam mi mtshungs  (ACIP source: DE DANG , DER YOD MED RNAM PA KUN DU MTSUNGS SAM MI MTSUNGS ZHE) | de dang , der yod med rnam pa kun tu mtshungs sam mi mtshungs | Three independent authorities agree, and none of them is inference of mine. (1) Tony Duff, Standard Tibetan Grammar Vol I p.79: the re-suffixed da of kun/shin/'on is invisible in new orthography but still present, and "the presence of re-suffixed da letter on  | CONFIRMED |
 | `C05:38` | stained or without stain." the first two of the chapters are devoted | stained or without stain." The first two of the chapters are devoted | Verbatim in the C05:38 english field: a new sentence opens lower-case after a period-closed quotation. Not a registered errata class and not a converter artefact (the wylie/ACIP have no bearing on English capitalisation). PARALLEL WITNESS: C16:687 carries the  | PROBABLE |
@@ -347,7 +348,7 @@ Defects found in the ALL core documents &mdash; the Tibetan (ACIP/Wylie) source 
 
 ## Recommended actions, by owner
 
-**Document editors.** The 171 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
+**Document editors.** The 172 document errata above. Start with the 6 HIGH entries. Note that several errors exist at MORE THAN ONE LOCUS because passages are ingested twice &mdash; each entry's evidence names them, and a per-segment fix will leave duplicates behind.
 
 **Data-pipeline maintainers.** The 59 digitisation artefacts, plus two reports filed separately: `docs/upstream/FOLIO_MARKER_COLLISIONS.md` (119 folio markers spliced into caption numbers) and `docs/upstream/C13_COLUMN_OFFSET.md` (**C13:63&ndash;82 pairs Tibetan with the English of a different text &mdash; C13 should not be scanned until it is fixed**).
 

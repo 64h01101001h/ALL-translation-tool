@@ -47,7 +47,7 @@ the/a/an/and/or/his/our/your/I/you unless `data/alignment/span_head_allow.json`
 lists it under `pages_c05` with the Tibetan word that licenses it.
 
 ## Progress
-c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. Coverage 165/511 (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads).
+c5p1–c5p7 (1–21) cloned 2026-09-05; c5p8–c5p49 (22–147) landed 2026-09-05; c5p50–c5p55 (148–165) landed 2026-09-08. Coverage AT THAT DATE was 165/511. **Do not read a current figure off this line** — a reconciler on C05:217 noticed it still said 165 while the bank was banked through 216, which is exactly the decay this project keeps finding. For the live number run `python3 tools/build_alignment_layer.py`, which prints COVERAGE and the bank size from the pages themselves. (17 gates green at every landing; pages_c05 0 unlicensed function-word span heads.)
 
 **PAUSED 2026-09-08 (Adam's call): the campaign stops here while the app goes to
 a public release (two-week target). Reconciled-but-unlanded specs for 166, 167,

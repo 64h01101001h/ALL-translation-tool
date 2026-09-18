@@ -32,7 +32,29 @@ import re, io, os, glob, sys, json
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALIGN = os.path.join(ROOT, "data", "alignment")
 ALLOW = os.path.join(ALIGN, "span_head_allow.json")
-BASELINE = {"pages_c01": 1643, "pages": 50, "pages_c03": 603}   # frozen 2026-09-04; c03 613->603 after the audit repairs the same day
+# Ratchets, TIGHTENED 2026-09-17 to the measurement after the sogs class
+# licensor landed: pages 50->48, c01 1643->1631, c03 603->578. Those 39
+# spans were sogs all along and had been counted against the ratchet.
+# Leaving the old numbers would have left 39 spans of dead room below the
+# gate -- the exact shape found twice elsewhere today (a battery floor set
+# under its own measured value, a ceiling twenty-five times above it).
+# A ratchet is only a ratchet if it sits ON the measurement.
+BASELINE = {"pages_c01": 1631, "pages": 48, "pages_c03": 578}   # frozen 2026-09-04; c03 613->603 after the audit repairs the same day
+# CLASS LICENSOR, added 2026-09-17. 20 of the 24 pages_c05 entries in
+# span_head_allow.json said the identical thing: `sogs` / `la sogs pa` owns
+# its closing gesture -- "and the rest", "and so on", "and the like", "or the
+# like", "or other". Twenty near-identical entries are not twenty rulings;
+# they are one ruling, re-typed, and re-typing a ruling is how rubber-stamping
+# starts. The Tibetan word IS the licensor here and always will be: the "and"
+# or "or" is not supplied English at all, it is what the etc.-particle means.
+#
+# This is safe because it is CHECKED, not assumed. Each span id appears twice
+# on a page, once per column, so the gate looks up the TIBETAN side of the
+# very same id and licenses the span only when that side is the sogs family.
+# A span that merely begins with "and" gets no free pass.
+SOGS = re.compile(r'^(?:la\s+)?sogs(?:\s+pa)?$')
+ID = re.compile(r'data-l="(s\d+\w+)"[^>]*>([^<]*)')
+
 FN = r'(?:the|The|a|A|an|An|and|And|or|Or|his|His|our|Our|your|Your|I|you|You) '
 PAT = re.compile(r'<span class="u[^"]*" data-d="([57])" data-l="(s\d+\w+)">'
                  r'(?:<span class="u[^"]*" data-d="7" data-l="s\d+\w+">)?' + FN)
@@ -47,10 +69,17 @@ def main():
         hits = []
         for f in sorted(glob.glob(os.path.join(ALIGN, d, "*.html"))):
             page = os.path.basename(f)[:-5]
-            for m in PAT.finditer(io.open(f, encoding="utf-8").read()):
+            html = io.open(f, encoding="utf-8").read()
+            # every text this page carries under each span id, both columns
+            texts = {}
+            for i, t in ID.findall(html):
+                texts.setdefault(i, []).append(t.strip())
+            for m in PAT.finditer(html):
                 key = "%s/%s" % (page, m.group(2))
                 if key in allow.get(d, {}):
                     continue
+                if any(SOGS.match(t) for t in texts.get(m.group(2), [])):
+                    continue          # class licensor: see SOGS above
                 hits.append((page, m.group(2), m.group(1)))
         if d in BASELINE:
             if len(hits) > BASELINE[d]:
