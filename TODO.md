@@ -4208,6 +4208,40 @@ carries the measurement that says how far off it is, so nobody has to guess.*
 
 ## AB. The campaign costs too much — measured 2026-09-22
 
+**CORRECTION 2026-09-22, BEFORE ANY OF THIS IS ACTED ON. The job is 10.4x
+smaller than the figures below assume, and the error was mine.** Everything
+in this section was priced against the whole 42,199-segment spine. The
+standing mandate is C01-C18. Verified row by row against
+build/hgm_spine_v27_2.db and alignment_full_v1.json:
+
+      C01-C18 segments                                  8,961
+      less C13 (standing order: do NOT scan)           -1,041
+      less already landed                              -1,748
+      = remaining under the mandate                     6,172
+      less EXACT (wylie, english) duplicates of text
+        already read, or of each other                 -2,099
+      = UNIQUE SEGMENTS NEEDING A READ                  4,073
+
+C16 is 49.9% duplicate of already-read text, C07 18.5%, C15 16.1%. Both
+corrections -- read the mandate not the corpus, and COPY duplicate pages
+rather than re-reading them -- are free, deterministic and gate-provable, and
+the repo already holds evidence that copying is safe: 223 comparable duplicate
+pairs in the bank agree at Jaccard 1.00, 222 of them perfectly.
+
+So the bill is ~1.31 BILLION tokens, not ~13.6 billion. DO THIS RE-SCOPE AND
+THE DUPLICATE-COPY PATH FIRST: they are worth an order of magnitude more than
+any of the three levers below, and until they are done no other saving can be
+priced honestly -- you cannot measure a few percent against a bill that is
+10.4x wrong.
+
+**AND THE PER-SEGMENT FIGURE BELOW IS IN DOUBT.** An independent recount of
+25 nine-segment batches puts the true cost at a median of 651,499 billable
+tokens per segment (input + cache_creation + output) and reports that 322,727
+does not reproduce from the transcripts. Re-derive it before quoting either
+number. The RATIO findings (content vs billed, tool calls per agent) are
+unaffected; the absolute figure is.
+
+
 - [ ] **Cut the cost of the aligned-dictionary campaign. Adam, 2026-09-22:
       the main concern is that it is "entirely too expensive to keep running
       the project in the way that we are."** Three levers, all measured, all

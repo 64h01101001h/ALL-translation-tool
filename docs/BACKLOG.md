@@ -373,6 +373,37 @@ live concern — see the cost item in `TODO.md`.
    wearing a new coat. Whatever it returns has to land as flagged candidates
    for a person, never as a silent edit.
 
+**WHAT AN ELEVEN-AGENT ASSESSMENT FOUND, 2026-09-22 — read this before the
+pass is scheduled.** Five candidate uses of Jev were designed and each was
+adversarially critiqued. **All five failed**, including this one. Adam's
+decision stands; these are the measured facts it will have to survive, and
+every one below was verified independently rather than taken from an agent:
+
+- **The only ground truth here is MACHINE-AUTHORED.**
+  `data/alignment/audit_verdicts_20260904.json` names its own labellers in its
+  `models` key — first_read `claude-opus-5`, second_reader and skeptics
+  `claude-fable-5-1` — and carries no human-adjudicator field at all. Grading
+  a checker against that set measures AGREEMENT WITH CLAUDE, not correctness,
+  and the resulting number would be quoted as accuracy. This is condition 3
+  above, and it is worse than it looked: the yardstick does not merely risk
+  circularity, it is circular today.
+- **The bottleneck is ADJUDICATION, not detection.** A free deterministic gate
+  (`test_no_supplied_span_head.py`) already flags **2,256** spans.
+  `span_head_allow.json` holds **38** adjudicated licensors — 1.7% worked.
+  Buying thousands more flagged candidates lengthens a queue that is already
+  98% unworked. Whatever Jev returns lands in the same place.
+- **The free detector is already precision 1.00 / recall 0.58** on the labeled
+  set, so Jev's whole opportunity is the residual — against 19 labeled
+  positives in total. Wilson 95% on that is +/-0.285 wide. There is no
+  statistical power to certify anything, and acquiring it would cost thousands
+  of agent invocations spent purely on validating the cheap thing.
+- **It saves nothing on the bill**, which was the concern that raised it. It
+  is additive to production by construction.
+
+None of that makes the pass wrong. It does mean the pass needs a HUMAN-LABELLED
+holdout built first, and an adjudication plan for what it finds — or it will
+produce a large, confident, unworkable queue measured against itself.
+
 **What to preserve between now and then, so the pass is possible at all:**
 every banked link already carries its course, segment, Tibetan span and
 English span. That is the whole supplied state. Do not let a future schema

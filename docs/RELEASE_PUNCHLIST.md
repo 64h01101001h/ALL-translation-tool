@@ -6,7 +6,7 @@
 
 The reading that produced the previous version of this page is kept at `docs/RELEASE_PUNCHLIST_2026-09-11.md`. Its classifications are the input to the re-survey that fills in the section below; they are not carried across automatically, because its rows are summaries whose source pointers have drifted and matching them by guess would be guesswork dressed as data.
 
-**152 open items.** 132 classified, 20 awaiting a reading.
+**152 open items.** 131 classified, 21 awaiting a reading.
 
 
 ## Release-blocking, and mine to do
@@ -73,7 +73,7 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 31 | A title-translation protocol distinguishing ornamental from descriptive titles and settling which comes first; measure the 2,463 catalog title pairs before writing the rule. | medium | `TODO.md:4155` |
 | 32 | Hover-for-English read-along over Geshe Michael's translations: segment-level works for all 42,199 today, word-level hover is attested for only 4.14% and must say so. | large | `TODO.md:4175` |
 | 33 | A Tibetan-folio to English-page estimator; the expansion is measured at 1.548 words per syllable with a 1.000-2.184 band, but syllables-per-folio is unmeasured. | medium | `TODO.md:4194` |
-| 34 | Cut the campaign's cost: batch the precedent lookups (21 tool calls per agent, 3.8x re-send multiplier), re-order reading for vocabulary yield, cheapen the propose pass. | medium | `TODO.md:4211` |
+| 34 | Cut the campaign's cost: batch the precedent lookups (21 tool calls per agent, 3.8x re-send multiplier), re-order reading for vocabulary yield, cheapen the propose pass. | medium | `TODO.md:4245` |
 | 35 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
 | 36 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
 | 37 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
@@ -107,8 +107,7 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 20 | Close the fixable slice of the 2.2% read-aloud gap by recording the spya/spyi/spyod pya-to-ca fold in kawachen_labels.json | small | `TODO.md:4137` |
 | 21 | Harvest the THL Kangyur/Tengyur catalogue and fold it in only on a verified join, after a licence and terms review | medium | `docs/BACKLOG.md:91` |
 | 22 | Settle attestation vs the Botok vocabulary ladder by measuring their rank correlation first | medium | `docs/BACKLOG.md:200` |
-| 23 | DECIDED: use Jev to check every banked link for correspondence-correctness once the dictionary is complete — a correctness pass, not a cost saving, with four conditions unsettled. | medium | `docs/BACKLOG.md:317` |
-| 24 | Commit the uncommitted day's work — the tree is clean and the work is in history | small | `docs/OPEN_TASKS_2026-09-10.md:7` |
+| 23 | Commit the uncommitted day's work — the tree is clean and the work is in history | small | `docs/OPEN_TASKS_2026-09-10.md:7` |
 
 ## Waiting on Adam
 
@@ -197,3 +196,4 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 18 | 3. | `TODO.md:531` |
 | 19 | 2-original. | `TODO.md:537` |
 | 20 | 30 open questions for Adam are collected at the end of each batch section of the plan. | `TODO.md:788` |
+| 21 | ## Jev AI — the verification pass, AFTER the dictionary is complete (Adam, 2026-09-22) DECIDED 2026-09-22. | `docs/BACKLOG.md:317` |
