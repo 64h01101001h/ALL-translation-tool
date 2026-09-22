@@ -314,31 +314,67 @@ What it would be FOR, so this is not scope for its own sake: a student reading
 a text about a figure they cannot picture is the ordinary case, and nothing in
 the tool answers it today. That is a real gap. It is still gated on step 1.
 
-## Jev AI for finishing the dictionary — UNIDENTIFIED (Adam, 2026-09-22)
+## Jev AI — the verification pass, AFTER the dictionary is complete (Adam, 2026-09-22)
 
-> "Is there some way to use the new Jev AI to complete the dictionary in a
-> more time and cost efficient way?"
+**DECIDED 2026-09-22.** Adam: *"we'll go back and use Jev to check everything
+once the dictionary is completed."* Not a cost lever for building the
+dictionary — a correctness pass over the finished one. This entry exists so
+that decision, and the conditions attached to it, survive to the day it is
+acted on.
 
-**I do not know what Jev AI is and did not guess.** It is not something this
-project has used, nothing in the tree mentions it, and it is not a system I
-can describe from knowledge. Rule 3 applies to tools as much as to syllables:
-a confident answer about a product I cannot identify would be worthless and
-would sound exactly like a useful one.
+**What Jev is** (TypeSafe AI, identified by Adam 2026-09-22, having been filed
+UNIDENTIFIED earlier the same day): a model for fast STRUCTURED
+DECISION-MAKING, not conversation. It does not generate text. It evaluates a
+supplied "state" and returns typed results — yes/no probabilities,
+multiple-choice classifications, scores and confidence values. Meant to
+complement a chat model rather than replace it. The vendor claims
+substantially lower latency and cost; **those are early company benchmarks,
+not independent results,** and nothing here should be planned as if they are
+proven.
 
-**Waiting on Adam for one thing only: what it is** — a link, a vendor, or
-where it was seen. Then it can be assessed properly.
+**Why it fits THIS job and not the building of the dictionary.** The alignment
+campaign composes: the propose pass decomposes a segment into spans, the
+reconcile pass writes an argument. Jev generates no text and can do neither.
+But the thing it CAN do is the thing nothing else here can:
 
-What the assessment will have to answer, recorded now so it is not
-re-invented later, and it is the same test any tool faces here:
+> the deterministic gates prove the text is VERBATIM, and they can never prove
+> the correspondence is CORRECT. A link that maps the wrong Tibetan word to
+> the wrong English span passes every check we have, because both sides are
+> genuine text. That is the single class of error that ships silently.
 
-- **Rule 1 is not negotiable.** `hgm_gloss` carries Geshe Michael's own
-  English. A machine may MATCH it from corpus evidence and may never COMPOSE
-  it. Any tool that would generate English equivalents is answering a question
-  this project does not ask, however cheaply it answers it.
-- **Where the actual cost is.** The expensive half of "completing the
-  dictionary" is not generation — it is ATTESTATION and human ruling. 12,004
-  of 105,634 entries carry an HGM gloss; the 79,305 Lokesh Chandra entries are
-  awaiting, and what they await is a decision, not text.
-- **The standing constraint**: no paid API generation, and the app imports a
-  dictionary release rather than owning one (CLAUDE.md). A tool that produces
-  data would be producing it for the DATA project, not for this repo.
+"Given this segment's Tibetan and English, is THIS Tibetan span correctly
+matched to THIS English span?" is a yes/no over a fully suppliable state. That
+is Jev's exact shape, and it is the only hole in the gate wall that no
+deterministic check can reach. Today **nothing** checks it — a full-attention
+re-audit of every banked link is precisely the pass that has always been too
+expensive to run.
+
+**Why AFTER, not now.** A checker earns most against a complete corpus: run it
+early and it re-runs on every batch; run it once at the end and every link is
+checked exactly once. It also cannot help the expense problem, which is the
+live concern — see the cost item in `TODO.md`.
+
+**What must be true before the pass runs — none of these is settled:**
+
+1. **Adam's standing constraint is no paid API generation.** Jev is a paid
+   external service. Whether *checking* counts as *generation* in that rule's
+   intent is Adam's reading to give, not anyone else's to assume.
+2. **Sending the corpus out publishes it.** Running the links through an
+   external service means Geshe Michael Roach's English and the Tibetan
+   corpus leave this machine. That is a decision for Adam and the
+   organisation, and it must be taken deliberately rather than discovered.
+3. **The validation must not be circular.** The obvious ground truth is the
+   reconcilers' own rulings — and grading a checker against the work it is
+   checking is the `circular-batteries` fault this project has already been
+   bitten by. The honest design needs held-out human judgements, or the
+   errata register's confirmed defects, as an independent yardstick.
+4. **Its output must not become a new unchecked authority.** A confidence
+   score that nobody can re-derive is this repo's characteristic failure
+   wearing a new coat. Whatever it returns has to land as flagged candidates
+   for a person, never as a silent edit.
+
+**What to preserve between now and then, so the pass is possible at all:**
+every banked link already carries its course, segment, Tibetan span and
+English span. That is the whole supplied state. Do not let a future schema
+change drop any of it.
+

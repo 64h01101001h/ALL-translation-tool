@@ -49,9 +49,13 @@ Adam then asked for them to be put where they belong. They are filed, and
 | 2 | hover-for-English read-along | `TODO.md` §AA | code |
 | 3 | folio -> English page estimator | `TODO.md` §AA | code |
 | 4 | Himalayan Art Resources | `docs/BACKLOG.md` | waiting on someone outside |
-| 5 | Jev AI | `docs/BACKLOG.md` | waiting on Adam |
+| 5 | Jev AI | `docs/BACKLOG.md` | **DECIDED 2026-09-22** — a correctness pass after the dictionary is complete |
 
-None has been designed, scoped or costed. Each entry carries the
+A sixth item was added the same day and is now the live concern: **the
+campaign costs too much** (`TODO.md` §AB), with the measurement of where the
+money actually goes.
+
+None of the five has been designed, scoped or costed. Each entry carries the
 measurement that says how far off it is, so the next reader does not have
 to guess — and the two in the backlog carry the reason they are gated
 rather than merely deferred.

@@ -4205,3 +4205,66 @@ carries the measurement that says how far off it is, so nobody has to guess.*
       assumed. Until then the tool can honestly answer "this many syllables
       becomes this many English words", which is most of what a publisher
       wants, and say that the folio conversion is unmeasured.
+
+## AB. The campaign costs too much — measured 2026-09-22
+
+- [ ] **Cut the cost of the aligned-dictionary campaign. Adam, 2026-09-22:
+      the main concern is that it is "entirely too expensive to keep running
+      the project in the way that we are."** Three levers, all measured, all
+      free, none needing a vendor or sending data anywhere. They multiply.
+
+      **WHERE THE MONEY GOES, measured across one 9-segment batch (27
+      agents).** The actual CONTENT — every prompt, tool result and written
+      report — is 748,000 tokens. The batch BILLED 2,855,264. The ~3.8x gap
+      is context re-send: each agent averages **21 tool calls** and the
+      heaviest made 31, and every call re-pays for the conversation before
+      it. Caching absorbs much of it but not the growth. Per segment:
+      ~83,000 tokens of content, ~317,000 billed.
+
+      **LEVER 1 — batch the precedent lookups. The biggest, and mine to
+      build.** Most of those 21 calls are one-at-a-time bank queries: count
+      `drung du`, count `sogs` -> "and so forth", count `la` nulls. Every
+      reconciler re-derives its own counts by scanning
+      `alignment_full_v1.json` (10.8 MB, 50,370 links) query by query. A
+      precomputed index — tib -> [(eng, count, depth)] — turns twenty round
+      trips into one lookup. Do NOT promise a multiplier before testing it;
+      the 3.8x is what it attacks, not what it will deliver.
+
+      **LEVER 2 — reading order.** The campaign's goal is a DICTIONARY and it
+      reads in COURSE ORDER, which is the worst case for vocabulary coverage.
+      Measured by greedy set-cover over 1-2 syllable units (43.3% of banked
+      headwords are that shape), against 40,451 unread segments and 152,500
+      remaining units:
+
+          2,000 segments -> 40.3% of remaining vocabulary  (0.65B tokens)
+          5,000 segments -> 62.9%                          (1.61B)
+         10,000 segments -> 82.2%                          (3.23B)
+         40,451 segments -> 100%                           (13.1B)
+
+      **63% of the remaining vocabulary is in 12% of the segments.** Ordering
+      barely shrinks the total (23,032 of 40,451 segments cover everything,
+      only 1.8x) — what it does is FRONT-LOAD, so stopping early costs
+      little. Today we stop wherever the budget runs out having read whatever
+      came next.
+      CAUTION, and it is the reason to check this before trusting it: a first
+      pass measured at SYLLABLE granularity said 10x, and that was wrong —
+      syllables are a 9,813-item vocabulary while real 1-2 syllable units
+      number 157,860. Measure at the granularity the bank actually keys on.
+      CONFLICT TO SETTLE WITH ADAM: the standing order is to read whole
+      courses in order (C01..C18). Vocabulary-greedy order breaks that, and
+      the campaign has been gate-proving per-course completeness. Ask before
+      re-ordering; the two goals are genuinely different.
+
+      **LEVER 3 — a cheaper model for the propose pass.** Two of the three
+      agents per segment DECOMPOSE; only the reconciler JUDGES. The
+      reconcilers' arguments are the campaign's intellectual product and
+      should keep full attention. The proposals plausibly should not. Test it
+      on a batch and compare the reconcilers' disagreement rate before and
+      after — if the cheaper proposals degrade, the reconciler will say so in
+      its own report, which is the measurement.
+
+      **NOT A COST LEVER: Jev.** It cannot build the dictionary — it
+      generates no text, and both the propose and reconcile passes compose.
+      Adam's decision 2026-09-22 is to use it to CHECK everything once the
+      dictionary is complete; that is a correctness pass, filed in
+      `docs/BACKLOG.md`, and it will not reduce this bill.
