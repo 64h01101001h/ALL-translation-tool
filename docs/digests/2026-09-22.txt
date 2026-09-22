@@ -1,0 +1,163 @@
+# Diamond Cutter Translation Tool Daily Digest #10 --- Tuesday, September 22 2026
+
+*Covers Friday the 18th and today. There was no work over the weekend or on
+Monday, and this digest says so rather than spreading two days across five.*
+
+**Headline.** The aligned dictionary passed **fifty thousand attested links**.
+Along the way it found something that matters more than the milestone: a
+keying error in one line of a course text had created its own entry in Geshe
+Michael's dictionary, and that entry then vouched for the error when the error
+was checked. It has now happened twice, and the second one was found on
+purpose, by applying the first one's lesson as a test.
+
+I also found that I had been over-estimating the remaining work by a factor of
+ten, which is the most useful thing in this digest.
+
+## What got done
+
+### A defect that wrote its own dictionary entry, and then cleared itself
+
+Course 5, line 335, spells the fourth non-virtue as *ma byin lan*. The correct
+spelling is *ma byin len* --- "taking what is not given". The proof is not a
+judgement call: the same root verse is restated in prose two lines later and
+spells it correctly, another line of the same course spells it correctly, and
+across everything we hold the correct spelling appears in fourteen places in
+seven courses while the wrong one appears in two --- this line, and one
+re-ingested copy of the same file.
+
+**Two independent readers cleared the line anyway**, and they cleared it for a
+reason that sounds excellent: the misspelling *is* a headword in the
+dictionary. It has a definition. It is marked as attested.
+
+Its record of where it occurs lists exactly those two places --- this line and
+its copy. **The entry was built from the error.** So the error now launders
+itself: anyone who checks the spelling against the dictionary finds it
+confirmed, because the dictionary learned it here.
+
+The correct sibling entry carries its Sanskrit, a scholarly gloss, and
+thirteen occurrences across seven courses. The two sit side by side.
+
+**Then it happened again, and this time we went looking.** Line 346 of the same
+course writes one phrase two different ways twenty words apart. Applying the
+same test: the rarer spelling is also its own dictionary headword, also built
+from exactly the four places that carry it. That one is recorded as a variant
+rather than a fault, because unlike the first it does appear in two genuinely
+independent documents --- and the entry says which half is certain and which is
+not.
+
+**Why this matters beyond two words.** The rule we now work by: before letting
+a reference work settle a question, ask what that reference work was *built
+from*. An entry whose entire evidence is the line you are auditing is not
+evidence. It is an echo. Both entries are recorded by number so that whoever
+cuts the next dictionary release can decide whether to retire them.
+
+### The work remaining is ten times smaller than I said it was
+
+This is a correction to my own figures and it is the most practical item here.
+
+I had been sizing the reading against everything we hold --- forty-two
+thousand passages. The standing instruction is the eighteen courses, which is
+nine thousand. Subtract Course 13, which is set aside because its English is
+paired with the wrong Tibetan, subtract what is already read, and subtract the
+passages whose text is **exactly identical** to something already read ---
+Course 16 is half duplicate, Course 7 a fifth --- and what actually remains to
+be read is about **four thousand passages, not forty-two thousand.**
+
+Both of those corrections are free and mechanical. Duplicate passages do not
+need a second reading; they need copying, and we already have evidence that is
+safe --- two hundred and twenty-three comparable duplicate pairs already read
+independently agree completely, two hundred and twenty-two of them perfectly.
+
+I would rather report this as my own error than let a wrong number keep
+shaping decisions about what this costs.
+
+### Fifty-three lines of the help text broke a rule, because the checker was told not to look there
+
+In July the rule was set that Geshe Michael is to be named rather than
+pronouned. A check enforces it across the program, the documents and the
+digests. It excluded one folder --- correctly, because that folder holds the
+dictionary and the corpus, which are nobody's to edit.
+
+That folder also holds the **help text the program shows on screen**, and the
+blanket exclusion hid fifty-three lines in it --- more than the whole rest of
+the project put together. Fifty-one are fixed. Two are correct as they stand
+and are recorded with reasons: one refers to the scholar who gave us a licence
+in writing, and one is a worked example about nobody in particular.
+
+The lesson is the ordinary one: a check that skips what the reader actually
+sees is pointed the wrong way.
+
+### Three copies of the manual had been describing an older program since August
+
+Chasing the above turned up three distribution copies of the user manual,
+nearly two thousand lines, untouched since the 22nd of August while the
+manual itself moved under them. They were advertising a smaller program --- no
+keyboard reading controls, no second pronunciation system, no glossary links
+--- and one of them told the reader to open a pane that had been renamed weeks
+earlier.
+
+They are generated from the real manual now, and a check compares them to a
+fresh generation, so they cannot drift again.
+
+### The checks themselves: thirteen of seventeen findings closed
+
+Last week's audit of our own checks found seventeen faults in them. Thirteen
+are now closed, each proved by deliberately breaking the thing it watches and
+confirming it complains. Four remain and are named so nobody has to hunt.
+
+Two are worth reporting plainly because they were faults of mine. One check
+had been quietly certifying that our build records came from a clean source
+tree when it was structurally incapable of ever saying so. And one limit I set
+myself --- in the very commit that fixed that check --- was set one notch above
+what it actually measured, which is a notch of room for something to go wrong
+unnoticed. Both are fixed, and a check now refuses any limit set above its own
+measurement.
+
+## Adam's decisions and actions
+
+- Asked for the cost of the aligned dictionary to come down, which produced
+  the ten-fold correction above.
+- Decided that the new structured-decision model we looked at will be used to
+  **check** the dictionary once it is complete, rather than to build it.
+- Asked for a title-translation protocol --- ornamental versus descriptive
+  titles, and which comes first --- a hover-for-English reading view across
+  Geshe Michael's translations, and a folio-to-English-pages estimator. All
+  three are filed with measurements attached.
+- Paused the reading mid-batch, which is recorded along with the one piece of
+  work that must not be trusted when it resumes.
+
+## Numbers
+
+  --------------------------------------------- ----------------------
+  Attested alignment links banked               50,370
+  Course 5 alignment                            366 of 511 segments
+  Pages read to the full standard               578
+  Source-document defects on record             298
+  New defects recorded since the last digest    17
+  Automatic checks, all passing                 128
+  Audit findings closed of seventeen            13
+  Dictionary and corpus data changed            **none**
+  --------------------------------------------- ----------------------
+
+## Open questions for leadership
+
+- **Whether our texts may be sent to an outside service.** The checking pass
+  described above would mean Geshe Michael's English and the Tibetan leaving
+  our own machines for a commercial provider. I have not done this and will
+  not without a decision. It is not a technical question.
+- **Who applies the dictionary work order, and when.** Unchanged from the last
+  digest and still waiting: six hundred and twenty-seven mechanical spelling
+  corrections and seven hundred and fifty-five needing a reader. The
+  corrections cannot be made here --- we import the dictionary rather than own
+  it.
+- **The two dictionary entries built from errors**, above. Retiring them is a
+  decision for whoever cuts the next release, not for us.
+- **What "all of Geshe Michael's translations" means.** The aligned passages
+  are a portion. Establishing what is missing needs the organisation's
+  records.
+
+## Next
+
+- The free savings first: read the eighteen courses rather than everything,
+  and copy the duplicate passages instead of re-reading them.
+- Then Course 5 onward from 367, with the one untrusted passage re-read.
