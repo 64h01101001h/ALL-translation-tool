@@ -4144,3 +4144,64 @@ licensing decisions.
 - [ ] **Sequenced reading is one surface used twice** — the beginner's
       enormous-glyph reader and Adam's own proofreading readback are the same
       machinery at different speeds. Build once.
+
+## AA. Adam's requests, 2026-09-22
+
+*Five arrived together. Two are filed to `docs/BACKLOG.md` instead — Himalayan
+Art Resources (licensing is the first question) and Jev AI (I do not know what
+it is). The three here are buildable with data we already hold, and each one
+carries the measurement that says how far off it is, so nobody has to guess.*
+
+- [ ] **A title-translation protocol: ornamental vs descriptive titles, and
+      which comes first** — Adam, 2026-09-22. A tutorial/walkthrough/protocol
+      for the translator. **CHECK THE WORD BEFORE YOU START: "ornamental"
+      already means something else here.** In `app/main.cpp` and the manual it
+      is the decorative title FOLIO (1a), a page-layout feature — nothing to
+      do with a title's kind. Whatever this protocol calls the two classes, it
+      must not collide with that, or a reader of the manual will think the
+      work is done.
+      What exists and what does not: `core/include/allcore/title_xlat.h` is an
+      ATTESTATION engine — given a Tibetan title it finds whole-title and
+      phrase-level matches among published pairs, and lists the syllables no
+      fragment covers. It does not classify titles, and nothing in the tree
+      does. `data/extracted/catalog_titles.json` holds **2,463 title pairs**,
+      which is enough to MEASURE actual practice rather than assert it: how
+      often a work carries both kinds, which one the published English leads
+      with, and whether "which comes first" even has one answer across the
+      Kangyur, the Tengyur and Geshe Michael's own course titles.
+      Do the measurement before writing the protocol. A protocol that states a
+      rule the corpus contradicts is worse than no protocol.
+
+- [ ] **Hover-for-English read-along across all of Geshe Michael's
+      translations** — Adam, 2026-09-22. Tibetan and English side by side,
+      hover a word, see its English equivalent. This is the surface the whole
+      alignment campaign has been building the data for, so the honest
+      question is not "can we" but "over how much".
+      **MEASURED 2026-09-22: word-level hover is attested for 1,748 of the
+      42,199 corpus segments — 4.14%** (C01 496, C02 68, C03 620, C04 198,
+      C05 366). Everything else has no word-level attestation at all.
+      So this splits into two deliverables and they must not be confused:
+      **(a)** a SEGMENT-level read-along — Tibetan beside Geshe Michael's
+      English, citation per segment — which is available for all 42,199 today
+      and needs no new data; and **(b)** the word-level hover, which is
+      available only where the bank reaches and must SAY SO on screen, per
+      tier, or it will imply an attestation that does not exist for 96% of
+      the corpus. Build (a) first; let (b) light up as the campaign lands.
+      Rule 1 governs the hover: it may show a MATCHED equivalent, never a
+      composed one. The Overlay pane's dictionary hover is a different thing
+      and already exists — this one is the aligned corpus.
+
+- [ ] **A Tibetan folio -> English page and volume estimator** — Adam,
+      2026-09-22. **MEASURED 2026-09-22 across 40,181 usable corpus segments:
+      1,511,326 wylie syllables produce 2,339,297 English words = 1.548
+      words per syllable.** But the spread is the finding, not the mean:
+      per-segment median 1.433, quartiles 1.200 and 1.738, and the 10th-90th
+      percentile band runs 1.000 to 2.184. A single multiplier would be wrong
+      by a third at either edge, so the estimator must quote a RANGE and say
+      what it is conditioned on (verse vs prose, root text vs commentary).
+      The missing constant is the other half: syllables per folio. That is not
+      in the corpus — it depends on the edition's line count and hand — so it
+      has to be measured from actual folios or taken from a source, NOT
+      assumed. Until then the tool can honestly answer "this many syllables
+      becomes this many English words", which is most of what a publisher
+      wants, and say that the folio conversion is unmeasured.

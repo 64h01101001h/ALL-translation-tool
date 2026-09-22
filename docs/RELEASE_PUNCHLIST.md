@@ -6,7 +6,7 @@
 
 The reading that produced the previous version of this page is kept at `docs/RELEASE_PUNCHLIST_2026-09-11.md`. Its classifications are the input to the re-survey that fills in the section below; they are not carried across automatically, because its rows are summaries whose source pointers have drifted and matching them by guess would be guesswork dressed as data.
 
-**146 open items.** 126 classified, 20 awaiting a reading.
+**151 open items.** 131 classified, 20 awaiting a reading.
 
 
 ## Release-blocking, and mine to do
@@ -70,12 +70,15 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 28 | Custom pane cursors (vajra/bell, pen nib, hand) with a visible hotspot and a "standard cursors" preference switch | medium | `TODO.md:4081` |
 | 29 | Eight Auspicious Symbols as pane icons, empty-state art and tab icons, drawn in-house or openly licensed with attribution | medium | `TODO.md:4086` |
 | 30 | Build sequenced reading once: the beginner's enormous-glyph reader and Adam's proofreading readback on the same machinery | medium | `TODO.md:4144` |
-| 31 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
-| 32 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
-| 33 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
-| 34 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
-| 35 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
-| 36 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
+| 31 | A title-translation protocol distinguishing ornamental from descriptive titles and settling which comes first; measure the 2,463 catalog title pairs before writing the rule. | medium | `TODO.md:4155` |
+| 32 | Hover-for-English read-along over Geshe Michael's translations: segment-level works for all 42,199 today, word-level hover is attested for only 4.14% and must say so. | large | `TODO.md:4175` |
+| 33 | A Tibetan-folio to English-page estimator; the expansion is measured at 1.548 words per syllable with a 1.000-2.184 band, but syllables-per-folio is unmeasured. | medium | `TODO.md:4194` |
+| 34 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
+| 35 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
+| 36 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
+| 37 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
+| 38 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
+| 39 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
 
 ## Everything else unblocked (docs, data, process)
 
@@ -155,7 +158,8 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 44 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
 | 45 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
 | 46 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
-| 47 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
+| 47 | Whether Jev AI can finish the dictionary more cheaply — UNIDENTIFIED; waiting on Adam to say what it is before any assessment. | small | `docs/BACKLOG.md:317` |
+| 48 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
 
 ## Waiting on someone outside
 
@@ -164,6 +168,7 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 1 | When BDRC ships its improved OCR models, refresh the bundled PhotiLines/Woodblock models and re-run the OCR selftests. | medium | `TODO.md:2264` |
 | 2 | Das dictionary etext still unobtained: PKTC has not answered, DSAL terms unexamined, OCR route untouched. | medium | `TODO.md:3024` |
 | 3 | Per-dictionary licence verification of the Steinert set is done and documented; verdict is do-not-ingest. | small | `TODO.md:3031` |
+| 4 | Bring Himalayan Art Resources into the project; gated on asking HAR what is permitted before any ingest, then choosing ingest / link-out / never-ship. | large | `docs/BACKLOG.md:281` |
 
 ## Not yet classified
 

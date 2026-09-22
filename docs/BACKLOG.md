@@ -277,3 +277,68 @@ underlying state is worth fixing properly:
 Not urgent — at the default text size the app looks right — but it is the
 difference between an app that merely ignores accessibility settings and one
 that breaks under them.
+
+## Himalayan Art Resources, somehow (Adam, 2026-09-22)
+
+> "find someway to bring the himalayan art resources website into this
+> project."
+
+Back burner because the FIRST question is not technical and cannot be answered
+from this repo: **what are we permitted to do with it.** himalayanart.org is
+somebody else's collection — images, iconographic identifications, and
+scholarly metadata, much of it photographed from works held by museums and
+private collections that carry their own separate rights. Nothing about the
+site being public makes any of it ours to ingest, and this project has a
+clean licensing manifest that a careless ingest would ruin: every payload row
+in `docs/distribution/PAYLOAD_MANIFEST.txt` names its source and its lane, and
+`tools/manifest_check.py` refuses anything unclassified.
+
+So the order of work is fixed, and it is not the order that feels natural:
+
+1. **Ask.** Find out whether HAR has an API, a data-sharing arrangement, or a
+   stated licence, and if it does not, ask them directly. This is an email
+   Adam or the organisation sends, not a crawl anybody runs. Precedent inside
+   this project: the rKTs abbreviation list came in CC BY 4.0 because
+   Dr. Bruno Laine was asked and said yes in writing, and that permission is
+   recorded at `docs/licenses/RKTS_ABBREVIATIONS.md`.
+2. **Then decide the lane** — ingest, link-out, or never-ship — the same three
+   lanes every other reference layer sits in. LINK-OUT is the likely answer
+   and it is not a consolation prize: a deep link from a text to its
+   iconographic entry costs nothing, ships nothing, and breaks no rights.
+3. **Only then** ask what it would attach to. The honest candidates are the
+   catalog (a work -> the images of its subject), the deity and lineage names
+   that already appear in the corpus, and the Sanskrit/Tibetan name forms the
+   converter already handles.
+
+What it would be FOR, so this is not scope for its own sake: a student reading
+a text about a figure they cannot picture is the ordinary case, and nothing in
+the tool answers it today. That is a real gap. It is still gated on step 1.
+
+## Jev AI for finishing the dictionary — UNIDENTIFIED (Adam, 2026-09-22)
+
+> "Is there some way to use the new Jev AI to complete the dictionary in a
+> more time and cost efficient way?"
+
+**I do not know what Jev AI is and did not guess.** It is not something this
+project has used, nothing in the tree mentions it, and it is not a system I
+can describe from knowledge. Rule 3 applies to tools as much as to syllables:
+a confident answer about a product I cannot identify would be worthless and
+would sound exactly like a useful one.
+
+**Waiting on Adam for one thing only: what it is** — a link, a vendor, or
+where it was seen. Then it can be assessed properly.
+
+What the assessment will have to answer, recorded now so it is not
+re-invented later, and it is the same test any tool faces here:
+
+- **Rule 1 is not negotiable.** `hgm_gloss` carries Geshe Michael's own
+  English. A machine may MATCH it from corpus evidence and may never COMPOSE
+  it. Any tool that would generate English equivalents is answering a question
+  this project does not ask, however cheaply it answers it.
+- **Where the actual cost is.** The expensive half of "completing the
+  dictionary" is not generation — it is ATTESTATION and human ruling. 12,004
+  of 105,634 entries carry an HGM gloss; the 79,305 Lokesh Chandra entries are
+  awaiting, and what they await is a decision, not text.
+- **The standing constraint**: no paid API generation, and the app imports a
+  dictionary release rather than owning one (CLAUDE.md). A tool that produces
+  data would be producing it for the DATA project, not for this repo.

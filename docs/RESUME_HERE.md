@@ -36,11 +36,25 @@ The scratchpad is session-local and will not survive indefinitely. If those
 three specs matter, the cheap recovery is to re-run 367-369 from scratch
 rather than to hunt for the files.
 
-## Five requests from Adam, 2026-09-22 — captured here, not yet started
+## Five requests from Adam, 2026-09-22 — NOW FILED, see below for where
 
-These arrived in conversation and existed nowhere durable until this file.
-They are recorded verbatim in intent; none has been designed, scoped or
-costed, and none should be assumed feasible until it is.
+They arrived in conversation and existed nowhere durable until this file;
+Adam then asked for them to be put where they belong. They are filed, and
+**this section is no longer the record** — the three source lists are, and
+`docs/RELEASE_PUNCHLIST.md` regenerates from them.
+
+| | request | filed to | punchlist section |
+|---|---|---|---|
+| 1 | title-translation protocol | `TODO.md` §AA | code |
+| 2 | hover-for-English read-along | `TODO.md` §AA | code |
+| 3 | folio -> English page estimator | `TODO.md` §AA | code |
+| 4 | Himalayan Art Resources | `docs/BACKLOG.md` | waiting on someone outside |
+| 5 | Jev AI | `docs/BACKLOG.md` | waiting on Adam |
+
+None has been designed, scoped or costed. Each entry carries the
+measurement that says how far off it is, so the next reader does not have
+to guess — and the two in the backlog carry the reason they are gated
+rather than merely deferred.
 
 1. **A title-translation tutorial / walkthrough / protocol** — ornamental
    versus descriptive titles, and which comes first.
