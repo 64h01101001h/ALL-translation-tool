@@ -315,6 +315,48 @@ COURSES = {
     },
 }
 
+# TRANSFERRED PAGES. A segment byte-identical to one already read can have the
+# reading carried across instead of paid for again (tools/transfer_duplicate_
+# segments.py). Those pages register themselves in a sidecar rather than in the
+# COURSES literal above, for the reason alignment_page_dirs.py exists: a
+# written-down list goes stale and nothing makes forgetting fail. The sidecar is
+# DISCOVERED here, so a transferred page counts toward coverage the moment it is
+# written, and a course that has only transferred pages still gets an entry and
+# is still measured.
+TRANSFERRED_PAGES = os.path.join(OUTDIR, "transferred_pages.json")
+
+
+def _merge_transferred(courses):
+    if not os.path.exists(TRANSFERRED_PAGES):
+        return
+    reg = json.load(io.open(TRANSFERRED_PAGES, encoding="utf-8"))
+    for course, cfg in sorted(reg.items()):
+        d = os.path.join(OUTDIR, cfg["dir"])
+        cur = courses.setdefault(course, {"complete": False, "dir": d,
+                                          "pages": {}})
+        if os.path.normpath(cur["dir"]) != os.path.normpath(d):
+            sys.exit("REFUSED: %s is registered under %r in COURSES but %r in "
+                     "%s" % (course, cur["dir"], cfg["dir"],
+                             os.path.basename(TRANSFERRED_PAGES)))
+        for pg, seqs in sorted(cfg["pages"].items()):
+            if pg in cur["pages"] and cur["pages"][pg] != seqs:
+                sys.exit("REFUSED: transferred page %s/%s collides with a page "
+                         "of the same name already registered in COURSES"
+                         % (course, pg))
+            cur["pages"][pg] = seqs
+
+
+_merge_transferred(COURSES)
+
+# The per-segment provenance stamp a transferred page carries, one line above
+# the segment's own heading. It is the ONLY thing that tells the bank a span
+# arrived by transfer rather than by an analyst reading the row, so it is read
+# back from the page on every build instead of being remembered anywhere.
+XFER = re.compile(
+    r'<!-- TRANSFER v1 target="([A-Za-z0-9]+):(\d+)" '
+    r'source="([A-Za-z0-9]+):(\d+)" source_page="([^"]+)" '
+    r'spans="(\d+)" date="([^"]*)" tool="[^"]*" -->')
+
 # The class attribute is "u" plus whatever grammar label the analyst supplied
 # ("u noun", "u verb-nominal", "u compound member, noun"). This pattern
 # required class="u" EXACTLY, so every labelled span was invisible to the
@@ -463,6 +505,7 @@ def main():
     pairs = {}   # tib_norm -> {eng_display -> set("COURSE:seq")}
     acip_forms = {}   # tib_norm -> set(ACIP forms recovered)
     acip_miss = []    # spans whose ACIP could not be proven
+    xrefs = set()     # "COURSE:seq" of segments whose reading was transferred
     full = {"links": [], "notes": {}, "trees": {}}
     sha = hashlib.sha256()
     for course, cfg in sorted(COURSES.items()):
@@ -512,6 +555,17 @@ def main():
                          "remove the entry." % (course, pg, path))
             doc = io.open(path, encoding="utf-8").read()
             sha.update(doc.encode())
+            xfer = {}
+            for m in XFER.finditer(doc):
+                if m.group(1) != course:
+                    sys.exit("REFUSED: %s/%s carries a transfer stamp for "
+                             "course %s; a page may only stamp its own course"
+                             % (course, pg, m.group(1)))
+                if int(m.group(2)) not in _seglist:
+                    sys.exit("REFUSED: %s/%s stamps segment %s as transferred "
+                             "but that segment is not registered on this page"
+                             % (course, pg, m.group(2)))
+                xfer[int(m.group(2))] = "%s:%s" % (m.group(3), m.group(4))
             tib, eng = {}, {}
             tibAll, engAll = {}, {}
             for d, l, txt in spans_of(doc, "tib"):
@@ -530,14 +584,22 @@ def main():
                 _sg = int(m0.group(1)) if m0 else None
                 _ac = (acip_span(segs[_sg][2], segs[_sg][0], rec["t"])
                        if _sg in segs else None)
-                full["links"].append({
+                link = {
                     "course": course, "page": pg,
                     "seg": _sg,
                     "id": lid, "d": d, "tib": rec["t"],
                     "tib_acip": _ac,
                     "eng": " … ".join(engAll.get((d, lid), [])) or None,
                     "case": rec["case"],
-                })
+                }
+                # PROVENANCE IS SACRED. A span that arrived by transfer says so
+                # here, permanently and per span, naming the segment it came
+                # from -- so nothing downstream can read it as an independent
+                # reading. Absent on every span that was actually read, so the
+                # bank of a tree with no transfers is byte-for-byte what it was.
+                if _sg in xfer:
+                    link["xfer"] = xfer[_sg]
+                full["links"].append(link)
             key = course + "/" + pg
             full["notes"][key] = [
                 " ".join(strip_tags(n).split())
@@ -585,6 +647,8 @@ def main():
                     acip_miss.append("%s:%d %r" % (course, seg, t))
                 pairs.setdefault(tn, {}).setdefault(e, set()).add(
                     "%s:%d" % (course, seg))
+                if seg in xfer:
+                    xrefs.add("%s:%d" % (course, seg))
     con.close()
 
     # BATTERY (Adam 2026-08-28): ACIP is the source of record, so a
@@ -617,6 +681,26 @@ def main():
         c, n = r.split(":")
         return (c, int(n))
 
+    def evidence(e, ss, tn):
+        """One rendering of one headword, with its citations.
+
+        A TRANSFERRED citation is a real citation -- the text is there in that
+        segment, byte for byte -- but it is not independent evidence: it is the
+        same reading counted a second time. It stays in `refs` so coverage is
+        honest, and it is named in `xrefs` with the independent count beside it
+        so a reader is never quietly shown a doubled tally. Whether the card
+        should RANK on n_read rather than n is Adam's ruling, not the builder's;
+        the builder's job is to make sure the question is answerable.
+        """
+        rec = {"eng": e, "refs": sorted(ss, key=refkey), "n": len(ss),
+               "acip": (sorted(acip_forms[tn])[0]
+                        if tn in acip_forms else None)}
+        x = sorted(ss & xrefs, key=refkey)
+        if x:
+            rec["xrefs"] = x
+            rec["n_read"] = len(ss) - len(x)
+        return rec
+
     doc = {
         "meta": {
             "layer": "alignment-evidence",
@@ -639,10 +723,7 @@ def main():
                      "pairing passes every one of them (risk R10)",
         },
         "pairs": {
-            tn: [{"eng": e, "refs": sorted(ss, key=refkey),
-                  "n": len(ss),
-                  "acip": (sorted(acip_forms[tn])[0]
-                           if tn in acip_forms else None)}
+            tn: [evidence(e, ss, tn)
                  # most-attested rendering FIRST (Adam, 2026-09-08): the
                  # card and the view show them in this order, count shown;
                  # ties fall back to the rendering itself

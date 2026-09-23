@@ -32,6 +32,15 @@ Four files, each answering a different question:
 
 Nothing here composes English. Every rendering is HGM's own corpus text,
 machine-MATCHED, and every row carries the tier that says so.
+
+PROVENANCE TRAVELS WITH THE ROW. A citation written C07:85<-C03:501 (with a
+Unicode arrow) is a CARRIED reading: that segment is byte-identical to the one
+named after the arrow and the reading was carried across rather than read
+again (tools/transfer_duplicate_segments.py). `occurrences` counts every
+citation, because the text really is in every one of those segments;
+`occurrences_independent` counts only the ones somebody read, and that is what
+the rankings here are ordered on. A count that does not distinguish the two is
+a doubled tally wearing the word "attested".
 """
 import collections
 import csv
@@ -40,8 +49,18 @@ import os
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUTDIR = os.path.join(ROOT, "docs")
+# ALL_VIEW_DOCS lets a gate build the whole dictionary into a scratch
+# directory. Without it, every rehearsal of the build overwrites the published
+# CSVs as a side effect, and a check that has to damage the artifact to run is
+# a check nobody runs.
+OUTDIR = os.environ.get("ALL_VIEW_DOCS") or os.path.join(ROOT, "docs")
 sys.path.insert(0, os.path.join(ROOT, "engines"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# ONE definition of the carried-citation mark, imported rather than copied.
+# A second hand-written copy of a convention is how the two quietly diverge;
+# the page and the CSV must agree about which citations are carried, because
+# for most people the CSV IS the dictionary.
+from build_dictionary_view import is_xfer   # noqa: E402
 
 try:
     import pron_engine as _P
@@ -89,6 +108,15 @@ def _rows(depths, phonetics, meta, acip_by_wylie=None):
                 acip = acip or (acip_by_wylie or {}).get(tib, "")
                 for eng, refs in rl:
                     courses = sorted({r.split(":")[0] for r in refs})
+                    # A CARRIED citation is a real citation and a doubled
+                    # tally at the same time: the segment is byte-identical to
+                    # the one the reading came from and nobody read it. It is
+                    # written C07:85<-C03:501 in `refs` (with the Unicode
+                    # arrow), and the count that is NOT inflated by it is
+                    # given its own column rather than quietly substituted,
+                    # so a lone CSV on someone else's desk can still tell an
+                    # attestation from an echo of one.
+                    carried = [r for r in refs if is_xfer(r)]
                     yield {
                         "wylie": tib,
                         "acip": acip,
@@ -105,6 +133,8 @@ def _rows(depths, phonetics, meta, acip_by_wylie=None):
                         "kind": kind,
                         "depth": d,
                         "occurrences": len(refs),
+                        "occurrences_independent": len(refs) - len(carried),
+                        "transferred_refs": " ".join(carried),
                         "courses": " ".join(courses),
                         "n_courses": len(courses),
                         "refs": " ".join(refs),
@@ -125,6 +155,7 @@ def _rows(depths, phonetics, meta, acip_by_wylie=None):
 
 FIELDS = ["wylie", "acip", "tibetan_generated", "pronunciation_generated",
           "in_acip_index", "english", "kind", "depth", "occurrences",
+          "occurrences_independent", "transferred_refs",
           "courses", "n_courses", "refs", "first_ref", "tier", "rule",
           "generated_columns", "source_corpus", "source_pages", "generator",
           "layer_date"]
@@ -164,24 +195,30 @@ def write_exports(depths, phonetics, meta, acip_index=None):
         if r["kind"] == "translation":
             rev[r["english"]].append(r)
     rev_rows = []
-    for eng in sorted(rev, key=lambda e: (-sum(x["occurrences"] for x in rev[e]),
-                                          e.lower())):
-        for r in sorted(rev[eng], key=lambda x: -x["occurrences"]):
+    # ranked on the INDEPENDENT count, so a carried reading never outranks a
+    # read one here either, and never breaks a tie in its own favour. With no
+    # transfers in the bank the independent count IS the total, so this is the
+    # same order as before.
+    for eng in sorted(rev, key=lambda e: (
+            -sum(x["occurrences_independent"] for x in rev[e]), e.lower())):
+        for r in sorted(rev[eng], key=lambda x: -x["occurrences_independent"]):
             rev_rows.append({"english": eng, "wylie": r["wylie"],
                              "acip": r["acip"], "tibetan_generated": r["tibetan_generated"],
                              "pronunciation_generated": r["pronunciation_generated"],
                              "depth": r["depth"],
                              "occurrences": r["occurrences"],
+                             "occurrences_independent": r["occurrences_independent"],
                              "courses": r["courses"], "refs": r["refs"],
                              "tier": r["tier"]})
     n_rev = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_reverse.csv"),
                    ["english", "wylie", "acip", "tibetan_generated",
                     "pronunciation_generated", "depth", "occurrences",
-                    "courses", "refs", "tier"],
+                    "occurrences_independent", "courses", "refs", "tier"],
                    rev_rows)
 
     # per course, ranked by occurrences in THAT course
     per = collections.defaultdict(lambda: collections.defaultdict(int))
+    ind = collections.defaultdict(lambda: collections.defaultdict(int))
     info = {}
     for r in rows:
         if r["kind"] != "translation":
@@ -189,21 +226,30 @@ def write_exports(depths, phonetics, meta, acip_index=None):
         for ref in r["refs"].split():
             co = ref.split(":")[0]
             per[co][(r["wylie"], r["english"])] += 1
+            # a carried citation counts toward how often the term OCCURS in
+            # the course -- the text really is there -- and not toward how
+            # often it was independently READ. Both numbers are given, because
+            # a single "occurrences" column silently answers whichever
+            # question the reader happened to be asking.
+            ind[co][(r["wylie"], r["english"])] += 0 if is_xfer(ref) else 1
             info[(r["wylie"], r["english"])] = r
     course_rows = []
     for co in sorted(per):
-        for (t, e), n in sorted(per[co].items(), key=lambda kv: (-kv[1],
-                                                                kv[0][0].lower())):
+        for (t, e), n in sorted(per[co].items(),
+                                key=lambda kv: (-ind[co][kv[0]],
+                                                kv[0][0].lower())):
             r = info[(t, e)]
             course_rows.append({"course": co, "wylie": t, "acip": r["acip"],
                                 "tibetan_generated": r["tibetan_generated"],
                                 "pronunciation_generated": r["pronunciation_generated"],
                                 "english": e, "occurrences_in_course": n,
+                                "occurrences_independent_in_course": ind[co][(t, e)],
                                 "depth": r["depth"], "tier": r["tier"]})
     n_course = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_by_course.csv"),
                       ["course", "wylie", "acip", "tibetan_generated",
                        "pronunciation_generated", "english",
-                       "occurrences_in_course", "depth", "tier"],
+                       "occurrences_in_course",
+                       "occurrences_independent_in_course", "depth", "tier"],
                       course_rows)
 
     # what changed since the previous export
@@ -221,6 +267,7 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                         "tibetan_generated": r["tibetan_generated"], "english": r["english"],
                         "kind": r["kind"], "depth": r["depth"],
                         "occurrences": r["occurrences"],
+                        "occurrences_independent": r["occurrences_independent"],
                         "courses": r["courses"], "refs": r["refs"]})
         cur = {(r["wylie"], r["english"], str(r["depth"])) for r in rows}
         for k, r in prev.items():
@@ -231,18 +278,22 @@ def write_exports(depths, phonetics, meta, acip_index=None):
                             "english": r.get("english", ""),
                             "kind": r.get("kind", ""), "depth": r.get("depth", ""),
                             "occurrences": r.get("occurrences", ""),
+                            "occurrences_independent":
+                                r.get("occurrences_independent", ""),
                             "courses": r.get("courses", ""),
                             "refs": r.get("refs", "")})
         n_chg = _write(os.path.join(OUTDIR, "geshe_michael_roach_dictionary_changes.csv"),
                        ["change", "wylie", "acip", "tibetan_generated", "english", "kind",
-                        "depth", "occurrences", "courses", "refs"], chg)
+                        "depth", "occurrences", "occurrences_independent",
+                        "courses", "refs"], chg)
 
-    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary.csv\n" % n_main)
-    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_reverse.csv\n" % n_rev)
-    sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_by_course.csv\n" % n_course)
+    sys.stderr.write("  csv  %6d rows  %s\n" % (n_main, os.path.join(OUTDIR, "geshe_michael_roach_dictionary.csv")))
+    sys.stderr.write("  csv  %6d rows  %s\n" % (n_rev, os.path.join(OUTDIR, "geshe_michael_roach_dictionary_reverse.csv")))
+    sys.stderr.write("  csv  %6d rows  %s\n" % (n_course, os.path.join(OUTDIR, "geshe_michael_roach_dictionary_by_course.csv")))
     if n_chg is not None:
-        sys.stderr.write("  csv  %6d rows  docs/geshe_michael_roach_dictionary_changes.csv "
-                         "(vs the previous export)\n" % n_chg)
+        sys.stderr.write("  csv  %6d rows  %s (vs the previous export)\n"
+                         % (n_chg, os.path.join(
+                             OUTDIR, "geshe_michael_roach_dictionary_changes.csv")))
     else:
         sys.stderr.write("  csv         no previous export, so no change report "
                          "this time\n")

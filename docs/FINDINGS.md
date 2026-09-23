@@ -16,6 +16,38 @@ NEEDS-INFO(question back to the filer).
 ## Inbox
 <!-- newest first; the app's File a Finding appends a template here -->
 
+### 2026-09-22 · decision for Adam · the model policy and the harness disagree, in writing
+
+The two alignment briefs open with a MODEL POLICY header dated 2026-09-01:
+"PROPOSE agents run on Claude Opus 5. RECONCILE and REFUTE agents run on
+Claude Fable 5.1, high effort", with the rationale that the judgment steps
+decide whether a page lands and whether a claim leaves the building.
+
+`.claude/workflows/scripts/c05-align.js` passes `model: 'opus'` at every stage
+— prefetch, both propose angles, and the reconciler — in the working tree and
+at HEAD alike (`git show HEAD:.claude/workflows/scripts/c05-align.js | grep
+model:` gives opus on both agent calls). So a reconciliation launched from
+this script runs on Opus, against a policy that says Fable 5.1. What earlier
+batches ran on, before the script was landed in the repository, is not
+recorded anywhere I can check. The contradiction was invisible while the briefs
+were files an agent opened; it is now INLINED VERBATIM IN THE PROMPT, so each
+reconciler is handed a header saying it runs on Fable 5.1 while it runs on
+Opus. The harness supplement says only that the running model "is set by the
+harness and is not yours to change", which manages the confusion without
+resolving it.
+
+Three ways out, and the choice is Adam's, not a subagent's:
+ 1. the policy stands and the harness is wrong — set the reconcile stage to
+    Claude Fable 5.1 (and REFUTE likewise, wherever it runs);
+ 2. the harness stands and the policy has moved on — amend the header in
+    docs/alignment_briefs/*.md, which the build gate then re-inlines;
+ 3. the policy is aspirational and the header should say so in as many words.
+
+Not decided here, and nothing was changed either way. DISPOSITION: OPEN —
+awaiting Adam's ruling. Whichever way it goes, one of the two documents is
+currently telling an agent something untrue about itself, which is the class
+of defect rule 3 exists for.
+
 ### 2026-09-10 · external cross-check · pron_engine.py vs the Kawachen reader
 The Kawachen Tibetan Reader (itibet.org) indexes its recordings by SOUND,
 not by spelling — every spelling that reads alike is served the same file.

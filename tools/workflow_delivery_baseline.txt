@@ -1,0 +1,25 @@
+# What each workflow script actually HANDS its agents — frozen at the
+# measurement, on the date below.
+#
+# tools/sync_workflow_briefs.py proves the inlined copy of a brief is the file.
+# It cannot prove the copy reaches a prompt: removing `PROPOSE_BRIEF,` from
+# proposeCommon() left every literal byte-perfect and every gate green while
+# the propose agents were handed an empty brief block. This file is the other
+# half — the args each script is rendered against, and how many of the prompts
+# that rendering produces carry each brief IN FULL.
+#
+# Both directions fail. One prompt fewer is a delivery regression; one more is
+# a change nobody froze. Re-freeze deliberately, with
+# `tools/test_workflow_briefs_delivered.py --freeze`, and say why in the
+# commit.
+#
+#   args     <script>  <the args JSON, one line>
+#   agents   <script>  <how many agent() calls that rendering makes>
+#   delivers <script>  <brief>  <prompts carrying it in full>
+#
+# Measured 2026-09-22 by tools/test_workflow_briefs_delivered.py --freeze.
+
+args     .claude/workflows/scripts/c05-align.js  {"seqs":[172,173],"segments":{"172":{"wylie":"FIXTURE wylie","english":"FIXTURE english","acip":"FIXTURE ACIP"}}}
+agents   .claude/workflows/scripts/c05-align.js  7
+delivers .claude/workflows/scripts/c05-align.js  docs/alignment_briefs/PROPOSE_BRIEF.md  4
+delivers .claude/workflows/scripts/c05-align.js  docs/alignment_briefs/RECONCILE_BRIEF.md  2

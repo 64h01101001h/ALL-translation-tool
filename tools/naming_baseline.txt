@@ -196,3 +196,14 @@ ef715fbd0bfa204e  docs/digests/README.md:130  attached (or Adam attaches anythin
 894fc2d8b37127f4  the referent is DR. BRUNO LAINE, not Geshe Michael -- the sentence is about the rKTs abbreviation list supplied by Dr. Laine 2026-08-19 with the CC BY 4.0 licence confirmed in his own words. Exactly the wrong-referent trap the blanket regex fell into
 f90f310d04bdc69e  a WORKED EXAMPLE of a draft translation of the honorific GZIGS PA -- 'he saw it' is the drill's own English about an unnamed subject, not about Geshe Michael
 be5f6b2a96c579f9  the disposition QUOTES the defect it closed -- 'his own words' is the SOURCES.md string whose referent is Dr. Bruno Laine, named here to show why that line was baselined rather than rewritten. Editing the quote would destroy the record of what was wrong
+
+# ---- 2026-09-22: .claude/workflows/scripts/*.js came under this gate ----
+# The alignment harness moved several thousand bytes of person-read prose into
+# the workflow script, which nothing here globbed. One live violation was
+# there and is now fixed in the prose ("Where he / has supplied a hinge" ->
+# "Where Geshe Michael has supplied a hinge"). This one line is NOT a
+# reference to anybody: it is a LIST OF ENGLISH FUNCTION WORDS that a span's
+# English may not begin with, handed to the reconciler for the
+# no_supplied_span_head gate. The "his" in it is a determiner being named as
+# a string, exactly like the stopword list in core/src/chantline.cpp above.
+403cfb1837d4aaf8  .claude/workflows/scripts/c05-align.js:601  'the/a/an/and/or/his/our/your/I/you - it will trip the no_supplied_span_head gate\n' +

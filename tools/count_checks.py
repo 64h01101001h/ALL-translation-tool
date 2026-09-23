@@ -138,8 +138,21 @@ def main(argv):
         for b in seen:
             if want and b != want:
                 continue
-            cache = os.path.join(ROOT, b, "CMakeCache.txt")
-            if newest and os.path.getmtime(cache) < os.path.getmtime(newest):
+            # Compare against the file ctest ACTUALLY READS. CTestTestfile
+            # .cmake is rewritten by every regenerate; CMakeCache.txt is NOT
+            # - cmake leaves the cache alone when no cache entry changed. So
+            # editing a COMMENT in core/CMakeLists.txt and then running the
+            # very command this gate prints left the cache older than the
+            # source, and the gate went on crying STALE at a build directory
+            # that was perfectly current. The only way to silence it was to
+            # touch the cache, which teaches the one reflex a staleness gate
+            # must never teach. The cache is kept as the fallback for a
+            # directory that has no test list at all.
+            stamp = os.path.join(ROOT, b, "CTestTestfile.cmake")
+            if not os.path.exists(stamp):
+                stamp = os.path.join(ROOT, b, "CMakeCache.txt")
+            if newest and os.path.exists(stamp) and \
+                    os.path.getmtime(stamp) < os.path.getmtime(newest):
                 print("\nSTALE: %s was configured before %s was last edited."
                       % (b, os.path.relpath(newest, ROOT)))
                 print("  ctest reads the test list written at CONFIGURE time, "

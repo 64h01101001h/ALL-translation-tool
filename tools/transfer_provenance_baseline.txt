@@ -1,0 +1,148 @@
+# Undeclared transfers already in the landed bank.
+#
+# Each line is a landed segment whose aligned block is identical -- once the
+# labels and the whole heading are rewritten -- to the block of the segment
+# named after the arrow, whose spine row is byte-identical to it in both
+# columns. That is a transfer: one reading, banked more than once, with nothing
+# in the data saying so.
+#
+# HOW FAR THEY REACH IS MEASURED BY THE GATE ON EVERY RUN and printed, instead
+# of being written down here where it would go stale. The first draft of this
+# header said the evidence layer "counts some renderings up to five times as
+# though five analysts had met them"; measured, that is false. As at 2026-09-22
+# the 91 carry 547 bank links, all at depths 1, 2 and 7 -- the evidence layer
+# harvests depth 5, so NOT ONE evidence rendering cites one of them. The
+# published dictionary harvests every depth: 109 of its 23,156 rows cite one,
+# and discounting all 91 would move the head rendering of exactly one headword.
+# Those numbers come out of `python3 tools/test_transfer_provenance.py`; do not
+# quote them from here without re-running it.
+#
+# RE-FROZEN 2026-09-22 AT 91, THE MEASUREMENT. The first freeze, earlier the
+# same day, said 84 and said the comparison ignored "the labels and the
+# heading" -- but the code blanked only the "<h2>Segment N " part and left the
+# analyst's TITLE inside the key, so an identical reading under a different
+# caption was invisible. Seven were: C03:97, C03:101, C03:102, C03:105,
+# C03:106 (the Lama supplication, captioned "again", "a third time", "a fourth
+# time" as the prayer repeats it) and C03:11, C03:16 ("...the stanza" against
+# "...the stanza in English"). The prose was right and the code was narrower
+# than the prose; the code was widened to match, which is also what stops a
+# future undeclared copy walking out of this gate by having its title edited
+# by three words.
+#
+# Re-freezing also moved four attributions: C04:11, C04:16, C05:11 and C05:16
+# were baselined against C03:11 and C03:16, which are themselves copies of
+# C01:11 and C01:16. With the title out of the key all six fall into one group
+# and the representative is the earliest landed member, C01.
+#
+# A new one fails this gate. So does this set shrinking without this file being
+# re-frozen -- slack in a ratchet is how a gate quietly stops measuring.
+#
+# What is measured is the identity, not the history. Whether a given pair was
+# copied or two readings simply landed on the same markup is not something a
+# string comparison can tell, and it does not change the consequence.
+#   C02/C03/C04/C05:1-21 <- C01  the liturgical opening that starts several
+#                       courses: the same Refuge, Wish and Grace, read once in
+#                       C01 and carried (or independently re-read onto the same
+#                       markup) in four more. C04:1-21 and C05:1-21 are
+#                       documented as hand copies of C03 in a comment in
+#                       build_alignment_layer.py (2026-09-04, 2026-09-05); the
+#                       comment says it, the bank does not, and C03's own
+#                       twenty-one are documented nowhere.
+#   C03:97..107 <- C03:87/89/98  the Lama supplication repeated four times
+#                       inside one course, each repeat captioned by the analyst
+#                       ("again", "a third time") over identical markup.
+# Whether these should be re-stamped with transfer provenance, left as they
+# are, or de-duplicated in the evidence count is Adam's ruling, not this
+# gate's. The gate's job is to stop the number growing in silence.
+
+C02:10<-C01:10
+C02:11<-C01:11
+C02:12<-C01:12
+C02:13<-C01:13
+C02:14<-C01:14
+C02:15<-C01:15
+C02:16<-C01:16
+C02:17<-C01:17
+C02:18<-C01:18
+C02:19<-C01:19
+C02:1<-C01:1
+C02:20<-C01:20
+C02:21<-C01:21
+C02:2<-C01:2
+C02:3<-C01:3
+C02:4<-C01:4
+C02:5<-C01:5
+C02:7<-C01:7
+C02:8<-C01:8
+C02:9<-C01:9
+C03:101<-C03:87
+C03:102<-C03:98
+C03:103<-C03:89
+C03:105<-C03:87
+C03:106<-C03:98
+C03:107<-C03:89
+C03:10<-C01:10
+C03:11<-C01:11
+C03:12<-C01:12
+C03:13<-C01:13
+C03:14<-C01:14
+C03:15<-C01:15
+C03:16<-C01:16
+C03:17<-C01:17
+C03:18<-C01:18
+C03:19<-C01:19
+C03:1<-C01:1
+C03:20<-C01:20
+C03:21<-C01:21
+C03:2<-C01:2
+C03:3<-C01:3
+C03:4<-C01:4
+C03:5<-C01:5
+C03:6<-C01:6
+C03:7<-C01:7
+C03:8<-C01:8
+C03:97<-C03:87
+C03:99<-C03:89
+C03:9<-C01:9
+C04:10<-C01:10
+C04:11<-C01:11
+C04:12<-C01:12
+C04:13<-C01:13
+C04:14<-C01:14
+C04:15<-C01:15
+C04:16<-C01:16
+C04:17<-C01:17
+C04:18<-C01:18
+C04:19<-C01:19
+C04:1<-C01:1
+C04:20<-C01:20
+C04:21<-C01:21
+C04:2<-C01:2
+C04:3<-C01:3
+C04:4<-C01:4
+C04:5<-C01:5
+C04:6<-C01:6
+C04:7<-C01:7
+C04:8<-C01:8
+C04:9<-C01:9
+C05:10<-C01:10
+C05:11<-C01:11
+C05:12<-C01:12
+C05:13<-C01:13
+C05:14<-C01:14
+C05:15<-C01:15
+C05:16<-C01:16
+C05:17<-C01:17
+C05:18<-C01:18
+C05:19<-C01:19
+C05:1<-C01:1
+C05:20<-C01:20
+C05:21<-C01:21
+C05:2<-C01:2
+C05:3<-C01:3
+C05:4<-C01:4
+C05:5<-C01:5
+C05:6<-C01:6
+C05:7<-C01:7
+C05:8<-C01:8
+C05:9<-C01:9

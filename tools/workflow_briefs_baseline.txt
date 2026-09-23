@@ -1,0 +1,18 @@
+# The frozen census of inlined briefs — the floor under tools/sync_workflow_briefs.py.
+#
+# Coverage is DISCOVERED from the `// >>> INLINED <path>` markers inside each
+# workflow script, and discovery with no floor is not a check: deleting a
+# block's two marker comments used to delete that brief's coverage while the
+# gate still printed success, and renaming the only script out of the glob used
+# to print "nothing to sync" and exit 0.
+#
+# So this file, which lives outside every script it describes, says what must
+# be there. One line per (script, brief) pair. A pair that disappears fails;
+# a pair that appears without being frozen here fails too, so that adding a
+# brief is a deliberate act and forgetting one cannot pass quietly.
+#
+# Rewritten only by `tools/sync_workflow_briefs.py --freeze`, never by --write:
+# if regenerating the copies also re-froze the census, deleting a brief and
+# running the sanctioned repair would launder the deletion.
+.claude/workflows/scripts/c05-align.js docs/alignment_briefs/PROPOSE_BRIEF.md
+.claude/workflows/scripts/c05-align.js docs/alignment_briefs/RECONCILE_BRIEF.md

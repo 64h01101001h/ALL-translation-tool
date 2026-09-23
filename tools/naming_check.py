@@ -95,6 +95,41 @@ def scan(root):
     code("core/include/allcore/*.h", "//")
     code("core/tests/*.cpp", "//")
 
+    # .claude/workflows/scripts/*.js — ADDED 2026-09-22, and it was a blind
+    # spot of exactly the shape this file keeps describing. The C05 alignment
+    # harness moved several thousand bytes of PERSON-READ PROSE into these
+    # scripts (a harness supplement, course context, per-segment blocks, the
+    # angle each analyst is given). Nothing here globbed .claude/, so the gate
+    # reported "all N pronoun-beside-the-name line(s) ruled on" while a live
+    # violation sat in the text every english-first propose agent reads:
+    # "Walk Geshe Michael's ENGLISH ... Where he / has supplied a hinge". It
+    # passed because it never looked.
+    #
+    # Prose here lives in STRING LITERALS of both quote styles, so both are
+    # tested. The `// >>> INLINED <path>` blocks are skipped: those are
+    # generated copies of docs/alignment_briefs/*.md, which this gate already
+    # scans at the source and which tools/sync_workflow_briefs.py proves are
+    # byte-identical to it. Ruling on a copy would mean ruling twice and
+    # re-arming on every regeneration.
+    js_str = re.compile(r'''(?:"[^"]*|'[^']*)\b'''
+                        r"(his|His|he|He|him|Him|himself|Himself)\b")
+    for p in sorted(glob.glob(os.path.join(root, ".claude/workflows/scripts/*.js"))):
+        inlined = False
+        for i, line in enumerate(io.open(p, encoding="utf-8",
+                                         errors="replace"), start=1):
+            s = line.rstrip("\n")
+            t = s.lstrip()
+            if t.startswith("// >>> INLINED "):
+                inlined = True
+                continue
+            if t.startswith("// <<< INLINED "):
+                inlined = False
+                continue
+            if inlined or t.startswith("//"):
+                continue
+            if js_str.search(s):
+                hits.append((os.path.relpath(p, root), i, s.strip()))
+
     # tools/ prints messages a human reads when a gate fails, and carries
     # docstrings that explain the rules. Same standard, narrower test: both the
     # name and the pronoun must be on the line, because a lone "he" in a

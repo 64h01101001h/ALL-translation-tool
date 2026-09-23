@@ -260,6 +260,16 @@ document.getElementById('foot').innerHTML =
      digitisation, and it is cut back here. Nothing is added or reworded &mdash;
      a trim can only remove. ${(META.n_phon||0).toLocaleString()} phonetic
      transcriptions are held out of the dictionary entirely, in band 0.</span>`
-     : ''}`;
+     : ''}
+   ${META.n_xfer ? `<br><span class="disclose">${META.n_xfer.toLocaleString()}
+     of the citations on this page, across
+     ${(META.n_xfer_rows||0).toLocaleString()} renderings, are CARRIED
+     READINGS, written <code>C07:85&larr;C03:501</code>: that segment is
+     byte-identical to the one named after the arrow, in the Tibetan and in
+     Geshe Michael&rsquo;s English alike, and the reading was carried across
+     rather than read again. It is a real citation &mdash; the text is there
+     &mdash; but it is the same reading counted twice, so renderings are
+     ordered here by how many segments were read INDEPENDENTLY, and a carried
+     citation never outranks a read one.</span>` : ''}`;
 render();
 </script>

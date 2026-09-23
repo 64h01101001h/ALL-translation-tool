@@ -109,10 +109,80 @@ def trim_glued(eng):
     return (cut, True) if len(cut) >= 12 else (eng, False)
 
 
-FULL = os.path.join(ROOT, "data", "alignment", "alignment_full_v1.json")
+# ALL_VIEW_FULL / ALL_VIEW_OUT (and ALL_VIEW_DOCS, in build_dictionary_exports)
+# let a gate build the whole dictionary from a scratch bank into a scratch
+# directory. tools/test_transfer_provenance.py uses them to publish a real
+# transfer and check what comes out; without them that check would have to
+# overwrite the published artifact to run, and a check that damages what it
+# checks is a check nobody runs. Unset, every path is the real one.
+FULL = os.environ.get("ALL_VIEW_FULL") or os.path.join(
+    ROOT, "data", "alignment", "alignment_full_v1.json")
 EVID = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
 SHELL = os.path.join(ROOT, "tools", "dictionary_view_shell.html")
-OUT = os.path.join(ROOT, "docs", "geshe_michael_roach_dictionary.html")
+OUT = os.environ.get("ALL_VIEW_OUT") or os.path.join(
+    ROOT, "docs", "geshe_michael_roach_dictionary.html")
+
+# PROVENANCE IS SACRED, AND THIS PAGE IS WHERE A PERSON READS IT.
+#
+# A segment whose Tibetan and Geshe Michael's English are byte-identical to a
+# segment already read can have that reading CARRIED ACROSS rather than read
+# again (tools/transfer_duplicate_segments.py). The bank says so on every such
+# span, in `xfer`; the evidence layer says so in `xrefs`/`n_read`. This file
+# builds the published dictionary straight from the bank's links, and until
+# 2026-09-22 it dropped the mark: a carried reading appeared here as an
+# ordinary citation beside the one it was carried from, and — because
+# renderings are ordered by how many segments cite them — an echo of a reading
+# could outrank a reading. One transferred segment was measured moving the head
+# rendering of 13 headwords.
+#
+# So a carried citation is written NAMING THE SEGMENT IT CAME FROM, in the
+# same notation the transfer baseline uses, and the independent count is what
+# orders the renderings:
+#
+#     C07:85               read in C07:85
+#     C07:85<-C03:501      carried across from C03:501; nobody read C07:85
+#
+# `<` and `>` never appear in a citation, and the page writes citations into
+# the document without escaping, so the arrow is spelled with the Unicode
+# character rather than an ASCII "<-".
+XFER_MARK = "←"          # C07:85←C03:501, read "carried from"
+
+
+def cite(course, seg, xfer):
+    """One citation, carrying its transfer provenance if it has any."""
+    ref = "%s:%s" % (course, seg)
+    return ref + XFER_MARK + xfer if xfer else ref
+
+
+def is_xfer(ref):
+    return XFER_MARK in ref
+
+
+def n_read(refs):
+    """How many of these citations are INDEPENDENT readings.
+
+    Not len(refs): a transferred citation is a real citation -- the text is
+    there, byte for byte -- but it is the same reading counted twice, and a
+    count that does not say so is a doubled tally wearing the word "attested".
+    """
+    return sum(1 for r in refs if not is_xfer(r))
+
+
+def rank(rend):
+    """Renderings, most INDEPENDENTLY attested first.
+
+    The count is n_read and NOTHING ELSE. Breaking a tie by the total would
+    put the rendering with more echoes above the one with none, which is
+    ranking by the thing that is not evidence -- and it is the tie case that
+    the measurement found: one transferred segment moved the head rendering of
+    13 headwords, and the moves were ties broken by the echo. A tie falls back
+    to the order the corpus itself produced, exactly as it did before.
+
+    With nothing transferred, n_read IS len, so this is the old order to the
+    byte; the published page was unchanged on the day this landed.
+    """
+    return sorted(([e, sorted(set(rs))] for e, rs in rend.items()),
+                  key=lambda x: -n_read(x[1]))
 
 
 def main():
@@ -127,6 +197,9 @@ def main():
     for l in links:
         d, t = l.get("d"), (l.get("tib") or "").strip()
         e, seg, co = (l.get("eng") or "").strip(), l.get("seg"), l.get("course")
+        # the bank's own per-span transfer stamp, read here rather than
+        # remembered anywhere: a span that arrived by transfer says so.
+        x = l.get("xfer")
         # a link with no English exponent is a null morpheme: correct on the
         # page, meaningless in a dictionary view.
         if not d or not t or not e or seg is None or not co:
@@ -150,20 +223,19 @@ def main():
             except Exception:
                 pass
             e = trimmed
-            phon[t][e].append("%s:%s" % (co, seg))
+            phon[t][e].append(cite(co, seg, x))
             n_phon += 1
             continue
         e, was_glued = trim_glued(e)
         if was_glued:
             n_glued += 1
-        byd[d][t][e].append("%s:%s" % (co, seg))
+        byd[d][t][e].append(cite(co, seg, x))
 
     depths = {}
     for d in sorted(byd):
         ents = []
         for t, rend in byd[d].items():
-            rl = sorted(([e, sorted(set(rs))] for e, rs in rend.items()),
-                        key=lambda x: -len(x[1]))
+            rl = rank(rend)
             ents.append([t, acip.get(t) or "", rl])
         ents.sort(key=lambda x: (-len(x[2]), x[0].lower()))
         depths[d] = ents
@@ -172,8 +244,7 @@ def main():
 
     pents = []
     for t, rend in phon.items():
-        rl = sorted(([e, sorted(set(rs))] for e, rs in rend.items()),
-                    key=lambda x: -len(x[1]))
+        rl = rank(rend)
         pents.append([t, acip.get(t) or "", rl])
     pents.sort(key=lambda x: (-len(x[2]), x[0].lower()))
     sys.stderr.write("  phonetics %5d headwords  %6d transcriptions "
@@ -204,12 +275,34 @@ def main():
     sys.stderr.write("  %d published rows show less than the layer banked "
                      "(from %d trim calls)\n" % (n_short, n_glued))
 
+    # The page must SAY that some of its citations are carried, not merely
+    # mark them and hope a reader works out what the arrow means. Counted from
+    # the assembled rows a reader can actually see, not from the links, for
+    # the reason n_glued is: a link that never reaches a published row is not
+    # something the disclosure is about.
+    n_xfer = n_xfer_rows = 0
+    for ents in list(depths.values()) + [pents]:
+        for _t, _a, rl in ents:
+            for _e, rs in rl:
+                k = sum(1 for r in rs if is_xfer(r))
+                n_xfer += k
+                n_xfer_rows += 1 if k else 0
+    sys.stderr.write("  %d published citations are carried readings, across "
+                     "%d rows (0 until a transfer lands)\n"
+                     % (n_xfer, n_xfer_rows))
+
     payload = {"meta": {"date": meta.get("date"), "tier": meta.get("tier"),
                         "corpus": meta.get("source_corpus"),
                         "rule": meta.get("rule"),
                         "n_glued": n_short, "n_phon": n_phon,
                         "n_skipped": skipped},
                "depths": depths, "phonetics": pents}
+    # emitted only when there is something to disclose, so a page built from a
+    # bank with no transfers in it is byte-for-byte the page that was built
+    # before this fix existed
+    if n_xfer:
+        payload["meta"]["n_xfer"] = n_xfer
+        payload["meta"]["n_xfer_rows"] = n_xfer_rows
     shell = io.open(SHELL, encoding="utf-8").read()
     data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     html = shell.replace("/*PAYLOAD*/", "const PAYLOAD = " + data + ";", 1)

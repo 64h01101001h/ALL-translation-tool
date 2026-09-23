@@ -664,6 +664,30 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_supplied_span_head.py)
 
+  # 2,099 of the segments still mandated are byte-identical to one already
+  # read, so the reading can be carried across instead of paid for again
+  # (tools/transfer_duplicate_segments.py). Two things can go wrong: the
+  # carried span is not the target's own text, or it sits in the bank looking
+  # exactly like a span somebody read -- and then the evidence layer counts one
+  # reading as several. This holds both. It also measures what is ALREADY in
+  # that state: 84 landed segments carry another segment's block verbatim, over
+  # byte-identical spine rows, and say nothing about it. That set is frozen by
+  # name, and it may neither grow nor quietly shrink.
+  add_test(NAME transfer_provenance
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_transfer_provenance.py)
+
+  # ...and the part that stops the above from passing for free. Nothing has
+  # been transferred yet, so the first check examines nothing, and a check that
+  # examines nothing is not a check. This builds a real transferred page from
+  # the campaign's own data and breaks it four ways -- corrupts a span, strips
+  # the provenance off the bank, removes the page's stamp, and names a source
+  # whose text differs -- requiring a named failure each time.
+  add_test(NAME transfer_provenance_selftest
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_transfer_provenance.py
+                   --selftest)
+
   # Invariants over the banked alignment layer — the questions a string
   # comparison can settle, kept apart from the questions that need a reader.
   # --strict fails on the EXACT checks only; the advisory ones are a review
@@ -772,6 +796,26 @@ if(Python3_FOUND)
   add_test(NAME generated_docs_in_sync
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_generated_docs_in_sync.py)
+
+  # The precedent index is the bank folded into "how has Geshe Michael
+  # rendered this before" - the question the alignment agents used to answer
+  # by grepping a 10.9 MB file 1,866 times, and the counts they act on when
+  # they null a particle or take the tighter span. A stale fold does not look
+  # stale, it looks like an answer, so this regenerates it and compares bytes.
+  # Regeneration alone compares the generator with ITSELF, so a second check
+  # recounts the bank independently - a builder that dropped every null link
+  # rebuilt cleanly and only the recount noticed 14,343 gone. That was still
+  # not enough: both of those are blind to the index BODY, and a review
+  # proved it by rewriting cite() so every citation reported depth 5, which
+  # falsified 20,292 of 50,370 citations, left the file at exactly the same
+  # byte count and passed both checks green. So the second check now also
+  # recounts every citation in the body against the link that made it -
+  # depth, case flag, transfer mark, course, segment - and a third holds the
+  # renderings in readings-first order, because a transferred copy is not a
+  # second attestation and must not head the list.
+  add_test(NAME precedent_index_in_sync
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_precedent_index_in_sync.py)
 
   # The same shape one layer down. generated_docs_in_sync guards the pages;
   # this guards the ORACLE DUMPS the Rule 2 batteries diff the C++ ports
@@ -936,6 +980,49 @@ if(Python3_FOUND)
                    ${CMAKE_SOURCE_DIR}/tools/test_workflow_scripts_parse.py)
   set_tests_properties(workflow_scripts_parse PROPERTIES SKIP_RETURN_CODE 77)
 
+  # The C05 alignment harness used to tell all three agents per segment to open
+  # the propose and reconcile briefs and read them in full. (A transport audit
+  # dated 2026-09-20 counted 566 Read calls across 567 agents for the same two
+  # files; that audit ran over session transcripts that are NOT in this
+  # repository, so the figure cannot be re-derived here and is quoted as a
+  # reason, not as a fact this tree can prove.) They are inlined in the prompt
+  # now, which makes the prompt carry a COPY of the document that decides how
+  # every span is judged. A copy nothing compares is a copy that will be wrong,
+  # and this one fails silently in the worst direction: a rule dropped from the
+  # inlined text governs every page after it, and every page still looks fine.
+  # So the copy is generated (--write) and compared byte-for-byte on every
+  # build. Discovery, not a list: the scripts come from the same glob the parse
+  # gate uses, and the briefs from the markers found inside each script.
+  #
+  # DISCOVERY WITH NO FLOOR WAS HOLLOW, proved 2026-09-22: weaken rule 10 in
+  # the inlined literal AND delete that block's two `// >>> INLINED` marker
+  # comments, and coverage vanished with them while this printed success and
+  # exited 0. Renaming the script out of the glob printed "nothing to sync".
+  # The census of (script, brief) pairs is now frozen in
+  # tools/workflow_briefs_baseline.txt -- outside every script it describes --
+  # and shrinkage fails.
+  add_test(NAME workflow_briefs_in_sync
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/sync_workflow_briefs.py)
+
+  # ... and the other half, which is the one the piece's whole claim rests on.
+  # The gate above proves the inlined copy is FAITHFUL. It cannot prove it is
+  # DELIVERED: leave both literals byte-perfect, remove `PROPOSE_BRIEF,` from
+  # proposeCommon(), and every check stayed green while each propose agent was
+  # handed "=== BRIEF ... ===" followed immediately by "=== END BRIEF ===" and
+  # told not to open the file. This renders the prompts the script actually
+  # builds (against stubs -- nothing is spawned, nothing is spent), reads the
+  # BRIEF FILES rather than the script's literals, and counts. An independent
+  # recount, not a regeneration: a check that compares a generator with itself
+  # cannot catch a broken generator. Counts are frozen at the measurement in
+  # tools/workflow_delivery_baseline.txt and both directions fail.
+  # SKIP (77) when node is missing -- it is not a build dependency here, and
+  # the byte-for-byte gate above needs no interpreter and never skips.
+  add_test(NAME workflow_briefs_delivered
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_workflow_briefs_delivered.py)
+  set_tests_properties(workflow_briefs_delivered PROPERTIES SKIP_RETURN_CODE 77)
+
   add_test(NAME checks_registered
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/count_checks.py --gate
@@ -963,4 +1050,5 @@ target_link_libraries(build_drill_pack PRIVATE allcore)
                        layer_matches_spine
                        oracle_never_raises
                        generated_docs_in_sync
+                       precedent_index_in_sync
                        PROPERTIES SKIP_RETURN_CODE 77)
