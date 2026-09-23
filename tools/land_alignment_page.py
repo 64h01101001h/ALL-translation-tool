@@ -53,6 +53,23 @@ def main():
     seqs = [int(x) for x in a.seqs.split(",")]
     if seqs != list(range(seqs[0], seqs[0] + len(seqs))):
         die("segments are not contiguous: %s" % seqs)
+    # HELD ROWS (Adam, 2026-09-23). A row-pairing check found Tibetan sitting
+    # one row off its English inside the mandate -- the defect that got C13
+    # excluded, and one every other gate passes, because both sides are genuine
+    # text. Adam ruled the flagged rows be held until he reads them. The hold is
+    # enforced HERE, where a page is made, rather than written down somewhere a
+    # batch would not look. It is checked before the page id is even parsed, so
+    # it still binds once this tool learns two-digit course numbers.
+    held_path = os.path.join(ROOT, "data", "alignment", "held_rows.json")
+    if not os.path.exists(held_path):
+        die("data/alignment/held_rows.json is missing -- no segment can be "
+            "shown NOT to be held, so nothing lands. Restore it from git.")
+    for h in json.load(io.open(held_path, encoding="utf-8"))["holds"]:
+        for q in seqs:
+            if h["course"] == a.course and h["from"] <= q <= h["to"]:
+                die("%s:%d is HELD (%s:%d-%d, ruled %s) until Adam reads it: %s"
+                    % (a.course, q, h["course"], h["from"], h["to"],
+                       h["ruled"], h["why"][:160]))
     m = re.fullmatch(r"c(\d)p(\d+)", a.page)
     if not m:
         die("page id must look like c5p57, got %r" % a.page)

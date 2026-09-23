@@ -6,7 +6,7 @@
 
 The reading that produced the previous version of this page is kept at `docs/RELEASE_PUNCHLIST_2026-09-11.md`. Its classifications are the input to the re-survey that fills in the section below; they are not carried across automatically, because its rows are summaries whose source pointers have drifted and matching them by guess would be guesswork dressed as data.
 
-**222 open items.** 202 classified, 20 awaiting a reading.
+**219 open items.** 199 classified, 20 awaiting a reading.
 
 
 ## Release-blocking, and mine to do
@@ -91,33 +91,34 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 49 | Make the app's evidence card show transfer provenance, and rank as Adam rules. | medium | `TODO.md:4418` |
 | 50 | Refresh the stale published dictionary before the first transfer lands. | small | `TODO.md:4425` |
 | 51 | Run the external workflow brief's remaining experiments once the research sweep lands. | large | `TODO.md:4429` |
-| 52 | Pin the model and effort in c05-align.js, and stamp the served model on every page. | medium | `TODO.md:4520` |
-| 53 | Fix the teaching-index honesty defect. | medium | `TODO.md:4526` |
-| 54 | Run the IBM Model 1 row-pairing check before every course, and hold what it flags. | large | `TODO.md:4533` |
-| 55 | Make SCRATCH durable and keep both proposals for every segment. | medium | `TODO.md:4543` |
-| 56 | Replace the parallel() barrier with pipeline() in c05-align.js. | medium | `TODO.md:4548` |
-| 57 | Send disagreement to people, deterministically. | medium | `TODO.md:4552` |
-| 58 | Promote the research instruments into gated tools before they rot. | large | `TODO.md:4557` |
-| 59 | Unblock the landing tools for Courses 6-18. | large | `TODO.md:4564` |
-| 60 | Build a lean custom agent type for propose and reconcile. | large | `TODO.md:4568` |
-| 61 | Re-derive why cost per segment tripled. | medium | `TODO.md:4573` |
-| 62 | Build the source-witness packet from the ACIP masters already on disk. | medium | `TODO.md:4578` |
-| 63 | Correct the project documents that now state falsehoods. | medium | `TODO.md:4582` |
-| 64 | Start a rulings register that code and gates read, plus a weekly decision pack delivered in the conversation. | large | `TODO.md:4587` |
-| 65 | Put local safety rails on any unattended run. | medium | `TODO.md:4591` |
-| 66 | Stop agents re-deriving counts the index already stamps. | medium | `TODO.md:4598` |
-| 67 | Pilot proposer effort 'medium' against 'high', in shadow. | medium | `TODO.md:4603` |
-| 68 | Pilot Sonnet 5 proposers with an Opus reconciler, in shadow. | medium | `TODO.md:4607` |
-| 69 | Dry-run the Rule 7 article trim in a worktree; land nothing. | medium | `TODO.md:4611` |
-| 70 | Build a deterministic near-duplicate lane. | medium | `TODO.md:4616` |
-| 71 | Pilot oral glosses from the public ACI class transcripts -- the one witness that is Geshe Michael's own voice rather than Claude. | medium | `TODO.md:4620` |
-| 72 | Per-course SPRT acceptance sampling, once readers exist. | medium | `TODO.md:4625` |
-| 73 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
-| 74 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
-| 75 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
-| 76 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
-| 77 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
-| 78 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
+| 52 | Fix the teaching-index honesty defect. | medium | `TODO.md:4532` |
+| 53 | Run the IBM Model 1 row-pairing check before every course, and hold what it flags. | large | `TODO.md:4539` |
+| 54 | Make SCRATCH durable and keep both proposals for every segment. | medium | `TODO.md:4549` |
+| 55 | Replace the parallel() barrier with pipeline() in c05-align.js. | medium | `TODO.md:4554` |
+| 56 | Send disagreement to people, deterministically. | medium | `TODO.md:4558` |
+| 57 | Promote the research instruments into gated tools before they rot. | large | `TODO.md:4563` |
+| 58 | Unblock the landing tools for Courses 6-18. | large | `TODO.md:4570` |
+| 59 | Build a lean custom agent type for propose and reconcile. | large | `TODO.md:4574` |
+| 60 | Re-derive why cost per segment tripled. | medium | `TODO.md:4579` |
+| 61 | Build the source-witness packet from the ACIP masters already on disk. | medium | `TODO.md:4584` |
+| 62 | Correct the project documents that now state falsehoods. | medium | `TODO.md:4588` |
+| 63 | Start a rulings register that code and gates read, plus a weekly decision pack delivered in the conversation. | large | `TODO.md:4593` |
+| 64 | Put local safety rails on any unattended run. | medium | `TODO.md:4597` |
+| 65 | Stop agents re-deriving counts the index already stamps. | medium | `TODO.md:4604` |
+| 66 | Pilot proposer effort 'medium' against 'high', in shadow. | medium | `TODO.md:4609` |
+| 67 | Pilot Sonnet 5 proposers with an Opus reconciler, in shadow. | medium | `TODO.md:4613` |
+| 68 | Dry-run the Rule 7 article trim in a worktree; land nothing. | medium | `TODO.md:4617` |
+| 69 | Build a deterministic near-duplicate lane. | medium | `TODO.md:4622` |
+| 70 | Pilot oral glosses from the public ACI class transcripts -- the one witness that is Geshe Michael's own voice rather than Claude. | medium | `TODO.md:4626` |
+| 71 | Per-course SPRT acceptance sampling, once readers exist. | medium | `TODO.md:4631` |
+| 72 | Run the Opus 5.5 shadow test Adam ruled for. | medium | `TODO.md:4761` |
+| 73 | Stamp the served model and effort on every landed page. | medium | `TODO.md:4767` |
+| 74 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
+| 75 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
+| 76 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
+| 77 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
+| 78 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
+| 79 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
 
 ## Everything else unblocked (docs, data, process)
 
@@ -195,32 +196,28 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 41 | Ask Venerable Utpala which of Geshe Michael's 2017 style rules, dropped in 2023, still hold. | small | `TODO.md:4033` |
 | 42 | Adam to ask Geshe Michael for his own requests for the Textual Research workflow and record the answers before design | small | `TODO.md:4099` |
 | 43 | A spoken-Tibetan trainer, which needs new colloquial recordings and Geshe Michael's call on whose voice and which dialect | large | `TODO.md:4126` |
-| 44 | Adam: find the named human reviewers for the gold standard. | small | `TODO.md:4446` |
-| 45 | Adam: rule on the 91 undeclared liturgy transfers. | small | `TODO.md:4450` |
-| 46 | Adam: rule on ranking -- every citation, or independent readings only. | small | `TODO.md:4456` |
-| 47 | Adam: rule on the model policy, which has lapsed. | small | `TODO.md:4460` |
-| 48 | Adam: rule on vocabulary-greedy order versus reading whole courses in order. | small | `TODO.md:4467` |
-| 49 | Adam: rule on whether retrieval-only similarity is an exception to the no-similarity rule. | small | `TODO.md:4472` |
-| 50 | Adam: attach the .docx to digest #10 and send it. | small | `TODO.md:4478` |
-| 51 | Adam: send the full text of the master efficiency-audit prompt so it can be banked. | small | `TODO.md:4482` |
-| 52 | Adam: say whether to push to GitHub. | small | `TODO.md:4487` |
-| 53 | Adam: check the "Help improve Claude" privacy setting and record its state and date. | small | `TODO.md:4632` |
-| 54 | Adam: choose the model id to pin. | small | `TODO.md:4636` |
-| 55 | Adam: rule on the Rule 7 article class, pending 19 days. | small | `TODO.md:4641` |
-| 56 | Adam: rule on the alignment conventions -- depth, granularity, nulls versus omissions, subword negation. | small | `TODO.md:4646` |
-| 57 | Adam: rule on holding C18 and the flagged rows. | small | `TODO.md:4651` |
-| 58 | Adam: set the quota policy -- the largest speed lever there is. | small | `TODO.md:4656` |
-| 59 | Adam: rule on billing and capacity. | small | `TODO.md:4661` |
-| 60 | Adam: replace "may corpus text leave" with per-class data rulings that cover past flows. | small | `TODO.md:4666` |
-| 61 | Adam: decide the Codex branch and the disk. | small | `TODO.md:4673` |
-| 62 | Adam: decide consent and rights. | small | `TODO.md:4678` |
-| 63 | Adam: rule on context-pack provenance. | small | `TODO.md:4683` |
-| 64 | Adam: run the reader recruitment test. | small | `TODO.md:4686` |
-| 65 | Adam: set the finish line. | small | `TODO.md:4691` |
-| 66 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
-| 67 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
-| 68 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
-| 69 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
+| 44 | Adam: rule on the 91 undeclared liturgy transfers. | small | `TODO.md:4452` |
+| 45 | Adam: rule on ranking -- every citation, or independent readings only. | small | `TODO.md:4458` |
+| 46 | Adam: rule on vocabulary-greedy order versus reading whole courses in order. | small | `TODO.md:4471` |
+| 47 | Adam: rule on whether retrieval-only similarity is an exception to the no-similarity rule. | small | `TODO.md:4476` |
+| 48 | Adam: attach the .docx to digest #10 and send it. | small | `TODO.md:4482` |
+| 49 | Adam: send the full text of the master efficiency-audit prompt so it can be banked. | small | `TODO.md:4486` |
+| 50 | Adam: say whether to push to GitHub. | small | `TODO.md:4491` |
+| 51 | Adam: check the "Help improve Claude" privacy setting and record its state and date. | small | `TODO.md:4638` |
+| 52 | Adam: rule on the Rule 7 article class, pending 19 days. | small | `TODO.md:4649` |
+| 53 | Adam: rule on the alignment conventions -- depth, granularity, nulls versus omissions, subword negation. | small | `TODO.md:4654` |
+| 54 | Adam: rule on billing and capacity. | small | `TODO.md:4673` |
+| 55 | Adam: replace "may corpus text leave" with per-class data rulings that cover past flows. | small | `TODO.md:4678` |
+| 56 | Adam: decide the Codex branch and the disk. | small | `TODO.md:4685` |
+| 57 | Adam: decide consent and rights. | small | `TODO.md:4690` |
+| 58 | Adam: rule on context-pack provenance. | small | `TODO.md:4695` |
+| 59 | Adam: set the finish line. | small | `TODO.md:4705` |
+| 60 | Adam: name the specific Diamond Cutter Classics readers, and schedule the first blind test. | small | `TODO.md:4751` |
+| 61 | Adam: read the held rows so they can be released or excluded. | small | `TODO.md:4758` |
+| 62 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
+| 63 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
+| 64 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
+| 65 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
 
 ## Waiting on someone outside
 
@@ -229,16 +226,16 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 1 | When BDRC ships its improved OCR models, refresh the bundled PhotiLines/Woodblock models and re-run the OCR selftests. | medium | `TODO.md:2264` |
 | 2 | Das dictionary etext still unobtained: PKTC has not answered, DSAL terms unexamined, OCR route untouched. | medium | `TODO.md:3024` |
 | 3 | Per-dictionary licence verification of the Steinert set is done and documented; verdict is do-not-ingest. | small | `TODO.md:3031` |
-| 4 | Organisation: decide whether corpus text may leave this machine. | small | `TODO.md:4493` |
-| 5 | Ask TypeSafe directly whether JEV served through OpenRouter is zero-retention. | small | `TODO.md:4498` |
-| 6 | Look into AI research credits. | small | `TODO.md:4501` |
-| 7 | Organisation: complete Claude for Nonprofits verification for ALL. | small | `TODO.md:4698` |
-| 8 | Organisation: apply to host a Claude Corps fellow. | small | `TODO.md:4703` |
-| 9 | Organisation: Khyentse Foundation Academic Development Grant through a university partner -- deadline 2026-12-15. | small | `TODO.md:4708` |
-| 10 | Organisation: fix ALL's Candid/GuideStar profile before any application. | small | `TODO.md:4713` |
-| 11 | Ask BDRC to add the unaligned high-traffic ACIP masters to its alignment queue. | small | `TODO.md:4717` |
-| 12 | Send one email each to research partners, with no corpus text attached. | small | `TODO.md:4721` |
-| 13 | Correct the research-credits lead before acting on it. | small | `TODO.md:4727` |
+| 4 | Organisation: decide whether corpus text may leave this machine. | small | `TODO.md:4497` |
+| 5 | Ask TypeSafe directly whether JEV served through OpenRouter is zero-retention. | small | `TODO.md:4502` |
+| 6 | Look into AI research credits. | small | `TODO.md:4505` |
+| 7 | Organisation: complete Claude for Nonprofits verification for ALL. | small | `TODO.md:4712` |
+| 8 | Organisation: apply to host a Claude Corps fellow. | small | `TODO.md:4717` |
+| 9 | Organisation: Khyentse Foundation Academic Development Grant through a university partner -- deadline 2026-12-15. | small | `TODO.md:4722` |
+| 10 | Organisation: fix ALL's Candid/GuideStar profile before any application. | small | `TODO.md:4727` |
+| 11 | Ask BDRC to add the unaligned high-traffic ACIP masters to its alignment queue. | small | `TODO.md:4731` |
+| 12 | Send one email each to research partners, with no corpus text attached. | small | `TODO.md:4735` |
+| 13 | Correct the research-credits lead before acting on it. | small | `TODO.md:4741` |
 | 14 | Bring Himalayan Art Resources into the project; gated on asking HAR what is permitted before any ingest, then choosing ingest / link-out / never-ship. | large | `docs/BACKLOG.md:281` |
 
 ## Not yet classified

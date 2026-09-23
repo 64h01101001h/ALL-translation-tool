@@ -2,11 +2,18 @@ export const meta = {
   name: 'c05-align',
   description: 'C05 full-depth alignment: two angles per segment, reconcile, generator must exit 0',
   phases: [
-    { title: 'Prefetch', detail: 'one dumper run when the launch did not supply the rows', model: 'opus' },
-    { title: 'Propose', detail: 'two independent analysts per segment', model: 'opus' },
-    { title: 'Reconcile', detail: 'merge into one spec the generator accepts', model: 'opus' },
+    { title: 'Prefetch', detail: 'one dumper run when the launch did not supply the rows', model: 'claude-opus-5' },
+    { title: 'Propose', detail: 'two independent analysts per segment', model: 'claude-opus-5' },
+    { title: 'Reconcile', detail: 'merge into one spec the generator accepts', model: 'claude-opus-5' },
   ],
 }
+
+// MODEL PINNED 2026-09-23 (Adam's ruling): claude-opus-5 at every stage.
+// The 'opus' alias moved to Opus 5.5 that afternoon with no signal but the
+// served-model field, and every page landed before then is Opus 5. A full
+// id is honoured by workflow agents -- proved by a one-agent probe served
+// claude-opus-5. Switching models is a ruling, after a shadow test, never
+// a side effect of an alias moving.
 
 // ---------------------------------------------------------------------------
 // TRANSPORT. A transport audit of this campaign (2026-09-20) found that 98.1%
@@ -518,7 +525,7 @@ if (missing.length) {
     'Do not summarise, normalise, re-wrap or tidy anything. If the tool refuses,\n' +
     'return rows for whatever it did print and say what it refused in "note".',
     { label: 'prefetch:' + COURSE, phase: 'Prefetch', schema: PREFETCH_SCHEMA,
-      model: 'opus', effort: 'low' })
+      model: 'claude-opus-5', effort: 'low' })
   const rows = (pre && pre.rows) || []
   for (const r of rows) {
     SEG[String(r.seq)] = { wylie: r.wylie, english: r.english, acip: r.acip }
@@ -557,7 +564,7 @@ const proposals = await parallel(
       'about and where the other angle is likely to disagree with you - that honesty is\n' +
       'what the reconciler uses.',
       { label: 'propose:' + seq + ':' + a.key, phase: 'Propose', schema: SPEC_SCHEMA,
-        model: 'opus', effort: 'high' })
+        model: 'claude-opus-5', effort: 'high' })
       .then(r => ({ seq, angle: a.key, spec: r }))
   }))
 )
@@ -611,7 +618,7 @@ const reconciled = await parallel(SEQS.map(seq => () => {
     'analysts disagreed about and how you settled it, what you DROPPED rather than\n' +
     'bank, and any span-head licensor the lander must add.',
     { label: 'reconcile:' + seq, phase: 'Reconcile', schema: SPEC_SCHEMA,
-      model: 'opus', effort: 'high' })
+      model: 'claude-opus-5', effort: 'high' })
     .then(r => ({ seq, spec: r }))
 }))
 

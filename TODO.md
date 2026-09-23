@@ -4443,10 +4443,12 @@ section is incomplete by design.*
 
 ### Waiting on Adam
 
-- [ ] **Adam: find the named human reviewers for the gold standard.** Nothing
+- [x] **Adam: find the named human reviewers for the gold standard.** Nothing
       about accuracy can be measured until they exist. The only labelled audit
       names Claude models as its labellers and has no human adjudicator, so
       grading anything against it measures agreement with Claude.
+      **RULED, Adam, 2026-09-23 (in conversation):** in-house scholars, but NOT from ACI -- Geshe Michael himself or one of the main translators of the Diamond Cutter Classics translation group. Naming the specific readers is the new item at the end of this section.
+
 - [ ] **Adam: rule on the 91 undeclared liturgy transfers.** Segments 1-21 --
       the Refuge, the Wish, Offering the Mandala, A Buddhist Grace -- open
       C02-C05 exactly as they open C01, and 91 banked segments carry those
@@ -4457,13 +4459,15 @@ section is incomplete by design.*
       only.** The published dictionary and CSVs now rank renderings by
       independent readings; the app's evidence card ranks by every citation.
       The two disagree the moment a transfer lands.
-- [ ] **Adam: rule on the model policy, which has lapsed.** The briefs say
+- [x] **Adam: rule on the model policy, which has lapsed.** The briefs say
       propose on Opus 5, reconcile and refute on Fable 5.1 (Adam, 2026-09-01),
       and it held in the C03 era (recorded earlier in this file). But
       `c05-align.js` forces Opus at every stage, and the transcripts confirm
       Opus served about 98% of all responses -- so the Fable policy stopped
       applying when the Course 5 harness was written. Restore it or amend the
       briefs.
+      **RULED, Adam, 2026-09-23 (in conversation):** pin claude-opus-5 at every stage; shadow-test claude-opus-5-5 before any switch. Pinned in c05-align.js the same day, after a probe proved a full model id is honoured.
+
 - [ ] **Adam: rule on vocabulary-greedy order versus reading whole courses in
       order.** Filed inside section AB, where a ruling can be missed. 63% of
       the remaining vocabulary sits in 12% of the segments, but the standing
@@ -4517,12 +4521,14 @@ conversation the day it was filed.*
 
 #### Mine -- free, do first
 
-- [ ] **Pin the model and effort in c05-align.js, and stamp the served model on
+- [x] **Pin the model and effort in c05-align.js, and stamp the served model on
       every page.** The `opus` alias moved to Opus 5.5 on 2026-09-23 between
       11:49 and 15:51 -- every workflow before served `claude-opus-5`, every
       one after `claude-opus-5-5` -- and c05-align.js requests `model: 'opus'`
       unpinned at three call sites. The next batch would have changed producer
       with nothing on the page to show it. Which id to pin is Adam's ruling.
+      **RULED, Adam, 2026-09-23 (in conversation):** pinned claude-opus-5 at all six call sites, and a one-agent probe proved the harness honours a full id (served claude-opus-5). Stamping the served model on each page is split out as its own item below.
+
 - [ ] **Fix the teaching-index honesty defect.** The card reads "Geshe Michael
       teaches this idea" (app/main.cpp:2032), but
       tools/build_teaching_index.py filters videos by LANGUAGE only, never by
@@ -4633,11 +4639,13 @@ conversation the day it was filed.*
       and date.** Under consumer terms it decides whether everything already
       sent is kept 30 days or up to 5 years, and whether it may be used for
       training.
-- [ ] **Adam: choose the model id to pin.** claude-opus-5 (continuity with every
+- [x] **Adam: choose the model id to pin.** claude-opus-5 (continuity with every
       landed page); claude-opus-5-5 (vendor list ~35% cheaper, quality
       unmeasured, shadow-test first); or the lapsed written policy, Opus 5
       propose plus Fable 5.1 reconcile (+12-14% list; Fable's separate weekly
       cap has bound three times and it refused on safeguards on 09-16).
+      **RULED, Adam, 2026-09-23 (in conversation):** claude-opus-5, with a shadow test of claude-opus-5-5. Done in c05-align.js.
+
 - [ ] **Adam: rule on the Rule 7 article class, pending 19 days.** A
       licensor-checked deterministic trim with exclusions and a 60-item human
       sample (re-cuts shipped C01-C03 pages), or tolerate -- which the research
@@ -4648,16 +4656,20 @@ conversation the day it was filed.*
       the Claude bank and the unmerged Codex bank (57.6% exact d=5 agreement on
       C05:178-366) is convention; a one-to-two-hour ruling pack would collapse
       the queue to ~0.5-1 genuine conflict per segment.
-- [ ] **Adam: rule on holding C18 and the flagged rows.** Hold C18:560-760,
+- [x] **Adam: rule on holding C18 and the flagged rows.** Hold C18:560-760,
       C15:148-165 and C18:1007-1024 out of the campaign until read -- about 15
       minutes to read C18:612-623 against C13:585-595 -- or scan them anyway,
       risking ~46 mispaired rows at ~15 links each. And whether to re-derive
       C13 upstream to bring its 1,041 segments into the mandate.
-- [ ] **Adam: set the quota policy -- the largest speed lever there is.**
+      **RULED, Adam, 2026-09-23 (in conversation):** hold until read. ENFORCED, not just recorded: data/alignment/held_rows.json lists the three ranges and tools/land_alignment_page.py refuses any held segment, and refuses everything if the register goes missing. The C13 upstream re-derive question is still open.
+
+- [x] **Adam: set the quota policy -- the largest speed lever there is.**
       Measured, Aug 6 to Sep 23: alignment workflows got 10.6% of the weekly
       allowance and main conversational sessions 61.5%. At 10.6% the mandate
       takes on the order of 60-95 weeks; at ~50%, 10-20. How much of each week
       may conversations, audits and research sweeps use?
+      **RULED, Adam, 2026-09-23 (in conversation):** upwards of 75% of each week's allowance goes to the alignment campaign. Conversations, audits and research sweeps share the rest.
+
 - [ ] **Adam: rule on billing and capacity.** Stay on Max 20x and protect quota
       (cash ~$0 per segment, limited by calendar); usage bundles with a cap
       ($700 buys $1,000 of list usage, up to $2,000 a month); or nonprofit Team
@@ -4683,11 +4695,13 @@ conversation the day it was filed.*
 - [ ] **Adam: rule on context-pack provenance.** May precedent counts stamped by
       a deterministic tool with the bank's sha256 replace the instruction
       "count it yourself"?
-- [ ] **Adam: run the reader recruitment test.** Three in-house ACI-trained
+- [x] **Adam: run the reader recruitment test.** Three in-house ACI-trained
       bilingual readers each adjudicate the same 30 randomly drawn spans,
       blind and timed, plus one reader outside the lineage on the overlap.
       About 3-8 person-hours; yields the first human minutes-per-span and
       inter-rater figures.
+      **RULED, Adam, 2026-09-23 (in conversation):** SUPERSEDED as written -- it assumed ACI-trained readers, and the readers are Geshe Michael or Diamond Cutter Classics translators. Replaced by the new item at the end of this section.
+
 - [ ] **Adam: set the finish line.** Define "done" by headword-incidence coverage
       certified by a sealed random sample, plus a price cap per new lexical
       headword recomputed by the ledger each batch. Measured: the mandate's
@@ -4731,3 +4745,26 @@ conversation the day it was filed.*
       Hyperscaler nonprofit credits cannot buy Claude and would pull the
       project toward models with no Tibetan evidence. NEH is ineligible on
       subject.
+
+#### Opened by the 2026-09-23 rulings
+
+- [ ] **Adam: name the specific Diamond Cutter Classics readers, and schedule
+      the first blind test.** Geshe Michael himself, or one or more of the main
+      DCC translators. Suggested first test: each reader adjudicates the same
+      30 randomly drawn spans, blind and timed, never seeing a machine verdict
+      first -- the first human minutes-per-span and agreement figures this
+      project will ever have. The readers are also co-translators, so the
+      consent-and-rights item above bears on this.
+- [ ] **Adam: read the held rows so they can be released or excluded.** About
+      15 minutes: `docs/research/held_rows_reading_sheet.md` sets each flagged
+      run out row by row. Record the ruling in `data/alignment/held_rows.json`.
+- [ ] **Run the Opus 5.5 shadow test Adam ruled for.** Re-run ~36 already-landed
+      segments on claude-opus-5-5 with identical briefs, in a fresh lean
+      session. Record per agent the served model, cache read/write and output
+      tokens, and generator runs to exit 0; compare span sets with the landed
+      Opus 5 pages; Adam reads a random 50 of the disagreements blind. About
+      $156 list-equivalent -- campaign quota, under the 75% ruling.
+- [ ] **Stamp the served model and effort on every landed page.** Pinning the
+      request is not proof of what served; the probe showed the field is
+      readable from the transcript. A page should carry the model that
+      actually answered, so a future alias move can never be silent again.
