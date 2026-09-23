@@ -253,6 +253,276 @@
    "test": "app_selftest",
    "expect_fail_contains": "TP-4",
    "expect": "killed"
+  },
+  {
+   "id": "SPANID-ROUNDTRIP",
+   "note": "Added 2026-09-23 with the span-id compiler. The danger case: a proposal picks the THIRD 'the' and the generator's forward cursor would bank the FIRST. Disabling the English offset comparison lets that spec out; the pin must refuse it by name.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if (r[\"a\"], r[\"b\"]) != c[\"eng\"]:",
+   "new": "        if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "English 'the' resolves to an earlier occurrence: expected refusal ROUND_TRIP_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-CENSUS",
+   "note": "Added 2026-09-23. The battery's page reader silently skipping every span of class 'noun' must be caught by the independent regex recount of span tags, not trusted.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if isinstance(f, dict):\n                f[\"b\"] = pos",
+   "new": "            if isinstance(f, dict) and f[\"cls\"] != \"noun\":\n                f[\"b\"] = pos",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "CENSUS: the page reader is blind",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-LAST-LINE",
+   "note": "Added 2026-09-23. With the named MEMBER_ENGLISH_UNDER_NULL_PARENT check removed (and the line after it guarded), the round trip is the only defence left, and it must still refuse: the generator silently drops a member's English under a null parent, and the English 'did not come back at all'.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if p[\"e\"] is None:\n                raise Refusal(\"MEMBER_ENGLISH_UNDER_NULL_PARENT\", \"the d=7 \"\n                              \"member %s has English but its parent %s has \"\n                              \"none. The generator renders a member's English \"\n                              \"only inside its parent's, and would silently \"\n                              \"DROP this one. Null the member, or give the \"\n                              \"parent its English.\" % (at(m, \"t\"), p[\"id\"]),\n                              seq, m[\"id\"])\n            if not (p[\"e\"][0] <= m[\"e\"][0] and m[\"e\"][1] <= p[\"e\"][1]):",
+   "new": "            if False:\n                raise Refusal(\"MEMBER_ENGLISH_UNDER_NULL_PARENT\", \"the d=7 \"\n                              \"member %s has English but its parent %s has \"\n                              \"none. The generator renders a member's English \"\n                              \"only inside its parent's, and would silently \"\n                              \"DROP this one. Null the member, or give the \"\n                              \"parent its English.\" % (at(m, \"t\"), p[\"id\"]),\n                              seq, m[\"id\"])\n            if p[\"e\"] is not None and not (p[\"e\"][0] <= m[\"e\"][0] and m[\"e\"][1] <= p[\"e\"][1]):",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "refused as ROUND_TRIP_MISMATCH, expected MEMBER_ENGLISH_UNDER_NULL_PARENT",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-ACHUNG",
+   "note": "Added 2026-09-23 (fix round 1). span-id-tok/1 split a syllable-final a-chung off its syllable, so the plain range `grub mtha` silently dropped the a-chung of `grub mtha'`. Reverting the fix without renaming the tokenizer must be caught by the pinned token boundaries, not trusted to a manual name bump.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if (side == \"tib\" and j < n and text[j] == \"'\"\n                    and (j + 1 >= n or not _tokch(text[j + 1]))):\n                j += 1          # the syllable-final a-chung: mtha'\n",
+   "new": "",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "TOKENIZER CHANGED WITHOUT A NAME BUMP",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-TOKENIZER-NOBUMP",
+   "note": "Added 2026-09-23 (fix round 1). The verifier's MN3: English tokens joined across '.' between letters, name unchanged. It passed the first gate; C05:83 E205-E207 then meant 'i.e.,' instead of 'i.e' under the same src. The canary and the per-segment boundary digests must catch it.",
+   "file": "tools/span_id_compiler.py",
+   "old": "                while (j + 1 < n and text[j] in \"'\\u2019\"",
+   "new": "                while (j + 1 < n and text[j] in \"'\\u2019.\"",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "TOKENIZER CHANGED WITHOUT A NAME BUMP",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-HASH-COVERS-ENGLISH",
+   "note": "Added 2026-09-23 (fix round 1). The verifier's MV: the src hash stopped covering the English, so a spine English edit would not stale an outstanding proposal. The independent restatement of the hash contract must fail.",
+   "file": "tools/span_id_compiler.py",
+   "old": "    h.update((\"%s\\0%s\\0%s\" % (TOKENIZER, wylie, english)).encode(\"utf-8\"))",
+   "new": "    h.update((\"%s\\0%s\\0%s\" % (TOKENIZER, wylie, \"\")).encode(\"utf-8\"))",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "the src contract moved",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-SUBWORD-ALLOWLIST",
+   "note": "Added 2026-09-23 (fix round 1). The derived subword flag switches OFF the generator's refusal of an accidental word cut, so the compiler must apply rule 8's allowlist first; with that check gone 'Exemp' out of 'Exemplist' compiled. Re-anchored in fix round 2, when the comparison became exact (case-sensitive, as test_no_broken_words compares).",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if eng[c:d] in ALLOWED_SUBWORD:\n                continue",
+   "new": "            if True:\n                continue",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "English cut outside the affix convention: expected refusal SUBWORD_NOT_ALLOWED, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-SYLLABLE-START",
+   "note": "Added 2026-09-23 (fix round 1). Rule 3: a depth 1-6 span starts a syllable. The generator's BOUND check misses a d=6 'i listed right after its own word; the compiler's check must refuse it by name.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if s[\"d\"] != 7 and _glued(wyl, a):",
+   "new": "        if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "bound 'i as a flat d=6 span: expected refusal FLAT_STARTS_MID_SYLLABLE, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-BUILDER-VIEW",
+   "note": "Added 2026-09-23 (fix round 1). The bank is built from the WHOLE page; a note carrying its own pair block once banked a second English under a real label. The whole-page check through the builder's own reader is the backstop behind the named title/note checks, pinned against stub output.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        got = sorted(G.B.spans_of(page, side))\n        if got != want:",
+   "new": "        got = sorted(G.B.spans_of(page, side))\n        if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "stub: a page carrying an extra pair block: expected refusal BUILDER_VIEW_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-NULL-MARKER-STUB",
+   "note": "Added 2026-09-23 (fix round 1). The verifier's MU: no proposal the earlier checks admit reaches this branch through today's generator, so it survived the first gate. It is now pinned against stub output.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if lab in seen_en or n is None:\n                raise Refusal(\"ROUND_TRIP_MISMATCH\", \"the null span did not \"\n                              \"come back as exactly one null marker\", seq, sid)",
+   "new": "            if lab in seen_en or n is None:\n                continue",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "stub: a null marker vanished: expected refusal ROUND_TRIP_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-SWEEP-TIBETAN",
+   "note": "Added 2026-09-23 (fix round 1). The verifier's MM: with the Tibetan offset comparison off, only four pins noticed. The occurrence sweep (every round-tripping block with one span moved to a later copy of its text, read back independently) must now catch it on whole-bank evidence.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if (r[\"a\"], r[\"b\"]) != c[\"tib\"]:",
+   "new": "        if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "variant(s) compiled to a spec that resolves somewhere other than proposed",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-PROTOCOL-ALLOWLIST",
+   "note": "Added 2026-09-23 (fix round 1). A protocol label used to excuse every failure class but three. It now excuses only the shape that defines the protocol; widening it back must be noticed through the blocks frozen by name.",
+   "file": "tools/span_id_compiler.py",
+   "old": "    return blk[\"class\"] in PROTOCOL_SHAPES.get(blk[\"kind\"], ())",
+   "new": "    return blk[\"kind\"] in PROTOCOL_SHAPES",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "NO LONGER FAILS AS FROZEN",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-MEMBER-ENGLISH-OFFSET",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V6a: with the member-English offset check off, C05:103's member on the second 'of' compiled and banked the first, every gate green. Now a pin, a stub pin, and the member re-point sweep (112 variants resolve elsewhere under it).",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if (r[\"a\"], r[\"b\"]) != c[\"eng\"]:",
+   "new": "        if c[\"d\"] != 7 and (r[\"a\"], r[\"b\"]) != c[\"eng\"]:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "member English on the second 'of' in its parent: expected refusal ROUND_TRIP_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-PACKET-NUMBERS",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V4b: a packet renderer one number ahead after the first token let an agent's citation of 'gzhan dag' compile to 'dag mu'. The packet contract now reads every landed packet back as text and resolves each number.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        out.append(\"[%d]%s\" % (n, text[a:b]))",
+   "new": "        out.append(\"[%d]%s\" % (n if n == 1 else n + 1, text[a:b]))",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "the markers run [3] where [2] was due",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-SHORT-CUTS",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V9a: every English cut of three characters or fewer allowed. Pins, and the cut sweep (1,599 variants compile under it).",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if eng[c:d] in ALLOWED_SUBWORD:\n",
+   "new": "            if eng[c:d] in ALLOWED_SUBWORD or d - c <= 3:\n",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "'the' cut out of 'Others' (3 characters): expected refusal SUBWORD_NOT_ALLOWED, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-D6-CUTS",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V9c: depth 6 exempted from the English cut rule.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if s[\"e\"] is None:\n            continue\n        c, d = s[\"e\"]",
+   "new": "        if s[\"e\"] is None or s[\"d\"] == 6:\n            continue\n        c, d = s[\"e\"]",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "an English cut on a depth-6 span: expected refusal SUBWORD_NOT_ALLOWED, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-ANY-ORDER",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V21: spans emitted in proposal order. The packet promises any order; a pin scrambles one, and the battery compiles every landed block backwards.",
+   "file": "tools/span_id_compiler.py",
+   "old": "                  key=lambda s: (s[\"t\"][0], -(s[\"t\"][1] - s[\"t\"][0]), s[\"k\"]))\n    for x, y in zip(flat, flat[1:]):",
+   "new": "                  key=lambda s: s[\"k\"])\n    for x, y in zip(sorted(flat, key=lambda s: (s[\"t\"][0], -(s[\"t\"][1] - s[\"t\"][0]))), sorted(flat, key=lambda s: (s[\"t\"][0], -(s[\"t\"][1] - s[\"t\"][0])))[1:]):",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "the first pin's spans listed scrambled: expected success, refused",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-BACKSTOP-CALLED",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V24: the whole-page check was pinned only by calling it directly, so removing its call on the compile path passed.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        check_page(run_generator_spec(whole), blocks, views)",
+   "new": "        pass",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "page check runs on the compile path: expected refusal BUILDER_VIEW_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-DOT-DISAMBIGUATOR",
+   "note": "Added 2026-09-23 (fix round 2). The verifier's V23: the dot form of the disambiguator was handled but unpinned.",
+   "file": "tools/span_id_compiler.py",
+   "old": "    if p == \".\" and a >= 2 and text[a - 2].isalpha() \\",
+   "new": "    if False and p == \".\" and a >= 2 and text[a - 2].isalpha() \\",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "d=6 'yel' cut out of 'g.yel' (dot form): expected refusal FLAT_STARTS_MID_SYLLABLE, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-HYPHEN-DISAMBIGUATOR",
+   "note": "Added 2026-09-23 (fix round 2). The spine writes the disambiguator as a hyphen (g-yo, 1,256 times after a lone g); a d=6 'yam' out of 'g-yam' compiled.",
+   "file": "tools/span_id_compiler.py",
+   "old": "    return (p == \"-\" and a >= 2",
+   "new": "    return (False and p == \"-\" and a >= 2",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "d=6 'yam' cut out of 'g-yam' (hyphen form): expected refusal FLAT_STARTS_MID_SYLLABLE, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-CASE-EXACT",
+   "note": "Added 2026-09-23 (fix round 2). Case folding in the compiler's own clause admitted C03:42's lone 'Un', which test_no_broken_words (case-sensitive) refuses on the very page produced.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if eng[c:d] in ALLOWED_SUBWORD:\n",
+   "new": "            if eng[c:d].lower() in _ALLOWED_LOWER:\n",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "a capitalised 'Un' standing alone: expected refusal SUBWORD_NOT_ALLOWED, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-RESERVED-CLS",
+   "note": "Added 2026-09-23 (fix round 2). A span classed 'nul' renders as a null marker while carrying English, and 'pair' as a two-column grid (C05:255 banks exactly that, now frozen as RESERVED_CLS).",
+   "file": "tools/span_id_compiler.py",
+   "old": "        hit = [c for c in (cls or \"\").split() if c.lower() in SPAN_RESERVED]",
+   "new": "        hit = []",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "cls 'nul': expected refusal RESERVED_CLS, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-NOTE-ATTRS",
+   "note": "Added 2026-09-23 (fix round 2). Note attributes are an allow-list (class, style), compared without case; the verifier's upper-case DATA-L note compiled and became a live linked span to the page's script.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if aname not in NOTE_ATTRS:",
+   "new": "            if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "note: a script handler: expected refusal MARKUP_IN_NOTE, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-MEMBER-UNREACHABLE",
+   "note": "Added 2026-09-23 (fix round 2). A member whose English also sits inside an earlier word of its parent ('a' inside 'as') made the generator refuse and blame the innocent member; the compiler now names the member to change, and an unnamed generator refusal in any sweep fails the gate.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        hit = member_unreachable(spec_seg, chosen, eng) \\\n            if e.code == \"GENERATOR_REFUSED\" else None",
+   "new": "        hit = None",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "variant(s) ended in GENERATOR_REFUSED",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-PACKET-SKIPPED",
+   "note": "Added 2026-09-23 (fix round 2). The packet contract skipped: its resolved-number count is held to an independent tally of every landed token.",
+   "file": "tools/span_id_compiler.py",
+   "old": "                        err, n = packet_contract(course, seq, *row0)",
+   "new": "                        err, n = None, 0",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "it did not look at them all",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-POST-GATES",
+   "note": "Added 2026-09-23 (fix round 2). The post-landing gates' cross-check skipped: both gates must be present in the result, not just silent.",
+   "file": "tools/span_id_compiler.py",
+   "old": "    post_gates(res)\n    return res",
+   "new": "    res[\"bodies\"] = len(res[\"bodies\"])\n    return res",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "was never run over the sweeps' pages",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-SHAPE-CENSUS",
+   "note": "Added 2026-09-23 (fix round 2). The rule-shape census is the scope of the rulings on rules 3, 8 and 9 (214 blocks); it is pinned in the baseline and may not vanish.",
+   "file": "tools/span_id_compiler.py",
+   "old": "                if shapes:\n                    res[\"shapes\"][key]",
+   "new": "                if False:\n                    res[\"shapes\"][key]",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "RULE-SHAPE CENSUS CHANGED",
+   "expect": "killed"
   }
  ]
 }

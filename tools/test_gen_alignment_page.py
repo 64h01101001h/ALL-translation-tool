@@ -256,6 +256,29 @@ else:
     else:
         print("  ok   a flat span will not match inside a larger word")
 
+# 18b. The LEFT edge of that rule, which pin 18 never exercised: "block"
+#     sits at the START of "blockprint", so a generator that stopped checking
+#     the character BEFORE a match still passed. C03:31 has "here" first as
+#     the tail of "there", then as a word of its own. With the left check
+#     gone the tail counts as a second hit, and the one span claiming "here"
+#     is refused as ambiguous -- or lands inside "there". That mutant
+#     (`before = True`) was committed at f36ccffa with this gate green; only
+#     the span-id compiler's whole-bank round trip saw it.
+#     MUTATION: before = True in find_word -> this pin fails.
+rc, out, err = run({"course": "C03", "segments": [{"seq": 31, "title": "t",
+    "spans": [{"id": "w1", "d": 5, "tib": "snyed", "eng": "here"}]}]})
+if rc != 0:
+    fails.append("left word boundary: a standalone 'here' was refused: %s"
+                 % err.strip()[:220])
+else:
+    import re as _re
+    m = _re.search(r'(.)<span[^>]*data-l="s31w1">here</span>', out)
+    if not m or _re.match(r"[A-Za-z]", m.group(1)):
+        fails.append("left word boundary: 'here' landed inside a word: %r"
+                     % (m.group(0) if m else out[:200]))
+    else:
+        print("  ok   a flat span will not match the tail of a larger word")
+
 # 19. The negative-affix convention: the Tibetan negation maps to the
 #     "n't" inside "doesn't", so the span deliberately sits within a larger
 #     word. Declared with "subword": true, it must be ALLOWED -- 14 spans

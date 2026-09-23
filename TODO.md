@@ -4768,3 +4768,38 @@ conversation the day it was filed.*
       request is not proof of what served; the probe showed the field is
       readable from the transcript. A page should carry the model that
       actually answered, so a future alias move can never be silent again.
+
+#### The span-ID compiler, landed 2026-09-23 -- what remains
+
+- [ ] **Close the span-ID compiler's remaining defects before wiring it into the
+      campaign.** Final adversarial verdict after two fix rounds: ready with
+      fixes. MEDIUM: the gate prints the token-scheme coverage (72,532 of 74,076
+      span sides, 97.916%) but pins neither it nor its plain/bracket split --
+      mutant M17 passes. LOW: check_blocks' depth/class comparison has no stub
+      pin; `_glued` and the generator's BOUND check disagree on `-`, `:` and
+      `}`, so some proposals pass the compiler and die in the generator with
+      advice that is wrong (C04:29 `dpg-yid`); a note class written as an
+      entity (`&#117;` for `u`) slips past the reserved-class check; the gate
+      crashes with a traceback instead of reporting when the compiler
+      regresses; token references accept Tibetan and fullwidth digits; and an
+      empty null reason is accepted while the page renders a default in its
+      place. None endangers a landed page -- the compiler is not yet in the
+      campaign -- but each must close before it is.
+- [ ] **Fix the two landed defects the compiler found.** C05:255 banks a depth-3
+      span whose class is 'coordinated clause pair', and `.pair` is a layout
+      class (display: grid) on the page, so the span restyles itself; it is
+      frozen as RESERVED_CLS. And the landed note on c3p90 contains a sequence
+      a browser reads as a bogus comment, hiding text from the reader.
+- [ ] **Make `mutate.py` run generator mutants in a sandboxed copy, then restore
+      the two sweep entries dropped from the compiler's commit.**
+      SPANID-GENERATOR-BROKEN and GEN-LEFT-BOUNDARY planted `before = True`
+      into the LIVE `gen_alignment_page.py` -- the exact mutant and path by
+      which commit f36ccffa shipped a broken generator. The protection they
+      give is covered meanwhile by pin 18b in `test_gen_alignment_page.py`,
+      which catches that mutant without touching the live tree.
+- [ ] **Measure whether the compiler saves anything, in its pilot.** It is PROVED
+      to lose nothing -- 953 landed blocks and 49,194 span sides regenerate
+      byte-identical -- and NOT proved to save anything: its packet is 2.12x
+      the raw segment text (median 2.13x, p90 3.39x) and the `[n]` markers are
+      42.5% of packet bytes. Whether fewer repair rounds outweigh a larger
+      packet is the question the pilot batch exists to answer.

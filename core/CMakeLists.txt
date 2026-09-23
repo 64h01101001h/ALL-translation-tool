@@ -657,6 +657,27 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
 
+  # The span-id compiler (tools/span_id_compiler.py) lets a proposal name token
+  # POSITIONS instead of retyping strings, and emits the generator's own spec.
+  # The pins require every refusal BY NAME -- above all the spec that would
+  # resolve to a different occurrence than the one proposed -- and hold the
+  # round trip's own checks to stub output. The battery reverse-compiles every
+  # landed segment and requires the regenerated blocks to be byte-identical to
+  # the page on disk, pins every landed segment's token boundaries against a
+  # tokenizer changed without a name bump, and moves spans to later copies of
+  # their own text (the occurrence sweep) or re-points d=7 members inside their
+  # parent, reading each compiled variant back with an independent reader. It
+  # shortens spans so they cut (the cut sweep) and requires each rule's own
+  # refusal, runs test_no_broken_words and test_no_split_syllables unmodified
+  # over every page the sweeps compile, reads every landed packet back as text
+  # and resolves each number an agent is shown, and pins a census of every
+  # landed block that breaks a written cut rule -- the scope of the rulings
+  # those blocks await. Identity, not truth: it proves nothing is lost or
+  # misplaced, never that an alignment is right.
+  add_test(NAME span_id_compiler
+           COMMAND ${Python3_EXECUTABLE}
+                   ${CMAKE_SOURCE_DIR}/tools/test_span_id_compiler.py)
+
   # Rule-7 ratchet (2026-09-04 audit): d=5/d=7 English spans that begin with a
   # supplied article or hinge may not increase in the shipped dirs and must
   # be zero (or allowlisted with a licensor) in any new course directory.

@@ -6,7 +6,7 @@
 
 The reading that produced the previous version of this page is kept at `docs/RELEASE_PUNCHLIST_2026-09-11.md`. Its classifications are the input to the re-survey that fills in the section below; they are not carried across automatically, because its rows are summaries whose source pointers have drifted and matching them by guess would be guesswork dressed as data.
 
-**219 open items.** 199 classified, 20 awaiting a reading.
+**223 open items.** 203 classified, 20 awaiting a reading.
 
 
 ## Release-blocking, and mine to do
@@ -113,12 +113,16 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 71 | Per-course SPRT acceptance sampling, once readers exist. | medium | `TODO.md:4631` |
 | 72 | Run the Opus 5.5 shadow test Adam ruled for. | medium | `TODO.md:4761` |
 | 73 | Stamp the served model and effort on every landed page. | medium | `TODO.md:4767` |
-| 74 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
-| 75 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
-| 76 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
-| 77 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
-| 78 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
-| 79 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
+| 74 | Close the span-ID compiler's remaining defects before wiring it into the campaign. | medium | `TODO.md:4774` |
+| 75 | Fix the two landed defects the compiler found. | medium | `TODO.md:4788` |
+| 76 | Make mutate.py run generator mutants in a sandboxed copy, then restore the two sweep entries dropped from the compiler's commit. | medium | `TODO.md:4793` |
+| 77 | Measure whether the compiler saves anything, in its pilot. | medium | `TODO.md:4800` |
+| 78 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
+| 79 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
+| 80 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
+| 81 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
+| 82 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
+| 83 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
 
 ## Everything else unblocked (docs, data, process)
 
