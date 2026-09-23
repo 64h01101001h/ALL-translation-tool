@@ -1,0 +1,323 @@
+#!/usr/bin/env python3
+"""Rebuild the browsable dictionary view from the current alignment layer.
+
+Adam asked to see the new dictionary as it grows batch to batch, with a
+slider for the depth layers. This regenerates docs/geshe_michael_roach_dictionary.html
+from whatever the layer currently holds, so republishing after a batch
+shows the batch.
+
+    python3 tools/build_dictionary_view.py
+    # then: Artifact(file_path="docs/geshe_michael_roach_dictionary.html", url=<same URL>)
+
+Publishing to the SAME url keeps one link that updates in place. Passing a
+new path, or omitting the url from a different conversation, creates a
+second artifact instead.
+
+The page carries the PROVISIONAL banner from the layer's own meta block,
+so the tier label can never drift from what the layer actually claims.
+"""
+import json, io, os, re, sys, collections, difflib
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "engines"))
+import pron_engine as _P   # noqa: E402
+
+
+def _n(s):
+    return re.sub(r"[^a-z]", "", (s or "").lower())
+
+
+_PHC = {}
+
+
+def is_phonetic(tib, eng):
+    """True when the English is a TRANSCRIPTION of the Tibetan rather than a
+    translation of it.
+
+    The liturgy pages align Geshe Michael's phonetic transcription lines
+    against the Tibetan they sound out -- `byugs shing` against "jukshing".
+    That is real, valuable data and it is exactly what the phonetics
+    protocol intends, but it is NOT dictionary content: shown as an entry
+    it reads as though `bsod nams` means "sunam", when it means merit.
+
+    Adam caught this in the published view, 2026-08-28. The evidence layer
+    the app reads was never affected -- it harvests d=5 only, where the
+    0.59% that match this test are legitimate proper names and titles
+    (`dge bshes` -> "Geshe", `aa ti sha` -> "Atisha"). The defect was in
+    the view, which harvests every depth, and d=7 is 46% phonetic.
+
+    Tested with the project's own pron_engine rather than a heuristic.
+    """
+    if tib not in _PHC:
+        try:
+            _PHC[tib] = _n(_P.pronounce(tib))
+        except Exception:
+            _PHC[tib] = ""
+    ph, ne = _PHC[tib], _n(eng)
+    if not ph or not ne:
+        return False
+    if ph == ne or (len(ne) > 3 and (ph.startswith(ne) or ne.startswith(ph))):
+        return True
+    # A depth-1 span wraps the WHOLE segment, and 115 source segments end a
+    # phonetic prayer run by appending the prayer's entire English
+    # translation to the last phonetic line (C01:11 carries "drola penchir
+    # sangye druppar shok." followed by the whole Refuge and The Wish). The
+    # page handles this correctly, separating the two at depth 2 -- but the
+    # depth-1 wrapper necessarily holds both, and as a dictionary entry that
+    # reads as though the Tibetan means all of it.
+    # Adam caught this in the published view, 2026-08-28.
+    if len(ph) >= 8 and ne.startswith(ph[:max(10, int(len(ph) * 0.8))]):
+        return True
+    # Geshe Michael's phonetics are his own convention and vary from the
+    # engine's: for `sku gsung thugs kyi dngos grub rtsol du gsol` the engine
+    # says "tsul du sul" and he writes "tsoldu sol". Exact prefix matching
+    # misses those, so compare the head of the English against the engine's
+    # output by similarity. 0.75 is deliberately high -- a real translation
+    # scores far below it against a transliteration.
+    if len(ph) >= 12:
+        head = ne[:len(ph)]
+        if difflib.SequenceMatcher(None, ph, head).ratio() >= 0.75:
+            return True
+    return False
+
+
+# A new section's heading glued onto the previous segment's English. 511
+# segments across 59 courses carry one (Adam, 2026-08-28). Only
+# high-confidence forms are trimmed -- numbered readings and contemplations,
+# cantos, and the course front matter -- because a general Title Case rule
+# also matches ordinary mid-sentence capitals like "As Master Shantideva".
+GLUED = re.compile(
+    r"[a-z\.\,\!\?][\.\s]\s*("
+    r"Reading (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|\d+)"
+    r"|Contemplation (?:One|Two|Three|Four|Five|Six|Seven|Eight|Nine|Ten|"
+    r"Eleven|Twelve|Thirteen|Fourteen|Fifteen|Sixteen|Seventeen|Eighteen|"
+    r"Nineteen|Twenty|Twenty-\w+|Thirty|Thirty-\w+|\d+)"
+    r"|(?:First|Second|Third|Fourth|Fifth) Canto"
+    r"|The Asian Classics Institute"
+    r"|Refuge and The Wish|A Buddhist Grace|Offering the Mandala"
+    r")\b")
+
+
+def trim_glued(eng):
+    """Cut the English where a following section's heading was glued on."""
+    m = GLUED.search(eng or "")
+    if not m:
+        return eng, False
+    cut = eng[:m.start() + 1].rstrip()
+    # only trim if something substantial survives; otherwise the span IS the
+    # heading and belongs to whatever follows, not here
+    return (cut, True) if len(cut) >= 12 else (eng, False)
+
+
+# ALL_VIEW_FULL / ALL_VIEW_OUT (and ALL_VIEW_DOCS, in build_dictionary_exports)
+# let a gate build the whole dictionary from a scratch bank into a scratch
+# directory. tools/test_transfer_provenance.py uses them to publish a real
+# transfer and check what comes out; without them that check would have to
+# overwrite the published artifact to run, and a check that damages what it
+# checks is a check nobody runs. Unset, every path is the real one.
+FULL = os.environ.get("ALL_VIEW_FULL") or os.path.join(
+    ROOT, "data", "alignment", "alignment_full_v1.json")
+EVID = os.path.join(ROOT, "data", "alignment", "alignment_evidence_v1.json")
+SHELL = os.path.join(ROOT, "tools", "dictionary_view_shell.html")
+OUT = os.environ.get("ALL_VIEW_OUT") or os.path.join(
+    ROOT, "docs", "geshe_michael_roach_dictionary.html")
+
+# PROVENANCE IS SACRED, AND THIS PAGE IS WHERE A PERSON READS IT.
+#
+# A segment whose Tibetan and Geshe Michael's English are byte-identical to a
+# segment already read can have that reading CARRIED ACROSS rather than read
+# again (tools/transfer_duplicate_segments.py). The bank says so on every such
+# span, in `xfer`; the evidence layer says so in `xrefs`/`n_read`. This file
+# builds the published dictionary straight from the bank's links, and until
+# 2026-09-22 it dropped the mark: a carried reading appeared here as an
+# ordinary citation beside the one it was carried from, and — because
+# renderings are ordered by how many segments cite them — an echo of a reading
+# could outrank a reading. One transferred segment was measured moving the head
+# rendering of 13 headwords.
+#
+# So a carried citation is written NAMING THE SEGMENT IT CAME FROM, in the
+# same notation the transfer baseline uses, and the independent count is what
+# orders the renderings:
+#
+#     C07:85               read in C07:85
+#     C07:85<-C03:501      carried across from C03:501; nobody read C07:85
+#
+# `<` and `>` never appear in a citation, and the page writes citations into
+# the document without escaping, so the arrow is spelled with the Unicode
+# character rather than an ASCII "<-".
+XFER_MARK = "←"          # C07:85←C03:501, read "carried from"
+
+
+def cite(course, seg, xfer):
+    """One citation, carrying its transfer provenance if it has any."""
+    ref = "%s:%s" % (course, seg)
+    return ref + XFER_MARK + xfer if xfer else ref
+
+
+def is_xfer(ref):
+    return XFER_MARK in ref
+
+
+def n_read(refs):
+    """How many of these citations are INDEPENDENT readings.
+
+    Not len(refs): a transferred citation is a real citation -- the text is
+    there, byte for byte -- but it is the same reading counted twice, and a
+    count that does not say so is a doubled tally wearing the word "attested".
+    """
+    return sum(1 for r in refs if not is_xfer(r))
+
+
+def rank(rend):
+    """Renderings, most INDEPENDENTLY attested first.
+
+    The count is n_read and NOTHING ELSE. Breaking a tie by the total would
+    put the rendering with more echoes above the one with none, which is
+    ranking by the thing that is not evidence -- and it is the tie case that
+    the measurement found: one transferred segment moved the head rendering of
+    13 headwords, and the moves were ties broken by the echo. A tie falls back
+    to the order the corpus itself produced, exactly as it did before.
+
+    With nothing transferred, n_read IS len, so this is the old order to the
+    byte; the published page was unchanged on the day this landed.
+    """
+    return sorted(([e, sorted(set(rs))] for e, rs in rend.items()),
+                  key=lambda x: -n_read(x[1]))
+
+
+def main():
+    links = json.load(io.open(FULL, encoding="utf-8"))["links"]
+    ev = json.load(io.open(EVID, encoding="utf-8"))
+    meta, acip = ev["meta"], ev.get("acip_index", {})
+
+    byd = collections.defaultdict(
+        lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
+    phon = collections.defaultdict(lambda: collections.defaultdict(list))
+    skipped = n_phon = n_glued = 0
+    for l in links:
+        d, t = l.get("d"), (l.get("tib") or "").strip()
+        e, seg, co = (l.get("eng") or "").strip(), l.get("seg"), l.get("course")
+        # the bank's own per-span transfer stamp, read here rather than
+        # remembered anywhere: a span that arrived by transfer says so.
+        x = l.get("xfer")
+        # a link with no English exponent is a null morpheme: correct on the
+        # page, meaningless in a dictionary view.
+        if not d or not t or not e or seg is None or not co:
+            skipped += 1
+            continue
+        # A proper name is not a phonetic pair even though it matches the
+        # test: `tsong kha pa` -> "Tsongkapa" IS the English. Names are
+        # capitalised in GMR's text and phonetic lines are not, which
+        # separates them without a hand-kept list.
+        if is_phonetic(t, e) and not e[:1].isupper():
+            # show only the transcription; the appended translation belongs
+            # to the prayer, not to this Tibetan line
+            trimmed = e
+            try:
+                say = _P.pronounce(t)
+                cut = len(say) + 2
+                if len(e) > cut * 1.6:
+                    m = re.match(r"^.{%d,%d}?[\.\,]" % (max(0, cut - 12), cut + 14), e)
+                    if m:
+                        trimmed = m.group(0)
+            except Exception:
+                pass
+            e = trimmed
+            phon[t][e].append(cite(co, seg, x))
+            n_phon += 1
+            continue
+        e, was_glued = trim_glued(e)
+        if was_glued:
+            n_glued += 1
+        byd[d][t][e].append(cite(co, seg, x))
+
+    depths = {}
+    for d in sorted(byd):
+        ents = []
+        for t, rend in byd[d].items():
+            rl = rank(rend)
+            ents.append([t, acip.get(t) or "", rl])
+        ents.sort(key=lambda x: (-len(x[2]), x[0].lower()))
+        depths[d] = ents
+        sys.stderr.write("  d=%d  %5d headwords  %6d renderings\n"
+                         % (d, len(ents), sum(len(x[2]) for x in ents)))
+
+    pents = []
+    for t, rend in phon.items():
+        rl = rank(rend)
+        pents.append([t, acip.get(t) or "", rl])
+    pents.sort(key=lambda x: (-len(x[2]), x[0].lower()))
+    sys.stderr.write("  phonetics %5d headwords  %6d transcriptions "
+                     "(held apart, not dictionary content)\n"
+                     % (len(pents), sum(len(x[2]) for x in pents)))
+
+    # The page must SAY what it did to the text, not just do it. trim_glued
+    # cuts a following section's heading off the English, so a trimmed entry
+    # shows less than the layer banked - defensible, but not something to do
+    # silently to a reader who is told the text is verbatim.
+    #
+    # Count the ROWS a reader can actually see differing from the layer, not
+    # the trim CALLS. They are not the same number: 11 calls produce 27
+    # visible rows, because a headword can bank a longer English at one
+    # segment and show a trimmed one here. The page must not quote the
+    # smaller figure - a disclosure that understates is worse than none - so
+    # it is measured the same way test_view_matches_layer.py measures it.
+    banked = collections.defaultdict(set)
+    for l in links:
+        if l.get("tib") and l.get("eng"):
+            banked[l["tib"]].add(l["eng"])
+    n_short = 0
+    for ents in list(depths.values()) + [pents]:
+        for t, _a, rl in ents:
+            for e, _rs in rl:
+                if e not in banked[t] and any(b.startswith(e) for b in banked[t]):
+                    n_short += 1
+    sys.stderr.write("  %d published rows show less than the layer banked "
+                     "(from %d trim calls)\n" % (n_short, n_glued))
+
+    # The page must SAY that some of its citations are carried, not merely
+    # mark them and hope a reader works out what the arrow means. Counted from
+    # the assembled rows a reader can actually see, not from the links, for
+    # the reason n_glued is: a link that never reaches a published row is not
+    # something the disclosure is about.
+    n_xfer = n_xfer_rows = 0
+    for ents in list(depths.values()) + [pents]:
+        for _t, _a, rl in ents:
+            for _e, rs in rl:
+                k = sum(1 for r in rs if is_xfer(r))
+                n_xfer += k
+                n_xfer_rows += 1 if k else 0
+    sys.stderr.write("  %d published citations are carried readings, across "
+                     "%d rows (0 until a transfer lands)\n"
+                     % (n_xfer, n_xfer_rows))
+
+    payload = {"meta": {"date": meta.get("date"), "tier": meta.get("tier"),
+                        "corpus": meta.get("source_corpus"),
+                        "rule": meta.get("rule"),
+                        "n_glued": n_short, "n_phon": n_phon,
+                        "n_skipped": skipped},
+               "depths": depths, "phonetics": pents}
+    # emitted only when there is something to disclose, so a page built from a
+    # bank with no transfers in it is byte-for-byte the page that was built
+    # before this fix existed
+    if n_xfer:
+        payload["meta"]["n_xfer"] = n_xfer
+        payload["meta"]["n_xfer_rows"] = n_xfer_rows
+    shell = io.open(SHELL, encoding="utf-8").read()
+    data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+    html = shell.replace("/*PAYLOAD*/", "const PAYLOAD = " + data + ";", 1)
+    io.open(OUT, "w", encoding="utf-8").write(html)
+    # Adam, 2026-09-09: the CSV is regenerated every time the dictionary is,
+    # from the SAME assembled entries the page renders, so the two cannot
+    # drift apart.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import build_dictionary_exports
+    build_dictionary_exports.write_exports(depths, pents, meta, acip)
+    sys.stderr.write("\n  trimmed %d spans where a following section's "
+                     "heading was glued on\n" % n_glued)
+    sys.stderr.write("  skipped %d links with no English exponent\n" % skipped)
+    sys.stderr.write("  wrote %s (%.2f MB)\n" % (OUT, len(html) / 1048576.0))
+
+
+if __name__ == "__main__":
+    main()

@@ -4504,3 +4504,230 @@ section is incomplete by design.*
       here and eligibility is unestablished; the research sweep's funding
       cluster is checking. Against a corrected mandate of about
       $27,000-29,000, it is the most financially material lead so far.
+
+### From the research sweep, 2026-09-23
+
+*56 agents, 21 clusters plus 6 gap clusters, each adversarially verified. Full
+findings, the AVOID list with reasons, the projection and the funding detail
+are in `docs/research/2026-09-23-ai-avenues/README.md`; the output and 295
+measuring scripts are banked beside it. THE RESEARCH MEASURED THAT RULINGS
+FILED IN DOCUMENTS SIT 14-32 DAYS and none of 15 TODO ruling checkboxes was
+ever ticked, so every "Adam:" item below was ALSO put to Adam in the
+conversation the day it was filed.*
+
+#### Mine -- free, do first
+
+- [ ] **Pin the model and effort in c05-align.js, and stamp the served model on
+      every page.** The `opus` alias moved to Opus 5.5 on 2026-09-23 between
+      11:49 and 15:51 -- every workflow before served `claude-opus-5`, every
+      one after `claude-opus-5-5` -- and c05-align.js requests `model: 'opus'`
+      unpinned at three call sites. The next batch would have changed producer
+      with nothing on the page to show it. Which id to pin is Adam's ruling.
+- [ ] **Fix the teaching-index honesty defect.** The card reads "Geshe Michael
+      teaches this idea" (app/main.cpp:2032), but
+      tools/build_teaching_index.py filters videos by LANGUAGE only, never by
+      speaker. The research measured at least 43.5% of English-card moments
+      and 19.2% of spoken-Tibetan moments coming from videos titled for other
+      teachers. Rule 10, in shipped product, under Geshe Michael's name. Filter
+      by speaker or relabel honestly; desktop, then iOS.
+- [ ] **Run the IBM Model 1 row-pairing check before every course, and hold what
+      it flags.** It found the registered C13:63-82 offset with exact
+      boundaries and UNREGISTERED offsets inside the mandate: C18:614-623
+      (confirmed by reading -- each Tibetan row sits one below its English) and
+      probable runs at C15:148-165 and C18:1007-1024. 273 C18 rows are
+      byte-identical clones of C13, which is excluded for exactly this defect.
+      Precision is NOT human-verified: 4 of 6 spine-wide runs were false
+      positives. Promote it into tools/ with the research's mutation test
+      (shift a 12-row window and require detection; require silence on the
+      unshifted copy). Supersedes the belief that this class is undetectable.
+- [ ] **Make SCRATCH durable and keep both proposals for every segment.** The
+      session scratchpad is wiped on restart; C05:367-369's specs were lost
+      that way. Point SCRATCH at a backed-up path outside build/ and keep
+      propose-A, propose-B, the report and the reconciled spec per segment --
+      the two proposals are the free routing signal for human review.
+- [ ] **Replace the parallel() barrier with pipeline() in c05-align.js.** Each
+      reconciler starts as soon as its own two proposals land. Measured by
+      replaying real agent durations: 1.59x faster per 9-segment run (34.6 to
+      22.2 minutes) with zero effect on any judgement.
+- [ ] **Send disagreement to people, deterministically.** Diff both proposals
+      against the reconciled spec for every segment; every dropped unanimous
+      span and every A/B dispute goes to the human queue stamped with its vote
+      pattern (both / one / reconciler-new / overturned). Disagreement is a
+      label-free LOWER bound on error.
+- [ ] **Promote the research instruments into gated tools before they rot.** The
+      295 scripts in `docs/research/2026-09-23-ai-avenues/instruments/` are not
+      tools: the row-pairing check, a coverage forecast (Good's coverage 0.83
+      for d=5 headwords, 0.50 for pairs), a repair census, and a cost-ledger
+      correction -- deduplicate by the LARGEST usage row per request, because
+      first-row dedup undercounts by 29-87%. Each needs a mutation test or it
+      becomes a number nobody can re-derive.
+- [ ] **Unblock the landing tools for Courses 6-18.** land_alignment_page.py
+      accepts only page ids matching `c(\d)p(\d+)` -- one digit -- so it will
+      refuse C10-C18, and c05-align.js hard-codes COURSE='C05' and Course 5
+      context. Parameterise both before the campaign leaves Course 5.
+- [ ] **Build a lean custom agent type for propose and reconcile.** 58% of cache
+      reads are a fixed ~51K-token preamble re-read on every round trip: the
+      Claude Code system prompt, the skill listing, MCP tool names, CLAUDE.md
+      and memory. A custom agent with only Bash/Read/Write, omitClaudeMd, a
+      pinned model and the verbatim brief removes it. Smoke-test, then pilot.
+- [ ] **Re-derive why cost per segment tripled.** Measured on Course 5:
+      direct-spawned agents (2026-09-01 to 09-08) ran at medians of $0.75
+      propose and $0.61 reconcile over 9 and 7 turns; workflow-spawned agents
+      at $2.24 and $2.05 over 19 and 18. Longer segments explain only ~1.25x.
+      Run one batch at the direct-era settings before any saving is quoted.
+- [ ] **Build the source-witness packet from the ACIP masters already on disk.**
+      98.2% of the mandate's non-trivial Tibetan traces to ACIP master files on
+      disk, and ACIP status letters on sibling releases settle 19 of the 26
+      open C05 TIBETAN_SPELLING errata locally. No OCR needed.
+- [ ] **Correct the project documents that now state falsehoods.** Including my
+      own `docs/AUDIT_PROMPT_OPENROUTER_SECTION.md` section VII.3 -- repair
+      iterations are not free local calls; each is a full round trip re-reading
+      ~90K tokens, and "4.7 runs" is mostly source reads -- and VII.4. Rule 10
+      applies to our own documents. Full list in the research README.
+- [ ] **Start a rulings register that code and gates read, plus a weekly decision
+      pack delivered in the conversation.** Measured: rulings asked in chat
+      closed in minutes; rulings filed in documents sat 14-32 days; the
+      model-policy lapse went at least 5-6 days unseen.
+- [ ] **Put local safety rails on any unattended run.** Deny writes to the
+      briefs, the generator, test_*.py, baselines, span_head_allow.json and the
+      workflow scripts through sandbox rules, not only Edit/Write hooks: every
+      write that mattered overnight was a Bash heredoc.
+
+#### Mine -- pilots, after something else lands
+
+- [ ] **Stop agents re-deriving counts the index already stamps.** c05-align.js
+      still tells agents to count precedents themselves. A count stamped by a
+      deterministic tool with the bank's sha256 can be re-derived; an agent's
+      self-count cannot. Saves ~2.4-4.4 round trips per agent. Needs Adam's
+      context-pack ruling.
+- [ ] **Pilot proposer effort 'medium' against 'high', in shadow.** Reconcile
+      stays at high. Thinking is ~24K tokens per proposer, ~24% of today's
+      bill. Same 9-18 segments; compare generator runs, tokens, and agreement
+      with the landed pages.
+- [ ] **Pilot Sonnet 5 proposers with an Opus reconciler, in shadow.** Vendor
+      list: ~$3.23 per segment against $4.34 all-Opus-5.5, about -26% against
+      the new base. Judge by reconciler overrides and dropped unanimous spans,
+      never by dollars alone.
+- [ ] **Dry-run the Rule 7 article trim in a worktree; land nothing.** 1,430 of
+      the 2,256 flagged spans (63%) are a supplied article before a lowercase
+      word -- an upper bound. The verifier's sample of 25 found traps: "a kind
+      of" becoming the hedge "kind of", "a number of", "a great many". Needs
+      Adam's Rule 7 ruling.
+- [ ] **Build a deterministic near-duplicate lane.** 72-110 remaining segments
+      differ from a landed one only in punctuation, case or markers (the two
+      verifiers disagree; the tool must settle it). Move them by
+      generator-checked transfer under a distinct provenance mark, no agent.
+- [ ] **Pilot oral glosses from the public ACI class transcripts** -- the one
+      witness that is Geshe Michael's own voice rather than Claude. On Course
+      5: 61 auto-resolved "{term} means ..." frames plus 30 unresolved, Tibetan
+      resolved forward only, first for headwords with 0-4 bank links. The
+      transcript is evidence; a person rules; nothing is composed.
+- [ ] **Per-course SPRT acceptance sampling, once readers exist.** On C05 with
+      p0=5%, p1=15%, alpha=beta=0.10: an average of ~25-35 items, about one
+      expert-hour. Certifies a bound on a course's defect rate, never an
+      individual link.
+
+#### Waiting on Adam
+
+- [ ] **Adam: check the "Help improve Claude" privacy setting and record its state
+      and date.** Under consumer terms it decides whether everything already
+      sent is kept 30 days or up to 5 years, and whether it may be used for
+      training.
+- [ ] **Adam: choose the model id to pin.** claude-opus-5 (continuity with every
+      landed page); claude-opus-5-5 (vendor list ~35% cheaper, quality
+      unmeasured, shadow-test first); or the lapsed written policy, Opus 5
+      propose plus Fable 5.1 reconcile (+12-14% list; Fable's separate weekly
+      cap has bound three times and it refused on safeguards on 09-16).
+- [ ] **Adam: rule on the Rule 7 article class, pending 19 days.** A
+      licensor-checked deterministic trim with exclusions and a 60-item human
+      sample (re-cuts shipped C01-C03 pages), or tolerate -- which the research
+      lists under AVOID, since banking known over-capture breaks Rule 10. It
+      would retire most of the 2,256-span queue.
+- [ ] **Adam: rule on the alignment conventions** -- depth, granularity, nulls
+      versus omissions, subword negation. About 80% of the disagreement between
+      the Claude bank and the unmerged Codex bank (57.6% exact d=5 agreement on
+      C05:178-366) is convention; a one-to-two-hour ruling pack would collapse
+      the queue to ~0.5-1 genuine conflict per segment.
+- [ ] **Adam: rule on holding C18 and the flagged rows.** Hold C18:560-760,
+      C15:148-165 and C18:1007-1024 out of the campaign until read -- about 15
+      minutes to read C18:612-623 against C13:585-595 -- or scan them anyway,
+      risking ~46 mispaired rows at ~15 links each. And whether to re-derive
+      C13 upstream to bring its 1,041 segments into the mandate.
+- [ ] **Adam: set the quota policy -- the largest speed lever there is.**
+      Measured, Aug 6 to Sep 23: alignment workflows got 10.6% of the weekly
+      allowance and main conversational sessions 61.5%. At 10.6% the mandate
+      takes on the order of 60-95 weeks; at ~50%, 10-20. How much of each week
+      may conversations, audits and research sweeps use?
+- [ ] **Adam: rule on billing and capacity.** Stay on Max 20x and protect quota
+      (cash ~$0 per segment, limited by calendar); usage bundles with a cap
+      ($700 buys $1,000 of list usage, up to $2,000 a month); or nonprofit Team
+      premium seats (commercial terms, no training by default; allowance
+      against Max 20x unknown).
+- [ ] **Adam: replace "may corpus text leave" with per-class data rulings that
+      cover past flows.** Measured: the C01-C18 English readings have been
+      public since about 2009 and are in Common Crawl; the bank and briefs go
+      to Anthropic on every call and to GitHub on push; the unmerged Codex
+      branch sent C05:166-378 and project files to OpenAI under a consumer
+      ChatGPT Pro plan on 2026-09-11 to 15; agents have read tantric TCS rows
+      through parallel-witness queries. One yes/no cannot cover that.
+- [ ] **Adam: decide the Codex branch and the disk.** Never merge the Codex bank;
+      use it as a review stratum (recommended); archive its ~83 GB working
+      directory to the external drive, since internal disk is down to ~16 GiB
+      and that blocks local models, audio and OCR work. And whether to disclose
+      the September OpenAI flow to the organisation.
+- [ ] **Adam: decide consent and rights.** Whether to ask Geshe Michael and the
+      co-translators for consent to named-vendor processing under no-training
+      terms. Nine DCC volumes are co-copyrighted, so Geshe Michael's consent
+      alone does not clear them. A request should disclose that tantric TCS
+      material has already been read by agents.
+- [ ] **Adam: rule on context-pack provenance.** May precedent counts stamped by
+      a deterministic tool with the bank's sha256 replace the instruction
+      "count it yourself"?
+- [ ] **Adam: run the reader recruitment test.** Three in-house ACI-trained
+      bilingual readers each adjudicate the same 30 randomly drawn spans,
+      blind and timed, plus one reader outside the lineage on the overlap.
+      About 3-8 person-hours; yields the first human minutes-per-span and
+      inter-rater figures.
+- [ ] **Adam: set the finish line.** Define "done" by headword-incidence coverage
+      certified by a sealed random sample, plus a price cap per new lexical
+      headword recomputed by the ledger each batch. Measured: the mandate's
+      unique remainder holds only about 16-23% of the uncovered vocabulary.
+
+#### Waiting on the organisation or someone outside
+
+- [ ] **Organisation: complete Claude for Nonprofits verification for ALL.**
+      Goodstack verification (EIN 83-2826030 per the research; about 3
+      minutes, no purchase), then one email to Anthropic sales: does the
+      nonprofit discount apply to usage or only to seats, what is the
+      premium-seat price, and what is its allowance against Max 20x?
+- [ ] **Organisation: apply to host a Claude Corps fellow.** Next cohort February
+      2027 and the host deadline is unpublished, so ask now. Vendor terms: a
+      free full-time fellow for a year, a $10,000 host grant, $2,500 in Claude
+      credits. The fellow could build the reader workstation, ledger and
+      sampling tools, but cannot adjudicate Tibetan.
+- [ ] **Organisation: Khyentse Foundation Academic Development Grant through a
+      university partner -- deadline 2026-12-15.** The only hard deadline in the
+      next three months. Size it to adjudication: ~90-226 reader hours, $5-15K
+      at graduate rates (estimate). The grantee is the university; the data
+      agreement must override the foundation's publication defaults.
+- [ ] **Organisation: fix ALL's Candid/GuideStar profile before any
+      application.** It shows no program information, no recorded board
+      members, and NTEE code B28, which misdescribes a digital library.
+      Funders check it. Zero cost.
+- [ ] **Ask BDRC to add the unaligned high-traffic ACIP masters to its alignment
+      queue.** ALL is a listed BDRC partner and co-released the CC0
+      ALL-BDRC-alignments dataset. Masters: S00069M, SE05525M, SL05525N,
+      SE00023M, S00201I, S00021N. Gives exact-edition page witnesses for errata.
+- [ ] **Send one email each to research partners, with no corpus text
+      attached.** The DharmaBench authors (their classical-Tibetan tasks draw
+      on asianlegacylibrary.org data, and they have expert annotators);
+      Dharmamitra (a Claude-independent aligner as a thesis or GSoC project);
+      and Mangalam and 84000 for their measured minutes per alignment
+      judgment -- the missing parameter under every human-cost figure.
+- [ ] **Correct the research-credits lead before acting on it.** The Anthropic AI
+      for Science figure conflicts -- $20K over 6 months on its help page
+      against $50K elsewhere -- it grants API credits needing API-key
+      authentication, and its listed fields do not include linguistics.
+      Hyperscaler nonprofit credits cannot buy Claude and would pull the
+      project toward models with no Tibetan evidence. NEH is ineligible on
+      subject.

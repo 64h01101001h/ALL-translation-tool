@@ -1,0 +1,21 @@
+from harness import *
+C,Q="C05",67
+w,e=row(C,Q)
+print("C05:67",w[:90])
+dd=w.find(", ,")
+by=w.find("bya,")
+attempt("B1 double shad: 2nd ',' of ', ,' after 'bya'",C,Q,[dict(id="a",d=5,tib=(by,by+3),eng=None),dict(id="x",d=6,tib=(dd+2,dd+3),eng=None)])
+attempt("B1b double shad: both ',' spans, in order",C,Q,[dict(id="a",d=6,tib=(dd,dd+1),eng=None),dict(id="x",d=6,tib=(dd+2,dd+3),eng=None)])
+attempt("B1c double shad: T-range covering ', ,'",C,Q,[dict(id="a",d=5,tib=(by,by+3),eng=None),dict(id="x",d=6,tib=(dd,dd+3),eng=None)])
+attempt("B2 folio '[i.7-8]' whole",C,Q,[dict(id="f",d=6,tib=(0,7),eng=None)])
+attempt("B2b folio: '8' alone",C,Q,[dict(id="f",d=6,tib=(5,6),eng=None)])
+attempt("B2c folio: bracket inside tokens 'T4-T6[7-8]'",C,Q,[dict(id="f",d=6,tib="T4-T6[7-8]",eng=None)])
+C,Q="C05",103
+w,e=row(C,Q)
+print("C05:103",w[:60])
+l1=w.find("las"); l2=w.find("las",l1+1)
+attempt("B3 2nd 'las' after folio span (1st las between)",C,Q,[dict(id="f",d=6,tib=(0,w.find("]")+1),eng=None),dict(id="x",d=5,tib=(l2,l2+3),eng=None)])
+attempt("B3b 1st 'las' then 2nd 'las'",C,Q,[dict(id="a",d=5,tib=(l1,l1+3),eng=None),dict(id="x",d=5,tib=(l2,l2+3),eng=None)])
+attempt("B3c 2nd 'las' as d7 member of 'las las' parent",C,Q,[dict(id="a",d=5,tib=(l1,l2+3),eng=None),dict(id="x",d=7,tib=(l2,l2+3),eng=None)])
+ap=w.find("'jig")
+attempt("B4 lone apostrophe token of a later a-chung vs earlier pa'i",C,Q,[dict(id="x",d=6,tib=(ap,ap+1) if False else "T%d"%[n for n,(a,b) in enumerate(S.tokenize(w,'tib'),1) if w[a:b]=="'"][0] if any(w[a:b]=="'" for a,b in S.tokenize(w,'tib')) else "T1",eng=None)])
