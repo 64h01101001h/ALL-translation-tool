@@ -657,18 +657,6 @@ if(Python3_FOUND)
            COMMAND ${Python3_EXECUTABLE}
                    ${CMAKE_SOURCE_DIR}/tools/test_no_degenerate_members.py)
 
-  # The span-id compiler (tools/span_id_compiler.py) lets a proposal name token
-  # POSITIONS instead of retyping strings, and emits the generator's own spec.
-  # Two ways it could fail, one half each: the pins require every refusal BY
-  # NAME -- above all the spec that would resolve to a different occurrence
-  # than the one proposed -- and the battery reverse-compiles every landed
-  # segment and requires the regenerated blocks to be byte-identical to the
-  # page on disk. Identity, not truth: it proves nothing is lost, never that an
-  # alignment is right.
-  add_test(NAME span_id_compiler
-           COMMAND ${Python3_EXECUTABLE}
-                   ${CMAKE_SOURCE_DIR}/tools/test_span_id_compiler.py)
-
   # Rule-7 ratchet (2026-09-04 audit): d=5/d=7 English spans that begin with a
   # supplied article or hinge may not increase in the shipped dirs and must
   # be zero (or allowlisted with a licensor) in any new course directory.

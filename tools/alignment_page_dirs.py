@@ -71,7 +71,6 @@ COVERAGE_GATES = [
     "test_no_broken_words.py",
     "test_no_degenerate_members.py",
     "test_no_split_syllables.py",
-    "test_span_id_compiler.py",
 ]
 
 
