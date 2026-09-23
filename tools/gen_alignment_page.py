@@ -92,7 +92,7 @@ def find_word(text, piece, start, stop=None, subword=False):
         j = i + len(piece)
         need_before = bool(WORDCH.match(piece[0]))
         need_after = bool(WORDCH.match(piece[-1]))
-        before = (not need_before) or i == 0 or not WORDCH.match(text[i - 1])
+        before = True
         after = (not need_after) or j >= len(text) or not WORDCH.match(text[j])
         if before and after:
             return i

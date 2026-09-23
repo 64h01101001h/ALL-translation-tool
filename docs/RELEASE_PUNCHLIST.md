@@ -6,7 +6,7 @@
 
 The reading that produced the previous version of this page is kept at `docs/RELEASE_PUNCHLIST_2026-09-11.md`. Its classifications are the input to the re-survey that fills in the section below; they are not carried across automatically, because its rows are summaries whose source pointers have drifted and matching them by guess would be guesswork dressed as data.
 
-**152 open items.** 131 classified, 21 awaiting a reading.
+**181 open items.** 161 classified, 20 awaiting a reading.
 
 
 ## Release-blocking, and mine to do
@@ -74,12 +74,29 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 32 | Hover-for-English read-along over Geshe Michael's translations: segment-level works for all 42,199 today, word-level hover is attested for only 4.14% and must say so. | large | `TODO.md:4175` |
 | 33 | A Tibetan-folio to English-page estimator; the expansion is measured at 1.548 words per syllable with a 1.000-2.184 band, but syllables-per-folio is unmeasured. | medium | `TODO.md:4194` |
 | 34 | Cut the campaign's cost: batch the precedent lookups (21 tool calls per agent, 3.8x re-send multiplier), re-order reading for vocabulary yield, cheapen the propose pass. | medium | `TODO.md:4245` |
-| 35 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
-| 36 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
-| 37 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
-| 38 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
-| 39 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
-| 40 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
+| 35 | Re-run C05:367-369 from scratch before Course 5 resumes. | medium | `TODO.md:4318` |
+| 36 | Stop naming_check.py --write-baseline from erasing the hand-written rulings. | small | `TODO.md:4323` |
+| 37 | Close the provenance holes the free-work re-verifiers left open. | medium | `TODO.md:4329` |
+| 38 | Close the workflow-prompt gate holes. | medium | `TODO.md:4338` |
+| 39 | Fix or retire the banked links that carry no provenance. | small | `TODO.md:4347` |
+| 40 | Investigate and fix the pronunciation-link classifier. | medium | `TODO.md:4355` |
+| 41 | Add the REFUTE stage the spec requires, or bring Adam the spec change. | medium | `TODO.md:4362` |
+| 42 | Build a durable campaign cost ledger. | medium | `TODO.md:4370` |
+| 43 | Record on every landed page which pipeline produced it. | small | `TODO.md:4380` |
+| 44 | Check quotations inside AI NOTEs against the spine. | medium | `TODO.md:4385` |
+| 45 | Resolve the last four gate-audit findings. | medium | `TODO.md:4390` |
+| 46 | Build the sampling frame and blind review view for the human gold standard. | large | `TODO.md:4395` |
+| 47 | Wire the span-ID compiler into the campaign and measure it on one pilot batch. | medium | `TODO.md:4409` |
+| 48 | Measure cache warm-up before fan-out. | small | `TODO.md:4414` |
+| 49 | Make the app's evidence card show transfer provenance, and rank as Adam rules. | medium | `TODO.md:4418` |
+| 50 | Refresh the stale published dictionary before the first transfer lands. | small | `TODO.md:4425` |
+| 51 | Run the external workflow brief's remaining experiments once the research sweep lands. | large | `TODO.md:4429` |
+| 52 | Feed the new Geshe Michael Roach dictionary layer into Drills, Trainer and terminology, tier-labelled, plus a ruling queue | large | `docs/BACKLOG.md:5` |
+| 53 | The iOS app's type is all fixed-size, so Dynamic Type does nothing and large sizes break the picker | medium | `docs/BACKLOG.md:259` |
+| 54 | Right-click Pronounce and the audio build split shipped; the Kawachen alphabet/roster/quiz reader is unbuilt | large | `docs/OPEN_TASKS_2026-09-10.md:13` |
+| 55 | Cloze distractors now must share the answer's case marker, so the particle give-away is gone | medium | `docs/OPEN_TASKS_2026-09-10.md:33` |
+| 56 | The drill card's meaning-after-answer, hint and post-answer lookup are built on both desktop and phone | small | `docs/OPEN_TASKS_2026-09-10.md:44` |
+| 57 | Decide whether the desktop Trainer and the iOS Trainer being separate programs is intended | medium | `docs/OPEN_TASKS_2026-09-10.md:94` |
 
 ## Everything else unblocked (docs, data, process)
 
@@ -107,7 +124,8 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 20 | Close the fixable slice of the 2.2% read-aloud gap by recording the spya/spyi/spyod pya-to-ca fold in kawachen_labels.json | small | `TODO.md:4137` |
 | 21 | Harvest the THL Kangyur/Tengyur catalogue and fold it in only on a verified join, after a licence and terms review | medium | `docs/BACKLOG.md:91` |
 | 22 | Settle attestation vs the Botok vocabulary ladder by measuring their rank correlation first | medium | `docs/BACKLOG.md:200` |
-| 23 | Commit the uncommitted day's work — the tree is clean and the work is in history | small | `docs/OPEN_TASKS_2026-09-10.md:7` |
+| 23 | DECIDED: use Jev to check every banked link once the dictionary is complete -- a correctness pass, not a cost saving; an eleven-agent assessment found all five candidate uses failed critique, and four conditions are unsettled. | medium | `docs/BACKLOG.md:317` |
+| 24 | Commit the uncommitted day's work — the tree is clean and the work is in history | small | `docs/OPEN_TASKS_2026-09-10.md:7` |
 
 ## Waiting on Adam
 
@@ -156,10 +174,19 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 41 | Ask Venerable Utpala which of Geshe Michael's 2017 style rules, dropped in 2023, still hold. | small | `TODO.md:4033` |
 | 42 | Adam to ask Geshe Michael for his own requests for the Textual Research workflow and record the answers before design | small | `TODO.md:4099` |
 | 43 | A spoken-Tibetan trainer, which needs new colloquial recordings and Geshe Michael's call on whose voice and which dialect | large | `TODO.md:4126` |
-| 44 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
-| 45 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
-| 46 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
-| 47 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
+| 44 | Adam: find the named human reviewers for the gold standard. | small | `TODO.md:4446` |
+| 45 | Adam: rule on the 91 undeclared liturgy transfers. | small | `TODO.md:4450` |
+| 46 | Adam: rule on ranking -- every citation, or independent readings only. | small | `TODO.md:4456` |
+| 47 | Adam: rule on the model policy, which has lapsed. | small | `TODO.md:4460` |
+| 48 | Adam: rule on vocabulary-greedy order versus reading whole courses in order. | small | `TODO.md:4467` |
+| 49 | Adam: rule on whether retrieval-only similarity is an exception to the no-similarity rule. | small | `TODO.md:4472` |
+| 50 | Adam: attach the .docx to digest #10 and send it. | small | `TODO.md:4478` |
+| 51 | Adam: send the full text of the master efficiency-audit prompt so it can be banked. | small | `TODO.md:4482` |
+| 52 | Adam: say whether to push to GitHub. | small | `TODO.md:4487` |
+| 53 | Render and teach the three cursive hands; blocked on Adam confirming the spellings and on shippable font licensing | large | `docs/BACKLOG.md:30` |
+| 54 | Standalone iOS drills/trainer app: built with eleven modes, but deck sync is undecided and signing waits on Adam | medium | `docs/BACKLOG.md:100` |
+| 55 | Build an input-centre suite for ACIP input operators; blocked on Adam's samples, guidelines and a name | large | `docs/BACKLOG.md:160` |
+| 56 | Upload the iPhone build to TestFlight — needs Adam to name testers and use his App Store Connect account | small | `docs/OPEN_TASKS_2026-09-10.md:122` |
 
 ## Waiting on someone outside
 
@@ -168,7 +195,10 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 1 | When BDRC ships its improved OCR models, refresh the bundled PhotiLines/Woodblock models and re-run the OCR selftests. | medium | `TODO.md:2264` |
 | 2 | Das dictionary etext still unobtained: PKTC has not answered, DSAL terms unexamined, OCR route untouched. | medium | `TODO.md:3024` |
 | 3 | Per-dictionary licence verification of the Steinert set is done and documented; verdict is do-not-ingest. | small | `TODO.md:3031` |
-| 4 | Bring Himalayan Art Resources into the project; gated on asking HAR what is permitted before any ingest, then choosing ingest / link-out / never-ship. | large | `docs/BACKLOG.md:281` |
+| 4 | Organisation: decide whether corpus text may leave this machine. | small | `TODO.md:4493` |
+| 5 | Ask TypeSafe directly whether JEV served through OpenRouter is zero-retention. | small | `TODO.md:4498` |
+| 6 | Look into AI research credits. | small | `TODO.md:4501` |
+| 7 | Bring Himalayan Art Resources into the project; gated on asking HAR what is permitted before any ingest, then choosing ingest / link-out / never-ship. | large | `docs/BACKLOG.md:281` |
 
 ## Not yet classified
 
@@ -196,4 +226,3 @@ The reading that produced the previous version of this page is kept at `docs/REL
 | 18 | 3. | `TODO.md:531` |
 | 19 | 2-original. | `TODO.md:537` |
 | 20 | 30 open questions for Adam are collected at the end of each batch section of the plan. | `TODO.md:788` |
-| 21 | ## Jev AI — the verification pass, AFTER the dictionary is complete (Adam, 2026-09-22) DECIDED 2026-09-22. | `docs/BACKLOG.md:317` |

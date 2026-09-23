@@ -253,6 +253,46 @@
    "test": "app_selftest",
    "expect_fail_contains": "TP-4",
    "expect": "killed"
+  },
+  {
+   "id": "SPANID-ROUNDTRIP",
+   "note": "Added 2026-09-23 with the span-id compiler. The danger case: a proposal picks the THIRD 'the' and the generator's forward cursor would bank the FIRST. Disabling the English offset comparison lets that spec out; the pin must refuse it by name.",
+   "file": "tools/span_id_compiler.py",
+   "old": "        if (r[\"a\"], r[\"b\"]) != c[\"eng\"]:",
+   "new": "        if False:",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "English 'the' resolves to an earlier occurrence: expected refusal ROUND_TRIP_MISMATCH, got a compiled spec",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-CENSUS",
+   "note": "Added 2026-09-23. The battery's page reader silently skipping every span of class 'noun' must be caught by the independent regex recount of span tags, not trusted.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if isinstance(f, dict):\n                f[\"b\"] = pos",
+   "new": "            if isinstance(f, dict) and f[\"cls\"] != \"noun\":\n                f[\"b\"] = pos",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "CENSUS: the page reader is blind",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-GENERATOR-BROKEN",
+   "note": "Added 2026-09-23. A regeneration check cannot catch a broken generator; this breaks the GENERATOR's left word-boundary rule and requires the battery to go red, because it compares with the landed page bytes. The generator is restored byte-identical by the harness.",
+   "file": "tools/gen_alignment_page.py",
+   "old": "        before = (not need_before) or i == 0 or not WORDCH.match(text[i - 1])",
+   "new": "        before = True",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "NEW FAILURE",
+   "expect": "killed"
+  },
+  {
+   "id": "SPANID-LAST-LINE",
+   "note": "Added 2026-09-23. With the named MEMBER_ENGLISH_UNDER_NULL_PARENT check removed (and the line after it guarded), the round trip is the only defence left, and it must still refuse: the generator silently drops a member's English under a null parent, and the English 'did not come back at all'.",
+   "file": "tools/span_id_compiler.py",
+   "old": "            if p[\"e\"] is None:\n                raise Refusal(\"MEMBER_ENGLISH_UNDER_NULL_PARENT\", \"the d=7 \"\n                              \"member %s has English but its parent %s has \"\n                              \"none. The generator renders a member's English \"\n                              \"only inside its parent's, and would silently \"\n                              \"DROP this one. Null the member, or give the \"\n                              \"parent its English.\" % (at(m, \"t\"), p[\"id\"]),\n                              seq, m[\"id\"])\n            if not (p[\"e\"][0] <= m[\"e\"][0] and m[\"e\"][1] <= p[\"e\"][1]):",
+   "new": "            if False:\n                raise Refusal(\"MEMBER_ENGLISH_UNDER_NULL_PARENT\", \"the d=7 \"\n                              \"member %s has English but its parent %s has \"\n                              \"none. The generator renders a member's English \"\n                              \"only inside its parent's, and would silently \"\n                              \"DROP this one. Null the member, or give the \"\n                              \"parent its English.\" % (at(m, \"t\"), p[\"id\"]),\n                              seq, m[\"id\"])\n            if p[\"e\"] is not None and not (p[\"e\"][0] <= m[\"e\"][0] and m[\"e\"][1] <= p[\"e\"][1]):",
+   "test": "^span_id_compiler$",
+   "expect_fail_contains": "refused as ROUND_TRIP_MISMATCH, expected MEMBER_ENGLISH_UNDER_NULL_PARENT",
+   "expect": "killed"
   }
  ]
 }

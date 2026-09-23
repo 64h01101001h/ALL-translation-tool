@@ -4302,3 +4302,205 @@ unaffected; the absolute figure is.
       Adam's decision 2026-09-22 is to use it to CHECK everything once the
       dictionary is complete; that is a correctness pass, filed in
       `docs/BACKLOG.md`, and it will not reduce this bill.
+
+## AC. Actionable items from the 2026-09-22/23 cost and accuracy work
+
+*Adam, 2026-09-23: "take anything that is actionable and put it on the todo
+list." Every defect below listed as open was CONFIRMED OPEN against the tree on
+2026-09-23 before filing, not carried over from a report. Two workflows were
+still running when this was written -- the span-ID compiler build and a
+21-cluster research sweep into every AI avenue for speed, accuracy and cost.
+Their actionable results get filed here when they land; until then this
+section is incomplete by design.*
+
+### Mine, unblocked
+
+- [ ] **Re-run C05:367-369 from scratch before Course 5 resumes.** The reconcile
+      for 369 died at the weekly usage limit on 2026-09-18 and the files it left
+      were never trusted; the session scratchpad that held all three specs has
+      since been cleared, so none of the three survives. Course 5 stands at 366
+      of 511.
+- [ ] **Stop `naming_check.py --write-baseline` from erasing the hand-written
+      rulings.** `tools/naming_baseline.txt` carries the reasoning above each
+      group -- that a referent is Dr. Bruno Laine, that 1419 is Tsongkapa's
+      passing -- and the sanctioned repair command regenerates the file from a
+      scan, destroying every one. Append new lines under a dated header and
+      leave existing rulings untouched; mutation-prove a re-run keeps them all.
+- [ ] **Close the provenance holes the free-work re-verifiers left open.**
+      (1) The published dictionary page shows only the first three citations
+      of a rendering (`tools/dictionary_view_shell.html:231`, `slice(0,3)`), so
+      a transferred citation from a late course hides behind "+N". (2)
+      `tools/test_transfer_provenance.py` imports `XFER_MARK` from
+      `build_dictionary_view.py` -- the generator it checks -- so changing the
+      mark in the generator changes what the gate accepts; pin the notation in
+      the gate. (3) The reader-facing transfer disclosure in the shell can be
+      deleted with every gate green. Mutation-prove each one closed.
+- [ ] **Close the workflow-prompt gate holes.** (1) `naming_check`'s `.js` scan
+      reads single- and double-quoted strings but not backtick template
+      literals, so identical prose passes in one quote style and fails in
+      another. (2) The brief-delivery census freezes one args blob per script,
+      so a stage behind an args flag -- exactly how a REFUTE stage would be
+      added -- escapes it; and the delivery gate runs the script in the same JS
+      realm as its recorder, so the script can defeat it from inside. (3)
+      `COURSE_CONTEXT` tells every agent the prompt carries no second copy of
+      the ten rules, and nothing checks that sentence.
+- [ ] **Fix or retire the banked links that carry no provenance.** Three links
+      have `seg: null` -- C01 `xbleed40`, `xb40`, and `xseg2829ldog`, the last a
+      real rendering (`ldog` -> "stop") with no corpus row to point at -- and
+      C03:126 `s126tail` has an EMPTY-STRING Tibetan, which is a substring of
+      every segment and would be offered as precedent for all of them. Find
+      each one's row or retire it through its page, then tighten the
+      `no-such-segment` ceiling in `test_layer_matches_spine.py` to the new
+      measurement.
+- [ ] **Investigate and fix the pronunciation-link classifier.**
+      `alignment_invariants.is_pronunciation_link` calls a link phonetic when
+      its id matches `^s\d+y\d+$`. Measured 2026-09-22 it matches 2,262 links
+      across 428 segments in five courses, 1,981 of which carry English -- so
+      the English-containment checks it exempts are skipping real renderings.
+      The precedent-index build refused to use it. Quantify what the checks
+      miss, then fix the rule.
+- [ ] **Add the REFUTE stage the spec requires, or bring Adam the spec change.**
+      `docs/ALIGNMENT_LAYER_SPEC.md` section 7 sends every claimed erratum to
+      skeptics. `c05-align.js` has no refute stage -- the word appears only
+      inside the inlined briefs' model-policy header -- so the errata banked
+      from E-282 onward went straight from reconciler to `merge_errata.py`
+      with no skeptic pass, and every cost figure measured is a FLOOR for the
+      specified pipeline. Wire it in behind the delivery census, or amend the
+      spec with Adam's ruling.
+- [ ] **Build a durable campaign cost ledger.** The $6.69-per-segment figure
+      exists only in commit messages and one audit's output -- a number nobody
+      can re-derive -- and two of its predecessors were wrong. Build
+      `tools/campaign_cost_ledger.py`: read the workflow transcripts,
+      deduplicate by message id (each request writes ~1.86 usage rows, which
+      is how 651,499 tokens/segment was once reported), separate uncached
+      input / cache write / cache read / output, record the resolved model id,
+      attribute cost to segment and stage, flag resumed runs (whose
+      transcripts over-count), and price from a dated rate table.
+      (External workflow brief, E01.)
+- [ ] **Record on every landed page which pipeline produced it.** Since the
+      transport repair, agents are handed the text instead of fetching it, but
+      `land_alignment_page.py` stamps nothing about the pipeline, so an auditor
+      cannot tell which pages came from which prompts. Stamp a hash of
+      `c05-align.js` and of each brief into the page.
+- [ ] **Check quotations inside AI NOTEs against the spine.** The generator
+      refuses any span not verbatim in the source, but a segment's `note` and
+      `title` are free prose that nothing compares to anything, so a corrupt or
+      misremembered quotation there can still be banked (Rule 10). Extract
+      quoted Tibetan and English from notes and verify each against its row.
+- [ ] **Resolve the last four gate-audit findings.** Named in
+      `docs/GATE_AUDIT_2026-09-17.md` under Counts: `build_manifest`'s untested
+      `.framework` indexing branch; `vuln_check`'s untested `classify()`; Rule
+      1 unpinned for `osv_query_one()`; and `constitution_check`'s three
+      `--static` sub-checks with no negative fixture.
+- [ ] **Build the sampling frame and blind review view for the human gold
+      standard.** The engineering half of the one prerequisite everything else
+      waits on; finding the reviewers is Adam's half, below. Two strata -- a
+      random population sample and a flagged/challenge sample -- with selection
+      probabilities recorded. Split by PASSAGE FAMILY, never by span, because
+      C16 is half a re-ingest of C05 and the liturgy recurs across C01-C05.
+      Separate development, calibration and sealed test sets; reviewers never
+      see a machine verdict; 15% double-labelled to start. Size it honestly:
+      zero errors in 400 independent decisions bounds the error rate at 0.746%
+      (one-sided 95%), and about 2,995 are needed to get below 0.1%.
+      (External workflow brief, E05.)
+
+### Mine, after something else lands
+
+- [ ] **Wire the span-ID compiler into the campaign and measure it on one pilot
+      batch.** Once the compiler passes verification (build running
+      2026-09-23). Compare generator repair rounds, tool calls and billed
+      tokens per segment against the last Course 5 batches, and compare
+      reconcile outcomes. Normal campaign spend, one batch. (E03.)
+- [ ] **Measure cache warm-up before fan-out.** Run one agent to write the
+      shared prefix, then fan out, and compare cache writes, reads and billed
+      cost against a cold simultaneous fan-out of an identical batch. Uses only
+      what the current harness exposes; no new provider. (E04.)
+- [ ] **Make the app's evidence card show transfer provenance, and rank as Adam
+      rules.** `app/main.cpp:45680` sorts renderings by `refs.size()`, every
+      citation counted alike, so a transferred echo would outrank an
+      independent reading on the desktop card. The published dictionary and
+      the four CSVs already rank on independent readings. Whichever way Adam
+      rules on ranking, the transfer mark must reach the card before any
+      transfer lands. Desktop first, then the iOS pack in the same session.
+- [ ] **Refresh the stale published dictionary before the first transfer
+      lands.** `docs/geshe_michael_roach_dictionary.html` predates Course 5,
+      and its own gate blocks the refresh because rebuilding adds thousands of
+      C05 rows at once. Clear it deliberately and republish to the same URL.
+- [ ] **Run the external workflow brief's remaining experiments once the
+      research sweep lands.** From the brief pasted 2026-09-23, all NOT_RUN:
+      E06 Tibetan-specific retrieval (lexical vs Botok-assisted vs
+      bod-eng-similarity vs MITRA-E, scored on recall@k of the right attested
+      precedent; needs the similarity ruling below and a licence review); E07
+      proposal-prompt optimisation with the judge frozen (needs a dev set); E08
+      JEV vs a small classifier vs no classifier (needs permission; see the Jev
+      entry in `docs/BACKLOG.md`); E09 direct provider vs OpenRouter on a
+      harmless build-time job (needs permission and a budget); E10 moving
+      independent jobs to batch pricing; E11 an expert review workstation; E12
+      a small ranker trained only on human labels; E13 local-inference
+      economics on the M1 Max (19 GB of free disk is the first constraint);
+      E14 BDRC OCR only where digital text is missing. Reconcile each against
+      the research's verified version before running it.
+
+### Waiting on Adam
+
+- [ ] **Adam: find the named human reviewers for the gold standard.** Nothing
+      about accuracy can be measured until they exist. The only labelled audit
+      names Claude models as its labellers and has no human adjudicator, so
+      grading anything against it measures agreement with Claude.
+- [ ] **Adam: rule on the 91 undeclared liturgy transfers.** Segments 1-21 --
+      the Refuge, the Wish, Offering the Mandala, A Buddhist Grace -- open
+      C02-C05 exactly as they open C01, and 91 banked segments carry those
+      duplicates without transfer provenance. Stamp them with real provenance,
+      leave them, or discount them in the counts. Frozen by name in
+      `tools/transfer_provenance_baseline.txt`.
+- [ ] **Adam: rule on ranking -- every citation, or independent readings
+      only.** The published dictionary and CSVs now rank renderings by
+      independent readings; the app's evidence card ranks by every citation.
+      The two disagree the moment a transfer lands.
+- [ ] **Adam: rule on the model policy, which has lapsed.** The briefs say
+      propose on Opus 5, reconcile and refute on Fable 5.1 (Adam, 2026-09-01),
+      and it held in the C03 era (recorded earlier in this file). But
+      `c05-align.js` forces Opus at every stage, and the transcripts confirm
+      Opus served about 98% of all responses -- so the Fable policy stopped
+      applying when the Course 5 harness was written. Restore it or amend the
+      briefs.
+- [ ] **Adam: rule on vocabulary-greedy order versus reading whole courses in
+      order.** Filed inside section AB, where a ruling can be missed. 63% of
+      the remaining vocabulary sits in 12% of the segments, but the standing
+      order is C01-C18 in order and the campaign gate-proves each course
+      complete. The two goals genuinely conflict.
+- [ ] **Adam: rule on whether retrieval-only similarity is an exception to the
+      no-similarity rule.** `docs/LEARN_TAB_VISION.md` forbids embeddings or a
+      similarity model deciding meaning, "because a machine judgment about
+      meaning is composition". Specialist Tibetan retrievers would only
+      surface candidate precedents for a model or a person to judge. A
+      conscious exception, or not.
+- [ ] **Adam: attach the .docx to digest #10 and send it.** It is in Gmail
+      drafts with the full text in the body but no attachment -- the inline
+      attach corrupted on verification and was stripped. The file is
+      `docs/digests/Translation Tool - Daily Digest #10 - 20260922.docx`.
+- [ ] **Adam: send the full text of the master efficiency-audit prompt so it
+      can be banked.** It exists in no file, and both copies pasted on
+      2026-09-22 were cut off mid-sentence at "reject any architecture that
+      falls". Its OpenRouter section is banked in
+      `docs/AUDIT_PROMPT_OPENROUTER_SECTION.md` with no parent.
+- [ ] **Adam: say whether to push to GitHub.** Pushing paused at "pause
+      everything" on 2026-09-22. `git rev-list --count origin/main..main`
+      gives the number of commits waiting.
+
+### Waiting on the organisation or someone outside
+
+- [ ] **Organisation: decide whether corpus text may leave this machine.** It
+      gates the Jev verification pass, any gateway, batch APIs and any hosted
+      retrieval. Zero data retention narrows the exposure; it does not answer
+      whether to transmit Geshe Michael Roach's unpublished corpus at all.
+      Asked of leadership in digest #10.
+- [ ] **Ask TypeSafe directly whether JEV served through OpenRouter is
+      zero-retention.** OpenRouter's provider page is a directory listing and
+      does not say so, and the data-handling plan leans on it.
+- [ ] **Look into AI research credits.** An external brief reports Anthropic
+      research support of up to $50,000 per project (announced 2026-08-27) and
+      OpenAI's Researcher Access Program at up to $1,000. Neither is verified
+      here and eligibility is unestablished; the research sweep's funding
+      cluster is checking. Against a corrected mandate of about
+      $27,000-29,000, it is the most financially material lead so far.
