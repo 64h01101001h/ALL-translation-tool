@@ -4479,10 +4479,16 @@ section is incomplete by design.*
       meaning is composition". Specialist Tibetan retrievers would only
       surface candidate precedents for a model or a person to judge. A
       conscious exception, or not.
-- [ ] **Adam: attach the .docx to digest #10 and send it.** It is in Gmail
-      drafts with the full text in the body but no attachment -- the inline
-      attach corrupted on verification and was stripped. The file is
-      `docs/digests/Translation Tool - Daily Digest #10 - 20260922.docx`.
+- [ ] **Adam: attach the .docx to digest #10 and send it; discard the stale
+      #10 draft.** Digest #10 was REGENERATED on 2026-09-23 (Adam: "i never
+      sent the last one we generated out"). The new draft, subject "...Daily
+      Digest #10 — Wednesday, September 23 2026", has the full text in the
+      body (verified identical to the file, character for character) and NO
+      attachment: attach `docs/digests/Translation Tool - Daily Digest #10 -
+      20260923.docx` by hand. The OLD draft ("...#10 — Tuesday, September 22
+      2026") is still in Gmail drafts and must be discarded by Adam -- it was
+      never sent, its figures are superseded, and it asks the outside-service
+      question in a form the 2026-09-23 research showed to be inaccurate.
 - [ ] **Adam: send the full text of the master efficiency-audit prompt so it
       can be banked.** It exists in no file, and both copies pasted on
       2026-09-22 were cut off mid-sentence at "reject any architecture that
@@ -4498,7 +4504,11 @@ section is incomplete by design.*
       gates the Jev verification pass, any gateway, batch APIs and any hosted
       retrieval. Zero data retention narrows the exposure; it does not answer
       whether to transmit Geshe Michael Roach's unpublished corpus at all.
-      Asked of leadership in digest #10.
+      NOT yet asked of leadership: the unsent 22 Sep draft carried it, and
+      the regenerated digest #10 (23 Sep) deliberately leaves it out, because
+      the research found texts have ALREADY gone out, so the forward-only
+      question would mislead. It waits on Adam's own three decisions in
+      section AC (framing by kind of text, disclosing past flows, consent).
 - [ ] **Ask TypeSafe directly whether JEV served through OpenRouter is
       zero-retention.** OpenRouter's provider page is a directory listing and
       does not say so, and the data-handling plan leans on it.

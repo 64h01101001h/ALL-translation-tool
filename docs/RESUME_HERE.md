@@ -63,5 +63,5 @@ Free fixes first, because each makes every later batch cheaper or safer:
 - Read the held rows: `docs/research/held_rows_reading_sheet.md` (~15 min).
 - Name the specific Diamond Cutter Classics readers for the first blind test.
 - Say whether to push.
-- Attach the .docx to the digest #10 draft in Gmail and send it.
+- Digest #10 was regenerated for 23 Sep: attach `Translation Tool - Daily Digest #10 - 20260923.docx` to the new draft by hand, send it, and discard the stale 22 Sep #10 draft.
 - The other rulings listed under "Waiting on Adam" in `TODO.md` section AC.
